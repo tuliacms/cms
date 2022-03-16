@@ -8,8 +8,7 @@ jobs:
         working_directory: ~/tuliacms/cms
         steps:
             - checkout
-            - run: sudo apt install -y libonig-dev
-            - run: sudo docker-php-ext-install pdo_mysql mbstring
+            - run: sudo apt install -y libonig-dev php-pdo-mysql php-mbstring
             - run:
                 name: Install ZIP
                 command: |
