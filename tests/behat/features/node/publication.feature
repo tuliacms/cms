@@ -3,7 +3,7 @@ Feature: Node publication date
     An admin should be able to
     Set a start and end publication date
 
-    Scenario: New node has published date set to "now"
+    Scenario: New node has published date set to   "now"
         Given there is a node
         Then node is published at "now"
 
