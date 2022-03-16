@@ -9,7 +9,7 @@ jobs:
         steps:
             - checkout
             - run: sudo apt install -y libonig-dev
-            - run: sudo -E docker-php-ext-install pdo_mysql mbstring
+            #- run: sudo -E docker-php-ext-install pdo_mysql mbstring
             - run:
                 name: Install ZIP
                 command: |
