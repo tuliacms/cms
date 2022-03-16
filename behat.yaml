@@ -1,0 +1,14 @@
+default:
+    formatters:
+        pretty:
+            verbose: true
+            paths: false
+            snippets: false
+    autoload:
+        '': '%paths.base%/tests/behat/bootstrap'
+    suites:
+        node_features:
+            paths:
+                features: '%paths.base%/tests/behat/features/node'
+            contexts:
+                - Node\NodeContext

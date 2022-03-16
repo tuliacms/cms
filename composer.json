@@ -52,6 +52,7 @@
         "twig/extra-bundle": "^3.3"
     },
     "require-dev": {
+        "behat/behat": "^3.10",
         "mockery/mockery": "^1.5",
         "phpcompatibility/php-compatibility": "^9.3",
         "phpspec/phpspec": "^7.1",
@@ -91,6 +92,7 @@
     "autoload-dev": {
         "psr-4": {
             "Tulia\\Tests\\Unit\\": "tests/unit",
+            "Tulia\\Tests\\Behat\\": "tests/behat/bootstrap",
             "Tulia\\Component\\Routing\\Tests\\Unit\\": "src/Component/routing/tests/unit"
         }
     },
@@ -106,6 +108,12 @@
         "symfony": {
             "allow-contrib": false,
             "require": "5.4.*"
+        }
+    },
+    "scripts": {
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
         }
     }
 }

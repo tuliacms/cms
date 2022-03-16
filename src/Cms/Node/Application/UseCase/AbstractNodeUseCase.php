@@ -75,9 +75,14 @@ abstract class AbstractNodeUseCase
         $node->setSlug($getValue('slug'));
         $node->setTitle($getValue('title'));
         $node->setPublishedAt(new ImmutableDateTime($getValue('published_at', '')));
-        $node->setPublishedTo($getValue('published_to') ? new ImmutableDateTime($getValue('published_to', '')) : null);
         $node->setParentId($getValue('parent_id'));
         $node->setAuthorId($getValue('author_id'));
         $node->updateAttributes($attributes);
+
+        if ($getValue('published_to')) {
+            $node->setPublishedTo(new ImmutableDateTime($getValue('published_to', '')));
+        } else {
+            $node->setPublishedToForever();
+        }
     }
 }

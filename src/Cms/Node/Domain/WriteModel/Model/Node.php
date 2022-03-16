@@ -34,8 +34,12 @@ final class Node extends AggregateRoot
     /** @var Attribute[] */
     protected array $attributes = [];
 
-    private function __construct(string $id, string $type, string $websiteId, string $locale)
-    {
+    private function __construct(
+        string $id,
+        string $type,
+        string $websiteId,
+        string $locale
+    ) {
         $this->id = new NodeId($id);
         $this->type = $type;
         $this->websiteId = $websiteId;
@@ -45,8 +49,12 @@ final class Node extends AggregateRoot
         $this->publishedAt = new ImmutableDateTime();
     }
 
-    public static function createNew(string $id, string $type, string $websiteId, string $locale): self
-    {
+    public static function createNew(
+        string $id,
+        string $type,
+        string $websiteId,
+        string $locale
+    ): self {
         $self = new self($id, $type, $websiteId, $locale);
         $self->recordThat(new Event\NodeCreated($id, $type, $websiteId, $locale, $type));
 
@@ -128,24 +136,7 @@ final class Node extends AggregateRoot
         );
 
         foreach ($attributes as $attribute) {
-            $name = $attribute->getCode();
-            $value = $attribute->getValue();
-
-            if (isset($this->attributes[$name]) === false || $this->attributes[$name]->getValue() !== $value) {
-                $this->attributes[$attribute->getUri()] = $attribute;
-                /**
-                 * Calling recordUniqueThat() prevents the system to record multiple changes on the same attribute.
-                 * This may be caused, in example, by SlugGenerator: first time system sets raw value from From,
-                 * and then SlugGenerator sets the validated and normalized slug. For us, the last updated
-                 * attribute's value matters, so we remove all previous events and adds new, at the end of
-                 * collection.
-                 */
-                $this->recordUniqueThat(AttributeUpdated::fromNode($this, $name, $value), function ($event) use ($name) {
-                    if ($event instanceof AttributeUpdated) {
-                        return $name === $event->getAttribute();
-                    }
-                });
-            }
+            $this->addAttribute($attribute);
         }
 
         $this->markAsUpdated();
@@ -159,21 +150,47 @@ final class Node extends AggregateRoot
         return $this->attributes;
     }
 
-    public function removeAttribute(string $code): void
+    public function addAttribute(Attribute $attribute): void
     {
-        unset($this->attributes[$code]);
+        $uri = $attribute->getUri();
+        $value = $attribute->getValue();
+
+        if (isset($this->attributes[$uri]) === false || $this->attributes[$uri]->getValue() !== $value) {
+            $this->attributes[$attribute->getUri()] = $attribute;
+            /**
+             * Calling recordUniqueThat() prevents the system to record multiple changes on the same attribute.
+             * This may be caused, in example, by SlugGenerator: first time system sets raw value from From,
+             * and then SlugGenerator sets the validated and normalized slug. For us, the last updated
+             * attribute's value matters, so we remove all previous events and adds new, at the end of
+             * collection.
+             */
+            $this->recordUniqueThat(AttributeUpdated::fromNode($this, $uri, $value), function ($event) use ($uri) {
+                if ($event instanceof AttributeUpdated) {
+                    return $uri === $event->getAttribute();
+                }
+            });
+        }
+    }
+
+    public function hasAttribute(string $uri): bool
+    {
+        return isset($this->attributes[$uri]);
+    }
+
+    public function removeAttribute(string $uri): void
+    {
+        unset($this->attributes[$uri]);
 
         $this->markAsUpdated();
     }
 
     /**
-     * @param string $name
      * @param mixed $default
      * @return mixed
      */
-    public function getAttribute(string $name, $default = null)
+    public function getAttribute(string $uri, $default = null)
     {
-        return $this->attributes[$name] ?? $default;
+        return $this->attributes[$uri] ?? $default;
     }
 
     public function hasFlag(string $flag): bool
@@ -238,9 +255,16 @@ final class Node extends AggregateRoot
         return $this->publishedTo;
     }
 
-    public function setPublishedTo(?ImmutableDateTime $publishedTo): void
+    public function setPublishedTo(ImmutableDateTime $publishedTo): void
     {
         $this->publishedTo = $publishedTo;
+
+        $this->markAsUpdated();
+    }
+
+    public function setPublishedToForever(): void
+    {
+        $this->publishedTo = null;
 
         $this->markAsUpdated();
     }
@@ -317,22 +341,6 @@ final class Node extends AggregateRoot
 
         /*$oldFlags = array_diff($this->attributes['flags'], $flags);
         $newFlags = array_diff($flags, $this->attributes['flags']);*/
-    }
-
-    /**
-     * @param mixed $code
-     */
-    private function validateAttributeName($code): void
-    {
-        if (is_string($code) === false) {
-            throw new \Exception('Must be string.');
-        }
-        if (strlen($code) < 2) {
-            throw new \Exception('Must have more than 2 chars.');
-        }
-        if (! preg_match('/^([a-z0-9_]+)$/m', $code)) {
-            throw new \Exception('Must contains only alphanumericals and underscores.');
-        }
     }
 
     private function markAsUpdated(): void
