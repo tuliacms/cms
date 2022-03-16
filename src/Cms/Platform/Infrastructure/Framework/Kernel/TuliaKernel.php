@@ -58,6 +58,10 @@ class TuliaKernel extends Kernel
 
     private function getExtensionConfigDirs(string $type): array
     {
+        if (is_dir($this->getProjectDir().'/extension/'.$type) === false) {
+            return [];
+        }
+
         $configDirs = [];
 
         foreach (new \DirectoryIterator($this->getProjectDir().'/extension/'.$type) as $vendor) {
