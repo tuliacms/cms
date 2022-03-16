@@ -1,0 +1,16 @@
+language: php
+php:
+    - '7.4'
+    - '8.0'
+    - '8.1'
+cache:
+    directories:
+        - $HOME/.composer/cache
+before_script:
+    - sudo apt-get update > /dev/null
+    - composer self-update
+    - composer install --dev --prefer-dist
+install:
+    - php vendor/autoload.php
+script:
+    - php vendor/bin/behat
