@@ -78,7 +78,7 @@ class DirectoryDiscoveryStorage implements StorageInterface
     private function resolveThemes(): void
     {
         foreach (new \DirectoryIterator($this->extensionsDirectory) as $namespace) {
-            if ($namespace->isDot()) {
+            if ($namespace->isDot() || !$namespace->isDir()) {
                 continue;
             }
 

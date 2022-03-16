@@ -65,12 +65,12 @@ class TuliaKernel extends Kernel
         $configDirs = [];
 
         foreach (new \DirectoryIterator($this->getProjectDir().'/extension/'.$type) as $vendor) {
-            if ($vendor->isDot()) {
+            if ($vendor->isDot() || !$vendor->isDir()) {
                 continue;
             }
 
             foreach (new \DirectoryIterator($this->getProjectDir().'/extension/'.$type.'/'.$vendor->getFilename()) as $ext) {
-                if ($vendor->isDot()) {
+                if ($ext->isDot() || !$ext->isDir()) {
                     continue;
                 }
 
