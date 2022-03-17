@@ -1,6 +1,6 @@
 framework:
     public_paths:
-        '%cms.core_dir%/Cms/TuliaEditor/Infrastructure/Framework/Resources/public/dist': '/core/tulia-editor'
+        '%cms.core_dir%/Cms/TuliaEditor/Infrastructure/Framework/Resources/public/tulia_editor/dist': '/core/tulia-editor-new'
     translator:
         paths:
             - '%cms.core_dir%/Cms/TuliaEditor/Infrastructure/Framework/Resources/translations'
@@ -15,3 +15,23 @@ framework:
                     - /assets/core/tulia-editor/js/tulia-editor.min.js
                 styles:
                     - /assets/core/tulia-editor/css/tulia-editor.min.css
+            tulia_editor_new:
+                group: head
+                scripts:
+                    - /assets/core/tulia-editor-new/tulia-editor.admin.js
+            tulia_editor_new.preview:
+                group: head
+                scripts:
+                    - /assets/core/tulia-editor-new/tulia-editor.preview.js
+            tulia_editor_new.editor:
+                group: head
+                scripts:
+                    - /assets/core/tulia-editor-new/tulia-editor.editor.js
+cms:
+    content_building:
+        data_types:
+            mapping:
+                tulia_editor:
+                    label: Tulia Editor
+                    classname: 'Tulia\Cms\TuliaEditor\Infrastructure\Framework\Form\FormType\TuliaEditorType'
+                    builder: 'Tulia\Cms\TuliaEditor\Infrastructure\Framework\Form\FormType\TuliaEditorTypeBuilder'

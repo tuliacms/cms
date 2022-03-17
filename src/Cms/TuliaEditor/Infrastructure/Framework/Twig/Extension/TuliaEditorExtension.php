@@ -25,14 +25,13 @@ class TuliaEditorExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('tulia_editor', function (string $name, ?string $content, AttributesAwareInterface $entity, array $params = []) {
+            new TwigFunction('tulia_editor', function (string $name, ?string $content, array $params = []) {
                 if (isset($params['id']) === false) {
                     $params['id'] = uniqid('', true);
                 }
 
                 return $this->engine->render(new View('@backend/tulia-editor/editor.tpl', [
                     'name' => $name,
-                    'entity' => $entity,
                     'content' => $content,
                     'params' => $params,
                 ]));
