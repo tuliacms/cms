@@ -1,0 +1,8 @@
+[![CircleCI](https://circleci.com/gh/tuliacms/cms/tree/master.svg?style=shield)](https://circleci.com/gh/tuliacms/cms/tree/master)
+![CircleCI](https://img.shields.io/circleci/build/github/tuliacms/cms)
+![GitHub issues](https://img.shields.io/github/issues-raw/tuliacms/cms)
+![GitHub closed issues](https://img.shields.io/github/issues-closed/tuliacms/cms)
+![GitHub](https://img.shields.io/github/license/tuliacms/cms)
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/tuliacms/cms)
+![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/tuliacms/cms)
+![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/tuliacms/cms)
