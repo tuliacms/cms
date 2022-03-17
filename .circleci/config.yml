@@ -39,6 +39,6 @@ jobs:
                 path: tests/_output
 workflows:
     version: 2
-    tuliacms/cms:
+    workflow:
         jobs:
             - test
