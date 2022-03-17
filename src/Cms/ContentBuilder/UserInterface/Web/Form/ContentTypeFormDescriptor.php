@@ -9,25 +9,33 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderInterface;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeHandler\FieldTypeHandlerInterface;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
+use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class ContentTypeFormDescriptor
 {
-    protected ContentType $contentType;
-    protected FormBuilderInterface $formBuilder;
-    protected ?FormInterface $form = null;
-    protected ?FormView $formView = null;
-    protected bool $formClosed = false;
-    protected array $data = [];
+    private FieldTypeMappingRegistry $fieldTypeMappingRegistry;
+    private ContentType $contentType;
+    private FormBuilderInterface $formBuilder;
+    private ?FormInterface $form = null;
+    private ?FormView $formView = null;
+    private bool $formClosed = false;
+    private array $data = [];
     private array $viewContext;
 
-    public function __construct(ContentType $contentType, FormBuilderInterface $formBuilder, array $viewContext = [])
-    {
+    public function __construct(
+        FieldTypeMappingRegistry $fieldTypeMappingRegistry,
+        ContentType $contentType,
+        FormBuilderInterface $formBuilder,
+        array $viewContext = []
+    ) {
+        $this->fieldTypeMappingRegistry = $fieldTypeMappingRegistry;
         $this->formBuilder = $formBuilder;
         $this->contentType = $contentType;
         $this->viewContext = $viewContext;
@@ -146,12 +154,20 @@ class ContentTypeFormDescriptor
 
                 $result[$uri] = new Attribute(
                     $prefix . $field->getCode(),
-                    $rawData[$field->getCode()],
                     $uri,
+                    $rawData[$field->getCode()],
+                    null,
+                    [],
                     $field->getFlags(),
                     $field->isMultilingual(),
                     $field->hasNonscalarValue()
                 );
+
+                $builder = $this->fieldTypeMappingRegistry->getTypeBuilder($field->getType());
+
+                if ($builder instanceof FieldTypeBuilderInterface) {
+                    $result[$uri] = $builder->buildAttributeFromValue($field, $result[$uri], $rawData[$field->getCode()]);
+                }
             }
         }
 

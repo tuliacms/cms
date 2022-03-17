@@ -37,7 +37,8 @@ class AbstractField
         \assert(\is_array($this->options['constraints']), 'The "constraints" option must be an array.');
         \assert(\is_array($this->options['children']), 'The "children" option must be an array.');
 
-        foreach ($this->options['children'] as $child) {
+        foreach ($this->options['children'] as $code => $child) {
+            \assert(\is_string($code), 'The children array must be associative. Please use field code as key.');
             \assert(is_object($child) && $child instanceof AbstractField, 'The children must be a Field instance.');
         }
 

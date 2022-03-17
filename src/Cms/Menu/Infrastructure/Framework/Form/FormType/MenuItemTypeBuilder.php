@@ -6,7 +6,7 @@ namespace Tulia\Cms\Menu\Infrastructure\Framework\Form\FormType;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderInterface;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\AbstractFieldTypeBuilder;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
 use Tulia\Cms\Menu\Domain\Builder\Type\RegistryInterface;
@@ -15,7 +15,7 @@ use Tulia\Cms\Menu\Domain\Builder\Type\TypeInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-class MenuItemTypeBuilder implements FieldTypeBuilderInterface
+class MenuItemTypeBuilder extends AbstractFieldTypeBuilder
 {
     protected RegistryInterface $registry;
     protected TranslatorInterface $translator;
@@ -28,7 +28,7 @@ class MenuItemTypeBuilder implements FieldTypeBuilderInterface
         $this->translator = $translator;
     }
 
-    public function build(Field $field, array $options, ContentType $contentType): array
+    public function buildOptions(Field $field, array $options, ContentType $contentType): array
     {
         $itemTypes = [];
 

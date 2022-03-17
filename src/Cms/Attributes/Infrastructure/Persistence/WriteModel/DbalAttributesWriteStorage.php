@@ -26,7 +26,9 @@ class DbalAttributesWriteStorage extends AbstractLocalizableStorage implements A
             tm.owner_id,
             tm.name,
             tm.uri,
-            COALESCE(tl.value, tm.value) AS `value`
+            COALESCE(tl.value, tm.value) AS `value`,
+            COALESCE(tl.compiled_value, tm.compiled_value) AS `compiled_value`,
+            COALESCE(tl.payload, tm.payload) AS `payload`
         FROM #__{$type}_attribute AS tm
         LEFT JOIN #__{$type}_attribute_lang AS tl
             ON tm.id = tl.attribute_id AND tl.locale = :locale
@@ -48,6 +50,8 @@ class DbalAttributesWriteStorage extends AbstractLocalizableStorage implements A
         foreach ($source as $row) {
             $result[$row['owner_id']][$row['uri']] = [
                 'value' => $row['value'],
+                'compiled_value' => $row['compiled_value'],
+                'payload' => $row['payload'] ? json_decode($row['payload'], true, JSON_THROW_ON_ERROR) : [],
                 'uri' => $row['uri'],
                 'name' => $row['name'],
             ];
@@ -89,6 +93,8 @@ class DbalAttributesWriteStorage extends AbstractLocalizableStorage implements A
             'owner_id' => $data['owner_id'],
             'name' => $data['name'],
             'value' => $data['value'],
+            'compiled_value' => $data['compiled_value'],
+            'payload' => json_encode($data['payload']),
             'uri' => $data['uri'],
             'is_renderable' => ((bool) $data['is_renderable']) ? 1 : 0,
             'has_nonscalar_value' => ((bool) $data['has_nonscalar_value']) ? 1 : 0,
@@ -103,6 +109,8 @@ class DbalAttributesWriteStorage extends AbstractLocalizableStorage implements A
 
         $this->connection->update("#__{$data['type']}_attribute", [
             'value' => $data['value'],
+            'compiled_value' => $data['compiled_value'],
+            'payload' => json_encode($data['payload']),
             'is_renderable' => ((bool) $data['is_renderable']) ? 1 : 0,
             'has_nonscalar_value' => ((bool) $data['has_nonscalar_value']) ? 1 : 0,
         ], [
@@ -121,6 +129,8 @@ class DbalAttributesWriteStorage extends AbstractLocalizableStorage implements A
         $this->connection->insert("#__{$data['type']}_attribute_lang", [
             'attribute_id' => $data['id'],
             'value' => $data['value'],
+            'compiled_value' => $data['compiled_value'],
+            'payload' => json_encode($data['payload']),
             'locale' => $data['locale'],
         ]);
     }
@@ -133,6 +143,8 @@ class DbalAttributesWriteStorage extends AbstractLocalizableStorage implements A
 
         $this->connection->update("#__{$data['type']}_attribute_lang", [
             'value' => $data['value'],
+            'compiled_value' => $data['compiled_value'],
+            'payload' => json_encode($data['payload']),
         ], [
             'attribute_id' => $data['id'],
             'locale' => $data['locale'],

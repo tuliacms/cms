@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Service;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
+use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Exception\ConstraintNotExistsException;
@@ -42,13 +42,23 @@ class SymfonyFormBuilderCreator
         $this->symfonyFieldBuilder = $symfonyFieldBuilder;
     }
 
-    public function createBuilder(ContentType $contentType, array $data, bool $expectCqrsToken = true): FormBuilderInterface
-    {
-        $builder = $this->createFormBuilder($contentType->getCode(), $data, $expectCqrsToken);
-
+    /**
+     * @param Attribute[] $attributes
+     */
+    public function createBuilder(
+        ContentType $contentType,
+        array $attributes,
+        bool $expectCqrsToken = true
+    ): FormBuilderInterface {
         $fields = $contentType->getFields();
 
-        $this->buildFieldsWithBuilder($fields, $builder, $contentType);
+        $builder = $this->createFormBuilder(
+            $contentType->getCode(),
+            $this->flattenAttributesValues($fields, $attributes),
+            $expectCqrsToken
+        );
+
+        $this->buildFieldsWithBuilder($builder, $contentType, $fields);
 
         return $builder;
     }
@@ -70,13 +80,21 @@ class SymfonyFormBuilderCreator
 
     /**
      * @param Field[] $fields
+     * @param Attribute[] $attributes
      */
-    private function buildFieldsWithBuilder(array $fields, FormBuilderInterface $builder, ContentType $contentType): void
-    {
+    private function buildFieldsWithBuilder(
+        FormBuilderInterface $builder,
+        ContentType $contentType,
+        array $fields
+    ): void {
         /** @var Field $field */
         foreach ($fields as $field) {
             try {
-                $this->symfonyFieldBuilder->buildFieldAndAddToBuilder($field, $builder, $contentType);
+                $this->symfonyFieldBuilder->buildFieldAndAddToBuilder(
+                    $builder,
+                    $contentType,
+                    $field
+                );
             } catch (ConstraintNotExistsException $e) {
                 $this->logger->warning(
                     sprintf(
@@ -102,5 +120,40 @@ class SymfonyFormBuilderCreator
                 'route' => 'backend.widget',
             ])
             ->add('save', SubmitType::class);
+    }
+
+    /**
+     * @param Field[] $fields
+     * @param Attribute[]|array<string, Attribute[]> $attributes
+     */
+    private function flattenAttributesValues(array $fields, array $attributes): array
+    {
+        $result = [];
+
+        foreach ($fields as $code => $field) {
+            if (isset($attributes[$code]) === false) {
+                continue;
+            }
+
+            $attribute = $attributes[$code];
+
+            if ($attribute instanceof Attribute) {
+                $typeBuilder = $this->mappingRegistry->getTypeBuilder($field->getType());
+
+                if ($typeBuilder) {
+                    $result[$code] = $typeBuilder->buildValueFromAttribute($field, $attribute);
+                } else {
+                    $result[$code] = $attribute->getValue();
+                }
+            }
+
+            if (is_array($attribute)) {
+                foreach ($attribute as $sk => $sv) {
+                    $result[$code][$sk] = $this->flattenAttributesValues($field->getChildren(), $sv);
+                }
+            }
+        }
+
+        return $result;
     }
 }

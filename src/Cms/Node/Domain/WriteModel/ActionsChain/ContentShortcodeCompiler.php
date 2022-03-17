@@ -41,6 +41,7 @@ class ContentShortcodeCompiler implements AggregateActionInterface
 
     public function execute(AggregateRoot $node): void
     {
+        /** @var Node $node */
         foreach ($node->getAttributes() as $attribute) {
             if (! $attribute->getValue()) {
                 continue;
@@ -50,18 +51,10 @@ class ContentShortcodeCompiler implements AggregateActionInterface
                 continue;
             }
 
-            $uri = $attribute->produceUriWithModificator('compiled');
+            $data = $attribute->toArray();
+            $data['compiled_value'] = $this->processor->process($attribute->getValue());
 
-            $node->updateAttributes([
-                $uri => new Attribute(
-                    $attribute->produceCodeWithModificator('compiled'),
-                    $this->processor->process($attribute->getValue()),
-                    $uri,
-                    ['renderable'],
-                    $attribute->isMultilingual(),
-                    $attribute->hasNonscalarValue()
-                )
-            ]);
+            $node->addAttribute(Attribute::fromArray($data));
         }
     }
 }

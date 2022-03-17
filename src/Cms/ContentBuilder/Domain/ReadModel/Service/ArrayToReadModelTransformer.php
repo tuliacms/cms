@@ -115,7 +115,7 @@ class ArrayToReadModelTransformer
         $result = [];
 
         foreach ($fields as $code => $field) {
-            $result[] = new Field([
+            $result[$code] = new Field([
                 'code' => $code,
                 'type' => $field['type'],
                 'name' => (string) $field['name'],

@@ -6,14 +6,14 @@ namespace Tulia\Cms\ContactForm\UserInterface\Web\Shared\Form\FormType;
 
 use Tulia\Cms\ContactForm\Domain\ReadModel\Finder\ContactFormFinderInterface;
 use Tulia\Cms\ContactForm\Domain\ReadModel\Finder\ContactFormFinderScopeEnum;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderInterface;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\AbstractFieldTypeBuilder;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class FormSelectorBuilder implements FieldTypeBuilderInterface
+class FormSelectorBuilder extends AbstractFieldTypeBuilder
 {
     private ContactFormFinderInterface $finder;
 
@@ -22,7 +22,7 @@ class FormSelectorBuilder implements FieldTypeBuilderInterface
         $this->finder = $finder;
     }
 
-    public function build(Field $field, array $options, ContentType $contentType): array
+    public function buildOptions(Field $field, array $options, ContentType $contentType): array
     {
         $forms = $this->finder->find([], ContactFormFinderScopeEnum::SEARCH);
 

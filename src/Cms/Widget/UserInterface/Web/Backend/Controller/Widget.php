@@ -160,7 +160,7 @@ class Widget extends AbstractController
     {
         return $this->contentFormService->buildFormDescriptor(
             str_replace('.', '_', 'widget_'.$widget->getWidgetType()),
-            $widget->toArray()
+            $widget->getAttributes()
         );
     }
 
@@ -204,7 +204,7 @@ class Widget extends AbstractController
         $widget->setStyles($getValue('styles'));
         $widget->setTitle($getValue('title'));
         $widget->setVisibility((bool) $getValue('visibility'));
-        $widget->setAttributes($attributes);
+        $widget->updateAttributes($attributes);
 
         if ($strategy === 'create') {
             $this->repository->insert($widget);

@@ -7,16 +7,16 @@ namespace Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Context\ExecutionContext;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderInterface;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\AbstractFieldTypeBuilder;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class PasswordTypeRepeatedBuilder implements FieldTypeBuilderInterface
+class PasswordTypeRepeatedBuilder extends AbstractFieldTypeBuilder
 {
-    public function build(Field $field, array $options, ContentType $contentType): array
+    public function buildOptions(Field $field, array $options, ContentType $contentType): array
     {
         $options['constraints'][] = new Callback([$this, 'validateFieldsValuesSame'], null, [
             'referenced_field' => $field->getConfig('referenced_field')

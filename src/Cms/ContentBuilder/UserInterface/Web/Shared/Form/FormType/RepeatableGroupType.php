@@ -26,10 +26,14 @@ class RepeatableGroupType extends AbstractType
         $this->symfonyFieldBuilder = $symfonyFieldBuilder;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         foreach ($options['fields'] as $field) {
-            $this->symfonyFieldBuilder->buildFieldAndAddToBuilder($field, $builder, $options['content_type']);
+            $this->symfonyFieldBuilder->buildFieldAndAddToBuilder(
+                $builder,
+                $options['content_type'],
+                $field
+            );
         }
 
         $builder->add('__order', HiddenType::class, [

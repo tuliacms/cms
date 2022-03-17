@@ -6,16 +6,16 @@ namespace Tulia\Cms\Node\UserInterface\Web\Shared\Form\FormType;
 
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderInterface;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\AbstractFieldTypeBuilder;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class NodeTypeaheadTypeBuilder implements FieldTypeBuilderInterface
+class NodeTypeaheadTypeBuilder extends AbstractFieldTypeBuilder
 {
-    public function build(Field $field, array $options, ContentType $contentType): array
+    public function buildOptions(Field $field, array $options, ContentType $contentType): array
     {
         $options['search_route_params'] = [
             'node_type' => $contentType->getCode(),

@@ -6,7 +6,7 @@ namespace Tulia\Cms\Taxonomy\Domain\ReadModel\Model;
 
 use InvalidArgumentException;
 use Tulia\Cms\Attributes\Domain\ReadModel\MagickAttributesTrait;
-use Tulia\Cms\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
+use Tulia\Cms\Attributes\Domain\ReadModel\Model\AttributesAwareInterface;
 
 /**
  * @author Adam Banaszkiewicz

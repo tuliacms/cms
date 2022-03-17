@@ -15,9 +15,7 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 class AttributesRepository
 {
     private AttributesWriteStorageInterface $storage;
-
     private CurrentWebsiteInterface $currentWebsite;
-
     private UuidGeneratorInterface $uuidGenerator;
 
     public function __construct(
@@ -58,8 +56,10 @@ class AttributesRepository
 
                 $result[$ownerId][$key] = new Attribute(
                     $element['name'],
-                    $value,
                     $element['uri'],
+                    $value,
+                    $element['compiled_value'],
+                    $element['payload'],
                     $flags,
                     $info[$element['name']]['is_multilingual'],
                     $info[$element['name']]['has_nonscalar_value'],
@@ -87,6 +87,8 @@ class AttributesRepository
             $structure[$uri] = [
                 'id' => $this->uuidGenerator->generate(),
                 'value' => $attribute->hasNonscalarValue() ? serialize($attribute->getValue()) : $attribute->getValue(),
+                'compiled_value' => $attribute->getCompiledValue(),
+                'payload' => $attribute->getPayload(),
                 'owner_id' => $ownerId,
                 'name' => $attribute->getCode(),
                 'uri' => $uri,

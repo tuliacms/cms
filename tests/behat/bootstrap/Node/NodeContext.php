@@ -133,6 +133,6 @@ class NodeContext implements Context
 
     private function attribute(string $uri, string $value): Attribute
     {
-        return new Attribute($uri, $value, $uri, [], false, false);
+        return new Attribute($uri, $uri, $value, $value, [], [], false, false);
     }
 }

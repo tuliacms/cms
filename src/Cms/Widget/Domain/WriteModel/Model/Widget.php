@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Widget\Domain\WriteModel\Model;
 
+use Tulia\Cms\Attributes\Domain\WriteModel\AttributesAwareTrait;
 use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
+use Tulia\Cms\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AggregateRoot;
 use Tulia\Cms\Widget\Domain\WriteModel\Event;
 use Tulia\Cms\Widget\Domain\WriteModel\Model\ValueObject\WidgetId;
@@ -12,8 +14,12 @@ use Tulia\Cms\Widget\Domain\WriteModel\Model\ValueObject\WidgetId;
 /**
  * @author Adam Banaszkiewicz
  */
-final class Widget extends AggregateRoot
+final class Widget extends AggregateRoot implements AttributesAwareInterface
 {
+    use AttributesAwareTrait {
+        AttributesAwareTrait::updateAttributes as baseUpdateAttributes;
+    }
+
     protected WidgetId $id;
     protected string $websiteId;
     protected string $widgetType;
@@ -193,31 +199,5 @@ final class Widget extends AggregateRoot
     public function isTranslated(): bool
     {
         return $this->translated;
-    }
-
-    /**
-     * @return Attribute[]
-     */
-    public function getAttributes(): array
-    {
-        return $this->attributes;
-    }
-
-    /**
-     * @param Attribute[] $attributes
-     */
-    public function setAttributes(array $attributes): void
-    {
-        unset(
-            $attributes['name'],
-            $attributes['space'],
-            $attributes['name'],
-            $attributes['html_class'],
-            $attributes['html_id'],
-            $attributes['styles'],
-            $attributes['title'],
-            $attributes['visibility'],
-        );
-        $this->attributes = $attributes;
     }
 }

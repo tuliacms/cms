@@ -50,8 +50,10 @@ class ObjectDataToAttributesTransformer
 
             $attributes[$attribute['name']] = new Attribute(
                 $attribute['name'],
-                $attribute['value'],
                 $attribute['uri'],
+                $attribute['value'],
+                $attribute['compiled_value'] ?? null,
+                $attribute['payload'] ?? [],
                 $field->getFlags(),
                 $field->isMultilingual(),
                 $field->hasNonscalarValue()

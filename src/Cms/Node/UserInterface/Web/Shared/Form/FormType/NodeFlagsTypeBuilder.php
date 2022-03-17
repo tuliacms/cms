@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\UserInterface\Web\Shared\Form\FormType;
 
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderInterface;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\AbstractFieldTypeBuilder;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
 use Tulia\Cms\Node\Domain\NodeFlag\NodeFlagRegistryInterface;
@@ -13,7 +13,7 @@ use Tulia\Cms\Node\Domain\NodeFlag\NodeFlagRegistryInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-class NodeFlagsTypeBuilder implements FieldTypeBuilderInterface
+class NodeFlagsTypeBuilder extends AbstractFieldTypeBuilder
 {
     private NodeFlagRegistryInterface $flagRegistry;
     private TranslatorInterface $translator;
@@ -24,7 +24,7 @@ class NodeFlagsTypeBuilder implements FieldTypeBuilderInterface
         $this->translator = $translator;
     }
 
-    public function build(Field $field, array $options, ContentType $contentType): array
+    public function buildOptions(Field $field, array $options, ContentType $contentType): array
     {
         $availableFlags = [];
 

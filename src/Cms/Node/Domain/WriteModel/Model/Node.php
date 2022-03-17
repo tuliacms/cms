@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\WriteModel\Model;
 
+use Tulia\Cms\Attributes\Domain\WriteModel\AttributesAwareTrait;
 use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
+use Tulia\Cms\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Event;
 use Tulia\Cms\Node\Domain\WriteModel\Event\AttributeUpdated;
 use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\NodeId;
@@ -14,8 +16,10 @@ use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 /**
  * @author Adam Banaszkiewicz
  */
-final class Node extends AggregateRoot
+final class Node extends AggregateRoot implements AttributesAwareInterface
 {
+    use AttributesAwareTrait;
+
     protected NodeId $id;
     protected string $type;
     protected string $status = 'draft';
@@ -118,44 +122,12 @@ final class Node extends AggregateRoot
         return $this->type;
     }
 
-    /**
-     * @param Attribute[] $attributes
-     */
-    public function updateAttributes(array $attributes): void
-    {
-        unset(
-            $attributes['id'],
-            $attributes['type'],
-            $attributes['status'],
-            $attributes['title'],
-            $attributes['slug'],
-            $attributes['parent_id'],
-            $attributes['published_at'],
-            $attributes['published_to'],
-            $attributes['author_id'],
-        );
-
-        foreach ($attributes as $attribute) {
-            $this->addAttribute($attribute);
-        }
-
-        $this->markAsUpdated();
-    }
-
-    /**
-     * @return Attribute[]
-     */
-    public function getAttributes(): array
-    {
-        return $this->attributes;
-    }
-
     public function addAttribute(Attribute $attribute): void
     {
         $uri = $attribute->getUri();
         $value = $attribute->getValue();
 
-        if (isset($this->attributes[$uri]) === false || $this->attributes[$uri]->getValue() !== $value) {
+        if (isset($this->attributes[$uri]) === false || $this->attributes[$uri]->equals($attribute) === false) {
             $this->attributes[$attribute->getUri()] = $attribute;
             /**
              * Calling recordUniqueThat() prevents the system to record multiple changes on the same attribute.
@@ -169,12 +141,9 @@ final class Node extends AggregateRoot
                     return $uri === $event->getAttribute();
                 }
             });
-        }
-    }
 
-    public function hasAttribute(string $uri): bool
-    {
-        return isset($this->attributes[$uri]);
+            $this->markAsUpdated();
+        }
     }
 
     public function removeAttribute(string $uri): void
@@ -184,15 +153,6 @@ final class Node extends AggregateRoot
         $this->markAsUpdated();
     }
 
-    /**
-     * @param mixed $default
-     * @return mixed
-     */
-    public function getAttribute(string $uri, $default = null)
-    {
-        return $this->attributes[$uri] ?? $default;
-    }
-
     public function hasFlag(string $flag): bool
     {
         return isset($this->attributes['flags']) && \in_array($flag, $this->attributes['flags']->getValue(), true);
@@ -200,7 +160,7 @@ final class Node extends AggregateRoot
 
     public function getFlags(): array
     {
-        return isset($this->attributes['flags']) ? $this->attributes['flags']->getValue() : [];
+        return $this->getAttribute('flags')->getValue();
     }
 
     public function getTitle(): string

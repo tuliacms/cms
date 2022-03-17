@@ -9,13 +9,25 @@ namespace Tulia\Cms\Attributes\Domain\WriteModel\Model;
  */
 interface AttributesAwareInterface
 {
-    public function __get(string $name);
+    /**
+     * @param Attribute[] $attributes
+     */
+    public function updateAttributes(array $attributes): void;
 
-    public function __set(string $name, $value): void;
-
-    public function __isset(string $name): bool;
-
-    public function attribute(string $name, $default = null);
-
+    /**
+     * @return Attribute[]
+     */
     public function getAttributes(): array;
+
+    public function addAttribute(Attribute $attribute): void;
+
+    public function hasAttribute(string $uri): bool;
+
+    public function removeAttribute(string $uri): void;
+
+    /**
+     * @param $default
+     * @return mixed
+     */
+    public function getAttribute(string $uri, $default = null);
 }

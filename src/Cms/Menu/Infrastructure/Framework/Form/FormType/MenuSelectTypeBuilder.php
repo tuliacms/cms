@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Infrastructure\Framework\Form\FormType;
 
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderInterface;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\AbstractFieldTypeBuilder;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
 use Tulia\Cms\Menu\Domain\ReadModel\Finder\MenuFinderInterface;
@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @author Adam Banaszkiewicz
  */
-class MenuSelectTypeBuilder implements FieldTypeBuilderInterface
+class MenuSelectTypeBuilder extends AbstractFieldTypeBuilder
 {
     private MenuFinderInterface $menuFinder;
 
@@ -23,7 +23,7 @@ class MenuSelectTypeBuilder implements FieldTypeBuilderInterface
         $this->menuFinder = $menuFinder;
     }
 
-    public function build(Field $field, array $options, ContentType $contentType): array
+    public function buildOptions(Field $field, array $options, ContentType $contentType): array
     {
         $source = $this->menuFinder->find([], MenuFinderScopeEnum::INTERNAL);
         $menus = [];

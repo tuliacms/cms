@@ -9,6 +9,7 @@ use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
 /**
  * @property array $attributes
  * @author Adam Banaszkiewicz
+ * @todo Remove this trait, WriteModel must not be "magick".
  */
 trait MagickAttributesTrait
 {

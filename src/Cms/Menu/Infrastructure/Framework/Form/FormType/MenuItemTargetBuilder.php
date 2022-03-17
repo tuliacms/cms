@@ -6,14 +6,14 @@ namespace Tulia\Cms\Menu\Infrastructure\Framework\Form\FormType;
 
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderInterface;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\AbstractFieldTypeBuilder;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class MenuItemTargetBuilder implements FieldTypeBuilderInterface
+class MenuItemTargetBuilder extends AbstractFieldTypeBuilder
 {
     protected TranslatorInterface $translator;
 
@@ -22,7 +22,7 @@ class MenuItemTargetBuilder implements FieldTypeBuilderInterface
         $this->translator = $translator;
     }
 
-    public function build(Field $field, array $options, ContentType $contentType): array
+    public function buildOptions(Field $field, array $options, ContentType $contentType): array
     {
         $itemTargets = [
             $this->translator->trans('itemTargetAuto', [], 'menu')  => '',

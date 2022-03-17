@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Service;
 
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
-use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\ContentTypeFormDescriptor;
+use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Attributes\Domain\WriteModel\Service\UriToArrayTransformer;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
+use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\ContentTypeFormDescriptor;
 
 /**
  * @author Adam Banaszkiewicz
@@ -16,31 +18,29 @@ class ContentFormService
     private ContentTypeRegistryInterface $contentTypeRegistry;
     private SymfonyFormBuilderCreator $formBuilder;
     private UriToArrayTransformer $attributesToArrayTransformer;
+    private FieldTypeMappingRegistry $fieldTypeMappingRegistry;
 
     public function __construct(
         ContentTypeRegistryInterface $contentTypeRegistry,
         SymfonyFormBuilderCreator $formBuilder,
-        UriToArrayTransformer $attributesToArrayTransformer
+        UriToArrayTransformer $attributesToArrayTransformer,
+        FieldTypeMappingRegistry $fieldTypeMappingRegistry
     ) {
         $this->contentTypeRegistry = $contentTypeRegistry;
         $this->formBuilder = $formBuilder;
         $this->attributesToArrayTransformer = $attributesToArrayTransformer;
+        $this->fieldTypeMappingRegistry = $fieldTypeMappingRegistry;
     }
 
-    public function buildFormDescriptor(string $type, array $data, array $viewContext = []): ContentTypeFormDescriptor
+    /**
+     * @param Attribute[] $attributes
+     */
+    public function buildFormDescriptor(string $type, array $attributes, array $viewContext = []): ContentTypeFormDescriptor
     {
         $contentType = $this->contentTypeRegistry->get($type);
-
-        if (isset($data['attributes']) && \is_array($data['attributes'])) {
-            $attributes = $this->attributesToArrayTransformer->transform($data['attributes']);
-            unset($data['attributes']);
-            $flattened = array_merge($attributes, $data);
-        } else {
-            $flattened = $data;
-        }
-
+        $flattened = $this->attributesToArrayTransformer->transform($attributes);
         $form = $this->formBuilder->createBuilder($contentType, $flattened);
 
-        return new ContentTypeFormDescriptor($contentType, $form, $viewContext);
+        return new ContentTypeFormDescriptor($this->fieldTypeMappingRegistry, $contentType, $form, $viewContext);
     }
 }

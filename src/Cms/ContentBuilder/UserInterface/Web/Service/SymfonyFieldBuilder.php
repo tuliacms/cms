@@ -29,12 +29,12 @@ class SymfonyFieldBuilder
     }
 
     public function buildFieldAndAddToBuilder(
-        Field $field,
         FormBuilderInterface $builder,
-        ContentType $contentType
+        ContentType $contentType,
+        Field $field
     ): void {
         if ($field->getType() === 'repeatable') {
-            $this->buildRepeatable($field, $builder, $contentType);
+            $this->buildRepeatable($builder, $contentType, $field);
             return;
         }
 
@@ -52,7 +52,7 @@ class SymfonyFieldBuilder
         ];
 
         if ($typeBuilder) {
-            $options = $typeBuilder->build($field, $options, $contentType);
+            $options = $typeBuilder->buildOptions($field, $options, $contentType);
         }
 
         $builder->add(
@@ -66,8 +66,11 @@ class SymfonyFieldBuilder
         }
     }
 
-    private function buildRepeatable(Field $field, FormBuilderInterface $builder, ContentType $contentType): void
-    {
+    private function buildRepeatable(
+        FormBuilderInterface $builder,
+        ContentType $contentType,
+        Field $field
+    ): void {
         $prototypeName = sprintf('__name_%s__', $field->getCode());
 
         $builder->add(

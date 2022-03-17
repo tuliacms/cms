@@ -11,19 +11,19 @@ use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
  */
 class UriToArrayTransformer
 {
+    /**
+     * @param Attribute[] $attributes
+     * @return array
+     */
     public function transform(array $attributes): array
     {
         $output = [];
 
-        foreach ($attributes as $uri => $value) {
+        foreach ($attributes as $uri => $attribute) {
             parse_str($uri.'=v', $result);
 
-            if ($value instanceof Attribute) {
-                $value = $value->getValue();
-            }
-
-            $value = $this->assignValueToMostDeepIndex($result, $value);
-            $output = $this->mergeRecursive($output, $value);
+            $attribute = $this->assignValueToMostDeepIndex($result, $attribute);
+            $output = $this->mergeRecursive($output, $attribute);
         }
 
         return $output;

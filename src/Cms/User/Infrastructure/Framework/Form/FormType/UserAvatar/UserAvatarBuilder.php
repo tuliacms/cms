@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserAvatar;
 
 use Symfony\Component\Validator\Constraints as Assert;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderInterface;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\AbstractFieldTypeBuilder;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class UserAvatarBuilder implements FieldTypeBuilderInterface
+class UserAvatarBuilder extends AbstractFieldTypeBuilder
 {
-    public function build(Field $field, array $options, ContentType $contentType): array
+    public function buildOptions(Field $field, array $options, ContentType $contentType): array
     {
         $options['constraints'][] = new Assert\Image([
             'minWidth' => 100,

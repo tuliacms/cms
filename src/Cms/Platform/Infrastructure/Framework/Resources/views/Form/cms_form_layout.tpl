@@ -100,8 +100,20 @@
 
 
 {% block tulia_editor_widget -%}
-    {{ tulia_editor(full_name, value, entity, { id: id }) }}
+    {% for child in form.children %}
+        {{ form_row(child) }}
+    {% endfor %}
 {%- endblock tulia_editor_widget %}
+
+{% block tulia_editor_payload_widget -%}
+    {#<div style="display:none !important;">#}
+        {{- block('textarea_widget') -}}
+    {#</div>#}
+{%- endblock tulia_editor_payload_widget %}
+
+{% block tulia_editor_instance_widget -%}
+    {{ tulia_editor(full_name, value, { id: id, group_id: editor_field_group_id }) }}
+{%- endblock tulia_editor_instance_widget %}
 
 
 

@@ -10,14 +10,12 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
-use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\ContentTypeFormDescriptor;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\ContentFormService;
 use Tulia\Cms\Node\Application\UseCase\CreateNode;
 use Tulia\Cms\Node\Application\UseCase\DeleteNode;
 use Tulia\Cms\Node\Application\UseCase\UpdateNode;
 use Tulia\Cms\Node\Domain\ReadModel\Datatable\NodeDatatableFinderInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\SingularFlagImposedOnMoreThanOneNodeException;
-use Tulia\Cms\Node\Domain\WriteModel\Model\Node as WriteModelNode;
 use Tulia\Cms\Node\Domain\WriteModel\NodeRepository;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
@@ -87,7 +85,7 @@ class Node extends AbstractController
 
         $node = $this->repository->createNew($node_type);
 
-        $formDescriptor = $this->produceFormDescriptor($node);
+        $formDescriptor = $this->contentFormService->buildFormDescriptor($node->getType(), $node);
         $formDescriptor->handleRequest($request);
         $nodeType = $formDescriptor->getContentType();
 
@@ -121,7 +119,7 @@ class Node extends AbstractController
             return $this->redirectToRoute('backend.node.list');
         }
 
-        $formDescriptor = $this->produceFormDescriptor($node);
+        $formDescriptor = $this->contentFormService->buildFormDescriptor($node->getType(), $node->getAttributes());
         $formDescriptor->handleRequest($request);
         $form = $formDescriptor->getForm();
         $nodeType = $formDescriptor->getContentType();
@@ -229,11 +227,6 @@ class Node extends AbstractController
         }
 
         return $result;
-    }
-
-    private function produceFormDescriptor(WriteModelNode $node): ContentTypeFormDescriptor
-    {
-        return $this->contentFormService->buildFormDescriptor($node->getType(), $node->toArray());
     }
 
     /**

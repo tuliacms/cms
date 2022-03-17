@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\User\Domain\ReadModel\Model;
 
 use Tulia\Cms\Attributes\Domain\ReadModel\MagickAttributesTrait;
-use Tulia\Cms\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
+use Tulia\Cms\Attributes\Domain\ReadModel\Model\AttributesAwareInterface;
 
 /**
  * @author Adam Banaszkiewicz
