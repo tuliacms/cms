@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Tests\Unit\Cms\ContentBuilder\UserInterface\LayoutType\Service;
 
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeHandler\FieldTypeHandlerRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\ConstraintTypeMappingRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
 use Tulia\Tests\Unit\TestCase;
@@ -46,7 +48,13 @@ class FieldTypeMappingRegistryTest extends TestCase
     private function produceRegistry(): FieldTypeMappingRegistry
     {
         $constraintMappingRegistry = \Mockery::mock(ConstraintTypeMappingRegistry::class);
+        $fieldTypeBuilderRegistry = \Mockery::mock(FieldTypeBuilderRegistry::class);
+        $fieldTypeHandlerRegistry = \Mockery::mock(FieldTypeHandlerRegistry::class);
 
-        return new FieldTypeMappingRegistry($constraintMappingRegistry);
+        return new FieldTypeMappingRegistry(
+            $constraintMappingRegistry,
+            $fieldTypeBuilderRegistry,
+            $fieldTypeHandlerRegistry
+        );
     }
 }

@@ -9,24 +9,18 @@ jobs:
         steps:
             - checkout
             - run: sudo apt install -y libonig-dev
-            #- run: sudo -E docker-php-ext-install pdo_mysql mbstring
             - run:
                 name: Install ZIP
                 command: |
                     sudo apt install -y zlib1g-dev libzip-dev
-            #        sudo -E docker-php-ext-configure zip
-            #        sudo -E docker-php-ext-install zip
             - run:
                 name: Install ICU
                 command: |
                     sudo apt install -y zlib1g-dev libicu-dev g++
-            #        sudo -E docker-php-ext-configure intl
-            #        sudo -E docker-php-ext-install intl
             - run:
                 name: Install XML
                 command: |
                     sudo apt install -y libxml2-dev
-            #        sudo -E docker-php-ext-install xml
             - run: sudo composer self-update
             - restore_cache:
                 keys:
@@ -38,12 +32,13 @@ jobs:
                 paths:
                     - vendor
             - run: ./vendor/bin/behat
+            - run: ./vendor/bin/phpunit
             - store_test_results:
                 path: tests/_output
             - store_artifacts:
                 path: tests/_output
 workflows:
     version: 2
-    workflow:
+    tuliacms/cms:
         jobs:
             - test
