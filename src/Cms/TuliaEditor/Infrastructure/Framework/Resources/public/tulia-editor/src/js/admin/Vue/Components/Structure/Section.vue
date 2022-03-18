@@ -1,18 +1,21 @@
 <template>
-    <section class="section" id="{{ section.id }}">
-        <Row
-            v-for="row in section.rows"
-            :key="row.id"
-            :row="row"
-        ></Row>
+    <section class="tued-structure-section" :id="section.id">
+        <div class="container-fluid">
+            <Row
+                v-for="row in section.rows"
+                :key="row.id"
+                :row="row"
+                :availableBlocks="availableBlocks"
+            ></Row>
+        </div>
     </section>
 </template>
 
 <script>
-import Row from './Row';
+import Row from './Row.vue';
 
 export default {
-    props: ['section'],
+    props: ['section', 'availableBlocks'],
     components: { Row },
 };
 </script>

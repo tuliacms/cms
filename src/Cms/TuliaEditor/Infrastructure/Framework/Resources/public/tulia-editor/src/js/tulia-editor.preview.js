@@ -1,4 +1,4 @@
-import TuliaEditorVue from './admin/Vue/TuliaEditor.vue'
+/*import TuliaEditorVue from './admin/Vue/TuliaEditor.vue'
 
 window.TuliaEditor = function (selector, options) {
     this.selector = selector;
@@ -18,5 +18,5 @@ window.TuliaEditor = function (selector, options) {
     };
 
     this.init();
-};
+};*/
 

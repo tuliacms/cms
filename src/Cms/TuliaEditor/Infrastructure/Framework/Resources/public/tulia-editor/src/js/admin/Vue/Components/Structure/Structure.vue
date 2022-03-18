@@ -1,18 +1,19 @@
 <template>
-    <div>
+    <div class="tued-structure">
         <Section
             v-for="section in structure.sections"
             :key="section.id"
             :section="section"
+            :availableBlocks="availableBlocks"
         ></Section>
     </div>
 </template>
 
 <script>
-import Section from "./Section";
+import Section from "./Section.vue";
 
 export default {
-    props: ['structure'],
-    components: { Section },
+    props: ['structure', 'availableBlocks'],
+    components: { Section }
 };
 </script>

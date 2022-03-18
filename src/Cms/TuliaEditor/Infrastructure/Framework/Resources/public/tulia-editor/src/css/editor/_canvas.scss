@@ -1,0 +1,84 @@
+@import "device";
+
+.tued-canvas {
+    position: absolute;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    right: 320px;
+    bottom: 0;
+    height: 100%;
+    background-color: #f1f1f1;
+    overflow: auto;
+
+    .tued-canvas-inner {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        margin: 0 auto;
+
+        .tued-canvas-sizer {
+            position: relative;
+            height: 17px;
+            border-bottom: 1px solid #ddd;
+            background-color: #f1f1f1;
+            user-select: none;
+
+            &:hover {
+                .tued-canvas-size.active {
+                    background-color: transparent;
+                }
+
+                .tued-canvas-size:hover {
+                    background-color: #fff;
+                }
+            }
+
+            .tued-canvas-size {
+                position: absolute;
+                left: 50%;
+                top: 0;
+                height: 17px;
+                transform: translateX(-50%);
+                transition: .12s all;
+                border-bottom: 1px solid #ddd;
+
+                &:before,
+                &:after {
+                    position: absolute;
+                    display: block;
+                    content: "";
+                    width: 1px;
+                    background-color: #ddd;
+                    height: 17px;
+                }
+
+                &.active {
+                    background-color: #fff;
+                }
+
+                &:hover {
+                    cursor: pointer;
+                }
+
+                .tued-canvas-size-left,
+                .tued-canvas-size-right {
+                    position: absolute;
+                    top: 0;
+                    color: #666;
+                    font-size: 11px;
+                    height: 17px;
+                    line-height: 17px;
+                }
+                .tued-canvas-size-left {
+                    left: 7px;
+                }
+                .tued-canvas-size-right {
+                    right: 7px;
+                }
+            }
+        }
+    }
+}

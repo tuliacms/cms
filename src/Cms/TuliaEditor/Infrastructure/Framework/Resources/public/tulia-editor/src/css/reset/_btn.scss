@@ -1,0 +1,57 @@
+.tuedr-btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid #0088cc;
+    padding: 9px 13px;
+    font-size: 13px;
+    line-height: 1;
+    border-radius: 3px;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    color: #0088cc;
+    background-color: #fff;
+    overflow: visible;
+    font-family: inherit;
+
+    &:not(:disabled):not(.disabled) {
+        cursor: pointer;
+    }
+
+    &:hover {
+        color: #fff;
+        background-color: #0069d9;
+        border-color: #0062cc;
+    }
+
+    &.tuedr-focus,
+    &:focus {
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+    }
+
+    &:not(:disabled):not(.tuedr-disabled).tuedr-active,
+    &:not(:disabled):not(.tuedr-disabled):active {
+        color: #fff;
+        background-color: #0062cc;
+        border-color: #005cbf;
+    }
+
+    &.tuedr-btn-primary {
+        &.tuedr-focus,
+        &:focus {
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.5);
+        }
+    }
+}
+
+.tuedr-show > .tuedr-btn.tuedr-dropdown-toggle {
+    color: #fff;
+    background-color: #0062cc;
+    border-color: #005cbf;
+}

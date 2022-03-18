@@ -16,6 +16,11 @@ class ThemeExtension extends AbstractExtension
     {
         return [
             new TwigFunction(
+                'theme',
+                [ThemeRuntime::class, 'theme'],
+                ['is_safe' => [ 'html' ]]
+            ),
+            new TwigFunction(
                 'customizer_get',
                 [ThemeRuntime::class, 'customizerGet'],
                 ['is_safe' => [ 'html' ]]

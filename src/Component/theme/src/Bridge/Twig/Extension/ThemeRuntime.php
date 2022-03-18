@@ -7,6 +7,7 @@ namespace Tulia\Component\Theme\Bridge\Twig\Extension;
 use Requtize\Assetter\AssetterInterface;
 use Tulia\Component\Theme\Customizer\DetectorInterface;
 use Tulia\Component\Theme\ManagerInterface;
+use Tulia\Component\Theme\ThemeInterface;
 use Twig\Extension\RuntimeExtensionInterface;
 
 /**
@@ -26,6 +27,11 @@ class ThemeRuntime implements RuntimeExtensionInterface
         $this->manager = $manager;
         $this->assetter = $assetter;
         $this->detector = $detector;
+    }
+
+    public function theme(): ThemeInterface
+    {
+        return $this->manager->getTheme();
     }
 
     /**

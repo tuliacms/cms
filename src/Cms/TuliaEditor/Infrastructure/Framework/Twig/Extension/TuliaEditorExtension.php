@@ -30,7 +30,7 @@ class TuliaEditorExtension extends AbstractExtension
                     $params['id'] = uniqid('', true);
                 }
 
-                return $this->engine->render(new View('@backend/tulia-editor/editor.tpl', [
+                return $this->engine->render(new View('@backend/tulia-editor/editor-control.tpl', [
                     'name' => $name,
                     'content' => $content,
                     'params' => $params,

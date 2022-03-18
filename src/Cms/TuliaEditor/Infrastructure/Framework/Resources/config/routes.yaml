@@ -1,0 +1,3 @@
+backend.tulia_editor.editor_view:
+    path: /administrator/tulia-editor/editor-view
+    controller: Tulia\Cms\TuliaEditor\UserInterface\Web\Backend\Controller\Editor::editor

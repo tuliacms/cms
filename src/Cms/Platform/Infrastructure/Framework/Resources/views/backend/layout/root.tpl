@@ -1,19 +1,24 @@
 {% block beforeall %}{% endblock %}
-{% assets ['backend'] %}
+
+{% if prevent_load_backend_assets is not defined %}
+    {% assets ['backend'] %}
+{% endif %}
 
 <!doctype html>
 <html lang="{{ current_website().locale.language }}">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <script nonce="{{ csp_nonce() }}">
-            window.Tulia = {};
-            Tulia.Globals = {
-                search_anything: {
-                    endpoint: '{{ path('backend.search.root') }}'
-                }
-            };
-        </script>
+        {% if prevent_load_backend_assets is not defined %}
+            <script nonce="{{ csp_nonce() }}">
+                window.Tulia = {};
+                Tulia.Globals = {
+                    search_anything: {
+                        endpoint: '{{ path('backend.search.root') }}'
+                    }
+                };
+            </script>
+        {% endif %}
         {% block beforehead %}{% endblock %}
         {{ theme_head() }}
         <title>{% block title %}{{ title('Tulia CMS Backend') }}{% endblock %}</title>
@@ -25,9 +30,12 @@
         {% block body %}{% endblock %}
 
         {{ theme_body() }}
-        <script nonce="{{ csp_nonce() }}">
-            typeof moment !== 'undefined' ? moment.locale('{{ user().locale }}') : null;
-        </script>
+
+        {% if prevent_load_backend_assets is not defined %}
+            <script nonce="{{ csp_nonce() }}">
+                typeof moment !== 'undefined' ? moment.locale('{{ user().locale }}') : null;
+            </script>
+        {% endif %}
 
         {% block afterbody %}{% endblock %}
     </body>

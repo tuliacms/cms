@@ -1,7 +1,6 @@
 const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader');
 const FileManagerPlugin = require('filemanager-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
     entry: {
@@ -47,9 +46,6 @@ module.exports = {
     },
     plugins: [
         new VueLoaderPlugin(),
-        new MiniCssExtractPlugin({
-            filename: 'style.bundle.css',
-        }),
         new FileManagerPlugin({
             events: {
                 onEnd: {
@@ -60,10 +56,11 @@ module.exports = {
             },
         }),
     ],
+    devtool: 'eval-source-map'
 };
 
 if (process.env.NODE_ENV === 'production') {
-    module.exports.devtool = '#source-map';
+    module.exports.devtool = 'source-map';
     module.exports.optimization = {
         minimize: true
     };

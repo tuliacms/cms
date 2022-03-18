@@ -27,6 +27,7 @@ framework:
                 group: head
                 scripts:
                     - /assets/core/tulia-editor-new/tulia-editor.editor.js
+                require: [ vue ]
 cms:
     content_building:
         data_types:

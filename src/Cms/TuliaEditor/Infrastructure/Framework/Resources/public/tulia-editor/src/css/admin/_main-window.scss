@@ -1,0 +1,26 @@
+.tueda-main-window {
+    display: block;
+    margin-bottom: 30px;
+
+    .tueda-header {
+        background-color: #f1f1f1;
+        border: 1px solid #ddd;
+        border-bottom: none;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .tueda-preview-headline {
+            color: #333;
+            font-size: 17px;
+            margin-left: 10px;
+
+            .tueda-logo {
+                color: #333;
+                font-weight: bold;
+                display: inline-block;
+            }
+        }
+    }
+}

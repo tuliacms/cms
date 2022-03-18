@@ -1,0 +1,13 @@
+@import "structure";
+
+.tued-canvas-device-faker {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 17px;
+    bottom: 0;
+    overflow: hidden;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    transition: .3s all ease;
+}
