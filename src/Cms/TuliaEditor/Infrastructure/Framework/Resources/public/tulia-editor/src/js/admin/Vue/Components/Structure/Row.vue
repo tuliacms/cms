@@ -4,6 +4,7 @@
         :id="row.id"
         @mouseenter="$root.$emit('structure.hoverable.enter', $el, 'row')"
         @mouseleave="$root.$emit('structure.hoverable.leave', $el, 'row')"
+        @mousedown="$root.$emit('structure.selectable.select', $el, 'row')"
     >
         <Column
             v-for="column in row.columns"

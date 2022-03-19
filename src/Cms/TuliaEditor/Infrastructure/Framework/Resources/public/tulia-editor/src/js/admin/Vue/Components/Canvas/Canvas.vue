@@ -1,21 +1,21 @@
 <template>
     <div class="tued-canvas">
-        <div class="tued-canvas-inner">
+        <div class="tued-canvas-inner" @mousedown.self="$root.$emit('structure.selectable.outsite')">
             <Sizer></Sizer>
-            <Device :structure="structure"></Device>
+            <DeviceFaker :structure="structure"></DeviceFaker>
         </div>
     </div>
 </template>
 
 <script>
 import Sizer from './Sizer.vue';
-import Device from './Device.vue';
+import DeviceFaker from './DeviceFaker.vue';
 
 export default {
-    props: ['structure',],
+    props: ['structure'],
     components: {
         Sizer,
-        Device
+        DeviceFaker
     }
 };
 </script>

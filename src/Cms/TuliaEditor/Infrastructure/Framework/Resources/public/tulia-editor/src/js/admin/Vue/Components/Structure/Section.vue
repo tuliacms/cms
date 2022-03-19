@@ -4,6 +4,7 @@
         :id="section.id"
         @mouseenter="$root.$emit('structure.hoverable.enter', $el, 'section')"
         @mouseleave="$root.$emit('structure.hoverable.leave', $el, 'section')"
+        @mousedown="$root.$emit('structure.selectable.select', $el, 'section')"
     >
         <div class="container-fluid">
             <Row

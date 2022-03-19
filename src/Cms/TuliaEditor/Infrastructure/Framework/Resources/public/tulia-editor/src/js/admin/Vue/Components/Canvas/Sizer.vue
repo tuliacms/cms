@@ -32,7 +32,7 @@ export default {
             for (let i in this.sizes) {
                 if (this.sizes[i].name === name) {
                     this.activeSize = name;
-                    this.$root.$emit('canvas.size.changed', this.sizes[i]);
+                    this.$root.$emit('device.size.changed', this.sizes[i]);
                 }
             }
         }

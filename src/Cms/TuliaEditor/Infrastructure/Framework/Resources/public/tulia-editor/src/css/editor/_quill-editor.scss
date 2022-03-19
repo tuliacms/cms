@@ -4,9 +4,16 @@
 
 .ql-bubble .ql-tooltip {
     background-color: #000;
-}
+    z-index: 100000;
+    text-align: center;
+    padding: 5px;
 
-.ql-formats button.ql-active {
-    background-color: rgba(255,255,255,.4);
-    border-radius: 3px;
+    .ql-formats {
+        margin: 4px;
+
+        button.ql-active {
+            background-color: rgba(255, 255, 255, .4);
+            border-radius: 3px;
+        }
+    }
 }

@@ -2,6 +2,7 @@ import './../css/tulia-editor.editor.scss';
 import draggable from 'vuedraggable';
 import TuliaEditorInstance from './admin/Vue/TuliaEditorInstance.vue';
 import Messanger from './shared/Messenger';
+import ClassObserver from './shared/Utils/ClassObserver';
 
 window.TuliaEditor = {};
 window.TuliaEditor.blocks = [];
@@ -41,6 +42,7 @@ window.TuliaEditor.registerBlocks = function () {
             template: `<div
                 @mouseenter="$root.$emit('structure.hoverable.enter', $el, 'block')"
                 @mouseleave="$root.$emit('structure.hoverable.leave', $el, 'block')"
+                @mousedown="$root.$emit('structure.selectable.select', $el, 'block')"
             >
                 ${TuliaEditor.blocks[i].template()}
             </div>`
@@ -137,37 +139,39 @@ TuliaEditor.extensions['WysiwygEditor'] = function () {
         props: {
             value: [String, null],
         },
-        template:`<div><div class="toolbar-container">
-            <span class="ql-formats">
-                <button class="ql-bold" title="Bold <ctrl+b>"></button>
-                <button class="ql-italic" title="Italic <ctrl+i>"></button>
-                <button class="ql-underline" title="Underline <ctrl+u>"></button>
-                <button class="ql-strike" title="Strikethrough"></button>
-            </span>
-            <span class="ql-formats">
-                <button class="ql-script" value="sub" title="Subscript"></button>
-                <button class="ql-script" value="super" title="Superscript"></button>
-            </span>
-            <span class="ql-formats">
-                <button class="ql-header" value="1"></button>
-                <button class="ql-header" value="2"></button>
-                <button class="ql-blockquote" title="Blockquote"></button>
-                <button class="ql-code-block" title="Code block"></button>
-            </span>
-            <span class="ql-formats">
-                <button class="ql-list" value="ordered"></button>
-                <button class="ql-list" value="bullet"></button>
-            </span>
-            <span class="ql-formats">
-                <select class="ql-align" title="Align text"></select>
-                <button class="ql-link" title="Link text"></button>
-                <button class="ql-clean" title="Clean text formatting"></button>
-            </span>
-        </div><div class="editor-container"><slot></slot></div></div>`,
+        template:`<div>
+            <div class="editor-toolbar">
+                <span class="ql-formats">
+                    <button class="ql-bold" title="Bold <ctrl+b>"></button>
+                    <button class="ql-italic" title="Italic <ctrl+i>"></button>
+                    <button class="ql-underline" title="Underline <ctrl+u>"></button>
+                    <button class="ql-strike" title="Strikethrough"></button>
+                </span>
+                <span class="ql-formats">
+                    <button class="ql-script" value="sub" title="Subscript"></button>
+                    <button class="ql-script" value="super" title="Superscript"></button>
+                </span>
+                <span class="ql-formats">
+                    <button class="ql-header" value="1"></button>
+                    <button class="ql-header" value="2"></button>
+                    <button class="ql-blockquote" title="Blockquote"></button>
+                    <button class="ql-code-block" title="Code block"></button>
+                </span>
+                <span class="ql-formats">
+                    <button class="ql-list" value="ordered"></button>
+                    <button class="ql-list" value="bullet"></button>
+                </span>
+                <span class="ql-formats">
+                    <select class="ql-align" title="Align text"></select>
+                    <button class="ql-link" title="Link text"></button>
+                    <button class="ql-clean" title="Clean text formatting"></button>
+                </span>
+            </div>
+            <div class="editor-container"><slot></slot></div>
+        </div>`,
         mounted () {
-            let self = this;
             let editorContent = this.$el.getElementsByClassName('editor-container')[0];
-            let editorToolbar = this.$el.getElementsByClassName('toolbar-container')[0];
+            let editorToolbar = this.$el.getElementsByClassName('editor-toolbar')[0];
             editorContent.innerHTML = this.value ?? null;
 
             let quill = new Quill(editorContent, {
@@ -176,10 +180,19 @@ TuliaEditor.extensions['WysiwygEditor'] = function () {
                 modules: {
                     toolbar: editorToolbar,
                 },
+                bounds: this.$el.closest('.tued-structure')
             });
             quill.on('text-change', () => {
                 this.$emit('input', quill.root.innerHTML);
                 this.$root.$emit('block.inner.updated');
+            });
+
+            new ClassObserver(quill.theme.tooltip.root, 'ql-hidden', (currentClass) => {
+                if(currentClass) {
+                    this.$root.$emit('structure.selectable.show');
+                } else {
+                    this.$root.$emit('structure.selectable.hide');
+                }
             });
         },
         watch: {
