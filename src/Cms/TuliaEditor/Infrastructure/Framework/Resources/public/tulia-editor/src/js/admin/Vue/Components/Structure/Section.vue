@@ -5,7 +5,6 @@
                 v-for="row in section.rows"
                 :key="row.id"
                 :row="row"
-                :availableBlocks="availableBlocks"
             ></Row>
         </div>
     </section>
@@ -15,7 +14,7 @@
 import Row from './Row.vue';
 
 export default {
-    props: ['section', 'availableBlocks'],
+    props: ['section'],
     components: { Row },
 };
 </script>

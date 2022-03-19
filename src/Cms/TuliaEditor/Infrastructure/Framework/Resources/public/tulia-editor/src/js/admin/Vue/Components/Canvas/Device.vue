@@ -7,7 +7,7 @@
         </div>
         <div class="tued-element-actions tued-hidden">
         </div>
-        <Structure :structure="structure" :availableBlocks="availableBlocks"></Structure>
+        <Structure :structure="structure"></Structure>
     </div>
 </template>
 
@@ -15,7 +15,7 @@
 import Structure from  '../Structure/Structure.vue';
 
 export default {
-    props: ['structure', 'availableBlocks'],
+    props: ['structure'],
     components: {
         Structure
     },

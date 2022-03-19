@@ -28,5 +28,7 @@
     "webpack": "^5.39.1",
     "webpack-cli": "^4.7.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "vuedraggable": "^2.24.3"
+  }
 }

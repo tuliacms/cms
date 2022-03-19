@@ -28,6 +28,8 @@ window.TuliaEditorAdmin = function (selector, options) {
     };
 
     this.openEditor = function () {
+        $('body').addClass('tueda-editor-opened');
+
         if (this.editor) {
             this.editor.removeClass('tueda-editor-open');
             return;
@@ -39,6 +41,7 @@ window.TuliaEditorAdmin = function (selector, options) {
     this.closeEditor = function () {
         if (this.editor) {
             this.editor.addClass('tueda-editor-open');
+            $('body').removeClass('tueda-editor-opened');
         }
     };
 

@@ -57,6 +57,7 @@ framework:
         '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/masonry': '/core/masonry'
         '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/momentjs': '/core/momentjs'
         '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/popperjs': '/core/popperjs'
+        '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/quill': '/core/quill'
         '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/simplebar': '/core/simplebar'
         '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/sweetalert2': '/core/sweetalert2'
         '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/tulia-dynamic-form': '/core/tulia-dynamic-form'
@@ -183,4 +184,8 @@ framework:
                 scripts: [ '/assets/core/tulia-dynamic-form/tulia-dynamic-form.js' ]
                 collection: tulia-dynamic-form
                 priority: 1000
+                group: head
+            quill:
+                scripts: [ '/assets/core/quill/quill.min.js' ]
+                styles: [ '/assets/core/quill/quill.bubble.css' ]
                 group: head

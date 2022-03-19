@@ -68,6 +68,20 @@
                                                     "size": 5
                                                 }
                                             ],
+                                            "blocks": [
+                                                {
+                                                    "id": "5c28bbf6-9f98-4ecd-90cc-51cc85b3728b",
+                                                    "type": "core-textblock",
+                                                    "data": {
+                                                        "text": "<p>Some sample text, MY TEXT :)</p>"
+                                                    }
+                                                },
+                                                {
+                                                    "id": "5c28bbf6-9f98-4ecd-90cc-41cc85b3728b",
+                                                    "type": "core-textblock",
+                                                    "data": {}
+                                                }
+                                            ]
                                             /*"blocks": [
                                                 {
                                                     "id": "f863ee0b-8e8e-455a-82ef-4f2171f7fad7",
@@ -94,6 +108,22 @@
                                                     "size": 12
                                                 }
                                             ],
+                                            "blocks": [
+                                                {
+                                                    "id": "5c28bbf6-9f98-4ecd-90cc-51cc85b3728b",
+                                                    "type": "core-textblock",
+                                                    "data": {
+                                                        "text": "<p>Some sample text, MY TEXT :)</p>"
+                                                    }
+                                                },
+                                                {
+                                                    "id": "5c28bbf6-9f98-4ecd-90cc-41cc85b3728b",
+                                                    "type": "core-textblock",
+                                                    "data": {
+                                                        "text": "<p>Quisque sit amet sem scelerisque, aliquam nisl ut, fringilla mi. Nulla commodo et nisl in suscipit. Mauris id turpis sit amet sapien feugiat venenatis. Aliquam pellentesque ac quam eget venenatis. Nullam pellentesque, arcu vel tempor bibendum, mauris arcu accumsan ex, quis condimentum mauris tellus sed nisi. In condimentum velit porta feugiat accumsan. Nulla facilisi. Cras sed facilisis nisl. Suspendisse auctor ex diam, ut pulvinar nisi rutrum eget. Nunc luctus tortor ac ante faucibus cursus. Nam quis imperdiet nulla.Curabitur sollicitudin lectus sem, quis iaculis libero dapibus quis. Proin imperdiet elit vel elit molestie, vitae tempus est dignissim. Nam eu sem id mi fringilla mattis vitae dignissim dui. Sed non laoreet lorem, quis mattis velit. Aliquam sem nisl, mattis ut tortor et, scelerisque finibus nulla. Morbi sed dui eget lectus vulputate finibus ac sit amet libero. Sed a dapibus enim, nec auctor risus. Pellentesque pharetra nisl sollicitudin malesuada sodales. Praesent porta in libero rhoncus luctus. Pellentesque eleifend consequat eros, at iaculis ligula. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Duis sed rhoncus elit. Morbi sed dui vehicula, viverra orci at, suscipit urna. Vestibulum eget urna interdum ex dignissim vulputate.Cras convallis purus eget mattis placerat. Etiam tortor mi, dignissim et ornare nec, tincidunt eu lacus. Ut eu odio a velit maximus sollicitudin. Donec laoreet ullamcorper nulla, a venenatis metus congue et. Integer eu sapien non augue laoreet eleifend. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aliquam erat volutpat. Phasellus vitae dolor vitae augue malesuada pulvinar sed ut magna. Nulla facilisi. Aliquam ultricies tortor sed enim mattis faucibus. Cras convallis nibh at urna venenatis tincidunt.Aenean nibh enim, porttitor ut magna ac, placerat vulputate metus. Fusce ut odio at lectus ornare semper aliquam et lorem. Vestibulum in ex eget urna faucibus vulputate. Vivamus nunc massa, dapibus non dictum sit amet, fringilla ac augue. Proin euismod fringilla lacus, sed finibus ex vestibulum ut. Vestibulum posuere libero sit amet massa gravida ultricies. Curabitur accumsan congue ex, a molestie neque sodales sed. Duis semper nisi metus, eget tempus turpis cursus in. In dignissim, eros vel ornare fermentum, magna odio maximus tortor, sit amet feugiat ipsum risus vitae dui.</p>"
+                                                    }
+                                                }
+                                            ]
                                             /*"blocks": [
                                                 {
                                                     "id": "af8fb198-e75c-4da6-a2db-1af975289bde",
@@ -130,6 +160,20 @@
                                                     "size": 6
                                                 }
                                             ],
+                                            "blocks": [
+                                                {
+                                                    "id": "5c28bbf6-9f98-4ecd-90cc-51cc85b3728b",
+                                                    "type": "core-textblock",
+                                                    "data": {
+                                                        "text": "<p>Some sample text, MY TEXT :)</p>"
+                                                    }
+                                                },
+                                                {
+                                                    "id": "5c28bbf6-9f98-4ecd-90cc-41cc85b3728b",
+                                                    "type": "core-textblock",
+                                                    "data": {}
+                                                }
+                                            ]
                                             /*"blocks": [
                                                 {
                                                     "id": "d3aeb447-dc10-4822-a242-5cff07a32bd7",
@@ -150,16 +194,20 @@
                                                     "size": 6
                                                 }
                                             ],
-                                            /*"blocks": [
+                                            "blocks": [
                                                 {
-                                                    "id": "d5ab13ad-213e-4dfd-a65b-d2353bf632a5",
-                                                    "column_id": "717faea4-cce0-4bc7-8664-4dc2259bc6ee",
-                                                    "type": "core/text",
+                                                    "id": "5c28bbf6-9f98-4ecd-90cc-51cc85b3728b",
+                                                    "type": "core-textblock",
                                                     "data": {
-                                                        "content": "<p>It works :D</p>"
+                                                        "text": "<p>Quisque sit amet sem scelerisque, aliquam nisl ut, fringilla mi. Nulla commodo et nisl in suscipit. Mauris id turpis sit amet sapien feugiat venenatis. Aliquam pellentesque ac quam eget venenatis. Nullam pellentesque, arcu vel tempor bibendum, mauris arcu accumsan ex, quis condimentum mauris tellus sed nisi. In condimentum velit porta feugiat accumsan. Nulla facilisi. Cras sed facilisis nisl. Suspendisse auctor ex diam, ut pulvinar nisi rutrum eget. Nunc luctus tortor ac ante faucibus cursus. Nam quis imperdiet nulla.Curabitur sollicitudin lectus sem, quis iaculis libero dapibus quis. Proin imperdiet elit vel elit molestie, vitae tempus est dignissim. Nam eu sem id mi fringilla mattis vitae dignissim dui. Sed non laoreet lorem, quis mattis velit. Aliquam sem nisl, mattis ut tortor et, scelerisque finibus nulla. Morbi sed dui eget lectus vulputate finibus ac sit amet libero. Sed a dapibus enim, nec auctor risus. Pellentesque pharetra nisl sollicitudin malesuada sodales. Praesent porta in libero rhoncus luctus. Pellentesque eleifend consequat eros, at iaculis ligula. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Duis sed rhoncus elit. Morbi sed dui vehicula, viverra orci at, suscipit urna. Vestibulum eget urna interdum ex dignissim vulputate.Cras convallis purus eget mattis placerat. Etiam tortor mi, dignissim et ornare nec, tincidunt eu lacus. Ut eu odio a velit maximus sollicitudin. Donec laoreet ullamcorper nulla, a venenatis metus congue et. Integer eu sapien non augue laoreet eleifend. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aliquam erat volutpat. Phasellus vitae dolor vitae augue malesuada pulvinar sed ut magna. Nulla facilisi. Aliquam ultricies tortor sed enim mattis faucibus. Cras convallis nibh at urna venenatis tincidunt.Aenean nibh enim, porttitor ut magna ac, placerat vulputate metus. Fusce ut odio at lectus ornare semper aliquam et lorem. Vestibulum in ex eget urna faucibus vulputate. Vivamus nunc massa, dapibus non dictum sit amet, fringilla ac augue. Proin euismod fringilla lacus, sed finibus ex vestibulum ut. Vestibulum posuere libero sit amet massa gravida ultricies. Curabitur accumsan congue ex, a molestie neque sodales sed. Duis semper nisi metus, eget tempus turpis cursus in. In dignissim, eros vel ornare fermentum, magna odio maximus tortor, sit amet feugiat ipsum risus vitae dui.</p>"
                                                     }
+                                                },
+                                                {
+                                                    "id": "5c28bbf6-9f98-4ecd-90cc-41cc85b3728b",
+                                                    "type": "core-textblock",
+                                                    "data": {}
                                                 }
-                                            ]*/
+                                            ]
                                         }
                                     ]
                                 }

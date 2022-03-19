@@ -4,7 +4,6 @@
             v-for="column in row.columns"
             :key="column.id"
             :column="column"
-            :availableBlocks="availableBlocks"
         ></Column>
     </div>
 </template>
@@ -13,7 +12,7 @@
 import Column from './Column.vue';
 
 export default {
-    props: ['row', 'availableBlocks'],
+    props: ['row'],
     components: { Column },
 };
 </script>

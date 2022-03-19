@@ -1,4 +1,5 @@
 import './../css/tulia-editor.editor.scss';
+import draggable from 'vuedraggable';
 import TuliaEditorInstance from './admin/Vue/TuliaEditorInstance.vue';
 import Messanger from './shared/Messenger';
 
@@ -11,15 +12,24 @@ window.TuliaEditor.registerBlocks = function () {
         let data = TuliaEditor.blocks[i].data();
         let dataBinds = [];
         let props = [];
+        let watches = {};
 
-        for (let d in data) {
-            dataBinds.push(` :${d}="blockData.${d}"`);
-            props.push(d);
+        for (let property in data) {
+            dataBinds.push(` :${property}="blockData.${property}"`);
+            props.push(property);
+            watches[property] = function (value) {
+                this.$emit('value-changed', property, value);
+            }
         }
 
         Vue.component(TuliaEditor.blocks[i].name + '-component-frame', {
             props: ['blockData'],
-            template: `<div><component :is="'${TuliaEditor.blocks[i].name}'" ${dataBinds.join()}></component></div>`
+            template: `<div><component :is="'${TuliaEditor.blocks[i].name}'" ${dataBinds.join()} @value-changed="updateBlockData"></component></div>`,
+            methods: {
+                updateBlockData (property, value) {
+                    this.blockData[property] = value;
+                }
+            }
         });
 
         Vue.component(TuliaEditor.blocks[i].name, {
@@ -27,6 +37,7 @@ window.TuliaEditor.registerBlocks = function () {
             data () {
                 return data;
             },
+            watch: watches,
             template: TuliaEditor.blocks[i].template()
         });
     }
@@ -62,6 +73,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         TuliaEditor.registerExtensions();
         TuliaEditor.registerBlocks();
+
+        /*Vue.directive('bs-tooltip', function(el) {
+            let tooltip = new bootstrap.Tooltip(el);
+            tooltip.enable();
+        });*/
+
+        Vue.use(draggable);
 
         new Vue({
             el: '#tulia-editor',
@@ -103,7 +121,7 @@ class TextBlock extends AbstractTuliaEditorBlock {
     }
 
     static template () {
-        return '<div><WysiwygEditor :content="text"></WysiwygEditor></div>';
+        return '<div><WysiwygEditor v-model="text"></WysiwygEditor></div>';
     }
 }
 
@@ -111,7 +129,62 @@ window.TuliaEditor.blocks.push(TextBlock);
 
 TuliaEditor.extensions['WysiwygEditor'] = function () {
     return Vue.component('WysiwygEditor', {
-        props: ['content'],
-        template: '<div v-html="content" contenteditable="true"></div>',
+        props: {
+            value: [String, null],
+        },
+        template:`<div><div class="toolbar-container">
+            <span class="ql-formats">
+                <button class="ql-bold" title="Bold <ctrl+b>"></button>
+                <button class="ql-italic" title="Italic <ctrl+i>"></button>
+                <button class="ql-underline" title="Underline <ctrl+u>"></button>
+                <button class="ql-strike" title="Strikethrough"></button>
+            </span>
+            <span class="ql-formats">
+                <button class="ql-script" value="sub" title="Subscript"></button>
+                <button class="ql-script" value="super" title="Superscript"></button>
+            </span>
+            <span class="ql-formats">
+                <button class="ql-header" value="1"></button>
+                <button class="ql-header" value="2"></button>
+                <button class="ql-blockquote" title="Blockquote"></button>
+                <button class="ql-code-block" title="Code block"></button>
+            </span>
+            <span class="ql-formats">
+                <button class="ql-list" value="ordered"></button>
+                <button class="ql-list" value="bullet"></button>
+            </span>
+            <span class="ql-formats">
+                <select class="ql-align" title="Align text"></select>
+                <button class="ql-link" title="Link text"></button>
+                <button class="ql-clean" title="Clean text formatting"></button>
+            </span>
+        </div><div class="editor-container"><slot></slot></div></div>`,
+        mounted () {
+            let self = this;
+            let editorContent = this.$el.getElementsByClassName('editor-container')[0];
+            let editorToolbar = this.$el.getElementsByClassName('toolbar-container')[0];
+            editorContent.innerHTML = this.value ?? null;
+
+            let quill = new Quill(editorContent, {
+                theme: 'bubble',
+                placeholder: 'Start typing...',
+                modules: {
+                    toolbar: editorToolbar,
+                },
+            });
+            quill.on('text-change', () => {
+                this.$emit('input', quill.root.innerHTML);
+            });
+
+            this.$el.dataset.quill = quill;
+        },
+        watch: {
+            content (val) {
+                this.$el.getElementsByClassName('editor-container')[0].innerHTML = val;
+            }
+        },
+        /*destroyed () {
+            $(this.$el).chosen('destroy');
+        }*/
     });
 };

@@ -1,6 +1,6 @@
 <template>
     <div class="tued-container" ref="root">
-        <Canvas :structure="options.structure.source" :availableBlocks="availableBlocks"></Canvas>
+        <Canvas :structure="options.structure.source"></Canvas>
     </div>
 </template>
 

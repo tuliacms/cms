@@ -4,7 +4,6 @@
             v-for="section in structure.sections"
             :key="section.id"
             :section="section"
-            :availableBlocks="availableBlocks"
         ></Section>
     </div>
 </template>
@@ -13,7 +12,7 @@
 import Section from "./Section.vue";
 
 export default {
-    props: ['structure', 'availableBlocks'],
+    props: ['structure'],
     components: { Section }
 };
 </script>
