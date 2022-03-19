@@ -1,5 +1,10 @@
 <template>
-    <section class="tued-structure-section" :id="section.id">
+    <section
+        class="tued-structure-section"
+        :id="section.id"
+        @mouseenter="$root.$emit('structure.hoverable.enter', $el, 'section')"
+        @mouseleave="$root.$emit('structure.hoverable.leave', $el, 'section')"
+    >
         <div class="container-fluid">
             <Row
                 v-for="row in section.rows"
@@ -15,6 +20,6 @@ import Row from './Row.vue';
 
 export default {
     props: ['section'],
-    components: { Row },
+    components: { Row }
 };
 </script>

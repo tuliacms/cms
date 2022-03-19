@@ -2,7 +2,7 @@
     <div class="tued-canvas">
         <div class="tued-canvas-inner">
             <Sizer></Sizer>
-            <Device :structure="structure""></Device>
+            <Device :structure="structure"></Device>
         </div>
     </div>
 </template>

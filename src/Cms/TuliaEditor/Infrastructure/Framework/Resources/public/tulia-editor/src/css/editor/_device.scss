@@ -10,4 +10,12 @@
     border-left: 1px solid #ddd;
     border-right: 1px solid #ddd;
     transition: .3s all ease;
+
+    .tued-element-boundaries {display:block;z-index:100;position:absolute;left:100px;top:100px;border:1px solid rgba(0,136,204,.6);border-radius:0 3px 3px 3px;pointer-events:none;width:200px;height:100px;box-shadow:0 0 5px rgba(0,136,204,.5)}
+    .tued-element-boundaries:before {content:"";display:block;position:absolute;left:0;top:0;right:0;bottom:0;background-color:rgba(0,136,204,.05);}
+    .tued-element-boundaries .tued-node-name {position:absolute;left:-1px;top:-20px;height:20px;padding:0 8px;line-height:20px;color:#fff;background-color:#0088cc;border-radius:3px 3px 0 0;text-transform:uppercase;font-size:11px;}
+    .tued-element-boundaries.tued-element-hovered-boundaries {background-color:rgba(0,136,204,.04);border-color:rgba(0,136,204,.3);box-shadow:none;border-radius:3px;}
+    .tued-element-boundaries.tued-element-hovered-boundaries:before {background-color:transparent;}
+    .tued-element-boundaries.tued-element-hovered-boundaries:hover {cursor:pointer;}
+    .tued-element-boundaries.tued-element-focused:before {background-color:transparent;}
 }

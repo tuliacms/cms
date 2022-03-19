@@ -38,7 +38,12 @@ window.TuliaEditor.registerBlocks = function () {
                 return data;
             },
             watch: watches,
-            template: TuliaEditor.blocks[i].template()
+            template: `<div
+                @mouseenter="$root.$emit('structure.hoverable.enter', $el, 'block')"
+                @mouseleave="$root.$emit('structure.hoverable.leave', $el, 'block')"
+            >
+                ${TuliaEditor.blocks[i].template()}
+            </div>`
         });
     }
 };
@@ -174,9 +179,8 @@ TuliaEditor.extensions['WysiwygEditor'] = function () {
             });
             quill.on('text-change', () => {
                 this.$emit('input', quill.root.innerHTML);
+                this.$root.$emit('block.inner.updated');
             });
-
-            this.$el.dataset.quill = quill;
         },
         watch: {
             content (val) {

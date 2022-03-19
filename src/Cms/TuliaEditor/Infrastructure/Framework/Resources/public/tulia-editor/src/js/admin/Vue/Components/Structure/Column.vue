@@ -1,5 +1,10 @@
 <template>
-    <div class="tued-structure-column col" :id="column.id">
+    <div
+        class="tued-structure-column col"
+        :id="column.id"
+        @mouseenter="$root.$emit('structure.hoverable.enter', $el, 'column')"
+        @mouseleave="$root.$emit('structure.hoverable.leave', $el, 'column')"
+    >
         <component
             v-for="block in column.blocks"
             :key="block.id"
