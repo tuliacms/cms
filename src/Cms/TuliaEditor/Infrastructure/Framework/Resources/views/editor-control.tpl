@@ -4,13 +4,25 @@
 
 <script>
     $(function () {
+        let structureSelector = '.tulia-editor-structure-field[data-tulia-editor-group-id="{{ params.group_id }}"]';
+        let contentSelector = '.tulia-editor-content-field[data-tulia-editor-group-id="{{ params.group_id }}"]';
+
+        let structure = $(structureSelector).val();
+        console.log(structure);
+
+        if (!structure) {
+            structure = {};
+        } else {
+            structure = JSON.parse(structure);
+        }
+
         new TuliaEditorAdmin('#{{ params.id }}-qaaaa', {
             sink: {
-                structure: '.tulia-editor-payload-field[data-tulia-editor-group-id="{{ params.group_id }}"]',
-                content: ''
+                structure: structureSelector,
+                content: contentSelector
             },
             structure: {
-                source: JSON.parse($('.tulia-editor-payload-field[data-tulia-editor-group-id="{{ params.group_id }}"]').val())
+                source: structure
             },
             editor: {
                 view: '{{ path('backend.tulia_editor.editor_view') }}',
@@ -65,7 +77,7 @@
 <script nonce="{{ csp_nonce() }}">
     $(function () {
         TuliaEditor.create('#{{ params.id }}', {
-            data: $('.tulia-editor-payload-field[data-tulia-editor-group-id="{{ params.group_id }}"]'),
+            data: $('.tulia-editor-structure-field[data-tulia-editor-group-id="{{ params.group_id }}"]'),
             framework: 'bootstrap-5',
             lang: '{{ user().locale }}',
             {#include: {

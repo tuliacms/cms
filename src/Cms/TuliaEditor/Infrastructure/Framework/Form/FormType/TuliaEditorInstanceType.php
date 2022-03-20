@@ -28,6 +28,8 @@ class TuliaEditorInstanceType extends AbstractType
     {
         $view->vars['label'] = false;
         $view->vars['editor_field_group_id'] = $options['editor_field_group_id'];
+        $view->vars['attr']['data-tulia-editor-group-id'] = $options['editor_field_group_id'];
+        $view->vars['attr']['class'] = 'tulia-editor-content-field';
     }
 
     public function getParent(): string

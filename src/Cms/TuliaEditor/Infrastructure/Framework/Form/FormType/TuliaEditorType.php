@@ -19,7 +19,7 @@ class TuliaEditorType extends AbstractType
     {
         $groupId = uniqid('tulia-editor-group-');
 
-        $builder->add('tulia_editor_payload', TuliaEditorPayloadType::class, [
+        $builder->add('tulia_editor_structure', TuliaEditorStructureType::class, [
             'editor_field_group_id' => $groupId,
         ]);
         $builder->add('tulia_editor_instance', TuliaEditorInstanceType::class, [

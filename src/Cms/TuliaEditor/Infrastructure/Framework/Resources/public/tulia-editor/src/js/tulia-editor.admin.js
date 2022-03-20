@@ -68,6 +68,7 @@ window.TuliaEditorAdmin = function (selector, options) {
 
     this.updateFields = function (structure) {
         document.querySelector(this.options.sink.structure).value = JSON.stringify(structure);
+        document.querySelector(this.options.sink.content).value = 'Content :)';
     };
 
     this.renderEditorWindow = function () {

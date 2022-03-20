@@ -19,7 +19,7 @@ class TuliaEditorTypeBuilder extends AbstractFieldTypeBuilder
     public function buildValueFromAttribute(Field $field, Attribute $attribute)
     {
         return [
-            'tulia_editor_payload' => json_encode($attribute->getPayload()),
+            'tulia_editor_structure' => json_encode($attribute->getPayload()),
             'tulia_editor_instance' => $attribute->getValue(),
         ];
     }
@@ -31,8 +31,8 @@ class TuliaEditorTypeBuilder extends AbstractFieldTypeBuilder
     {
         $attribute = $attribute->withValue($value['tulia_editor_instance']);
 
-        if ($value['tulia_editor_payload']) {
-            $attribute = $attribute->withPayload(json_decode($value['tulia_editor_payload'], true, JSON_THROW_ON_ERROR));
+        if ($value['tulia_editor_structure']) {
+            $attribute = $attribute->withPayload(json_decode($value['tulia_editor_structure'], true, JSON_THROW_ON_ERROR));
         }
 
         return $attribute;

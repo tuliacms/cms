@@ -13,7 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * @author Adam Banaszkiewicz
  */
-class TuliaEditorPayloadType extends AbstractType
+class TuliaEditorStructureType extends AbstractType
 {
     public function configureOptions(OptionsResolver $resolver)
     {
@@ -27,8 +27,9 @@ class TuliaEditorPayloadType extends AbstractType
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['label'] = false;
+        $view->vars['editor_field_group_id'] = $options['editor_field_group_id'];
         $view->vars['attr']['data-tulia-editor-group-id'] = $options['editor_field_group_id'];
-        $view->vars['attr']['class'] = 'tulia-editor-payload-field';
+        $view->vars['attr']['class'] = 'tulia-editor-structure-field';
     }
 
     public function getParent(): string
@@ -38,6 +39,6 @@ class TuliaEditorPayloadType extends AbstractType
 
     public function getBlockPrefix(): string
     {
-        return 'tulia_editor_payload';
+        return 'tulia_editor_structure';
     }
 }
