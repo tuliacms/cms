@@ -1,4 +1,4 @@
-.tuedr-btn {
+.tued-btn {
     display: inline-block;
     font-weight: 400;
     text-align: center;
@@ -29,28 +29,28 @@
         border-color: #0062cc;
     }
 
-    &.tuedr-focus,
+    &.tued-focus,
     &:focus {
         outline: 0;
         box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
     }
 
-    &:not(:disabled):not(.tuedr-disabled).tuedr-active,
-    &:not(:disabled):not(.tuedr-disabled):active {
+    &:not(:disabled):not(.tued-disabled).tued-active,
+    &:not(:disabled):not(.tued-disabled):active {
         color: #fff;
         background-color: #0062cc;
         border-color: #005cbf;
     }
 
-    &.tuedr-btn-primary {
-        &.tuedr-focus,
+    &.tued-btn-primary {
+        &.tued-focus,
         &:focus {
             box-shadow: 0 0 0 0.2rem rgba(0,123,255,.5);
         }
     }
 }
 
-.tuedr-show > .tuedr-btn.tuedr-dropdown-toggle {
+.tued-show > .tued-btn.tued-dropdown-toggle {
     color: #fff;
     background-color: #0062cc;
     border-color: #005cbf;

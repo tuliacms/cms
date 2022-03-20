@@ -31,7 +31,7 @@ window.TuliaEditorAdmin = function (selector, options) {
         $('body').addClass('tueda-editor-opened');
 
         if (this.editor) {
-            this.editor.removeClass('tueda-editor-open');
+            this.editor.addClass('tueda-editor-opened');
             return;
         }
 
@@ -40,7 +40,7 @@ window.TuliaEditorAdmin = function (selector, options) {
 
     this.closeEditor = function () {
         if (this.editor) {
-            this.editor.addClass('tueda-editor-open');
+            this.editor.removeClass('tueda-editor-opened');
             $('body').removeClass('tueda-editor-opened');
         }
     };
@@ -55,12 +55,23 @@ window.TuliaEditorAdmin = function (selector, options) {
         this.messanger.listen('editor.init.fetch', () => {
             this.messanger.send('editor.init.data', this.options);
         });
+        this.messanger.listen('editor.cancel', () => {
+            this.closeEditor();
+        });
+        this.messanger.listen('editor.save', (structure) => {
+            this.closeEditor();
+            this.updateFields(structure);
+        });
 
         this.messageBroker.start();
     };
 
+    this.updateFields = function (structure) {
+        document.querySelector(this.options.sink.structure).value = JSON.stringify(structure);
+    };
+
     this.renderEditorWindow = function () {
-        this.editor = $('<div class="tueda-editor-window"><iframe src="' + this.options.editor.view + '?tuliaEditorInstance=' + this.instanceId + '"></iframe></div>');
+        this.editor = $('<div class="tueda-editor-window tueda-editor-opened"><iframe src="' + this.options.editor.view + '?tuliaEditorInstance=' + this.instanceId + '"></iframe></div>');
         this.editor.appendTo('body');
     };
 
@@ -70,7 +81,7 @@ window.TuliaEditorAdmin = function (selector, options) {
                 '<div class="tueda-preview-headline">' +
                     '<span class="tueda-logo">Tulia Editor</span> - podgląd treści' +
                 '</div>' +
-                '<button type="button" class="tuedr-btn" data-tued-action="edit">Edytuj</button>' +
+                '<button type="button" class="tued-btn" data-tued-action="edit">Edytuj</button>' +
             '</div>' +
             '<div class="tueda-preview"></div>' +
         '</div>');
@@ -90,5 +101,11 @@ window.TuliaEditorAdmin.defaults = {
      * 'default' - default view.
      * 'editor' - opens editor immediately
      */
-    start_point: 'default'
+    start_point: 'default',
+    sink: {
+        // HTML input/textarea selector, where to store the structure.
+        structure: null,
+        // HTML input/textarea selector, where to store the rendered content.
+        content: null
+    },
 };

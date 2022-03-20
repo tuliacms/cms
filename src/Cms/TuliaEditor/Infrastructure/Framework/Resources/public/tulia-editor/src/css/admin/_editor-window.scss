@@ -6,6 +6,11 @@
     bottom: 0;
     z-index: 999999999;
     background-color: #fff;
+    display: none;
+
+    &.tueda-editor-opened {
+        display: block;
+    }
 
     iframe {
         display: block;

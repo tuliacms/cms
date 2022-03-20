@@ -25,7 +25,13 @@ window.TuliaEditor.registerBlocks = function () {
 
         Vue.component(TuliaEditor.blocks[i].name + '-component-frame', {
             props: ['blockData'],
-            template: `<div><component :is="'${TuliaEditor.blocks[i].name}'" ${dataBinds.join()} @value-changed="updateBlockData"></component></div>`,
+            template: `<div>
+                <component
+                    :is="'${TuliaEditor.blocks[i].name}'"
+                    ${dataBinds.join()}
+                    @value-changed="updateBlockData"
+                ></component>
+            </div>`,
             methods: {
                 updateBlockData (property, value) {
                     this.blockData[property] = value;
@@ -43,6 +49,7 @@ window.TuliaEditor.registerBlocks = function () {
                 @mouseenter="$root.$emit('structure.hoverable.enter', $el, 'block')"
                 @mouseleave="$root.$emit('structure.hoverable.leave', $el, 'block')"
                 @mousedown="$root.$emit('structure.selectable.select', $el, 'block')"
+                data-tagname="Block"
             >
                 ${TuliaEditor.blocks[i].template()}
             </div>`
@@ -139,6 +146,11 @@ TuliaEditor.extensions['WysiwygEditor'] = function () {
         props: {
             value: [String, null],
         },
+        data() {
+            return {
+                quill: null,
+            };
+        },
         template:`<div>
             <div class="editor-toolbar">
                 <span class="ql-formats">
@@ -187,6 +199,8 @@ TuliaEditor.extensions['WysiwygEditor'] = function () {
                 this.$root.$emit('block.inner.updated');
             });
 
+            this.quill = quill;
+
             new ClassObserver(quill.theme.tooltip.root, 'ql-hidden', (currentClass) => {
                 if(currentClass) {
                     this.$root.$emit('structure.selectable.show');
@@ -196,8 +210,12 @@ TuliaEditor.extensions['WysiwygEditor'] = function () {
             });
         },
         watch: {
-            content (val) {
-                this.$el.getElementsByClassName('editor-container')[0].innerHTML = val;
+            value (val) {
+                if (this.quill.root.innerHTML === val) {
+                    return;
+                }
+
+                this.quill.root.innerHTML = val ? val : '';
             }
         },
         /*destroyed () {

@@ -5,13 +5,17 @@
         @mouseenter="$root.$emit('structure.hoverable.enter', $el, 'section')"
         @mouseleave="$root.$emit('structure.hoverable.leave', $el, 'section')"
         @mousedown="$root.$emit('structure.selectable.select', $el, 'section')"
+        data-tagname="Section"
     >
         <div class="container-fluid">
             <Row
-                v-for="row in section.rows"
-                :key="row.id"
+                v-for="(row, key) in section.rows"
+                :key="'row-' + key"
                 :row="row"
             ></Row>
+            <div v-if="section.rows.length === 0">
+                Empty Section
+            </div>
         </div>
     </section>
 </template>

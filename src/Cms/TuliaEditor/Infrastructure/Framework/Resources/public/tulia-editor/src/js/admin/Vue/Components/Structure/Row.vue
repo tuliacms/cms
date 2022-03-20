@@ -5,12 +5,16 @@
         @mouseenter="$root.$emit('structure.hoverable.enter', $el, 'row')"
         @mouseleave="$root.$emit('structure.hoverable.leave', $el, 'row')"
         @mousedown="$root.$emit('structure.selectable.select', $el, 'row')"
+        data-tagname="Row"
     >
         <Column
-            v-for="column in row.columns"
-            :key="column.id"
+            v-for="(column, key) in row.columns"
+            :key="'column-' + key"
             :column="column"
         ></Column>
+        <div v-if="row.columns.length === 0">
+            Empty Row
+        </div>
     </div>
 </template>
 

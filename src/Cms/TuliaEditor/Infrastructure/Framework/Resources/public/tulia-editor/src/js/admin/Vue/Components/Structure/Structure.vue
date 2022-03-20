@@ -4,8 +4,8 @@
         @mousedown="$root.$emit('structure.selectable.select', $el, 'root')"
     >
         <Section
-            v-for="section in structure.sections"
-            :key="section.id"
+            v-for="(section, key) in structure.sections"
+            :key="'section-' + key"
             :section="section"
         ></Section>
         <div
@@ -62,25 +62,35 @@ class Hoverable {
         }
     }
 
+    hide () {
+        this.hoveredStack = [];
+        this.hoveredElement = null;
+        this.resetPosition();
+    }
+
     update () {
         this.updatePosition();
     }
 
     updatePosition () {
+        if (!this.hoveredElement) {
+            return;
+        }
+
         this.positionUpdater({
-            width: this.hoveredElement.offsetWidth,
-            height: this.hoveredElement.offsetHeight,
             top: this.hoveredElement.offsetTop,
             left: this.hoveredElement.offsetLeft,
+            width: this.hoveredElement.offsetWidth,
+            height: this.hoveredElement.offsetHeight,
         });
     }
 
     resetPosition () {
         this.positionUpdater({
-            width: 0,
-            height: 0,
             top: -100,
             left: -100,
+            width: 0,
+            height: 0,
         });
     }
 }
@@ -159,20 +169,20 @@ class Selectable {
         }
 
         this.positionUpdater({
-            width: this.selectedElement.offsetWidth,
-            height: this.selectedElement.offsetHeight,
             top: this.selectedElement.offsetTop,
             left: this.selectedElement.offsetLeft,
-            tagName: this.selectedElement.tagName
+            width: this.selectedElement.offsetWidth,
+            height: this.selectedElement.offsetHeight,
+            tagName: this.selectedElement.dataset.tagname ?? this.selectedElement.tagName
         });
     }
 
     resetPosition () {
         this.positionUpdater({
-            width: 0,
-            height: 0,
             top: -100,
             left: -100,
+            width: 0,
+            height: 0,
         });
     }
 }
@@ -187,8 +197,8 @@ export default {
             hoverable: {
                 manager: new Hoverable(this.updateHoverableStyle),
                 style: {
-                    left: 0,
-                    top: 0,
+                    left: -100,
+                    top: -100,
                     width: 0,
                     height: 0,
                 }
@@ -196,8 +206,8 @@ export default {
             selectable: {
                 manager: new Selectable(this.updateSelectableStyle),
                 style: {
-                    left: 0,
-                    top: 0,
+                    left: -100,
+                    top: -100,
                     width: 0,
                     height: 0,
                     tagName: 'div',
@@ -260,6 +270,14 @@ export default {
             }
 
             this.selectable.manager.keepUpdatePositionFor(transitionDuration);
+        });
+        this.$root.$on('editor.save', () => {
+            this.selectable.manager.hide();
+            this.hoverable.manager.hide();
+        });
+        this.$root.$on('editor.cancel', () => {
+            this.selectable.manager.hide();
+            this.hoverable.manager.hide();
         });
     }
 };
