@@ -6,7 +6,6 @@
 {% assets theme().config.all('asset')|keys %}
 {% assets theme().config.all('tulia_editor_plugin')|keys %}
 
-
 {% block body %}
     <div id="tulia-editor"></div>
 {% endblock %}

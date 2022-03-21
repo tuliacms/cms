@@ -1,87 +1,16 @@
 import './../css/tulia-editor.editor.scss';
 import draggable from 'vuedraggable';
-import TuliaEditorInstance from './admin/Vue/TuliaEditorInstance.vue';
+import Structure from './admin/Vue/Components/Structure/Structure.vue';
+import RenderingCanvas from './admin/Vue/Components/Rendering/Canvas.vue';
 import Messanger from './shared/Messenger';
 import ClassObserver from './shared/Utils/ClassObserver';
+import VueComponents from './shared/VueComponents.js';
+import Location from './shared/Utils/Location.js';
+import ObjectCloner from './shared/Utils/ObjectCloner';
 
 window.TuliaEditor = {};
 window.TuliaEditor.blocks = [];
 window.TuliaEditor.extensions = {};
-
-window.TuliaEditor.registerBlocks = function () {
-    for (let i in TuliaEditor.blocks) {
-        let data = TuliaEditor.blocks[i].data();
-        let dataBinds = [];
-        let props = [];
-        let watches = {};
-
-        for (let property in data) {
-            dataBinds.push(` :${property}="blockData.${property}"`);
-            props.push(property);
-            watches[property] = function (value) {
-                this.$emit('value-changed', property, value);
-            }
-        }
-
-        Vue.component(TuliaEditor.blocks[i].name + '-component-frame', {
-            props: ['blockData'],
-            template: `<div>
-                <component
-                    :is="'${TuliaEditor.blocks[i].name}'"
-                    ${dataBinds.join()}
-                    @value-changed="updateBlockData"
-                ></component>
-            </div>`,
-            methods: {
-                updateBlockData (property, value) {
-                    this.blockData[property] = value;
-                }
-            }
-        });
-
-        Vue.component(TuliaEditor.blocks[i].name, {
-            props: props,
-            data () {
-                return data;
-            },
-            watch: watches,
-            template: `<div
-                @mouseenter="$root.$emit('structure.hoverable.enter', $el, 'block')"
-                @mouseleave="$root.$emit('structure.hoverable.leave', $el, 'block')"
-                @mousedown="$root.$emit('structure.selectable.select', $el, 'block')"
-                data-tagname="Block"
-            >
-                ${TuliaEditor.blocks[i].template()}
-            </div>`
-        });
-
-
-
-
-
-
-
-
-
-        Vue.component(TuliaEditor.blocks[i].name + '-rendering-component-frame', {
-            props: ['blockData'],
-            template: `<div class="tued-block-outer">
-                <component
-                    :is="'${TuliaEditor.blocks[i].name}-rendering'"
-                    ${dataBinds.join()}
-                ></component>
-            </div>`
-        });
-
-        Vue.component(TuliaEditor.blocks[i].name + '-rendering', {
-            props: props,
-            data () {
-                return data;
-            },
-            template: `<div class="tued-block-inner">${TuliaEditor.blocks[i].render()}</div>`
-        });
-    }
-};
 
 window.TuliaEditor.registerExtensions = function () {
     for (let i in TuliaEditor.extensions) {
@@ -90,48 +19,64 @@ window.TuliaEditor.registerExtensions = function () {
 };
 
 document.addEventListener('DOMContentLoaded', function () {
-    function getQueryVariable(variable) {
-        let query = window.location.search.substring(1);
-        let vars = query.split('&');
-
-        for (let i = 0; i < vars.length; i++) {
-            let pair = vars[i].split('=');
-
-            if (decodeURIComponent(pair[0]) === variable) {
-                return decodeURIComponent(pair[1]);
-            }
-        }
-
-        console.error('Query variable %s not found', variable);
-    }
-
-    let instanceId = getQueryVariable('tuliaEditorInstance');
+    let instanceId = Location.getQueryVariable('tuliaEditorInstance');
     let messanger = new Messanger(instanceId, window.parent, 'editor');
 
     messanger.listen('editor.init.data', function (options) {
         Vue.config.devtools = true;
 
         TuliaEditor.registerExtensions();
-        TuliaEditor.registerBlocks();
 
-        /*Vue.directive('bs-tooltip', function(el) {
-            let tooltip = new bootstrap.Tooltip(el);
-            tooltip.enable();
-        });*/
+        VueComponents.registerBlocksAsComponents(TuliaEditor.blocks);
 
         Vue.use(draggable);
 
         new Vue({
             el: '#tulia-editor',
-            template: '<TuliaEditorInstance :instanceId="instanceId" :options="options" :messanger="messanger" :availableBlocks="availableBlocks"></TuliaEditorInstance>',
+            template: `<div class="tued-container" ref="root">
+                <Structure :structure="structure.current"></Structure>
+                <RenderingCanvas ref="rendered-content" :structure="structure.current"></RenderingCanvas>
+            </div>`,
             components: {
-                TuliaEditorInstance
+                Structure,
+                RenderingCanvas
             },
             data: {
                 instanceId: instanceId,
                 options: options,
                 messanger: messanger,
-                availableBlocks: TuliaEditor.blocks
+                availableBlocks: TuliaEditor.blocks,
+                structure: {
+                    current: {},
+                    previous: {}
+                }
+            },
+            methods: {
+                restorePreviousStructure: function () {
+                    this.structure.current = ObjectCloner.deepClone(this.structure.previous);
+                },
+                useCurrentStructureAsPrevious: function () {
+                    this.structure.previous = ObjectCloner.deepClone(this.structure.current);
+                }
+            },
+            mounted() {
+                this.structure.current = ObjectCloner.deepClone(this.options.structure.source);
+                this.structure.previous = ObjectCloner.deepClone(this.options.structure.source);
+
+                messanger.listen('editor.structure.fetch', () => {
+                    this.useCurrentStructureAsPrevious();
+
+                    messanger.send(
+                        'editor.structure.data',
+                        this.structure.current,
+                        this.$root.$refs['rendered-content'].$el.innerHTML
+                    );
+                });
+
+                messanger.listen('editor.structure.restore', () => {
+                    this.restorePreviousStructure();
+                    messanger.send('editor.structure.restored');
+                });
             }
         });
     });

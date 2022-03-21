@@ -2,7 +2,7 @@
     <div class="tued-canvas">
         <div class="tued-canvas-inner" @mousedown.self="$root.$emit('structure.selectable.outsite')">
             <Sizer></Sizer>
-            <DeviceFaker :structure="structure"></DeviceFaker>
+            <DeviceFaker :editorView="editorView"></DeviceFaker>
             <div class="body-coturn body-coturn-left" :style="{ transform: `translateX(-${coturn_position}px)` }"></div>
             <div class="body-coturn body-coturn-right" :style="{ transform: `translateX(${coturn_position}px)` }"></div>
         </div>
@@ -14,7 +14,7 @@ import Sizer from './Sizer.vue';
 import DeviceFaker from './DeviceFaker.vue';
 
 export default {
-    props: ['structure'],
+    props: ['editorView'],
     components: {
         Sizer,
         DeviceFaker

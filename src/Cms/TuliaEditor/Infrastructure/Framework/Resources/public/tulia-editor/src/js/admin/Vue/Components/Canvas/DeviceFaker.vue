@@ -1,17 +1,12 @@
 <template>
     <div class="tued-canvas-device-faker" :style="{ width: this.width + 'px' }">
-        <Structure :structure="structure"></Structure>
+        <iframe :src="editorView"></iframe>
     </div>
 </template>
 
 <script>
-import Structure from  '../Structure/Structure.vue';
-
 export default {
-    props: ['structure'],
-    components: {
-        Structure
-    },
+    props: ['editorView'],
     data () {
         return {
             width: 1400

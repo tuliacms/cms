@@ -1,5 +1,5 @@
 <template>
-    <div class="tued-rendering-canvas" as="asd">
+    <div class="tued-rendering-canvas">
         <section
             v-for="(section, key) in structure.sections"
             :key="'section-' + key"

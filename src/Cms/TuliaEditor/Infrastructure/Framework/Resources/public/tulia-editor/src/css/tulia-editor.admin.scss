@@ -1,7 +1,10 @@
 @import "tulia-editor.reset";
+@import "admin/variables";
+@import "admin/canvas";
+@import "admin/sidebar";
 @import "admin/main-window";
 @import "admin/editor-window";
 
-.tueda-editor-opened {
+.tued-editor-opened {
     overflow: hidden !important;
 }

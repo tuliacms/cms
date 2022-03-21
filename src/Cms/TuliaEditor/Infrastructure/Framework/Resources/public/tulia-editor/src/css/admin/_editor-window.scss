@@ -1,4 +1,4 @@
-.tueda-editor-window {
+.tued-editor-window {
     position: fixed;
     left: 0;
     top: 0;
@@ -8,7 +8,7 @@
     background-color: #fff;
     display: none;
 
-    &.tueda-editor-opened {
+    &.tued-editor-opened {
         display: block;
     }
 

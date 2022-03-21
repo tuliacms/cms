@@ -11,10 +11,7 @@
 </template>
 
 <script>
-//import Row from './Row.vue';
-
 export default {
     props: ['availableBlocks'],
-    //components: { Row }
 };
 </script>
