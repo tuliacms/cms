@@ -54,6 +54,32 @@ window.TuliaEditor.registerBlocks = function () {
                 ${TuliaEditor.blocks[i].template()}
             </div>`
         });
+
+
+
+
+
+
+
+
+
+        Vue.component(TuliaEditor.blocks[i].name + '-rendering-component-frame', {
+            props: ['blockData'],
+            template: `<div class="tued-block-outer">
+                <component
+                    :is="'${TuliaEditor.blocks[i].name}-rendering'"
+                    ${dataBinds.join()}
+                ></component>
+            </div>`
+        });
+
+        Vue.component(TuliaEditor.blocks[i].name + '-rendering', {
+            props: props,
+            data () {
+                return data;
+            },
+            template: `<div class="tued-block-inner">${TuliaEditor.blocks[i].render()}</div>`
+        });
     }
 };
 
@@ -123,6 +149,10 @@ class AbstractTuliaEditorBlock {
     static template () {
         return '<div></div>';
     }
+
+    static render () {
+        return '<div></div>';
+    }
 }
 
 class TextBlock extends AbstractTuliaEditorBlock {
@@ -136,6 +166,10 @@ class TextBlock extends AbstractTuliaEditorBlock {
 
     static template () {
         return '<div><WysiwygEditor v-model="text"></WysiwygEditor></div>';
+    }
+
+    static render () {
+        return '<div v-html="text"></div>';
     }
 }
 

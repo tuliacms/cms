@@ -27,7 +27,7 @@ module.exports = class Messanger {
         }, false);
     }
 
-    send (name, body) {
+    send (name, ...body) {
         this.brokerWindow.postMessage(
             {
                 header: {
@@ -52,7 +52,7 @@ module.exports = class Messanger {
 
     callListeners (event) {
         for (let i in this.listeners[event.header.name]) {
-            this.listeners[event.header.name][i].call(null, event.body);
+            this.listeners[event.header.name][i].call(null, ...event.body);
         }
     }
 

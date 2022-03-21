@@ -8,7 +8,6 @@
         let contentSelector = '.tulia-editor-content-field[data-tulia-editor-group-id="{{ params.group_id }}"]';
 
         let structure = $(structureSelector).val();
-        console.log(structure);
 
         if (!structure) {
             structure = {};

@@ -58,17 +58,19 @@ window.TuliaEditorAdmin = function (selector, options) {
         this.messanger.listen('editor.cancel', () => {
             this.closeEditor();
         });
-        this.messanger.listen('editor.save', (structure) => {
+        this.messanger.listen('editor.save', (structure, content) => {
             this.closeEditor();
-            this.updateFields(structure);
+            this.updateFields(structure, content);
         });
 
         this.messageBroker.start();
     };
 
-    this.updateFields = function (structure) {
+    this.updateFields = function (structure, content) {
         document.querySelector(this.options.sink.structure).value = JSON.stringify(structure);
-        document.querySelector(this.options.sink.content).value = 'Content :)';
+        document.querySelector(this.options.sink.content).value = content;
+
+        console.log(document.querySelector(this.options.sink.content));
     };
 
     this.renderEditorWindow = function () {

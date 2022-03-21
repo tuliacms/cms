@@ -1,8 +1,7 @@
-@import "device";
+@import "device-faker";
 
 .tued-canvas {
     padding-right: 320px;
-    background-color: #f1f1f1;
 
     .tued-canvas-inner {
         position: absolute;
@@ -73,6 +72,23 @@
                     right: 7px;
                 }
             }
+        }
+    }
+
+    .body-coturn {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        display: block;
+        width: 5000px;
+        background-color: #f1f1f1;
+        transition: $canvas-faker-size-animation-time all;
+
+        &.body-coturn-left {
+            right: 50%;
+        }
+        &.body-coturn-right {
+            left: 50%;
         }
     }
 }

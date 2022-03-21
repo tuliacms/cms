@@ -2,12 +2,14 @@
     <div class="tued-container" ref="root">
         <Canvas :structure="structure.working"></Canvas>
         <Sidebar :availableBlocks="availableBlocks"></Sidebar>
+        <RenderingCanvas ref="rendered-content" :structure="structure.working"></RenderingCanvas>
     </div>
 </template>
 
 <script>
 import Canvas from './Components/Canvas/Canvas.vue';
 import Sidebar from './Components/Sidebar/Sidebar.vue';
+import RenderingCanvas from './Components/Rendering/Canvas.vue';
 import ObjectCloner from './../../shared/Utils/ObjectCloner.js';
 
 export default {
@@ -21,12 +23,17 @@ export default {
         }
     },
     components: {
-        Canvas, Sidebar
+        Canvas, Sidebar,
+        RenderingCanvas
     },
     methods: {
         save: function () {
             this.useCurrentStructureAsPrevious();
-            this.messanger.send('editor.save', this.structure.working);
+            this.messanger.send(
+                'editor.save',
+                this.structure.working,
+                this.$refs['rendered-content'].$el.innerHTML
+            );
         },
         cancel: function () {
             this.restorePreviousStructure();

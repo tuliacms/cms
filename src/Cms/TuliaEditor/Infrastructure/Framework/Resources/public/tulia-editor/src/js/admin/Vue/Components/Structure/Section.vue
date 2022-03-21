@@ -7,7 +7,7 @@
         @mousedown="$root.$emit('structure.selectable.select', $el, 'section')"
         data-tagname="Section"
     >
-        <div class="container-fluid">
+        <div class="container-xxl">
             <Row
                 v-for="(row, key) in section.rows"
                 :key="'row-' + key"

@@ -1,5 +1,5 @@
 <template>
-    <div class="tued-canvas-device-faker" :style="{ width: this.width }">
+    <div class="tued-canvas-device-faker" :style="{ width: this.width + 'px' }">
         <Structure :structure="structure"></Structure>
     </div>
 </template>
@@ -14,12 +14,12 @@ export default {
     },
     data () {
         return {
-            width: '100%'
+            width: 1400
         }
     },
     methods: {
         changeSizeTo: function (size) {
-            this.width = size.width + 'px';
+            this.width = size.width;
         },
     },
     mounted() {

@@ -9,7 +9,7 @@
     overflow-y: auto;
     border-left: 1px solid #ddd;
     border-right: 1px solid #ddd;
-    transition: .3s all ease;
+    transition: $canvas-faker-size-animation-time all ease;
     z-index: 100;
 
     .tued-element-boundaries {
