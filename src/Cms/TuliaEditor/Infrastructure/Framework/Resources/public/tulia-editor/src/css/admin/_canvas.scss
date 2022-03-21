@@ -48,6 +48,13 @@
                     height: 17px;
                 }
 
+                &:before {
+                    left: 0;
+                }
+                &:after {
+                    right: 0;
+                }
+
                 &.active {
                     background-color: #fff;
                 }

@@ -1,7 +1,7 @@
 import './../css/tulia-editor.admin.scss';
 import Messanger from './shared/Messenger';
 import MessageBroker from './shared/MessageBroker';
-import EditorAdmin from './admin/Vue/Admin/EditorAdmin.vue';
+import EditorAdmin from './admin/Vue/EditorAdmin.vue';
 
 Vue.config.devtools = true;
 
