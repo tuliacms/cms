@@ -16,7 +16,7 @@
 export default {
     data () {
         return {
-            activeSize: 'xxl',
+            activeSize: 'xl',
             sizes: [
                 { name: 'xxl', width: 1400 },
                 { name: 'xl', width: 1200 },

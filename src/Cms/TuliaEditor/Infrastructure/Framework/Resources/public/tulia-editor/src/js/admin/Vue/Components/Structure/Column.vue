@@ -1,6 +1,6 @@
 <template>
     <div
-        class="tued-structure-column col"
+        class="tued-structure-column tued-structure-element-selectable col"
         :id="column.id"
         @mouseenter="$root.$emit('structure.hoverable.enter', $el, 'column')"
         @mouseleave="$root.$emit('structure.hoverable.leave', $el, 'column')"

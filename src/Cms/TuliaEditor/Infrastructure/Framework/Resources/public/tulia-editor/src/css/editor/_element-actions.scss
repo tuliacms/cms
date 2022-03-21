@@ -1,0 +1,27 @@
+.tued-element-actions {
+    display: block;
+    z-index: 999;
+    position: absolute;
+    background-color: #0088cc;
+    font-size: 0;
+    border-radius: 4px 4px 0 0;
+
+    .tued-element-action {
+        display: inline-block;
+        padding: 2px 0;
+        color: #fff;
+        font-size: 12px;
+        width: 27px;
+        text-align: center;
+        border-left: 1px solid #ddd;
+
+        &:first-child {
+            border: none;
+        }
+
+        &:hover {
+            cursor: pointer;
+            background-color: #045b88;
+        }
+    }
+}

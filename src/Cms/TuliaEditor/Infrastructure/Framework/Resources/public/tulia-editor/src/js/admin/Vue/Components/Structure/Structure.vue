@@ -29,12 +29,23 @@
             }"
         >
         </div>
+        <div
+            class="tued-element-actions"
+            ref="element-actions"
+            :style="{
+                left: actions.style.left + 'px',
+                top: actions.style.top + 'px',
+            }"
+        >
+            <div class="tued-element-action" title="Zaznacz blok wyżej"><i class="fas fa-long-arrow-alt-up"></i></div>
+            <div class="tued-element-action" title="Duplikuj"><i class="fas fa-copy"></i></div>
+            <div class="tued-element-action" title="Usuń"><i class="fas fa-trash"></i></div>
+        </div>
     </div>
 </template>
 
 <script>
 import Section from "./Section.vue";
-
 
 class Hoverable {
     hoveredElement;
@@ -168,12 +179,15 @@ class Selectable {
             return;
         }
 
+        let doc = this.selectedElement.ownerDocument;
+
         this.positionUpdater({
             top: this.selectedElement.offsetTop,
             left: this.selectedElement.offsetLeft,
             width: this.selectedElement.offsetWidth,
             height: this.selectedElement.offsetHeight,
-            tagName: this.selectedElement.dataset.tagname ?? this.selectedElement.tagName
+            tagName: this.selectedElement.dataset.tagname ?? this.selectedElement.tagName,
+            scrollTop : $(doc.defaultView || doc.parentWindow).scrollTop()
         });
     }
 
@@ -187,9 +201,8 @@ class Selectable {
     }
 }
 
-
 export default {
-    props: ['structure'],
+    props: ['structure', 'messenger'],
     components: { Section },
     data () {
         return {
@@ -212,6 +225,12 @@ export default {
                     height: 0,
                     tagName: 'div',
                 }
+            },
+            actions: {
+                style: {
+                    left: -100,
+                    top: -100
+                }
             }
         }
     },
@@ -228,6 +247,14 @@ export default {
             this.selectable.style.width = style.width;
             this.selectable.style.height = style.height;
             this.selectable.style.tagName = style.tagName;
+
+            let elm = this.$refs['element-actions'];
+
+            this.actions.style.top = style.top - elm.offsetHeight;
+            this.actions.style.left = style.width + style.left - elm.offsetWidth;
+        },
+        updateElementActions: function (element, type) {
+            console.log(element, type);
         }
     },
     mounted() {
@@ -247,6 +274,8 @@ export default {
                 this.selectable.manager.select(el);
                 this.selectable.manager.blockSelected();
             }
+
+            this.updateElementActions(el, type);
         });
         this.$root.$on('structure.selectable.hide', () => {
             this.selectable.manager.hide();
@@ -254,30 +283,22 @@ export default {
         this.$root.$on('structure.selectable.show', () => {
             this.selectable.manager.show();
         });
-        this.$root.$on('structure.selectable.outsite', () => {
-            this.selectable.manager.hide();
-        });
-        this.$root.$on('device.size.changed', () => {
-            let deviceFaker = this.$el.closest('.tued-canvas-device-faker');
-            let transitionDuration = window.getComputedStyle(deviceFaker).transitionDuration;
-
-            if (transitionDuration && transitionDuration.indexOf('s')) {
-                transitionDuration = parseFloat(transitionDuration.replace('s', '')) * 1000;
-                // Add 50ms for any browser rendering lag
-                transitionDuration = transitionDuration + 50;
-            } else {
-                transitionDuration = 500;
-            }
-
-            this.selectable.manager.keepUpdatePositionFor(transitionDuration);
-        });
         this.$root.$on('editor.save', () => {
             this.selectable.manager.hide();
             this.hoverable.manager.hide();
         });
-        this.$root.$on('editor.cancel', () => {
+
+        this.messenger.listen('editor.cancel', () => {
             this.selectable.manager.hide();
             this.hoverable.manager.hide();
+        });
+        this.messenger.listen('structure.selectable.outsite', () => {
+            this.selectable.manager.hide();
+        });
+        this.messenger.listen('device.size.changed', () => {
+            let animationTime = 300;
+
+            this.selectable.manager.keepUpdatePositionFor(animationTime);
         });
     }
 };

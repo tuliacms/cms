@@ -9,7 +9,7 @@ export default {
     props: ['editorView'],
     data () {
         return {
-            width: 1400
+            width: 1200
         }
     },
     methods: {

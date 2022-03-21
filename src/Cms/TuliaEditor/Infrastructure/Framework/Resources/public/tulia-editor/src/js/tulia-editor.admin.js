@@ -1,7 +1,8 @@
 import './../css/tulia-editor.admin.scss';
 import Messanger from './shared/Messenger';
 import MessageBroker from './shared/MessageBroker';
-import EditorAdmin from './admin/Vue/EditorAdmin.vue';
+import Canvas from './admin/Vue/Components/Canvas/Canvas.vue';
+import Sidebar from './admin/Vue/Components/Sidebar/Sidebar.vue';
 
 Vue.config.devtools = true;
 
@@ -77,15 +78,15 @@ window.TuliaEditorAdmin = function (selector, options) {
 
         this.vue = new Vue({
             el: `#tued-editor-window-inner-${this.instanceId}`,
-            template: `<EditorAdmin
-                class="tued-editor-window-inner"
-                :instanceId="instanceId"
-                :options="options"
-                :messanger="messanger"
-                :availableBlocks="availableBlocks"
-            ></EditorAdmin>`,
+            template: `<div class="tued-editor-window-inner">
+                <div class="tued-container">
+                    <Canvas :editorView="\`${options.editor.view}?tuliaEditorInstance=${this.instanceId}\`"></Canvas>
+                    <Sidebar :availableBlocks="availableBlocks"></Sidebar>
+                </div>
+            </div>`,
             components: {
-                EditorAdmin
+                Canvas,
+                Sidebar
             },
             data: {
                 instanceId: this.instanceId,
@@ -95,20 +96,26 @@ window.TuliaEditorAdmin = function (selector, options) {
             },
             mounted () {
                 self.messanger.listen('editor.structure.data', (structure, content) => {
-                    console.log(structure, content);
                     self.closeEditor();
                     self.updateFields(structure, content);
                 });
                 self.messanger.listen('editor.structure.restored', () => {
-                    console.log('structure restored');
                     self.closeEditor();
                 });
 
                 this.$root.$on('editor.save', () => {
+                    self.messanger.send('editor.save');
                     self.messanger.send('editor.structure.fetch');
                 });
                 this.$root.$on('editor.cancel', () => {
+                    self.messanger.send('editor.cancel');
                     self.messanger.send('editor.structure.restore');
+                });
+                this.$root.$on('device.size.changed', (size) => {
+                    self.messanger.send('device.size.changed', size);
+                });
+                this.$root.$on('structure.selectable.outsite', () => {
+                    self.messanger.send('structure.selectable.outsite');
                 });
             }
         });

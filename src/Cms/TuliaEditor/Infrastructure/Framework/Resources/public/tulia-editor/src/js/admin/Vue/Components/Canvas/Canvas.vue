@@ -1,6 +1,6 @@
 <template>
-    <div class="tued-canvas">
-        <div class="tued-canvas-inner" @mousedown.self="$root.$emit('structure.selectable.outsite')">
+    <div class="tued-canvas" @mousedown="$root.$emit('structure.selectable.outsite')">
+        <div class="tued-canvas-inner">
             <Sizer></Sizer>
             <DeviceFaker :editorView="editorView"></DeviceFaker>
             <div class="body-coturn body-coturn-left" :style="{ transform: `translateX(-${coturn_position}px)` }"></div>
@@ -21,7 +21,7 @@ export default {
     },
     data () {
         return {
-            coturn_position: 700
+            coturn_position: 600
         };
     },
     mounted () {

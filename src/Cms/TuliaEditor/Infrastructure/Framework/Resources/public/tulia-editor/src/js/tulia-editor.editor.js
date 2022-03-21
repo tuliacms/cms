@@ -20,9 +20,9 @@ window.TuliaEditor.registerExtensions = function () {
 
 document.addEventListener('DOMContentLoaded', function () {
     let instanceId = Location.getQueryVariable('tuliaEditorInstance');
-    let messanger = new Messanger(instanceId, window.parent, 'editor');
+    let messenger = new Messanger(instanceId, window.parent, 'editor');
 
-    messanger.listen('editor.init.data', function (options) {
+    messenger.listen('editor.init.data', function (options) {
         Vue.config.devtools = true;
 
         TuliaEditor.registerExtensions();
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
         new Vue({
             el: '#tulia-editor',
             template: `<div class="tued-container" ref="root">
-                <Structure :structure="structure.current"></Structure>
+                <Structure :structure="structure.current" :messenger="messenger"></Structure>
                 <RenderingCanvas ref="rendered-content" :structure="structure.current"></RenderingCanvas>
             </div>`,
             components: {
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
             data: {
                 instanceId: instanceId,
                 options: options,
-                messanger: messanger,
+                messenger: messenger,
                 availableBlocks: TuliaEditor.blocks,
                 structure: {
                     current: {},
@@ -63,25 +63,25 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.structure.current = ObjectCloner.deepClone(this.options.structure.source);
                 this.structure.previous = ObjectCloner.deepClone(this.options.structure.source);
 
-                messanger.listen('editor.structure.fetch', () => {
+                messenger.listen('editor.structure.fetch', () => {
                     this.useCurrentStructureAsPrevious();
 
-                    messanger.send(
+                    messenger.send(
                         'editor.structure.data',
                         this.structure.current,
                         this.$root.$refs['rendered-content'].$el.innerHTML
                     );
                 });
 
-                messanger.listen('editor.structure.restore', () => {
+                messenger.listen('editor.structure.restore', () => {
                     this.restorePreviousStructure();
-                    messanger.send('editor.structure.restored');
+                    messenger.send('editor.structure.restored');
                 });
             }
         });
     });
 
-    messanger.send('editor.init.fetch');
+    messenger.send('editor.init.fetch');
 });
 
 class AbstractTuliaEditorBlock {
@@ -170,8 +170,7 @@ TuliaEditor.extensions['WysiwygEditor'] = function () {
                 placeholder: 'Start typing...',
                 modules: {
                     toolbar: editorToolbar,
-                },
-                bounds: this.$el.closest('.tued-structure')
+                }
             });
             quill.on('text-change', () => {
                 this.$emit('input', quill.root.innerHTML);

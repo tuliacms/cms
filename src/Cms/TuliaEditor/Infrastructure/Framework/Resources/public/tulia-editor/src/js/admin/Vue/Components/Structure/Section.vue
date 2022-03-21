@@ -1,6 +1,6 @@
 <template>
     <section
-        class="tued-structure-section"
+        class="tued-structure-section tued-structure-element-selectable"
         :id="section.id"
         @mouseenter="$root.$emit('structure.hoverable.enter', $el, 'section')"
         @mouseleave="$root.$emit('structure.hoverable.leave', $el, 'section')"

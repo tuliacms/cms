@@ -75,6 +75,7 @@ module.exports = class VueComponents {
             },
             watch: watches,
             template: `<div
+                    class="tued-structure-element-selectable"
                     @mouseenter="$root.$emit('structure.hoverable.enter', $el, 'block')"
                     @mouseleave="$root.$emit('structure.hoverable.leave', $el, 'block')"
                     @mousedown="$root.$emit('structure.selectable.select', $el, 'block')"
@@ -84,5 +85,4 @@ module.exports = class VueComponents {
                 </div>`
         });
     }
-
 };

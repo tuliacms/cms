@@ -22,6 +22,25 @@
         background-color: rgba(0,136,204,.05);
     }
 
+    &.tued-element-hovered-boundaries {
+        background-color: rgba(0,136,204,.04);
+        border-color: rgba(0,136,204,.3);
+        box-shadow: none;
+        border-radius: 3px;
+    }
+
+    &.tued-element-hovered-boundaries:before {
+        background-color: transparent;
+    }
+
+    &.tued-element-hovered-boundaries:hover {
+        cursor: pointer;
+    }
+
+    &.tued-element-focused:before {
+        background-color: transparent;
+    }
+
     .tued-node-name {
         position: absolute;
         left: -1px;
@@ -35,20 +54,4 @@
         text-transform: uppercase;
         font-size: 11px;
     }
-}
-
-.tued-element-boundaries.tued-element-hovered-boundaries {
-    background-color: rgba(0,136,204,.04);
-    border-color: rgba(0,136,204,.3);
-    box-shadow: none;
-    border-radius: 3px;
-}
-.tued-element-boundaries.tued-element-hovered-boundaries:before {
-    background-color: transparent;
-}
-.tued-element-boundaries.tued-element-hovered-boundaries:hover {
-    cursor: pointer;
-}
-.tued-element-boundaries.tued-element-focused:before {
-    background-color: transparent;
 }
