@@ -1,0 +1,30 @@
+.tued-structure {
+    padding: 20px 20px 20px 0;
+
+    .tued-structure-element {
+        padding-left: 20px;
+
+        span {
+            margin: 0 0 4px 0;
+            border: 1px solid #f1f1f1;
+            padding: 5px 10px;
+            display: block;
+            border-radius: 3px;
+            transition: .12s all;
+
+            &:hover {
+                cursor: pointer;
+                border-color: #bdbdbd;
+            }
+
+            &.tued-element-selected {
+                border-color: #0088cc;
+                background-color: rgba(#0088cc, .1);
+            }
+
+            &.tued-element-hovered {
+                border-color: rgba(#0088cc, .7);
+            }
+        }
+    }
+}

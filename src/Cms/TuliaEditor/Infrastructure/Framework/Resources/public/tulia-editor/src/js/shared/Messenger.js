@@ -1,4 +1,4 @@
-module.exports = class Messanger {
+module.exports = class Messenger {
     instanceId;
     brokerWindow;
     code;

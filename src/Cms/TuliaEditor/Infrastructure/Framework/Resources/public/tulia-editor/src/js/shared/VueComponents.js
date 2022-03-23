@@ -56,9 +56,9 @@ module.exports = class VueComponents {
             props: ['block', 'parent'],
             template: `<div
                 class="tued-structure-element-selectable"
-                @mouseenter="$root.$emit('structure.hoverable.enter', $el, 'block')"
-                @mouseleave="$root.$emit('structure.hoverable.leave', $el, 'block')"
-                @mousedown="$root.$emit('structure.selectable.select', $el, 'block', block, parent)"
+                @mouseenter="$root.$emit('structure.hovering.enter', 'block', block.id)"
+                @mouseleave="$root.$emit('structure.hovering.leave', 'block', block.id)"
+                @mousedown.stop="$root.$emit('structure.selection.select', 'block', block.id)"
                 data-tagname="Block"
             >
                 <component

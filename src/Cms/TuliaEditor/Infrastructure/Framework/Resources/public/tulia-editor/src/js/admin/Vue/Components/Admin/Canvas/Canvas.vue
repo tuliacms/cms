@@ -1,5 +1,5 @@
 <template>
-    <div class="tued-canvas" @mousedown="$root.$emit('structure.selectable.outsite')">
+    <div class="tued-canvas" @mousedown="$root.$emit('structure.selection.outsite')">
         <div class="tued-canvas-inner">
             <Sizer></Sizer>
             <DeviceFaker :editorView="editorView"></DeviceFaker>

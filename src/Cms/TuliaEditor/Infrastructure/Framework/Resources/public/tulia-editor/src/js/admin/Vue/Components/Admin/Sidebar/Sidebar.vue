@@ -5,13 +5,18 @@
                 <button type="button" class="tued-btn" @click="$root.$emit('editor.save')">Zapisz</button>
                 <button type="button" class="tued-btn" @click="$root.$emit('editor.cancel')">Anuluj</button>
             </div>
-            Edit controls
+            <Structure :structure="structure" :messenger="messenger"></Structure>
         </div>
     </div>
 </template>
 
 <script>
+import Structure from './Structure.vue';
+
 export default {
-    props: ['availableBlocks'],
+    props: ['availableBlocks', 'messenger', 'structure'],
+    components: {
+        Structure
+    }
 };
 </script>

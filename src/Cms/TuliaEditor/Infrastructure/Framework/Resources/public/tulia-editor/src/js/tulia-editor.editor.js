@@ -1,8 +1,8 @@
 import './../css/tulia-editor.editor.scss';
 import draggable from 'vuedraggable';
-import Structure from './admin/Vue/Components/Structure/Structure.vue';
-import RenderingCanvas from './admin/Vue/Components/Rendering/Canvas.vue';
-import Messanger from './shared/Messenger';
+import Structure from './admin/Vue/Components/Editor/Structure/Structure.vue';
+import RenderingCanvas from './admin/Vue/Components/Editor/Rendering/Canvas.vue';
+import Messenger from './shared/Messenger';
 import ClassObserver from './shared/Utils/ClassObserver';
 import VueComponents from './shared/VueComponents.js';
 import Location from './shared/Utils/Location.js';
@@ -20,7 +20,7 @@ window.TuliaEditor.registerExtensions = function () {
 
 document.addEventListener('DOMContentLoaded', function () {
     let instanceId = Location.getQueryVariable('tuliaEditorInstance');
-    let messenger = new Messanger(instanceId, window.parent, 'editor');
+    let messenger = new Messenger(instanceId, window.parent, 'editor');
 
     messenger.listen('editor.init.data', function (options) {
         Vue.config.devtools = true;
@@ -76,6 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 messenger.listen('editor.structure.restore', () => {
                     this.restorePreviousStructure();
                     messenger.send('editor.structure.restored');
+                    messenger.send('structure.changed', this.structure.current);
                 });
             }
         });
@@ -181,9 +182,9 @@ TuliaEditor.extensions['WysiwygEditor'] = function () {
 
             new ClassObserver(quill.theme.tooltip.root, 'ql-hidden', (currentClass) => {
                 if(currentClass) {
-                    this.$root.$emit('structure.selectable.show');
+                    this.$root.$emit('structure.selection.show');
                 } else {
-                    this.$root.$emit('structure.selectable.hide');
+                    this.$root.$emit('structure.selection.hide');
                 }
             });
         },
