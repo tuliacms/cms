@@ -187,5 +187,5 @@ framework:
                 group: head
             quill:
                 scripts: [ '/assets/core/quill/quill.min.js' ]
-                styles: [ '/assets/core/quill/quill.bubble.css' ]
+                styles: [ '/assets/core/quill/quill.bubble.light.css' ]
                 group: head

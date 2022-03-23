@@ -4,7 +4,7 @@
         :id="section.id"
         @mouseenter="$root.$emit('structure.hoverable.enter', $el, 'section')"
         @mouseleave="$root.$emit('structure.hoverable.leave', $el, 'section')"
-        @mousedown="$root.$emit('structure.selectable.select', $el, 'section')"
+        @mousedown="$root.$emit('structure.selectable.select', $el, 'section', section, null)"
         data-tagname="Section"
     >
         <div class="container-xxl">
@@ -12,6 +12,7 @@
                 v-for="(row, key) in section.rows"
                 :key="'row-' + key"
                 :row="row"
+                :parent="section"
             ></Row>
             <div v-if="section.rows.length === 0">
                 Empty Section

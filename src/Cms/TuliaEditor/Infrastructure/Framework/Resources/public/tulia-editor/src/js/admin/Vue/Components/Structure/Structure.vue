@@ -33,13 +33,28 @@
             class="tued-element-actions"
             ref="element-actions"
             :style="{
+                width: actions.style.width + 'px',
                 left: actions.style.left + 'px',
                 top: actions.style.top + 'px',
             }"
         >
-            <div class="tued-element-action" title="Zaznacz blok wyżej"><i class="fas fa-long-arrow-alt-up"></i></div>
-            <div class="tued-element-action" title="Duplikuj"><i class="fas fa-copy"></i></div>
-            <div class="tued-element-action" title="Usuń"><i class="fas fa-trash"></i></div>
+            <div
+                class="tued-element-action"
+                title="Zaznacz blok wyżej"
+                @click="selectParentSelectable()"
+                v-if="actions.activeness.selectParent"
+            ><i class="fas fa-long-arrow-alt-up"></i></div>
+            <div
+                class="tued-element-action"
+                title="Duplikuj"
+                v-if="actions.activeness.duplicate"
+            ><i class="fas fa-copy"></i></div>
+            <div
+                class="tued-element-action"
+                title="Usuń"
+                @click="deleteSelectedElement()"
+                v-if="actions.activeness.delete"
+            ><i class="fas fa-trash"></i></div>
         </div>
     </div>
 </template>
@@ -109,32 +124,20 @@ class Hoverable {
 class Selectable {
     selectedElement;
     positionUpdater;
-
-    /**
-     * Blocking is a feature that allows us to not stopping propagation on DOM,
-     * but select only first clickem element in DOM. Usage:
-     * 1. Bind `mousedown` on all selectable elements
-     * 2. Bind `mousedown` od a Root element (this is a root of all selectable elements, there propagation stopped)
-     * 3. On any selectable element call first select(element) and then call blockSelected().
-     * 4. On root element call unblockSelected()
-     * In this case, we select only first call of the select(element), omit the selections (elements) between
-     * first one, and stop at the root.
-     *
-     * @type {boolean}
-     */
-    blocked = false;
+    positionUpdateAnimationFrameHandle;
 
     constructor (positionUpdater) {
         this.positionUpdater = positionUpdater;
     }
 
     select (element) {
-        if (this.blocked) {
-            return;
-        }
-
         this.selectedElement = element;
         this.updatePosition();
+    }
+
+    deselect () {
+        this.selectedElement = null;
+        this.resetPosition();
     }
 
     hide () {
@@ -149,16 +152,6 @@ class Selectable {
         this.updatePosition();
     }
 
-    unblockSelected () {
-        this.blocked = false;
-    }
-
-    blockSelected () {
-        this.blocked = true;
-    }
-
-    positionUpdateAnimationFrameHandle;
-
     keepUpdatePositionFor (microseconds) {
         let self = this;
 
@@ -172,6 +165,10 @@ class Selectable {
         setTimeout(() => {
             cancelAnimationFrame(self.positionUpdateAnimationFrameHandle);
         }, microseconds);
+    }
+
+    getSelectedElement () {
+        return this.selectedElement;
     }
 
     updatePosition () {
@@ -201,6 +198,79 @@ class Selectable {
     }
 }
 
+class Selection {
+    _emitter = null;
+    _rootAchived = true;
+    _lastSelectedElement = null;
+    _firstElementSelected = false;
+    _stack = [];
+
+    constructor(emitter) {
+        this._emitter = emitter;
+    }
+
+    selectElementUsingStackUntillRoot (type, element) {
+        // Prevents double click on canvas and reset the selection.
+        if (this._lastSelectedElement === element.el) {
+            return;
+        }
+
+        this._lastSelectedElement = element.el;
+        this.clearIfRootAchived();
+
+        if (type === 'root') {
+            this._rootAchived = true;
+            // Notice only when stack is complete
+            this.noticeWhenFirstElementIsSelected();
+        } else {
+            this._rootAchived = false;
+            this._stack.push(element);
+        }
+    }
+
+    noticeWhenFirstElementIsSelected() {
+        if (this._firstElementSelected === false) {
+            this._firstElementSelected = true;
+            this.emit('selection.selected', this._stack[0]);
+        }
+    }
+
+    clearSelection () {
+        this._stack = [];
+        this.emit('selection.cleared');
+    }
+
+    getSelected () {
+        return this._stack[0];
+    }
+
+    selectParent () {
+        this._stack.shift();
+        let newSelectedElement = this._stack[0];
+
+        if (!newSelectedElement) {
+            return;
+        }
+
+        this.emit('selection.selected', newSelectedElement);
+    }
+
+    hasParentToSelect () {
+        return this._stack.length > 1;
+    }
+
+    clearIfRootAchived () {
+        if (this._rootAchived) {
+            this._stack = [];
+            this._firstElementSelected = false;
+        }
+    }
+
+    emit (event, ...args) {
+        this._emitter(event, ...args);
+    }
+}
+
 export default {
     props: ['structure', 'messenger'],
     components: { Section },
@@ -218,6 +288,7 @@ export default {
             },
             selectable: {
                 manager: new Selectable(this.updateSelectableStyle),
+                selection: new Selection((...args) => {this.$root.$emit(...args)}),
                 style: {
                     left: -100,
                     top: -100,
@@ -229,7 +300,13 @@ export default {
             actions: {
                 style: {
                     left: -100,
-                    top: -100
+                    top: -100,
+                    width: 0,
+                },
+                activeness: {
+                    selectParent: false,
+                    duplicate: true,
+                    delete: true,
                 }
             }
         }
@@ -251,13 +328,54 @@ export default {
             let elm = this.$refs['element-actions'];
 
             this.actions.style.top = style.top - elm.offsetHeight;
-            this.actions.style.left = style.width + style.left - elm.offsetWidth;
+            this.actions.style.left = style.left;
+            this.actions.style.width = style.width;
         },
-        updateElementActions: function (element, type) {
-            console.log(element, type);
+        selectParentSelectable: function () {
+            this.selectable.selection.selectParent();
+        },
+        deleteSelectedElement: function () {
+            let element = this.selectable.selection.getSelected();
+
+
+            if (element.type === 'block') {
+                let index = element.parent.blocks.indexOf(element.object);
+
+                if (index >= 0) {
+                    element.parent.blocks.splice(index, 1);
+                    this.selectable.selection.clearSelection();
+                }
+            } else if (element.type === 'column') {
+                let index = element.parent.columns.indexOf(element.object);
+
+                if (index >= 0) {
+                    element.parent.columns.splice(index, 1);
+                    this.selectable.selection.clearSelection();
+                }
+            } else if (element.type === 'row') {
+                let index = element.parent.rows.indexOf(element.object);
+
+                if (index >= 0) {
+                    element.parent.rows.splice(index, 1);
+                    this.selectable.selection.clearSelection();
+                }
+            } else if (element.type === 'section') {
+                let index = this.structure.sections.indexOf(element.object);
+
+                if (index >= 0) {
+                    this.structure.sections.splice(index, 1);
+                    this.selectable.selection.clearSelection();
+                }
+            }
+        },
+        updateElementActions: function (element, type, object) {
+            this.actions.activeness.selectParent = this.selectable.selection.hasParentToSelect();
         }
     },
-    mounted() {
+    mounted () {
+        /**
+         * Local listeners
+         */
         this.$root.$on('structure.hoverable.enter', (el, type) => {
             this.hoverable.manager.enter(el);
         });
@@ -267,15 +385,13 @@ export default {
         this.$root.$on('block.inner.updated', () => {
             this.hoverable.manager.update();
         });
-        this.$root.$on('structure.selectable.select', (el, type) => {
-            if (type === 'root') {
-                this.selectable.manager.unblockSelected();
-            } else {
-                this.selectable.manager.select(el);
-                this.selectable.manager.blockSelected();
-            }
-
-            this.updateElementActions(el, type);
+        this.$root.$on('structure.selectable.select', (el, type, object, parent) => {
+            this.selectable.selection.selectElementUsingStackUntillRoot(type, {
+                el: el,
+                type: type,
+                object: object,
+                parent: parent,
+            });
         });
         this.$root.$on('structure.selectable.hide', () => {
             this.selectable.manager.hide();
@@ -287,7 +403,17 @@ export default {
             this.selectable.manager.hide();
             this.hoverable.manager.hide();
         });
+        this.$root.$on('selection.selected', (element) => {
+            this.selectable.manager.select(element.el);
+            this.updateElementActions(element.el, element.type, element.object);
+        });
+        this.$root.$on('selection.cleared', () => {
+            this.selectable.manager.deselect();
+        });
 
+        /**
+         * Global listeners
+         */
         this.messenger.listen('editor.cancel', () => {
             this.selectable.manager.hide();
             this.hoverable.manager.hide();

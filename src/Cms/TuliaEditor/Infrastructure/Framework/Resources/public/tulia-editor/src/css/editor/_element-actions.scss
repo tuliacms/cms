@@ -1,10 +1,11 @@
 .tued-element-actions {
-    display: block;
     z-index: 999;
     position: absolute;
-    background-color: #0088cc;
     font-size: 0;
-    border-radius: 4px 4px 0 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    height: 0;
 
     .tued-element-action {
         display: inline-block;
@@ -14,9 +15,14 @@
         width: 27px;
         text-align: center;
         border-left: 1px solid #ddd;
+        background-color: #0088cc;
 
         &:first-child {
             border: none;
+            border-radius: 4px 0 0 0;
+        }
+        &:last-child {
+            border-radius: 0 4px 0 0;
         }
 
         &:hover {

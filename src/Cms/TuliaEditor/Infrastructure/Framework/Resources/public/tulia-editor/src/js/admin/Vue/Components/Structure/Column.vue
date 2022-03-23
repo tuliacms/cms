@@ -4,14 +4,15 @@
         :id="column.id"
         @mouseenter="$root.$emit('structure.hoverable.enter', $el, 'column')"
         @mouseleave="$root.$emit('structure.hoverable.leave', $el, 'column')"
-        @mousedown="$root.$emit('structure.selectable.select', $el, 'column')"
+        @mousedown="$root.$emit('structure.selectable.select', $el, 'column', column, parent)"
         data-tagname="Column"
     >
         <component
             v-for="(block, key) in column.blocks"
             :key="'block-' + key"
             :is="block.type + '-component-frame'"
-            :blockData="block.data"
+            :block="block"
+            :parent="column"
         ></component>
         <div v-if="column.blocks.length === 0">
             Empty Column
@@ -21,6 +22,6 @@
 
 <script>
 export default {
-    props: ['column']
+    props: ['column', 'parent']
 };
 </script>

@@ -20,7 +20,7 @@
                             v-for="(block, key) in column.blocks"
                             :key="'block-' + key"
                             :is="block.type + '-rendering-component-frame'"
-                            :blockData="block.data"
+                            :block="block"
                         ></component>
                     </div>
                 </div>

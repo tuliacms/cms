@@ -7,7 +7,7 @@ module.exports = class VueComponents {
             let watches = {};
 
             for (let property in data) {
-                dataBinds.push(` :${property}="blockData.${property}"`);
+                dataBinds.push(` :${property}="block.data.${property}"`);
                 props.push(property);
                 watches[property] = function (value) {
                     this.$emit('value-changed', property, value);
@@ -33,7 +33,7 @@ module.exports = class VueComponents {
 
     static registerBlockRenderingComponent (block, props, data, dataBinds) {
         Vue.component(block.name + '-rendering-component-frame', {
-            props: ['blockData'],
+            props: ['block'],
             template: `<div class="tued-block-outer">
                 <component
                     :is="'${block.name}-rendering'"
@@ -53,17 +53,23 @@ module.exports = class VueComponents {
 
     static registerBlockEditorComponent (block, props, data, dataBinds, watches) {
         Vue.component(block.name + '-component-frame', {
-            props: ['blockData'],
-            template: `<div>
-            <component
-                :is="'${block.name}'"
-                ${dataBinds.join()}
-                @value-changed="updateBlockData"
-            ></component>
+            props: ['block', 'parent'],
+            template: `<div
+                class="tued-structure-element-selectable"
+                @mouseenter="$root.$emit('structure.hoverable.enter', $el, 'block')"
+                @mouseleave="$root.$emit('structure.hoverable.leave', $el, 'block')"
+                @mousedown="$root.$emit('structure.selectable.select', $el, 'block', block, parent)"
+                data-tagname="Block"
+            >
+                <component
+                    :is="'${block.name}'"
+                    ${dataBinds.join()}
+                    @value-changed="updateBlockData"
+                ></component>
             </div>`,
             methods: {
                 updateBlockData (property, value) {
-                    this.blockData[property] = value;
+                    this.block.data[property] = value;
                 }
             }
         });
@@ -74,15 +80,7 @@ module.exports = class VueComponents {
                 return data;
             },
             watch: watches,
-            template: `<div
-                    class="tued-structure-element-selectable"
-                    @mouseenter="$root.$emit('structure.hoverable.enter', $el, 'block')"
-                    @mouseleave="$root.$emit('structure.hoverable.leave', $el, 'block')"
-                    @mousedown="$root.$emit('structure.selectable.select', $el, 'block')"
-                    data-tagname="Block"
-                >
-                    ${block.template()}
-                </div>`
+            template: `<div>${block.template()}</div>`
         });
     }
 };
