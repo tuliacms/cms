@@ -1,10 +1,12 @@
 <template>
-    <div class="tued-canvas" @mousedown="$root.$emit('structure.selection.outsite')">
+    <div class="tued-canvas">
         <div class="tued-canvas-inner">
             <Sizer></Sizer>
-            <DeviceFaker :editorView="editorView"></DeviceFaker>
-            <div class="body-coturn body-coturn-left" :style="{ transform: `translateX(-${coturn_position}px)` }"></div>
-            <div class="body-coturn body-coturn-right" :style="{ transform: `translateX(${coturn_position}px)` }"></div>
+            <div @mousedown="$root.$emit('structure.selection.outsite')">
+                <DeviceFaker :editorView="editorView"></DeviceFaker>
+                <div class="body-coturn body-coturn-left" :style="{ transform: `translateX(-${coturn_position}px)` }"></div>
+                <div class="body-coturn body-coturn-right" :style="{ transform: `translateX(${coturn_position}px)` }"></div>
+            </div>
         </div>
     </div>
 </template>

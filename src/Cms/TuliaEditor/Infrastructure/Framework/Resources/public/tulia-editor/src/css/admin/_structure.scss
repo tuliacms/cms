@@ -1,20 +1,26 @@
 .tued-structure {
-    padding: 20px 20px 20px 0;
+    padding: 20px;
 
     .tued-structure-element {
         padding-left: 20px;
 
-        span {
-            margin: 0 0 4px 0;
-            border: 1px solid #f1f1f1;
-            padding: 5px 10px;
+        &.tued-structure-element-section {
+            padding-left: 0;
+        }
+
+        .tued-label {
+            position: relative;
+            margin: 0 0 6px 0;
+            border: 1px solid #dedede;
+            padding: 6px 10px 6px 30px;
             display: block;
-            border-radius: 3px;
+            border-radius: 4px;
             transition: .12s all;
+            font-size: 13px;
 
             &:hover {
                 cursor: pointer;
-                border-color: #bdbdbd;
+                border-color: #939393;
             }
 
             &.tued-element-selected {
@@ -25,6 +31,39 @@
             &.tued-element-hovered {
                 border-color: rgba(#0088cc, .7);
             }
+
+            .tued-structure-draggable-handler {
+                position: absolute;
+                left: 9px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 20px;
+                height: 20px;
+                cursor: move;
+
+                i {
+                    font-size: 13px;
+                    line-height: 20px;
+                    text-align: center;
+                    color: rgba(0,0,0,.3);
+                    transition: .12s all;
+                }
+            }
+
+            &.tued-element-selected,
+            &.tued-element-hovered,
+            &:hover {
+                .tued-structure-draggable-handler i {
+                    color: rgba(0,0,0,.6);
+                }
+            }
         }
+    }
+
+    .tued-structure-draggable-ghost {
+        border-color: #000;
+        background-color: rgba(#000, .3);
+        color: #fff;
+        border-radius: 4px;
     }
 }

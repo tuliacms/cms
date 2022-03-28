@@ -1,7 +1,6 @@
 <template>
     <div
         class="tued-structure"
-        @mousedown.self.stop="$root.$emit('structure.selection.select', 'root')"
         ref="structure"
     >
         <Section
@@ -69,6 +68,7 @@ class Hoverable {
     hoveredElement;
     hoveredStack = [];
     emitter;
+    disabledStack = 0;
 
     constructor (emitter) {
         this.emitter = emitter;
@@ -104,7 +104,31 @@ class Hoverable {
         this.updatePosition();
     }
 
+    disable () {
+        this.disabledStack++;
+
+        if (this.isDisabled()) {
+            this.resetPosition();
+        }
+    }
+
+    isDisabled () {
+        return this.disabledStack > 0;
+    }
+
+    enable () {
+        this.disabledStack--;
+
+        if (this.isDisabled() === false) {
+            this.updatePosition();
+        }
+    }
+
     updatePosition () {
+        if (this.isDisabled()) {
+            return;
+        }
+
         if (!this.hoveredElement) {
             return;
         }
@@ -231,79 +255,6 @@ class Selectable {
         this.emitter(event, ...args);
     }
 }
-
-/*class Selection {
-    _emitter = null;
-    _rootAchived = true;
-    _lastSelectedElement = null;
-    _firstElementSelected = false;
-    _stack = [];
-
-    constructor(emitter) {
-        this._emitter = emitter;
-    }
-
-    selectElementUsingStackUntillRoot (type, element) {
-        // Prevents double click on canvas and reset the selection.
-        if (this._lastSelectedElement === element.el) {
-            return;
-        }
-
-        this._lastSelectedElement = element.el;
-        this.clearIfRootAchived();
-
-        if (type === 'root') {
-            this._rootAchived = true;
-            // Notice only when stack is complete
-            this.noticeWhenFirstElementIsSelected();
-        } else {
-            this._rootAchived = false;
-            this._stack.push(element);
-        }
-    }
-
-    noticeWhenFirstElementIsSelected() {
-        if (this._firstElementSelected === false) {
-            this._firstElementSelected = true;
-            this.emit('structure.selection.selected', this._stack[0]);
-        }
-    }
-
-    clearSelection () {
-        this._stack = [];
-        this.emit('structure.selection.cleared');
-    }
-
-    getSelected () {
-        return this._stack[0];
-    }
-
-    selectParent () {
-        this._stack.shift();
-        let newSelectedElement = this._stack[0];
-
-        if (!newSelectedElement) {
-            return;
-        }
-
-        this.emit('structure.selection.selected', newSelectedElement);
-    }
-
-    hasParentToSelect () {
-        return this._stack.length > 1;
-    }
-
-    clearIfRootAchived () {
-        if (this._rootAchived) {
-            this._stack = [];
-            this._firstElementSelected = false;
-        }
-    }
-
-    emit (event, ...args) {
-        this._emitter(event, ...args);
-    }
-}*/
 
 export default {
     props: ['structure', 'messenger'],
@@ -499,11 +450,15 @@ export default {
          */
         this.$root.$on('block.inner.updated', () => {
             this.hoverable.manager.update();
+            this.selectable.manager.update();
         });
         this.$root.$on('editor.save', () => {
             this.selectable.manager.hide();
             this.hoverable.manager.hide();
         });
+
+
+
 
         this.messenger.listen('editor.cancel', () => {
             this.selectable.manager.hide();
@@ -512,6 +467,11 @@ export default {
         this.messenger.listen('device.size.changed', () => {
             let animationTime = 300;
             this.selectable.manager.keepUpdatePositionFor(animationTime);
+        });
+        this.messenger.listen('structure.move-element', (delta) => {
+            Structure.moveElementUsingDelta(this.structure, delta);
+            this.hoverable.manager.hide();
+            this.messenger.send('structure.selection.select', delta.element.type, delta.element.id);
         });
 
 
@@ -534,6 +494,12 @@ export default {
                 id: id
             });
         });
+        this.messenger.listen('strucure.hovering.disable', () => {
+            this.hoverable.manager.disable();
+        });
+        this.messenger.listen('strucure.hovering.enable', () => {
+            this.hoverable.manager.enable();
+        });
 
         /**
          * Selection
@@ -541,6 +507,7 @@ export default {
         this.messenger.listen('structure.selection.deselected', () => {
             this.selectable.manager.clearSelection();
             this.selectable.manager.hide();
+            this.hoverable.manager.hide();
         });
         this.messenger.listen('structure.selection.select', (type, id) => {
             let element = this.getElement(type, id);

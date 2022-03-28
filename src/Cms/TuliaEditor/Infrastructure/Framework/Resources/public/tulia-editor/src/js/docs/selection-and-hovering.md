@@ -7,13 +7,6 @@
   - `id` - ID of the element
 - `structure.selection.deselected` - Clicked outlide the structure. When we deselect selected element.
 
-
-
-## Events callstack
-
-- Local `structure.selection.select` (`type`, `id`)
-- Local `structure.selection.selected` (`type`, `id`)
-
 # Hovering
 
 ## Events

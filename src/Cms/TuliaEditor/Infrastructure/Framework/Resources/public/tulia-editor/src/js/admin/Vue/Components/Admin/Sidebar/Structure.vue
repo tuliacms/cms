@@ -1,132 +1,118 @@
 <template>
     <div class="tued-structure">
-        <!--<draggable group="sections" :list="sections" v-bind="dragOptions" handle=".ctb-section-sortable-handler" class="ctb-sections-container">
-            <transition-group type="transition" :name="!drag ? 'flip-list' : null" class="ctb-sortable-placeholder" tag="div" :data-label="translations.addNewSection">
-                <Section
-                    v-for="(section, id) in sections"
-                    :key="section.code"
-                    :section="section"
-                    :translations="translations"
-                    :errors="$get(errors, id, {})"
-                    @section:remove="removeSection"
-                ></Section>
-            </transition-group>
-        </draggable>-->
-
-        <div
-            class="tued-structure-element tued-structure-element-section"
-            v-for="(section, sk) in structure.sections"
-            :key="'section-' + sk"
+        <draggable
+            group="sections"
+            :list="structure.sections"
+            v-bind="dragOptions"
+            handle=".tued-structure-draggable-placeholder > .tued-structure-element-section > .tued-label > .tued-structure-draggable-handler"
+            @start="handleStart"
+            @change="handleChange"
+            @end="sendDelta"
         >
-            <span
-                :class="{
-                    'tued-label': true,
-                    'tued-element-selected': selected.id === section.id,
-                    'tued-element-hovered': hovered.id === section.id
-                }"
-                @click.stop="select('section', section)"
-                @mouseenter="enter('section', section)"
-                @mouseleave="leave('section', section)"
+            <transition-group
+                type="transition"
+                class="tued-structure-draggable-placeholder"
+                tag="div"
+                data-draggable-delta-transformer-parent=""
             >
-                Sekcja
-            </span>
-            <div
-                class="tued-structure-element tued-structure-element-row"
-                v-for="(row, rk) in section.rows"
-                :key="'row-' + rk"
-            >
-                <span
-                    :class="{
-                        'tued-label': true,
-                        'tued-element-selected': selected.id === row.id,
-                        'tued-element-hovered': hovered.id === row.id
-                    }"
-                    @click.stop="select('row', row)"
-                    @mouseenter="enter('row', row)"
-                    @mouseleave="leave('row', row)"
-                >
-                    Wiersz
-                </span>
                 <div
-                    class="tued-structure-element tued-structure-element-column"
-                    v-for="(column, ck) in row.columns"
-                    :key="'column-' + ck"
+                    class="tued-structure-element tued-structure-element-section"
+                    v-for="section in structure.sections"
+                    :key="'section-' + section.id"
                 >
-                    <span
-                        :class="{
-                            'tued-label': true,
-                            'tued-element-selected': selected.id === column.id,
-                            'tued-element-hovered': hovered.id === column.id
-                        }"
-                        @click.stop="select('column', column)"
-                        @mouseenter="enter('column', column)"
-                        @mouseleave="leave('column', column)"
-                    >
-                        Kolumna
-                    </span>
                     <div
-                        class="tued-structure-element tued-structure-element-block"
-                        v-for="(block, bk) in column.blocks"
-                        :key="'block-' + bk"
+                        :class="{ 'tued-label': true, 'tued-element-selected': selected.id === section.id, 'tued-element-hovered': hovered.id === section.id }"
+                        @click.stop="$root.$emit('structure.element.select', 'section', section)"
+                        @mouseenter="$root.$emit('structure.element.enter', 'section', section)"
+                        @mouseleave="$root.$emit('structure.element.leave', 'section', section)"
                     >
-                        <span
-                            :class="{
-                                'tued-label': true,
-                                'tued-element-selected': selected.id === block.id,
-                                'tued-element-hovered': hovered.id === block.id
-                            }"
-                            @click.stop="select('block', block)"
-                            @mouseenter="enter('block', block)"
-                            @mouseleave="leave('block', block)"
-                        >
-                            Blok
-                        </span>
+                        <div class="tued-structure-draggable-handler"><i class="fas fa-arrows-alt"></i></div>
+                        Sekcja
                     </div>
+                    <Rows
+                        :parent="section"
+                        :rows="section.rows"
+                        :selected="selected"
+                        :hovered="hovered"
+                    ></Rows>
                 </div>
-            </div>
-        </div>
+            </transition-group>
+        </draggable>
     </div>
 </template>
 
 <script>
-import draggable from "vuedraggable";
+import draggable from 'vuedraggable';
+import Rows from './Rows.vue';
+import DraggableDeltaTranslator from '../../../../../shared/DraggableDeltaTranslator.js';
 
 export default {
     props: ['structure', 'messenger'],
     components: {
-        draggable
+        draggable,
+        Rows
     },
     data () {
         return {
             dragOptions: {
                 animation: 200,
-                group: 'sections',
                 disabled: false,
-                ghostClass: 'ctb-draggable-ghost'
+                ghostClass: 'tued-structure-draggable-ghost'
             },
             selected: {
                 id: null
             },
             hovered: {
                 id: null
-            }
+            },
+            draggableTranslator: null
         }
     },
     methods: {
-        select: function (type, object) {
-            this.messenger.send('structure.selection.select', type, object.id);
+        handleStart: function (event) {
+            this.$root.$emit('structure.element.draggable.start', event);
         },
-        deselect: function () {
-            this.messenger.send('structure.selection.deselected');
+        handleChange: function (change) {
+            this.$root.$emit('structure.element.draggable.change', change);
         },
-        enter: function (type, object) {
-            this.messenger.send('structure.hovering.enter', type, object.id);
-        },
-        leave: function (type, object) {
-            this.messenger.send('structure.hovering.leave', type, object.id);
+        sendDelta: function (event) {
+            this.$root.$emit('structure.element.draggable.stop', event);
         }
     },
     mounted () {
+        this.$root.$on('structure.element.select', (type, object) => {
+            this.messenger.send('structure.selection.select', type, object.id);
+        });
+        this.$root.$on('structure.element.enter', (type, object) => {
+            this.messenger.send('structure.hovering.enter', type, object.id);
+        });
+        this.$root.$on('structure.element.leave', (type, object) => {
+            this.messenger.send('structure.hovering.leave', type, object.id);
+        });
+        this.$root.$on('structure.changed', () => {
+            this.messenger.send('structure.changed', this.structure);
+        });
+        this.$root.$on('structure.element.draggable.start', (event) => {
+            this.draggableTranslator = new DraggableDeltaTranslator(event);
+            this.messenger.send('strucure.hovering.disable');
+        });
+        this.$root.$on('structure.element.draggable.change', (change) => {
+            this.draggableTranslator.handle(change);
+        });
+        this.$root.$on('structure.element.draggable.stop', (event) => {
+            this.messenger.send('strucure.hovering.enable');
+
+            let delta = this.draggableTranslator.stop(event);
+
+            if (!delta) {
+                return;
+            }
+
+            this.messenger.send('structure.move-element', delta);
+        });
+
+
+
         this.messenger.listen('structure.selection.selected', (type, id) => {
             this.selected.id = id;
         });
@@ -141,6 +127,10 @@ export default {
         });
         this.messenger.listen('structure.changed', (structure) => {
             this.structure = structure;
+        });
+        this.messenger.listen('editor.cancel', () => {
+            this.selected.id = null;
+            this.hovered.id = null;
         });
     }
 };

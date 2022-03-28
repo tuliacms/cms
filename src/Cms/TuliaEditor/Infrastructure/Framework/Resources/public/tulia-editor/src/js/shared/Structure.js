@@ -73,6 +73,64 @@ module.exports = class Structure {
         return null;
     }
 
+    static removeElement (structure, id) {
+        for (let sk in structure.sections) {
+            if (structure.sections[sk].id === id) {
+                structure.sections.splice(sk, 1);
+                return;
+            }
+
+            let rows = structure.sections[sk].rows;
+
+            for (let rk in rows) {
+                if (structure.sections[sk].rows[rk].id === id) {
+                    structure.sections[sk].rows.splice(rk, 1);
+                    return;
+                }
+
+                let columns = rows[rk].columns;
+
+                for (let ck in columns) {
+                    if (structure.sections[sk].rows[rk].columns[ck].id === id) {
+                        structure.sections[sk].rows[rk].columns.splice(ck, 1);
+                        return;
+                    }
+
+                    let blocks = columns[ck].blocks;
+
+                    for (let bk in blocks) {
+                        if (structure.sections[sk].rows[rk].columns[ck].blocks[bk].id === id) {
+                            structure.sections[sk].rows[rk].columns[ck].blocks.splice(bk, 1);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    static moveElementUsingDelta (structure, delta) {
+        let element = this.find(structure, delta.element.id);
+
+        if (delta.from.parent.type === 'structure' && delta.to.parent.type === 'structure') {
+            this.removeElement(structure, delta.element.id);
+            structure.sections.splice(delta.to.index, 0, element);
+            return;
+        }
+
+        let newParent = this.find(structure, delta.to.parent.id);
+
+        this.removeElement(structure, element.id);
+
+        if (newParent.type === 'column') {
+            newParent.blocks.splice(delta.to.index, 0, element);
+        } else if (newParent.type === 'row') {
+            newParent.columns.splice(delta.to.index, 0, element);
+        } else if (newParent.type === 'section') {
+            newParent.rows.splice(delta.to.index, 0, element);
+        }
+    }
+
     static ensureAllIdsAreUnique (structure) {
         let usedIds = [];
 

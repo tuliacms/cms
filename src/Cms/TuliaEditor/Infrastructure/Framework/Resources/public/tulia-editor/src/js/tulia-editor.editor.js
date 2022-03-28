@@ -34,8 +34,8 @@ document.addEventListener('DOMContentLoaded', function () {
         new Vue({
             el: '#tulia-editor',
             template: `<div class="tued-container" ref="root">
-                <Structure :structure="structure.current" :messenger="messenger"></Structure>
-                <RenderingCanvas ref="rendered-content" :structure="structure.current"></RenderingCanvas>
+                <Structure :structure="currentStructure" :messenger="messenger"></Structure>
+                <RenderingCanvas ref="rendered-content" :structure="currentStructure"></RenderingCanvas>
             </div>`,
             components: {
                 Structure,
@@ -46,29 +46,27 @@ document.addEventListener('DOMContentLoaded', function () {
                 options: options,
                 messenger: messenger,
                 availableBlocks: TuliaEditor.blocks,
-                structure: {
-                    current: {},
-                    previous: {}
-                }
+                currentStructure: {},
+                previousStructure: {},
             },
             methods: {
                 restorePreviousStructure: function () {
-                    this.structure.current = ObjectCloner.deepClone(this.structure.previous);
+                    this.currentStructure = ObjectCloner.deepClone(this.previousStructure);
                 },
                 useCurrentStructureAsPrevious: function () {
-                    this.structure.previous = ObjectCloner.deepClone(this.structure.current);
+                    this.previousStructure = ObjectCloner.deepClone(this.currentStructure);
                 }
             },
             mounted() {
-                this.structure.current = ObjectCloner.deepClone(this.options.structure.source);
-                this.structure.previous = ObjectCloner.deepClone(this.options.structure.source);
+                this.currentStructure = ObjectCloner.deepClone(this.options.structure.source);
+                this.previousStructure = ObjectCloner.deepClone(this.options.structure.source);
 
                 messenger.listen('editor.structure.fetch', () => {
                     this.useCurrentStructureAsPrevious();
 
                     messenger.send(
                         'editor.structure.data',
-                        this.structure.current,
+                        this.currentStructure,
                         this.$root.$refs['rendered-content'].$el.innerHTML
                     );
                 });
@@ -76,8 +74,22 @@ document.addEventListener('DOMContentLoaded', function () {
                 messenger.listen('editor.structure.restore', () => {
                     this.restorePreviousStructure();
                     messenger.send('editor.structure.restored');
-                    messenger.send('structure.changed', this.structure.current);
+                    messenger.send('structure.changed', this.currentStructure);
                 });
+
+                document.addEventListener('click', (event) => {
+                    if (event.target.tagName === 'HTML') {
+                        messenger.send('structure.selection.deselected');
+                    }
+                });
+            },
+            watch: {
+                currentStructure: {
+                    handler(newValue, oldValue) {
+                        messenger.send('structure.changed', this.currentStructure);
+                    },
+                    deep: true
+                }
             }
         });
     });
@@ -124,7 +136,11 @@ window.TuliaEditor.blocks.push(TextBlock);
 TuliaEditor.extensions['WysiwygEditor'] = function () {
     return Vue.component('WysiwygEditor', {
         props: {
-            value: [String, null],
+            value: {
+                type: String,
+                required: true,
+                default: ''
+            },
         },
         data() {
             return {
