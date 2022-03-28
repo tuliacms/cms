@@ -16,8 +16,46 @@
         right: 0;
         overflow: auto;
 
-        .tued-controls-group {
-            padding: 10px;
+        .tued-sidebar-toolbar {
+            display: flex;
+            border-bottom: 1px solid #dedede;
+
+            .tued-menu-holder {
+                flex-grow: 1;
+                border-right: 1px solid #dedede;
+
+                .tued-menu-hamburger {
+                    display: block;
+                    padding: 5px 10px;
+                    width: 50px;
+
+                    span {
+                        display: block;
+                        height: 4px;
+                        border-radius: 100px;
+                        background-color: #6e6e6e;
+                        margin: 5px 0;
+                    }
+
+                    &:hover {
+                        cursor: pointer;
+                    }
+                }
+            }
+
+            .tued-main-btn {
+                border-radius: 0;
+                padding: 7px 8px;
+                width: 135px;
+                text-align: center;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+
+                &.tued-btn-default {
+                    border: none;
+                }
+            }
         }
     }
 }
