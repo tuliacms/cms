@@ -26,15 +26,15 @@
 
                 .tued-menu-hamburger {
                     display: block;
-                    padding: 5px 10px;
-                    width: 50px;
+                    padding: 10px 13px;
+                    width: 48px;
 
                     span {
                         display: block;
-                        height: 4px;
+                        height: 3px;
                         border-radius: 100px;
                         background-color: #6e6e6e;
-                        margin: 5px 0;
+                        margin: 3px 0;
                     }
 
                     &:hover {
@@ -51,6 +51,7 @@
                 overflow: hidden;
                 white-space: nowrap;
                 text-overflow: ellipsis;
+                font-size: 14px;
 
                 &.tued-btn-default {
                     border: none;

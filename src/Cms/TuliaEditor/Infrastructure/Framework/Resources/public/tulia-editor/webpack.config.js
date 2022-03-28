@@ -6,7 +6,6 @@ module.exports = {
     entry: {
         'js/tulia-editor.admin.js': './src/js/tulia-editor.admin.js',
         'js/tulia-editor.editor.js': './src/js/tulia-editor.editor.js',
-        'js/tulia-editor.preview.js': './src/js/tulia-editor.preview.js',
     },
     output: {
         filename: '[name]',

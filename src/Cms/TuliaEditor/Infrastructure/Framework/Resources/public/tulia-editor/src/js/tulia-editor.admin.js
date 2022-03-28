@@ -5,6 +5,9 @@ import Structure from './shared/Structure.js';
 import Canvas from './admin/Vue/Components/Admin/Canvas/Canvas.vue';
 import Sidebar from './admin/Vue/Components/Admin/Sidebar/Sidebar.vue';
 
+import TuliaEditor from './TuliaEditor.js';
+window.TuliaEditor = TuliaEditor;
+
 Vue.config.devtools = true;
 
 window.TuliaEditorAdmin = function (selector, options) {
@@ -23,6 +26,9 @@ window.TuliaEditorAdmin = function (selector, options) {
         this.messenger = new Messenger(this.instanceId, window, 'root');
         this.messageBroker = new MessageBroker(this.instanceId, [window]);
         this.options = $.extend({}, TuliaEditorAdmin.defaults, this.options);
+
+        TuliaEditor.loadExtensions();
+        TuliaEditor.loadBlocks();
 
         this.options.structure.source = Structure.ensureAllIdsAreUnique(this.options.structure.source);
         this.options.structure.source = Structure.ensureStructureHasTypeInAllElements(this.options.structure.source);

@@ -32,17 +32,17 @@ module.exports = class VueComponents {
     }
 
     static registerBlockRenderingComponent (block, props, data, dataBinds) {
-        Vue.component(block.name + '-rendering-component-frame', {
+        Vue.component(block.code + '-rendering-component-frame', {
             props: ['block'],
             template: `<div class="tued-block-outer">
                 <component
-                    :is="'${block.name}-rendering'"
+                    :is="'${block.code}-rendering'"
                     ${dataBinds.join()}
                 ></component>
             </div>`
         });
 
-        Vue.component(block.name + '-rendering', {
+        Vue.component(block.code + '-rendering', {
             props: props,
             data () {
                 return data;
@@ -52,7 +52,7 @@ module.exports = class VueComponents {
     }
 
     static registerBlockEditorComponent (block, props, data, dataBinds, watches) {
-        Vue.component(block.name + '-component-frame', {
+        Vue.component(block.code + '-component-frame', {
             props: ['block', 'parent'],
             template: `<div
                 class="tued-structure-element-selectable"
@@ -62,7 +62,7 @@ module.exports = class VueComponents {
                 data-tagname="Block"
             >
                 <component
-                    :is="'${block.name}'"
+                    :is="'${block.code}'"
                     ${dataBinds.join()}
                     @value-changed="updateBlockData"
                 ></component>
@@ -74,7 +74,7 @@ module.exports = class VueComponents {
             }
         });
 
-        Vue.component(block.name, {
+        Vue.component(block.code, {
             props: props,
             data () {
                 return data;

@@ -1,4 +1,4 @@
-{% assets ['tulia_editor', 'tulia_editor_new'] %}
+{% assets ['tulia_editor_new'] %}
 
 <div id="{{ params.id }}-qaaaa"></div>
 
@@ -74,6 +74,7 @@
 <div id="{{ params.id }}"></div>
 
 <script nonce="{{ csp_nonce() }}">
+    /*
     $(function () {
         TuliaEditor.create('#{{ params.id }}', {
             data: $('.tulia-editor-structure-field[data-tulia-editor-group-id="{{ params.group_id }}"]'),
@@ -100,4 +101,5 @@
         TuliaEditor.i18n['pl']['style.predefined.heading.primary'] = 'Styl 1';
         TuliaEditor.i18n['en']['style.predefined.heading.primary'] = 'Style 1';
     });
+    */
 </script>

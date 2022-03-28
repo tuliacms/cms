@@ -1,0 +1,14 @@
+.tued-block-selector {
+    display: flex;
+    flex-wrap: wrap;
+
+    .tued-block-item {
+        flex: 0 0 250px;
+        max-width: 250px;
+
+        svg {
+            display: inline-block;
+            max-width: 200px;
+        }
+    }
+}
