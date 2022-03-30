@@ -27,13 +27,15 @@
                         @mouseleave="$root.$emit('structure.element.leave', 'section', section)"
                     >
                         <div class="tued-structure-draggable-handler"><i class="fas fa-arrows-alt"></i></div>
-                        Sekcja
+                        <span>Sekcja</span>
                     </div>
                     <Rows
                         :parent="section"
                         :rows="section.rows"
                         :selected="selected"
                         :hovered="hovered"
+                        :messenger="messenger"
+                        :canvas="canvas"
                     ></Rows>
                 </div>
             </transition-group>
@@ -47,7 +49,7 @@ import Rows from './Rows.vue';
 import DraggableDeltaTranslator from '../../../../../shared/DraggableDeltaTranslator.js';
 
 export default {
-    props: ['structure', 'messenger'],
+    props: ['structure', 'messenger', 'canvas'],
     components: {
         draggable,
         Rows
@@ -89,9 +91,6 @@ export default {
         this.$root.$on('structure.element.leave', (type, object) => {
             this.messenger.send('structure.hovering.leave', type, object.id);
         });
-        this.$root.$on('structure.changed', () => {
-            this.messenger.send('structure.changed', this.structure);
-        });
         this.$root.$on('structure.element.draggable.start', (event) => {
             this.draggableTranslator = new DraggableDeltaTranslator(event);
             this.messenger.send('strucure.hovering.disable');
@@ -124,9 +123,6 @@ export default {
         });
         this.messenger.listen('structure.hovering.clear', () => {
             this.hovered.id = null;
-        });
-        this.messenger.listen('structure.changed', (structure) => {
-            this.structure = structure;
         });
         this.messenger.listen('editor.cancel', () => {
             this.selected.id = null;

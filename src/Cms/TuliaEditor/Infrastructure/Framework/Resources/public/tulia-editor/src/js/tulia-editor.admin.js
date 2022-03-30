@@ -2,6 +2,7 @@ import './../css/tulia-editor.admin.scss';
 import Messenger from './shared/Messenger.js';
 import MessageBroker from './shared/MessageBroker.js';
 import Structure from './shared/Structure.js';
+import ObjectCloner from './shared/Utils/ObjectCloner.js';
 import Canvas from './admin/Vue/Components/Admin/Canvas/Canvas.vue';
 import Sidebar from './admin/Vue/Components/Admin/Sidebar/Sidebar.vue';
 
@@ -32,6 +33,7 @@ window.TuliaEditorAdmin = function (selector, options) {
 
         this.options.structure.source = Structure.ensureAllIdsAreUnique(this.options.structure.source);
         this.options.structure.source = Structure.ensureStructureHasTypeInAllElements(this.options.structure.source);
+        this.options.structure.source = Structure.ensureColumnsHasSizesPropertyInStructure(this.options.structure.source);
 
         this.renderMainWindow();
         this.bindEvents();
@@ -84,52 +86,104 @@ window.TuliaEditorAdmin = function (selector, options) {
         </div>`);
         this.editor.appendTo('body');
 
-        let self = this;
+        let editor = this;
 
         this.vue = new Vue({
             el: `#tued-editor-window-inner-${this.instanceId}`,
             template: `<div class="tued-editor-window-inner">
                 <div class="tued-container">
-                    <Canvas :editorView="\`${options.editor.view}?tuliaEditorInstance=${this.instanceId}\`"></Canvas>
-                    <Sidebar :availableBlocks="availableBlocks" :structure="currentStructure" :messenger="messenger"></Sidebar>
+                    <Canvas
+                        :editorView="\`${options.editor.view}?tuliaEditorInstance=${this.instanceId}\`"
+                        :canvas="canvas"
+                    ></Canvas>
+                    <Sidebar
+                        :availableBlocks="availableBlocks"
+                        :structure="currentStructure"
+                        :messenger="messenger"
+                        :canvas="canvas"
+                    ></Sidebar>
                 </div>
             </div>`,
             components: {
                 Canvas,
                 Sidebar
             },
-            data: {
-                instanceId: this.instanceId,
-                options: this.options,
-                messenger: this.messenger,
-                availableBlocks: TuliaEditor.blocks,
-                // currentStructure store structure live updated from Editor iframe instance.
-                // Default value of this field is a value from options.
-                currentStructure: this.options.structure.source
+            data () {
+                let breakpoints = ObjectCloner.deepClone(editor.options.canvas.size.breakpoints);
+                let defaultBreakpoint = {
+                    name: 'xl',
+                    width: 1200,
+                };
+
+                for (let i in breakpoints) {
+                    if (breakpoints[i].name === editor.options.canvas.size.default) {
+                        defaultBreakpoint.name = breakpoints[i].name;
+                        defaultBreakpoint.width = breakpoints[i].width;
+                    }
+                }
+
+                return {
+                    instanceId: editor.instanceId,
+                    options: ObjectCloner.deepClone(editor.options),
+                    messenger: editor.messenger,
+                    availableBlocks: TuliaEditor.blocks,
+                    // currentStructure store structure live updated from Editor iframe instance.
+                    // Default value of this field is a value from options.
+                    currentStructure: ObjectCloner.deepClone(editor.options.structure.source),
+                    previousStructure: ObjectCloner.deepClone(editor.options.structure.source),
+                    canvas: {
+                        size: {
+                            breakpoints: breakpoints,
+                            breakpoint: defaultBreakpoint
+                        }
+                    }
+                };
+            },
+            methods: {
+                restorePreviousStructure: function () {
+                    this.currentStructure = ObjectCloner.deepClone(this.previousStructure);
+                    this.messenger.send('editor.structure.restored');
+                },
+                useCurrentStructureAsPrevious: function () {
+                    this.previousStructure = ObjectCloner.deepClone(this.currentStructure);
+                }
             },
             mounted () {
-                self.messenger.listen('editor.structure.data', (structure, content) => {
-                    self.closeEditor();
-                    self.updateFields(structure, content);
-                });
-                self.messenger.listen('editor.structure.restored', () => {
-                    self.closeEditor();
-                });
-
                 this.$root.$on('editor.save', () => {
-                    self.messenger.send('editor.save');
-                    self.messenger.send('editor.structure.fetch');
+                    this.messenger.listen('structure.rendered.data', (content) => {
+                        this.useCurrentStructureAsPrevious();
+                        this.messenger.send('structure.synchronize.from.admin', this.currentStructure);
+                        editor.updateFields(
+                            ObjectCloner.deepClone(this.currentStructure),
+                            content
+                        );
+                        editor.closeEditor();
+                        this.messenger.send('editor.save');
+                    });
+
+                    this.messenger.send('structure.rendered.fetch');
                 });
                 this.$root.$on('editor.cancel', () => {
-                    self.messenger.send('editor.cancel');
-                    self.messenger.send('editor.structure.restore');
+                    this.restorePreviousStructure();
+                    this.messenger.send('structure.synchronize.from.admin', this.currentStructure);
+                    editor.closeEditor();
+                    this.messenger.send('editor.cancel');
                 });
                 this.$root.$on('device.size.changed', (size) => {
-                    self.messenger.send('device.size.changed', size);
+                    this.messenger.send('device.size.changed', size);
                 });
-
                 this.$root.$on('structure.selection.outsite', () => {
                     this.messenger.send('structure.selection.deselected');
+                });
+                this.$root.$on('structure.column.resize', (columnsId, size) => {
+                    this.messenger.send('structure.synchronize.from.admin', this.currentStructure);
+                });
+
+
+
+                this.messenger.listen('structure.synchronize.from.editor', (structure) => {
+                    this.currentStructure = structure;
+                    this.messenger.send('structure.updated');
                 });
             }
         });
@@ -168,4 +222,17 @@ window.TuliaEditorAdmin.defaults = {
         // HTML input/textarea selector, where to store the rendered content.
         content: null
     },
+    canvas: {
+        size: {
+            default: 'xl',
+            breakpoints: [
+                { name: 'xxl', width: 1440 },
+                { name: 'xl', width: 1220 },
+                { name: 'lg', width: 1000 },
+                { name: 'md', width: 770 },
+                { name: 'sm', width: 580 },
+                { name: 'xs', width: 320 },
+            ]
+        }
+    }
 };

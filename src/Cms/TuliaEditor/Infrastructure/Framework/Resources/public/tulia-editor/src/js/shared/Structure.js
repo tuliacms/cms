@@ -208,4 +208,29 @@ module.exports = class Structure {
 
         return structure;
     }
+
+    static ensureColumnsHasSizesPropertyInStructure (structure) {
+        for (let sk in structure.sections) {
+            let rows = structure.sections[sk].rows;
+
+            for (let rk in rows) {
+                let columns = rows[rk].columns;
+
+                for (let ck in columns) {
+                    if (!columns[ck].sizes) {
+                        structure.sections[sk].rows[rk].columns[ck].sizes = {
+                            xxl: { size: null },
+                            xl: { size: null },
+                            lg: { size: null },
+                            md: { size: null },
+                            sm: { size: null },
+                            xs: { size: null },
+                        };
+                    }
+                }
+            }
+        }
+
+        return structure;
+    }
 };

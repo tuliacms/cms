@@ -1,4 +1,5 @@
 import './../css/tulia-editor.editor.scss';
+
 import draggable from 'vuedraggable';
 import Structure from './admin/Vue/Components/Editor/Structure/Structure.vue';
 import RenderingCanvas from './admin/Vue/Components/Editor/Rendering/Canvas.vue';
@@ -23,9 +24,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         new Vue({
             el: '#tulia-editor',
-            template: `<div class="tued-container" ref="root">
-                <Structure :structure="currentStructure" :messenger="messenger"></Structure>
-                <RenderingCanvas ref="rendered-content" :structure="currentStructure"></RenderingCanvas>
+            template: `<div class="tued-container">
+                <Structure :structure="structure" :messenger="messenger"></Structure>
+                <RenderingCanvas ref="rendered-content" :structure="structure"></RenderingCanvas>
             </div>`,
             components: {
                 Structure,
@@ -36,50 +37,29 @@ document.addEventListener('DOMContentLoaded', function () {
                 options: options,
                 messenger: messenger,
                 availableBlocks: TuliaEditor.blocks,
-                currentStructure: {},
-                previousStructure: {},
-            },
-            methods: {
-                restorePreviousStructure: function () {
-                    this.currentStructure = ObjectCloner.deepClone(this.previousStructure);
-                },
-                useCurrentStructureAsPrevious: function () {
-                    this.previousStructure = ObjectCloner.deepClone(this.currentStructure);
-                }
+                structure: ObjectCloner.deepClone(options.structure.source),
             },
             mounted() {
-                this.currentStructure = ObjectCloner.deepClone(this.options.structure.source);
-                this.previousStructure = ObjectCloner.deepClone(this.options.structure.source);
+                this.$root.$on('block.inner.updated', () => {
+                    this.messenger.send('structure.synchronize.from.editor', this.structure);
+                });
 
-                messenger.listen('editor.structure.fetch', () => {
-                    this.useCurrentStructureAsPrevious();
-
-                    messenger.send(
-                        'editor.structure.data',
-                        this.currentStructure,
+                this.messenger.listen('structure.rendered.fetch', () => {
+                    this.messenger.send(
+                        'structure.rendered.data',
                         this.$root.$refs['rendered-content'].$el.innerHTML
                     );
                 });
-
-                messenger.listen('editor.structure.restore', () => {
-                    this.restorePreviousStructure();
-                    messenger.send('editor.structure.restored');
-                    messenger.send('structure.changed', this.currentStructure);
+                this.messenger.listen('structure.synchronize.from.admin', (structure) => {
+                    this.structure = structure;
+                    this.messenger.send('structure.updated');
                 });
 
                 document.addEventListener('click', (event) => {
                     if (event.target.tagName === 'HTML') {
-                        messenger.send('structure.selection.deselected');
+                        this.messenger.send('structure.selection.deselected');
                     }
                 });
-            },
-            watch: {
-                currentStructure: {
-                    handler(newValue, oldValue) {
-                        messenger.send('structure.changed', this.currentStructure);
-                    },
-                    deep: true
-                }
             }
         });
     });

@@ -27,7 +27,21 @@
                         @mouseleave="$root.$emit('structure.element.leave', 'column', column)"
                     >
                         <div class="tued-structure-draggable-handler"><i class="fas fa-arrows-alt"></i></div>
-                        Kolumna
+                        <span>Kolumna</span>
+                        <div class="tied-structure-element-options">
+                            <div class="tued-structure-column-sizer">
+                                <span>{{ canvas.size.breakpoint.name }}</span>
+                                <input
+                                    type="text"
+                                    :ref="'column-' + column.id"
+                                    v-model="column.sizes[canvas.size.breakpoint.name].size"
+                                    @focus="$event.target.select()"
+                                    @keyup="changeSize(column, $event)"
+                                    @change="changeSize(column, $event)"
+                                    placeholder="inherit"
+                                />
+                            </div>
+                        </div>
                     </div>
                     <Blocks
                         :parent="column"
@@ -46,7 +60,7 @@ import draggable from 'vuedraggable';
 import Blocks from './Blocks.vue';
 
 export default {
-    props: ['parent', 'columns', 'selected', 'hovered'],
+    props: ['parent', 'columns', 'selected', 'hovered', 'messenger', 'canvas'],
     components: {
         draggable,
         Blocks
@@ -56,7 +70,7 @@ export default {
             dragOptions: {
                 animation: 200,
                 disabled: false,
-                ghostClass: 'tued-structure-draggable-ghost'
+                ghostClass: 'tued-structure-draggable-ghost',
             }
         }
     },
@@ -69,7 +83,53 @@ export default {
         },
         sendDelta: function (event) {
             this.$root.$emit('structure.element.draggable.stop', event);
+        },
+        changeSize: function (column, event) {
+            let size = column.sizes[this.canvas.size.breakpoint.name];
+
+            switch (event.key) {
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                case '0':
+                    break;
+                case 'ArrowLeft':
+                case 'ArrowRight':
+                case 'ArrowUp':
+                case 'ArrowDown':
+                case 'Backspace':
+                case 'Delete':
+                    return;
+                default:
+                    event.preventDefault();
+            }
+
+            let input = this.$refs['column-' + column.id][0];
+            let value = input.value;
+            let valueInt = parseInt(value);
+
+            // Reset if value is empty or 'zero'
+            if (!value) {
+                input.value = '';
+                size.size = null;
+            } else {
+                // Max 12 columns
+                if (valueInt >= 12) {
+                    input.value = '12';
+                    valueInt = 12;
+                }
+
+                size.size = valueInt;
+            }
+
+            this.$root.$emit('structure.column.resize', column.id, size.size);
         }
-    },
+    }
 };
 </script>

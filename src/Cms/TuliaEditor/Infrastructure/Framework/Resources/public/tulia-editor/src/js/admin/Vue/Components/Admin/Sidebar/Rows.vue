@@ -27,13 +27,15 @@
                         @mouseleave="$root.$emit('structure.element.leave', 'row', row)"
                     >
                         <div class="tued-structure-draggable-handler"><i class="fas fa-arrows-alt"></i></div>
-                        Wiersz
+                        <span>Wiersz</span>
                     </div>
                     <Columns
                         :parent="row"
                         :columns="row.columns"
                         :selected="selected"
                         :hovered="hovered"
+                        :messenger="messenger"
+                        :canvas="canvas"
                     ></Columns>
                 </div>
             </transition-group>
@@ -46,7 +48,7 @@ import draggable from 'vuedraggable';
 import Columns from './Columns.vue';
 
 export default {
-    props: ['parent', 'rows', 'selected', 'hovered'],
+    props: ['parent', 'rows', 'selected', 'hovered', 'messenger', 'canvas'],
     components: {
         draggable,
         Columns

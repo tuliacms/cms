@@ -1,6 +1,6 @@
 <template>
     <div
-        class="tued-structure-column tued-structure-element-selectable col"
+        :class="columnClass"
         :id="column.id"
         @mouseenter="$root.$emit('structure.hovering.enter', 'column', column.id)"
         @mouseleave="$root.$emit('structure.hovering.leave', 'column', column.id)"
@@ -24,6 +24,31 @@
 
 <script>
 export default {
-    props: ['column', 'parent']
+    props: ['column', 'parent'],
+    computed: {
+        columnClass: function () {
+            let classList = ['tued-structure-column', 'tued-structure-element-selectable'];
+            let anySizingAdded = false;
+
+            for (let i in this.column.sizes) {
+                if (this.column.sizes[i].size) {
+                    let prefix = `${i}-`;
+
+                    if (i === 'xs') {
+                        prefix = '';
+                    }
+
+                    classList.push(`col-${prefix}${this.column.sizes[i].size}`);
+                    anySizingAdded = true;
+                }
+            }
+
+            if (anySizingAdded === false) {
+                classList.push('col');
+            }
+
+            return classList;
+        }
+    }
 };
 </script>

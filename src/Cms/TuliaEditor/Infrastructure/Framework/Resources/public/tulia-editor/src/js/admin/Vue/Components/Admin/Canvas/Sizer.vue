@@ -1,8 +1,8 @@
 <template>
     <div class="tued-canvas-sizer">
         <div
-            v-for="size in sizes"
-            :class="{ 'tued-canvas-size': true, 'active': size.name === activeSize }"
+            v-for="size in canvas.size.breakpoints"
+            :class="{ 'tued-canvas-size': true, 'active': size.name === canvas.size.breakpoint.name }"
             :data-breakpoint="size.name" :style="{ width: size.width + 'px' }"
             @click="setCurrentSizeTo(size.name)"
         >
@@ -14,25 +14,14 @@
 
 <script>
 export default {
-    data () {
-        return {
-            activeSize: 'xl',
-            sizes: [
-                { name: 'xxl', width: 1400 },
-                { name: 'xl', width: 1200 },
-                { name: 'lg', width: 992 },
-                { name: 'md', width: 768 },
-                { name: 'sm', width: 576 },
-                { name: 'xs', width: 380 },
-            ]
-        }
-    },
+    props: ['canvas'],
     methods: {
         setCurrentSizeTo: function (name) {
-            for (let i in this.sizes) {
-                if (this.sizes[i].name === name) {
-                    this.activeSize = name;
-                    this.$root.$emit('device.size.changed', this.sizes[i]);
+            for (let i in this.canvas.size.breakpoints) {
+                if (this.canvas.size.breakpoints[i].name === name) {
+                    this.canvas.size.breakpoint.name = name;
+                    this.canvas.size.breakpoint.width = this.canvas.size.breakpoints[i].width;
+                    this.$root.$emit('device.size.changed', this.canvas.size.breakpoints[i]);
                 }
             }
         }

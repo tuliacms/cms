@@ -12,3 +12,8 @@
   - `column` - Column object (with `id` property).
 - `structure.block.removed` - When block were removed. Arguments:
   - `block` - Block object (with `id` property).
+
+- `structure.synchronize.from.admin` - When any of elements inside admin model has changed.
+  This event is listened by Editor iframe to update it's internal structure.
+
+- `structure.updated` - Called after synchronizing the structure between admin and editor.

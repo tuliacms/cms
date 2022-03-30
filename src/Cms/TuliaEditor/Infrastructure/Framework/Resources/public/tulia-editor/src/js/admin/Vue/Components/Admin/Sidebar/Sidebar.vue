@@ -18,7 +18,7 @@
                 <div :class="{ 'tued-sidebar-type': true, 'tued-sidebar-type-active': sidebar === 'structure' }" @click="sidebar = 'structure'"><i class="fas fa-stream"></i><span>Structure</span></div>
             </div>
             <div v-if="sidebar === 'structure'">
-                <Structure :structure="structure" :messenger="messenger"></Structure>
+                <Structure :structure="structure" :messenger="messenger" :canvas="canvas"></Structure>
             </div>
             <div v-if="sidebar === 'selected'">
                 Selected
@@ -43,7 +43,7 @@
 import Structure from './Structure.vue';
 
 export default {
-    props: ['availableBlocks', 'messenger', 'structure'],
+    props: ['availableBlocks', 'messenger', 'structure', 'canvas'],
     components: {
         Structure
     },
@@ -59,7 +59,7 @@ export default {
         }
 
         return {
-            sidebar: 'blocks',
+            sidebar: 'structure',
             blocks: blocks
         }
     }

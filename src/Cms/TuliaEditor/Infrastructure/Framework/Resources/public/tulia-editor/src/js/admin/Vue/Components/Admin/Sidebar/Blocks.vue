@@ -27,7 +27,7 @@
                         @mouseleave="$root.$emit('structure.element.leave', 'block', block)"
                     >
                         <div class="tued-structure-draggable-handler"><i class="fas fa-arrows-alt"></i></div>
-                        Blok
+                        <span>Blok</span>
                     </div>
                 </div>
             </transition-group>

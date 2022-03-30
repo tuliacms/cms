@@ -1,9 +1,9 @@
 <template>
     <div class="tued-canvas">
         <div class="tued-canvas-inner">
-            <Sizer></Sizer>
+            <Sizer :canvas="canvas"></Sizer>
             <div @mousedown="$root.$emit('structure.selection.outsite')">
-                <DeviceFaker :editorView="editorView"></DeviceFaker>
+                <DeviceFaker :editorView="editorView" :canvas="canvas"></DeviceFaker>
                 <div class="body-coturn body-coturn-left" :style="{ transform: `translateX(-${coturn_position}px)` }"></div>
                 <div class="body-coturn body-coturn-right" :style="{ transform: `translateX(${coturn_position}px)` }"></div>
             </div>
@@ -16,20 +16,15 @@ import Sizer from './Sizer.vue';
 import DeviceFaker from './DeviceFaker.vue';
 
 export default {
-    props: ['editorView'],
+    props: ['editorView', 'canvas'],
     components: {
         Sizer,
         DeviceFaker
     },
-    data () {
-        return {
-            coturn_position: 600
-        };
-    },
-    mounted () {
-        this.$root.$on('device.size.changed', (size) => {
-            this.coturn_position = size.width / 2;
-        });
+    computed: {
+        coturn_position: function () {
+            this.coturn_position = this.canvas.size.breakpoint.width / 2;
+        }
     }
 };
 </script>

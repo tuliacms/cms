@@ -384,7 +384,7 @@ export default {
             }
 
             if (found) {
-                this.messenger.send('structure.changed', this.structure);
+                this.messenger.send('structure.synchronize.from.editor', this.structure);
             }
         },
         hideElementActions: function () {
@@ -472,6 +472,10 @@ export default {
             Structure.moveElementUsingDelta(this.structure, delta);
             this.hoverable.manager.hide();
             this.messenger.send('structure.selection.select', delta.element.type, delta.element.id);
+        });
+        this.messenger.listen('structure.updated', () => {
+            this.hoverable.manager.update();
+            this.selectable.manager.update();
         });
 
 
