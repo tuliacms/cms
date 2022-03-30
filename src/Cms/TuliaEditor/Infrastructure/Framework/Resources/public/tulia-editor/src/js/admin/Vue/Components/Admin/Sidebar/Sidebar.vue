@@ -9,8 +9,8 @@
                         <span></span>
                     </div>
                 </div>
-                <button type="button" class="tued-main-btn tued-btn-default" @click="$root.$emit('editor.cancel')">Porzuć</button>
-                <button type="button" class="tued-main-btn tued-btn-success" @click="$root.$emit('editor.save')">Zapisz</button>
+                <button type="button" class="tued-main-btn tued-btn-default" @click="$root.$emit('editor.cancel')">{{ translator.trans('cancel') }}</button>
+                <button type="button" class="tued-main-btn tued-btn-success" @click="$root.$emit('editor.save')">{{ translator.trans('save') }}</button>
             </div>
             <div class="tued-sidebar-selector">
                 <div :class="{ 'tued-sidebar-type': true, 'tued-sidebar-type-active': sidebar === 'blocks' }" @click="sidebar = 'blocks'"><i class="fas fa-plus-square"></i><span>Add</span></div>
@@ -43,7 +43,7 @@
 import Structure from './Structure.vue';
 
 export default {
-    props: ['availableBlocks', 'messenger', 'structure', 'canvas'],
+    props: ['availableBlocks', 'messenger', 'structure', 'canvas', 'translator'],
     components: {
         Structure
     },

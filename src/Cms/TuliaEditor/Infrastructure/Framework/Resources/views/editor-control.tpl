@@ -4,6 +4,15 @@
 
 <script>
     $(function () {
+        TuliaEditorAdmin.translations['{{ user().locale }}'] = {
+            save: '{{ 'save'|trans }}',
+            cancel: '{{ 'cancel'|trans }}',
+            section: '{{ 'section'|trans({}, 'tulia-editor') }}',
+            column: '{{ 'column'|trans({}, 'tulia-editor') }}',
+            row: '{{ 'row'|trans({}, 'tulia-editor') }}',
+            block: '{{ 'block'|trans({}, 'tulia-editor') }}',
+        };
+
         let structureSelector = '.tulia-editor-structure-field[data-tulia-editor-group-id="{{ params.group_id }}"]';
         let contentSelector = '.tulia-editor-content-field[data-tulia-editor-group-id="{{ params.group_id }}"]';
 
@@ -26,7 +35,8 @@
             editor: {
                 view: '{{ path('backend.tulia_editor.editor_view') }}',
             },
-            start_point: 'editor'
+            start_point: 'editor',
+            locale: '{{ user().locale }}'
         });
     });
 </script>

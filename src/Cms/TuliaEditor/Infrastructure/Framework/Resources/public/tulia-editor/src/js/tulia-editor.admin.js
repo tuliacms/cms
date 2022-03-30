@@ -2,6 +2,7 @@ import './../css/tulia-editor.admin.scss';
 import Messenger from './shared/Messenger.js';
 import MessageBroker from './shared/MessageBroker.js';
 import Structure from './shared/Structure.js';
+import Translator from './shared/I18n/Translator.js';
 import ObjectCloner from './shared/Utils/ObjectCloner.js';
 import Canvas from './admin/Vue/Components/Admin/Canvas/Canvas.vue';
 import Sidebar from './admin/Vue/Components/Admin/Sidebar/Sidebar.vue';
@@ -19,6 +20,7 @@ window.TuliaEditorAdmin = function (selector, options) {
     this.editor = null;
     this.messenger = null;
     this.messageBroker = null;
+    this.translator = null;
     this.vue = null;
 
     this.init = function () {
@@ -27,6 +29,7 @@ window.TuliaEditorAdmin = function (selector, options) {
         this.messenger = new Messenger(this.instanceId, window, 'root');
         this.messageBroker = new MessageBroker(this.instanceId, [window]);
         this.options = $.extend({}, TuliaEditorAdmin.defaults, this.options);
+        this.translator = new Translator(this.options.locale, this.options.fallback_locales);
 
         TuliaEditor.loadExtensions();
         TuliaEditor.loadBlocks();
@@ -101,6 +104,7 @@ window.TuliaEditorAdmin = function (selector, options) {
                         :structure="currentStructure"
                         :messenger="messenger"
                         :canvas="canvas"
+                        :translator="translator"
                     ></Sidebar>
                 </div>
             </div>`,
@@ -126,6 +130,7 @@ window.TuliaEditorAdmin = function (selector, options) {
                     instanceId: editor.instanceId,
                     options: ObjectCloner.deepClone(editor.options),
                     messenger: editor.messenger,
+                    translator: editor.translator,
                     availableBlocks: TuliaEditor.blocks,
                     // currentStructure store structure live updated from Editor iframe instance.
                     // Default value of this field is a value from options.
@@ -205,6 +210,12 @@ window.TuliaEditorAdmin = function (selector, options) {
 };
 
 window.TuliaEditorAdmin.instances = 0;
+window.TuliaEditorAdmin.translations = {
+    en: {
+        save: 'Save',
+        cancel: 'Cancel'
+    }
+};
 
 window.TuliaEditorAdmin.defaults = {
     structure: {},
@@ -234,5 +245,7 @@ window.TuliaEditorAdmin.defaults = {
                 { name: 'xs', width: 320 },
             ]
         }
-    }
+    },
+    locale: 'en_en',
+    fallback_locales: ['en']
 };
