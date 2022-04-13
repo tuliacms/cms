@@ -1,3 +1,6 @@
+import:
+    - { resource: '../framework.yaml' }
+
 framework:
     test: true
     session:

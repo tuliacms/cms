@@ -114,8 +114,8 @@ framework:
                 scripts: [ '/assets/core/momentjs/moment-with-locales.min.js' ]
                 priority: 800
             vue:
-                scripts: [ '/assets/core/vuejs/vue.min.js' ]
                 priority: 500
+                # Scripts defined in environments
             nestable:
                 scripts: [ '/assets/core/jquery-nestable/jquery.nestable.min.js' ]
                 styles: [ '/assets/core/jquery-nestable/jquery.nestable.min.css' ]

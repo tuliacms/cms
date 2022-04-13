@@ -1,0 +1,5 @@
+framework:
+    assetter:
+        assets:
+            vue:
+                scripts: [ '/assets/core/vuejs/vue.dev.js' ]

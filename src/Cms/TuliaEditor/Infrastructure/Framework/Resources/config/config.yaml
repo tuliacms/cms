@@ -1,6 +1,6 @@
 framework:
     public_paths:
-        '%cms.core_dir%/Cms/TuliaEditor/Infrastructure/Framework/Resources/public/tulia_editor/dist': '/core/tulia-editor-new'
+        '%cms.core_dir%/Cms/TuliaEditor/Infrastructure/Framework/Resources/public/tulia_editor/dist': '/core/tulia-editor'
     translator:
         paths:
             - '%cms.core_dir%/Cms/TuliaEditor/Infrastructure/Framework/Resources/translations'
@@ -10,23 +10,21 @@ framework:
     assetter:
         assets:
             tulia_editor:
-                group: head
+                group: body
                 scripts:
-                    - /assets/core/tulia-editor/js/tulia-editor.min.js
+                    - /assets/core/tulia-editor/tulia-editor.admin.js
                 styles:
-                    - /assets/core/tulia-editor/css/tulia-editor.min.css
-            tulia_editor_new:
-                group: head
+                    - /assets/core/tulia-editor/tulia-editor.admin.js.css
+#            tulia_editor.preview:
+#                group: head
+#                scripts:
+#                    - /assets/core/tulia-editor/tulia-editor.preview.js
+            tulia_editor.editor:
+                group: body
                 scripts:
-                    - /assets/core/tulia-editor-new/tulia-editor.admin.js
-            tulia_editor_new.preview:
-                group: head
-                scripts:
-                    - /assets/core/tulia-editor-new/tulia-editor.preview.js
-            tulia_editor_new.editor:
-                group: head
-                scripts:
-                    - /assets/core/tulia-editor-new/tulia-editor.editor.js
+                    - /assets/core/tulia-editor/tulia-editor.editor.js
+                styles:
+                    - /assets/core/tulia-editor/tulia-editor.editor.js.css
                 require: [ vue, quill ]
 cms:
     content_building:
