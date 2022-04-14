@@ -23,7 +23,7 @@
                         <div class="tued-structure-draggable-handler" @mousedown.stop="selection.select('column', element.id)">
                             <i class="fas fa-arrows-alt"></i>
                         </div>
-                        <span>Kolumna</span>
+                        <span>{{ translator.trans('column') }}</span>
                         <div class="tied-structure-element-options">
                             <div class="tued-structure-column-sizer">
                                 <span>{{ breakpointSize }}</span>
@@ -58,8 +58,8 @@ const draggable = require('vuedraggable');
 const Blocks = require('components/Admin/Sidebar/Blocks.vue').default;
 
 export default {
-    props: ['parent', 'columns', 'selected', 'hovered'],
-    inject: ['selection', 'canvas', 'columnSize', 'structureDragOptions'],
+    props: ['parent', 'columns'],
+    inject: ['selection', 'canvas', 'columnSize', 'structureDragOptions', 'translator'],
     components: {
         draggable,
         Blocks

@@ -4461,7 +4461,7 @@ const draggable = __webpack_require__(/*! vuedraggable */ "./node_modules/vuedra
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
     props: ['parent', 'blocks', 'selected', 'hovered'],
-    inject: ['selection', 'structureDragOptions'],
+    inject: ['selection', 'structureDragOptions', 'translator'],
     components: {
         draggable,
     }
@@ -4514,8 +4514,8 @@ const draggable = __webpack_require__(/*! vuedraggable */ "./node_modules/vuedra
 const Blocks = (__webpack_require__(/*! components/Admin/Sidebar/Blocks.vue */ "./src/js/Components/Admin/Sidebar/Blocks.vue")["default"]);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-    props: ['parent', 'columns', 'selected', 'hovered'],
-    inject: ['selection', 'canvas', 'columnSize', 'structureDragOptions'],
+    props: ['parent', 'columns'],
+    inject: ['selection', 'canvas', 'columnSize', 'structureDragOptions', 'translator'],
     components: {
         draggable,
         Blocks
@@ -4622,7 +4622,7 @@ const Columns = (__webpack_require__(/*! components/Admin/Sidebar/Columns.vue */
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
     props: ['parent', 'rows'],
-    inject: ['selection', 'structureDragOptions'],
+    inject: ['selection', 'structureDragOptions', 'translator'],
     components: {
         draggable,
         Columns
@@ -4675,7 +4675,7 @@ __webpack_require__.r(__webpack_exports__);
 const Structure = (__webpack_require__(/*! components/Admin/Sidebar/Structure.vue */ "./src/js/Components/Admin/Sidebar/Structure.vue")["default"]);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-    props: ['availableBlocks', 'structure'],
+    props: ['structure'],
     inject: ['eventDispatcher', 'translator'],
     components: {
         Structure
@@ -5515,10 +5515,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         editorView: $props.options.editor.view + '?tuliaEditorInstance=' + $props.instanceId,
         canvasOptions: $setup.canvasOptions
       }, null, 8 /* PROPS */, ["editorView", "canvasOptions"]),
-      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["SidebarComponent"], {
-        availableBlocks: $props.availableBlocks,
-        structure: $setup.structure
-      }, null, 8 /* PROPS */, ["availableBlocks", "structure"])
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["SidebarComponent"], { structure: $setup.structure }, null, 8 /* PROPS */, ["structure"])
     ])
   ]))
 }
@@ -5547,7 +5544,6 @@ const _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElemen
 const _hoisted_5 = [
   _hoisted_4
 ]
-const _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "Blok", -1 /* HOISTED */)
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_draggable = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("draggable")
@@ -5577,7 +5573,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               class: "tued-structure-draggable-handler",
               onMousedown: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($options.selection.select('block', element.id)), ["stop"])
             }, _hoisted_5, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_3),
-            _hoisted_6
+            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translator.trans('block')), 1 /* TEXT */)
           ], 42 /* CLASS, PROPS, HYDRATE_EVENTS */, _hoisted_2)
         ])
       ]),
@@ -5610,10 +5606,9 @@ const _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElemen
 const _hoisted_5 = [
   _hoisted_4
 ]
-const _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "Kolumna", -1 /* HOISTED */)
-const _hoisted_7 = { class: "tied-structure-element-options" }
-const _hoisted_8 = { class: "tued-structure-column-sizer" }
-const _hoisted_9 = ["value", "onKeyup", "onKeydown", "onChange"]
+const _hoisted_6 = { class: "tied-structure-element-options" }
+const _hoisted_7 = { class: "tued-structure-column-sizer" }
+const _hoisted_8 = ["value", "onKeyup", "onKeydown", "onChange"]
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_Blocks = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Blocks")
@@ -5644,9 +5639,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               class: "tued-structure-draggable-handler",
               onMousedown: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($options.selection.select('column', element.id)), ["stop"])
             }, _hoisted_5, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_3),
-            _hoisted_6,
-            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [
-              (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [
+            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translator.trans('column')), 1 /* TEXT */),
+            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [
+              (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [
                 (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.breakpointSize), 1 /* TEXT */),
                 (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
                   type: "text",
@@ -5657,7 +5652,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                   onKeydown: $event => ($options.changeSizeWithArrows(element, $event)),
                   onChange: $event => ($options.changeSize(element, $event)),
                   placeholder: "inherit"
-                }, null, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_9)
+                }, null, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_8)
               ])
             ])
           ], 42 /* CLASS, PROPS, HYDRATE_EVENTS */, _hoisted_2),
@@ -5699,7 +5694,6 @@ const _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElemen
 const _hoisted_5 = [
   _hoisted_4
 ]
-const _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "Wiersz", -1 /* HOISTED */)
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_Columns = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Columns")
@@ -5730,7 +5724,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               class: "tued-structure-draggable-handler",
               onMousedown: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($options.selection.select('row', element.id)), ["stop"])
             }, _hoisted_5, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_3),
-            _hoisted_6
+            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translator.trans('row')), 1 /* TEXT */)
           ], 42 /* CLASS, PROPS, HYDRATE_EVENTS */, _hoisted_2),
           (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Columns, {
             parent: element,
@@ -5774,29 +5768,10 @@ const _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElemen
   ])
 ], -1 /* HOISTED */)
 const _hoisted_5 = { class: "tued-sidebar-selector" }
-const _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", { class: "fas fa-plus-square" }, null, -1 /* HOISTED */)
-const _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "Add", -1 /* HOISTED */)
-const _hoisted_8 = [
-  _hoisted_6,
-  _hoisted_7
-]
-const _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", { class: "far fa-dot-circle" }, null, -1 /* HOISTED */)
-const _hoisted_10 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "Selected", -1 /* HOISTED */)
-const _hoisted_11 = [
-  _hoisted_9,
-  _hoisted_10
-]
-const _hoisted_12 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", { class: "fas fa-stream" }, null, -1 /* HOISTED */)
-const _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "Structure", -1 /* HOISTED */)
-const _hoisted_14 = [
-  _hoisted_12,
-  _hoisted_13
-]
-const _hoisted_15 = { key: 0 }
-const _hoisted_16 = { key: 1 }
-const _hoisted_17 = { key: 2 }
-const _hoisted_18 = { class: "tued-block-selector" }
-const _hoisted_19 = ["src"]
+const _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", { class: "far fa-dot-circle" }, null, -1 /* HOISTED */)
+const _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", { class: "fas fa-stream" }, null, -1 /* HOISTED */)
+const _hoisted_8 = { key: 0 }
+const _hoisted_9 = { key: 1 }
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_Structure = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Structure")
@@ -5818,41 +5793,28 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       ]),
       (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [
         (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-          class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({ 'tued-sidebar-type': true, 'tued-sidebar-type-active': $data.sidebar === 'blocks' }),
-          onClick: _cache[2] || (_cache[2] = $event => ($data.sidebar = 'blocks'))
-        }, _hoisted_8, 2 /* CLASS */),
-        (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
           class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({ 'tued-sidebar-type': true, 'tued-sidebar-type-active': $data.sidebar === 'selected' }),
-          onClick: _cache[3] || (_cache[3] = $event => ($data.sidebar = 'selected'))
-        }, _hoisted_11, 2 /* CLASS */),
+          onClick: _cache[2] || (_cache[2] = $event => ($data.sidebar = 'selected'))
+        }, [
+          _hoisted_6,
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translator.trans('selected')), 1 /* TEXT */)
+        ], 2 /* CLASS */),
         (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
           class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({ 'tued-sidebar-type': true, 'tued-sidebar-type-active': $data.sidebar === 'structure' }),
-          onClick: _cache[4] || (_cache[4] = $event => ($data.sidebar = 'structure'))
-        }, _hoisted_14, 2 /* CLASS */)
+          onClick: _cache[3] || (_cache[3] = $event => ($data.sidebar = 'structure'))
+        }, [
+          _hoisted_7,
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translator.trans('structure')), 1 /* TEXT */)
+        ], 2 /* CLASS */)
       ]),
       ($data.sidebar === 'structure')
-        ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_15, [
+        ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_8, [
             (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Structure, { structure: $props.structure }, null, 8 /* PROPS */, ["structure"])
           ]))
         : ($data.sidebar === 'selected')
-          ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_16, " Selected "))
-          : ($data.sidebar === 'blocks')
-            ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_17, [
-                (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [
-                  ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.availableBlocks, (block) => {
-                    return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
-                      class: "tued-block-item",
-                      key: block.code
-                    }, [
-                      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
-                        src: block.icon
-                      }, null, 8 /* PROPS */, _hoisted_19),
-                      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(block.name), 1 /* TEXT */)
-                    ]))
-                  }), 128 /* KEYED_FRAGMENT */))
-                ])
-              ]))
-            : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)
+          ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_9, " Selected "))
+          : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true),
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("            <div v-else-if=\"sidebar === 'blocks'\">\n                <div class=\"tued-block-selector\">\n                    <div\n                        class=\"tued-block-item\"\n                        v-for=\"block in availableBlocks\"\n                        :key=\"block.code\"\n                    >\n                        <img :src=\"block.icon\" />\n                        {{ block.name }}\n                    </div>\n                </div>\n            </div>")
     ])
   ]))
 }
@@ -5882,7 +5844,6 @@ const _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElemen
 const _hoisted_6 = [
   _hoisted_5
 ]
-const _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "Sekcja", -1 /* HOISTED */)
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_Rows = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Rows")
@@ -5913,7 +5874,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               class: "tued-structure-draggable-handler",
               onMousedown: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($options.selection.select(_ctx.section, element.id)), ["stop"])
             }, _hoisted_6, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_4),
-            _hoisted_7
+            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translator.trans('section')), 1 /* TEXT */)
           ], 42 /* CLASS, PROPS, HYDRATE_EVENTS */, _hoisted_3),
           (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Rows, {
             parent: element,
@@ -5927,7 +5888,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       _: 1 /* STABLE */
     }, 16 /* FULL_PROPS */, ["list", "onStart", "onChange", "onEnd"]),
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-      class: "tued-structure-new-element",
+      class: "tued-structure-new-element ml-0",
       onClick: _cache[1] || (_cache[1] = $event => ($options.structureManipulator.newSection()))
     }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translator.trans('newSection')), 1 /* TEXT */)
   ]))
@@ -12682,7 +12643,14 @@ class TuliaEditor {
         en: {
             save: 'Save',
             cancel: 'Cancel',
-            newSection: 'New section'
+            newSection: 'New section',
+            newBlock: 'New block',
+            section: 'Section',
+            row: 'Row',
+            column: 'Column',
+            block: 'Block',
+            selected: 'Selected',
+            structure: 'Structure',
         }
     };
 

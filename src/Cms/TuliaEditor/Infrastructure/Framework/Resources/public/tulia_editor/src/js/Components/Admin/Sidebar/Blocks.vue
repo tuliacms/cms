@@ -23,7 +23,7 @@
                         <div class="tued-structure-draggable-handler" @mousedown.stop="selection.select('block', element.id)">
                             <i class="fas fa-arrows-alt"></i>
                         </div>
-                        <span>Blok</span>
+                        <span>{{ translator.trans('block') }}</span>
                     </div>
                 </div>
             </template>
@@ -36,7 +36,7 @@ const draggable = require('vuedraggable');
 
 export default {
     props: ['parent', 'blocks', 'selected', 'hovered'],
-    inject: ['selection', 'structureDragOptions'],
+    inject: ['selection', 'structureDragOptions', 'translator'],
     components: {
         draggable,
     }

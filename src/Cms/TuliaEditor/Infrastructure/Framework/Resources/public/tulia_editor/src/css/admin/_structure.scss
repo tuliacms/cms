@@ -105,16 +105,19 @@
     }
 
     .tued-structure-new-element {
-        border: 2px dashed #c5c5c5;
+        border: 2px dashed #dedede;
         border-radius: 5px;
         padding: 5px;
         text-align: center;
         transition: .12s all;
+        margin: 5px 0 5px 20px;
+        color: #bbbbbb;
 
         &:hover {
             cursor: pointer;
             border-color: #9b9b9b;
             background-color: #f1f1f1;
+            color: #444;
         }
     }
 }

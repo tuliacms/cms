@@ -36,7 +36,14 @@ export class TuliaEditor {
         en: {
             save: 'Save',
             cancel: 'Cancel',
-            newSection: 'New section'
+            newSection: 'New section',
+            newBlock: 'New block',
+            section: 'Section',
+            row: 'Row',
+            column: 'Column',
+            block: 'Block',
+            selected: 'Selected',
+            structure: 'Structure',
         }
     };
 

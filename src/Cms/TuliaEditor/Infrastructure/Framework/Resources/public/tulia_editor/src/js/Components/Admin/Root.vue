@@ -6,7 +6,6 @@
                 :canvasOptions="canvasOptions"
             ></CanvasComponent>
             <SidebarComponent
-                :availableBlocks="availableBlocks"
                 :structure="structure"
             ></SidebarComponent>
         </div>

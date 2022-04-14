@@ -23,7 +23,7 @@
                         <div class="tued-structure-draggable-handler" @mousedown.stop="selection.select('row', element.id)">
                             <i class="fas fa-arrows-alt"></i>
                         </div>
-                        <span>Wiersz</span>
+                        <span>{{ translator.trans('row') }}</span>
                     </div>
                     <Columns
                         :parent="element"
@@ -44,7 +44,7 @@ const Columns = require('components/Admin/Sidebar/Columns.vue').default;
 
 export default {
     props: ['parent', 'rows'],
-    inject: ['selection', 'structureDragOptions'],
+    inject: ['selection', 'structureDragOptions', 'translator'],
     components: {
         draggable,
         Columns

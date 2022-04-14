@@ -23,7 +23,7 @@
                         <div class="tued-structure-draggable-handler" @mousedown.stop="selection.select(section, element.id)">
                             <i class="fas fa-arrows-alt"></i>
                         </div>
-                        <span>Sekcja</span>
+                        <span>{{ translator.trans('section') }}</span>
                     </div>
                     <Rows
                         :parent="element"
@@ -35,7 +35,7 @@
                 </div>
             </template>
         </draggable>
-        <div class="tued-structure-new-element" @click="structureManipulator.newSection()">
+        <div class="tued-structure-new-element ml-0" @click="structureManipulator.newSection()">
             {{ translator.trans('newSection') }}
         </div>
     </div>

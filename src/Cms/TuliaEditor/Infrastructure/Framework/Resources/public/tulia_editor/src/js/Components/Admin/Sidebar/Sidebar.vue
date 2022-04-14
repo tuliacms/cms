@@ -13,9 +13,8 @@
                 <button type="button" class="tued-main-btn tued-btn-success" @click="eventDispatcher.emit('editor.save')">{{ translator.trans('save') }}</button>
             </div>
             <div class="tued-sidebar-selector">
-                <div :class="{ 'tued-sidebar-type': true, 'tued-sidebar-type-active': sidebar === 'blocks' }" @click="sidebar = 'blocks'"><i class="fas fa-plus-square"></i><span>Add</span></div>
-                <div :class="{ 'tued-sidebar-type': true, 'tued-sidebar-type-active': sidebar === 'selected' }" @click="sidebar = 'selected'"><i class="far fa-dot-circle"></i><span>Selected</span></div>
-                <div :class="{ 'tued-sidebar-type': true, 'tued-sidebar-type-active': sidebar === 'structure' }" @click="sidebar = 'structure'"><i class="fas fa-stream"></i><span>Structure</span></div>
+                <div :class="{ 'tued-sidebar-type': true, 'tued-sidebar-type-active': sidebar === 'selected' }" @click="sidebar = 'selected'"><i class="far fa-dot-circle"></i><span>{{ translator.trans('selected') }}</span></div>
+                <div :class="{ 'tued-sidebar-type': true, 'tued-sidebar-type-active': sidebar === 'structure' }" @click="sidebar = 'structure'"><i class="fas fa-stream"></i><span>{{ translator.trans('structure') }}</span></div>
             </div>
             <div v-if="sidebar === 'structure'">
                 <Structure :structure="structure"></Structure>
@@ -23,7 +22,7 @@
             <div v-else-if="sidebar === 'selected'">
                 Selected
             </div>
-            <div v-else-if="sidebar === 'blocks'">
+<!--            <div v-else-if="sidebar === 'blocks'">
                 <div class="tued-block-selector">
                     <div
                         class="tued-block-item"
@@ -34,7 +33,7 @@
                         {{ block.name }}
                     </div>
                 </div>
-            </div>
+            </div>-->
         </div>
     </div>
 </template>
@@ -43,7 +42,7 @@
 const Structure = require('components/Admin/Sidebar/Structure.vue').default;
 
 export default {
-    props: ['availableBlocks', 'structure'],
+    props: ['structure'],
     inject: ['eventDispatcher', 'translator'],
     components: {
         Structure
