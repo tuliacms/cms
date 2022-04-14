@@ -28,6 +28,7 @@ const structureManipulator = new StructureManipulator(structure, props.container
 provide('selection', selection);
 provide('messenger', props.container.messenger);
 provide('eventDispatcher', props.container.eventDispatcher);
+provide('translator', props.container.translator);
 provide('structureManipulator', structureManipulator);
 
 const renderedContent = ref(null);

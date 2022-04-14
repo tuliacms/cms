@@ -35,7 +35,8 @@ export class TuliaEditor {
     static translations = {
         en: {
             save: 'Save',
-            cancel: 'Cancel'
+            cancel: 'Cancel',
+            newSection: 'New section'
         }
     };
 
@@ -83,6 +84,7 @@ export class TuliaEditor {
         this.root = $(this.selector);
         this.instanceId = ++instances;
         this.options = $.extend({}, TuliaEditor.defaults, this.options);
+        this.options.translations = TuliaEditor.translations;
 
         this.options.structure.source = (new Fixer())
             .fix(this.options.structure.source);
@@ -90,7 +92,11 @@ export class TuliaEditor {
         this.container.editor = this;
         this.container.messenger = new Messenger(this.instanceId, window, 'root');
         this.container.messageBroker = new MessageBroker(this.instanceId, [window]);
-        this.container.translator = new Translator(this.options.locale, this.options.fallback_locales);
+        this.container.translator = new Translator(
+            this.options.locale,
+            this.options.fallback_locales,
+            this.options.translations
+        );
         this.container.eventDispatcher = new EventDispatcher();
 
         this.renderMainWindow();

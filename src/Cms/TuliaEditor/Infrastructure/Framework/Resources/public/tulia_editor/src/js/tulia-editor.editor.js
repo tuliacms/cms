@@ -4,6 +4,7 @@ const Vue = require('vue');
 const Messenger = require('shared/Messenger.js').default;
 const Location = require('shared/Utils/Location.js').default;
 const EventDispatcher = require('shared/EventDispatcher.js').default;
+const Translator = require('shared/I18n/Translator.js').default;
 const EditorRoot = require("components/Editor/Root.vue").default;
 const ObjectCloner = require("shared/Utils/ObjectCloner.js").default;
 const extensions = require("extensions/extensions.js").default;
@@ -11,26 +12,29 @@ const blocks = require("blocks/blocks.js").default;
 
 export class Canvas {
     instanceId = null;
-    messenger = null;
-    eventDispatcher = null;
     vue = null;
 
     constructor () {
         this.instanceId = Location.getQueryVariable('tuliaEditorInstance');
-        this.container = {
-            messenger: new Messenger(this.instanceId, window.parent, 'editor'),
-            eventDispatcher: new EventDispatcher(),
-        };
 
         this.start();
     }
 
     start () {
         let self = this;
+        let messenger = new Messenger(this.instanceId, window.parent, 'editor');
 
-        this.container.messenger.listen('editor.init.data', function (options) {
+        messenger.listen('editor.init.data', function (options) {
             self.vue = Vue.createApp(EditorRoot, {
-                container: self.container,
+                container: {
+                    translator: new Translator(
+                        options.locale,
+                        options.fallback_locales,
+                        options.translations
+                    ),
+                    eventDispatcher: new EventDispatcher(),
+                    messenger: messenger,
+                },
                 instanceId: self.instanceId,
                 options: options,
                 availableBlocks: blocks,
@@ -44,7 +48,7 @@ export class Canvas {
             self.vue.mount('#tulia-editor');
         });
 
-        this.container.messenger.send('editor.init.fetch');
+        messenger.send('editor.init.fetch');
     }
 
     loadExtensions (vueApp) {

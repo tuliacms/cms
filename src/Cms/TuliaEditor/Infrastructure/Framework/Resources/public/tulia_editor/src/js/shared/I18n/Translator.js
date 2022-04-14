@@ -4,8 +4,10 @@ export default class Translator {
     catalogues = {};
     locale;
     fallbackLocales = [];
+    translations;
 
-    constructor (locale, fallbackLocales) {
+    constructor (locale, fallbackLocales, translations) {
+        this.translations = translations;
         this.locale = locale;
         this.fallbackLocales = fallbackLocales;
     }
@@ -37,7 +39,7 @@ export default class Translator {
             return this.catalogues[locale];
         }
 
-        this.catalogues[locale] = new Catalogue(TuliaEditor.TuliaEditor.translations[locale] ?? {});
+        this.catalogues[locale] = new Catalogue(this.translations[locale] ?? {});
 
         return this.catalogues[locale];
     }

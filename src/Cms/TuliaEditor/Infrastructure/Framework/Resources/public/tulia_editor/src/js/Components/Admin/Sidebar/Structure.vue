@@ -5,7 +5,7 @@
             item-key="id"
             :list="structure.sections"
             tag="div"
-            :component-data="{ name:'fade', as: 'transition-group', 'data-draggable-delta-transformer-parent': '' }"
+            :component-data="{ name: 'fade', as: 'transition-group', 'data-draggable-delta-transformer-parent': '' }"
             v-bind="structureDragOptions"
             handle=".tued-structure-element-section > .tued-label > .tued-structure-draggable-handler"
             @start="handleStart"
@@ -35,6 +35,9 @@
                 </div>
             </template>
         </draggable>
+        <div class="tued-structure-new-element" @click="structureManipulator.newSection()">
+            {{ translator.trans('newSection') }}
+        </div>
     </div>
 </template>
 
@@ -45,7 +48,14 @@ const DraggableDeltaTranslator = require('shared/Structure/DraggableDeltaTransla
 
 export default {
     props: ['structure'],
-    inject: ['eventDispatcher', 'messenger', 'selection', 'structureDragOptions'],
+    inject: [
+        'eventDispatcher',
+        'messenger',
+        'selection',
+        'structureDragOptions',
+        'structureManipulator',
+        'translator'
+    ],
     components: {
         draggable,
         Rows

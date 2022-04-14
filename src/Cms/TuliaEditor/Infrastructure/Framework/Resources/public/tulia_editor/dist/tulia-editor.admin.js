@@ -4745,7 +4745,14 @@ const DraggableDeltaTranslator = (__webpack_require__(/*! shared/Structure/Dragg
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
     props: ['structure'],
-    inject: ['eventDispatcher', 'messenger', 'selection', 'structureDragOptions'],
+    inject: [
+        'eventDispatcher',
+        'messenger',
+        'selection',
+        'structureDragOptions',
+        'structureManipulator',
+        'translator'
+    ],
     components: {
         draggable,
         Rows
@@ -5553,7 +5560,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       handle: ".tued-structure-element-block > .tued-label > .tued-structure-draggable-handler",
       "item-key": "id",
       tag: "div",
-      "component-data": { name:'fade', as: 'transition-group', 'data-draggable-delta-transformer-parent': `${$props.parent.type}.${$props.parent.id}` },
+      "component-data": { class: 'tued-structure-draggable-group', name: 'fade', as: 'transition-group', 'data-draggable-delta-transformer-parent': `${$props.parent.type}.${$props.parent.id}` },
       onStart: _cache[1] || (_cache[1] = (event) => _ctx.$emit('draggable-start', event)),
       onChange: _cache[2] || (_cache[2] = (event) => _ctx.$emit('draggable-change', event)),
       onEnd: _cache[3] || (_cache[3] = (event) => _ctx.$emit('draggable-end', event))
@@ -5620,7 +5627,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       handle: ".tued-structure-element-column > .tued-label > .tued-structure-draggable-handler",
       "item-key": "id",
       tag: "div",
-      "component-data": { name:'fade', as: 'transition-group', 'data-draggable-delta-transformer-parent': `${$props.parent.type}.${$props.parent.id}` },
+      "component-data": { class: 'tued-structure-draggable-group', name: 'fade', as: 'transition-group', 'data-draggable-delta-transformer-parent': `${$props.parent.type}.${$props.parent.id}` },
       onStart: _cache[5] || (_cache[5] = (event) => _ctx.$emit('draggable-start', event)),
       onChange: _cache[6] || (_cache[6] = (event) => _ctx.$emit('draggable-change', event)),
       onEnd: _cache[7] || (_cache[7] = (event) => _ctx.$emit('draggable-end', event))
@@ -5706,7 +5713,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       handle: ".tued-structure-element-row > .tued-label > .tued-structure-draggable-handler",
       "item-key": "id",
       tag: "div",
-      "component-data": { name:'fade', as: 'transition-group', 'data-draggable-delta-transformer-parent': `${$props.parent.type}.${$props.parent.id}` },
+      "component-data": { class: 'tued-structure-draggable-group', name: 'fade', as: 'transition-group', 'data-draggable-delta-transformer-parent': `${$props.parent.type}.${$props.parent.id}` },
       onStart: _cache[4] || (_cache[4] = (event) => _ctx.$emit('draggable-start', event)),
       onChange: _cache[5] || (_cache[5] = (event) => _ctx.$emit('draggable-change', event)),
       onEnd: _cache[6] || (_cache[6] = (event) => _ctx.$emit('draggable-end', event))
@@ -5887,7 +5894,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "item-key": "id",
       list: $props.structure.sections,
       tag: "div",
-      "component-data": { name:'fade', as: 'transition-group', 'data-draggable-delta-transformer-parent': '' }
+      "component-data": { name: 'fade', as: 'transition-group', 'data-draggable-delta-transformer-parent': '' }
     }, $options.structureDragOptions, {
       handle: ".tued-structure-element-section > .tued-label > .tued-structure-draggable-handler",
       onStart: $options.handleStart,
@@ -5918,7 +5925,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ])
       ]),
       _: 1 /* STABLE */
-    }, 16 /* FULL_PROPS */, ["list", "onStart", "onChange", "onEnd"])
+    }, 16 /* FULL_PROPS */, ["list", "onStart", "onChange", "onEnd"]),
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+      class: "tued-structure-new-element",
+      onClick: _cache[1] || (_cache[1] = $event => ($options.structureManipulator.newSection()))
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translator.trans('newSection')), 1 /* TEXT */)
   ]))
 }
 
@@ -11425,8 +11436,10 @@ class Translator {
     catalogues = {};
     locale;
     fallbackLocales = [];
+    translations;
 
-    constructor (locale, fallbackLocales) {
+    constructor (locale, fallbackLocales, translations) {
+        this.translations = translations;
         this.locale = locale;
         this.fallbackLocales = fallbackLocales;
     }
@@ -11458,7 +11471,7 @@ class Translator {
             return this.catalogues[locale];
         }
 
-        this.catalogues[locale] = new Catalogue(TuliaEditor.TuliaEditor.translations[locale] ?? {});
+        this.catalogues[locale] = new Catalogue(this.translations[locale] ?? {});
 
         return this.catalogues[locale];
     }
@@ -12231,6 +12244,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ StructureManipulator)
 /* harmony export */ });
 const { toRaw } = __webpack_require__(/*! vue */ "vue");
+const { v4 } = __webpack_require__(/*! uuid */ "./node_modules/uuid/index.js");
+const Fixer = (__webpack_require__(/*! shared/Structure/Fixer.js */ "./src/js/shared/Structure/Fixer.js")["default"]);
 
 class StructureManipulator {
     structure;
@@ -12243,6 +12258,7 @@ class StructureManipulator {
         this._listenToUpdateElement();
         this._listenToRemoveElement();
         this._listenToMoveElementUsingDelta();
+        this._listenToNewSection();
     }
 
     update (newStructure) {
@@ -12322,6 +12338,36 @@ class StructureManipulator {
         return null;
     }
 
+    newSection () {
+        let emptyStructure = {
+            sections: [
+                {
+                    rows: [
+                        {
+                            columns: [
+                                {
+                                    blocks: [],
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+
+        this.messenger.send('structure.element.new-section', (new Fixer()).fix(emptyStructure).sections[0]);
+    }
+
+    _listenToNewSection () {
+        this.messenger.listen('structure.element.new-section', (newSection) => {
+            this._doNewSection(newSection);
+        });
+    }
+
+    _doNewSection (newSection) {
+        this.structure.sections.push(newSection);
+    }
+
     removeElement (id) {
         this.messenger.send('structure.element.delete', id);
     }
@@ -12336,43 +12382,43 @@ class StructureManipulator {
         let removed = false;
 
         loop:
-            for (let sk in this.structure.sections) {
-                if (this.structure.sections[sk].id === id) {
-                    this.structure.sections.splice(sk, 1);
+        for (let sk in this.structure.sections) {
+            if (this.structure.sections[sk].id === id) {
+                this.structure.sections.splice(sk, 1);
+                removed = true;
+                break;
+            }
+
+            let rows = this.structure.sections[sk].rows;
+
+            for (let rk in rows) {
+                if (this.structure.sections[sk].rows[rk].id === id) {
+                    this.structure.sections[sk].rows.splice(rk, 1);
                     removed = true;
-                    break;
+                    break loop;
                 }
 
-                let rows = this.structure.sections[sk].rows;
+                let columns = rows[rk].columns;
 
-                for (let rk in rows) {
-                    if (this.structure.sections[sk].rows[rk].id === id) {
-                        this.structure.sections[sk].rows.splice(rk, 1);
+                for (let ck in columns) {
+                    if (this.structure.sections[sk].rows[rk].columns[ck].id === id) {
+                        this.structure.sections[sk].rows[rk].columns.splice(ck, 1);
                         removed = true;
                         break loop;
                     }
 
-                    let columns = rows[rk].columns;
+                    let blocks = columns[ck].blocks;
 
-                    for (let ck in columns) {
-                        if (this.structure.sections[sk].rows[rk].columns[ck].id === id) {
-                            this.structure.sections[sk].rows[rk].columns.splice(ck, 1);
+                    for (let bk in blocks) {
+                        if (this.structure.sections[sk].rows[rk].columns[ck].blocks[bk].id === id) {
+                            this.structure.sections[sk].rows[rk].columns[ck].blocks.splice(bk, 1);
                             removed = true;
                             break loop;
-                        }
-
-                        let blocks = columns[ck].blocks;
-
-                        for (let bk in blocks) {
-                            if (this.structure.sections[sk].rows[rk].columns[ck].blocks[bk].id === id) {
-                                this.structure.sections[sk].rows[rk].columns[ck].blocks.splice(bk, 1);
-                                removed = true;
-                                break loop;
-                            }
                         }
                     }
                 }
             }
+        }
 
         if (removed) {
             this.messenger.send('structure.element.removed', id);
@@ -12635,7 +12681,8 @@ class TuliaEditor {
     static translations = {
         en: {
             save: 'Save',
-            cancel: 'Cancel'
+            cancel: 'Cancel',
+            newSection: 'New section'
         }
     };
 
@@ -12683,6 +12730,7 @@ class TuliaEditor {
         this.root = $(this.selector);
         this.instanceId = ++instances;
         this.options = $.extend({}, TuliaEditor.defaults, this.options);
+        this.options.translations = TuliaEditor.translations;
 
         this.options.structure.source = (new Fixer())
             .fix(this.options.structure.source);
@@ -12690,7 +12738,11 @@ class TuliaEditor {
         this.container.editor = this;
         this.container.messenger = new Messenger(this.instanceId, window, 'root');
         this.container.messageBroker = new MessageBroker(this.instanceId, [window]);
-        this.container.translator = new Translator(this.options.locale, this.options.fallback_locales);
+        this.container.translator = new Translator(
+            this.options.locale,
+            this.options.fallback_locales,
+            this.options.translations
+        );
         this.container.eventDispatcher = new EventDispatcher();
 
         this.renderMainWindow();

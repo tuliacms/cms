@@ -73,6 +73,17 @@
 
 .tued-structure {
   margin: 40px 0; }
+  .tued-structure .tued-structure-new-element {
+    border: 2px dashed #c5c5c5;
+    border-radius: 5px;
+    padding: 5px;
+    text-align: center;
+    transition: .12s all;
+    margin: 20px; }
+    .tued-structure .tued-structure-new-element:hover {
+      cursor: pointer;
+      border-color: #9b9b9b;
+      background-color: #f1f1f1; }
 
 .tued-element-actions {
   z-index: 999;

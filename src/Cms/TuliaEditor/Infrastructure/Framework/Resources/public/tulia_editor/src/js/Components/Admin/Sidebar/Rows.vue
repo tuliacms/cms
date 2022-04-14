@@ -7,7 +7,7 @@
             handle=".tued-structure-element-row > .tued-label > .tued-structure-draggable-handler"
             item-key="id"
             tag="div"
-            :component-data="{ name:'fade', as: 'transition-group', 'data-draggable-delta-transformer-parent': `${parent.type}.${parent.id}` }"
+            :component-data="{ class: 'tued-structure-draggable-group', name: 'fade', as: 'transition-group', 'data-draggable-delta-transformer-parent': `${parent.type}.${parent.id}` }"
             @start="(event) => $emit('draggable-start', event)"
             @change="(event) => $emit('draggable-change', event)"
             @end="(event) => $emit('draggable-end', event)"

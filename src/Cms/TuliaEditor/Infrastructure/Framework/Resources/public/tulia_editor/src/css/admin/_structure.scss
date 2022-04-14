@@ -1,9 +1,11 @@
 .tued-structure {
     padding: 10px;
 
-    .tued-structure-element {
+    .tued-structure-draggable-group {
         padding-left: 20px;
+    }
 
+    .tued-structure-element {
         &.tued-structure-element-section {
             padding-left: 0;
         }
@@ -79,10 +81,12 @@
                 background-color: #fff;
                 text-align: center;
                 padding: 0 5px;
+                height: 20px;
+                line-height: 20px;
             }
             input {
                 width: 25px;
-                height: 22px;
+                height: 20px;
                 border: 1px solid #ddd;
                 border-radius: 0 3px 3px 0;
                 text-align: center;
@@ -98,5 +102,19 @@
         background-color: rgba(#000, .3);
         color: #fff;
         border-radius: 4px;
+    }
+
+    .tued-structure-new-element {
+        border: 2px dashed #c5c5c5;
+        border-radius: 5px;
+        padding: 5px;
+        text-align: center;
+        transition: .12s all;
+
+        &:hover {
+            cursor: pointer;
+            border-color: #9b9b9b;
+            background-color: #f1f1f1;
+        }
     }
 }

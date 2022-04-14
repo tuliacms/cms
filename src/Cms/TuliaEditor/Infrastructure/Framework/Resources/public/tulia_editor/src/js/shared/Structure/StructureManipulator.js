@@ -1,4 +1,6 @@
 const { toRaw } = require('vue');
+const { v4 } = require('uuid');
+const Fixer = require('shared/Structure/Fixer.js').default;
 
 export default class StructureManipulator {
     structure;
@@ -11,6 +13,7 @@ export default class StructureManipulator {
         this._listenToUpdateElement();
         this._listenToRemoveElement();
         this._listenToMoveElementUsingDelta();
+        this._listenToNewSection();
     }
 
     update (newStructure) {
@@ -90,6 +93,36 @@ export default class StructureManipulator {
         return null;
     }
 
+    newSection () {
+        let emptyStructure = {
+            sections: [
+                {
+                    rows: [
+                        {
+                            columns: [
+                                {
+                                    blocks: [],
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+
+        this.messenger.send('structure.element.new-section', (new Fixer()).fix(emptyStructure).sections[0]);
+    }
+
+    _listenToNewSection () {
+        this.messenger.listen('structure.element.new-section', (newSection) => {
+            this._doNewSection(newSection);
+        });
+    }
+
+    _doNewSection (newSection) {
+        this.structure.sections.push(newSection);
+    }
+
     removeElement (id) {
         this.messenger.send('structure.element.delete', id);
     }
@@ -104,43 +137,43 @@ export default class StructureManipulator {
         let removed = false;
 
         loop:
-            for (let sk in this.structure.sections) {
-                if (this.structure.sections[sk].id === id) {
-                    this.structure.sections.splice(sk, 1);
+        for (let sk in this.structure.sections) {
+            if (this.structure.sections[sk].id === id) {
+                this.structure.sections.splice(sk, 1);
+                removed = true;
+                break;
+            }
+
+            let rows = this.structure.sections[sk].rows;
+
+            for (let rk in rows) {
+                if (this.structure.sections[sk].rows[rk].id === id) {
+                    this.structure.sections[sk].rows.splice(rk, 1);
                     removed = true;
-                    break;
+                    break loop;
                 }
 
-                let rows = this.structure.sections[sk].rows;
+                let columns = rows[rk].columns;
 
-                for (let rk in rows) {
-                    if (this.structure.sections[sk].rows[rk].id === id) {
-                        this.structure.sections[sk].rows.splice(rk, 1);
+                for (let ck in columns) {
+                    if (this.structure.sections[sk].rows[rk].columns[ck].id === id) {
+                        this.structure.sections[sk].rows[rk].columns.splice(ck, 1);
                         removed = true;
                         break loop;
                     }
 
-                    let columns = rows[rk].columns;
+                    let blocks = columns[ck].blocks;
 
-                    for (let ck in columns) {
-                        if (this.structure.sections[sk].rows[rk].columns[ck].id === id) {
-                            this.structure.sections[sk].rows[rk].columns.splice(ck, 1);
+                    for (let bk in blocks) {
+                        if (this.structure.sections[sk].rows[rk].columns[ck].blocks[bk].id === id) {
+                            this.structure.sections[sk].rows[rk].columns[ck].blocks.splice(bk, 1);
                             removed = true;
                             break loop;
-                        }
-
-                        let blocks = columns[ck].blocks;
-
-                        for (let bk in blocks) {
-                            if (this.structure.sections[sk].rows[rk].columns[ck].blocks[bk].id === id) {
-                                this.structure.sections[sk].rows[rk].columns[ck].blocks.splice(bk, 1);
-                                removed = true;
-                                break loop;
-                            }
                         }
                     }
                 }
             }
+        }
 
         if (removed) {
             this.messenger.send('structure.element.removed', id);
