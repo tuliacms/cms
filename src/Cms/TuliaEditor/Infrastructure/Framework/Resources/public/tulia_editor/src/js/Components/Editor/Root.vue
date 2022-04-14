@@ -51,8 +51,14 @@ onMounted(() => {
 
     props.container.messenger.listen('structure.move-element', (delta) => {
         structureManipulator.moveElementUsingDelta(delta);
-        selection.resetHovered();
-        selection.select(delta.element.type, delta.element.id);
+
+        // @todo We need mechanism of wating for all windows confirms the message was handled and operation of moving was done in structure.
+        // Only with that we can select element in document.
+        // Right now we have to hack system, and select with timeout.
+        setTimeout(() => {
+            selection.resetHovered();
+            selection.select(delta.element.type, delta.element.id);
+        }, 60);
     });
 
     props.container.messenger.listen('editor.click.outside', () => {

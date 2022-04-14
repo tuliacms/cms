@@ -48,6 +48,15 @@ export default {
     components: {
         Structure
     },
+    provide () {
+        return {
+            structureDragOptions: {
+                animation: 200,
+                disabled: false,
+                ghostClass: 'tued-structure-draggable-ghost'
+            }
+        };
+    },
     data () {
         return {
             sidebar: 'structure',

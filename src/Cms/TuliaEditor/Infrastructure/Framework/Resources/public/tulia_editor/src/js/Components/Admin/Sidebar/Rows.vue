@@ -3,14 +3,14 @@
         <draggable
             group="rows"
             :list="rows"
-            v-bind="dragOptions"
+            v-bind="structureDragOptions"
             handle=".tued-structure-element-row > .tued-label > .tued-structure-draggable-handler"
             item-key="id"
             tag="div"
             :component-data="{ name:'fade', as: 'transition-group', 'data-draggable-delta-transformer-parent': `${parent.type}.${parent.id}` }"
-            @start="handleStart"
-            @change="handleChange"
-            @end="sendDelta"
+            @start="(event) => $emit('draggable-start', event)"
+            @change="(event) => $emit('draggable-change', event)"
+            @end="(event) => $emit('draggable-end', event)"
         >
             <template #item="{element}">
                 <div class="tued-structure-element tued-structure-element-row">
@@ -28,6 +28,9 @@
                     <Columns
                         :parent="element"
                         :columns="element.columns"
+                        @draggable-start="(event) => $emit('draggable-start', event)"
+                        @draggable-change="(event) => $emit('draggable-change', event)"
+                        @draggable-end="(event) => $emit('draggable-end', event)"
                     ></Columns>
                 </div>
             </template>
@@ -41,30 +44,10 @@ const Columns = require('components/Admin/Sidebar/Columns.vue').default;
 
 export default {
     props: ['parent', 'rows'],
-    inject: ['eventDispatcher', 'selection'],
+    inject: ['selection', 'structureDragOptions'],
     components: {
         draggable,
         Columns
-    },
-    data () {
-        return {
-            dragOptions: {
-                animation: 200,
-                disabled: false,
-                ghostClass: 'tued-structure-draggable-ghost'
-            }
-        }
-    },
-    methods: {
-        handleStart: function (event) {
-            this.eventDispatcher.emit('structure.element.draggable.start', event);
-        },
-        handleChange: function (change) {
-            this.eventDispatcher.emit('structure.element.draggable.change', change);
-        },
-        sendDelta: function (event) {
-            this.eventDispatcher.emit('structure.element.draggable.stop', event);
-        }
-    },
+    }
 };
 </script>

@@ -3,14 +3,14 @@
         <draggable
             group="blocks"
             :list="blocks"
-            v-bind="dragOptions"
+            v-bind="structureDragOptions"
             handle=".tued-structure-element-block > .tued-label > .tued-structure-draggable-handler"
             item-key="id"
             tag="div"
             :component-data="{ name:'fade', as: 'transition-group', 'data-draggable-delta-transformer-parent': `${parent.type}.${parent.id}` }"
-            @start="handleStart"
-            @change="handleChange"
-            @end="sendDelta"
+            @start="(event) => $emit('draggable-start', event)"
+            @change="(event) => $emit('draggable-change', event)"
+            @end="(event) => $emit('draggable-end', event)"
         >
             <template #item="{element}">
                 <div class="tued-structure-element tued-structure-element-block">
@@ -36,29 +36,9 @@ const draggable = require('vuedraggable');
 
 export default {
     props: ['parent', 'blocks', 'selected', 'hovered'],
-    inject: ['eventDispatcher', 'selection'],
+    inject: ['selection', 'structureDragOptions'],
     components: {
         draggable,
-    },
-    data () {
-        return {
-            dragOptions: {
-                animation: 200,
-                disabled: false,
-                ghostClass: 'tued-structure-draggable-ghost'
-            }
-        }
-    },
-    methods: {
-        handleStart: function (event) {
-            this.eventDispatcher.emit('structure.element.draggable.start', event);
-        },
-        handleChange: function (change) {
-            this.eventDispatcher.emit('structure.element.draggable.change', change);
-        },
-        sendDelta: function (event) {
-            this.eventDispatcher.emit('structure.element.draggable.stop', event);
-        }
-    },
+    }
 };
 </script>

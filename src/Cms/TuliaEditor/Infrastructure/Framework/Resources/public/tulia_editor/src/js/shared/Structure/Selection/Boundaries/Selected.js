@@ -9,9 +9,7 @@ export default class Selected {
     }
 
     highlightSelected (element) {
-        this.selectedElement = {
-            element: element
-        };
+        this.selectedElement = element;
         this.updatePosition();
     }
 
@@ -54,14 +52,14 @@ export default class Selected {
             return;
         }
 
-        let doc = this.selectedElement.element.ownerDocument;
+        let doc = this.selectedElement.ownerDocument;
 
         this.viewUpdater({
-            top: this.selectedElement.element.offsetTop,
-            left: this.selectedElement.element.offsetLeft,
-            width: this.selectedElement.element.offsetWidth,
-            height: this.selectedElement.element.offsetHeight,
-            tagName: this.selectedElement.element.dataset.tagname ?? this.selectedElement.element.tagName,
+            top: this.selectedElement.offsetTop,
+            left: this.selectedElement.offsetLeft,
+            width: this.selectedElement.offsetWidth,
+            height: this.selectedElement.offsetHeight,
+            tagName: this.selectedElement.dataset.tagname ?? this.selectedElement.tagName,
             // @todo Remove dependency to jQuery
             scrollTop : $(doc.defaultView || doc.parentWindow).scrollTop()
         });

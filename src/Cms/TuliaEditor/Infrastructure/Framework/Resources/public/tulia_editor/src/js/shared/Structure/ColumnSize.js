@@ -28,13 +28,6 @@ export default class ColumnSize {
 
         this.structureManipulator.updateElement(column);
 
-        /*this.messenger.send(
-            'structure.element.update',
-            'column',
-            column.id,
-            toRaw(column)
-        );*/
-
         return size;
     }
 

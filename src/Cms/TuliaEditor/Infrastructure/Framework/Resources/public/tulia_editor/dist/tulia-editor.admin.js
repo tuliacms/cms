@@ -4461,30 +4461,10 @@ const draggable = __webpack_require__(/*! vuedraggable */ "./node_modules/vuedra
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
     props: ['parent', 'blocks', 'selected', 'hovered'],
-    inject: ['eventDispatcher', 'selection'],
+    inject: ['selection', 'structureDragOptions'],
     components: {
         draggable,
-    },
-    data () {
-        return {
-            dragOptions: {
-                animation: 200,
-                disabled: false,
-                ghostClass: 'tued-structure-draggable-ghost'
-            }
-        }
-    },
-    methods: {
-        handleStart: function (event) {
-            this.eventDispatcher.emit('structure.element.draggable.start', event);
-        },
-        handleChange: function (change) {
-            this.eventDispatcher.emit('structure.element.draggable.change', change);
-        },
-        sendDelta: function (event) {
-            this.eventDispatcher.emit('structure.element.draggable.stop', event);
-        }
-    },
+    }
 });
 
 
@@ -4535,19 +4515,10 @@ const Blocks = (__webpack_require__(/*! components/Admin/Sidebar/Blocks.vue */ "
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
     props: ['parent', 'columns', 'selected', 'hovered'],
-    inject: ['eventDispatcher', 'selection', 'canvas', 'columnSize'],
+    inject: ['selection', 'canvas', 'columnSize', 'structureDragOptions'],
     components: {
         draggable,
         Blocks
-    },
-    data () {
-        return {
-            dragOptions: {
-                animation: 200,
-                disabled: false,
-                ghostClass: 'tued-structure-draggable-ghost',
-            }
-        }
     },
     computed: {
         breakpointSize: function () {
@@ -4555,20 +4526,13 @@ const Blocks = (__webpack_require__(/*! components/Admin/Sidebar/Blocks.vue */ "
         },
     },
     methods: {
-        handleStart: function (event) {
-            this.eventDispatcher.emit('structure.element.draggable.start', event);
-        },
-        handleChange: function (change) {
-            this.eventDispatcher.emit('structure.element.draggable.change', change);
-        },
-        sendDelta: function (event) {
-            this.eventDispatcher.emit('structure.element.draggable.stop', event);
-        },
         changeSizeWithArrows: function (column, event) {
             switch (event.key) {
+                case '+':
                 case 'ArrowUp':
                     this.$refs['column-' + column.id].value = this.columnSize.increment(column, this.canvas.getBreakpointName());
                     break;
+                case '-':
                 case 'ArrowDown':
                     this.$refs['column-' + column.id].value = this.columnSize.decrement(column, this.canvas.getBreakpointName());
                     break;
@@ -4658,31 +4622,11 @@ const Columns = (__webpack_require__(/*! components/Admin/Sidebar/Columns.vue */
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
     props: ['parent', 'rows'],
-    inject: ['eventDispatcher', 'selection'],
+    inject: ['selection', 'structureDragOptions'],
     components: {
         draggable,
         Columns
-    },
-    data () {
-        return {
-            dragOptions: {
-                animation: 200,
-                disabled: false,
-                ghostClass: 'tued-structure-draggable-ghost'
-            }
-        }
-    },
-    methods: {
-        handleStart: function (event) {
-            this.eventDispatcher.emit('structure.element.draggable.start', event);
-        },
-        handleChange: function (change) {
-            this.eventDispatcher.emit('structure.element.draggable.change', change);
-        },
-        sendDelta: function (event) {
-            this.eventDispatcher.emit('structure.element.draggable.stop', event);
-        }
-    },
+    }
 });
 
 
@@ -4735,6 +4679,15 @@ const Structure = (__webpack_require__(/*! components/Admin/Sidebar/Structure.vu
     inject: ['eventDispatcher', 'translator'],
     components: {
         Structure
+    },
+    provide () {
+        return {
+            structureDragOptions: {
+                animation: 200,
+                disabled: false,
+                ghostClass: 'tued-structure-draggable-ghost'
+            }
+        };
     },
     data () {
         return {
@@ -4792,43 +4745,27 @@ const DraggableDeltaTranslator = (__webpack_require__(/*! shared/Structure/Dragg
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
     props: ['structure'],
-    inject: ['eventDispatcher', 'messenger', 'selection'],
+    inject: ['eventDispatcher', 'messenger', 'selection', 'structureDragOptions'],
     components: {
         draggable,
         Rows
     },
     data () {
         return {
-            dragOptions: {
-                animation: 200,
-                disabled: false,
-                ghostClass: 'tued-structure-draggable-ghost'
-            },
             draggableDeltaTranslator: null
         }
     },
     methods: {
         handleStart: function (event) {
-            this.eventDispatcher.emit('structure.element.draggable.start', event);
-        },
-        handleChange: function (change) {
-            this.eventDispatcher.emit('structure.element.draggable.change', change);
-        },
-        sendDelta: function (event) {
-            this.eventDispatcher.emit('structure.element.draggable.stop', event);
-        }
-    },
-    mounted () {
-        this.eventDispatcher.on('structure.element.draggable.start', (event) => {
             this.draggableDeltaTranslator = new DraggableDeltaTranslator(event);
 
             this.selection.resetHovered();
             this.selection.disableHovering();
-        });
-        this.eventDispatcher.on('structure.element.draggable.change', (change) => {
+        },
+        handleChange: function (change) {
             this.draggableDeltaTranslator.handle(change);
-        });
-        this.eventDispatcher.on('structure.element.draggable.stop', (event) => {
+        },
+        sendDelta: function (event) {
             this.selection.enableHovering();
 
             let delta = this.draggableDeltaTranslator.stop(event);
@@ -4838,7 +4775,7 @@ const DraggableDeltaTranslator = (__webpack_require__(/*! shared/Structure/Dragg
             }
 
             this.messenger.send('structure.move-element', delta);
-        });
+        }
     }
 });
 
@@ -5612,14 +5549,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_draggable, (0,vue__WEBPACK_IMPORTED_MODULE_0__.mergeProps)({
       group: "blocks",
       list: $props.blocks
-    }, $data.dragOptions, {
+    }, $options.structureDragOptions, {
       handle: ".tued-structure-element-block > .tued-label > .tued-structure-draggable-handler",
       "item-key": "id",
       tag: "div",
       "component-data": { name:'fade', as: 'transition-group', 'data-draggable-delta-transformer-parent': `${$props.parent.type}.${$props.parent.id}` },
-      onStart: $options.handleStart,
-      onChange: $options.handleChange,
-      onEnd: $options.sendDelta
+      onStart: _cache[1] || (_cache[1] = (event) => _ctx.$emit('draggable-start', event)),
+      onChange: _cache[2] || (_cache[2] = (event) => _ctx.$emit('draggable-change', event)),
+      onEnd: _cache[3] || (_cache[3] = (event) => _ctx.$emit('draggable-end', event))
     }), {
       item: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(({element}) => [
         (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [
@@ -5638,7 +5575,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ])
       ]),
       _: 1 /* STABLE */
-    }, 16 /* FULL_PROPS */, ["list", "component-data", "onStart", "onChange", "onEnd"])
+    }, 16 /* FULL_PROPS */, ["list", "component-data"])
   ]))
 }
 
@@ -5679,14 +5616,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_draggable, (0,vue__WEBPACK_IMPORTED_MODULE_0__.mergeProps)({
       group: "columns",
       list: $props.columns
-    }, $data.dragOptions, {
+    }, $options.structureDragOptions, {
       handle: ".tued-structure-element-column > .tued-label > .tued-structure-draggable-handler",
       "item-key": "id",
       tag: "div",
       "component-data": { name:'fade', as: 'transition-group', 'data-draggable-delta-transformer-parent': `${$props.parent.type}.${$props.parent.id}` },
-      onStart: $options.handleStart,
-      onChange: $options.handleChange,
-      onEnd: $options.sendDelta
+      onStart: _cache[5] || (_cache[5] = (event) => _ctx.$emit('draggable-start', event)),
+      onChange: _cache[6] || (_cache[6] = (event) => _ctx.$emit('draggable-change', event)),
+      onEnd: _cache[7] || (_cache[7] = (event) => _ctx.$emit('draggable-end', event))
     }), {
       item: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(({element}) => [
         (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [
@@ -5719,12 +5656,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           ], 42 /* CLASS, PROPS, HYDRATE_EVENTS */, _hoisted_2),
           (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Blocks, {
             parent: element,
-            blocks: element.blocks
+            blocks: element.blocks,
+            onDraggableStart: _cache[2] || (_cache[2] = (event) => _ctx.$emit('draggable-start', event)),
+            onDraggableChange: _cache[3] || (_cache[3] = (event) => _ctx.$emit('draggable-change', event)),
+            onDraggableEnd: _cache[4] || (_cache[4] = (event) => _ctx.$emit('draggable-end', event))
           }, null, 8 /* PROPS */, ["parent", "blocks"])
         ])
       ]),
       _: 1 /* STABLE */
-    }, 16 /* FULL_PROPS */, ["list", "component-data", "onStart", "onChange", "onEnd"])
+    }, 16 /* FULL_PROPS */, ["list", "component-data"])
   ]))
 }
 
@@ -5762,14 +5702,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_draggable, (0,vue__WEBPACK_IMPORTED_MODULE_0__.mergeProps)({
       group: "rows",
       list: $props.rows
-    }, $data.dragOptions, {
+    }, $options.structureDragOptions, {
       handle: ".tued-structure-element-row > .tued-label > .tued-structure-draggable-handler",
       "item-key": "id",
       tag: "div",
       "component-data": { name:'fade', as: 'transition-group', 'data-draggable-delta-transformer-parent': `${$props.parent.type}.${$props.parent.id}` },
-      onStart: $options.handleStart,
-      onChange: $options.handleChange,
-      onEnd: $options.sendDelta
+      onStart: _cache[4] || (_cache[4] = (event) => _ctx.$emit('draggable-start', event)),
+      onChange: _cache[5] || (_cache[5] = (event) => _ctx.$emit('draggable-change', event)),
+      onEnd: _cache[6] || (_cache[6] = (event) => _ctx.$emit('draggable-end', event))
     }), {
       item: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(({element}) => [
         (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [
@@ -5787,12 +5727,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           ], 42 /* CLASS, PROPS, HYDRATE_EVENTS */, _hoisted_2),
           (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Columns, {
             parent: element,
-            columns: element.columns
+            columns: element.columns,
+            onDraggableStart: _cache[1] || (_cache[1] = (event) => _ctx.$emit('draggable-start', event)),
+            onDraggableChange: _cache[2] || (_cache[2] = (event) => _ctx.$emit('draggable-change', event)),
+            onDraggableEnd: _cache[3] || (_cache[3] = (event) => _ctx.$emit('draggable-end', event))
           }, null, 8 /* PROPS */, ["parent", "columns"])
         ])
       ]),
       _: 1 /* STABLE */
-    }, 16 /* FULL_PROPS */, ["list", "component-data", "onStart", "onChange", "onEnd"])
+    }, 16 /* FULL_PROPS */, ["list", "component-data"])
   ]))
 }
 
@@ -5945,7 +5888,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       list: $props.structure.sections,
       tag: "div",
       "component-data": { name:'fade', as: 'transition-group', 'data-draggable-delta-transformer-parent': '' }
-    }, $data.dragOptions, {
+    }, $options.structureDragOptions, {
       handle: ".tued-structure-element-section > .tued-label > .tued-structure-draggable-handler",
       onStart: $options.handleStart,
       onChange: $options.handleChange,
@@ -5967,8 +5910,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           ], 42 /* CLASS, PROPS, HYDRATE_EVENTS */, _hoisted_3),
           (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Rows, {
             parent: element,
-            rows: element.rows
-          }, null, 8 /* PROPS */, ["parent", "rows"])
+            rows: element.rows,
+            onDraggableStart: $options.handleStart,
+            onDraggableChange: $options.handleChange,
+            onDraggableEnd: $options.sendDelta
+          }, null, 8 /* PROPS */, ["parent", "rows", "onDraggableStart", "onDraggableChange", "onDraggableEnd"])
         ])
       ]),
       _: 1 /* STABLE */
@@ -11735,13 +11681,6 @@ class ColumnSize {
         column.sizes[breakpoint].size = size;
 
         this.structureManipulator.updateElement(column);
-
-        /*this.messenger.send(
-            'structure.element.update',
-            'column',
-            column.id,
-            toRaw(column)
-        );*/
 
         return size;
     }

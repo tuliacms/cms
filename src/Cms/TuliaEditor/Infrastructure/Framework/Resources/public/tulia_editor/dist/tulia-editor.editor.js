@@ -176,8 +176,14 @@ onMounted(() => {
 
     props.container.messenger.listen('structure.move-element', (delta) => {
         structureManipulator.moveElementUsingDelta(delta);
-        selection.resetHovered();
-        selection.select(delta.element.type, delta.element.id);
+
+        // @todo We need mechanism of wating for all windows confirms the message was handled and operation of moving was done in structure.
+        // Only with that we can select element in document.
+        // Right now we have to hack system, and select with timeout.
+        setTimeout(() => {
+            selection.resetHovered();
+            selection.select(delta.element.type, delta.element.id);
+        }, 60);
     });
 
     props.container.messenger.listen('editor.click.outside', () => {
@@ -1904,9 +1910,7 @@ class Selected {
     }
 
     highlightSelected (element) {
-        this.selectedElement = {
-            element: element
-        };
+        this.selectedElement = element;
         this.updatePosition();
     }
 
@@ -1949,14 +1953,14 @@ class Selected {
             return;
         }
 
-        let doc = this.selectedElement.element.ownerDocument;
+        let doc = this.selectedElement.ownerDocument;
 
         this.viewUpdater({
-            top: this.selectedElement.element.offsetTop,
-            left: this.selectedElement.element.offsetLeft,
-            width: this.selectedElement.element.offsetWidth,
-            height: this.selectedElement.element.offsetHeight,
-            tagName: this.selectedElement.element.dataset.tagname ?? this.selectedElement.element.tagName,
+            top: this.selectedElement.offsetTop,
+            left: this.selectedElement.offsetLeft,
+            width: this.selectedElement.offsetWidth,
+            height: this.selectedElement.offsetHeight,
+            tagName: this.selectedElement.dataset.tagname ?? this.selectedElement.tagName,
             // @todo Remove dependency to jQuery
             scrollTop : $(doc.defaultView || doc.parentWindow).scrollTop()
         });

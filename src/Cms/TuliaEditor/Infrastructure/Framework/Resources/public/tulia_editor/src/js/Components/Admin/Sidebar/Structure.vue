@@ -6,7 +6,7 @@
             :list="structure.sections"
             tag="div"
             :component-data="{ name:'fade', as: 'transition-group', 'data-draggable-delta-transformer-parent': '' }"
-            v-bind="dragOptions"
+            v-bind="structureDragOptions"
             handle=".tued-structure-element-section > .tued-label > .tued-structure-draggable-handler"
             @start="handleStart"
             @change="handleChange"
@@ -28,6 +28,9 @@
                     <Rows
                         :parent="element"
                         :rows="element.rows"
+                        @draggable-start="handleStart"
+                        @draggable-change="handleChange"
+                        @draggable-end="sendDelta"
                     ></Rows>
                 </div>
             </template>
@@ -42,43 +45,27 @@ const DraggableDeltaTranslator = require('shared/Structure/DraggableDeltaTransla
 
 export default {
     props: ['structure'],
-    inject: ['eventDispatcher', 'messenger', 'selection'],
+    inject: ['eventDispatcher', 'messenger', 'selection', 'structureDragOptions'],
     components: {
         draggable,
         Rows
     },
     data () {
         return {
-            dragOptions: {
-                animation: 200,
-                disabled: false,
-                ghostClass: 'tued-structure-draggable-ghost'
-            },
             draggableDeltaTranslator: null
         }
     },
     methods: {
         handleStart: function (event) {
-            this.eventDispatcher.emit('structure.element.draggable.start', event);
-        },
-        handleChange: function (change) {
-            this.eventDispatcher.emit('structure.element.draggable.change', change);
-        },
-        sendDelta: function (event) {
-            this.eventDispatcher.emit('structure.element.draggable.stop', event);
-        }
-    },
-    mounted () {
-        this.eventDispatcher.on('structure.element.draggable.start', (event) => {
             this.draggableDeltaTranslator = new DraggableDeltaTranslator(event);
 
             this.selection.resetHovered();
             this.selection.disableHovering();
-        });
-        this.eventDispatcher.on('structure.element.draggable.change', (change) => {
+        },
+        handleChange: function (change) {
             this.draggableDeltaTranslator.handle(change);
-        });
-        this.eventDispatcher.on('structure.element.draggable.stop', (event) => {
+        },
+        sendDelta: function (event) {
             this.selection.enableHovering();
 
             let delta = this.draggableDeltaTranslator.stop(event);
@@ -88,7 +75,7 @@ export default {
             }
 
             this.messenger.send('structure.move-element', delta);
-        });
+        }
     }
 };
 </script>

@@ -3,14 +3,14 @@
         <draggable
             group="columns"
             :list="columns"
-            v-bind="dragOptions"
+            v-bind="structureDragOptions"
             handle=".tued-structure-element-column > .tued-label > .tued-structure-draggable-handler"
             item-key="id"
             tag="div"
             :component-data="{ name:'fade', as: 'transition-group', 'data-draggable-delta-transformer-parent': `${parent.type}.${parent.id}` }"
-            @start="handleStart"
-            @change="handleChange"
-            @end="sendDelta"
+            @start="(event) => $emit('draggable-start', event)"
+            @change="(event) => $emit('draggable-change', event)"
+            @end="(event) => $emit('draggable-end', event)"
         >
             <template #item="{element}">
                 <div class="tued-structure-element tued-structure-element-column">
@@ -43,6 +43,9 @@
                     <Blocks
                         :parent="element"
                         :blocks="element.blocks"
+                        @draggable-start="(event) => $emit('draggable-start', event)"
+                        @draggable-change="(event) => $emit('draggable-change', event)"
+                        @draggable-end="(event) => $emit('draggable-end', event)"
                     ></Blocks>
                 </div>
             </template>
@@ -56,19 +59,10 @@ const Blocks = require('components/Admin/Sidebar/Blocks.vue').default;
 
 export default {
     props: ['parent', 'columns', 'selected', 'hovered'],
-    inject: ['eventDispatcher', 'selection', 'canvas', 'columnSize'],
+    inject: ['selection', 'canvas', 'columnSize', 'structureDragOptions'],
     components: {
         draggable,
         Blocks
-    },
-    data () {
-        return {
-            dragOptions: {
-                animation: 200,
-                disabled: false,
-                ghostClass: 'tued-structure-draggable-ghost',
-            }
-        }
     },
     computed: {
         breakpointSize: function () {
@@ -76,20 +70,13 @@ export default {
         },
     },
     methods: {
-        handleStart: function (event) {
-            this.eventDispatcher.emit('structure.element.draggable.start', event);
-        },
-        handleChange: function (change) {
-            this.eventDispatcher.emit('structure.element.draggable.change', change);
-        },
-        sendDelta: function (event) {
-            this.eventDispatcher.emit('structure.element.draggable.stop', event);
-        },
         changeSizeWithArrows: function (column, event) {
             switch (event.key) {
+                case '+':
                 case 'ArrowUp':
                     this.$refs['column-' + column.id].value = this.columnSize.increment(column, this.canvas.getBreakpointName());
                     break;
+                case '-':
                 case 'ArrowDown':
                     this.$refs['column-' + column.id].value = this.columnSize.decrement(column, this.canvas.getBreakpointName());
                     break;
