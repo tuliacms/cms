@@ -4133,15 +4133,15 @@ const Sizer = (__webpack_require__(/*! components/Admin/Canvas/Sizer.vue */ "./s
 const DeviceFaker = (__webpack_require__(/*! components/Admin/Canvas/DeviceFaker.vue */ "./src/js/Components/Admin/Canvas/DeviceFaker.vue")["default"]);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-    props: ['editorView', 'canvas'],
-    inject: ['eventDispatcher', 'selection', 'messenger'],
+    props: ['editorView', 'canvasOptions'],
+    inject: ['messenger'],
     components: {
         Sizer,
         DeviceFaker
     },
     computed: {
-        coturn_position: function () {
-            return this.canvas.size.breakpoint.width / 2;
+        coturnPosition: function () {
+            return this.canvasOptions.size.breakpoint.width / 2;
         }
     }
 });
@@ -4190,14 +4190,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-    props: ['editorView', 'canvas'],
-    inject: ['eventDispatcher'],
-    mounted() {
-        this.eventDispatcher.on('device.size.changed', (size) => {
-            this.canvas.size.breakpoint.width = size.width;
-            this.canvas.size.breakpoint.name = size.name;
-        });
-    }
+    props: ['editorView', 'canvasOptions'],
+    inject: ['eventDispatcher']
 });
 
 
@@ -4244,16 +4238,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-    props: ['container', 'canvas'],
+    props: ['container', 'canvasOptions'],
+    inject: ['canvas'],
     methods: {
-        setCurrentSizeTo: function (name) {
-            for (let i in this.canvas.size.breakpoints) {
-                if (this.canvas.size.breakpoints[i].name === name) {
-                    this.canvas.size.breakpoint.name = name;
-                    this.canvas.size.breakpoint.width = this.canvas.size.breakpoints[i].width;
-                    this.container.eventDispatcher.emit('device.size.changed', this.canvas.size.breakpoints[i]);
-                }
-            }
+        changeSizeTo: function (name) {
+            this.canvas.changeSizeTo(name);
         }
     }
 });
@@ -4315,25 +4304,16 @@ __webpack_require__.r(__webpack_exports__);
 
 const props = __props
 
-const Canvas = (__webpack_require__(/*! components/Admin/Canvas/Canvas.vue */ "./src/js/Components/Admin/Canvas/Canvas.vue")["default"]);
-const Sidebar = (__webpack_require__(/*! components/Admin/Sidebar/Sidebar.vue */ "./src/js/Components/Admin/Sidebar/Sidebar.vue")["default"]);
+const CanvasComponent = (__webpack_require__(/*! components/Admin/Canvas/Canvas.vue */ "./src/js/Components/Admin/Canvas/Canvas.vue")["default"]);
+const SidebarComponent = (__webpack_require__(/*! components/Admin/Sidebar/Sidebar.vue */ "./src/js/Components/Admin/Sidebar/Sidebar.vue")["default"]);
 const ObjectCloner = (__webpack_require__(/*! shared/Utils/ObjectCloner.js */ "./src/js/shared/Utils/ObjectCloner.js")["default"]);
-const Selection = (__webpack_require__(/*! shared/Structure/Selection/Selection.js */ "./src/js/shared/Structure/Selection/Selection.js")["default"]);
 const { defineProps, provide, reactive, onMounted, isProxy, toRaw } = __webpack_require__(/*! vue */ "vue");
 
 
 
-// 'structure' store structure live updated from Editor iframe instance.
-// Default value of this field is a value from 'options' passed in new instance creation.
-const structure = reactive(ObjectCloner.deepClone(props.structure));
-let previousStructure = ObjectCloner.deepClone(props.structure);
-
-const selection = new Selection(structure, props.container.messenger);
-
 provide('messenger', props.container.messenger);
 provide('translator', props.container.translator);
 provide('eventDispatcher', props.container.eventDispatcher);
-provide('selection', selection);
 
 onMounted(() => {
     props.container.eventDispatcher.on('editor.save', () => {
@@ -4357,22 +4337,40 @@ onMounted(() => {
         props.editor.closeEditor();
         props.container.messenger.send('editor.cancel');
     });
-    props.container.eventDispatcher.on('device.size.changed', (size) => {
-        props.container.messenger.send('device.size.changed', size);
-    });
-    props.container.eventDispatcher.on('structure.column.resize', (columnsId, size) => {
-        props.container.messenger.send('structure.synchronize.from.admin', ObjectCloner.deepClone(toRaw(structure)));
-    });
+});
+
+
+
+
+/*************
+ * Structure *
+ *************/
+const StructureManipulator = (__webpack_require__(/*! shared/Structure/StructureManipulator.js */ "./src/js/shared/Structure/StructureManipulator.js")["default"]);
+const Selection = (__webpack_require__(/*! shared/Structure/Selection/Selection.js */ "./src/js/shared/Structure/Selection/Selection.js")["default"]);
+
+// 'structure' store structure live updated from Editor iframe instance.
+// Default value of this field is a value from 'options' passed in new instance creation.
+const structure = reactive(props.structure);
+let previousStructure = ObjectCloner.deepClone(props.structure);
+
+const selection = new Selection(structure, props.container.messenger);
+const structureManipulator = new StructureManipulator(structure, props.container.messenger);
+
+provide('selection', selection);
+provide('structureManipulator', structureManipulator);
+
+onMounted(() => {
     props.container.messenger.listen('structure.updated', () => {
         selection.update();
     });
 
-
-
     props.container.messenger.listen('structure.synchronize.from.editor', (newStructure) => {
-        structure.sections = newStructure.sections;
-        props.container.messenger.send('structure.updated');
+        structureManipulator.update(newStructure);
     });
+
+    /*props.container.eventDispatcher.on('structure.column.resize', (columnId) => {
+        props.container.messenger.send('structure.synchronize.from.admin', ObjectCloner.deepClone(toRaw(structure)));
+    });*/
 });
 
 function restorePreviousStructure() {
@@ -4383,7 +4381,34 @@ function useCurrentStructureAsPrevious() {
     previousStructure = ObjectCloner.deepClone(toRaw(structure));
 }
 
-const __returned__ = { Canvas, Sidebar, ObjectCloner, Selection, defineProps, provide, reactive, onMounted, isProxy, toRaw, props, structure, previousStructure, selection, restorePreviousStructure, useCurrentStructureAsPrevious }
+
+
+
+
+
+/**********
+ * Canvas *
+ **********/
+const canvasOptions = reactive(ObjectCloner.deepClone(props.canvas));
+const Canvas = (__webpack_require__(/*! shared/Canvas.js */ "./src/js/shared/Canvas.js")["default"]);
+provide('canvas', new Canvas(
+    props.container.messenger,
+    canvasOptions.size.breakpoints,
+    canvasOptions.size.breakpoint
+));
+
+
+
+
+
+/***********
+ * Columns *
+ ***********/
+const ColumnSize = (__webpack_require__(/*! shared/Structure/ColumnSize.js */ "./src/js/shared/Structure/ColumnSize.js")["default"]);
+provide('columnSize', new ColumnSize(structureManipulator));
+
+
+const __returned__ = { CanvasComponent, SidebarComponent, ObjectCloner, defineProps, provide, reactive, onMounted, isProxy, toRaw, props, StructureManipulator, Selection, structure, previousStructure, selection, structureManipulator, restorePreviousStructure, useCurrentStructureAsPrevious, canvasOptions, Canvas, ColumnSize }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -4509,8 +4534,8 @@ const draggable = __webpack_require__(/*! vuedraggable */ "./node_modules/vuedra
 const Blocks = (__webpack_require__(/*! components/Admin/Sidebar/Blocks.vue */ "./src/js/Components/Admin/Sidebar/Blocks.vue")["default"]);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-    props: ['parent', 'columns', 'selected', 'hovered', 'canvas'],
-    inject: ['eventDispatcher', 'selection'],
+    props: ['parent', 'columns', 'selected', 'hovered'],
+    inject: ['eventDispatcher', 'selection', 'canvas', 'columnSize'],
     components: {
         draggable,
         Blocks
@@ -4524,6 +4549,11 @@ const Blocks = (__webpack_require__(/*! components/Admin/Sidebar/Blocks.vue */ "
             }
         }
     },
+    computed: {
+        breakpointSize: function () {
+            return this.canvas.getBreakpointName();
+        },
+    },
     methods: {
         handleStart: function (event) {
             this.eventDispatcher.emit('structure.element.draggable.start', event);
@@ -4534,9 +4564,19 @@ const Blocks = (__webpack_require__(/*! components/Admin/Sidebar/Blocks.vue */ "
         sendDelta: function (event) {
             this.eventDispatcher.emit('structure.element.draggable.stop', event);
         },
+        changeSizeWithArrows: function (column, event) {
+            switch (event.key) {
+                case 'ArrowUp':
+                    this.$refs['column-' + column.id].value = this.columnSize.increment(column, this.canvas.getBreakpointName());
+                    break;
+                case 'ArrowDown':
+                    this.$refs['column-' + column.id].value = this.columnSize.decrement(column, this.canvas.getBreakpointName());
+                    break;
+                default:
+                    return;
+            }
+        },
         changeSize: function (column, event) {
-            let size = column.sizes[this.canvas.size.breakpoint.name];
-
             switch (event.key) {
                 case '1':
                 case '2':
@@ -4549,10 +4589,10 @@ const Blocks = (__webpack_require__(/*! components/Admin/Sidebar/Blocks.vue */ "
                 case '9':
                 case '0':
                     break;
-                case 'ArrowLeft':
-                case 'ArrowRight':
                 case 'ArrowUp':
                 case 'ArrowDown':
+                case 'ArrowLeft':
+                case 'ArrowRight':
                 case 'Backspace':
                 case 'Delete':
                     return;
@@ -4560,26 +4600,13 @@ const Blocks = (__webpack_require__(/*! components/Admin/Sidebar/Blocks.vue */ "
                     event.preventDefault();
             }
 
-            let input = this.$refs['column-' + column.id][0];
-            let value = input.value;
-            let valueInt = parseInt(value);
+            let input = this.$refs['column-' + column.id];
 
-            // Reset if value is empty or 'zero'
-            if (!value) {
-                input.value = '';
-                size.size = null;
-            } else {
-                // Max 12 columns
-                if (valueInt >= 12) {
-                    input.value = '12';
-                    valueInt = 12;
-                }
-
-                size.size = valueInt;
-            }
-
-            this.eventDispatcher.emit('structure.column.resize', column.id, size.size);
-        }
+            input.value = this.columnSize.changeTo(column, this.canvas.getBreakpointName(), input.value);
+        },
+        columnSizeByBreakpoint: function (column) {
+            return column.sizes[this.canvas.getBreakpointName()].size;
+        },
     }
 });
 
@@ -4630,7 +4657,7 @@ const draggable = __webpack_require__(/*! vuedraggable */ "./node_modules/vuedra
 const Columns = (__webpack_require__(/*! components/Admin/Sidebar/Columns.vue */ "./src/js/Components/Admin/Sidebar/Columns.vue")["default"]);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-    props: ['parent', 'rows', 'canvas'],
+    props: ['parent', 'rows'],
     inject: ['eventDispatcher', 'selection'],
     components: {
         draggable,
@@ -4704,7 +4731,7 @@ __webpack_require__.r(__webpack_exports__);
 const Structure = (__webpack_require__(/*! components/Admin/Sidebar/Structure.vue */ "./src/js/Components/Admin/Sidebar/Structure.vue")["default"]);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-    props: ['availableBlocks', 'structure', 'canvas'],
+    props: ['availableBlocks', 'structure'],
     inject: ['eventDispatcher', 'translator'],
     components: {
         Structure
@@ -4761,10 +4788,10 @@ __webpack_require__.r(__webpack_exports__);
 
 const draggable = __webpack_require__(/*! vuedraggable */ "./node_modules/vuedraggable/dist/vuedraggable.umd.js");
 const Rows = (__webpack_require__(/*! components/Admin/Sidebar/Rows.vue */ "./src/js/Components/Admin/Sidebar/Rows.vue")["default"]);
-const DraggableDeltaTranslator = (__webpack_require__(/*! shared/DraggableDeltaTranslator.js */ "./src/js/shared/DraggableDeltaTranslator.js")["default"]);
+const DraggableDeltaTranslator = (__webpack_require__(/*! shared/Structure/DraggableDeltaTranslator.js */ "./src/js/shared/Structure/DraggableDeltaTranslator.js")["default"]);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-    props: ['structure', 'canvas'],
+    props: ['structure'],
     inject: ['eventDispatcher', 'messenger', 'selection'],
     components: {
         draggable,
@@ -5430,21 +5457,21 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [
-      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Sizer, { canvas: $props.canvas }, null, 8 /* PROPS */, ["canvas"]),
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Sizer, { canvasOptions: $props.canvasOptions }, null, 8 /* PROPS */, ["canvasOptions"]),
       (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
         onMousedown: _cache[0] || (_cache[0] = $event => ($options.messenger.send('editor.click.outside')))
       }, [
         (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_DeviceFaker, {
           editorView: $props.editorView,
-          canvas: $props.canvas
-        }, null, 8 /* PROPS */, ["editorView", "canvas"]),
+          canvasOptions: $props.canvasOptions
+        }, null, 8 /* PROPS */, ["editorView", "canvasOptions"]),
         (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
           class: "body-coturn body-coturn-left",
-          style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)({ transform: `translateX(-${$options.coturn_position}px)` })
+          style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)({ transform: `translateX(-${$options.coturnPosition}px)` })
         }, null, 4 /* STYLE */),
         (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
           class: "body-coturn body-coturn-right",
-          style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)({ transform: `translateX(${$options.coturn_position}px)` })
+          style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)({ transform: `translateX(${$options.coturnPosition}px)` })
         }, null, 4 /* STYLE */)
       ], 32 /* HYDRATE_EVENTS */)
     ])
@@ -5473,7 +5500,7 @@ const _hoisted_1 = ["src"]
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
     class: "tued-canvas-device-faker",
-    style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)({ width: $props.canvas.size.breakpoint.width + 'px' })
+    style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)({ width: $props.canvasOptions.size.breakpoint.width + 'px' })
   }, [
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("iframe", { src: $props.editorView }, null, 8 /* PROPS */, _hoisted_1)
   ], 4 /* STYLE */))
@@ -5503,12 +5530,12 @@ const _hoisted_4 = { class: "tued-canvas-size-right" }
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [
-    ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.canvas.size.breakpoints, (size) => {
+    ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.canvasOptions.size.breakpoints, (size) => {
       return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
-        class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({ 'tued-canvas-size': true, 'active': size.name === $props.canvas.size.breakpoint.name }),
+        class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({ 'tued-canvas-size': true, 'active': size.name === $props.canvasOptions.size.breakpoint.name }),
         "data-breakpoint": size.name,
         style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)({ width: size.width + 'px' }),
-        onClick: $event => ($options.setCurrentSizeTo(size.name))
+        onClick: $event => ($options.changeSizeTo(size.name))
       }, [
         (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(size.width), 1 /* TEXT */),
         (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(size.width), 1 /* TEXT */)
@@ -5540,15 +5567,14 @@ const _hoisted_2 = { class: "tued-container" }
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [
-      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Canvas"], {
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["CanvasComponent"], {
         editorView: $props.options.editor.view + '?tuliaEditorInstance=' + $props.instanceId,
-        canvas: $props.canvas
-      }, null, 8 /* PROPS */, ["editorView", "canvas"]),
-      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Sidebar"], {
+        canvasOptions: $setup.canvasOptions
+      }, null, 8 /* PROPS */, ["editorView", "canvasOptions"]),
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["SidebarComponent"], {
         availableBlocks: $props.availableBlocks,
-        structure: $setup.structure,
-        canvas: $props.canvas
-      }, null, 8 /* PROPS */, ["availableBlocks", "structure", "canvas"])
+        structure: $setup.structure
+      }, null, 8 /* PROPS */, ["availableBlocks", "structure"])
     ])
   ]))
 }
@@ -5641,11 +5667,9 @@ const _hoisted_5 = [
   _hoisted_4
 ]
 const _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "Kolumna", -1 /* HOISTED */)
-const _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", { class: "tied-structure-element-options" }, [
-  /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", { class: "tued-structure-column-sizer" }, [
-    /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                                <span>{{ canvas.size.breakpoint.name }}</span>\n                                <input\n                                    type=\"text\"\n                                    :ref=\"'column-' + column.id\"\n                                    v-model=\"column.sizes[canvas.size.breakpoint.name].size\"\n                                    @focus=\"$event.target.select()\"\n                                    @keyup=\"changeSize(column, $event)\"\n                                    @change=\"changeSize(column, $event)\"\n                                    placeholder=\"inherit\"\n                                />")
-  ])
-], -1 /* HOISTED */)
+const _hoisted_7 = { class: "tied-structure-element-options" }
+const _hoisted_8 = { class: "tued-structure-column-sizer" }
+const _hoisted_9 = ["value", "onKeyup", "onKeydown", "onChange"]
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_Blocks = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Blocks")
@@ -5670,14 +5694,28 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({ 'tued-label': true, 'tued-element-selected': element.metadata.selected, 'tued-element-hovered': element.metadata.hovered }),
             onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($options.selection.select('column', element.id)), ["stop"]),
             onMouseenter: $event => ($options.selection.hover('column', element.id)),
-            onMouseleave: _cache[0] || (_cache[0] = $event => ($options.selection.resetHovered()))
+            onMouseleave: _cache[1] || (_cache[1] = $event => ($options.selection.resetHovered()))
           }, [
             (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
               class: "tued-structure-draggable-handler",
               onMousedown: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($options.selection.select('column', element.id)), ["stop"])
             }, _hoisted_5, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_3),
             _hoisted_6,
-            _hoisted_7
+            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [
+              (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [
+                (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.breakpointSize), 1 /* TEXT */),
+                (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+                  type: "text",
+                  ref: 'column-' + element.id,
+                  value: $options.columnSizeByBreakpoint(element),
+                  onFocus: _cache[0] || (_cache[0] = $event => ($event.target.select())),
+                  onKeyup: $event => ($options.changeSize(element, $event)),
+                  onKeydown: $event => ($options.changeSizeWithArrows(element, $event)),
+                  onChange: $event => ($options.changeSize(element, $event)),
+                  placeholder: "inherit"
+                }, null, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_9)
+              ])
+            ])
           ], 42 /* CLASS, PROPS, HYDRATE_EVENTS */, _hoisted_2),
           (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Blocks, {
             parent: element,
@@ -5749,9 +5787,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           ], 42 /* CLASS, PROPS, HYDRATE_EVENTS */, _hoisted_2),
           (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Columns, {
             parent: element,
-            columns: element.columns,
-            canvas: $props.canvas
-          }, null, 8 /* PROPS */, ["parent", "columns", "canvas"])
+            columns: element.columns
+          }, null, 8 /* PROPS */, ["parent", "columns"])
         ])
       ]),
       _: 1 /* STABLE */
@@ -5845,10 +5882,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       ]),
       ($data.sidebar === 'structure')
         ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_15, [
-            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Structure, {
-              structure: $props.structure,
-              canvas: $props.canvas
-            }, null, 8 /* PROPS */, ["structure", "canvas"])
+            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Structure, { structure: $props.structure }, null, 8 /* PROPS */, ["structure"])
           ]))
         : ($data.sidebar === 'selected')
           ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_16, " Selected "))
@@ -5933,9 +5967,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           ], 42 /* CLASS, PROPS, HYDRATE_EVENTS */, _hoisted_3),
           (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Rows, {
             parent: element,
-            rows: element.rows,
-            canvas: $props.canvas
-          }, null, 8 /* PROPS */, ["parent", "rows", "canvas"])
+            rows: element.rows
+          }, null, 8 /* PROPS */, ["parent", "rows"])
         ])
       ]),
       _: 1 /* STABLE */
@@ -11246,7 +11279,7 @@ __webpack_require__.r(__webpack_exports__);
         type: Object,
         default (rawProps) {
             const defaults = {
-                text: 'some text'
+                text: ''
             };
 
             return {...defaults, ...rawProps};
@@ -11297,77 +11330,42 @@ const WysiwygEditor = (__webpack_require__(/*! ./WysiwygEditor.vue */ "./src/js/
 
 /***/ }),
 
-/***/ "./src/js/shared/DraggableDeltaTranslator.js":
-/*!***************************************************!*\
-  !*** ./src/js/shared/DraggableDeltaTranslator.js ***!
-  \***************************************************/
+/***/ "./src/js/shared/Canvas.js":
+/*!*********************************!*\
+  !*** ./src/js/shared/Canvas.js ***!
+  \*********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ DraggableDeltaTranslator)
+/* harmony export */   "default": () => (/* binding */ Canvas)
 /* harmony export */ });
-class DraggableDeltaTranslator {
-    delta = [];
-    element = null;
+const { toRaw } = __webpack_require__(/*! vue */ "vue");
 
-    handle (delta) {
-        let newElement = null;
+class Canvas {
+    messenger;
+    breakpoints;
+    breakpoint;
 
-        if (delta.moved) {
-            newElement = delta.moved.element;
-        }
-        if (delta.added) {
-            newElement = delta.added.element;
-        }
-        if (delta.removed) {
-            newElement = delta.removed.element;
-        }
+    constructor (messenger, breakpoints, breakpoint) {
+        this.breakpoints = breakpoints;
+        this.breakpoint = breakpoint;
+        this.messenger = messenger;
+    }
 
-        if (this.element === null) {
-            this.element = newElement;
-        } else {
-            if (this.element !== newElement) {
-                throw new Error('Cannot handle deltas for different elements in one instance of DraggableDeltaTranslator.');
+    changeSizeTo (name) {
+        for (let i in this.breakpoints) {
+            if (this.breakpoints[i].name === name) {
+                this.breakpoint.name = name;
+                this.breakpoint.width = this.breakpoints[i].width;
+                this.messenger.send('device.size.changed', toRaw(this.breakpoints[i]));
             }
         }
     }
 
-    stop (event) {
-        if (!this.element) {
-            return;
-        }
-
-        return {
-            from: {
-                parent: this.translateParent(event.from.dataset.draggableDeltaTransformerParent),
-                index: event.oldIndex,
-            },
-            to: {
-                parent: this.translateParent(event.to.dataset.draggableDeltaTransformerParent),
-                index: event.newIndex,
-            },
-            element: {
-                id: this.element.id,
-                type: this.element.type,
-            }
-        }
-    }
-
-    translateParent (parent) {
-        if (!parent) {
-            return {
-                type: 'structure'
-            }
-        }
-
-        let [type, id] = parent.split('.');
-
-        return {
-            id: id,
-            type: type,
-        }
+    getBreakpointName () {
+        return this.breakpoint.name;
     }
 };
 
@@ -11697,152 +11695,186 @@ class Messenger {
 
 /***/ }),
 
-/***/ "./src/js/shared/Structure.js":
-/*!************************************!*\
-  !*** ./src/js/shared/Structure.js ***!
-  \************************************/
+/***/ "./src/js/shared/Structure/ColumnSize.js":
+/*!***********************************************!*\
+  !*** ./src/js/shared/Structure/ColumnSize.js ***!
+  \***********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Structure)
+/* harmony export */   "default": () => (/* binding */ ColumnSize)
 /* harmony export */ });
-const { v4 } = __webpack_require__(/*! uuid */ "./node_modules/uuid/index.js");
 const { toRaw } = __webpack_require__(/*! vue */ "vue");
 
-class Structure {
-    static find (structure, id) {
-        for (let sk in structure.sections) {
-            if (structure.sections[sk].id === id) {
-                return structure.sections[sk];
+class ColumnSize {
+    structureManipulator;
+
+    constructor (structureManipulator) {
+        this.structureManipulator = structureManipulator;
+    }
+
+    changeTo (column, breakpoint, size) {
+        size = parseInt(size);
+
+        // Reset if value is empty or 'zero'
+        if (!size) {
+            size = null;
+        } else {
+            // Max 12 columns
+            if (size >= 12) {
+                size = 12;
             }
 
-            let rows = structure.sections[sk].rows;
-
-            for (let rk in rows) {
-                if (rows[rk].id === id) {
-                    return rows[rk];
-                }
-
-                let columns = rows[rk].columns;
-
-                for (let ck in columns) {
-                    if (columns[ck].id === id) {
-                        return columns[ck];
-                    }
-
-                    let blocks = columns[ck].blocks;
-
-                    for (let bk in blocks) {
-                        if (blocks[bk].id === id) {
-                            return blocks[bk];
-                        }
-                    }
-                }
+            if (size <= 0) {
+                size = null;
             }
         }
 
-        return null;
+        column.sizes[breakpoint].size = size;
+
+        this.structureManipulator.updateElement(column);
+
+        /*this.messenger.send(
+            'structure.element.update',
+            'column',
+            column.id,
+            toRaw(column)
+        );*/
+
+        return size;
     }
 
-    static findParent (structure, childId) {
-        let parent = null;
+    increment (column, breakpoint) {
+        let size = column.sizes[breakpoint].size;
 
-        for (let sk in structure.sections) {
-            parent = structure.sections[sk];
-
-            let rows = structure.sections[sk].rows;
-
-            for (let rk in rows) {
-                if (rows[rk].id === childId) {
-                    return parent;
-                }
-
-                parent = rows[rk];
-
-                let columns = rows[rk].columns;
-
-                for (let ck in columns) {
-                    if (columns[ck].id === childId) {
-                        return parent;
-                    }
-
-                    parent = columns[ck];
-
-                    let blocks = columns[ck].blocks;
-
-                    for (let bk in blocks) {
-                        if (blocks[bk].id === childId) {
-                            return parent;
-                        }
-                    }
-                }
-            }
+        if (!size) {
+            size = 0;
         }
 
-        return null;
+        return this.changeTo(column, breakpoint, size + 1);
     }
 
-    static removeElement (structure, id) {
-        for (let sk in structure.sections) {
-            if (structure.sections[sk].id === id) {
-                structure.sections.splice(sk, 1);
-                return;
-            }
+    decrement (column, breakpoint) {
+        let size = column.sizes[breakpoint].size;
 
-            let rows = structure.sections[sk].rows;
+        if (!size) {
+            return size;
+        }
 
-            for (let rk in rows) {
-                if (structure.sections[sk].rows[rk].id === id) {
-                    structure.sections[sk].rows.splice(rk, 1);
-                    return;
-                }
+        return this.changeTo(column, breakpoint, size - 1);
+    }
+}
 
-                let columns = rows[rk].columns;
 
-                for (let ck in columns) {
-                    if (structure.sections[sk].rows[rk].columns[ck].id === id) {
-                        structure.sections[sk].rows[rk].columns.splice(ck, 1);
-                        return;
-                    }
+/***/ }),
 
-                    let blocks = columns[ck].blocks;
+/***/ "./src/js/shared/Structure/DraggableDeltaTranslator.js":
+/*!*************************************************************!*\
+  !*** ./src/js/shared/Structure/DraggableDeltaTranslator.js ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-                    for (let bk in blocks) {
-                        if (structure.sections[sk].rows[rk].columns[ck].blocks[bk].id === id) {
-                            structure.sections[sk].rows[rk].columns[ck].blocks.splice(bk, 1);
-                            return;
-                        }
-                    }
-                }
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ DraggableDeltaTranslator)
+/* harmony export */ });
+class DraggableDeltaTranslator {
+    delta = [];
+    element = null;
+
+    handle (delta) {
+        let newElement = null;
+
+        if (delta.moved) {
+            newElement = delta.moved.element;
+        }
+        if (delta.added) {
+            newElement = delta.added.element;
+        }
+        if (delta.removed) {
+            newElement = delta.removed.element;
+        }
+
+        if (this.element === null) {
+            this.element = newElement;
+        } else {
+            if (this.element !== newElement) {
+                throw new Error('Cannot handle deltas for different elements in one instance of DraggableDeltaTranslator.');
             }
         }
     }
 
-    static moveElementUsingDelta (structure, delta) {
-        let element = toRaw(this.find(structure, delta.element.id));
-
-        if (delta.from.parent.type === 'structure' && delta.to.parent.type === 'structure') {
-            this.removeElement(structure, delta.element.id);
-            structure.sections.splice(delta.to.index, 0, element);
+    stop (event) {
+        if (!this.element) {
             return;
         }
 
-        let newParent = this.find(structure, delta.to.parent.id);
-
-        this.removeElement(structure, delta.element.id);
-
-        if (newParent.type === 'column') {
-            newParent.blocks.splice(delta.to.index, 0, element);
-        } else if (newParent.type === 'row') {
-            newParent.columns.splice(delta.to.index, 0, element);
-        } else if (newParent.type === 'section') {
-            newParent.rows.splice(delta.to.index, 0, element);
+        return {
+            from: {
+                parent: this.translateParent(event.from.dataset.draggableDeltaTransformerParent),
+                index: event.oldIndex,
+            },
+            to: {
+                parent: this.translateParent(event.to.dataset.draggableDeltaTransformerParent),
+                index: event.newIndex,
+            },
+            element: {
+                id: this.element.id,
+                type: this.element.type,
+            }
         }
     }
 
-    static ensureAllIdsAreUnique (structure) {
+    translateParent (parent) {
+        if (!parent) {
+            return {
+                type: 'structure'
+            }
+        }
+
+        let [type, id] = parent.split('.');
+
+        return {
+            id: id,
+            type: type,
+        }
+    }
+};
+
+
+/***/ }),
+
+/***/ "./src/js/shared/Structure/Fixer.js":
+/*!******************************************!*\
+  !*** ./src/js/shared/Structure/Fixer.js ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Fixer)
+/* harmony export */ });
+const ObjectCloner = (__webpack_require__(/*! shared/Utils/ObjectCloner.js */ "./src/js/shared/Utils/ObjectCloner.js")["default"]);
+const { v4 } = __webpack_require__(/*! uuid */ "./node_modules/uuid/index.js");
+
+class Fixer {
+    fix (structure) {
+        let workingCopy = ObjectCloner.deepClone(structure);
+
+        workingCopy = this.ensureAllIdsAreUnique(workingCopy);
+        workingCopy = this.ensureStructureHasTypeInAllElements(workingCopy);
+        workingCopy = this.ensureColumnsHasSizesPropertyInStructure(workingCopy);
+        workingCopy = this.ensureElementsHasMetadataPropertyInStructure(workingCopy);
+        workingCopy = this.ensureElementsHasParentPropertyInStructure(workingCopy);
+
+        return workingCopy;
+    }
+
+    ensureAllIdsAreUnique (structure) {
         let usedIds = [];
 
         for (let sk in structure.sections) {
@@ -11886,7 +11918,7 @@ class Structure {
         return structure;
     }
 
-    static ensureStructureHasTypeInAllElements (structure) {
+    ensureStructureHasTypeInAllElements (structure) {
         for (let sk in structure.sections) {
             if (!structure.sections[sk].type) {
                 structure.sections[sk].type = 'section';
@@ -11920,7 +11952,7 @@ class Structure {
         return structure;
     }
 
-    static ensureColumnsHasSizesPropertyInStructure (structure) {
+    ensureColumnsHasSizesPropertyInStructure (structure) {
         for (let sk in structure.sections) {
             let rows = structure.sections[sk].rows;
 
@@ -11945,7 +11977,7 @@ class Structure {
         return structure;
     }
 
-    static ensureElementsHasMetadataPropertyInStructure (structure) {
+    ensureElementsHasMetadataPropertyInStructure (structure) {
         for (let sk in structure.sections) {
             if (!structure.sections[sk].metadata) {
                 structure.sections[sk].metadata = {
@@ -11991,7 +12023,7 @@ class Structure {
         return structure;
     }
 
-    static ensureElementsHasParentPropertyInStructure (structure) {
+    ensureElementsHasParentPropertyInStructure (structure) {
         for (let sk in structure.sections) {
             if (!structure.sections[sk].metadata.parent) {
                 structure.sections[sk].metadata.parent = {
@@ -12036,7 +12068,7 @@ class Structure {
 
         return structure;
     }
-};
+}
 
 
 /***/ }),
@@ -12248,6 +12280,226 @@ class Selection {
 
 /***/ }),
 
+/***/ "./src/js/shared/Structure/StructureManipulator.js":
+/*!*********************************************************!*\
+  !*** ./src/js/shared/Structure/StructureManipulator.js ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ StructureManipulator)
+/* harmony export */ });
+const { toRaw } = __webpack_require__(/*! vue */ "vue");
+
+class StructureManipulator {
+    structure;
+    messenger;
+
+    constructor (structure, messenger) {
+        this.messenger = messenger;
+        this.structure = structure;
+
+        this._listenToUpdateElement();
+        this._listenToRemoveElement();
+        this._listenToMoveElementUsingDelta();
+    }
+
+    update (newStructure) {
+        this.structure.sections = newStructure.sections;
+        this.messenger.send('structure.updated');
+    }
+
+    find (id) {
+        for (let sk in this.structure.sections) {
+            if (this.structure.sections[sk].id === id) {
+                return this.structure.sections[sk];
+            }
+
+            let rows = this.structure.sections[sk].rows;
+
+            for (let rk in rows) {
+                if (rows[rk].id === id) {
+                    return rows[rk];
+                }
+
+                let columns = rows[rk].columns;
+
+                for (let ck in columns) {
+                    if (columns[ck].id === id) {
+                        return columns[ck];
+                    }
+
+                    let blocks = columns[ck].blocks;
+
+                    for (let bk in blocks) {
+                        if (blocks[bk].id === id) {
+                            return blocks[bk];
+                        }
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    findParent (childId) {
+        let parent = null;
+
+        for (let sk in this.structure.sections) {
+            parent = this.structure.sections[sk];
+
+            let rows = this.structure.sections[sk].rows;
+
+            for (let rk in rows) {
+                if (rows[rk].id === childId) {
+                    return parent;
+                }
+
+                parent = rows[rk];
+
+                let columns = rows[rk].columns;
+
+                for (let ck in columns) {
+                    if (columns[ck].id === childId) {
+                        return parent;
+                    }
+
+                    parent = columns[ck];
+
+                    let blocks = columns[ck].blocks;
+
+                    for (let bk in blocks) {
+                        if (blocks[bk].id === childId) {
+                            return parent;
+                        }
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    removeElement (id) {
+        this.messenger.send('structure.element.delete', id);
+    }
+
+    _listenToRemoveElement () {
+        this.messenger.listen('structure.element.delete', (id) => {
+            this._doRemoveElement(id);
+        });
+    }
+
+    _doRemoveElement (id) {
+        let removed = false;
+
+        loop:
+            for (let sk in this.structure.sections) {
+                if (this.structure.sections[sk].id === id) {
+                    this.structure.sections.splice(sk, 1);
+                    removed = true;
+                    break;
+                }
+
+                let rows = this.structure.sections[sk].rows;
+
+                for (let rk in rows) {
+                    if (this.structure.sections[sk].rows[rk].id === id) {
+                        this.structure.sections[sk].rows.splice(rk, 1);
+                        removed = true;
+                        break loop;
+                    }
+
+                    let columns = rows[rk].columns;
+
+                    for (let ck in columns) {
+                        if (this.structure.sections[sk].rows[rk].columns[ck].id === id) {
+                            this.structure.sections[sk].rows[rk].columns.splice(ck, 1);
+                            removed = true;
+                            break loop;
+                        }
+
+                        let blocks = columns[ck].blocks;
+
+                        for (let bk in blocks) {
+                            if (this.structure.sections[sk].rows[rk].columns[ck].blocks[bk].id === id) {
+                                this.structure.sections[sk].rows[rk].columns[ck].blocks.splice(bk, 1);
+                                removed = true;
+                                break loop;
+                            }
+                        }
+                    }
+                }
+            }
+
+        if (removed) {
+            this.messenger.send('structure.element.removed', id);
+        }
+    }
+
+    updateElement (element) {
+        this.messenger.send('structure.element.update', element.id, toRaw(element));
+    }
+
+    _listenToUpdateElement () {
+        this.messenger.listen('structure.element.update', (id, newElement) => {
+            this._doUpdateElement(id, newElement);
+        });
+    }
+
+    _doUpdateElement (id, newElement) {
+        let currentElement = this.find(id);
+
+        if (!currentElement) {
+            return;
+        }
+
+        // Implement basic comparison, only replace every key from newElement to currentElement.
+        // @todo Try to detect which data changed, and update only the changed.
+        for (let ni in newElement) {
+            currentElement[ni] = newElement[ni];
+        }
+
+        this.messenger.send('structure.element.updated', id);
+    }
+
+    moveElementUsingDelta (delta) {
+        this.messenger.send('structure.element.move', delta);
+    }
+
+    _listenToMoveElementUsingDelta () {
+        this.messenger.listen('structure.element.move', (delta) => {
+            let element = toRaw(this.find(delta.element.id));
+
+            if (delta.from.parent.type === 'structure' && delta.to.parent.type === 'structure') {
+                this._doRemoveElement(delta.element.id);
+                this.structure.sections.splice(delta.to.index, 0, element);
+            } else {
+                let newParent = this.find(delta.to.parent.id);
+
+                this._doRemoveElement(delta.element.id);
+
+                if (newParent.type === 'column') {
+                    newParent.blocks.splice(delta.to.index, 0, element);
+                } else if (newParent.type === 'row') {
+                    newParent.columns.splice(delta.to.index, 0, element);
+                } else if (newParent.type === 'section') {
+                    newParent.rows.splice(delta.to.index, 0, element);
+                }
+            }
+
+            this.messenger.send('structure.element.moved', delta);
+            this.messenger.send('structure.element.updated', delta.element.id);
+        });
+    }
+};
+
+
+/***/ }),
+
 /***/ "./src/js/shared/Utils/ClassObserver.js":
 /*!**********************************************!*\
   !*** ./src/js/shared/Utils/ClassObserver.js ***!
@@ -12418,7 +12670,7 @@ __webpack_require__.r(__webpack_exports__);
 const Vue = __webpack_require__(/*! vue */ "vue");
 const Messenger = (__webpack_require__(/*! shared/Messenger.js */ "./src/js/shared/Messenger.js")["default"]);
 const MessageBroker = (__webpack_require__(/*! shared/MessageBroker.js */ "./src/js/shared/MessageBroker.js")["default"]);
-const Structure = (__webpack_require__(/*! shared/Structure.js */ "./src/js/shared/Structure.js")["default"]);
+const Fixer = (__webpack_require__(/*! shared/Structure/Fixer.js */ "./src/js/shared/Structure/Fixer.js")["default"]);
 const Translator = (__webpack_require__(/*! shared/I18n/Translator.js */ "./src/js/shared/I18n/Translator.js")["default"]);
 const EventDispatcher = (__webpack_require__(/*! shared/EventDispatcher.js */ "./src/js/shared/EventDispatcher.js")["default"]);
 const AdminRoot = (__webpack_require__(/*! components/Admin/Root.vue */ "./src/js/Components/Admin/Root.vue")["default"]);
@@ -12493,11 +12745,8 @@ class TuliaEditor {
         this.instanceId = ++instances;
         this.options = $.extend({}, TuliaEditor.defaults, this.options);
 
-        this.options.structure.source = Structure.ensureAllIdsAreUnique(this.options.structure.source);
-        this.options.structure.source = Structure.ensureStructureHasTypeInAllElements(this.options.structure.source);
-        this.options.structure.source = Structure.ensureColumnsHasSizesPropertyInStructure(this.options.structure.source);
-        this.options.structure.source = Structure.ensureElementsHasMetadataPropertyInStructure(this.options.structure.source);
-        this.options.structure.source = Structure.ensureElementsHasParentPropertyInStructure(this.options.structure.source);
+        this.options.structure.source = (new Fixer())
+            .fix(this.options.structure.source);
 
         this.container.editor = this;
         this.container.messenger = new Messenger(this.instanceId, window, 'root');

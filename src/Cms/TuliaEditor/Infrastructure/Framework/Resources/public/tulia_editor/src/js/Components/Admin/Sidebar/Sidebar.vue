@@ -18,7 +18,7 @@
                 <div :class="{ 'tued-sidebar-type': true, 'tued-sidebar-type-active': sidebar === 'structure' }" @click="sidebar = 'structure'"><i class="fas fa-stream"></i><span>Structure</span></div>
             </div>
             <div v-if="sidebar === 'structure'">
-                <Structure :structure="structure" :canvas="canvas"></Structure>
+                <Structure :structure="structure"></Structure>
             </div>
             <div v-else-if="sidebar === 'selected'">
                 Selected
@@ -43,7 +43,7 @@
 const Structure = require('components/Admin/Sidebar/Structure.vue').default;
 
 export default {
-    props: ['availableBlocks', 'structure', 'canvas'],
+    props: ['availableBlocks', 'structure'],
     inject: ['eventDispatcher', 'translator'],
     components: {
         Structure

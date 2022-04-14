@@ -5,6 +5,7 @@
  *
  */
 /******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
 /***/ "./src/css/tulia-editor.editor.scss":
@@ -13,265 +14,8 @@
   \******************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
-
-
-/***/ }),
-
-/***/ "./node_modules/uuid/index.js":
-/*!************************************!*\
-  !*** ./node_modules/uuid/index.js ***!
-  \************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var v1 = __webpack_require__(/*! ./v1 */ "./node_modules/uuid/v1.js");
-var v4 = __webpack_require__(/*! ./v4 */ "./node_modules/uuid/v4.js");
-
-var uuid = v4;
-uuid.v1 = v1;
-uuid.v4 = v4;
-
-module.exports = uuid;
-
-
-/***/ }),
-
-/***/ "./node_modules/uuid/lib/bytesToUuid.js":
-/*!**********************************************!*\
-  !*** ./node_modules/uuid/lib/bytesToUuid.js ***!
-  \**********************************************/
-/***/ ((module) => {
-
-/**
- * Convert array of 16 byte values to UUID string format of the form:
- * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
- */
-var byteToHex = [];
-for (var i = 0; i < 256; ++i) {
-  byteToHex[i] = (i + 0x100).toString(16).substr(1);
-}
-
-function bytesToUuid(buf, offset) {
-  var i = offset || 0;
-  var bth = byteToHex;
-  // join used to fix memory issue caused by concatenation: https://bugs.chromium.org/p/v8/issues/detail?id=3175#c4
-  return ([
-    bth[buf[i++]], bth[buf[i++]],
-    bth[buf[i++]], bth[buf[i++]], '-',
-    bth[buf[i++]], bth[buf[i++]], '-',
-    bth[buf[i++]], bth[buf[i++]], '-',
-    bth[buf[i++]], bth[buf[i++]], '-',
-    bth[buf[i++]], bth[buf[i++]],
-    bth[buf[i++]], bth[buf[i++]],
-    bth[buf[i++]], bth[buf[i++]]
-  ]).join('');
-}
-
-module.exports = bytesToUuid;
-
-
-/***/ }),
-
-/***/ "./node_modules/uuid/lib/rng-browser.js":
-/*!**********************************************!*\
-  !*** ./node_modules/uuid/lib/rng-browser.js ***!
-  \**********************************************/
-/***/ ((module) => {
-
-// Unique ID creation requires a high quality random # generator.  In the
-// browser this is a little complicated due to unknown quality of Math.random()
-// and inconsistent support for the `crypto` API.  We do the best we can via
-// feature-detection
-
-// getRandomValues needs to be invoked in a context where "this" is a Crypto
-// implementation. Also, find the complete implementation of crypto on IE11.
-var getRandomValues = (typeof(crypto) != 'undefined' && crypto.getRandomValues && crypto.getRandomValues.bind(crypto)) ||
-                      (typeof(msCrypto) != 'undefined' && typeof window.msCrypto.getRandomValues == 'function' && msCrypto.getRandomValues.bind(msCrypto));
-
-if (getRandomValues) {
-  // WHATWG crypto RNG - http://wiki.whatwg.org/wiki/Crypto
-  var rnds8 = new Uint8Array(16); // eslint-disable-line no-undef
-
-  module.exports = function whatwgRNG() {
-    getRandomValues(rnds8);
-    return rnds8;
-  };
-} else {
-  // Math.random()-based (RNG)
-  //
-  // If all else fails, use Math.random().  It's fast, but is of unspecified
-  // quality.
-  var rnds = new Array(16);
-
-  module.exports = function mathRNG() {
-    for (var i = 0, r; i < 16; i++) {
-      if ((i & 0x03) === 0) r = Math.random() * 0x100000000;
-      rnds[i] = r >>> ((i & 0x03) << 3) & 0xff;
-    }
-
-    return rnds;
-  };
-}
-
-
-/***/ }),
-
-/***/ "./node_modules/uuid/v1.js":
-/*!*********************************!*\
-  !*** ./node_modules/uuid/v1.js ***!
-  \*********************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var rng = __webpack_require__(/*! ./lib/rng */ "./node_modules/uuid/lib/rng-browser.js");
-var bytesToUuid = __webpack_require__(/*! ./lib/bytesToUuid */ "./node_modules/uuid/lib/bytesToUuid.js");
-
-// **`v1()` - Generate time-based UUID**
-//
-// Inspired by https://github.com/LiosK/UUID.js
-// and http://docs.python.org/library/uuid.html
-
-var _nodeId;
-var _clockseq;
-
-// Previous uuid creation time
-var _lastMSecs = 0;
-var _lastNSecs = 0;
-
-// See https://github.com/uuidjs/uuid for API details
-function v1(options, buf, offset) {
-  var i = buf && offset || 0;
-  var b = buf || [];
-
-  options = options || {};
-  var node = options.node || _nodeId;
-  var clockseq = options.clockseq !== undefined ? options.clockseq : _clockseq;
-
-  // node and clockseq need to be initialized to random values if they're not
-  // specified.  We do this lazily to minimize issues related to insufficient
-  // system entropy.  See #189
-  if (node == null || clockseq == null) {
-    var seedBytes = rng();
-    if (node == null) {
-      // Per 4.5, create and 48-bit node id, (47 random bits + multicast bit = 1)
-      node = _nodeId = [
-        seedBytes[0] | 0x01,
-        seedBytes[1], seedBytes[2], seedBytes[3], seedBytes[4], seedBytes[5]
-      ];
-    }
-    if (clockseq == null) {
-      // Per 4.2.2, randomize (14 bit) clockseq
-      clockseq = _clockseq = (seedBytes[6] << 8 | seedBytes[7]) & 0x3fff;
-    }
-  }
-
-  // UUID timestamps are 100 nano-second units since the Gregorian epoch,
-  // (1582-10-15 00:00).  JSNumbers aren't precise enough for this, so
-  // time is handled internally as 'msecs' (integer milliseconds) and 'nsecs'
-  // (100-nanoseconds offset from msecs) since unix epoch, 1970-01-01 00:00.
-  var msecs = options.msecs !== undefined ? options.msecs : new Date().getTime();
-
-  // Per 4.2.1.2, use count of uuid's generated during the current clock
-  // cycle to simulate higher resolution clock
-  var nsecs = options.nsecs !== undefined ? options.nsecs : _lastNSecs + 1;
-
-  // Time since last uuid creation (in msecs)
-  var dt = (msecs - _lastMSecs) + (nsecs - _lastNSecs)/10000;
-
-  // Per 4.2.1.2, Bump clockseq on clock regression
-  if (dt < 0 && options.clockseq === undefined) {
-    clockseq = clockseq + 1 & 0x3fff;
-  }
-
-  // Reset nsecs if clock regresses (new clockseq) or we've moved onto a new
-  // time interval
-  if ((dt < 0 || msecs > _lastMSecs) && options.nsecs === undefined) {
-    nsecs = 0;
-  }
-
-  // Per 4.2.1.2 Throw error if too many uuids are requested
-  if (nsecs >= 10000) {
-    throw new Error('uuid.v1(): Can\'t create more than 10M uuids/sec');
-  }
-
-  _lastMSecs = msecs;
-  _lastNSecs = nsecs;
-  _clockseq = clockseq;
-
-  // Per 4.1.4 - Convert from unix epoch to Gregorian epoch
-  msecs += 12219292800000;
-
-  // `time_low`
-  var tl = ((msecs & 0xfffffff) * 10000 + nsecs) % 0x100000000;
-  b[i++] = tl >>> 24 & 0xff;
-  b[i++] = tl >>> 16 & 0xff;
-  b[i++] = tl >>> 8 & 0xff;
-  b[i++] = tl & 0xff;
-
-  // `time_mid`
-  var tmh = (msecs / 0x100000000 * 10000) & 0xfffffff;
-  b[i++] = tmh >>> 8 & 0xff;
-  b[i++] = tmh & 0xff;
-
-  // `time_high_and_version`
-  b[i++] = tmh >>> 24 & 0xf | 0x10; // include version
-  b[i++] = tmh >>> 16 & 0xff;
-
-  // `clock_seq_hi_and_reserved` (Per 4.2.2 - include variant)
-  b[i++] = clockseq >>> 8 | 0x80;
-
-  // `clock_seq_low`
-  b[i++] = clockseq & 0xff;
-
-  // `node`
-  for (var n = 0; n < 6; ++n) {
-    b[i + n] = node[n];
-  }
-
-  return buf ? buf : bytesToUuid(b);
-}
-
-module.exports = v1;
-
-
-/***/ }),
-
-/***/ "./node_modules/uuid/v4.js":
-/*!*********************************!*\
-  !*** ./node_modules/uuid/v4.js ***!
-  \*********************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var rng = __webpack_require__(/*! ./lib/rng */ "./node_modules/uuid/lib/rng-browser.js");
-var bytesToUuid = __webpack_require__(/*! ./lib/bytesToUuid */ "./node_modules/uuid/lib/bytesToUuid.js");
-
-function v4(options, buf, offset) {
-  var i = buf && offset || 0;
-
-  if (typeof(options) == 'string') {
-    buf = options === 'binary' ? new Array(16) : null;
-    options = null;
-  }
-  options = options || {};
-
-  var rnds = options.random || (options.rng || rng)();
-
-  // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
-  rnds[6] = (rnds[6] & 0x0f) | 0x40;
-  rnds[8] = (rnds[8] & 0x3f) | 0x80;
-
-  // Copy bytes to buffer, if provided
-  if (buf) {
-    for (var ii = 0; ii < 16; ++ii) {
-      buf[i + ii] = rnds[ii];
-    }
-  }
-
-  return buf || bytesToUuid(rnds);
-}
-
-module.exports = v4;
 
 
 /***/ }),
@@ -282,7 +26,6 @@ module.exports = v4;
   \******************************************************/
 /***/ ((__unused_webpack_module, exports) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 // runtime helper for setting properties on components
@@ -304,7 +47,6 @@ exports["default"] = (sfc, props) => {
   \*******************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
@@ -332,7 +74,6 @@ if (false) {}
   \***************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
@@ -352,7 +93,6 @@ __webpack_require__.r(__webpack_exports__);
   \*******************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
@@ -380,7 +120,6 @@ if (false) {}
   \**************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
@@ -402,17 +141,19 @@ const StructureComponent = (__webpack_require__(/*! components/Editor/Structure/
 const RenderingCanvasComponent = (__webpack_require__(/*! components/Editor/Rendering/Canvas.vue */ "./src/js/Components/Editor/Rendering/Canvas.vue")["default"]);
 const ObjectCloner = (__webpack_require__(/*! shared/Utils/ObjectCloner.js */ "./src/js/shared/Utils/ObjectCloner.js")["default"]);
 const Selection = (__webpack_require__(/*! shared/Structure/Selection/Selection.js */ "./src/js/shared/Structure/Selection/Selection.js")["default"]);
-const Structure = (__webpack_require__(/*! shared/Structure.js */ "./src/js/shared/Structure.js")["default"]);
+const StructureManipulator = (__webpack_require__(/*! shared/Structure/StructureManipulator.js */ "./src/js/shared/Structure/StructureManipulator.js")["default"]);
 const { defineProps, provide, reactive, onMounted, toRaw, ref } = __webpack_require__(/*! vue */ "vue");
 
 
 
 const structure = reactive(ObjectCloner.deepClone(props.structure));
 const selection = new Selection(structure, props.container.messenger);
+const structureManipulator = new StructureManipulator(structure, props.container.messenger);
 
 provide('selection', selection);
 provide('messenger', props.container.messenger);
 provide('eventDispatcher', props.container.eventDispatcher);
+provide('structureManipulator', structureManipulator);
 
 const renderedContent = ref(null);
 
@@ -434,7 +175,7 @@ onMounted(() => {
     });
 
     props.container.messenger.listen('structure.move-element', (delta) => {
-        Structure.moveElementUsingDelta(structure, delta);
+        structureManipulator.moveElementUsingDelta(delta);
         selection.resetHovered();
         selection.select(delta.element.type, delta.element.id);
     });
@@ -450,7 +191,7 @@ onMounted(() => {
     });
 });
 
-const __returned__ = { StructureComponent, RenderingCanvasComponent, ObjectCloner, Selection, Structure, defineProps, provide, reactive, onMounted, toRaw, ref, props, structure, selection, renderedContent }
+const __returned__ = { StructureComponent, RenderingCanvasComponent, ObjectCloner, Selection, StructureManipulator, defineProps, provide, reactive, onMounted, toRaw, ref, props, structure, selection, structureManipulator, renderedContent }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -465,7 +206,6 @@ return __returned__
   \******************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
@@ -493,7 +233,6 @@ if (false) {}
   \**************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
@@ -513,7 +252,6 @@ __webpack_require__.r(__webpack_exports__);
   \*******************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
@@ -541,7 +279,6 @@ if (false) {}
   \***************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
@@ -589,7 +326,6 @@ const Block = (__webpack_require__(/*! ./Block.vue */ "./src/js/Components/Edito
   \****************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
@@ -617,7 +353,6 @@ if (false) {}
   \************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
@@ -640,7 +375,6 @@ const Column = (__webpack_require__(/*! ./Column.vue */ "./src/js/Components/Edi
   \********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
@@ -668,7 +402,6 @@ if (false) {}
   \****************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
@@ -691,7 +424,6 @@ const Row = (__webpack_require__(/*! ./Row.vue */ "./src/js/Components/Editor/St
   \**********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
@@ -719,14 +451,12 @@ if (false) {}
   \******************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 
 const Section = (__webpack_require__(/*! components/Editor/Structure/Section.vue */ "./src/js/Components/Editor/Structure/Section.vue")["default"]);
-const Structure = (__webpack_require__(/*! shared/Structure.js */ "./src/js/shared/Structure.js")["default"]);
 const ObjectCloner = (__webpack_require__(/*! shared/Utils/ObjectCloner.js */ "./src/js/shared/Utils/ObjectCloner.js")["default"]);
 const SelectedBoundaries = (__webpack_require__(/*! shared/Structure/Selection/Boundaries/Selected.js */ "./src/js/shared/Structure/Selection/Boundaries/Selected.js")["default"]);
 const HoveredBoundaries = (__webpack_require__(/*! shared/Structure/Selection/Boundaries/Hovered.js */ "./src/js/shared/Structure/Selection/Boundaries/Hovered.js")["default"]);
@@ -735,7 +465,7 @@ const { toRaw } = __webpack_require__(/*! vue */ "vue");
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
     props: ['structure'],
-    inject: ['messenger', 'selection', 'eventDispatcher'],
+    inject: ['messenger', 'selection', 'eventDispatcher', 'structureManipulator'],
     components: { Section },
     data () {
         return {
@@ -808,7 +538,7 @@ const { toRaw } = __webpack_require__(/*! vue */ "vue");
                 return;
             }
 
-            let parent = Structure.findParent(this.structure, selected.id);
+            let parent = this.structureManipulator.findParent(selected.id);
 
             if (!parent) {
                 return;
@@ -818,65 +548,19 @@ const { toRaw } = __webpack_require__(/*! vue */ "vue");
         },
         deleteSelectedElement: function () {
             let selected = this.selection.getSelected();
-            let found = false;
 
             if (!selected) {
                 console.error('Cannot remove selected element. None of elements were selected.');
                 return;
             }
 
-            let element = Structure.find(this.structure, selected.id);
-            let parent = Structure.findParent(this.structure, element.id);
-
-            if (element.type === 'block') {
-                let index = parent.blocks.indexOf(element);
-
-                if (index >= 0) {
-                    parent.blocks.splice(index, 1);
-                    this.selectable.boundaries.clearSelectionHighlight();
-                    this.messenger.send('structure.block.removed', ObjectCloner.deepClone(toRaw(element)));
-                    found = true;
-                }
-            } else if (element.type === 'column') {
-                let index = parent.columns.indexOf(element);
-
-                if (index >= 0) {
-                    parent.columns.splice(index, 1);
-                    this.selectable.boundaries.clearSelectionHighlight();
-                    this.messenger.send('structure.column.removed', ObjectCloner.deepClone(toRaw(element)));
-                    found = true;
-                }
-            } else if (element.type === 'row') {
-                let index = parent.rows.indexOf(element);
-
-                if (index >= 0) {
-                    parent.rows.splice(index, 1);
-                    this.selectable.boundaries.clearSelectionHighlight();
-                    this.messenger.send('structure.row.removed', ObjectCloner.deepClone(toRaw(element)));
-                    found = true;
-                }
-            } else if (element.type === 'section') {
-                let index = this.structure.sections.indexOf(element);
-
-                if (index >= 0) {
-                    this.structure.sections.splice(index, 1);
-                    this.selectable.boundaries.clearSelectionHighlight();
-                    this.messenger.send('structure.section.removed', ObjectCloner.deepClone(toRaw(element)));
-                    found = true;
-                }
-            }
-
-            if (found) {
-                this.messenger.send('structure.synchronize.from.editor', ObjectCloner.deepClone(toRaw(this.structure)));
-                this.selection.resetSelection();
-                this.selection.resetHovered();
-            }
+            this.structureManipulator.removeElement(selected.id);
         },
         hideElementActions: function () {
             this.actions.activeness.selectParent = false;
         },
         updateElementActions: function (el, type, element) {
-            let parent = Structure.findParent(this.structure, element.id);
+            let parent = this.structureManipulator.findParent(element.id);
 
             if (!parent) {
                 this.hideElementActions();
@@ -890,24 +574,27 @@ const { toRaw } = __webpack_require__(/*! vue */ "vue");
         }
     },
     mounted () {
+        // @todo Is this event `block.inner.updated` needed?
+        // Maybe we can use `structure.element.updated`?
         this.eventDispatcher.on('block.inner.updated', () => {
             this.hoverable.boundaries.update();
             this.selectable.boundaries.update();
         });
-
-
-        /*this.messenger.listen('device.size.changed', () => {
-            let animationTime = 300;
-            this.selectable.boundaries.keepUpdatePositionFor(animationTime);
-        });*/
-
+        this.messenger.listen('structure.element.updated', () => {
+            this.hoverable.boundaries.update();
+            this.selectable.boundaries.update();
+        });
+        this.messenger.listen('structure.element.removed', () => {
+            this.selection.resetSelection();
+            this.selection.resetHovered();
+        });
 
         /**
          * Selection
          */
         this.messenger.listen('structure.selection.select', (type, id) => {
             let node = this.getElement(type, id);
-            let element = Structure.find(this.structure, id);
+            let element = this.structureManipulator.find(id);
 
             this.selectable.boundaries.highlightSelected(node);
             this.updateElementActions(node, type, element);
@@ -923,6 +610,10 @@ const { toRaw } = __webpack_require__(/*! vue */ "vue");
         this.messenger.listen('structure.selection.dehover', () => {
             this.hoverable.boundaries.clear();
         });
+        this.messenger.listen('device.size.changed', () => {
+            let animationTime = 300;
+            this.selectable.boundaries.keepUpdatePositionFor(animationTime);
+        });
     }
 });
 
@@ -935,7 +626,6 @@ const { toRaw } = __webpack_require__(/*! vue */ "vue");
   \********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
@@ -963,7 +653,6 @@ if (false) {}
   \****************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
@@ -986,7 +675,6 @@ const props = (__webpack_require__(/*! ./props.js */ "./src/js/blocks/TextBlock/
   \********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
@@ -1014,7 +702,6 @@ if (false) {}
   \****************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
@@ -1035,7 +722,6 @@ const props = (__webpack_require__(/*! ./props.js */ "./src/js/blocks/TextBlock/
   \*********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
@@ -1063,7 +749,6 @@ if (false) {}
   \*****************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
@@ -1139,7 +824,6 @@ const ClassObserver = (__webpack_require__(/*! shared/Utils/ClassObserver.js */ 
   \*******************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Canvas_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
@@ -1155,7 +839,6 @@ __webpack_require__.r(__webpack_exports__);
   \******************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Root_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
@@ -1171,7 +854,6 @@ __webpack_require__.r(__webpack_exports__);
   \******************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Block_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
@@ -1187,7 +869,6 @@ __webpack_require__.r(__webpack_exports__);
   \*******************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Column_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
@@ -1203,7 +884,6 @@ __webpack_require__.r(__webpack_exports__);
   \****************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Row_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
@@ -1219,7 +899,6 @@ __webpack_require__.r(__webpack_exports__);
   \********************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Section_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
@@ -1235,7 +914,6 @@ __webpack_require__.r(__webpack_exports__);
   \**********************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Structure_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
@@ -1251,7 +929,6 @@ __webpack_require__.r(__webpack_exports__);
   \********************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Editor_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
@@ -1267,7 +944,6 @@ __webpack_require__.r(__webpack_exports__);
   \********************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Render_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
@@ -1283,7 +959,6 @@ __webpack_require__.r(__webpack_exports__);
   \*********************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_WysiwygEditor_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
@@ -1299,7 +974,6 @@ __webpack_require__.r(__webpack_exports__);
   \*************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Canvas_vue_vue_type_template_id_27d57861__WEBPACK_IMPORTED_MODULE_0__.render)
@@ -1315,7 +989,6 @@ __webpack_require__.r(__webpack_exports__);
   \*************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Root_vue_vue_type_template_id_1386ac68__WEBPACK_IMPORTED_MODULE_0__.render)
@@ -1331,7 +1004,6 @@ __webpack_require__.r(__webpack_exports__);
   \************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Block_vue_vue_type_template_id_0de2ec3b__WEBPACK_IMPORTED_MODULE_0__.render)
@@ -1347,7 +1019,6 @@ __webpack_require__.r(__webpack_exports__);
   \*************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Column_vue_vue_type_template_id_32264bd0__WEBPACK_IMPORTED_MODULE_0__.render)
@@ -1363,7 +1034,6 @@ __webpack_require__.r(__webpack_exports__);
   \**********************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Row_vue_vue_type_template_id_7cc13ef0__WEBPACK_IMPORTED_MODULE_0__.render)
@@ -1379,7 +1049,6 @@ __webpack_require__.r(__webpack_exports__);
   \**************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Section_vue_vue_type_template_id_4d532d13__WEBPACK_IMPORTED_MODULE_0__.render)
@@ -1395,7 +1064,6 @@ __webpack_require__.r(__webpack_exports__);
   \****************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Structure_vue_vue_type_template_id_4d3491be__WEBPACK_IMPORTED_MODULE_0__.render)
@@ -1411,7 +1079,6 @@ __webpack_require__.r(__webpack_exports__);
   \**************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Editor_vue_vue_type_template_id_45cbd610__WEBPACK_IMPORTED_MODULE_0__.render)
@@ -1427,7 +1094,6 @@ __webpack_require__.r(__webpack_exports__);
   \**************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Render_vue_vue_type_template_id_fdea0ebe__WEBPACK_IMPORTED_MODULE_0__.render)
@@ -1443,7 +1109,6 @@ __webpack_require__.r(__webpack_exports__);
   \***************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_WysiwygEditor_vue_vue_type_template_id_4a713d3c__WEBPACK_IMPORTED_MODULE_0__.render)
@@ -1459,7 +1124,6 @@ __webpack_require__.r(__webpack_exports__);
   \*******************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "render": () => (/* binding */ render)
@@ -1513,7 +1177,6 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   \*******************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "render": () => (/* binding */ render)
@@ -1542,7 +1205,6 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   \******************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "render": () => (/* binding */ render)
@@ -1573,7 +1235,6 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   \*******************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "render": () => (/* binding */ render)
@@ -1620,7 +1281,6 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   \****************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "render": () => (/* binding */ render)
@@ -1667,7 +1327,6 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   \********************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "render": () => (/* binding */ render)
@@ -1717,7 +1376,6 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   \**********************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "render": () => (/* binding */ render)
@@ -1822,7 +1480,6 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   \********************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "render": () => (/* binding */ render)
@@ -1850,7 +1507,6 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   \********************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "render": () => (/* binding */ render)
@@ -1875,7 +1531,6 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   \*********************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "render": () => (/* binding */ render)
@@ -1904,7 +1559,6 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   \**********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
@@ -1929,7 +1583,6 @@ const Render = (__webpack_require__(/*! ./Render.vue */ "./src/js/blocks/TextBlo
   \******************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
@@ -1939,7 +1592,7 @@ __webpack_require__.r(__webpack_exports__);
         type: Object,
         default (rawProps) {
             const defaults = {
-                text: 'some text'
+                text: ''
             };
 
             return {...defaults, ...rawProps};
@@ -1956,7 +1609,6 @@ __webpack_require__.r(__webpack_exports__);
   \*********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
@@ -1976,7 +1628,6 @@ const TextBlock = (__webpack_require__(/*! ./TextBlock/TextBlock.js */ "./src/js
   \*****************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
@@ -1996,7 +1647,6 @@ const WysiwygEditor = (__webpack_require__(/*! ./WysiwygEditor.vue */ "./src/js/
   \******************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ EventDispatcher)
@@ -2060,7 +1710,6 @@ class EventDispatcher {
   \************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Messenger)
@@ -2143,357 +1792,12 @@ class Messenger {
 
 /***/ }),
 
-/***/ "./src/js/shared/Structure.js":
-/*!************************************!*\
-  !*** ./src/js/shared/Structure.js ***!
-  \************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Structure)
-/* harmony export */ });
-const { v4 } = __webpack_require__(/*! uuid */ "./node_modules/uuid/index.js");
-const { toRaw } = __webpack_require__(/*! vue */ "vue");
-
-class Structure {
-    static find (structure, id) {
-        for (let sk in structure.sections) {
-            if (structure.sections[sk].id === id) {
-                return structure.sections[sk];
-            }
-
-            let rows = structure.sections[sk].rows;
-
-            for (let rk in rows) {
-                if (rows[rk].id === id) {
-                    return rows[rk];
-                }
-
-                let columns = rows[rk].columns;
-
-                for (let ck in columns) {
-                    if (columns[ck].id === id) {
-                        return columns[ck];
-                    }
-
-                    let blocks = columns[ck].blocks;
-
-                    for (let bk in blocks) {
-                        if (blocks[bk].id === id) {
-                            return blocks[bk];
-                        }
-                    }
-                }
-            }
-        }
-
-        return null;
-    }
-
-    static findParent (structure, childId) {
-        let parent = null;
-
-        for (let sk in structure.sections) {
-            parent = structure.sections[sk];
-
-            let rows = structure.sections[sk].rows;
-
-            for (let rk in rows) {
-                if (rows[rk].id === childId) {
-                    return parent;
-                }
-
-                parent = rows[rk];
-
-                let columns = rows[rk].columns;
-
-                for (let ck in columns) {
-                    if (columns[ck].id === childId) {
-                        return parent;
-                    }
-
-                    parent = columns[ck];
-
-                    let blocks = columns[ck].blocks;
-
-                    for (let bk in blocks) {
-                        if (blocks[bk].id === childId) {
-                            return parent;
-                        }
-                    }
-                }
-            }
-        }
-
-        return null;
-    }
-
-    static removeElement (structure, id) {
-        for (let sk in structure.sections) {
-            if (structure.sections[sk].id === id) {
-                structure.sections.splice(sk, 1);
-                return;
-            }
-
-            let rows = structure.sections[sk].rows;
-
-            for (let rk in rows) {
-                if (structure.sections[sk].rows[rk].id === id) {
-                    structure.sections[sk].rows.splice(rk, 1);
-                    return;
-                }
-
-                let columns = rows[rk].columns;
-
-                for (let ck in columns) {
-                    if (structure.sections[sk].rows[rk].columns[ck].id === id) {
-                        structure.sections[sk].rows[rk].columns.splice(ck, 1);
-                        return;
-                    }
-
-                    let blocks = columns[ck].blocks;
-
-                    for (let bk in blocks) {
-                        if (structure.sections[sk].rows[rk].columns[ck].blocks[bk].id === id) {
-                            structure.sections[sk].rows[rk].columns[ck].blocks.splice(bk, 1);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    static moveElementUsingDelta (structure, delta) {
-        let element = toRaw(this.find(structure, delta.element.id));
-
-        if (delta.from.parent.type === 'structure' && delta.to.parent.type === 'structure') {
-            this.removeElement(structure, delta.element.id);
-            structure.sections.splice(delta.to.index, 0, element);
-            return;
-        }
-
-        let newParent = this.find(structure, delta.to.parent.id);
-
-        this.removeElement(structure, delta.element.id);
-
-        if (newParent.type === 'column') {
-            newParent.blocks.splice(delta.to.index, 0, element);
-        } else if (newParent.type === 'row') {
-            newParent.columns.splice(delta.to.index, 0, element);
-        } else if (newParent.type === 'section') {
-            newParent.rows.splice(delta.to.index, 0, element);
-        }
-    }
-
-    static ensureAllIdsAreUnique (structure) {
-        let usedIds = [];
-
-        for (let sk in structure.sections) {
-            if (!structure.sections[sk].id || usedIds.indexOf(structure.sections[sk].id) >= 0) {
-                structure.sections[sk].id = v4();
-            }
-
-            usedIds.push(structure.sections[sk].id);
-
-            let rows = structure.sections[sk].rows;
-
-            for (let rk in rows) {
-                if (!rows[rk].id || usedIds.indexOf(rows[rk].id) >= 0) {
-                    rows[rk].id = v4();
-                }
-
-                usedIds.push(rows[rk].id);
-
-                let columns = rows[rk].columns;
-
-                for (let ck in columns) {
-                    if (!columns[ck].id || usedIds.indexOf(columns[ck].id) >= 0) {
-                        columns[ck].id = v4();
-                    }
-
-                    usedIds.push(columns[ck].id);
-
-                    let blocks = columns[ck].blocks;
-
-                    for (let bk in blocks) {
-                        if (!blocks[bk].id || usedIds.indexOf(blocks[bk].id) >= 0) {
-                            blocks[bk].id = v4();
-                        }
-
-                        usedIds.push(blocks[bk].id);
-                    }
-                }
-            }
-        }
-
-        return structure;
-    }
-
-    static ensureStructureHasTypeInAllElements (structure) {
-        for (let sk in structure.sections) {
-            if (!structure.sections[sk].type) {
-                structure.sections[sk].type = 'section';
-            }
-
-            let rows = structure.sections[sk].rows;
-
-            for (let rk in rows) {
-                if (!rows[rk].type) {
-                    structure.sections[sk].rows[rk].type = 'row';
-                }
-
-                let columns = rows[rk].columns;
-
-                for (let ck in columns) {
-                    if (!columns[ck].type) {
-                        structure.sections[sk].rows[rk].columns[ck].type = 'column';
-                    }
-
-                    let blocks = columns[ck].blocks;
-
-                    for (let bk in blocks) {
-                        if (!blocks[bk].type) {
-                            structure.sections[sk].rows[rk].columns[ck].blocks[bk].type = 'block';
-                        }
-                    }
-                }
-            }
-        }
-
-        return structure;
-    }
-
-    static ensureColumnsHasSizesPropertyInStructure (structure) {
-        for (let sk in structure.sections) {
-            let rows = structure.sections[sk].rows;
-
-            for (let rk in rows) {
-                let columns = rows[rk].columns;
-
-                for (let ck in columns) {
-                    if (!columns[ck].sizes) {
-                        structure.sections[sk].rows[rk].columns[ck].sizes = {
-                            xxl: { size: null },
-                            xl: { size: null },
-                            lg: { size: null },
-                            md: { size: null },
-                            sm: { size: null },
-                            xs: { size: null },
-                        };
-                    }
-                }
-            }
-        }
-
-        return structure;
-    }
-
-    static ensureElementsHasMetadataPropertyInStructure (structure) {
-        for (let sk in structure.sections) {
-            if (!structure.sections[sk].metadata) {
-                structure.sections[sk].metadata = {
-                    hovered: false,
-                    selected: false,
-                };
-            }
-
-            let rows = structure.sections[sk].rows;
-
-            for (let rk in rows) {
-                if (!rows[rk].metadata) {
-                    structure.sections[sk].rows[rk].metadata = {
-                        hovered: false,
-                        selected: false,
-                    };
-                }
-
-                let columns = rows[rk].columns;
-
-                for (let ck in columns) {
-                    if (!columns[ck].metadata) {
-                        structure.sections[sk].rows[rk].columns[ck].metadata = {
-                            hovered: false,
-                            selected: false,
-                        };
-                    }
-
-                    let blocks = columns[ck].blocks;
-
-                    for (let bk in blocks) {
-                        if (!blocks[bk].metadata) {
-                            structure.sections[sk].rows[rk].columns[ck].blocks[bk].metadata = {
-                                hovered: false,
-                                selected: false,
-                            };
-                        }
-                    }
-                }
-            }
-        }
-
-        return structure;
-    }
-
-    static ensureElementsHasParentPropertyInStructure (structure) {
-        for (let sk in structure.sections) {
-            if (!structure.sections[sk].metadata.parent) {
-                structure.sections[sk].metadata.parent = {
-                    type: null,
-                    id: null,
-                };
-            }
-
-            let rows = structure.sections[sk].rows;
-
-            for (let rk in rows) {
-                if (!rows[rk].metadata.parent) {
-                    structure.sections[sk].rows[rk].metadata.parent = {
-                        type: 'section',
-                        id: structure.sections[sk].id,
-                    };
-                }
-
-                let columns = rows[rk].columns;
-
-                for (let ck in columns) {
-                    if (!columns[ck].metadata.parent) {
-                        structure.sections[sk].rows[rk].columns[ck].metadata.parent = {
-                            type: 'row',
-                            id: structure.sections[sk].rows[rk].id,
-                        };
-                    }
-
-                    let blocks = columns[ck].blocks;
-
-                    for (let bk in blocks) {
-                        if (!blocks[bk].metadata.parent) {
-                            structure.sections[sk].rows[rk].columns[ck].blocks[bk].metadata.parent = {
-                                type: 'column',
-                                id: structure.sections[sk].rows[rk].columns[ck].id,
-                            };
-                        }
-                    }
-                }
-            }
-        }
-
-        return structure;
-    }
-};
-
-
-/***/ }),
-
 /***/ "./src/js/shared/Structure/Selection/Boundaries/Hovered.js":
 /*!*****************************************************************!*\
   !*** ./src/js/shared/Structure/Selection/Boundaries/Hovered.js ***!
   \*****************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Hovered)
@@ -2585,7 +1889,6 @@ class Hovered {
   \******************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Selected)
@@ -2680,7 +1983,6 @@ class Selected {
   \************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ HoverResolver)
@@ -2725,7 +2027,6 @@ class HoverResolver {
   \********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Selection)
@@ -2926,13 +2227,231 @@ class Selection {
 
 /***/ }),
 
+/***/ "./src/js/shared/Structure/StructureManipulator.js":
+/*!*********************************************************!*\
+  !*** ./src/js/shared/Structure/StructureManipulator.js ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ StructureManipulator)
+/* harmony export */ });
+const { toRaw } = __webpack_require__(/*! vue */ "vue");
+
+class StructureManipulator {
+    structure;
+    messenger;
+
+    constructor (structure, messenger) {
+        this.messenger = messenger;
+        this.structure = structure;
+
+        this._listenToUpdateElement();
+        this._listenToRemoveElement();
+        this._listenToMoveElementUsingDelta();
+    }
+
+    update (newStructure) {
+        this.structure.sections = newStructure.sections;
+        this.messenger.send('structure.updated');
+    }
+
+    find (id) {
+        for (let sk in this.structure.sections) {
+            if (this.structure.sections[sk].id === id) {
+                return this.structure.sections[sk];
+            }
+
+            let rows = this.structure.sections[sk].rows;
+
+            for (let rk in rows) {
+                if (rows[rk].id === id) {
+                    return rows[rk];
+                }
+
+                let columns = rows[rk].columns;
+
+                for (let ck in columns) {
+                    if (columns[ck].id === id) {
+                        return columns[ck];
+                    }
+
+                    let blocks = columns[ck].blocks;
+
+                    for (let bk in blocks) {
+                        if (blocks[bk].id === id) {
+                            return blocks[bk];
+                        }
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    findParent (childId) {
+        let parent = null;
+
+        for (let sk in this.structure.sections) {
+            parent = this.structure.sections[sk];
+
+            let rows = this.structure.sections[sk].rows;
+
+            for (let rk in rows) {
+                if (rows[rk].id === childId) {
+                    return parent;
+                }
+
+                parent = rows[rk];
+
+                let columns = rows[rk].columns;
+
+                for (let ck in columns) {
+                    if (columns[ck].id === childId) {
+                        return parent;
+                    }
+
+                    parent = columns[ck];
+
+                    let blocks = columns[ck].blocks;
+
+                    for (let bk in blocks) {
+                        if (blocks[bk].id === childId) {
+                            return parent;
+                        }
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    removeElement (id) {
+        this.messenger.send('structure.element.delete', id);
+    }
+
+    _listenToRemoveElement () {
+        this.messenger.listen('structure.element.delete', (id) => {
+            this._doRemoveElement(id);
+        });
+    }
+
+    _doRemoveElement (id) {
+        let removed = false;
+
+        loop:
+            for (let sk in this.structure.sections) {
+                if (this.structure.sections[sk].id === id) {
+                    this.structure.sections.splice(sk, 1);
+                    removed = true;
+                    break;
+                }
+
+                let rows = this.structure.sections[sk].rows;
+
+                for (let rk in rows) {
+                    if (this.structure.sections[sk].rows[rk].id === id) {
+                        this.structure.sections[sk].rows.splice(rk, 1);
+                        removed = true;
+                        break loop;
+                    }
+
+                    let columns = rows[rk].columns;
+
+                    for (let ck in columns) {
+                        if (this.structure.sections[sk].rows[rk].columns[ck].id === id) {
+                            this.structure.sections[sk].rows[rk].columns.splice(ck, 1);
+                            removed = true;
+                            break loop;
+                        }
+
+                        let blocks = columns[ck].blocks;
+
+                        for (let bk in blocks) {
+                            if (this.structure.sections[sk].rows[rk].columns[ck].blocks[bk].id === id) {
+                                this.structure.sections[sk].rows[rk].columns[ck].blocks.splice(bk, 1);
+                                removed = true;
+                                break loop;
+                            }
+                        }
+                    }
+                }
+            }
+
+        if (removed) {
+            this.messenger.send('structure.element.removed', id);
+        }
+    }
+
+    updateElement (element) {
+        this.messenger.send('structure.element.update', element.id, toRaw(element));
+    }
+
+    _listenToUpdateElement () {
+        this.messenger.listen('structure.element.update', (id, newElement) => {
+            this._doUpdateElement(id, newElement);
+        });
+    }
+
+    _doUpdateElement (id, newElement) {
+        let currentElement = this.find(id);
+
+        if (!currentElement) {
+            return;
+        }
+
+        // Implement basic comparison, only replace every key from newElement to currentElement.
+        // @todo Try to detect which data changed, and update only the changed.
+        for (let ni in newElement) {
+            currentElement[ni] = newElement[ni];
+        }
+
+        this.messenger.send('structure.element.updated', id);
+    }
+
+    moveElementUsingDelta (delta) {
+        this.messenger.send('structure.element.move', delta);
+    }
+
+    _listenToMoveElementUsingDelta () {
+        this.messenger.listen('structure.element.move', (delta) => {
+            let element = toRaw(this.find(delta.element.id));
+
+            if (delta.from.parent.type === 'structure' && delta.to.parent.type === 'structure') {
+                this._doRemoveElement(delta.element.id);
+                this.structure.sections.splice(delta.to.index, 0, element);
+            } else {
+                let newParent = this.find(delta.to.parent.id);
+
+                this._doRemoveElement(delta.element.id);
+
+                if (newParent.type === 'column') {
+                    newParent.blocks.splice(delta.to.index, 0, element);
+                } else if (newParent.type === 'row') {
+                    newParent.columns.splice(delta.to.index, 0, element);
+                } else if (newParent.type === 'section') {
+                    newParent.rows.splice(delta.to.index, 0, element);
+                }
+            }
+
+            this.messenger.send('structure.element.moved', delta);
+            this.messenger.send('structure.element.updated', delta.element.id);
+        });
+    }
+};
+
+
+/***/ }),
+
 /***/ "./src/js/shared/Utils/ClassObserver.js":
 /*!**********************************************!*\
   !*** ./src/js/shared/Utils/ClassObserver.js ***!
   \**********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ ClassObserver)
@@ -2980,7 +2499,6 @@ class ClassObserver {
   \*****************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Location)
@@ -3011,7 +2529,6 @@ class Location {
   \*********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ ObjectCloner)
@@ -3031,7 +2548,6 @@ class ObjectCloner {
   \**********************/
 /***/ ((module) => {
 
-"use strict";
 module.exports = window["Vue"];
 
 /***/ })
@@ -3105,9 +2621,8 @@ module.exports = window["Vue"];
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-"use strict";
 /*!***************************************!*\
   !*** ./src/js/tulia-editor.editor.js ***!
   \***************************************/

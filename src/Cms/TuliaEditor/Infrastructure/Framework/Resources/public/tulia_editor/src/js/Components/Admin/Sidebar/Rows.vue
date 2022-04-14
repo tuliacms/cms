@@ -28,7 +28,6 @@
                     <Columns
                         :parent="element"
                         :columns="element.columns"
-                        :canvas="canvas"
                     ></Columns>
                 </div>
             </template>
@@ -41,7 +40,7 @@ const draggable = require('vuedraggable');
 const Columns = require('components/Admin/Sidebar/Columns.vue').default;
 
 export default {
-    props: ['parent', 'rows', 'canvas'],
+    props: ['parent', 'rows'],
     inject: ['eventDispatcher', 'selection'],
     components: {
         draggable,

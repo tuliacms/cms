@@ -9,7 +9,7 @@ import './../css/tulia-editor.admin.scss';
 const Vue = require('vue');
 const Messenger = require('shared/Messenger.js').default;
 const MessageBroker = require('shared/MessageBroker.js').default;
-const Structure = require('shared/Structure.js').default;
+const Fixer = require('shared/Structure/Fixer.js').default;
 const Translator = require('shared/I18n/Translator.js').default;
 const EventDispatcher = require('shared/EventDispatcher.js').default;
 const AdminRoot = require("components/Admin/Root.vue").default;
@@ -84,11 +84,8 @@ export class TuliaEditor {
         this.instanceId = ++instances;
         this.options = $.extend({}, TuliaEditor.defaults, this.options);
 
-        this.options.structure.source = Structure.ensureAllIdsAreUnique(this.options.structure.source);
-        this.options.structure.source = Structure.ensureStructureHasTypeInAllElements(this.options.structure.source);
-        this.options.structure.source = Structure.ensureColumnsHasSizesPropertyInStructure(this.options.structure.source);
-        this.options.structure.source = Structure.ensureElementsHasMetadataPropertyInStructure(this.options.structure.source);
-        this.options.structure.source = Structure.ensureElementsHasParentPropertyInStructure(this.options.structure.source);
+        this.options.structure.source = (new Fixer())
+            .fix(this.options.structure.source);
 
         this.container.editor = this;
         this.container.messenger = new Messenger(this.instanceId, window, 'root');

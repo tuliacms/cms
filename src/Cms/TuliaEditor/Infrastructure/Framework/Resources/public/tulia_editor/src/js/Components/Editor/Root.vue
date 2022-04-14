@@ -10,7 +10,7 @@ const StructureComponent = require("components/Editor/Structure/Structure.vue").
 const RenderingCanvasComponent = require("components/Editor/Rendering/Canvas.vue").default;
 const ObjectCloner = require("shared/Utils/ObjectCloner.js").default;
 const Selection = require("shared/Structure/Selection/Selection.js").default;
-const Structure = require('shared/Structure.js').default;
+const StructureManipulator = require('shared/Structure/StructureManipulator.js').default;
 const { defineProps, provide, reactive, onMounted, toRaw, ref } = require('vue');
 
 const props = defineProps([
@@ -23,10 +23,12 @@ const props = defineProps([
 
 const structure = reactive(ObjectCloner.deepClone(props.structure));
 const selection = new Selection(structure, props.container.messenger);
+const structureManipulator = new StructureManipulator(structure, props.container.messenger);
 
 provide('selection', selection);
 provide('messenger', props.container.messenger);
 provide('eventDispatcher', props.container.eventDispatcher);
+provide('structureManipulator', structureManipulator);
 
 const renderedContent = ref(null);
 
@@ -48,7 +50,7 @@ onMounted(() => {
     });
 
     props.container.messenger.listen('structure.move-element', (delta) => {
-        Structure.moveElementUsingDelta(structure, delta);
+        structureManipulator.moveElementUsingDelta(delta);
         selection.resetHovered();
         selection.select(delta.element.type, delta.element.id);
     });

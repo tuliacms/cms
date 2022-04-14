@@ -1,3 +1,10 @@
+/*!
+ * Tulia Editor
+ * @author	Adam Banaszkiewicz <adam@codevia.com>
+ * @license MIT only with Tulia CMS package. Usage outside the Tulia CMS package is prohibited.
+ *
+ */
+
 /**!
  * Sortable 1.14.0
  * @author	RubaXa   <trash@rubaxa.org>

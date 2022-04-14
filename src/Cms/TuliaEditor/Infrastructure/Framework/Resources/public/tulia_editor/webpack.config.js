@@ -67,7 +67,7 @@ module.exports = {
             events: {
                 onEnd: {
                     copy: [
-                        { source: './dist/**/*', destination: './../../../../../../../../../public/assets/core/tulia-editor-new' },
+                        { source: './dist/**/*', destination: './../../../../../../../../../public/assets/core/tulia-editor' },
                     ],
                 },
             },

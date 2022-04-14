@@ -3,7 +3,7 @@ export default {
         type: Object,
         default (rawProps) {
             const defaults = {
-                text: 'some text'
+                text: ''
             };
 
             return {...defaults, ...rawProps};

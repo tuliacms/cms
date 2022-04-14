@@ -28,7 +28,6 @@
                     <Rows
                         :parent="element"
                         :rows="element.rows"
-                        :canvas="canvas"
                     ></Rows>
                 </div>
             </template>
@@ -39,10 +38,10 @@
 <script>
 const draggable = require('vuedraggable');
 const Rows = require('components/Admin/Sidebar/Rows.vue').default;
-const DraggableDeltaTranslator = require('shared/DraggableDeltaTranslator.js').default;
+const DraggableDeltaTranslator = require('shared/Structure/DraggableDeltaTranslator.js').default;
 
 export default {
-    props: ['structure', 'canvas'],
+    props: ['structure'],
     inject: ['eventDispatcher', 'messenger', 'selection'],
     components: {
         draggable,

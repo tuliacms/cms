@@ -64,7 +64,6 @@
 
 <script>
 const Section = require('components/Editor/Structure/Section.vue').default;
-const Structure = require('shared/Structure.js').default;
 const ObjectCloner = require("shared/Utils/ObjectCloner.js").default;
 const SelectedBoundaries = require('shared/Structure/Selection/Boundaries/Selected.js').default;
 const HoveredBoundaries = require('shared/Structure/Selection/Boundaries/Hovered.js').default;
@@ -73,7 +72,7 @@ const { toRaw } = require('vue');
 
 export default {
     props: ['structure'],
-    inject: ['messenger', 'selection', 'eventDispatcher'],
+    inject: ['messenger', 'selection', 'eventDispatcher', 'structureManipulator'],
     components: { Section },
     data () {
         return {
@@ -146,7 +145,7 @@ export default {
                 return;
             }
 
-            let parent = Structure.findParent(this.structure, selected.id);
+            let parent = this.structureManipulator.findParent(selected.id);
 
             if (!parent) {
                 return;
@@ -156,65 +155,19 @@ export default {
         },
         deleteSelectedElement: function () {
             let selected = this.selection.getSelected();
-            let found = false;
 
             if (!selected) {
                 console.error('Cannot remove selected element. None of elements were selected.');
                 return;
             }
 
-            let element = Structure.find(this.structure, selected.id);
-            let parent = Structure.findParent(this.structure, element.id);
-
-            if (element.type === 'block') {
-                let index = parent.blocks.indexOf(element);
-
-                if (index >= 0) {
-                    parent.blocks.splice(index, 1);
-                    this.selectable.boundaries.clearSelectionHighlight();
-                    this.messenger.send('structure.block.removed', ObjectCloner.deepClone(toRaw(element)));
-                    found = true;
-                }
-            } else if (element.type === 'column') {
-                let index = parent.columns.indexOf(element);
-
-                if (index >= 0) {
-                    parent.columns.splice(index, 1);
-                    this.selectable.boundaries.clearSelectionHighlight();
-                    this.messenger.send('structure.column.removed', ObjectCloner.deepClone(toRaw(element)));
-                    found = true;
-                }
-            } else if (element.type === 'row') {
-                let index = parent.rows.indexOf(element);
-
-                if (index >= 0) {
-                    parent.rows.splice(index, 1);
-                    this.selectable.boundaries.clearSelectionHighlight();
-                    this.messenger.send('structure.row.removed', ObjectCloner.deepClone(toRaw(element)));
-                    found = true;
-                }
-            } else if (element.type === 'section') {
-                let index = this.structure.sections.indexOf(element);
-
-                if (index >= 0) {
-                    this.structure.sections.splice(index, 1);
-                    this.selectable.boundaries.clearSelectionHighlight();
-                    this.messenger.send('structure.section.removed', ObjectCloner.deepClone(toRaw(element)));
-                    found = true;
-                }
-            }
-
-            if (found) {
-                this.messenger.send('structure.synchronize.from.editor', ObjectCloner.deepClone(toRaw(this.structure)));
-                this.selection.resetSelection();
-                this.selection.resetHovered();
-            }
+            this.structureManipulator.removeElement(selected.id);
         },
         hideElementActions: function () {
             this.actions.activeness.selectParent = false;
         },
         updateElementActions: function (el, type, element) {
-            let parent = Structure.findParent(this.structure, element.id);
+            let parent = this.structureManipulator.findParent(element.id);
 
             if (!parent) {
                 this.hideElementActions();
@@ -228,24 +181,27 @@ export default {
         }
     },
     mounted () {
+        // @todo Is this event `block.inner.updated` needed?
+        // Maybe we can use `structure.element.updated`?
         this.eventDispatcher.on('block.inner.updated', () => {
             this.hoverable.boundaries.update();
             this.selectable.boundaries.update();
         });
-
-
-        /*this.messenger.listen('device.size.changed', () => {
-            let animationTime = 300;
-            this.selectable.boundaries.keepUpdatePositionFor(animationTime);
-        });*/
-
+        this.messenger.listen('structure.element.updated', () => {
+            this.hoverable.boundaries.update();
+            this.selectable.boundaries.update();
+        });
+        this.messenger.listen('structure.element.removed', () => {
+            this.selection.resetSelection();
+            this.selection.resetHovered();
+        });
 
         /**
          * Selection
          */
         this.messenger.listen('structure.selection.select', (type, id) => {
             let node = this.getElement(type, id);
-            let element = Structure.find(this.structure, id);
+            let element = this.structureManipulator.find(id);
 
             this.selectable.boundaries.highlightSelected(node);
             this.updateElementActions(node, type, element);
@@ -260,6 +216,10 @@ export default {
         });
         this.messenger.listen('structure.selection.dehover', () => {
             this.hoverable.boundaries.clear();
+        });
+        this.messenger.listen('device.size.changed', () => {
+            let animationTime = 300;
+            this.selectable.boundaries.keepUpdatePositionFor(animationTime);
         });
     }
 };

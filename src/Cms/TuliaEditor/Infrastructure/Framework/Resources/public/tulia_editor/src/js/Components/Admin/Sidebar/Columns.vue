@@ -26,16 +26,17 @@
                         <span>Kolumna</span>
                         <div class="tied-structure-element-options">
                             <div class="tued-structure-column-sizer">
-<!--                                <span>{{ canvas.size.breakpoint.name }}</span>
+                                <span>{{ breakpointSize }}</span>
                                 <input
                                     type="text"
-                                    :ref="'column-' + column.id"
-                                    v-model="column.sizes[canvas.size.breakpoint.name].size"
+                                    :ref="'column-' + element.id"
+                                    :value="columnSizeByBreakpoint(element)"
                                     @focus="$event.target.select()"
-                                    @keyup="changeSize(column, $event)"
-                                    @change="changeSize(column, $event)"
+                                    @keyup="changeSize(element, $event)"
+                                    @keydown="changeSizeWithArrows(element, $event)"
+                                    @change="changeSize(element, $event)"
                                     placeholder="inherit"
-                                />-->
+                                />
                             </div>
                         </div>
                     </div>
@@ -54,8 +55,8 @@ const draggable = require('vuedraggable');
 const Blocks = require('components/Admin/Sidebar/Blocks.vue').default;
 
 export default {
-    props: ['parent', 'columns', 'selected', 'hovered', 'canvas'],
-    inject: ['eventDispatcher', 'selection'],
+    props: ['parent', 'columns', 'selected', 'hovered'],
+    inject: ['eventDispatcher', 'selection', 'canvas', 'columnSize'],
     components: {
         draggable,
         Blocks
@@ -69,6 +70,11 @@ export default {
             }
         }
     },
+    computed: {
+        breakpointSize: function () {
+            return this.canvas.getBreakpointName();
+        },
+    },
     methods: {
         handleStart: function (event) {
             this.eventDispatcher.emit('structure.element.draggable.start', event);
@@ -79,9 +85,19 @@ export default {
         sendDelta: function (event) {
             this.eventDispatcher.emit('structure.element.draggable.stop', event);
         },
+        changeSizeWithArrows: function (column, event) {
+            switch (event.key) {
+                case 'ArrowUp':
+                    this.$refs['column-' + column.id].value = this.columnSize.increment(column, this.canvas.getBreakpointName());
+                    break;
+                case 'ArrowDown':
+                    this.$refs['column-' + column.id].value = this.columnSize.decrement(column, this.canvas.getBreakpointName());
+                    break;
+                default:
+                    return;
+            }
+        },
         changeSize: function (column, event) {
-            let size = column.sizes[this.canvas.size.breakpoint.name];
-
             switch (event.key) {
                 case '1':
                 case '2':
@@ -94,10 +110,10 @@ export default {
                 case '9':
                 case '0':
                     break;
-                case 'ArrowLeft':
-                case 'ArrowRight':
                 case 'ArrowUp':
                 case 'ArrowDown':
+                case 'ArrowLeft':
+                case 'ArrowRight':
                 case 'Backspace':
                 case 'Delete':
                     return;
@@ -105,26 +121,13 @@ export default {
                     event.preventDefault();
             }
 
-            let input = this.$refs['column-' + column.id][0];
-            let value = input.value;
-            let valueInt = parseInt(value);
+            let input = this.$refs['column-' + column.id];
 
-            // Reset if value is empty or 'zero'
-            if (!value) {
-                input.value = '';
-                size.size = null;
-            } else {
-                // Max 12 columns
-                if (valueInt >= 12) {
-                    input.value = '12';
-                    valueInt = 12;
-                }
-
-                size.size = valueInt;
-            }
-
-            this.eventDispatcher.emit('structure.column.resize', column.id, size.size);
-        }
+            input.value = this.columnSize.changeTo(column, this.canvas.getBreakpointName(), input.value);
+        },
+        columnSizeByBreakpoint: function (column) {
+            return column.sizes[this.canvas.getBreakpointName()].size;
+        },
     }
 };
 </script>
