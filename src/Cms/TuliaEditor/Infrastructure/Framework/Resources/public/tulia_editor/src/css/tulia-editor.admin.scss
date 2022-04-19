@@ -6,7 +6,8 @@
 @import "admin/_main-window.scss";
 @import "admin/_editor-window.scss";
 @import "admin/_view-mode-selector.scss";
-@import "admin/_block-selector.scss";
+@import "admin/_modals.scss";
+@import "admin/_block-picker-modal.scss";
 
 .tued-editor-opened {
     overflow: hidden !important;

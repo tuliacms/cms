@@ -7,8 +7,9 @@
         data-tagname="Block"
     >
         <component
-            :is="'block-' + block.block_type + '-editor'"
+            :is="'block-' + block.code + '-editor'"
             :data="block.data"
+            :id="block.id"
         ></component>
     </div>
 </template>

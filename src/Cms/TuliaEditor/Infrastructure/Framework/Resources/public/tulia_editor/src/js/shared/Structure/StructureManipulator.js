@@ -1,24 +1,26 @@
 const { toRaw } = require('vue');
-const { v4 } = require('uuid');
 const Fixer = require('shared/Structure/Fixer.js').default;
 
 export default class StructureManipulator {
     structure;
     messenger;
+    fixer;
 
     constructor (structure, messenger) {
         this.messenger = messenger;
         this.structure = structure;
+        this.fixer = new Fixer();
 
         this._listenToUpdateElement();
         this._listenToRemoveElement();
         this._listenToMoveElementUsingDelta();
         this._listenToNewSection();
+        this._listenToNewBlock();
     }
 
     update (newStructure) {
         this.structure.sections = newStructure.sections;
-        this.messenger.send('structure.updated');
+        this.messenger.notify('structure.updated');
     }
 
     find (id) {
@@ -94,27 +96,11 @@ export default class StructureManipulator {
     }
 
     newSection () {
-        let emptyStructure = {
-            sections: [
-                {
-                    rows: [
-                        {
-                            columns: [
-                                {
-                                    blocks: [],
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        };
-
-        this.messenger.send('structure.element.new-section', (new Fixer()).fix(emptyStructure).sections[0]);
+        this.messenger.notify('structure.element.new-section', this.fixer.fixSection({}));
     }
 
     _listenToNewSection () {
-        this.messenger.listen('structure.element.new-section', (newSection) => {
+        this.messenger.on('structure.element.new-section', (newSection) => {
             this._doNewSection(newSection);
         });
     }
@@ -123,12 +109,36 @@ export default class StructureManipulator {
         this.structure.sections.push(newSection);
     }
 
+    newBlock (type, parent) {
+        let block = {
+            code: type
+        };
+
+        block = this.fixer.fixBlock(block);
+
+        this.messenger.notify('structure.element.new-block', block, parent);
+    }
+
+    _listenToNewBlock () {
+        this.messenger.on('structure.element.new-block', (block, parent) => {
+            this._doNewBlock(block, parent);
+        });
+    }
+
+    _doNewBlock (block, parent) {
+        let column = this.find(parent);
+
+        column.blocks.push(block);
+
+        this.messenger.notify('structure.element.created', 'block', block.id);
+    }
+
     removeElement (id) {
-        this.messenger.send('structure.element.delete', id);
+        this.messenger.notify('structure.element.remove', id);
     }
 
     _listenToRemoveElement () {
-        this.messenger.listen('structure.element.delete', (id) => {
+        this.messenger.on('structure.element.remove', (id) => {
             this._doRemoveElement(id);
         });
     }
@@ -176,16 +186,16 @@ export default class StructureManipulator {
         }
 
         if (removed) {
-            this.messenger.send('structure.element.removed', id);
+            this.messenger.notify('structure.element.removed', id);
         }
     }
 
     updateElement (element) {
-        this.messenger.send('structure.element.update', element.id, toRaw(element));
+        this.messenger.notify('structure.element.update', element.id, toRaw(element));
     }
 
     _listenToUpdateElement () {
-        this.messenger.listen('structure.element.update', (id, newElement) => {
+        this.messenger.on('structure.element.update', (id, newElement) => {
             this._doUpdateElement(id, newElement);
         });
     }
@@ -203,15 +213,15 @@ export default class StructureManipulator {
             currentElement[ni] = newElement[ni];
         }
 
-        this.messenger.send('structure.element.updated', id);
+        this.messenger.notify('structure.element.updated', id);
     }
 
     moveElementUsingDelta (delta) {
-        this.messenger.send('structure.element.move', delta);
+        this.messenger.notify('structure.element.move', delta);
     }
 
     _listenToMoveElementUsingDelta () {
-        this.messenger.listen('structure.element.move', (delta) => {
+        this.messenger.on('structure.element.move', (delta) => {
             let element = toRaw(this.find(delta.element.id));
 
             if (delta.from.parent.type === 'structure' && delta.to.parent.type === 'structure') {
@@ -231,8 +241,8 @@ export default class StructureManipulator {
                 }
             }
 
-            this.messenger.send('structure.element.moved', delta);
-            this.messenger.send('structure.element.updated', delta.element.id);
+            this.messenger.notify('structure.element.moved', delta);
+            this.messenger.notify('structure.element.updated', delta.element.id);
         });
     }
 };

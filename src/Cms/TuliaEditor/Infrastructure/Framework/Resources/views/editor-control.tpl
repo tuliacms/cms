@@ -35,10 +35,13 @@
             editor: {
                 view: '{{ path('backend.tulia_editor.editor_view') }}',
             },
+            blocks: {
+                "core-imageblock": {
+                    image_resolve_path: '{{ path('filemanager.resolve.image.size', { size: '{size}', id: '{id}', filename: '{filename}' }) }}',
+                    filemanager_endpoint: '{{ path('backend.filemanager.endpoint') }}',
+                },
+            },
             //lang: '{{ user().locale }}',
-            {#include: {
-                stylesheets: {{ (assetter_standalone_assets(theme.config.all('tulia_editor_asset')|keys).stylesheets)|json_encode|raw }}
-            },#}
             start_point: 'editor',
             locale: '{{ user().locale }}'
         });

@@ -19,7 +19,7 @@
                         <component
                             v-for="(block, key) in column.blocks"
                             :key="'block-' + key"
-                            :is="'block-' + block.block_type + '-render'"
+                            :is="'block-' + block.code + '-render'"
                             :data="block.data"
                         ></component>
                     </div>

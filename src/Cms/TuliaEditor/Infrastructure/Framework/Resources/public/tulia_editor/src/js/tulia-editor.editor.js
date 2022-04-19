@@ -1,7 +1,7 @@
 import './../css/tulia-editor.editor.scss';
 
 const Vue = require('vue');
-const Messenger = require('shared/Messenger.js').default;
+const Messenger = require('shared/Messaging/Messenger.js').default;
 const Location = require('shared/Utils/Location.js').default;
 const EventDispatcher = require('shared/EventDispatcher.js').default;
 const Translator = require('shared/I18n/Translator.js').default;
@@ -9,6 +9,7 @@ const EditorRoot = require("components/Editor/Root.vue").default;
 const ObjectCloner = require("shared/Utils/ObjectCloner.js").default;
 const extensions = require("extensions/extensions.js").default;
 const blocks = require("blocks/blocks.js").default;
+
 
 export class Canvas {
     instanceId = null;
@@ -22,33 +23,33 @@ export class Canvas {
 
     start () {
         let self = this;
-        let messenger = new Messenger(this.instanceId, window.parent, 'editor');
+        let messenger = new Messenger(this.instanceId, 'editor', [window, window.parent]);
 
-        messenger.listen('editor.init.data', function (options) {
-            self.vue = Vue.createApp(EditorRoot, {
-                container: {
-                    translator: new Translator(
-                        options.locale,
-                        options.fallback_locales,
-                        options.translations
-                    ),
-                    eventDispatcher: new EventDispatcher(),
-                    messenger: messenger,
-                },
-                instanceId: self.instanceId,
-                options: options,
-                availableBlocks: blocks,
-                structure: ObjectCloner.deepClone(options.structure.source)
+        messenger.on('editor.ready', () => {
+            messenger.execute('editor.init.fetch').then((options) => {
+                self.vue = Vue.createApp(EditorRoot, {
+                    container: {
+                        translator: new Translator(
+                            options.locale,
+                            options.fallback_locales,
+                            options.translations
+                        ),
+                        eventDispatcher: new EventDispatcher(),
+                        messenger: messenger,
+                    },
+                    instanceId: self.instanceId,
+                    options: options,
+                    availableBlocks: blocks,
+                    structure: ObjectCloner.deepClone(options.structure.source)
+                });
+                self.loadExtensions(self.vue);
+                self.loadBlocks(self.vue);
+                self.vue.config.devtools = true;
+                self.vue.config.performance = true;
+
+                self.vue.mount('#tulia-editor');
             });
-            self.loadExtensions(self.vue);
-            self.loadBlocks(self.vue);
-            self.vue.config.devtools = true;
-            self.vue.config.performance = true;
-
-            self.vue.mount('#tulia-editor');
         });
-
-        messenger.send('editor.init.fetch');
     }
 
     loadExtensions (vueApp) {

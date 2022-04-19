@@ -8,6 +8,10 @@
             <SidebarComponent
                 :structure="structure"
             ></SidebarComponent>
+            <BlockPickerComponent
+                :availableBlocks="availableBlocks"
+                :blockPickerData="blockPickerData"
+            ></BlockPickerComponent>
         </div>
     </div>
 </template>
@@ -15,6 +19,7 @@
 <script setup>
 const CanvasComponent = require("components/Admin/Canvas/Canvas.vue").default;
 const SidebarComponent = require("components/Admin/Sidebar/Sidebar.vue").default;
+const BlockPickerComponent = require("components/Admin/Block/PickerModal.vue").default;
 const ObjectCloner = require("shared/Utils/ObjectCloner.js").default;
 const { defineProps, provide, reactive, onMounted, isProxy, toRaw } = require('vue');
 
@@ -31,10 +36,11 @@ const props = defineProps([
 provide('messenger', props.container.messenger);
 provide('translator', props.container.translator);
 provide('eventDispatcher', props.container.eventDispatcher);
+provide('options', props.options);
 
 onMounted(() => {
     props.container.eventDispatcher.on('editor.save', () => {
-        props.container.messenger.listen('structure.rendered.data', (content, newStructure) => {
+        props.container.messenger.on('structure.rendered.data', (content, newStructure) => {
             selection.resetHovered();
             selection.resetSelection();
             structure.sections = newStructure.sections;
@@ -77,17 +83,17 @@ provide('selection', selection);
 provide('structureManipulator', structureManipulator);
 
 onMounted(() => {
-    props.container.messenger.listen('structure.updated', () => {
+    props.container.messenger.on('structure.updated', () => {
         selection.update();
     });
 
-    props.container.messenger.listen('structure.synchronize.from.editor', (newStructure) => {
+    props.container.messenger.on('structure.synchronize.from.editor', (newStructure) => {
         structureManipulator.update(newStructure);
     });
 
-    /*props.container.eventDispatcher.on('structure.column.resize', (columnId) => {
-        props.container.messenger.send('structure.synchronize.from.admin', ObjectCloner.deepClone(toRaw(structure)));
-    });*/
+    props.container.messenger.on('structure.element.created', (type, id) => {
+        selection.select(type, id);
+    });
 });
 
 function restorePreviousStructure() {
@@ -123,5 +129,38 @@ provide('canvas', new Canvas(
  ***********/
 const ColumnSize = require("shared/Structure/ColumnSize.js").default;
 provide('columnSize', new ColumnSize(structureManipulator));
+
+
+
+
+
+/**********
+ * Modals *
+ **********/
+const Modals = require("shared/Modals.js").default;
+const modalsData = reactive({
+    instances: []
+});
+const modals = new Modals(modalsData);
+provide('modals', modals);
+
+
+
+
+
+/**********
+ * Blocks *
+ **********/
+const Blocks = require('shared/Structure/Blocks/Blocks.js').default;
+const BlocksPicker = require("shared/Structure/Blocks/BlocksPicker.js").default;
+const BlockHooks = require("shared/Structure/Blocks/BlockHooks.js").default;
+
+const blockPickerData = reactive({
+    columnId: null,
+    blocks: props.availableBlocks
+});
+const blockHooks = new BlockHooks(props.container.messenger);
+provide('blocks', new Blocks(blockHooks, props.options.blocks));
+provide('blocksPicker', new BlocksPicker(blockPickerData, structureManipulator, modals));
 
 </script>

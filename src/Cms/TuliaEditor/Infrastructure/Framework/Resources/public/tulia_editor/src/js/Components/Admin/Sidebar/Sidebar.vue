@@ -22,18 +22,6 @@
             <div v-else-if="sidebar === 'selected'">
                 Selected
             </div>
-<!--            <div v-else-if="sidebar === 'blocks'">
-                <div class="tued-block-selector">
-                    <div
-                        class="tued-block-item"
-                        v-for="block in availableBlocks"
-                        :key="block.code"
-                    >
-                        <img :src="block.icon" />
-                        {{ block.name }}
-                    </div>
-                </div>
-            </div>-->
         </div>
     </div>
 </template>

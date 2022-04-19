@@ -14,19 +14,19 @@ export default class Selection {
     }
 
     disableHovering () {
-        this.messenger.send('structure.selection.hovering.disable');
+        this.messenger.notify('structure.selection.hovering.disable');
     }
 
     enableHovering () {
-        this.messenger.send('structure.selection.hovering.enable');
+        this.messenger.notify('structure.selection.hovering.enable');
     }
 
     disableSelecting () {
-        this.messenger.send('structure.selection.selecting.disable');
+        this.messenger.notify('structure.selection.selecting.disable');
     }
 
     enableSelecting () {
-        this.messenger.send('structure.selection.selecting.enable');
+        this.messenger.notify('structure.selection.selecting.enable');
     }
 
     update () {
@@ -43,8 +43,8 @@ export default class Selection {
             return;
         }
 
-        this.messenger.send('structure.selection.deselect');
-        this.messenger.send('structure.selection.select', type, id);
+        this.messenger.notify('structure.selection.deselect');
+        this.messenger.notify('structure.selection.select', type, id);
     }
 
     hover (type, id) {
@@ -52,8 +52,8 @@ export default class Selection {
             return;
         }
 
-        this.messenger.send('structure.selection.dehover');
-        this.messenger.send('structure.selection.hover', type, id);
+        this.messenger.notify('structure.selection.dehover');
+        this.messenger.notify('structure.selection.hover', type, id);
     }
 
     resetSelection () {
@@ -61,7 +61,7 @@ export default class Selection {
             return;
         }
 
-        this.messenger.send('structure.selection.deselect');
+        this.messenger.notify('structure.selection.deselect');
     }
 
     resetHovered () {
@@ -69,7 +69,7 @@ export default class Selection {
             return;
         }
 
-        this.messenger.send('structure.selection.dehover');
+        this.messenger.notify('structure.selection.dehover');
     }
 
     reset () {
@@ -132,7 +132,7 @@ export default class Selection {
     }
 
     build () {
-        this.messenger.listen('structure.selection.select', (type, id) => {
+        this.messenger.on('structure.selection.select', (type, id) => {
             let element = this.get(type, id);
 
             if (!element) {
@@ -141,9 +141,9 @@ export default class Selection {
 
             element.metadata.selected = true;
             this.selected = { type: type, id: id };
-            this.messenger.send('structure.selection.selected', type, id);
+            this.messenger.notify('structure.selection.selected', type, id);
         });
-        this.messenger.listen('structure.selection.hover', (type, id) => {
+        this.messenger.on('structure.selection.hover', (type, id) => {
             let element = this.get(type, id);
 
             if (!element) {
@@ -152,40 +152,40 @@ export default class Selection {
 
             element.metadata.hovered = true;
             this.hovered = { type: type, id: id };
-            this.messenger.send('structure.selection.hovered', type, id);
+            this.messenger.notify('structure.selection.hovered', type, id);
         });
-        this.messenger.listen('structure.selection.deselect', () => {
+        this.messenger.on('structure.selection.deselect', () => {
             this.forEach((element) => {
                 if (element.metadata.selected) {
                     element.metadata.selected = false;
                 }
             });
             this.selected = null;
-            this.messenger.send('structure.selection.deselected');
+            this.messenger.notify('structure.selection.deselected');
         });
-        this.messenger.listen('structure.selection.dehover', () => {
+        this.messenger.on('structure.selection.dehover', () => {
             this.forEach((element) => {
                 if (element.metadata.hovered) {
                     element.metadata.hovered = false;
                 }
             });
             this.hovered = null;
-            this.messenger.send('structure.selection.dehovered');
+            this.messenger.notify('structure.selection.dehovered');
         });
-        /*this.messenger.listen('structure.hovering.clear', () => {
+        /*this.messenger.on('structure.hovering.clear', () => {
             this.selection.resetHovered();
         });*/
 
-        this.messenger.listen('structure.selection.hovering.disable', () => {
+        this.messenger.on('structure.selection.hovering.disable', () => {
             this.hoveringDisabled = true;
         });
-        this.messenger.listen('structure.selection.hovering.enable', () => {
+        this.messenger.on('structure.selection.hovering.enable', () => {
             this.hoveringDisabled = false;
         });
-        this.messenger.listen('structure.selection.selecting.disable', () => {
+        this.messenger.on('structure.selection.selecting.disable', () => {
             this.selectingDisabled = true;
         });
-        this.messenger.listen('structure.selection.selecting.enable', () => {
+        this.messenger.on('structure.selection.selecting.enable', () => {
             this.selectingDisabled = false;
         });
     }

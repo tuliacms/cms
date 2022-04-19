@@ -190,11 +190,11 @@ export default {
             this.hoverable.boundaries.update();
             this.selectable.boundaries.update();
         });
-        this.messenger.listen('structure.element.updated', () => {
+        this.messenger.on('structure.element.updated', () => {
             this.hoverable.boundaries.update();
             this.selectable.boundaries.update();
         });
-        this.messenger.listen('structure.element.removed', () => {
+        this.messenger.on('structure.element.removed', () => {
             this.selection.resetSelection();
             this.selection.resetHovered();
         });
@@ -202,25 +202,25 @@ export default {
         /**
          * Selection
          */
-        this.messenger.listen('structure.selection.select', (type, id) => {
+        this.messenger.on('structure.selection.select', (type, id) => {
             let node = this.getElement(type, id);
             let element = this.structureManipulator.find(id);
 
             this.selectable.boundaries.highlightSelected(node);
             this.updateElementActions(node, type, element);
         });
-        this.messenger.listen('structure.selection.deselect', () => {
+        this.messenger.on('structure.selection.deselect', () => {
             this.selectable.boundaries.clearSelectionHighlight();
         });
-        this.messenger.listen('structure.selection.hover', (type, id) => {
+        this.messenger.on('structure.selection.hover', (type, id) => {
             let node = this.getElement(type, id);
 
             this.hoverable.boundaries.highlight(node, type, id);
         });
-        this.messenger.listen('structure.selection.dehover', () => {
+        this.messenger.on('structure.selection.dehover', () => {
             this.hoverable.boundaries.clear();
         });
-        this.messenger.listen('device.size.changed', () => {
+        this.messenger.on('device.size.changed', () => {
             let animationTime = 300;
             this.selectable.boundaries.keepUpdatePositionFor(animationTime);
         });

@@ -24,10 +24,18 @@
                             <i class="fas fa-arrows-alt"></i>
                         </div>
                         <span>{{ translator.trans('block') }}</span>
+                        <component
+                            :is="'block-' + element.code + '-manager'"
+                            :data="element.data"
+                            :id="element.id"
+                        ></component>
                     </div>
                 </div>
             </template>
         </draggable>
+        <div class="tued-structure-new-element" @click="blocksPicker.newAt(parent.id)">
+            {{ translator.trans('newBlock') }}
+        </div>
     </div>
 </template>
 
@@ -35,8 +43,8 @@
 const draggable = require('vuedraggable');
 
 export default {
-    props: ['parent', 'blocks', 'selected', 'hovered'],
-    inject: ['selection', 'structureDragOptions', 'translator'],
+    props: ['parent', 'blocks'],
+    inject: ['selection', 'structureDragOptions', 'translator', 'blocksPicker'],
     components: {
         draggable,
     }

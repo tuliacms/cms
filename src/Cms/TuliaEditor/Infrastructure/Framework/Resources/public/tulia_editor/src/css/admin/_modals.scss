@@ -1,0 +1,10 @@
+#tued-modals-container {
+    .modal {
+        z-index: 10100;
+        background-color: rgba(0,0,0,.5);
+
+        &.show {
+            display: block !important;
+        }
+    }
+}

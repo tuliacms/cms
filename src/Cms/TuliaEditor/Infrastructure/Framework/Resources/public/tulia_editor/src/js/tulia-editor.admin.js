@@ -7,15 +7,15 @@
 import './../css/tulia-editor.admin.scss';
 
 const Vue = require('vue');
-const Messenger = require('shared/Messenger.js').default;
-const MessageBroker = require('shared/MessageBroker.js').default;
 const Fixer = require('shared/Structure/Fixer.js').default;
 const Translator = require('shared/I18n/Translator.js').default;
+const Messenger = require('shared/Messaging/Messenger.js').default;
 const EventDispatcher = require('shared/EventDispatcher.js').default;
 const AdminRoot = require("components/Admin/Root.vue").default;
 const ObjectCloner = require("shared/Utils/ObjectCloner.js").default;
 const extensions = require("extensions/extensions.js").default;
 const blocks = require("blocks/blocks.js").default;
+
 
 let instances = 0;
 
@@ -94,11 +94,12 @@ export class TuliaEditor {
         this.options.translations = TuliaEditor.translations;
 
         this.options.structure.source = (new Fixer())
-            .fix(this.options.structure.source);
+            .fixStructure(this.options.structure.source);
+
 
         this.container.editor = this;
-        this.container.messenger = new Messenger(this.instanceId, window, 'root');
-        this.container.messageBroker = new MessageBroker(this.instanceId, [window]);
+        this.container.editor = this;
+        this.container.messenger = new Messenger(this.instanceId, 'admin', [window]);
         this.container.translator = new Translator(
             this.options.locale,
             this.options.fallback_locales,
@@ -107,8 +108,12 @@ export class TuliaEditor {
         this.container.eventDispatcher = new EventDispatcher();
 
         this.renderMainWindow();
+        this.renderModalsContainer();
         this.bindEvents();
-        this.startMessaging();
+
+        this.container.messenger.operation('editor.init.fetch', (params, success, fail) => {
+            success(this.options);
+        });
 
         if (this.options.start_point === 'editor') {
             this.openEditor();
@@ -118,6 +123,12 @@ export class TuliaEditor {
     loadExtensions (vueApp) {
         for (let i in extensions) {
             vueApp.component(i, extensions[i]);
+        }
+    }
+
+    loadBlocks (vueApp) {
+        for (let i in blocks) {
+            vueApp.component('block-' + blocks[i].code + '-manager', blocks[i].manager);
         }
     }
 
@@ -144,14 +155,6 @@ export class TuliaEditor {
         });
     }
 
-    startMessaging () {
-        this.container.messenger.listen('editor.init.fetch', () => {
-            this.container.messenger.send('editor.init.data', this.options);
-        });
-
-        this.container.messageBroker.start();
-    };
-
     updateContent (structure, content) {
         document.querySelector(this.options.sink.structure).value = JSON.stringify(structure);
         document.querySelector(this.options.sink.content).value = content;
@@ -177,6 +180,14 @@ export class TuliaEditor {
             '<div class="tued-preview"></div>' +
         '</div>');
     };
+
+    renderModalsContainer () {
+        if ($('#tued-modals-container').length) {
+            return;
+        }
+
+        $('body').append('<div id="tued-modals-container"></div>');
+    }
 
     createVueApp () {
         let breakpoints = ObjectCloner.deepClone(this.options.canvas.size.breakpoints);
@@ -210,6 +221,7 @@ export class TuliaEditor {
         this.vue = Vue.createApp(AdminRoot, data);
 
         this.loadExtensions(this.vue);
+        this.loadBlocks(this.vue);
 
         this.vue.config.devtools = true;
         this.vue.config.performance = true;

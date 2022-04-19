@@ -2,7 +2,7 @@
     <div class="tued-canvas">
         <div class="tued-canvas-inner">
             <Sizer :canvasOptions="canvasOptions"></Sizer>
-            <div @mousedown="messenger.send('editor.click.outside')">
+            <div @mousedown="messenger.notify('editor.click.outside')">
                 <DeviceFaker :editorView="editorView" :canvasOptions="canvasOptions"></DeviceFaker>
                 <div class="body-coturn body-coturn-left" :style="{ transform: `translateX(-${coturnPosition}px)` }"></div>
                 <div class="body-coturn body-coturn-right" :style="{ transform: `translateX(${coturnPosition}px)` }"></div>

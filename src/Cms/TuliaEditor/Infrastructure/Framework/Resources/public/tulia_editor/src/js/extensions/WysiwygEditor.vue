@@ -39,7 +39,6 @@ const ClassObserver = require('shared/Utils/ClassObserver.js').default;
 export default {
     props: {
         modelValue: {
-            type: String,
             required: true,
             default: ''
         },
@@ -77,7 +76,7 @@ export default {
             }
         });*/
 
-        this.messenger.listen('editor.click.outside', () => {
+        this.messenger.on('editor.click.outside', () => {
             quill.theme.tooltip.root.classList.add('ql-hidden');
         });
     },

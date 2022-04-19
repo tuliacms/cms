@@ -84,7 +84,7 @@ export default {
                 return;
             }
 
-            this.messenger.send('structure.move-element', delta);
+            this.messenger.notify('structure.move-element', delta);
         }
     }
 };

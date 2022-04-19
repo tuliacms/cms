@@ -30,6 +30,7 @@ provide('messenger', props.container.messenger);
 provide('eventDispatcher', props.container.eventDispatcher);
 provide('translator', props.container.translator);
 provide('structureManipulator', structureManipulator);
+provide('options', props.options);
 
 const renderedContent = ref(null);
 
@@ -38,19 +39,19 @@ onMounted(() => {
         props.container.messenger.send('structure.synchronize.from.editor', ObjectCloner.deepClone(toRaw(structure)));
     });
 
-    props.container.messenger.listen('structure.rendered.fetch', () => {
+    props.container.messenger.on('structure.rendered.fetch', () => {
         props.container.messenger.send(
             'structure.rendered.data',
             renderedContent.value.$el.innerHTML,
             ObjectCloner.deepClone(toRaw(structure))
         );
     });
-    props.container.messenger.listen('structure.synchronize.from.admin', (newStructure) => {
+    props.container.messenger.on('structure.synchronize.from.admin', (newStructure) => {
         structure.sections = newStructure.sections;
         props.container.messenger.send('structure.updated');
     });
 
-    props.container.messenger.listen('structure.move-element', (delta) => {
+    props.container.messenger.on('structure.move-element', (delta) => {
         structureManipulator.moveElementUsingDelta(delta);
 
         // @todo We need mechanism of wating for all windows confirms the message was handled and operation of moving was done in structure.
@@ -62,15 +63,28 @@ onMounted(() => {
         }, 60);
     });
 
-    props.container.messenger.listen('editor.click.outside', () => {
+    props.container.messenger.on('editor.click.outside', () => {
         selection.resetSelection();
     });
 
     document.addEventListener('click', (event) => {
         if (event.target.tagName === 'HTML') {
-            props.container.messenger.send('editor.click.outside');
+            props.container.messenger.notify('editor.click.outside');
         }
     });
 });
+
+
+
+
+
+/*********
+ * Blocks
+ *********/
+const Blocks = require('shared/Structure/Blocks/Blocks.js').default;
+const BlockHooks = require("shared/Structure/Blocks/BlockHooks.js").default;
+const blockHooks = new BlockHooks(props.container.messenger);
+provide('blocks', new Blocks(blockHooks, props.options.blocks));
+
 </script>
 

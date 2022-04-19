@@ -47,7 +47,8 @@ module.exports = {
         ignored: ['**/dist', '**/node_modules'],
     },
     externals: {
-        vue: 'Vue'
+        vue: 'Vue',
+        Tulia: 'Tulia'
     },
     resolve: {
         extensions: ['.js', '.scss'],

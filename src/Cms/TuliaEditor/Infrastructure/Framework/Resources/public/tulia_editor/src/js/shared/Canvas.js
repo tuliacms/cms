@@ -16,7 +16,7 @@ export default class Canvas {
             if (this.breakpoints[i].name === name) {
                 this.breakpoint.name = name;
                 this.breakpoint.width = this.breakpoints[i].width;
-                this.messenger.send('device.size.changed', toRaw(this.breakpoints[i]));
+                this.messenger.notify('device.size.changed', toRaw(this.breakpoints[i]));
             }
         }
     }

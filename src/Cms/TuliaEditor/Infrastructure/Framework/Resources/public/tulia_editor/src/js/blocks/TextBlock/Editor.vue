@@ -1,13 +1,19 @@
 <template>
-    <div><WysiwygEditor v-model="data.text"></WysiwygEditor></div>
+    <div><WysiwygEditor v-model="block.data.text"></WysiwygEditor></div>
 </template>
 
-<script>
+<script setup>
 const WysiwygEditor = require('extensions/WysiwygEditor.vue').default;
-const props = require('./props.js').default;
+const { defineProps, inject } = require('vue');
 
-export default {
-    props: props,
-    components: { WysiwygEditor },
-}
+/****************
+ * Prepare block
+ ****************/
+const props = defineProps(['id', 'data']);
+const blocks = inject('blocks');
+const block = blocks.editor(
+    'core-textblock',
+    props,
+    require('./defaults.js').default
+);
 </script>
