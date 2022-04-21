@@ -390,5 +390,13 @@
 .tued-editor-opened {
   overflow: hidden !important; }
 
+/*!*********************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/blocks/ImageBlock/Editor.vue?vue&type=style&index=0&id=3505231e&scoped=true&lang=css ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************/
+
+.tued-block-image_image[data-v-3505231e]:hover {
+        cursor: pointer;
+}
+
 
 /*# sourceMappingURL=tulia-editor.admin.js.css.map*/

@@ -1,4 +1,4 @@
-.filemanager {display:none;position:fixed;z-index:1000;left:0;top:0;right:0;bottom:0;}
+.filemanager {display:none;position:fixed;z-index:10000;left:0;top:0;right:0;bottom:0;}
 .filemanager.fm-opened {display:block;}
 .filemanager .fm-bg {position:absolute;left:0;top:0;right:0;bottom:0;z-index:1;background-color:rgba(0,0,0,.6);}
 .filemanager .fm-bg:hover {cursor:pointer;}

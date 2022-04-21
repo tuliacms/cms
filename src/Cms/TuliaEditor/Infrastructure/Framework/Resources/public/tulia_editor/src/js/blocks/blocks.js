@@ -4,6 +4,6 @@ const ImageBlock = require('./ImageBlock/ImageBlock.js').default;
 let blocks = {};
 
 blocks[TextBlock.code] = TextBlock;
-//blocks[ImageBlock.code] = ImageBlock;
+blocks[ImageBlock.code] = ImageBlock;
 
 export default blocks;

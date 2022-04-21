@@ -90,11 +90,7 @@ class BlockHook {
     }
 
     listen () {
-        this.messegner.on('structure.element.created', (type, id) => {
-            if (type === 'block' && id === this.blockId) {
-                this.callListeners('created');
-            }
-        });
+
     }
 
     isSingularEvent (event) {

@@ -1,5 +1,5 @@
 <template>
-    <div class="tued-rendering-canvas">
+    <div :class="{ 'tued-rendering-canvas': true, 'tued-rendering-canvas-showed': renderPreview }">
         <section
             v-for="(section, key) in structure.sections"
             :key="'section-' + key"
@@ -21,6 +21,7 @@
                             :key="'block-' + key"
                             :is="'block-' + block.code + '-render'"
                             :data="block.data"
+                            :id="block.id"
                         ></component>
                     </div>
                 </div>
@@ -29,9 +30,18 @@
     </div>
 </template>
 
-<script>
-export default {
-    name: 'RenderingCanvas',
-    props: ['structure'],
-};
+<script setup>
+const { ref, defineProps, inject } = require('vue');
+const props = defineProps(['structure']);
+const messenger = inject('messenger');
+
+/**********************
+ * Render area preview
+ **********************/
+const renderPreview = ref(false);
+messenger.operation('editor.canvas.preview.toggle', (params, success, fail) => {
+    renderPreview.value = !renderPreview.value;
+
+    success();
+});
 </script>

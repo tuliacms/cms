@@ -28,6 +28,8 @@ export class TuliaEditor {
     vue = null;
     container = {};
 
+    static instances = {};
+
     static extensions = {};
 
     static blocks = {};
@@ -96,7 +98,6 @@ export class TuliaEditor {
         this.options.structure.source = (new Fixer())
             .fixStructure(this.options.structure.source);
 
-
         this.container.editor = this;
         this.container.editor = this;
         this.container.messenger = new Messenger(this.instanceId, 'admin', [window]);
@@ -105,7 +106,10 @@ export class TuliaEditor {
             this.options.fallback_locales,
             this.options.translations
         );
+        // @todo Try to remove dispatcher and place messegnger instead of it.
         this.container.eventDispatcher = new EventDispatcher();
+
+        TuliaEditor.instances[this.instanceId] = this;
 
         this.renderMainWindow();
         this.renderModalsContainer();
@@ -161,7 +165,7 @@ export class TuliaEditor {
     };
 
     renderEditorWindow () {
-        this.editor = $(`<div class="tued-editor-window tued-editor-opened">
+        this.editor = $(`<div class="tued-editor-window tued-editor-opened" data-tulia-editor-instance="${this.instanceId}">
             <div id="tued-editor-window-inner-${this.instanceId}"></div>
         </div>`);
         this.editor.appendTo('body');
@@ -227,5 +231,9 @@ export class TuliaEditor {
         this.vue.config.performance = true;
         this.vue.mount(`#tued-editor-window-inner-${this.instanceId}`);
     };
+
+    toggleRenderPreview () {
+        this.container.messenger.execute('editor.canvas.preview.toggle');
+    }
 }
 

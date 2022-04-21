@@ -36,19 +36,18 @@ const renderedContent = ref(null);
 
 onMounted(() => {
     props.container.eventDispatcher.on('block.inner.updated', () => {
-        props.container.messenger.send('structure.synchronize.from.editor', ObjectCloner.deepClone(toRaw(structure)));
+        //props.container.messenger.notify('structure.synchronize.from.editor', ObjectCloner.deepClone(toRaw(structure)));
     });
 
-    props.container.messenger.on('structure.rendered.fetch', () => {
-        props.container.messenger.send(
-            'structure.rendered.data',
-            renderedContent.value.$el.innerHTML,
-            ObjectCloner.deepClone(toRaw(structure))
-        );
+    props.container.messenger.operation('structure.fetch', (params, success, fail) => {
+        success({
+            content: renderedContent.value.$el.innerHTML,
+            structure: ObjectCloner.deepClone(toRaw(structure))
+        });
     });
     props.container.messenger.on('structure.synchronize.from.admin', (newStructure) => {
         structure.sections = newStructure.sections;
-        props.container.messenger.send('structure.updated');
+        props.container.messenger.notify('structure.updated');
     });
 
     props.container.messenger.on('structure.move-element', (delta) => {
@@ -83,8 +82,12 @@ onMounted(() => {
  *********/
 const Blocks = require('shared/Structure/Blocks/Blocks.js').default;
 const BlockHooks = require("shared/Structure/Blocks/BlockHooks.js").default;
-const blockHooks = new BlockHooks(props.container.messenger);
-provide('blocks', new Blocks(blockHooks, props.options.blocks));
+const BlocksRegistry = require("shared/Structure/Blocks/Registry.js").default;
 
+const blockHooks = new BlockHooks(props.container.messenger);
+const blocksRegistry = new BlocksRegistry(props.availableBlocks);
+
+provide('blocksRegistry', blocksRegistry);
+provide('blocks', new Blocks(blockHooks, props.options.blocks, props.container.messenger));
 </script>
 

@@ -15,22 +15,20 @@ framework:
                     - /assets/core/tulia-editor/tulia-editor.admin.js
                 styles:
                     - /assets/core/tulia-editor/tulia-editor.admin.js.css
-#            tulia_editor.preview:
-#                group: head
-#                scripts:
-#                    - /assets/core/tulia-editor/tulia-editor.preview.js
+                require: [ lodash, vue ]
             tulia_editor.editor:
                 group: body
                 scripts:
                     - /assets/core/tulia-editor/tulia-editor.editor.js
                 styles:
                     - /assets/core/tulia-editor/tulia-editor.editor.js.css
-                require: [ vue, quill ]
+                require: [ lodash, vue, quill ]
 cms:
     content_building:
         data_types:
             mapping:
                 tulia_editor:
                     label: Tulia Editor
+                    flags: [ compilable, renderable ]
                     classname: 'Tulia\Cms\TuliaEditor\Infrastructure\Framework\Form\FormType\TuliaEditorType'
                     builder: 'Tulia\Cms\TuliaEditor\Infrastructure\Framework\Form\FormType\TuliaEditorTypeBuilder'

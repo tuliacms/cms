@@ -9,11 +9,7 @@ const { defineProps, inject } = require('vue');
 /****************
  * Prepare block
  ****************/
-const props = defineProps(['id', 'data']);
+const props = defineProps(require('./props.js').default);
 const blocks = inject('blocks');
-const block = blocks.editor(
-    'core-textblock',
-    props,
-    require('./defaults.js').default
-);
+const block = blocks.editor('core-textblock', props);
 </script>

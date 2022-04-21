@@ -46,7 +46,7 @@ class AttributesFinder
                     $value = $attribute['value'];
                 }
 
-                $attributes[$uri] = $value;
+                $attributes[$uri]['value'] = $value;
             }
 
             $attributes = $this->attributesValueRenderer->renderValues($attributes, $type, $scope);

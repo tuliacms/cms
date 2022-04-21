@@ -1,17 +1,15 @@
 <template>
-<!--    <div><img :src="image_link" /></div>-->
+    <div>[image id="{{ block.data.imageId }}" size="thumbnail"]</div>
 </template>
 
-<script>
-/*const props = require('./props.js').default;
+<script setup>
+const { defineProps, inject } = require('vue');
 
-export default {
-    props: props,
-    inject: ['options'],
-    computed: {
-        image_link: function () {
-            return '#';
-        }
-    }
-}*/
+/****************
+ * Prepare block
+ ****************/
+const props = defineProps(require('./props.js').default);
+const blocks = inject('blocks');
+const block = blocks.render('core-imageblock', props);
+
 </script>

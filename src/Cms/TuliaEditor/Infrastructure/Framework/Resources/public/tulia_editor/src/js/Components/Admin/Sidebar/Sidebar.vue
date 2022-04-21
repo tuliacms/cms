@@ -9,8 +9,8 @@
                         <span></span>
                     </div>
                 </div>
-                <button type="button" class="tued-main-btn tued-btn-default" @click="eventDispatcher.emit('editor.cancel')">{{ translator.trans('cancel') }}</button>
-                <button type="button" class="tued-main-btn tued-btn-success" @click="eventDispatcher.emit('editor.save')">{{ translator.trans('save') }}</button>
+                <button type="button" class="tued-main-btn tued-btn-default" @click="$emit('cancel')">{{ translator.trans('cancel') }}</button>
+                <button type="button" class="tued-main-btn tued-btn-success" @click="$emit('save')">{{ translator.trans('save') }}</button>
             </div>
             <div class="tued-sidebar-selector">
                 <div :class="{ 'tued-sidebar-type': true, 'tued-sidebar-type-active': sidebar === 'selected' }" @click="sidebar = 'selected'"><i class="far fa-dot-circle"></i><span>{{ translator.trans('selected') }}</span></div>
@@ -31,7 +31,7 @@ const Structure = require('components/Admin/Sidebar/Structure.vue').default;
 
 export default {
     props: ['structure'],
-    inject: ['eventDispatcher', 'translator'],
+    inject: ['messenger', 'translator'],
     components: {
         Structure
     },

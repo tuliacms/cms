@@ -26,24 +26,33 @@ class AttributesValueRenderer
         $this->scopesByType = $scopes;
     }
 
-    public function renderValues(array $values, string $type, string $scope): array
+    public function renderValues(array $attributes, string $type, string $scope): array
     {
-        if ($values === []) {
-            return $values;
+        if ($attributes === []) {
+            return $attributes;
         }
 
         if (\in_array($scope, $this->scopesByType[$type]['scopes'] ?? [], true) === false) {
-            return $values;
+            return $this->extractValue($attributes);
         }
 
-        foreach ($values as $key => $value) {
-            if (strpos($key, ':compiled') !== false) {
-                $values[$key] = $this->valueRenderer->render($value, [
+        foreach ($attributes as $key => $attribute) {
+            if ($attribute['is_renderable']) {
+                $attributes[$key]['value'] = $this->valueRenderer->render($attribute['compiled_value'], [
                     'attribute' => $key
                 ]);
             }
         }
 
-        return $values;
+        return $this->extractValue($attributes);
+    }
+
+    private function extractValue(array $attributes): array
+    {
+        foreach ($attributes as $key => $attribute) {
+            $attributes[$key] = $attribute['value'];
+        }
+
+        return $attributes;
     }
 }

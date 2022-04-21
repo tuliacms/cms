@@ -7,6 +7,8 @@
             ></CanvasComponent>
             <SidebarComponent
                 :structure="structure"
+                @cancel="cancelEditor"
+                @save="saveEditor"
             ></SidebarComponent>
             <BlockPickerComponent
                 :availableBlocks="availableBlocks"
@@ -21,7 +23,7 @@ const CanvasComponent = require("components/Admin/Canvas/Canvas.vue").default;
 const SidebarComponent = require("components/Admin/Sidebar/Sidebar.vue").default;
 const BlockPickerComponent = require("components/Admin/Block/PickerModal.vue").default;
 const ObjectCloner = require("shared/Utils/ObjectCloner.js").default;
-const { defineProps, provide, reactive, onMounted, isProxy, toRaw } = require('vue');
+const { defineProps, onMounted, provide, reactive, isProxy, toRaw } = require('vue');
 
 const props = defineProps([
     'editor',
@@ -38,29 +40,27 @@ provide('translator', props.container.translator);
 provide('eventDispatcher', props.container.eventDispatcher);
 provide('options', props.options);
 
-onMounted(() => {
-    props.container.eventDispatcher.on('editor.save', () => {
-        props.container.messenger.on('structure.rendered.data', (content, newStructure) => {
-            selection.resetHovered();
-            selection.resetSelection();
-            structure.sections = newStructure.sections;
-            useCurrentStructureAsPrevious();
-            props.editor.updateContent(newStructure, content);
-            props.editor.closeEditor();
-            props.container.messenger.send('editor.save');
-        });
-
-        props.container.messenger.send('structure.rendered.fetch');
-    });
-    props.container.eventDispatcher.on('editor.cancel', () => {
+const saveEditor = function () {
+    props.container.messenger.execute('structure.fetch').then((data) => {
         selection.resetHovered();
         selection.resetSelection();
-        restorePreviousStructure();
-        props.container.messenger.send('structure.synchronize.from.admin', ObjectCloner.deepClone(toRaw(structure)));
+        structure.sections = data.structure.sections;
+        console.log(data.structure, data.content)
+        useCurrentStructureAsPrevious();
+        props.editor.updateContent(data.structure, data.content);
         props.editor.closeEditor();
-        props.container.messenger.send('editor.cancel');
+        props.container.messenger.notify('editor.save');
     });
-});
+};
+
+const cancelEditor = function () {
+    selection.resetHovered();
+    selection.resetSelection();
+    restorePreviousStructure();
+    props.container.messenger.notify('structure.synchronize.from.admin', ObjectCloner.deepClone(toRaw(structure)));
+    props.editor.closeEditor();
+    props.container.messenger.notify('editor.cancel');
+};
 
 
 
@@ -98,7 +98,7 @@ onMounted(() => {
 
 function restorePreviousStructure() {
     structure.sections = ObjectCloner.deepClone(previousStructure).sections;
-    props.container.messenger.send('editor.structure.restored');
+    props.container.messenger.notify('editor.structure.restored');
 }
 function useCurrentStructureAsPrevious() {
     previousStructure = ObjectCloner.deepClone(toRaw(structure));
@@ -153,14 +153,17 @@ provide('modals', modals);
  **********/
 const Blocks = require('shared/Structure/Blocks/Blocks.js').default;
 const BlocksPicker = require("shared/Structure/Blocks/BlocksPicker.js").default;
+const BlocksRegistry = require("shared/Structure/Blocks/Registry.js").default;
 const BlockHooks = require("shared/Structure/Blocks/BlockHooks.js").default;
 
 const blockPickerData = reactive({
-    columnId: null,
-    blocks: props.availableBlocks
+    columnId: null
 });
 const blockHooks = new BlockHooks(props.container.messenger);
-provide('blocks', new Blocks(blockHooks, props.options.blocks));
-provide('blocksPicker', new BlocksPicker(blockPickerData, structureManipulator, modals));
+const blocksRegistry = new BlocksRegistry(props.availableBlocks);
+
+provide('blocksRegistry', blocksRegistry);
+provide('blocks', new Blocks(blockHooks, props.options.blocks, props.container.messenger));
+provide('blocksPicker', new BlocksPicker(blockPickerData, blocksRegistry, structureManipulator, modals));
 
 </script>

@@ -1,25 +1,44 @@
-const BlockEditor = require('shared/Structure/Blocks/Editor/BlockEditor.js').default;
-const BlockManager = require('shared/Structure/Blocks/Editor/BlockManager.js').default;
-const BlockRender = require('shared/Structure/Blocks/Editor/BlockRender.js').default;
+const Block = require('shared/Structure/Blocks/Editor/Block.js').default;
+const Data = require('shared/Structure/Blocks/Data.js').default;
 
 export default class Blocks {
     hooks;
     blocksOptions;
+    messenger;
 
-    constructor (hooks, blocksOptions) {
+    constructor (hooks, blocksOptions, messenger) {
         this.hooks = hooks;
         this.blocksOptions = blocksOptions;
+        this.messenger = messenger;
     }
 
-    editor (code, props, data) {
-        return new BlockEditor(code, props, data, this.blocksOptions[code] ?? {}, this.hooks);
+    editor (code, props) {
+        return new Block(
+            props.id,
+            code,
+            new Data(props.id, 'editor', props, this.messenger),
+            this.blocksOptions[code] ?? {},
+            this.messenger
+        );
     }
 
-    manager (code, props, data) {
-        return new BlockManager(code, props, data, this.blocksOptions[code] ?? {}, this.hooks);
+    manager (code, props) {
+        return new Block(
+            props.id,
+            code,
+            new Data(props.id, 'manager', props, this.messenger),
+            this.blocksOptions[code] ?? {},
+            this.messenger
+        );
     }
 
-    render (code, props, data) {
-        return new BlockRender(code, props, data, this.blocksOptions[code] ?? {}, this.hooks);
+    render (code, props) {
+        return new Block(
+            props.id,
+            code,
+            new Data(props.id, 'render', props, this.messenger),
+            this.blocksOptions[code] ?? {},
+            this.messenger
+        );
     }
 }

@@ -20,6 +20,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/mini-css-extract-plugin/dist/loader.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/blocks/ImageBlock/Editor.vue?vue&type=style&index=0&id=3505231e&scoped=true&lang=css":
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/mini-css-extract-plugin/dist/loader.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/blocks/ImageBlock/Editor.vue?vue&type=style&index=0&id=3505231e&scoped=true&lang=css ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
 /***/ "./node_modules/sortablejs/modular/sortable.esm.js":
 /*!*********************************************************!*\
   !*** ./node_modules/sortablejs/modular/sortable.esm.js ***!
@@ -4376,7 +4389,7 @@ const CanvasComponent = (__webpack_require__(/*! components/Admin/Canvas/Canvas.
 const SidebarComponent = (__webpack_require__(/*! components/Admin/Sidebar/Sidebar.vue */ "./src/js/Components/Admin/Sidebar/Sidebar.vue")["default"]);
 const BlockPickerComponent = (__webpack_require__(/*! components/Admin/Block/PickerModal.vue */ "./src/js/Components/Admin/Block/PickerModal.vue")["default"]);
 const ObjectCloner = (__webpack_require__(/*! shared/Utils/ObjectCloner.js */ "./src/js/shared/Utils/ObjectCloner.js")["default"]);
-const { defineProps, provide, reactive, onMounted, isProxy, toRaw } = __webpack_require__(/*! vue */ "vue");
+const { defineProps, onMounted, provide, reactive, isProxy, toRaw } = __webpack_require__(/*! vue */ "vue");
 
 
 
@@ -4385,29 +4398,27 @@ provide('translator', props.container.translator);
 provide('eventDispatcher', props.container.eventDispatcher);
 provide('options', props.options);
 
-onMounted(() => {
-    props.container.eventDispatcher.on('editor.save', () => {
-        props.container.messenger.on('structure.rendered.data', (content, newStructure) => {
-            selection.resetHovered();
-            selection.resetSelection();
-            structure.sections = newStructure.sections;
-            useCurrentStructureAsPrevious();
-            props.editor.updateContent(newStructure, content);
-            props.editor.closeEditor();
-            props.container.messenger.send('editor.save');
-        });
-
-        props.container.messenger.send('structure.rendered.fetch');
-    });
-    props.container.eventDispatcher.on('editor.cancel', () => {
+const saveEditor = function () {
+    props.container.messenger.execute('structure.fetch').then((data) => {
         selection.resetHovered();
         selection.resetSelection();
-        restorePreviousStructure();
-        props.container.messenger.send('structure.synchronize.from.admin', ObjectCloner.deepClone(toRaw(structure)));
+        structure.sections = data.structure.sections;
+        console.log(data.structure, data.content)
+        useCurrentStructureAsPrevious();
+        props.editor.updateContent(data.structure, data.content);
         props.editor.closeEditor();
-        props.container.messenger.send('editor.cancel');
+        props.container.messenger.notify('editor.save');
     });
-});
+};
+
+const cancelEditor = function () {
+    selection.resetHovered();
+    selection.resetSelection();
+    restorePreviousStructure();
+    props.container.messenger.notify('structure.synchronize.from.admin', ObjectCloner.deepClone(toRaw(structure)));
+    props.editor.closeEditor();
+    props.container.messenger.notify('editor.cancel');
+};
 
 
 
@@ -4445,7 +4456,7 @@ onMounted(() => {
 
 function restorePreviousStructure() {
     structure.sections = ObjectCloner.deepClone(previousStructure).sections;
-    props.container.messenger.send('editor.structure.restored');
+    props.container.messenger.notify('editor.structure.restored');
 }
 function useCurrentStructureAsPrevious() {
     previousStructure = ObjectCloner.deepClone(toRaw(structure));
@@ -4500,18 +4511,21 @@ provide('modals', modals);
  **********/
 const Blocks = (__webpack_require__(/*! shared/Structure/Blocks/Blocks.js */ "./src/js/shared/Structure/Blocks/Blocks.js")["default"]);
 const BlocksPicker = (__webpack_require__(/*! shared/Structure/Blocks/BlocksPicker.js */ "./src/js/shared/Structure/Blocks/BlocksPicker.js")["default"]);
+const BlocksRegistry = (__webpack_require__(/*! shared/Structure/Blocks/Registry.js */ "./src/js/shared/Structure/Blocks/Registry.js")["default"]);
 const BlockHooks = (__webpack_require__(/*! shared/Structure/Blocks/BlockHooks.js */ "./src/js/shared/Structure/Blocks/BlockHooks.js")["default"]);
 
 const blockPickerData = reactive({
-    columnId: null,
-    blocks: props.availableBlocks
+    columnId: null
 });
 const blockHooks = new BlockHooks(props.container.messenger);
-provide('blocks', new Blocks(blockHooks, props.options.blocks));
-provide('blocksPicker', new BlocksPicker(blockPickerData, structureManipulator, modals));
+const blocksRegistry = new BlocksRegistry(props.availableBlocks);
+
+provide('blocksRegistry', blocksRegistry);
+provide('blocks', new Blocks(blockHooks, props.options.blocks, props.container.messenger));
+provide('blocksPicker', new BlocksPicker(blockPickerData, blocksRegistry, structureManipulator, modals));
 
 
-const __returned__ = { CanvasComponent, SidebarComponent, BlockPickerComponent, ObjectCloner, defineProps, provide, reactive, onMounted, isProxy, toRaw, props, StructureManipulator, Selection, structure, previousStructure, selection, structureManipulator, restorePreviousStructure, useCurrentStructureAsPrevious, canvasOptions, Canvas, ColumnSize, Modals, modalsData, modals, Blocks, BlocksPicker, BlockHooks, blockPickerData, blockHooks }
+const __returned__ = { CanvasComponent, SidebarComponent, BlockPickerComponent, ObjectCloner, defineProps, onMounted, provide, reactive, isProxy, toRaw, props, saveEditor, cancelEditor, StructureManipulator, Selection, structure, previousStructure, selection, structureManipulator, restorePreviousStructure, useCurrentStructureAsPrevious, canvasOptions, Canvas, ColumnSize, Modals, modalsData, modals, Blocks, BlocksPicker, BlocksRegistry, BlockHooks, blockPickerData, blockHooks, blocksRegistry }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -4564,7 +4578,7 @@ const draggable = __webpack_require__(/*! vuedraggable */ "./node_modules/vuedra
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
     props: ['parent', 'blocks'],
-    inject: ['selection', 'structureDragOptions', 'translator', 'blocksPicker'],
+    inject: ['selection', 'structureDragOptions', 'translator', 'blocksPicker', 'blocksRegistry'],
     components: {
         draggable,
     }
@@ -4779,7 +4793,7 @@ const Structure = (__webpack_require__(/*! components/Admin/Sidebar/Structure.vu
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
     props: ['structure'],
-    inject: ['eventDispatcher', 'translator'],
+    inject: ['messenger', 'translator'],
     components: {
         Structure
     },
@@ -4903,13 +4917,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _Editor_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Editor.vue?vue&type=script&setup=true&lang=js */ "./src/js/blocks/ImageBlock/Editor.vue?vue&type=script&setup=true&lang=js");
-/* harmony import */ var _home_adam_projects_tuliacms_core_src_Cms_TuliaEditor_Infrastructure_Framework_Resources_public_tulia_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Editor_vue_vue_type_template_id_3505231e_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Editor.vue?vue&type=template&id=3505231e&scoped=true */ "./src/js/blocks/ImageBlock/Editor.vue?vue&type=template&id=3505231e&scoped=true");
+/* harmony import */ var _Editor_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Editor.vue?vue&type=script&setup=true&lang=js */ "./src/js/blocks/ImageBlock/Editor.vue?vue&type=script&setup=true&lang=js");
+/* harmony import */ var _Editor_vue_vue_type_style_index_0_id_3505231e_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Editor.vue?vue&type=style&index=0&id=3505231e&scoped=true&lang=css */ "./src/js/blocks/ImageBlock/Editor.vue?vue&type=style&index=0&id=3505231e&scoped=true&lang=css");
+/* harmony import */ var _home_adam_projects_tuliacms_core_src_Cms_TuliaEditor_Infrastructure_Framework_Resources_public_tulia_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_home_adam_projects_tuliacms_core_src_Cms_TuliaEditor_Infrastructure_Framework_Resources_public_tulia_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_1__["default"])(_Editor_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"], [['__file',"src/js/blocks/ImageBlock/Editor.vue"]])
+
+
+const __exports__ = /*#__PURE__*/(0,_home_adam_projects_tuliacms_core_src_Cms_TuliaEditor_Infrastructure_Framework_Resources_public_tulia_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_Editor_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Editor_vue_vue_type_template_id_3505231e_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render],['__scopeId',"data-v-3505231e"],['__file',"src/js/blocks/ImageBlock/Editor.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -4930,113 +4949,41 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['id', 'data'],
+  props: (__webpack_require__(/*! ./props.js */ "./src/js/blocks/ImageBlock/props.js")["default"]),
   setup(__props, { expose }) {
   expose();
 
 const props = __props
 
-const { computed, onMounted, defineProps, inject } = __webpack_require__(/*! vue */ "vue");
-
+const WysiwygEditor = (__webpack_require__(/*! extensions/WysiwygEditor.vue */ "./src/js/extensions/WysiwygEditor.vue")["default"]);
+const { defineProps, inject, computed } = __webpack_require__(/*! vue */ "vue");
 
 /****************
  * Prepare block
  ****************/
 
 const blocks = inject('blocks');
-const block = blocks.editor(
-    'core-imageblock',
-    props,
-    {
-        imageId: null
-    }
-);
-
-
+const block = blocks.editor('core-imageblock', props);
 
 /**************
  * Block logic
  **************/
-const Tulia = __webpack_require__(/*! Tulia */ "Tulia");
-
-const filemanager = null;
-
+const imageResolvePath =  decodeURIComponent(block.options.image_resolve_path);
+const imagePathFromId = function () {
+    return imageResolvePath
+        .replace('{size}', 'original')
+        .replace('{id}', block.data.imageId)
+        .replace('{filename}', block.data.imageFilename);
+};
 const imageLink = computed(() => {
-    //console.log(block.options);
-
     if (!block.data.imageId) {
         return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAADIBAMAAADGsYKFAAAAG1BMVEXMzMyWlpbFxcWcnJyjo6Oqqqq+vr6xsbG3t7ecUE7+AAAERUlEQVR42uzSsUoDQRSG0YuQ2HodJe2ChXXUwlILSWtIYynoAyj4AII+uDtmV9NYTGVgz2n+Zm7zMQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADsucyjQKwQq4FYDcRqIFYDsRqI1UCsBmI1EOsf7cY6eCuruvNNWXXxh8/l1UtU483y8iGmYifWU2Ze9LvudxGD882y3L3H6CMzy2OM5rfZu46J6GMNM89e6WKW1X18e86qjJ/pMKvjn8SvOTyeht9YZ1ndxDqrxRBn66SLnTilG65muXUa0/DFvtn0tA0EYXiycWIfeWNjcrRJSznWVUt7NaCKI676cU2kol6JqqIeA/343WU9s95AwIkabuPnEGV2ncuj8Xh21/GyWFI6BJM5OeLQ4ubO5VfXEBakgkbWSHJo4oQ0cnzu9MGk/Cs//ZJU0MjaRXz1B0CJ5O+3gocD3A5mB9+XEi25Mb+RNNM4yw4qYI9U0MgCLq0NvqcmwJiIZsCxna3s5C0FsOAQO3wXHtkEKxCTCkSWlPQ+2JLhcC4Z1eeiFUkKBSKrQFxP58CUNCCypO6Erg8okdhPlkMRzw6k0BuWZYCULKGW5sHLWkjJzvg5F9vUERtDvqrnHntVHYfijkhLhfeyJGcSssxE1shfZQdBMmvjfnP3VRiRBvzTUMIxWfLay+kpp46Rgi4XUb+Oe1LX7URKGmhkjSUceVmMvw0r1yIM6njm3FGupHdoZKV3ZPUaWV4OlS6Bwjq+bhT1lCx4fAfvwlVZQy7ovoRFdVxhTEwfCWlgrayDHyfAPVlDkdWgpCv1C+kHZb0owezIZI1ZkQXSQLusEHhcVtnJWpblfOx5WcyqrIwU0CorgCX5mUnN6mS1yJoDeHPDw77Ae1lj0kWrrAL4sDRciixX4JW0opvJiuByx3XwaSfrMVkD4Hz5qrmzE3EHr6Rv30yWbCusLqRDWRvGxJj9fdLAGlnZ8kI6d3aCOvZdfq4kx1pk8YfPJJ9pudvPWsgWjZLnYrssyawJDzfbx/N7O6Wlts2/VVk+dSp3TihSirt78JG1poE2WYFICMHDcoxBA4lLOd2ZaDmSbpMV8tGXKSEpNQPO3bkhh8c6zw0fkGUAvM8OK8QF9oycUN+YXxBZAwBX2WEJJfW9VRZVYEb2y5TIFBzH9jIOVb1z1CprAmY6Z1k0E3lymcwr2VReI2vIqXNEuciSgYVcZkpVidUui57hlt2MQpYlA6lxR9AhVL0muYaLgl/G/Vq8zcjy/CQ+o0YWRR+L15+po4Whli70KYj0lKntCYFL6mhl8OkLfwm0vL22BX2Av+RKTnO2IXAL5rmaNvT/iaRjMGoWg1tg5JW3CZRs9m1FBbybmgt0D8MNyHW9YbQdIYRX1LGWShKraxw2ICqArmJtSmT/2Np17x0dHf/ag0MCAAAAAEH/X7vBDgAAAAAAAAAAAAAAAAAA8AT99p+0ltRNJAAAAABJRU5ErkJggg==';
     }
 
-    return '#';
+    return imagePathFromId();
 });
 
-const createFilemanagerInstance = function () {
-    console.log(Tulia);
-};
-
-onMounted(() => {
-    block.on('created', () => {
-        createFilemanagerInstance();
-        //filemanager.open();
-    });
-});
-
-
-/*const props = require('./props.js').default;
-
-export default {
-    props: props,
-    inject: ['options', 'blockHooks'],
-    computed: {
-        image_link: function () {
-            console.log(this.options.blocks['core-imageblock']);
-
-            if (!this.data.imageId) {
-                return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAADIBAMAAADGsYKFAAAAG1BMVEXMzMyWlpbFxcWcnJyjo6Oqqqq+vr6xsbG3t7ecUE7+AAAERUlEQVR42uzSsUoDQRSG0YuQ2HodJe2ChXXUwlILSWtIYynoAyj4AII+uDtmV9NYTGVgz2n+Zm7zMQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADsucyjQKwQq4FYDcRqIFYDsRqI1UCsBmI1EOsf7cY6eCuruvNNWXXxh8/l1UtU483y8iGmYifWU2Ze9LvudxGD882y3L3H6CMzy2OM5rfZu46J6GMNM89e6WKW1X18e86qjJ/pMKvjn8SvOTyeht9YZ1ndxDqrxRBn66SLnTilG65muXUa0/DFvtn0tA0EYXiycWIfeWNjcrRJSznWVUt7NaCKI676cU2kol6JqqIeA/343WU9s95AwIkabuPnEGV2ncuj8Xh21/GyWFI6BJM5OeLQ4ubO5VfXEBakgkbWSHJo4oQ0cnzu9MGk/Cs//ZJU0MjaRXz1B0CJ5O+3gocD3A5mB9+XEi25Mb+RNNM4yw4qYI9U0MgCLq0NvqcmwJiIZsCxna3s5C0FsOAQO3wXHtkEKxCTCkSWlPQ+2JLhcC4Z1eeiFUkKBSKrQFxP58CUNCCypO6Erg8okdhPlkMRzw6k0BuWZYCULKGW5sHLWkjJzvg5F9vUERtDvqrnHntVHYfijkhLhfeyJGcSssxE1shfZQdBMmvjfnP3VRiRBvzTUMIxWfLay+kpp46Rgi4XUb+Oe1LX7URKGmhkjSUceVmMvw0r1yIM6njm3FGupHdoZKV3ZPUaWV4OlS6Bwjq+bhT1lCx4fAfvwlVZQy7ovoRFdVxhTEwfCWlgrayDHyfAPVlDkdWgpCv1C+kHZb0owezIZI1ZkQXSQLusEHhcVtnJWpblfOx5WcyqrIwU0CorgCX5mUnN6mS1yJoDeHPDw77Ae1lj0kWrrAL4sDRciixX4JW0opvJiuByx3XwaSfrMVkD4Hz5qrmzE3EHr6Rv30yWbCusLqRDWRvGxJj9fdLAGlnZ8kI6d3aCOvZdfq4kx1pk8YfPJJ9pudvPWsgWjZLnYrssyawJDzfbx/N7O6Wlts2/VVk+dSp3TihSirt78JG1poE2WYFICMHDcoxBA4lLOd2ZaDmSbpMV8tGXKSEpNQPO3bkhh8c6zw0fkGUAvM8OK8QF9oycUN+YXxBZAwBX2WEJJfW9VRZVYEb2y5TIFBzH9jIOVb1z1CprAmY6Z1k0E3lymcwr2VReI2vIqXNEuciSgYVcZkpVidUui57hlt2MQpYlA6lxR9AhVL0muYaLgl/G/Vq8zcjy/CQ+o0YWRR+L15+po4Whli70KYj0lKntCYFL6mhl8OkLfwm0vL22BX2Av+RKTnO2IXAL5rmaNvT/iaRjMGoWg1tg5JW3CZRs9m1FBbybmgt0D8MNyHW9YbQdIYRX1LGWShKraxw2ICqArmJtSmT/2Np17x0dHf/ag0MCAAAAAEH/X7vBDgAAAAAAAAAAAAAAAAAA8AT99p+0ltRNJAAAAABJRU5ErkJggg==';
-            }
-
-            return '#';
-        }
-    },
-    data () {
-        return {
-            filemanager: null
-        };
-    },
-    methods: {
-        createFilemanagerInstance: function () {
-            const self = this;
-            const Tulia = require('Tulia');
-
-            console.log(window.Tulia, window);
-            this.filemanager = Tulia.Filemanager.create({
-                showOnInit: true,
-                endpoint: this.options.blocks['core-imageblock'].filemanager_endpoint,
-                filter: { type: 'image' },
-                multiple: false,
-                closeOnSelect: true,
-                onSelect: function (files) {
-                    if (!files.length) {
-                        return;
-                    }
-
-                    self.data.imageId = files[0].id;
-                }
-            });
-        }
-    },
-    mounted () {
-        const hooks = this.blockHooks.forBlock(this.id);
-
-        hooks.on('created', () => {
-            this.createFilemanagerInstance();
-            this.filemanager.open();
-        });
-    }
-}*/
-
-const __returned__ = { computed, onMounted, defineProps, inject, props, blocks, block, Tulia, filemanager, imageLink, createFilemanagerInstance }
+const __returned__ = { WysiwygEditor, defineProps, inject, computed, props, blocks, block, imageResolvePath, imagePathFromId, imageLink }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -5085,7 +5032,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['id', 'data'],
+  props: (__webpack_require__(/*! ./props.js */ "./src/js/blocks/ImageBlock/props.js")["default"]),
   setup(__props, { expose }) {
   expose();
 
@@ -5093,32 +5040,23 @@ const props = __props
 
 const { computed, onMounted, defineProps, inject } = __webpack_require__(/*! vue */ "vue");
 
-
 /****************
  * Prepare block
  ****************/
 
 const blocks = inject('blocks');
-const block = blocks.editor(
-    'core-imageblock',
-    props,
-    {
-        imageId: null
-    }
-);
-
-
+const block = blocks.manager('core-imageblock', props);
 
 /**************
  * Block logic
  **************/
 const Tulia = __webpack_require__(/*! Tulia */ "Tulia");
 
-const filemanager = null;
+const filemanager = {
+    instance: null
+};
 
 const imageLink = computed(() => {
-    //console.log(block.options);
-
     if (!block.data.imageId) {
         return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAADIBAMAAADGsYKFAAAAG1BMVEXMzMyWlpbFxcWcnJyjo6Oqqqq+vr6xsbG3t7ecUE7+AAAERUlEQVR42uzSsUoDQRSG0YuQ2HodJe2ChXXUwlILSWtIYynoAyj4AII+uDtmV9NYTGVgz2n+Zm7zMQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADsucyjQKwQq4FYDcRqIFYDsRqI1UCsBmI1EOsf7cY6eCuruvNNWXXxh8/l1UtU483y8iGmYifWU2Ze9LvudxGD882y3L3H6CMzy2OM5rfZu46J6GMNM89e6WKW1X18e86qjJ/pMKvjn8SvOTyeht9YZ1ndxDqrxRBn66SLnTilG65muXUa0/DFvtn0tA0EYXiycWIfeWNjcrRJSznWVUt7NaCKI676cU2kol6JqqIeA/343WU9s95AwIkabuPnEGV2ncuj8Xh21/GyWFI6BJM5OeLQ4ubO5VfXEBakgkbWSHJo4oQ0cnzu9MGk/Cs//ZJU0MjaRXz1B0CJ5O+3gocD3A5mB9+XEi25Mb+RNNM4yw4qYI9U0MgCLq0NvqcmwJiIZsCxna3s5C0FsOAQO3wXHtkEKxCTCkSWlPQ+2JLhcC4Z1eeiFUkKBSKrQFxP58CUNCCypO6Erg8okdhPlkMRzw6k0BuWZYCULKGW5sHLWkjJzvg5F9vUERtDvqrnHntVHYfijkhLhfeyJGcSssxE1shfZQdBMmvjfnP3VRiRBvzTUMIxWfLay+kpp46Rgi4XUb+Oe1LX7URKGmhkjSUceVmMvw0r1yIM6njm3FGupHdoZKV3ZPUaWV4OlS6Bwjq+bhT1lCx4fAfvwlVZQy7ovoRFdVxhTEwfCWlgrayDHyfAPVlDkdWgpCv1C+kHZb0owezIZI1ZkQXSQLusEHhcVtnJWpblfOx5WcyqrIwU0CorgCX5mUnN6mS1yJoDeHPDw77Ae1lj0kWrrAL4sDRciixX4JW0opvJiuByx3XwaSfrMVkD4Hz5qrmzE3EHr6Rv30yWbCusLqRDWRvGxJj9fdLAGlnZ8kI6d3aCOvZdfq4kx1pk8YfPJJ9pudvPWsgWjZLnYrssyawJDzfbx/N7O6Wlts2/VVk+dSp3TihSirt78JG1poE2WYFICMHDcoxBA4lLOd2ZaDmSbpMV8tGXKSEpNQPO3bkhh8c6zw0fkGUAvM8OK8QF9oycUN+YXxBZAwBX2WEJJfW9VRZVYEb2y5TIFBzH9jIOVb1z1CprAmY6Z1k0E3lymcwr2VReI2vIqXNEuciSgYVcZkpVidUui57hlt2MQpYlA6lxR9AhVL0muYaLgl/G/Vq8zcjy/CQ+o0YWRR+L15+po4Whli70KYj0lKntCYFL6mhl8OkLfwm0vL22BX2Av+RKTnO2IXAL5rmaNvT/iaRjMGoWg1tg5JW3CZRs9m1FBbybmgt0D8MNyHW9YbQdIYRX1LGWShKraxw2ICqArmJtSmT/2Np17x0dHf/ag0MCAAAAAEH/X7vBDgAAAAAAAAAAAAAAAAAA8AT99p+0ltRNJAAAAABJRU5ErkJggg==';
     }
@@ -5126,72 +5064,41 @@ const imageLink = computed(() => {
     return '#';
 });
 
-const createFilemanagerInstance = function () {
-    console.log(Tulia);
+const getFilemanager = () => {
+    if (filemanager.instance) {
+        return filemanager.instance;
+    }
+
+    return filemanager.instance = Tulia.Filemanager.create({
+        showOnInit: false,
+        endpoint: block.options.filemanager_endpoint,
+        filter: { type: 'image' },
+        multiple: false,
+        closeOnSelect: true,
+        onSelect: function (files) {
+            if (!files.length) {
+                return;
+            }
+
+            block.data.imageId = files[0].id;
+            block.data.imageFilename = files[0].name;
+        }
+    });
 };
 
 onMounted(() => {
     block.on('created', () => {
-        createFilemanagerInstance();
-        //filemanager.open();
+        getFilemanager().show();
+    });
+
+    block.operation('chose-image', (data, success, fail) => {
+        getFilemanager().show();
+        success();
     });
 });
 
 
-/*const props = require('./props.js').default;
-
-export default {
-    props: props,
-    inject: ['options', 'blockHooks'],
-    computed: {
-        image_link: function () {
-            console.log(this.options.blocks['core-imageblock']);
-
-            if (!this.data.imageId) {
-                return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAADIBAMAAADGsYKFAAAAG1BMVEXMzMyWlpbFxcWcnJyjo6Oqqqq+vr6xsbG3t7ecUE7+AAAERUlEQVR42uzSsUoDQRSG0YuQ2HodJe2ChXXUwlILSWtIYynoAyj4AII+uDtmV9NYTGVgz2n+Zm7zMQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADsucyjQKwQq4FYDcRqIFYDsRqI1UCsBmI1EOsf7cY6eCuruvNNWXXxh8/l1UtU483y8iGmYifWU2Ze9LvudxGD882y3L3H6CMzy2OM5rfZu46J6GMNM89e6WKW1X18e86qjJ/pMKvjn8SvOTyeht9YZ1ndxDqrxRBn66SLnTilG65muXUa0/DFvtn0tA0EYXiycWIfeWNjcrRJSznWVUt7NaCKI676cU2kol6JqqIeA/343WU9s95AwIkabuPnEGV2ncuj8Xh21/GyWFI6BJM5OeLQ4ubO5VfXEBakgkbWSHJo4oQ0cnzu9MGk/Cs//ZJU0MjaRXz1B0CJ5O+3gocD3A5mB9+XEi25Mb+RNNM4yw4qYI9U0MgCLq0NvqcmwJiIZsCxna3s5C0FsOAQO3wXHtkEKxCTCkSWlPQ+2JLhcC4Z1eeiFUkKBSKrQFxP58CUNCCypO6Erg8okdhPlkMRzw6k0BuWZYCULKGW5sHLWkjJzvg5F9vUERtDvqrnHntVHYfijkhLhfeyJGcSssxE1shfZQdBMmvjfnP3VRiRBvzTUMIxWfLay+kpp46Rgi4XUb+Oe1LX7URKGmhkjSUceVmMvw0r1yIM6njm3FGupHdoZKV3ZPUaWV4OlS6Bwjq+bhT1lCx4fAfvwlVZQy7ovoRFdVxhTEwfCWlgrayDHyfAPVlDkdWgpCv1C+kHZb0owezIZI1ZkQXSQLusEHhcVtnJWpblfOx5WcyqrIwU0CorgCX5mUnN6mS1yJoDeHPDw77Ae1lj0kWrrAL4sDRciixX4JW0opvJiuByx3XwaSfrMVkD4Hz5qrmzE3EHr6Rv30yWbCusLqRDWRvGxJj9fdLAGlnZ8kI6d3aCOvZdfq4kx1pk8YfPJJ9pudvPWsgWjZLnYrssyawJDzfbx/N7O6Wlts2/VVk+dSp3TihSirt78JG1poE2WYFICMHDcoxBA4lLOd2ZaDmSbpMV8tGXKSEpNQPO3bkhh8c6zw0fkGUAvM8OK8QF9oycUN+YXxBZAwBX2WEJJfW9VRZVYEb2y5TIFBzH9jIOVb1z1CprAmY6Z1k0E3lymcwr2VReI2vIqXNEuciSgYVcZkpVidUui57hlt2MQpYlA6lxR9AhVL0muYaLgl/G/Vq8zcjy/CQ+o0YWRR+L15+po4Whli70KYj0lKntCYFL6mhl8OkLfwm0vL22BX2Av+RKTnO2IXAL5rmaNvT/iaRjMGoWg1tg5JW3CZRs9m1FBbybmgt0D8MNyHW9YbQdIYRX1LGWShKraxw2ICqArmJtSmT/2Np17x0dHf/ag0MCAAAAAEH/X7vBDgAAAAAAAAAAAAAAAAAA8AT99p+0ltRNJAAAAABJRU5ErkJggg==';
-            }
-
-            return '#';
-        }
-    },
-    data () {
-        return {
-            filemanager: null
-        };
-    },
-    methods: {
-        createFilemanagerInstance: function () {
-            const self = this;
-            const Tulia = require('Tulia');
-
-            console.log(window.Tulia, window);
-            this.filemanager = Tulia.Filemanager.create({
-                showOnInit: true,
-                endpoint: this.options.blocks['core-imageblock'].filemanager_endpoint,
-                filter: { type: 'image' },
-                multiple: false,
-                closeOnSelect: true,
-                onSelect: function (files) {
-                    if (!files.length) {
-                        return;
-                    }
-
-                    self.data.imageId = files[0].id;
-                }
-            });
-        }
-    },
-    mounted () {
-        const hooks = this.blockHooks.forBlock(this.id);
-
-        hooks.on('created', () => {
-            this.createFilemanagerInstance();
-            this.filemanager.open();
-        });
-    }
-}*/
-
-const __returned__ = { computed, onMounted, defineProps, inject, props, blocks, block, Tulia, filemanager, imageLink, createFilemanagerInstance }
+const __returned__ = { computed, onMounted, defineProps, inject, props, blocks, block, Tulia, filemanager, imageLink, getFilemanager }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -5212,17 +5119,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _Render_vue_vue_type_template_id_4e13f272__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Render.vue?vue&type=template&id=4e13f272 */ "./src/js/blocks/ImageBlock/Render.vue?vue&type=template&id=4e13f272");
-/* harmony import */ var _Render_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Render.vue?vue&type=script&lang=js */ "./src/js/blocks/ImageBlock/Render.vue?vue&type=script&lang=js");
-/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
-/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _Render_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _Render_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__[__WEBPACK_IMPORT_KEY__]
-/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
+/* harmony import */ var _Render_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Render.vue?vue&type=script&setup=true&lang=js */ "./src/js/blocks/ImageBlock/Render.vue?vue&type=script&setup=true&lang=js");
 /* harmony import */ var _home_adam_projects_tuliacms_core_src_Cms_TuliaEditor_Infrastructure_Framework_Resources_public_tulia_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_home_adam_projects_tuliacms_core_src_Cms_TuliaEditor_Infrastructure_Framework_Resources_public_tulia_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Render_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Render_vue_vue_type_template_id_4e13f272__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"src/js/blocks/ImageBlock/Render.vue"]])
+const __exports__ = /*#__PURE__*/(0,_home_adam_projects_tuliacms_core_src_Cms_TuliaEditor_Infrastructure_Framework_Resources_public_tulia_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Render_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Render_vue_vue_type_template_id_4e13f272__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"src/js/blocks/ImageBlock/Render.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -5231,25 +5135,40 @@ if (false) {}
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/blocks/ImageBlock/Render.vue?vue&type=script&lang=js":
-/*!*****************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/blocks/ImageBlock/Render.vue?vue&type=script&lang=js ***!
-  \*****************************************************************************************************************************************/
-/***/ (() => {
+/***/ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/blocks/ImageBlock/Render.vue?vue&type=script&setup=true&lang=js":
+/*!****************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/blocks/ImageBlock/Render.vue?vue&type=script&setup=true&lang=js ***!
+  \****************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: (__webpack_require__(/*! ./props.js */ "./src/js/blocks/ImageBlock/props.js")["default"]),
+  setup(__props, { expose }) {
+  expose();
+
+const props = __props
+
+const { defineProps, inject } = __webpack_require__(/*! vue */ "vue");
+
+/****************
+ * Prepare block
+ ****************/
+
+const blocks = inject('blocks');
+const block = blocks.render('core-imageblock', props);
 
 
-/*const props = require('./props.js').default;
+const __returned__ = { defineProps, inject, props, blocks, block }
+Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
+return __returned__
+}
 
-export default {
-    props: props,
-    inject: ['options'],
-    computed: {
-        image_link: function () {
-            return '#';
-        }
-    }
-}*/
-
+});
 
 /***/ }),
 
@@ -5293,7 +5212,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['id', 'data'],
+  props: (__webpack_require__(/*! ./props.js */ "./src/js/blocks/TextBlock/props.js")["default"]),
   setup(__props, { expose }) {
   expose();
 
@@ -5307,11 +5226,7 @@ const { defineProps, inject } = __webpack_require__(/*! vue */ "vue");
  ****************/
 
 const blocks = inject('blocks');
-const block = blocks.editor(
-    'core-textblock',
-    props,
-    (__webpack_require__(/*! ./defaults.js */ "./src/js/blocks/TextBlock/defaults.js")["default"])
-);
+const block = blocks.editor('core-textblock', props);
 
 const __returned__ = { WysiwygEditor, defineProps, inject, props, blocks, block }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
@@ -5362,7 +5277,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['id', 'data'],
+  props: (__webpack_require__(/*! ./props.js */ "./src/js/blocks/TextBlock/props.js")["default"]),
   setup(__props, { expose }) {
   expose();
 
@@ -5376,11 +5291,7 @@ const { computed, onMounted, defineProps, inject } = __webpack_require__(/*! vue
  ****************/
 
 const blocks = inject('blocks');
-const block = blocks.manager(
-    'core-textblock',
-    props,
-    (__webpack_require__(/*! ./defaults.js */ "./src/js/blocks/TextBlock/defaults.js")["default"])
-);
+const block = blocks.manager('core-textblock', props);
 
 
 
@@ -5437,7 +5348,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['id', 'data'],
+  props: (__webpack_require__(/*! ./props.js */ "./src/js/blocks/TextBlock/props.js")["default"]),
   setup(__props, { expose }) {
   expose();
 
@@ -5450,11 +5361,7 @@ const { defineProps, inject } = __webpack_require__(/*! vue */ "vue");
  ****************/
 
 const blocks = inject('blocks');
-const block = blocks.render(
-    'core-textblock',
-    props,
-    (__webpack_require__(/*! ./defaults.js */ "./src/js/blocks/TextBlock/defaults.js")["default"])
-);
+const block = blocks.render('core-textblock', props);
 
 const __returned__ = { defineProps, inject, props, blocks, block }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
@@ -5564,6 +5471,19 @@ const ClassObserver = (__webpack_require__(/*! shared/Utils/ClassObserver.js */ 
         $(this.$el).chosen('destroy');
     }*/
 });
+
+
+/***/ }),
+
+/***/ "./src/js/blocks/ImageBlock/Editor.vue?vue&type=style&index=0&id=3505231e&scoped=true&lang=css":
+/*!*****************************************************************************************************!*\
+  !*** ./src/js/blocks/ImageBlock/Editor.vue?vue&type=style&index=0&id=3505231e&scoped=true&lang=css ***!
+  \*****************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Editor_vue_vue_type_style_index_0_id_3505231e_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/mini-css-extract-plugin/dist/loader.js!../../../../node_modules/css-loader/dist/cjs.js!../../../../node_modules/vue-loader/dist/stylePostLoader.js!../../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./Editor.vue?vue&type=style&index=0&id=3505231e&scoped=true&lang=css */ "./node_modules/mini-css-extract-plugin/dist/loader.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/blocks/ImageBlock/Editor.vue?vue&type=style&index=0&id=3505231e&scoped=true&lang=css");
 
 
 /***/ }),
@@ -5760,22 +5680,18 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/js/blocks/ImageBlock/Render.vue?vue&type=script&lang=js":
-/*!*********************************************************************!*\
-  !*** ./src/js/blocks/ImageBlock/Render.vue?vue&type=script&lang=js ***!
-  \*********************************************************************/
+/***/ "./src/js/blocks/ImageBlock/Render.vue?vue&type=script&setup=true&lang=js":
+/*!********************************************************************************!*\
+  !*** ./src/js/blocks/ImageBlock/Render.vue?vue&type=script&setup=true&lang=js ***!
+  \********************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* reexport default from dynamic */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Render_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0___default.a)
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Render_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Render_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./Render.vue?vue&type=script&lang=js */ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/blocks/ImageBlock/Render.vue?vue&type=script&lang=js");
-/* harmony import */ var _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Render_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Render_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
-/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Render_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Render_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
-/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
+/* harmony import */ var _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Render_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./Render.vue?vue&type=script&setup=true&lang=js */ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/blocks/ImageBlock/Render.vue?vue&type=script&setup=true&lang=js");
  
 
 /***/ }),
@@ -6000,6 +5916,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Structure_vue_vue_type_template_id_17f870f8__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Structure_vue_vue_type_template_id_17f870f8__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./Structure.vue?vue&type=template&id=17f870f8 */ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Components/Admin/Sidebar/Structure.vue?vue&type=template&id=17f870f8");
+
+
+/***/ }),
+
+/***/ "./src/js/blocks/ImageBlock/Editor.vue?vue&type=template&id=3505231e&scoped=true":
+/*!***************************************************************************************!*\
+  !*** ./src/js/blocks/ImageBlock/Editor.vue?vue&type=template&id=3505231e&scoped=true ***!
+  \***************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Editor_vue_vue_type_template_id_3505231e_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Editor_vue_vue_type_template_id_3505231e_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!../../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./Editor.vue?vue&type=template&id=3505231e&scoped=true */ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/blocks/ImageBlock/Editor.vue?vue&type=template&id=3505231e&scoped=true");
 
 
 /***/ }),
@@ -6322,7 +6254,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         editorView: $props.options.editor.view + '?tuliaEditorInstance=' + $props.instanceId,
         canvasOptions: $setup.canvasOptions
       }, null, 8 /* PROPS */, ["editorView", "canvasOptions"]),
-      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["SidebarComponent"], { structure: $setup.structure }, null, 8 /* PROPS */, ["structure"]),
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["SidebarComponent"], {
+        structure: $setup.structure,
+        onCancel: $setup.cancelEditor,
+        onSave: $setup.saveEditor
+      }, null, 8 /* PROPS */, ["structure"]),
       (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["BlockPickerComponent"], {
         availableBlocks: $props.availableBlocks,
         blockPickerData: $setup.blockPickerData
@@ -6384,7 +6320,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               class: "tued-structure-draggable-handler",
               onMousedown: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($options.selection.select('block', element.id)), ["stop"])
             }, _hoisted_5, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_3),
-            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translator.trans('block')), 1 /* TEXT */),
+            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.blocksRegistry.get(element.code).name), 1 /* TEXT */),
             ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)((0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveDynamicComponent)('block-' + element.code + '-manager'), {
               data: element.data,
               id: element.id
@@ -6602,12 +6538,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
           type: "button",
           class: "tued-main-btn tued-btn-default",
-          onClick: _cache[0] || (_cache[0] = $event => ($options.eventDispatcher.emit('editor.cancel')))
+          onClick: _cache[0] || (_cache[0] = $event => (_ctx.$emit('cancel')))
         }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translator.trans('cancel')), 1 /* TEXT */),
         (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
           type: "button",
           class: "tued-main-btn tued-btn-success",
-          onClick: _cache[1] || (_cache[1] = $event => ($options.eventDispatcher.emit('editor.save')))
+          onClick: _cache[1] || (_cache[1] = $event => (_ctx.$emit('save')))
         }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translator.trans('save')), 1 /* TEXT */)
       ]),
       (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [
@@ -6714,10 +6650,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/blocks/ImageBlock/Manager.vue?vue&type=template&id=a875ed68":
-/*!**********************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/blocks/ImageBlock/Manager.vue?vue&type=template&id=a875ed68 ***!
-  \**********************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/blocks/ImageBlock/Editor.vue?vue&type=template&id=3505231e&scoped=true":
+/*!*********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/blocks/ImageBlock/Editor.vue?vue&type=template&id=3505231e&scoped=true ***!
+  \*********************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -6729,12 +6665,36 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 
 
+const _withScopeId = n => ((0,vue__WEBPACK_IMPORTED_MODULE_0__.pushScopeId)("data-v-3505231e"),n=n(),(0,vue__WEBPACK_IMPORTED_MODULE_0__.popScopeId)(),n)
 const _hoisted_1 = ["src"]
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", { src: $setup.imageLink }, null, 8 /* PROPS */, _hoisted_1)
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
+      class: "tued-block-image_image",
+      src: $setup.imageLink,
+      onClick: _cache[0] || (_cache[0] = $event => ($setup.block.execute('chose-image'))),
+      onLoad: _cache[1] || (_cache[1] = $event => (_ctx.$emit('updated')))
+    }, null, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_1)
   ]))
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/blocks/ImageBlock/Manager.vue?vue&type=template&id=a875ed68":
+/*!**********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/blocks/ImageBlock/Manager.vue?vue&type=template&id=a875ed68 ***!
+  \**********************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render)
+/* harmony export */ });
+
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  return null
 }
 
 /***/ }),
@@ -6755,7 +6715,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("    <div><img :src=\"image_link\" /></div>")
+  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, "[image id=\"" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.block.data.imageId) + "\" size=\"thumbnail\"]", 1 /* TEXT */))
 }
 
 /***/ }),
@@ -12063,6 +12023,35 @@ const Manager = (__webpack_require__(/*! ./Manager.vue */ "./src/js/blocks/Image
 
 /***/ }),
 
+/***/ "./src/js/blocks/ImageBlock/props.js":
+/*!*******************************************!*\
+  !*** ./src/js/blocks/ImageBlock/props.js ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+const defaults = {
+    imageId: null,
+    imageFilename: null,
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+    id: String,
+    data: {
+        type: Object,
+        default (rawProps) {
+            return Object.assign({}, defaults, rawProps);
+        }
+    }
+});
+
+
+/***/ }),
+
 /***/ "./src/js/blocks/TextBlock/TextBlock.js":
 /*!**********************************************!*\
   !*** ./src/js/blocks/TextBlock/TextBlock.js ***!
@@ -12090,10 +12079,10 @@ const Manager = (__webpack_require__(/*! ./Manager.vue */ "./src/js/blocks/TextB
 
 /***/ }),
 
-/***/ "./src/js/blocks/TextBlock/defaults.js":
-/*!*********************************************!*\
-  !*** ./src/js/blocks/TextBlock/defaults.js ***!
-  \*********************************************/
+/***/ "./src/js/blocks/TextBlock/props.js":
+/*!******************************************!*\
+  !*** ./src/js/blocks/TextBlock/props.js ***!
+  \******************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -12101,8 +12090,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+const defaults = {
+    text: ''
+};
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-    text: null
+    id: String,
+    data: {
+        type: Object,
+        default (rawProps) {
+            return Object.assign({}, defaults, rawProps);
+        }
+    }
 });
 
 
@@ -12125,7 +12124,7 @@ const ImageBlock = (__webpack_require__(/*! ./ImageBlock/ImageBlock.js */ "./src
 let blocks = {};
 
 blocks[TextBlock.code] = TextBlock;
-//blocks[ImageBlock.code] = ImageBlock;
+blocks[ImageBlock.code] = ImageBlock;
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (blocks);
 
@@ -12836,11 +12835,7 @@ class BlockHook {
     }
 
     listen () {
-        this.messegner.on('structure.element.created', (type, id) => {
-            if (type === 'block' && id === this.blockId) {
-                this.callListeners('created');
-            }
-        });
+
     }
 
     isSingularEvent (event) {
@@ -12871,29 +12866,48 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Blocks)
 /* harmony export */ });
-const BlockEditor = (__webpack_require__(/*! shared/Structure/Blocks/Editor/BlockEditor.js */ "./src/js/shared/Structure/Blocks/Editor/BlockEditor.js")["default"]);
-const BlockManager = (__webpack_require__(/*! shared/Structure/Blocks/Editor/BlockManager.js */ "./src/js/shared/Structure/Blocks/Editor/BlockManager.js")["default"]);
-const BlockRender = (__webpack_require__(/*! shared/Structure/Blocks/Editor/BlockRender.js */ "./src/js/shared/Structure/Blocks/Editor/BlockRender.js")["default"]);
+const Block = (__webpack_require__(/*! shared/Structure/Blocks/Editor/Block.js */ "./src/js/shared/Structure/Blocks/Editor/Block.js")["default"]);
+const Data = (__webpack_require__(/*! shared/Structure/Blocks/Data.js */ "./src/js/shared/Structure/Blocks/Data.js")["default"]);
 
 class Blocks {
     hooks;
     blocksOptions;
+    messenger;
 
-    constructor (hooks, blocksOptions) {
+    constructor (hooks, blocksOptions, messenger) {
         this.hooks = hooks;
         this.blocksOptions = blocksOptions;
+        this.messenger = messenger;
     }
 
-    editor (code, props, data) {
-        return new BlockEditor(code, props, data, this.blocksOptions[code] ?? {}, this.hooks);
+    editor (code, props) {
+        return new Block(
+            props.id,
+            code,
+            new Data(props.id, 'editor', props, this.messenger),
+            this.blocksOptions[code] ?? {},
+            this.messenger
+        );
     }
 
-    manager (code, props, data) {
-        return new BlockManager(code, props, data, this.blocksOptions[code] ?? {}, this.hooks);
+    manager (code, props) {
+        return new Block(
+            props.id,
+            code,
+            new Data(props.id, 'manager', props, this.messenger),
+            this.blocksOptions[code] ?? {},
+            this.messenger
+        );
     }
 
-    render (code, props, data) {
-        return new BlockRender(code, props, data, this.blocksOptions[code] ?? {}, this.hooks);
+    render (code, props) {
+        return new Block(
+            props.id,
+            code,
+            new Data(props.id, 'render', props, this.messenger),
+            this.blocksOptions[code] ?? {},
+            this.messenger
+        );
     }
 }
 
@@ -12915,8 +12929,10 @@ class BlocksPicker {
     config;
     structure;
     modals;
+    blocksRegistry;
 
-    constructor (config, structure, modals) {
+    constructor (config, blocksRegistry, structure, modals) {
+        this.blocksRegistry = blocksRegistry;
         this.config = config;
         this.structure = structure;
         this.modals = modals;
@@ -12945,111 +12961,165 @@ class BlocksPicker {
 
 /***/ }),
 
-/***/ "./src/js/shared/Structure/Blocks/Editor/BlockEditor.js":
-/*!**************************************************************!*\
-  !*** ./src/js/shared/Structure/Blocks/Editor/BlockEditor.js ***!
-  \**************************************************************/
+/***/ "./src/js/shared/Structure/Blocks/Data.js":
+/*!************************************************!*\
+  !*** ./src/js/shared/Structure/Blocks/Data.js ***!
+  \************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ BlockEditor)
+/* harmony export */   "default": () => (/* binding */ Data)
 /* harmony export */ });
-const { reactive, toRaw } = __webpack_require__(/*! vue */ "vue");
+const { reactive, toRaw, watch } = __webpack_require__(/*! vue */ "vue");
 
-class BlockEditor {
-    id;
-    options;
+class Data {
     data;
-    hooks;
+    blockId;
+    messenger;
+    owner;
+    version = 0;
+    lastUpdateFromOutside = false;
 
-    constructor (code, props, data, options, hooks) {
-        this.hooks = hooks;
-        this.options = options;
+    constructor (blockId, owner, props, messenger) {
+        this.blockId = blockId;
+        this.owner = owner;
+        this.messenger = messenger;
 
-        this.data = reactive(Object.assign({}, data, toRaw(props.data)));
-        this.id = props.id;
+        this.data = reactive(props.data);
 
-        this.hooks = hooks.forBlock(this.id);
+        this.propagateChangesInThisInstance();
+        this.watchForChangesInOtherInstance();
     }
 
-    on (event, listener) {
-        this.hooks.on(event, listener);
+    get reactiveData () {
+        return this.data;
+    }
+
+    propagateChangesInThisInstance () {
+        watch(this.data, async (newData, oldData) => {
+            if (this.lastUpdateFromOutside) {
+                return;
+            }
+
+            this.version++;
+
+            this.messenger.execute('structure.block.data.update', {
+                owner: this.owner,
+                data: toRaw(newData),
+                blockId: this.blockId,
+                version: this.version,
+            });
+        });
+    }
+
+    watchForChangesInOtherInstance () {
+        this.messenger.operation('structure.block.data.update', (data, success, fail) => {
+            // Catch only operations for the same block in all windows
+            if (data.blockId === this.blockId && data.owner !== this.owner) {
+                this.handleDataUpdate(data);
+            }
+
+            success();
+        });
+    }
+
+    handleDataUpdate (newData) {
+        if (newData.version > this.version) {
+            for (let i in newData.data) {
+                this.lastUpdateFromOutside = true;
+                this.data[i] = newData.data[i];
+            }
+            this.lastUpdateFromOutside = false;
+            this.version = newData.version;
+        }
     }
 }
 
 
 /***/ }),
 
-/***/ "./src/js/shared/Structure/Blocks/Editor/BlockManager.js":
-/*!***************************************************************!*\
-  !*** ./src/js/shared/Structure/Blocks/Editor/BlockManager.js ***!
-  \***************************************************************/
+/***/ "./src/js/shared/Structure/Blocks/Editor/Block.js":
+/*!********************************************************!*\
+  !*** ./src/js/shared/Structure/Blocks/Editor/Block.js ***!
+  \********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ BlockManager)
+/* harmony export */   "default": () => (/* binding */ Block)
 /* harmony export */ });
-const { reactive, toRaw } = __webpack_require__(/*! vue */ "vue");
-
-class BlockManager {
+class Block {
     id;
+    code;
     options;
-    data;
-    hooks;
+    dataSynchronizer;
+    messenger;
 
-    constructor (code, props, data, options, hooks) {
-        this.hooks = hooks;
+    constructor (id, code, dataSynchronizer, options, messenger) {
+        this.id = id;
+        this.code = code;
         this.options = options;
+        this.dataSynchronizer = dataSynchronizer;
+        this.messenger = messenger;
 
-        this.data = reactive(Object.assign({}, data, toRaw(props.data)));
-        this.id = props.id;
-
-        this.hooks = hooks.forBlock(this.id);
+        this.messenger.on('structure.element.created', (type, id) => {
+            if (type === 'block' && id === this.id) {
+                this.notify('created');
+            }
+        });
     }
 
     on (event, listener) {
-        this.hooks.on(event, listener);
+        this.messenger.on(this.generateBlockPrefix(event), listener);
+    }
+
+    execute (operation, body) {
+        return this.messenger.execute(this.generateBlockPrefix(operation), body);
+    }
+
+    notify (notification, ...body) {
+        this.messenger.notify(this.generateBlockPrefix(notification), ...body);
+    }
+
+    operation (operation, listener) {
+        this.messenger.operation(this.generateBlockPrefix(operation), listener);
+    }
+
+    get data () {
+        return this.dataSynchronizer.reactiveData;
+    }
+
+    generateBlockPrefix (operation) {
+        return `structure.block.instance.${this.code}.${this.id}.${operation}`;
     }
 }
 
 
 /***/ }),
 
-/***/ "./src/js/shared/Structure/Blocks/Editor/BlockRender.js":
-/*!**************************************************************!*\
-  !*** ./src/js/shared/Structure/Blocks/Editor/BlockRender.js ***!
-  \**************************************************************/
+/***/ "./src/js/shared/Structure/Blocks/Registry.js":
+/*!****************************************************!*\
+  !*** ./src/js/shared/Structure/Blocks/Registry.js ***!
+  \****************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ BlockRender)
+/* harmony export */   "default": () => (/* binding */ Registry)
 /* harmony export */ });
-const { reactive, toRaw } = __webpack_require__(/*! vue */ "vue");
+class Registry {
+    blocks;
 
-class BlockRender {
-    id;
-    options;
-    data;
-    hooks;
-
-    constructor (code, props, data, options, hooks) {
-        this.hooks = hooks;
-        this.options = options;
-
-        this.data = reactive(Object.assign({}, data, toRaw(props.data)));
-        this.id = props.id;
-
-        this.hooks = hooks.forBlock(this.id);
+    constructor (blocks) {
+        this.blocks = blocks;
     }
 
-    on (event, listener) {
-        this.hooks.on(event, listener);
+    get (code) {
+        return this.blocks[code];
     }
 }
 
@@ -14033,6 +14103,8 @@ class TuliaEditor {
     vue = null;
     container = {};
 
+    static instances = {};
+
     static extensions = {};
 
     static blocks = {};
@@ -14101,7 +14173,6 @@ class TuliaEditor {
         this.options.structure.source = (new Fixer())
             .fixStructure(this.options.structure.source);
 
-
         this.container.editor = this;
         this.container.editor = this;
         this.container.messenger = new Messenger(this.instanceId, 'admin', [window]);
@@ -14110,7 +14181,10 @@ class TuliaEditor {
             this.options.fallback_locales,
             this.options.translations
         );
+        // @todo Try to remove dispatcher and place messegnger instead of it.
         this.container.eventDispatcher = new EventDispatcher();
+
+        TuliaEditor.instances[this.instanceId] = this;
 
         this.renderMainWindow();
         this.renderModalsContainer();
@@ -14166,7 +14240,7 @@ class TuliaEditor {
     };
 
     renderEditorWindow () {
-        this.editor = $(`<div class="tued-editor-window tued-editor-opened">
+        this.editor = $(`<div class="tued-editor-window tued-editor-opened" data-tulia-editor-instance="${this.instanceId}">
             <div id="tued-editor-window-inner-${this.instanceId}"></div>
         </div>`);
         this.editor.appendTo('body');
@@ -14232,6 +14306,10 @@ class TuliaEditor {
         this.vue.config.performance = true;
         this.vue.mount(`#tued-editor-window-inner-${this.instanceId}`);
     };
+
+    toggleRenderPreview () {
+        this.container.messenger.execute('editor.canvas.preview.toggle');
+    }
 }
 
 

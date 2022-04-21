@@ -158,6 +158,16 @@
 
 .tued-rendering-canvas {
   display: none; }
+  .tued-rendering-canvas.tued-rendering-canvas-showed {
+    display: block; }
+    .tued-rendering-canvas.tued-rendering-canvas-showed:before {
+      content: "RENDERING PREVIEW";
+      text-align: center;
+      background-color: #ddd;
+      color: #000;
+      display: block;
+      padding: 10px;
+      margin: 0 auto 20px; }
 
 .ql-editor {
   overflow: initial; }
@@ -175,6 +185,14 @@
 
 body {
   font-family: 'Roboto', sans-serif; }
+
+/*!*********************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/blocks/ImageBlock/Editor.vue?vue&type=style&index=0&id=3505231e&scoped=true&lang=css ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************/
+
+.tued-block-image_image[data-v-3505231e]:hover {
+        cursor: pointer;
+}
 
 
 /*# sourceMappingURL=tulia-editor.editor.js.css.map*/

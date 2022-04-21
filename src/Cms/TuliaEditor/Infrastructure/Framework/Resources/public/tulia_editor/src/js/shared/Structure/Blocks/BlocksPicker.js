@@ -2,8 +2,10 @@ export default class BlocksPicker {
     config;
     structure;
     modals;
+    blocksRegistry;
 
-    constructor (config, structure, modals) {
+    constructor (config, blocksRegistry, structure, modals) {
+        this.blocksRegistry = blocksRegistry;
         this.config = config;
         this.structure = structure;
         this.modals = modals;
