@@ -2,12 +2,10 @@ const Block = require('shared/Structure/Blocks/Editor/Block.js').default;
 const Data = require('shared/Structure/Blocks/Data.js').default;
 
 export default class Blocks {
-    hooks;
     blocksOptions;
     messenger;
 
-    constructor (hooks, blocksOptions, messenger) {
-        this.hooks = hooks;
+    constructor (blocksOptions, messenger) {
         this.blocksOptions = blocksOptions;
         this.messenger = messenger;
     }

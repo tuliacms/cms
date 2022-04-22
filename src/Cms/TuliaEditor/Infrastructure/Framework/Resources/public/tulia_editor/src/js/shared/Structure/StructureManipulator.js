@@ -96,50 +96,37 @@ export default class StructureManipulator {
     }
 
     newSection () {
-        this.messenger.notify('structure.element.new-section', this.fixer.fixSection({}));
+        this.messenger.execute('structure.element.create-section', { section: this.fixer.fixSection({}) });
     }
 
     _listenToNewSection () {
-        this.messenger.on('structure.element.new-section', (newSection) => {
-            this._doNewSection(newSection);
+        this.messenger.operation('structure.element.create-section', (data, success, fail) => {
+            this.structure.sections.push(data.section);
+            success();
         });
-    }
-
-    _doNewSection (newSection) {
-        this.structure.sections.push(newSection);
     }
 
     newBlock (type, parent) {
-        let block = {
+        let block = this.fixer.fixBlock({
             code: type
-        };
+        });
 
-        block = this.fixer.fixBlock(block);
-
-        this.messenger.notify('structure.element.new-block', block, parent);
-    }
-
-    _listenToNewBlock () {
-        this.messenger.on('structure.element.new-block', (block, parent) => {
-            this._doNewBlock(block, parent);
+        this.messenger.execute('structure.element.create-block', {block, parent}).then(() => {
+            this.messenger.notify('structure.element.created', 'block', block.id);
         });
     }
 
-    _doNewBlock (block, parent) {
-        let column = this.find(parent);
-
-        column.blocks.push(block);
-
-        this.messenger.notify('structure.element.created', 'block', block.id);
+    _listenToNewBlock () {
+        this.messenger.operation('structure.element.create-block', (data, success, fail) => {
+            let column = this.find(data.parent);
+            column.blocks.push(data.block);
+            success();
+        });
     }
 
     removeElement (id) {
-        this.messenger.notify('structure.element.remove', id);
-    }
-
-    _listenToRemoveElement () {
-        this.messenger.on('structure.element.remove', (id) => {
-            this._doRemoveElement(id);
+        this.messenger.execute('structure.element.remove', {id}).then(() => {
+            this.messenger.notify('structure.element.removed', id);
         });
     }
 
@@ -185,43 +172,53 @@ export default class StructureManipulator {
             }
         }
 
-        if (removed) {
-            this.messenger.notify('structure.element.removed', id);
-        }
+        return removed;
     }
 
-    updateElement (element) {
-        this.messenger.notify('structure.element.update', element.id, toRaw(element));
-    }
-
-    _listenToUpdateElement () {
-        this.messenger.on('structure.element.update', (id, newElement) => {
-            this._doUpdateElement(id, newElement);
+    _listenToRemoveElement () {
+        this.messenger.operation('structure.element.remove', (data, success, fail) => {
+            if (this._doRemoveElement(data.id)) {
+                success();
+            } else {
+                fail();
+            }
         });
     }
 
-    _doUpdateElement (id, newElement) {
-        let currentElement = this.find(id);
+    updateElement (element) {
+        this.messenger.execute('structure.element.update', { id: element.id, element: toRaw(element) }).then(() => {
+            this.messenger.notify('structure.element.updated', element.id);
+        });
+    }
 
-        if (!currentElement) {
-            return;
-        }
+    _listenToUpdateElement () {
+        this.messenger.operation('structure.element.update', (data, success, fail) => {
+            let currentElement = this.find(data.id);
 
-        // Implement basic comparison, only replace every key from newElement to currentElement.
-        // @todo Try to detect which data changed, and update only the changed.
-        for (let ni in newElement) {
-            currentElement[ni] = newElement[ni];
-        }
+            if (!currentElement) {
+                return;
+            }
 
-        this.messenger.notify('structure.element.updated', id);
+            // Implement basic comparison, only replace every key from newElement to currentElement.
+            // @todo Try to detect which data changed, and update only the changed.
+            for (let ni in data.element) {
+                currentElement[ni] = data.element[ni];
+            }
+
+            success();
+        });
     }
 
     moveElementUsingDelta (delta) {
-        this.messenger.notify('structure.element.move', delta);
+        this.messenger.execute('structure.element.move', {delta}).then(() => {
+            this.messenger.notify('structure.element.moved', delta);
+            this.messenger.notify('structure.element.updated', delta.element.id);
+        });
     }
 
     _listenToMoveElementUsingDelta () {
-        this.messenger.on('structure.element.move', (delta) => {
+        this.messenger.operation('structure.element.move', (data, success, fail) => {
+            let delta = data.delta;
             let element = toRaw(this.find(delta.element.id));
 
             if (delta.from.parent.type === 'structure' && delta.to.parent.type === 'structure') {
@@ -241,8 +238,7 @@ export default class StructureManipulator {
                 }
             }
 
-            this.messenger.notify('structure.element.moved', delta);
-            this.messenger.notify('structure.element.updated', delta.element.id);
+            success();
         });
     }
 };

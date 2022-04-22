@@ -11,5 +11,4 @@ const { defineProps, inject } = require('vue');
 const props = defineProps(require('./props.js').default);
 const blocks = inject('blocks');
 const block = blocks.render('core-imageblock', props);
-
 </script>

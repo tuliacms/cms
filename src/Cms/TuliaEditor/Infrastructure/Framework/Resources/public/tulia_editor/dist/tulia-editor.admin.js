@@ -4512,20 +4512,18 @@ provide('modals', modals);
 const Blocks = (__webpack_require__(/*! shared/Structure/Blocks/Blocks.js */ "./src/js/shared/Structure/Blocks/Blocks.js")["default"]);
 const BlocksPicker = (__webpack_require__(/*! shared/Structure/Blocks/BlocksPicker.js */ "./src/js/shared/Structure/Blocks/BlocksPicker.js")["default"]);
 const BlocksRegistry = (__webpack_require__(/*! shared/Structure/Blocks/Registry.js */ "./src/js/shared/Structure/Blocks/Registry.js")["default"]);
-const BlockHooks = (__webpack_require__(/*! shared/Structure/Blocks/BlockHooks.js */ "./src/js/shared/Structure/Blocks/BlockHooks.js")["default"]);
 
 const blockPickerData = reactive({
     columnId: null
 });
-const blockHooks = new BlockHooks(props.container.messenger);
 const blocksRegistry = new BlocksRegistry(props.availableBlocks);
 
 provide('blocksRegistry', blocksRegistry);
-provide('blocks', new Blocks(blockHooks, props.options.blocks, props.container.messenger));
+provide('blocks', new Blocks(props.options.blocks, props.container.messenger));
 provide('blocksPicker', new BlocksPicker(blockPickerData, blocksRegistry, structureManipulator, modals));
 
 
-const __returned__ = { CanvasComponent, SidebarComponent, BlockPickerComponent, ObjectCloner, defineProps, onMounted, provide, reactive, isProxy, toRaw, props, saveEditor, cancelEditor, StructureManipulator, Selection, structure, previousStructure, selection, structureManipulator, restorePreviousStructure, useCurrentStructureAsPrevious, canvasOptions, Canvas, ColumnSize, Modals, modalsData, modals, Blocks, BlocksPicker, BlocksRegistry, BlockHooks, blockPickerData, blockHooks, blocksRegistry }
+const __returned__ = { CanvasComponent, SidebarComponent, BlockPickerComponent, ObjectCloner, defineProps, onMounted, provide, reactive, isProxy, toRaw, props, saveEditor, cancelEditor, StructureManipulator, Selection, structure, previousStructure, selection, structureManipulator, restorePreviousStructure, useCurrentStructureAsPrevious, canvasOptions, Canvas, ColumnSize, Modals, modalsData, modals, Blocks, BlocksPicker, BlocksRegistry, blockPickerData, blocksRegistry }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -5161,7 +5159,6 @@ const { defineProps, inject } = __webpack_require__(/*! vue */ "vue");
 
 const blocks = inject('blocks');
 const block = blocks.render('core-imageblock', props);
-
 
 const __returned__ = { defineProps, inject, props, blocks, block }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
@@ -12732,129 +12729,6 @@ class Modals {
 
 /***/ }),
 
-/***/ "./src/js/shared/Structure/Blocks/BlockHooks.js":
-/*!******************************************************!*\
-  !*** ./src/js/shared/Structure/Blocks/BlockHooks.js ***!
-  \******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ BlockHooks)
-/* harmony export */ });
-class BlockHooks {
-    messenger;
-    eventsCollection = {};
-    bindedBlocksHooks = [];
-
-    constructor (messenger) {
-        this.messenger = messenger;
-
-        this.listen();
-    }
-
-    forBlock (blockId) {
-        this.bindedBlocksHooks.push(blockId);
-
-        let events = this.eventsCollection[blockId] ?? [];
-        this.eventsCollection[blockId] = [];
-
-        return new BlockHook(this.messenger, blockId, events);
-    }
-
-    listen () {
-        this.messenger.on('structure.element.created', (type, id) => {
-            if (type !== 'block') {
-                return;
-            }
-
-            if (this.bindedBlocksHooks.indexOf(id) < 0) {
-                if (!this.eventsCollection[id]) {
-                    this.eventsCollection[id] = [];
-                }
-
-                this.eventsCollection[id].push({
-                    event: 'created',
-                });
-            }
-        });
-    }
-}
-
-class BlockHook {
-    messegner;
-    blockId;
-    occuredEvents;
-    listeners = [];
-    eventsCallsTimes = {
-        created: 0
-    };
-
-    constructor (messegner, blockId, occuredEvents) {
-        this.messegner = messegner;
-        this.blockId = blockId;
-        this.occuredEvents = occuredEvents;
-
-        this.listen();
-    }
-
-    on (event, listener) {
-        this.listeners.push({
-            event: event,
-            listener: listener
-        });
-
-        this.callListenersForOccuredEvents(event);
-    }
-
-    callListeners (event) {
-        if (this.eventAlreadyDispatched(event) === false) {
-            this.eventsCallsTimes[event] = 0;
-        }
-
-        if (this.isSingularEvent(event) && this.eventsCallsTimes[event] >= 1) {
-            return;
-        }
-
-        this.eventsCallsTimes[event]++;
-
-        for (let i in this.listeners) {
-            if (this.listeners[i].event === event) {
-                this.listeners[i].listener.call();
-            }
-        }
-    }
-
-    callListenersForOccuredEvents (event) {
-        for (let i in this.occuredEvents) {
-            if (this.occuredEvents[i].event === event) {
-                this.callListeners(event);
-            }
-        }
-    }
-
-    listen () {
-
-    }
-
-    isSingularEvent (event) {
-        switch (event) {
-            case 'created':
-                return true;
-        }
-
-        return false;
-    }
-
-    eventAlreadyDispatched (event) {
-        return !!this.eventsCallsTimes[event];
-    }
-}
-
-
-/***/ }),
-
 /***/ "./src/js/shared/Structure/Blocks/Blocks.js":
 /*!**************************************************!*\
   !*** ./src/js/shared/Structure/Blocks/Blocks.js ***!
@@ -12870,12 +12744,10 @@ const Block = (__webpack_require__(/*! shared/Structure/Blocks/Editor/Block.js *
 const Data = (__webpack_require__(/*! shared/Structure/Blocks/Data.js */ "./src/js/shared/Structure/Blocks/Data.js")["default"]);
 
 class Blocks {
-    hooks;
     blocksOptions;
     messenger;
 
-    constructor (hooks, blocksOptions, messenger) {
-        this.hooks = hooks;
+    constructor (blocksOptions, messenger) {
         this.blocksOptions = blocksOptions;
         this.messenger = messenger;
     }
@@ -13749,50 +13621,37 @@ class StructureManipulator {
     }
 
     newSection () {
-        this.messenger.notify('structure.element.new-section', this.fixer.fixSection({}));
+        this.messenger.execute('structure.element.create-section', { section: this.fixer.fixSection({}) });
     }
 
     _listenToNewSection () {
-        this.messenger.on('structure.element.new-section', (newSection) => {
-            this._doNewSection(newSection);
+        this.messenger.operation('structure.element.create-section', (data, success, fail) => {
+            this.structure.sections.push(data.section);
+            success();
         });
-    }
-
-    _doNewSection (newSection) {
-        this.structure.sections.push(newSection);
     }
 
     newBlock (type, parent) {
-        let block = {
+        let block = this.fixer.fixBlock({
             code: type
-        };
+        });
 
-        block = this.fixer.fixBlock(block);
-
-        this.messenger.notify('structure.element.new-block', block, parent);
-    }
-
-    _listenToNewBlock () {
-        this.messenger.on('structure.element.new-block', (block, parent) => {
-            this._doNewBlock(block, parent);
+        this.messenger.execute('structure.element.create-block', {block, parent}).then(() => {
+            this.messenger.notify('structure.element.created', 'block', block.id);
         });
     }
 
-    _doNewBlock (block, parent) {
-        let column = this.find(parent);
-
-        column.blocks.push(block);
-
-        this.messenger.notify('structure.element.created', 'block', block.id);
+    _listenToNewBlock () {
+        this.messenger.operation('structure.element.create-block', (data, success, fail) => {
+            let column = this.find(data.parent);
+            column.blocks.push(data.block);
+            success();
+        });
     }
 
     removeElement (id) {
-        this.messenger.notify('structure.element.remove', id);
-    }
-
-    _listenToRemoveElement () {
-        this.messenger.on('structure.element.remove', (id) => {
-            this._doRemoveElement(id);
+        this.messenger.execute('structure.element.remove', {id}).then(() => {
+            this.messenger.notify('structure.element.removed', id);
         });
     }
 
@@ -13838,43 +13697,53 @@ class StructureManipulator {
             }
         }
 
-        if (removed) {
-            this.messenger.notify('structure.element.removed', id);
-        }
+        return removed;
     }
 
-    updateElement (element) {
-        this.messenger.notify('structure.element.update', element.id, toRaw(element));
-    }
-
-    _listenToUpdateElement () {
-        this.messenger.on('structure.element.update', (id, newElement) => {
-            this._doUpdateElement(id, newElement);
+    _listenToRemoveElement () {
+        this.messenger.operation('structure.element.remove', (data, success, fail) => {
+            if (this._doRemoveElement(data.id)) {
+                success();
+            } else {
+                fail();
+            }
         });
     }
 
-    _doUpdateElement (id, newElement) {
-        let currentElement = this.find(id);
+    updateElement (element) {
+        this.messenger.execute('structure.element.update', { id: element.id, element: toRaw(element) }).then(() => {
+            this.messenger.notify('structure.element.updated', element.id);
+        });
+    }
 
-        if (!currentElement) {
-            return;
-        }
+    _listenToUpdateElement () {
+        this.messenger.operation('structure.element.update', (data, success, fail) => {
+            let currentElement = this.find(data.id);
 
-        // Implement basic comparison, only replace every key from newElement to currentElement.
-        // @todo Try to detect which data changed, and update only the changed.
-        for (let ni in newElement) {
-            currentElement[ni] = newElement[ni];
-        }
+            if (!currentElement) {
+                return;
+            }
 
-        this.messenger.notify('structure.element.updated', id);
+            // Implement basic comparison, only replace every key from newElement to currentElement.
+            // @todo Try to detect which data changed, and update only the changed.
+            for (let ni in data.element) {
+                currentElement[ni] = data.element[ni];
+            }
+
+            success();
+        });
     }
 
     moveElementUsingDelta (delta) {
-        this.messenger.notify('structure.element.move', delta);
+        this.messenger.execute('structure.element.move', {delta}).then(() => {
+            this.messenger.notify('structure.element.moved', delta);
+            this.messenger.notify('structure.element.updated', delta.element.id);
+        });
     }
 
     _listenToMoveElementUsingDelta () {
-        this.messenger.on('structure.element.move', (delta) => {
+        this.messenger.operation('structure.element.move', (data, success, fail) => {
+            let delta = data.delta;
             let element = toRaw(this.find(delta.element.id));
 
             if (delta.from.parent.type === 'structure' && delta.to.parent.type === 'structure') {
@@ -13894,8 +13763,7 @@ class StructureManipulator {
                 }
             }
 
-            this.messenger.notify('structure.element.moved', delta);
-            this.messenger.notify('structure.element.updated', delta.element.id);
+            success();
         });
     }
 };
