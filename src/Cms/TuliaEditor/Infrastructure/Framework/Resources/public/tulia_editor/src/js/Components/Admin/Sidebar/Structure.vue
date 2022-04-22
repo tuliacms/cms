@@ -49,7 +49,6 @@ const DraggableDeltaTranslator = require('shared/Structure/DraggableDeltaTransla
 export default {
     props: ['structure'],
     inject: [
-        'eventDispatcher',
         'messenger',
         'selection',
         'structureDragOptions',

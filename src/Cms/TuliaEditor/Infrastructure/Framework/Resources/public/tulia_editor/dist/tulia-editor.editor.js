@@ -459,7 +459,6 @@ const structureManipulator = new StructureManipulator(structure, props.container
 
 provide('selection', selection);
 provide('messenger', props.container.messenger);
-provide('eventDispatcher', props.container.eventDispatcher);
 provide('translator', props.container.translator);
 provide('structureManipulator', structureManipulator);
 provide('options', props.options);
@@ -467,10 +466,6 @@ provide('options', props.options);
 const renderedContent = ref(null);
 
 onMounted(() => {
-    props.container.eventDispatcher.on('block.inner.updated', () => {
-        //props.container.messenger.notify('structure.synchronize.from.editor', ObjectCloner.deepClone(toRaw(structure)));
-    });
-
     props.container.messenger.operation('structure.fetch', (params, success, fail) => {
         success({
             content: renderedContent.value.$el.innerHTML,
@@ -571,7 +566,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
     props: ['block', 'parent'],
-    inject: ['selection', 'eventDispatcher'],
+    inject: ['selection', 'messenger'],
 });
 
 
@@ -788,7 +783,7 @@ const { toRaw } = __webpack_require__(/*! vue */ "vue");
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
     props: ['structure'],
-    inject: ['messenger', 'selection', 'eventDispatcher', 'structureManipulator', 'translator'],
+    inject: ['messenger', 'selection', 'structureManipulator', 'translator'],
     components: { Section },
     data () {
         return {
@@ -897,12 +892,6 @@ const { toRaw } = __webpack_require__(/*! vue */ "vue");
         }
     },
     mounted () {
-        // @todo Is this event `block.inner.updated` needed?
-        // Maybe we can use `structure.element.updated`?
-        this.eventDispatcher.on('block.inner.updated', () => {
-            this.hoverable.boundaries.update();
-            this.selectable.boundaries.update();
-        });
         this.messenger.on('structure.element.updated', () => {
             this.hoverable.boundaries.update();
             this.selectable.boundaries.update();
@@ -1456,8 +1445,12 @@ const ClassObserver = (__webpack_require__(/*! shared/Utils/ClassObserver.js */ 
             required: true,
             default: ''
         },
+        blockId: {
+            required: true,
+            default: ''
+        },
     },
-    inject: ['eventDispatcher', 'messenger'],
+    inject: ['messenger'],
     data () {
         return {
             quill: null,
@@ -1477,7 +1470,7 @@ const ClassObserver = (__webpack_require__(/*! shared/Utils/ClassObserver.js */ 
         });
         quill.on('text-change', () => {
             this.$emit('update:modelValue', quill.root.innerHTML);
-            this.eventDispatcher.emit('block.inner.updated');
+            this.messenger.notify('structure.element.updated', this.blockId);
         });
 
         this.quill = quill;
@@ -2083,7 +2076,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)((0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveDynamicComponent)('block-' + $props.block.code + '-editor'), {
       data: $props.block.data,
       id: $props.block.id,
-      onUpdated: _cache[0] || (_cache[0] = $event => ($options.eventDispatcher.emit('block.inner.updated')))
+      onUpdated: _cache[0] || (_cache[0] = $event => ($options.messenger.notify('structure.element.updated', $props.block.id)))
     }, null, 8 /* PROPS */, ["data", "id"]))
   ], 32 /* HYDRATE_EVENTS */))
 }
@@ -2432,8 +2425,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["WysiwygEditor"], {
       modelValue: $setup.block.data.text,
-      "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => (($setup.block.data.text) = $event))
-    }, null, 8 /* PROPS */, ["modelValue"])
+      "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => (($setup.block.data.text) = $event)),
+      blockId: $setup.block.id
+    }, null, 8 /* PROPS */, ["modelValue", "blockId"])
   ]))
 }
 
@@ -2662,70 +2656,6 @@ const WysiwygEditor = (__webpack_require__(/*! ./WysiwygEditor.vue */ "./src/js/
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
     WysiwygEditor
 });
-
-
-/***/ }),
-
-/***/ "./src/js/shared/EventDispatcher.js":
-/*!******************************************!*\
-  !*** ./src/js/shared/EventDispatcher.js ***!
-  \******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ EventDispatcher)
-/* harmony export */ });
-class EventDispatcher {
-    events = [];
-
-    on (events, listener, priority) {
-        events = events.split(',');
-        priority = priority || 100;
-
-        for (let i = 0; i < events.length; i++) {
-            let name = events[i].trim();
-
-            if (this.events[name]) {
-                this.events[name].push({
-                    listener: listener,
-                    priority: priority
-                });
-            } else {
-                this.events[name] = [];
-                this.events[name].push({
-                    listener: listener,
-                    priority: priority
-                });
-            }
-
-            this.events[name].sort(function (a, b) {
-                return b.priority - a.priority;
-            });
-        }
-
-        return this;
-    }
-
-    emit (name, ...args) {
-        if (! this.events[name]) {
-            return this;
-        }
-
-        args = args || [];
-
-        for (let i = 0; i < this.events[name].length; i++) {
-            if (typeof(this.events[name][i].listener) !== 'function') {
-                throw new Error('One of the listeners of the "' + name + '" event is not a function.');
-            }
-
-            this.events[name][i].listener(...args);
-        }
-
-        return this;
-    }
-};
 
 
 /***/ }),
@@ -4501,7 +4431,6 @@ __webpack_require__.r(__webpack_exports__);
 const Vue = __webpack_require__(/*! vue */ "vue");
 const Messenger = (__webpack_require__(/*! shared/Messaging/Messenger.js */ "./src/js/shared/Messaging/Messenger.js")["default"]);
 const Location = (__webpack_require__(/*! shared/Utils/Location.js */ "./src/js/shared/Utils/Location.js")["default"]);
-const EventDispatcher = (__webpack_require__(/*! shared/EventDispatcher.js */ "./src/js/shared/EventDispatcher.js")["default"]);
 const Translator = (__webpack_require__(/*! shared/I18n/Translator.js */ "./src/js/shared/I18n/Translator.js")["default"]);
 const EditorRoot = (__webpack_require__(/*! components/Editor/Root.vue */ "./src/js/Components/Editor/Root.vue")["default"]);
 const ObjectCloner = (__webpack_require__(/*! shared/Utils/ObjectCloner.js */ "./src/js/shared/Utils/ObjectCloner.js")["default"]);
@@ -4532,7 +4461,6 @@ class Canvas {
                             options.fallback_locales,
                             options.translations
                         ),
-                        eventDispatcher: new EventDispatcher(),
                         messenger: messenger,
                     },
                     instanceId: self.instanceId,

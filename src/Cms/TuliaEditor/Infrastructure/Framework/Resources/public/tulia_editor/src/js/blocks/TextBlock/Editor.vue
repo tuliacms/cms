@@ -1,5 +1,5 @@
 <template>
-    <div><WysiwygEditor v-model="block.data.text"></WysiwygEditor></div>
+    <div><WysiwygEditor v-model="block.data.text" :blockId="block.id"></WysiwygEditor></div>
 </template>
 
 <script setup>

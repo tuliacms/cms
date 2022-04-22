@@ -75,7 +75,7 @@ const { toRaw } = require('vue');
 
 export default {
     props: ['structure'],
-    inject: ['messenger', 'selection', 'eventDispatcher', 'structureManipulator', 'translator'],
+    inject: ['messenger', 'selection', 'structureManipulator', 'translator'],
     components: { Section },
     data () {
         return {
@@ -184,12 +184,6 @@ export default {
         }
     },
     mounted () {
-        // @todo Is this event `block.inner.updated` needed?
-        // Maybe we can use `structure.element.updated`?
-        this.eventDispatcher.on('block.inner.updated', () => {
-            this.hoverable.boundaries.update();
-            this.selectable.boundaries.update();
-        });
         this.messenger.on('structure.element.updated', () => {
             this.hoverable.boundaries.update();
             this.selectable.boundaries.update();

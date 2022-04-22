@@ -3,7 +3,6 @@ import './../css/tulia-editor.editor.scss';
 const Vue = require('vue');
 const Messenger = require('shared/Messaging/Messenger.js').default;
 const Location = require('shared/Utils/Location.js').default;
-const EventDispatcher = require('shared/EventDispatcher.js').default;
 const Translator = require('shared/I18n/Translator.js').default;
 const EditorRoot = require("components/Editor/Root.vue").default;
 const ObjectCloner = require("shared/Utils/ObjectCloner.js").default;
@@ -34,7 +33,6 @@ export class Canvas {
                             options.fallback_locales,
                             options.translations
                         ),
-                        eventDispatcher: new EventDispatcher(),
                         messenger: messenger,
                     },
                     instanceId: self.instanceId,

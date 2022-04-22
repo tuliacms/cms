@@ -37,7 +37,6 @@ const props = defineProps([
 
 provide('messenger', props.container.messenger);
 provide('translator', props.container.translator);
-provide('eventDispatcher', props.container.eventDispatcher);
 provide('options', props.options);
 
 const saveEditor = function () {

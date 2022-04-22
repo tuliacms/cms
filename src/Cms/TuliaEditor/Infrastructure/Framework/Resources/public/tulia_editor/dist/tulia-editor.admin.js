@@ -4395,7 +4395,6 @@ const { defineProps, onMounted, provide, reactive, isProxy, toRaw } = __webpack_
 
 provide('messenger', props.container.messenger);
 provide('translator', props.container.translator);
-provide('eventDispatcher', props.container.eventDispatcher);
 provide('options', props.options);
 
 const saveEditor = function () {
@@ -4861,7 +4860,6 @@ const DraggableDeltaTranslator = (__webpack_require__(/*! shared/Structure/Dragg
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
     props: ['structure'],
     inject: [
-        'eventDispatcher',
         'messenger',
         'selection',
         'structureDragOptions',
@@ -5417,8 +5415,12 @@ const ClassObserver = (__webpack_require__(/*! shared/Utils/ClassObserver.js */ 
             required: true,
             default: ''
         },
+        blockId: {
+            required: true,
+            default: ''
+        },
     },
-    inject: ['eventDispatcher', 'messenger'],
+    inject: ['messenger'],
     data () {
         return {
             quill: null,
@@ -5438,7 +5440,7 @@ const ClassObserver = (__webpack_require__(/*! shared/Utils/ClassObserver.js */ 
         });
         quill.on('text-change', () => {
             this.$emit('update:modelValue', quill.root.innerHTML);
-            this.eventDispatcher.emit('block.inner.updated');
+            this.messenger.notify('structure.element.updated', this.blockId);
         });
 
         this.quill = quill;
@@ -6736,8 +6738,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["WysiwygEditor"], {
       modelValue: $setup.block.data.text,
-      "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => (($setup.block.data.text) = $event))
-    }, null, 8 /* PROPS */, ["modelValue"])
+      "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => (($setup.block.data.text) = $event)),
+      blockId: $setup.block.id
+    }, null, 8 /* PROPS */, ["modelValue", "blockId"])
   ]))
 }
 
@@ -12190,70 +12193,6 @@ class Canvas {
 
 /***/ }),
 
-/***/ "./src/js/shared/EventDispatcher.js":
-/*!******************************************!*\
-  !*** ./src/js/shared/EventDispatcher.js ***!
-  \******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ EventDispatcher)
-/* harmony export */ });
-class EventDispatcher {
-    events = [];
-
-    on (events, listener, priority) {
-        events = events.split(',');
-        priority = priority || 100;
-
-        for (let i = 0; i < events.length; i++) {
-            let name = events[i].trim();
-
-            if (this.events[name]) {
-                this.events[name].push({
-                    listener: listener,
-                    priority: priority
-                });
-            } else {
-                this.events[name] = [];
-                this.events[name].push({
-                    listener: listener,
-                    priority: priority
-                });
-            }
-
-            this.events[name].sort(function (a, b) {
-                return b.priority - a.priority;
-            });
-        }
-
-        return this;
-    }
-
-    emit (name, ...args) {
-        if (! this.events[name]) {
-            return this;
-        }
-
-        args = args || [];
-
-        for (let i = 0; i < this.events[name].length; i++) {
-            if (typeof(this.events[name][i].listener) !== 'function') {
-                throw new Error('One of the listeners of the "' + name + '" event is not a function.');
-            }
-
-            this.events[name][i].listener(...args);
-        }
-
-        return this;
-    }
-};
-
-
-/***/ }),
-
 /***/ "./src/js/shared/I18n/Catalogue.js":
 /*!*****************************************!*\
   !*** ./src/js/shared/I18n/Catalogue.js ***!
@@ -13953,7 +13892,6 @@ const Vue = __webpack_require__(/*! vue */ "vue");
 const Fixer = (__webpack_require__(/*! shared/Structure/Fixer.js */ "./src/js/shared/Structure/Fixer.js")["default"]);
 const Translator = (__webpack_require__(/*! shared/I18n/Translator.js */ "./src/js/shared/I18n/Translator.js")["default"]);
 const Messenger = (__webpack_require__(/*! shared/Messaging/Messenger.js */ "./src/js/shared/Messaging/Messenger.js")["default"]);
-const EventDispatcher = (__webpack_require__(/*! shared/EventDispatcher.js */ "./src/js/shared/EventDispatcher.js")["default"]);
 const AdminRoot = (__webpack_require__(/*! components/Admin/Root.vue */ "./src/js/Components/Admin/Root.vue")["default"]);
 const ObjectCloner = (__webpack_require__(/*! shared/Utils/ObjectCloner.js */ "./src/js/shared/Utils/ObjectCloner.js")["default"]);
 const extensions = (__webpack_require__(/*! extensions/extensions.js */ "./src/js/extensions/extensions.js")["default"]);
@@ -14049,8 +13987,6 @@ class TuliaEditor {
             this.options.fallback_locales,
             this.options.translations
         );
-        // @todo Try to remove dispatcher and place messegnger instead of it.
-        this.container.eventDispatcher = new EventDispatcher();
 
         TuliaEditor.instances[this.instanceId] = this;
 

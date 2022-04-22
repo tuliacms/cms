@@ -10,7 +10,7 @@
             :is="'block-' + block.code + '-editor'"
             :data="block.data"
             :id="block.id"
-            @updated="eventDispatcher.emit('block.inner.updated')"
+            @updated="messenger.notify('structure.element.updated', block.id)"
         ></component>
     </div>
 </template>
@@ -18,6 +18,6 @@
 <script>
 export default {
     props: ['block', 'parent'],
-    inject: ['selection', 'eventDispatcher'],
+    inject: ['selection', 'messenger'],
 };
 </script>

@@ -10,7 +10,6 @@ const Vue = require('vue');
 const Fixer = require('shared/Structure/Fixer.js').default;
 const Translator = require('shared/I18n/Translator.js').default;
 const Messenger = require('shared/Messaging/Messenger.js').default;
-const EventDispatcher = require('shared/EventDispatcher.js').default;
 const AdminRoot = require("components/Admin/Root.vue").default;
 const ObjectCloner = require("shared/Utils/ObjectCloner.js").default;
 const extensions = require("extensions/extensions.js").default;
@@ -106,8 +105,6 @@ export class TuliaEditor {
             this.options.fallback_locales,
             this.options.translations
         );
-        // @todo Try to remove dispatcher and place messegnger instead of it.
-        this.container.eventDispatcher = new EventDispatcher();
 
         TuliaEditor.instances[this.instanceId] = this;
 

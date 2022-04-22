@@ -42,8 +42,12 @@ export default {
             required: true,
             default: ''
         },
+        blockId: {
+            required: true,
+            default: ''
+        },
     },
-    inject: ['eventDispatcher', 'messenger'],
+    inject: ['messenger'],
     data () {
         return {
             quill: null,
@@ -63,7 +67,7 @@ export default {
         });
         quill.on('text-change', () => {
             this.$emit('update:modelValue', quill.root.innerHTML);
-            this.eventDispatcher.emit('block.inner.updated');
+            this.messenger.notify('structure.element.updated', this.blockId);
         });
 
         this.quill = quill;

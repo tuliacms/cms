@@ -27,7 +27,6 @@ const structureManipulator = new StructureManipulator(structure, props.container
 
 provide('selection', selection);
 provide('messenger', props.container.messenger);
-provide('eventDispatcher', props.container.eventDispatcher);
 provide('translator', props.container.translator);
 provide('structureManipulator', structureManipulator);
 provide('options', props.options);
@@ -35,10 +34,6 @@ provide('options', props.options);
 const renderedContent = ref(null);
 
 onMounted(() => {
-    props.container.eventDispatcher.on('block.inner.updated', () => {
-        //props.container.messenger.notify('structure.synchronize.from.editor', ObjectCloner.deepClone(toRaw(structure)));
-    });
-
     props.container.messenger.operation('structure.fetch', (params, success, fail) => {
         success({
             content: renderedContent.value.$el.innerHTML,
