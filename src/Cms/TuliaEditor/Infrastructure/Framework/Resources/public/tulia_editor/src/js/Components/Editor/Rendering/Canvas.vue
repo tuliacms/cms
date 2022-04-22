@@ -14,7 +14,7 @@
                     <div
                         v-for="(column, key) in row.columns"
                         :key="'column-' + key"
-                        class="tued-column col"
+                        :class="columnClass(column)"
                     >
                         <component
                             v-for="(block, key) in column.blocks"
@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-const { ref, defineProps, inject } = require('vue');
+const { ref, defineProps, inject, computed } = require('vue');
 const props = defineProps(['structure']);
 const messenger = inject('messenger');
 
@@ -44,4 +44,16 @@ messenger.operation('editor.canvas.preview.toggle', (params, success, fail) => {
 
     success();
 });
+
+
+/**********
+ * Columns
+ **********/
+const SizesClassnameGenerator = require('shared/Structure/Columns/SizesClassnameGenerator.js').default;
+const columnClass = (column) => {
+    return (new SizesClassnameGenerator(
+        column,
+        ['tued-column']
+    )).generate();
+};
 </script>
