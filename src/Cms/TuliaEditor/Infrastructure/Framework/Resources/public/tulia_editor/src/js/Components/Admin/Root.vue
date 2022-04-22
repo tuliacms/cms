@@ -154,16 +154,14 @@ provide('modals', modals);
 const Blocks = require('shared/Structure/Blocks/Blocks.js').default;
 const BlocksPicker = require("shared/Structure/Blocks/BlocksPicker.js").default;
 const BlocksRegistry = require("shared/Structure/Blocks/Registry.js").default;
-const BlockHooks = require("shared/Structure/Blocks/BlockHooks.js").default;
 
 const blockPickerData = reactive({
     columnId: null
 });
-const blockHooks = new BlockHooks(props.container.messenger);
 const blocksRegistry = new BlocksRegistry(props.availableBlocks);
 
 provide('blocksRegistry', blocksRegistry);
-provide('blocks', new Blocks(blockHooks, props.options.blocks, props.container.messenger));
+provide('blocks', new Blocks(props.options.blocks, props.container.messenger));
 provide('blocksPicker', new BlocksPicker(blockPickerData, blocksRegistry, structureManipulator, modals));
 
 </script>
