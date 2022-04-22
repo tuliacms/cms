@@ -1,6 +1,6 @@
 framework:
     public_paths:
-        '%cms.core_dir%/Cms/ContactForm/Infrastructure/Framework/Resources/public/dist': '/core/contact-forms'
+        - { source: '%cms.core_dir%/Cms/ContactForm/Infrastructure/Framework/Resources/public/dist', target: '/core/contact-forms' }
     translator:
         paths:
             - '%cms.core_dir%/Cms/ContactForm/Infrastructure/Framework/Resources/translations'

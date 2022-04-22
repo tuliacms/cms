@@ -1,0 +1,15 @@
+@import "tulia-editor.reset.scss";
+@import "admin/_variables.scss";
+@import "admin/_canvas.scss";
+@import "admin/_sidebar.scss";
+@import "admin/_structure.scss";
+@import "admin/_main-window.scss";
+@import "admin/_editor-window.scss";
+@import "admin/_view-mode-selector.scss";
+@import "admin/_modals.scss";
+@import "admin/_block-picker-modal.scss";
+@import "admin/_selected-element.scss";
+
+.tued-editor-opened {
+    overflow: hidden !important;
+}

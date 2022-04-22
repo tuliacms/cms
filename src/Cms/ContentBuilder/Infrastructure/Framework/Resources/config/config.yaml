@@ -3,7 +3,7 @@ framework:
         paths:
             - '%cms.core_dir%/Cms/ContentBuilder/Infrastructure/Framework/Resources/translations'
     public_paths:
-        '%cms.core_dir%/Cms/ContentBuilder/Infrastructure/Framework/Resources/public/layout_builder/dist': '/core/content-builder-layout-builder'
+        - { source: '%cms.core_dir%/Cms/ContentBuilder/Infrastructure/Framework/Resources/public/layout-builder/dist', target: '/core/content-builder-layout-builder' }
     templating:
         paths:
             - { name: backend/content_builder, path: '%cms.core_dir%/Cms/ContentBuilder/Infrastructure/Framework/Resources/views/backend' }

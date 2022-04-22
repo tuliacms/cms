@@ -3,7 +3,7 @@ framework:
         paths:
             - '%cms.core_dir%/Cms/ContentBlock/Infrastructure/Framework/Resources/translations'
     public_paths:
-        '%cms.core_dir%/Cms/ContentBlock/Infrastructure/Framework/Resources/public/content-blocks-builder/dist': '/core/content-block-builder'
+        - { source: '%cms.core_dir%/Cms/ContentBlock/Infrastructure/Framework/Resources/public/content-blocks-builder/dist', target: '/core/content-block-builder' }
     templating:
         paths:
             - { name: backend/content_block, path: '%cms.core_dir%/Cms/ContentBlock/Infrastructure/Framework/Resources/views/backend' }
@@ -33,7 +33,7 @@ cms:
                     classname: 'Tulia\Cms\ContentBlock\Infrastructure\Framework\Form\FormType\ContentBlockBuilderType'
                     exclude_for_types: [ content_block ]
                     constraints: [ required ]
-                    flags: [ compilable ]
+                    flags: [ compilable, renderable ]
                     configuration:
                         icon:
                             required: false

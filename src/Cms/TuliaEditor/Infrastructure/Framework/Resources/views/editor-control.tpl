@@ -1,4 +1,4 @@
-{% assets ['tulia_editor'] %}
+{% assets ['tulia_editor', 'tulia_editor_blocks'] %}
 
 <div id="{{ params.id }}-qaaaa"></div>
 
@@ -11,6 +11,7 @@
             column: '{{ 'column'|trans({}, 'tulia-editor') }}',
             row: '{{ 'row'|trans({}, 'tulia-editor') }}',
             block: '{{ 'block'|trans({}, 'tulia-editor') }}',
+            selectEditableElementToShowOptions: '{{ 'selectEditableElementToShowOptions'|trans({}, 'tulia-editor') }}',
         };
 
         let structureSelector = '.tulia-editor-structure-field[data-tulia-editor-group-id="{{ params.group_id }}"]';

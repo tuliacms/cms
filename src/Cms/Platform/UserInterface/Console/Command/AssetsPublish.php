@@ -37,11 +37,11 @@ class AssetsPublish extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        foreach ($this->assetsPublicPaths as $source => $target) {
-            $sourceHumanized = str_replace($this->rootDir, '', $source);
-            $targetHumanized = '/public/assets' . $target;
+        foreach ($this->assetsPublicPaths as $path) {
+            $sourceHumanized = str_replace($this->rootDir, '', $path['source']);
+            $targetHumanized = '/public/assets' . $path['target'];
 
-            if ($this->assetsPublisher->publish($source, $target)) {
+            if ($this->assetsPublisher->publish($path['source'], $path['target'])) {
                 $output->writeln(sprintf('<info>%s => %s</info>', $sourceHumanized, $targetHumanized));
             } else {
                 $output->writeln(sprintf('<fg=red>%s => %s</>', $sourceHumanized, $targetHumanized));

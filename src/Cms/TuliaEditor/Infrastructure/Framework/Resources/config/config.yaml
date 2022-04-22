@@ -1,6 +1,6 @@
 framework:
     public_paths:
-        '%cms.core_dir%/Cms/TuliaEditor/Infrastructure/Framework/Resources/public/tulia_editor/dist': '/core/tulia-editor'
+        - { source: '%cms.core_dir%/Cms/TuliaEditor/Infrastructure/Framework/Resources/public/tulia-editor/dist', target: '/core/tulia-editor' }
     translator:
         paths:
             - '%cms.core_dir%/Cms/TuliaEditor/Infrastructure/Framework/Resources/translations'

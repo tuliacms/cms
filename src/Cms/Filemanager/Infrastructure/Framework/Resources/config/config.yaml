@@ -3,7 +3,7 @@ framework:
         paths:
             - { name: backend/filemanager, path: '%cms.core_dir%/Cms/Filemanager/Infrastructure/Framework/Resources/views/backend' }
     public_paths:
-        '%cms.core_dir%/Cms/Filemanager/Infrastructure/Framework/Resources/public/filemanager/dist': '/core/filemanager'
+        - { source: '%cms.core_dir%/Cms/Filemanager/Infrastructure/Framework/Resources/public/filemanager/dist', target: '/core/filemanager' }
     assetter:
         assets:
             filemanager:

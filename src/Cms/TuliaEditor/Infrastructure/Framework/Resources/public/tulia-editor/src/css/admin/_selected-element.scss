@@ -1,0 +1,17 @@
+.tued-sidebar-selected-element {
+    .tued-sidebar-selected-element-not-selected {
+        padding: 15px;
+        text-align: center;
+        font-size: 17px;
+        color: rgba(0,0,0,.3);
+    }
+}
+
+.tued-structure-selected-options {
+    display: none;
+    padding: 10px;
+
+    &.tued-structure-selected-active {
+        display: block;
+    }
+}

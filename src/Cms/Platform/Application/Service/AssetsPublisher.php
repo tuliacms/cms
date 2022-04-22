@@ -23,8 +23,8 @@ class AssetsPublisher
 
     public function publishRegisteredAssets(): void
     {
-        foreach ($this->assetsPublicPaths as $source => $target) {
-            $this->publish($source, $target);
+        foreach ($this->assetsPublicPaths as $path) {
+            $this->publish($path['source'], $path['target']);
         }
     }
 

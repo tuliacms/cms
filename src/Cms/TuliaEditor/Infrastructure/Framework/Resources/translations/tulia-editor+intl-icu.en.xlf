@@ -22,6 +22,10 @@
                 <source>block</source>
                 <target>Block</target>
             </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.6">
+                <source>selectEditableElementToShowOptions</source>
+                <target>Select editable element to show options</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

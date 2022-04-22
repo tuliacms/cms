@@ -33,35 +33,35 @@ framework:
                     theme:
                         template: "{% extends [ '@theme/layout.tpl', '@parent/layout.tpl' ] %}"
     public_paths:
-        '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/backend_layout/dist': '/core/backend'
-        '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/animate-css': '/core/animate-css'
-        '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/bootstrap': '/core/bootstrap'
-        '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/bootstrap-datetimepicker': '/core/bootstrap-datetimepicker'
-        '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/bootstrap-datetimepicker-custom': '/core/bootstrap-datetimepicker-custom'
-        '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/chosen': '/core/chosen'
-        '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/customizer': '/core/customizer'
-        '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/datatable-tulia': '/core/datatable-tulia'
-        '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/datatables': '/core/datatables'
-        '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/frontend': '/core/frontend'
-        '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/frontend-toolbar': '/core/frontend-toolbar'
-        '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/fileapi': '/core/fileapi'
-        '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/flag-icons': '/core/flag-icons'
-        '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/font-awesome': '/core/font-awesome'
-        '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/jquery': '/core/jquery'
-        '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/jquery-nestable': '/core/jquery-nestable'
-        '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/jquery-typeahead': '/core/jquery-typeahead'
-        '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/jquery-ui': '/core/jquery-ui'
-        '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/js-cookie': '/core/js-cookie'
-        '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/jstree': '/core/jstree'
-        '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/lodash': '/core/lodash'
-        '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/masonry': '/core/masonry'
-        '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/momentjs': '/core/momentjs'
-        '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/popperjs': '/core/popperjs'
-        '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/quill': '/core/quill'
-        '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/simplebar': '/core/simplebar'
-        '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/sweetalert2': '/core/sweetalert2'
-        '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/tulia-dynamic-form': '/core/tulia-dynamic-form'
-        '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core_assets/vuejs': '/core/vuejs'
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/backend-layout/dist', target: '/core/backend' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/animate-css', target: '/core/animate-css' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/bootstrap', target: '/core/bootstrap' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/bootstrap-datetimepicker', target: '/core/bootstrap-datetimepicker' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/bootstrap-datetimepicker-custom', target: '/core/bootstrap-datetimepicker-custom' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/chosen', target: '/core/chosen' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/customizer', target: '/core/customizer' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/datatable-tulia', target: '/core/datatable-tulia' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/datatables', target: '/core/datatables' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/frontend', target: '/core/frontend' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/frontend-toolbar', target: '/core/frontend-toolbar' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/fileapi', target: '/core/fileapi' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/flag-icons', target: '/core/flag-icons' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/font-awesome', target: '/core/font-awesome' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/jquery', target: '/core/jquery' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/jquery-nestable', target: '/core/jquery-nestable' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/jquery-typeahead', target: '/core/jquery-typeahead' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/jquery-ui', target: '/core/jquery-ui' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/js-cookie', target: '/core/js-cookie' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/jstree', target: '/core/jstree' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/lodash', target: '/core/lodash' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/masonry', target: '/core/masonry' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/momentjs', target: '/core/momentjs' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/popperjs', target: '/core/popperjs' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/quill', target: '/core/quill' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/simplebar', target: '/core/simplebar' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/sweetalert2', target: '/core/sweetalert2' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/tulia-dynamic-form', target: '/core/tulia-dynamic-form' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/vuejs', target: '/core/vuejs' }
     assetter:
         assets:
             jquery:
