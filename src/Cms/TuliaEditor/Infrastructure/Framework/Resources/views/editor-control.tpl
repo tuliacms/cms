@@ -1,10 +1,10 @@
-{% assets ['tulia_editor', 'tulia_editor_blocks'] %}
+{% assets ['tulia_editor', 'tulia_editor_extensions', 'tulia_editor_blocks'] %}
 
 <div id="{{ params.id }}-qaaaa"></div>
 
 <script>
     $(function () {
-        window.TuliaEditor.TuliaEditor.translations['{{ user().locale }}'] = {
+        TuliaEditor.translations['{{ user().locale }}'] = {
             save: '{{ 'save'|trans }}',
             cancel: '{{ 'cancel'|trans }}',
             section: '{{ 'section'|trans({}, 'tulia-editor') }}',
@@ -25,7 +25,7 @@
             structure = JSON.parse(structure);
         }
 
-        new window.TuliaEditor.TuliaEditor('#{{ params.id }}-qaaaa', {
+        new TuliaEditor.Editor('#{{ params.id }}-qaaaa', {
             sink: {
                 structure: structureSelector,
                 content: contentSelector

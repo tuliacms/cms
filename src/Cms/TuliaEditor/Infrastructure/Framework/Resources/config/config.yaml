@@ -12,17 +12,12 @@ framework:
             tulia_editor:
                 group: body
                 scripts:
-                    - /assets/core/tulia-editor/tulia-editor.admin.js
+                    - /assets/core/tulia-editor/tulia-editor.js
                 styles:
-                    - /assets/core/tulia-editor/tulia-editor.admin.js.css
-                require: [ lodash, vue ]
-            tulia_editor.editor:
-                group: body
-                scripts:
-                    - /assets/core/tulia-editor/tulia-editor.editor.js
-                styles:
-                    - /assets/core/tulia-editor/tulia-editor.editor.js.css
+                    - /assets/core/tulia-editor/main.css
                 require: [ lodash, vue, quill ]
+            tulia_editor_extensions: ~
+            tulia_editor_blocks: ~
 cms:
     content_building:
         data_types:

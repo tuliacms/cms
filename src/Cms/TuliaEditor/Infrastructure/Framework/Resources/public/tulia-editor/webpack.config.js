@@ -9,17 +9,15 @@ const fs = require('fs');
 
 module.exports = {
     mode: 'development',
-    entry: {
-        'tulia-editor.admin.js': './src/js/tulia-editor.admin.js',
-        'tulia-editor.editor.js': './src/js/tulia-editor.editor.js',
-    },
+    entry: './src/js/tulia-editor.js',
     output: {
-        filename: '[name]',
+        filename: 'tulia-editor.js',
         path: path.resolve(__dirname, 'dist'),
         library: {
             name: 'TuliaEditor',
-            type: 'window'
-        }
+            type: 'var',
+            export: 'default',
+        },
     },
     module: {
         rules: [
