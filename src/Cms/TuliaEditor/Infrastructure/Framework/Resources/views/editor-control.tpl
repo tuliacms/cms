@@ -1,4 +1,4 @@
-{% assets ['tulia_editor', 'tulia_editor_extensions', 'tulia_editor_blocks'] %}
+{% assets ['tulia_editor'] %}
 
 <div id="{{ params.id }}-qaaaa"></div>
 

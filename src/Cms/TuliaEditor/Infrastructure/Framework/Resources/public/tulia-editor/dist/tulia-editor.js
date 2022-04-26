@@ -13475,12 +13475,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ Editor)
 /* harmony export */ });
 /* harmony import */ var _css_tulia_editor_admin_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../css/tulia-editor.admin.scss */ "./src/css/tulia-editor.admin.scss");
-/**!
- * Tulia Editor
- * @author	Adam Banaszkiewicz <adam@codevia.com>
- * @license MIT only with Tulia CMS package. Usage outside the Tulia CMS package is prohibited.
- */
-
 
 
 const Vue = __webpack_require__(/*! vue */ "vue");

@@ -9,15 +9,14 @@ framework:
             - { name: backend/tulia-editor, path: '%cms.core_dir%/Cms/TuliaEditor/Infrastructure/Framework/Resources/views' }
     assetter:
         assets:
-            tulia_editor:
+            tulia_editor_bundle:
                 group: body
                 scripts:
                     - /assets/core/tulia-editor/tulia-editor.js
                 styles:
                     - /assets/core/tulia-editor/main.css
                 require: [ lodash, vue, quill ]
-            tulia_editor_extensions: ~
-            tulia_editor_blocks: ~
+                collection: tulia_editor
 cms:
     content_building:
         data_types:
