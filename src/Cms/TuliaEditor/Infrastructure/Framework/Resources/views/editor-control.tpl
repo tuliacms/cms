@@ -14,6 +14,8 @@
             selectEditableElementToShowOptions: '{{ 'selectEditableElementToShowOptions'|trans({}, 'tulia-editor') }}',
             startTypingPlaceholder: '{{ 'startTypingPlaceholder'|trans({}, 'tulia-editor') }}',
             choseImage: '{{ 'choseImage'|trans({}, 'tulia-editor') }}',
+            removeItem: '{{ 'removeItem'|trans({}, 'tulia-editor') }}',
+            addItem: '{{ 'addItem'|trans({}, 'tulia-editor') }}',
         };
 
         let structureSelector = '.tulia-editor-structure-field[data-tulia-editor-group-id="{{ params.group_id }}"]';

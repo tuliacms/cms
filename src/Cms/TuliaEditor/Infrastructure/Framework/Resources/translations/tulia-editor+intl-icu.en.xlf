@@ -34,6 +34,14 @@
                 <source>choseImage</source>
                 <target>Chose image</target>
             </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.9">
+                <source>removeItem</source>
+                <target>Remove item</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.10">
+                <source>addItem</source>
+                <target>Add item</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

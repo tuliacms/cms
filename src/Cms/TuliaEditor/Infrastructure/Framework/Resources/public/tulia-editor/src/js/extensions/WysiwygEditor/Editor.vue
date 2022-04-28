@@ -51,12 +51,9 @@ export default {
         modelValue: {
             required: true,
             default: ''
-        },
-        blockId: {
-            required: true,
-            default: ''
-        },
+        }
     },
+    name: 'Wysiwyg',
     inject: ['messenger', 'translator'],
     data () {
         return {
@@ -77,7 +74,6 @@ export default {
         });
         quill.on('text-change', () => {
             this.$emit('update:modelValue', quill.root.innerHTML);
-            this.messenger.notify('structure.element.updated', this.blockId);
         });
 
         this.quill = quill;
@@ -103,6 +99,7 @@ export default {
             this.quill.root.innerHTML = val ? val : '';
         }
     },
+    // @todo Destroy Quill when destroy component
     /*destroyed () {
         $(this.$el).chosen('destroy');
     }*/

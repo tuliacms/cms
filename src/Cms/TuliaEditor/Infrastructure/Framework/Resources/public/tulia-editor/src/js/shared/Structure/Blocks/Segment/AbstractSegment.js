@@ -20,14 +20,10 @@ export default class AbstractSegment {
         this.dataSynchronizer = new Data(props.id, segment, props.data, this.messenger);
         this.styleSynchronizer = new ElementStyle(props.style);
 
-        if (segment === 'manager') {
-            this.messenger.on('structure.element.created', (type, id) => {
-                if (type === 'block' && id === this.id) {
-                    this.notify('created');
-                }
-            });
-        }
+        this.init();
     }
+
+    init () {}
 
     on (event, listener) {
         this.messenger.on(this.generateBlockPrefix(event), listener);

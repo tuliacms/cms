@@ -6305,12 +6305,9 @@ __webpack_require__.r(__webpack_exports__);
         modelValue: {
             required: true,
             default: ''
-        },
-        blockId: {
-            required: true,
-            default: ''
-        },
+        }
     },
+    name: 'Contenteditable',
     inject: ['messenger', 'translator'],
     methods: {
         onPaste (e) {
@@ -6352,12 +6349,10 @@ __webpack_require__.r(__webpack_exports__);
         },
         _changed () {
             this.$emit('update:modelValue', this.$refs.editable.innerHTML);
-            this.messenger.notify('structure.element.updated', this.blockId);
         }
     },
     mounted () {
         this.$refs.editable.innerHTML = this.modelValue;
-        this.messenger.notify('structure.element.updated', this.blockId);
     }
 });
 
@@ -6613,12 +6608,9 @@ const ClassObserver = (__webpack_require__(/*! shared/Utils/ClassObserver.js */ 
         modelValue: {
             required: true,
             default: ''
-        },
-        blockId: {
-            required: true,
-            default: ''
-        },
+        }
     },
+    name: 'Wysiwyg',
     inject: ['messenger', 'translator'],
     data () {
         return {
@@ -6639,7 +6631,6 @@ const ClassObserver = (__webpack_require__(/*! shared/Utils/ClassObserver.js */ 
         });
         quill.on('text-change', () => {
             this.$emit('update:modelValue', quill.root.innerHTML);
-            this.messenger.notify('structure.element.updated', this.blockId);
         });
 
         this.quill = quill;
@@ -6665,6 +6656,7 @@ const ClassObserver = (__webpack_require__(/*! shared/Utils/ClassObserver.js */ 
             this.quill.root.innerHTML = val ? val : '';
         }
     },
+    // @todo Destroy Quill when destroy component
     /*destroyed () {
         $(this.$el).chosen('destroy');
     }*/
@@ -8808,9 +8800,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["WysiwygEditor"], {
       modelValue: $setup.block.data.text,
-      "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => (($setup.block.data.text) = $event)),
-      blockId: $setup.block.id
-    }, null, 8 /* PROPS */, ["modelValue", "blockId"])
+      "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => (($setup.block.data.text) = $event))
+    }, null, 8 /* PROPS */, ["modelValue"])
   ]))
 }
 
@@ -15434,6 +15425,7 @@ class Data {
     messenger;
     owner;
     lastUpdateFromOutside = false;
+    onChangeCallable;
 
     constructor (blockId, owner, dataProperty, messenger) {
         this.blockId = blockId;
@@ -15448,6 +15440,10 @@ class Data {
 
     get reactiveData () {
         return this.data;
+    }
+
+    onChange (callable) {
+        this.onChangeCallable = callable;
     }
 
     propagateChangesInThisInstance () {
@@ -15469,6 +15465,10 @@ class Data {
             // Catch only operations for the same block in all windows
             if (data.blockId === this.blockId && data.owner !== this.owner) {
                 this.handleDataUpdate(data);
+
+                if (this.onChangeCallable) {
+                    this.onChangeCallable();
+                }
             }
 
             success();
@@ -15548,14 +15548,10 @@ class AbstractSegment {
         this.dataSynchronizer = new Data(props.id, segment, props.data, this.messenger);
         this.styleSynchronizer = new ElementStyle(props.style);
 
-        if (segment === 'manager') {
-            this.messenger.on('structure.element.created', (type, id) => {
-                if (type === 'block' && id === this.id) {
-                    this.notify('created');
-                }
-            });
-        }
+        this.init();
     }
+
+    init () {}
 
     on (event, listener) {
         this.messenger.on(this.generateBlockPrefix(event), listener);
@@ -15617,6 +15613,12 @@ class Editor extends AbstractSegment {
     constructor (props, options, messenger, extensions) {
         super('editor', props, options, messenger, extensions);
     }
+
+    init () {
+        this.dataSynchronizer.onChange(() => {
+            this.messenger.notify('structure.element.updated', this.id);
+        });
+    }
 }
 
 
@@ -15639,6 +15641,14 @@ const AbstractSegment = (__webpack_require__(/*! shared/Structure/Blocks/Segment
 class Manager extends AbstractSegment {
     constructor (props, options, messenger, extensions) {
         super('manager', props, options, messenger, extensions);
+    }
+
+    init () {
+        this.messenger.on('structure.element.created', (type, id) => {
+            if (type === 'block' && id === this.id) {
+                this.notify('created');
+            }
+        });
     }
 }
 

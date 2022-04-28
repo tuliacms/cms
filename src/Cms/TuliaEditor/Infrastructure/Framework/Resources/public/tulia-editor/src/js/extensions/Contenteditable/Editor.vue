@@ -35,12 +35,9 @@ export default {
         modelValue: {
             required: true,
             default: ''
-        },
-        blockId: {
-            required: true,
-            default: ''
-        },
+        }
     },
+    name: 'Contenteditable',
     inject: ['messenger', 'translator'],
     methods: {
         onPaste (e) {
@@ -82,12 +79,10 @@ export default {
         },
         _changed () {
             this.$emit('update:modelValue', this.$refs.editable.innerHTML);
-            this.messenger.notify('structure.element.updated', this.blockId);
         }
     },
     mounted () {
         this.$refs.editable.innerHTML = this.modelValue;
-        this.messenger.notify('structure.element.updated', this.blockId);
     }
 };
 </script>

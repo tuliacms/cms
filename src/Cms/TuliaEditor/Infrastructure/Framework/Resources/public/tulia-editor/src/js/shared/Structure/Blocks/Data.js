@@ -7,6 +7,7 @@ export default class Data {
     messenger;
     owner;
     lastUpdateFromOutside = false;
+    onChangeCallable;
 
     constructor (blockId, owner, dataProperty, messenger) {
         this.blockId = blockId;
@@ -21,6 +22,10 @@ export default class Data {
 
     get reactiveData () {
         return this.data;
+    }
+
+    onChange (callable) {
+        this.onChangeCallable = callable;
     }
 
     propagateChangesInThisInstance () {
@@ -42,6 +47,10 @@ export default class Data {
             // Catch only operations for the same block in all windows
             if (data.blockId === this.blockId && data.owner !== this.owner) {
                 this.handleDataUpdate(data);
+
+                if (this.onChangeCallable) {
+                    this.onChangeCallable();
+                }
             }
 
             success();
