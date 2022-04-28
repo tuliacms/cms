@@ -1,5 +1,6 @@
 const Block = require('shared/Structure/Blocks/Editor/Block.js').default;
 const Data = require('shared/Structure/Blocks/Data.js').default;
+const ElementStyle = require('shared/Structure/Style/ElementStyle.js').default;
 
 export default class Blocks {
     blocksOptions;
@@ -10,32 +11,35 @@ export default class Blocks {
         this.messenger = messenger;
     }
 
-    editor (code, props) {
+    editor (props) {
         return new Block(
-            props.id,
-            code,
-            new Data(props.id, 'editor', props, this.messenger),
-            this.blocksOptions[code] ?? {},
+            props.block.id,
+            props.block.code,
+            new Data(props.block.id, 'editor', props.block.data, this.messenger),
+            null,
+            this.blocksOptions[props.block.code] ?? {},
             this.messenger
         );
     }
 
-    manager (code, props) {
+    manager (props) {
         return new Block(
-            props.id,
-            code,
-            new Data(props.id, 'manager', props, this.messenger),
-            this.blocksOptions[code] ?? {},
+            props.block.id,
+            props.block.code,
+            new Data(props.block.id, 'manager', props.block.data, this.messenger),
+            null,
+            this.blocksOptions[props.block.code] ?? {},
             this.messenger
         );
     }
 
-    render (code, props) {
+    render (props) {
         return new Block(
-            props.id,
-            code,
-            new Data(props.id, 'render', props, this.messenger),
-            this.blocksOptions[code] ?? {},
+            props.block.id,
+            props.block.code,
+            new Data(props.block.id, 'render', props.block.data, this.messenger),
+            new ElementStyle(props.block.style),
+            this.blocksOptions[props.block.code] ?? {},
             this.messenger
         );
     }

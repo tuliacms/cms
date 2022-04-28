@@ -36,6 +36,10 @@ export default class Fixer {
             section.rows = [{}];
         }
 
+        if (!section.style) {
+            section.style = {};
+        }
+
         for (let i in section.rows) {
             section.rows[i] = this.fixRow(section.rows[i]);
         }
@@ -59,6 +63,10 @@ export default class Fixer {
                     id: sectionId,
                 }
             };
+        }
+
+        if (!row.style) {
+            row.style = {};
         }
 
         if (!row.columns || row.columns.length === 0) {
@@ -101,6 +109,10 @@ export default class Fixer {
             };
         }
 
+        if (!column.style) {
+            column.style = {};
+        }
+
         if (!column.blocks) {
             column.blocks = [];
         }
@@ -128,6 +140,10 @@ export default class Fixer {
                     id: columnId,
                 }
             };
+        }
+
+        if (!block.style) {
+            block.style = {};
         }
 
         if (!block.data) {

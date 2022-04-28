@@ -1,5 +1,5 @@
 <template>
-    <div class="tued-structure">
+    <div class="tued-sidebar-structure">
         <draggable
             group="sections"
             item-key="id"

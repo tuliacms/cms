@@ -4,25 +4,32 @@
             v-for="(section, key) in structure.sections"
             :key="'section-' + key"
             class="tued-section"
+            :id="`tued-section-${section.id}`"
         >
             <div class="tued-container container-xxl">
                 <div
                     v-for="(row, key) in section.rows"
                     :key="'row-' + key"
                     class="tued-row row"
+                    :id="`tued-row-${row.id}`"
                 >
                     <div
                         v-for="(column, key) in row.columns"
                         :key="'column-' + key"
                         :class="columnClass(column)"
+                        :id="`tued-column-${column.id}`"
                     >
-                        <component
+                        <div
                             v-for="(block, key) in column.blocks"
                             :key="'block-' + key"
-                            :is="'block-' + block.code + '-render'"
-                            :data="block.data"
-                            :id="block.id"
-                        ></component>
+                            class="tued-block"
+                            :id="`tued-block-${block.id}`"
+                        >
+                            <component
+                                :is="'block-' + block.code + '-render'"
+                                :block="block"
+                            ></component>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -31,14 +38,14 @@
 </template>
 
 <script setup>
-const { ref, defineProps, inject, computed } = require('vue');
+const { ref, defineProps, inject } = require('vue');
 const props = defineProps(['structure']);
 const messenger = inject('messenger');
 
 /**********************
  * Render area preview
  **********************/
-const renderPreview = ref(false);
+const renderPreview = ref(true);
 messenger.operation('editor.canvas.preview.toggle', (params, success, fail) => {
     renderPreview.value = !renderPreview.value;
 

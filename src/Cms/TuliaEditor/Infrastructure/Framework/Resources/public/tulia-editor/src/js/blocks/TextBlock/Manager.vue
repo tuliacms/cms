@@ -1,12 +1,15 @@
 <template></template>
 
 <script setup>
-const { computed, onMounted, defineProps, inject } = require('vue');
-
 /****************
  * Prepare block
  ****************/
-const props = defineProps(require('./props.js').default);
+const { defineProps, inject } = require('vue');
+const props = defineProps(['block']);
 const blocks = inject('blocks');
-const block = blocks.manager('core-textblock', props);
+const block = blocks.manager(props);
+
+/**************
+ * Block logic
+ **************/
 </script>

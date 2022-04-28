@@ -44,9 +44,8 @@ const saveEditor = function () {
         selection.resetHovered();
         selection.resetSelection();
         structure.sections = data.structure.sections;
-        console.log(data.structure, data.content)
         useCurrentStructureAsPrevious();
-        props.editor.updateContent(data.structure, data.content);
+        props.editor.updateContent(data.structure, data.content, data.style);
         props.editor.closeEditor();
         props.container.messenger.notify('editor.save');
     });

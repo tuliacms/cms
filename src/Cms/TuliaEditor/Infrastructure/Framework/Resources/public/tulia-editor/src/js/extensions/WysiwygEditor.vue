@@ -33,6 +33,16 @@
     </div>
 </template>
 
+<style scoped lang="scss">
+.editor-container {
+    outline: none !important;
+
+    &:hover {
+        outline: 1px dotted #555 !important;
+    }
+}
+</style>
+
 <script>
 const ClassObserver = require('shared/Utils/ClassObserver.js').default;
 
@@ -47,7 +57,7 @@ export default {
             default: ''
         },
     },
-    inject: ['messenger'],
+    inject: ['messenger', 'translator'],
     data () {
         return {
             quill: null,
@@ -60,7 +70,7 @@ export default {
 
         let quill = new Quill(editorContent, {
             theme: 'bubble',
-            placeholder: 'Start typing...',
+            placeholder: this.translator.trans('startTypingPlaceholder'),
             modules: {
                 toolbar: editorToolbar,
             }

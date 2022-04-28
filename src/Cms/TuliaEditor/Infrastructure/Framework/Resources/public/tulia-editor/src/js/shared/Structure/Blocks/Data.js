@@ -1,19 +1,19 @@
 const { reactive, toRaw, watch } = require('vue');
+const _ = require('lodash');
 
 export default class Data {
     data;
     blockId;
     messenger;
     owner;
-    version = 0;
     lastUpdateFromOutside = false;
 
-    constructor (blockId, owner, props, messenger) {
+    constructor (blockId, owner, dataProperty, messenger) {
         this.blockId = blockId;
         this.owner = owner;
         this.messenger = messenger;
 
-        this.data = reactive(props.data);
+        this.data = reactive(dataProperty);
 
         this.propagateChangesInThisInstance();
         this.watchForChangesInOtherInstance();
@@ -29,13 +29,10 @@ export default class Data {
                 return;
             }
 
-            this.version++;
-
             this.messenger.execute('structure.block.data.update', {
                 owner: this.owner,
                 data: toRaw(newData),
                 blockId: this.blockId,
-                version: this.version,
             });
         });
     }
@@ -52,13 +49,12 @@ export default class Data {
     }
 
     handleDataUpdate (newData) {
-        if (newData.version > this.version) {
+        if (_.isEqual(newData.data, toRaw(this.data)) === false) {
             for (let i in newData.data) {
                 this.lastUpdateFromOutside = true;
                 this.data[i] = newData.data[i];
             }
             this.lastUpdateFromOutside = false;
-            this.version = newData.version;
         }
     }
 }

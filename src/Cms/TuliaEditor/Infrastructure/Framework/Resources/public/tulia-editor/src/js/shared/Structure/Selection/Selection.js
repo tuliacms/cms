@@ -43,12 +43,20 @@ export default class Selection {
             return;
         }
 
+        if (this.selected && this.selected.type === type && this.selected.id === id) {
+            return;
+        }
+
         this.messenger.notify('structure.selection.deselect');
         this.messenger.notify('structure.selection.select', type, id, trigger);
     }
 
     hover (type, id, trigger) {
         if (this.hoveringDisabled) {
+            return;
+        }
+
+        if (this.hovered && this.hovered.type === type && this.hovered.id === id) {
             return;
         }
 

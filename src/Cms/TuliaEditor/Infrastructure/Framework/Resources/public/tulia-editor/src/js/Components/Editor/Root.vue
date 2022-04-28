@@ -11,6 +11,7 @@ const RenderingCanvasComponent = require("components/Editor/Rendering/Canvas.vue
 const ObjectCloner = require("shared/Utils/ObjectCloner.js").default;
 const Selection = require("shared/Structure/Selection/Selection.js").default;
 const StructureManipulator = require('shared/Structure/StructureManipulator.js').default;
+const StyleCompiler = require('shared/Structure/Style/Compiler.js').default;
 const { defineProps, provide, reactive, onMounted, toRaw, ref } = require('vue');
 
 const props = defineProps([
@@ -35,9 +36,12 @@ const renderedContent = ref(null);
 
 onMounted(() => {
     props.container.messenger.operation('structure.fetch', (params, success, fail) => {
+        let rawStructure = ObjectCloner.deepClone(toRaw(structure));
+
         success({
             content: renderedContent.value.$el.innerHTML,
-            structure: ObjectCloner.deepClone(toRaw(structure))
+            structure: rawStructure,
+            style: (new StyleCompiler(structure)).compile()
         });
     });
     props.container.messenger.on('structure.synchronize.from.admin', (newStructure) => {

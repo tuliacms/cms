@@ -3,13 +3,16 @@
 </template>
 
 <script setup>
-const WysiwygEditor = require('extensions/WysiwygEditor.vue').default;
-const { defineProps, inject } = require('vue');
-
 /****************
  * Prepare block
  ****************/
-const props = defineProps(require('./props.js').default);
+const { defineProps, inject } = require('vue');
+const props = defineProps(['block']);
 const blocks = inject('blocks');
-const block = blocks.editor('core-textblock', props);
+const block = blocks.editor(props);
+
+/**************
+ * Block logic
+ **************/
+const WysiwygEditor = require('extensions/WysiwygEditor.vue').default;
 </script>

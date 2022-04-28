@@ -13,9 +13,6 @@ use Tulia\Cms\Filemanager\Domain\Generator\Html;
  */
 class Image implements ShortcodeCompilerInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function compile(ShortcodeInterface $shortcode): string
     {
         if ($src = $shortcode->getParameter('src')) {
@@ -29,9 +26,6 @@ class Image implements ShortcodeCompilerInterface
         return '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getAlias(): string
     {
         return 'image';

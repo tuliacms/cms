@@ -3,13 +3,32 @@
  * @author	Adam Banaszkiewicz <adam@codevia.com>
  * @license MIT only with Tulia CMS package. Usage outside the Tulia CMS package is prohibited.
  */
-
 const Canvas = require('./Canvas.js').default;
 const Editor = require('./Editor.js').default;
 
 export default {
     Canvas,
     Editor,
+    block: function (block) {
+        const requiredProps = [
+            'code',
+            'name',
+            'icon',
+            'manager',
+            'editor',
+            'render',
+            'defaults',
+        ];
+
+        for (let prop of requiredProps) {
+            if (block.hasOwnProperty(prop) === false) {
+                console.error(`Missing property "${prop}" in block. Cannot be registered.`);
+                return;
+            }
+        }
+
+        this.blocks[block.code] = block;
+    },
     extensions: require("extensions/extensions.js").default,
     blocks: require("blocks/blocks.js").default,
     translations: {
@@ -57,6 +76,12 @@ export default {
             }
         },
         locale: 'en_en',
-        fallback_locales: ['en']
+        fallback_locales: ['en'],
+        // Blocks options
+        blocks: {},
+        filemanager: {
+            image_resolve_path: null,
+            endpoint: null
+        }
     }
 }

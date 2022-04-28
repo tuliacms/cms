@@ -26,6 +26,14 @@
                 <source>selectEditableElementToShowOptions</source>
                 <target>Select editable element to show options</target>
             </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.7">
+                <source>startTypingPlaceholder</source>
+                <target>Start typing...</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.8">
+                <source>choseImage</source>
+                <target>Chose image</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

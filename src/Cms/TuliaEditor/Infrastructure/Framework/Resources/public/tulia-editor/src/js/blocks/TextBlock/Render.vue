@@ -3,12 +3,15 @@
 </template>
 
 <script setup>
-const { defineProps, inject } = require('vue');
-
 /****************
  * Prepare block
  ****************/
-const props = defineProps(require('./props.js').default);
+const { defineProps, inject } = require('vue');
+const props = defineProps(['block']);
 const blocks = inject('blocks');
-const block = blocks.render('core-textblock', props);
+const block = blocks.render(props);
+
+/**************
+ * Block logic
+ **************/
 </script>

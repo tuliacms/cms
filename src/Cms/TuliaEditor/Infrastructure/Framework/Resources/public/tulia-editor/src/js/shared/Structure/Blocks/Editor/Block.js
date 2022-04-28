@@ -1,15 +1,19 @@
+const _ = require('lodash');
+
 export default class Block {
     id;
     code;
     options;
     dataSynchronizer;
+    styleSynchronizer;
     messenger;
 
-    constructor (id, code, dataSynchronizer, options, messenger) {
+    constructor (id, code, dataSynchronizer, styleSynchronizer, options, messenger) {
         this.id = id;
         this.code = code;
         this.options = options;
         this.dataSynchronizer = dataSynchronizer;
+        this.styleSynchronizer = styleSynchronizer;
         this.messenger = messenger;
 
         this.messenger.on('structure.element.created', (type, id) => {
@@ -39,7 +43,15 @@ export default class Block {
         return this.dataSynchronizer.reactiveData;
     }
 
+    style (prefix, styles) {
+        let id = _.uniqueId(`tued-element-style-${prefix}-`);
+
+        this.styleSynchronizer.reactiveStyle[id] = styles;
+
+        return id;
+    }
+
     generateBlockPrefix (operation) {
-        return `structure.block.instance.${this.code}.${this.id}.${operation}`;
+        return `structure.block.instance.${this.id}.${operation}`;
     }
 }

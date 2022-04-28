@@ -106,9 +106,10 @@ export default class StructureManipulator {
         });
     }
 
-    newBlock (type, parent) {
+    newBlock (type, parent, defaults) {
         let block = this.fixer.fixBlock({
-            code: type
+            code: type,
+            data: defaults,
         });
 
         this.messenger.execute('structure.element.create-block', {block, parent}).then(() => {

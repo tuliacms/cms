@@ -93,9 +93,9 @@ export default class Editor {
         });
     }
 
-    updateContent (structure, content) {
+    updateContent (structure, content, style) {
         document.querySelector(this.options.sink.structure).value = JSON.stringify(structure);
-        document.querySelector(this.options.sink.content).value = content;
+        document.querySelector(this.options.sink.content).value = content + `<style>${style}</style>`;
     };
 
     renderEditorWindow () {

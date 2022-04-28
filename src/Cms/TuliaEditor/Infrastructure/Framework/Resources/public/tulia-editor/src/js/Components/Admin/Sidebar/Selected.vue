@@ -19,8 +19,7 @@
                     >
                         <component
                             :is="'block-' + block.code + '-manager'"
-                            :data="block.data"
-                            :id="block.id"
+                            :block="block"
                         ></component>
                     </div>
                 </div>

@@ -8,8 +8,7 @@
     >
         <component
             :is="'block-' + block.code + '-editor'"
-            :data="block.data"
-            :id="block.id"
+            :block="block"
             @updated="messenger.notify('structure.element.updated', block.id)"
         ></component>
     </div>

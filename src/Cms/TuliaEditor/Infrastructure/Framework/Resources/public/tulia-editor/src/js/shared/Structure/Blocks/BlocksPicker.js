@@ -26,7 +26,7 @@ export default class BlocksPicker {
     }
 
     select (code) {
-        this.structure.newBlock(code, this.config.columnId);
+        this.structure.newBlock(code, this.config.columnId, this.blocksRegistry.get(code).defaults);
         this.close();
     }
 }

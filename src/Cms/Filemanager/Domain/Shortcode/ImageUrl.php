@@ -10,22 +10,15 @@ use Tulia\Component\Shortcode\ShortcodeInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-class Gallery implements ShortcodeCompilerInterface
+class ImageUrl implements ShortcodeCompilerInterface
 {
     public function compile(ShortcodeInterface $shortcode): string
     {
-        $ids = explode(',', $shortcode->getParameter('ids'));
-        $ids = array_map(function ($id) {
-            $id = trim($id);
-            return "'{$id}'";
-        }, $ids);
-        $ids = implode(',', $ids);
-
-        return "{{ gallery([{$ids}]) }}";
+        return "{{ image_url('{$shortcode->getParameter('id')}', '{$shortcode->getParameter('size')}') }}";
     }
 
     public function getAlias(): string
     {
-        return 'gallery';
+        return 'image_url';
     }
 }

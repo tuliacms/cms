@@ -46,7 +46,8 @@ module.exports = {
     },
     externals: {
         vue: 'Vue',
-        Tulia: 'Tulia'
+        Tulia: 'Tulia',
+        lodash: '_',
     },
     resolve: {
         extensions: ['.js', '.scss'],
