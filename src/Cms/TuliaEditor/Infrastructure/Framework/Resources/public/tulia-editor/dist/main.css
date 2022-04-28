@@ -184,9 +184,11 @@
       background-color: rgba(255, 255, 255, 0.4);
       border-radius: 3px; }
 
-.tued-block_editable-image {
+.tued-block_editable-image,
+.tued-block_editable-background-image {
   position: relative; }
-  .tued-block_editable-image button {
+  .tued-block_editable-image button,
+  .tued-block_editable-background-image button {
     display: block;
     position: absolute;
     left: 5px;
@@ -199,11 +201,13 @@
     border: none;
     outline: none;
     transition: .12s all; }
-    .tued-block_editable-image button:before {
+    .tued-block_editable-image button:before,
+    .tued-block_editable-background-image button:before {
       content: "\f304";
       font-family: "Font Awesome 5 Free", serif;
       font-weight: bold; }
-    .tued-block_editable-image button:hover {
+    .tued-block_editable-image button:hover,
+    .tued-block_editable-background-image button:hover {
       cursor: pointer;
       background-color: #0071a5; }
 
@@ -611,26 +615,26 @@ body {
 .tued-editor-opened {
   overflow: hidden !important; }
 
-/*!*************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/extensions/WysiwygEditor.vue?vue&type=style&index=0&id=4a713d3c&scoped=true&lang=scss ***!
-  \*************************************************************************************************************************************************************************************************************************************************************************************************************/
-.editor-container[data-v-4a713d3c] {
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/extensions/WysiwygEditor/Editor.vue?vue&type=style&index=0&id=ca601020&scoped=true&lang=scss ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************/
+.editor-container[data-v-ca601020] {
   outline: none !important;
 }
-.editor-container[data-v-4a713d3c]:hover {
+.editor-container[data-v-ca601020]:hover {
     outline: 1px dotted #555 !important;
 }
 
-/*!***************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/extensions/Contenteditable.vue?vue&type=style&index=0&id=4af73d3f&scoped=true&lang=scss ***!
-  \***************************************************************************************************************************************************************************************************************************************************************************************************************/
-.tued-ext-contenteditable-element[data-v-4af73d3f] {
+/*!**********************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/extensions/Contenteditable/Editor.vue?vue&type=style&index=0&id=4f2d7e8d&scoped=true&lang=scss ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************************************************/
+.tued-ext-contenteditable-element[data-v-4f2d7e8d] {
   outline: none !important;
 }
-.tued-ext-contenteditable-element[data-v-4af73d3f]:hover {
+.tued-ext-contenteditable-element[data-v-4f2d7e8d]:hover {
     outline: 1px dotted #555 !important;
 }
-.tued-ext-contenteditable-element[data-v-4af73d3f]:empty:before {
+.tued-ext-contenteditable-element[data-v-4f2d7e8d]:empty:before {
     content: attr(data-placeholder);
     color: rgba(0, 0, 0, 0.3);
     font-style: italic;

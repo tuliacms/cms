@@ -14,5 +14,5 @@ const block = blocks.editor(props);
 /**************
  * Block logic
  **************/
-const WysiwygEditor = require('extensions/WysiwygEditor.vue').default;
+const WysiwygEditor = block.extension('WysiwygEditor');
 </script>

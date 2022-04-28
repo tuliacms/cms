@@ -23,6 +23,7 @@ const CanvasComponent = require("components/Admin/Canvas/Canvas.vue").default;
 const SidebarComponent = require("components/Admin/Sidebar/Sidebar.vue").default;
 const BlockPickerComponent = require("components/Admin/Block/PickerModal.vue").default;
 const ObjectCloner = require("shared/Utils/ObjectCloner.js").default;
+const TuliaEditor = require('TuliaEditor');
 const { defineProps, onMounted, provide, reactive, isProxy, toRaw } = require('vue');
 
 const props = defineProps([
@@ -144,6 +145,13 @@ provide('modals', modals);
 
 
 
+/*************
+ * Extensions
+ ************/
+const ExtensionRegistry = require("shared/Extension/Registry.js").default;
+const extensionRegistry = new ExtensionRegistry(TuliaEditor.extensions);
+provide('extensionRegistry', extensionRegistry);
+
 
 
 /*********
@@ -159,7 +167,7 @@ const blockPickerData = reactive({
 const blocksRegistry = new BlocksRegistry(props.availableBlocks);
 
 provide('blocksRegistry', blocksRegistry);
-provide('blocks', new Blocks(props.options.blocks, props.container.messenger));
+provide('blocks', new Blocks(props.options.blocks, props.container.messenger, extensionRegistry));
 provide('blocksPicker', new BlocksPicker(blockPickerData, blocksRegistry, structureManipulator, modals));
 
 </script>

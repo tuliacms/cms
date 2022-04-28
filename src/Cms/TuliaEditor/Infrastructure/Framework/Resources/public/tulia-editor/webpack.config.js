@@ -46,6 +46,7 @@ module.exports = {
     },
     externals: {
         vue: 'Vue',
+        TuliaEditor: 'TuliaEditor',
         Tulia: 'Tulia',
         lodash: '_',
     },

@@ -18,5 +18,5 @@ const block = blocks.editor(props);
 /**************
  * Block logic
  **************/
-const ImageEditor = require('extensions/Image/Image.js').default.Editor;
+const ImageEditor = block.extension('Image');
 </script>

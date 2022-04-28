@@ -12,6 +12,8 @@ const ObjectCloner = require("shared/Utils/ObjectCloner.js").default;
 const Selection = require("shared/Structure/Selection/Selection.js").default;
 const StructureManipulator = require('shared/Structure/StructureManipulator.js').default;
 const StyleCompiler = require('shared/Structure/Style/Compiler.js').default;
+const Filemanager = require('shared/Filemanager.js').default;
+const TuliaEditor = require('TuliaEditor');
 const { defineProps, provide, reactive, onMounted, toRaw, ref } = require('vue');
 
 const props = defineProps([
@@ -31,6 +33,7 @@ provide('messenger', props.container.messenger);
 provide('translator', props.container.translator);
 provide('structureManipulator', structureManipulator);
 provide('options', props.options);
+provide('filemanager', new Filemanager(props.options.filemanager));
 
 const renderedContent = ref(null);
 
@@ -76,15 +79,24 @@ onMounted(() => {
 
 
 
+/*************
+ * Extensions
+ ************/
+const ExtensionRegistry = require("shared/Extension/Registry.js").default;
+const extensionRegistry = new ExtensionRegistry(TuliaEditor.extensions);
+provide('extensionRegistry', extensionRegistry);
+
+
+
+
 /*********
  * Blocks
  *********/
 const Blocks = require('shared/Structure/Blocks/Blocks.js').default;
 const BlocksRegistry = require("shared/Structure/Blocks/Registry.js").default;
-
 const blocksRegistry = new BlocksRegistry(props.availableBlocks);
 
 provide('blocksRegistry', blocksRegistry);
-provide('blocks', new Blocks(props.options.blocks, props.container.messenger));
+provide('blocks', new Blocks(props.options.blocks, props.container.messenger, extensionRegistry));
 </script>
 

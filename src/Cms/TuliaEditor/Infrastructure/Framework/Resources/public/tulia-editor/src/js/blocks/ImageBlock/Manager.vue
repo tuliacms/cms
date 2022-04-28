@@ -20,5 +20,5 @@ const block = blocks.manager(props);
 /**************
  * Block logic
  **************/
-const ImageManager = require('extensions/Image/Image.js').default.Manager;
+const ImageManager = block.extension('Image');
 </script>

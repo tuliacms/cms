@@ -1,23 +1,24 @@
 const Render = require('shared/Structure/Blocks/Segment/Render.js').default;
 const Manager = require('shared/Structure/Blocks/Segment/Manager.js').default;
 const Editor = require('shared/Structure/Blocks/Segment/Editor.js').default;
-const Data = require('shared/Structure/Blocks/Data.js').default;
-const ElementStyle = require('shared/Structure/Style/ElementStyle.js').default;
 
 export default class Blocks {
     blocksOptions;
     messenger;
+    extensions;
 
-    constructor (blocksOptions, messenger) {
+    constructor (blocksOptions, messenger, extensions) {
         this.blocksOptions = blocksOptions;
         this.messenger = messenger;
+        this.extensions = extensions;
     }
 
     editor (props) {
         return new Editor(
             props.block,
             this.blocksOptions[props.block.code] ?? {},
-            this.messenger
+            this.messenger,
+            this.extensions
         );
     }
 
@@ -25,7 +26,8 @@ export default class Blocks {
         return new Manager(
             props.block,
             this.blocksOptions[props.block.code] ?? {},
-            this.messenger
+            this.messenger,
+            this.extensions
         );
     }
 
@@ -33,7 +35,8 @@ export default class Blocks {
         return new Render(
             props.block,
             this.blocksOptions[props.block.code] ?? {},
-            this.messenger
+            this.messenger,
+            this.extensions
         );
     }
 }

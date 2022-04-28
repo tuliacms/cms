@@ -74,6 +74,6 @@ onMounted(() => {
 
 <script>
 export default {
-    name: 'ImageManager'
+    name: 'BackgroundImageManager'
 }
 </script>
