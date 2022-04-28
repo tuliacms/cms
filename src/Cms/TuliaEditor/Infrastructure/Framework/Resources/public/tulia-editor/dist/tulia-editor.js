@@ -14817,7 +14817,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Blocks)
 /* harmony export */ });
-const Block = (__webpack_require__(/*! shared/Structure/Blocks/Editor/Block.js */ "./src/js/shared/Structure/Blocks/Editor/Block.js")["default"]);
+const Render = (__webpack_require__(/*! shared/Structure/Blocks/Segment/Render.js */ "./src/js/shared/Structure/Blocks/Segment/Render.js")["default"]);
+const Manager = (__webpack_require__(/*! shared/Structure/Blocks/Segment/Manager.js */ "./src/js/shared/Structure/Blocks/Segment/Manager.js")["default"]);
+const Editor = (__webpack_require__(/*! shared/Structure/Blocks/Segment/Editor.js */ "./src/js/shared/Structure/Blocks/Segment/Editor.js")["default"]);
 const Data = (__webpack_require__(/*! shared/Structure/Blocks/Data.js */ "./src/js/shared/Structure/Blocks/Data.js")["default"]);
 const ElementStyle = (__webpack_require__(/*! shared/Structure/Style/ElementStyle.js */ "./src/js/shared/Structure/Style/ElementStyle.js")["default"]);
 
@@ -14831,33 +14833,24 @@ class Blocks {
     }
 
     editor (props) {
-        return new Block(
-            props.block.id,
-            props.block.code,
-            new Data(props.block.id, 'editor', props.block.data, this.messenger),
-            null,
+        return new Editor(
+            props.block,
             this.blocksOptions[props.block.code] ?? {},
             this.messenger
         );
     }
 
     manager (props) {
-        return new Block(
-            props.block.id,
-            props.block.code,
-            new Data(props.block.id, 'manager', props.block.data, this.messenger),
-            null,
+        return new Manager(
+            props.block,
             this.blocksOptions[props.block.code] ?? {},
             this.messenger
         );
     }
 
     render (props) {
-        return new Block(
-            props.block.id,
-            props.block.code,
-            new Data(props.block.id, 'render', props.block.data, this.messenger),
-            new ElementStyle(props.block.style),
+        return new Render(
+            props.block,
             this.blocksOptions[props.block.code] ?? {},
             this.messenger
         );
@@ -14989,40 +14982,68 @@ class Data {
 
 /***/ }),
 
-/***/ "./src/js/shared/Structure/Blocks/Editor/Block.js":
-/*!********************************************************!*\
-  !*** ./src/js/shared/Structure/Blocks/Editor/Block.js ***!
-  \********************************************************/
+/***/ "./src/js/shared/Structure/Blocks/Registry.js":
+/*!****************************************************!*\
+  !*** ./src/js/shared/Structure/Blocks/Registry.js ***!
+  \****************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Block)
+/* harmony export */   "default": () => (/* binding */ Registry)
 /* harmony export */ });
-const _ = __webpack_require__(/*! lodash */ "lodash");
+class Registry {
+    blocks;
 
-class Block {
+    constructor (blocks) {
+        this.blocks = blocks;
+    }
+
+    get (code) {
+        return this.blocks[code];
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/shared/Structure/Blocks/Segment/AbstractSegment.js":
+/*!*******************************************************************!*\
+  !*** ./src/js/shared/Structure/Blocks/Segment/AbstractSegment.js ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ AbstractSegment)
+/* harmony export */ });
+const Data = (__webpack_require__(/*! shared/Structure/Blocks/Data.js */ "./src/js/shared/Structure/Blocks/Data.js")["default"]);
+const ElementStyle = (__webpack_require__(/*! shared/Structure/Style/ElementStyle.js */ "./src/js/shared/Structure/Style/ElementStyle.js")["default"]);
+
+class AbstractSegment {
     id;
     code;
+    props;
     options;
-    dataSynchronizer;
-    styleSynchronizer;
     messenger;
 
-    constructor (id, code, dataSynchronizer, styleSynchronizer, options, messenger) {
-        this.id = id;
-        this.code = code;
+    constructor (segment, props, options, messenger) {
+        this.id = props.id;
+        this.code = props.code;
         this.options = options;
-        this.dataSynchronizer = dataSynchronizer;
-        this.styleSynchronizer = styleSynchronizer;
         this.messenger = messenger;
+        this.dataSynchronizer = new Data(props.id, segment, props.data, this.messenger);
+        this.styleSynchronizer = new ElementStyle(props.style);
 
-        this.messenger.on('structure.element.created', (type, id) => {
-            if (type === 'block' && id === this.id) {
-                this.notify('created');
-            }
-        });
+        if (segment === 'manager') {
+            this.messenger.on('structure.element.created', (type, id) => {
+                if (type === 'block' && id === this.id) {
+                    this.notify('created');
+                }
+            });
+        }
     }
 
     on (event, listener) {
@@ -15045,14 +15066,6 @@ class Block {
         return this.dataSynchronizer.reactiveData;
     }
 
-    style (prefix, styles) {
-        let id = _.uniqueId(`tued-element-style-${prefix}-`);
-
-        this.styleSynchronizer.reactiveStyle[id] = styles;
-
-        return id;
-    }
-
     generateBlockPrefix (operation) {
         return `structure.block.instance.${this.id}.${operation}`;
     }
@@ -15061,26 +15074,77 @@ class Block {
 
 /***/ }),
 
-/***/ "./src/js/shared/Structure/Blocks/Registry.js":
-/*!****************************************************!*\
-  !*** ./src/js/shared/Structure/Blocks/Registry.js ***!
-  \****************************************************/
+/***/ "./src/js/shared/Structure/Blocks/Segment/Editor.js":
+/*!**********************************************************!*\
+  !*** ./src/js/shared/Structure/Blocks/Segment/Editor.js ***!
+  \**********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Registry)
+/* harmony export */   "default": () => (/* binding */ Editor)
 /* harmony export */ });
-class Registry {
-    blocks;
+const _ = __webpack_require__(/*! lodash */ "lodash");
+const AbstractSegment = (__webpack_require__(/*! shared/Structure/Blocks/Segment/AbstractSegment.js */ "./src/js/shared/Structure/Blocks/Segment/AbstractSegment.js")["default"]);
 
-    constructor (blocks) {
-        this.blocks = blocks;
+class Editor extends AbstractSegment {
+    constructor (props, options, messenger) {
+        super('editor', props, options, messenger);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/shared/Structure/Blocks/Segment/Manager.js":
+/*!***********************************************************!*\
+  !*** ./src/js/shared/Structure/Blocks/Segment/Manager.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Manager)
+/* harmony export */ });
+const _ = __webpack_require__(/*! lodash */ "lodash");
+const AbstractSegment = (__webpack_require__(/*! shared/Structure/Blocks/Segment/AbstractSegment.js */ "./src/js/shared/Structure/Blocks/Segment/AbstractSegment.js")["default"]);
+
+class Manager extends AbstractSegment {
+    constructor (props, options, messenger) {
+        super('manager', props, options, messenger);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/shared/Structure/Blocks/Segment/Render.js":
+/*!**********************************************************!*\
+  !*** ./src/js/shared/Structure/Blocks/Segment/Render.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Render)
+/* harmony export */ });
+const _ = __webpack_require__(/*! lodash */ "lodash");
+const AbstractSegment = (__webpack_require__(/*! shared/Structure/Blocks/Segment/AbstractSegment.js */ "./src/js/shared/Structure/Blocks/Segment/AbstractSegment.js")["default"]);
+
+class Render extends AbstractSegment {
+    constructor (props, options, messenger) {
+        super('render', props, options, messenger);
     }
 
-    get (code) {
-        return this.blocks[code];
+    style (styles) {
+        let id = _.uniqueId(`tued-element-style-`);
+
+        this.styleSynchronizer.reactiveStyle[id] = styles;
+
+        return id;
     }
 }
 
@@ -16212,7 +16276,7 @@ class Compiler {
 
         for (let elementId in styles) {
             for (let style in styles[elementId]) {
-                compiled.push(`#tued-block-${id} #${elementId} { ${style}: ${styles[elementId][style]()} }`);
+                compiled.push(`#tued-block-${id} #${elementId} {${style}:${styles[elementId][style]()}}`);
             }
         }
 

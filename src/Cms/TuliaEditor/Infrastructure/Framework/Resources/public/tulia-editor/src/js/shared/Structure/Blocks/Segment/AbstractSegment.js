@@ -1,26 +1,28 @@
-const _ = require('lodash');
+const Data = require('shared/Structure/Blocks/Data.js').default;
+const ElementStyle = require('shared/Structure/Style/ElementStyle.js').default;
 
-export default class Block {
+export default class AbstractSegment {
     id;
     code;
+    props;
     options;
-    dataSynchronizer;
-    styleSynchronizer;
     messenger;
 
-    constructor (id, code, dataSynchronizer, styleSynchronizer, options, messenger) {
-        this.id = id;
-        this.code = code;
+    constructor (segment, props, options, messenger) {
+        this.id = props.id;
+        this.code = props.code;
         this.options = options;
-        this.dataSynchronizer = dataSynchronizer;
-        this.styleSynchronizer = styleSynchronizer;
         this.messenger = messenger;
+        this.dataSynchronizer = new Data(props.id, segment, props.data, this.messenger);
+        this.styleSynchronizer = new ElementStyle(props.style);
 
-        this.messenger.on('structure.element.created', (type, id) => {
-            if (type === 'block' && id === this.id) {
-                this.notify('created');
-            }
-        });
+        if (segment === 'manager') {
+            this.messenger.on('structure.element.created', (type, id) => {
+                if (type === 'block' && id === this.id) {
+                    this.notify('created');
+                }
+            });
+        }
     }
 
     on (event, listener) {
@@ -41,14 +43,6 @@ export default class Block {
 
     get data () {
         return this.dataSynchronizer.reactiveData;
-    }
-
-    style (prefix, styles) {
-        let id = _.uniqueId(`tued-element-style-${prefix}-`);
-
-        this.styleSynchronizer.reactiveStyle[id] = styles;
-
-        return id;
     }
 
     generateBlockPrefix (operation) {
