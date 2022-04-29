@@ -13,60 +13,38 @@
   \*******************************************************************************************************************************/
 .tued-btn {
   display: inline-block;
-  font-weight: 400;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  border: 1px solid #0088cc;
-  padding: 9px 13px;
-  font-size: 13px;
-  line-height: 1;
-  border-radius: 3px;
-  transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-  color: #0088cc;
   background-color: #fff;
-  overflow: visible;
-  font-family: inherit; }
-  .tued-btn:not(:disabled):not(.disabled) {
-    cursor: pointer; }
+  padding: 8px 12px;
+  font-size: 14px;
+  line-height: 1;
+  color: #000;
+  border: 1px solid #0088cc;
+  outline: none !important;
+  border-radius: 3px;
+  transition: .12s all; }
   .tued-btn:hover {
     color: #fff;
     background-color: #0069d9;
     border-color: #0062cc; }
-  .tued-btn.tued-focus, .tued-btn:focus {
+  .tued-btn:focus {
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
-  .tued-btn:not(:disabled):not(.tued-disabled).tued-active, .tued-btn:not(:disabled):not(.tued-disabled):active {
-    color: #fff;
-    background-color: #0062cc;
-    border-color: #005cbf; }
-  .tued-btn.tued-btn-primary.tued-focus, .tued-btn.tued-btn-primary:focus {
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5); }
 
 .tued-main-btn {
   transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out; }
 
-.tued-btn-success {
+.tued-main-btn-success {
   background-color: #088170;
   border: 1px solid #088170;
   color: #fff; }
-  .tued-btn-success:hover {
+  .tued-main-btn-success:hover {
     background-color: #065f53; }
 
-.tued-btn-default {
+.tued-main-btn-default {
   background-color: #fff;
   border: 1px solid #dedede; }
-  .tued-btn-default:hover {
+  .tued-main-btn-default:hover {
     background-color: #f1f1f1; }
-
-.tued-show > .tued-btn.tued-dropdown-toggle {
-  color: #fff;
-  background-color: #0062cc;
-  border-color: #005cbf; }
 
 .tued-hidden {
   display: none !important; }
@@ -222,60 +200,38 @@ body {
   \**************************************************************************************************************************/
 .tued-btn {
   display: inline-block;
-  font-weight: 400;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  border: 1px solid #0088cc;
-  padding: 9px 13px;
-  font-size: 13px;
-  line-height: 1;
-  border-radius: 3px;
-  transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-  color: #0088cc;
   background-color: #fff;
-  overflow: visible;
-  font-family: inherit; }
-  .tued-btn:not(:disabled):not(.disabled) {
-    cursor: pointer; }
+  padding: 8px 12px;
+  font-size: 14px;
+  line-height: 1;
+  color: #000;
+  border: 1px solid #0088cc;
+  outline: none !important;
+  border-radius: 3px;
+  transition: .12s all; }
   .tued-btn:hover {
     color: #fff;
     background-color: #0069d9;
     border-color: #0062cc; }
-  .tued-btn.tued-focus, .tued-btn:focus {
+  .tued-btn:focus {
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
-  .tued-btn:not(:disabled):not(.tued-disabled).tued-active, .tued-btn:not(:disabled):not(.tued-disabled):active {
-    color: #fff;
-    background-color: #0062cc;
-    border-color: #005cbf; }
-  .tued-btn.tued-btn-primary.tued-focus, .tued-btn.tued-btn-primary:focus {
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5); }
 
 .tued-main-btn {
   transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out; }
 
-.tued-btn-success {
+.tued-main-btn-success {
   background-color: #088170;
   border: 1px solid #088170;
   color: #fff; }
-  .tued-btn-success:hover {
+  .tued-main-btn-success:hover {
     background-color: #065f53; }
 
-.tued-btn-default {
+.tued-main-btn-default {
   background-color: #fff;
   border: 1px solid #dedede; }
-  .tued-btn-default:hover {
+  .tued-main-btn-default:hover {
     background-color: #f1f1f1; }
-
-.tued-show > .tued-btn.tued-dropdown-toggle {
-  color: #fff;
-  background-color: #0062cc;
-  border-color: #005cbf; }
 
 .tued-hidden {
   display: none !important; }
@@ -580,25 +536,28 @@ body {
 
 .tued-block-selector {
   display: flex;
-  flex-wrap: wrap; }
+  flex-wrap: wrap;
+  padding: 5px; }
   .tued-block-selector .tued-block-item {
-    flex: 0 0 210px;
-    max-width: 210px;
-    padding: 5px;
-    border: 1px solid #dedede;
-    border-radius: 5px;
-    transition: .12s all;
-    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.1); }
-    .tued-block-selector .tued-block-item img {
-      display: inline-block; }
-    .tued-block-selector .tued-block-item span {
-      display: block;
-      text-align: center;
-      padding: 3px; }
-    .tued-block-selector .tued-block-item:hover {
-      border-color: #c3c3c3;
-      cursor: pointer;
-      box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.05); }
+    flex: 0 0 190px;
+    max-width: 190px;
+    padding: 5px; }
+    .tued-block-selector .tued-block-item .tued-block-item-inner {
+      padding: 5px;
+      border: 1px solid #dedede;
+      border-radius: 5px;
+      transition: .12s all;
+      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.1); }
+      .tued-block-selector .tued-block-item .tued-block-item-inner:hover {
+        border-color: #c3c3c3;
+        cursor: pointer;
+        box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.05); }
+      .tued-block-selector .tued-block-item .tued-block-item-inner img {
+        display: inline-block; }
+      .tued-block-selector .tued-block-item .tued-block-item-inner span {
+        display: block;
+        text-align: center;
+        padding: 3px; }
 
 .tued-sidebar-selected-element .tued-sidebar-selected-element-not-selected {
   padding: 15px;
@@ -629,10 +588,11 @@ body {
   !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/extensions/Contenteditable/Editor.vue?vue&type=style&index=0&id=4f2d7e8d&scoped=true&lang=scss ***!
   \**********************************************************************************************************************************************************************************************************************************************************************************************************************/
 .tued-ext-contenteditable-element[data-v-4f2d7e8d] {
+  display: block;
   outline: none !important;
 }
 .tued-ext-contenteditable-element[data-v-4f2d7e8d]:hover {
-    outline: 1px dotted #555 !important;
+    outline: 1px dotted #8c8c8c !important;
 }
 .tued-ext-contenteditable-element[data-v-4f2d7e8d]:empty:before {
     content: attr(data-placeholder);

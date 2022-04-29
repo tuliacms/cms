@@ -1,31 +1,14 @@
 .tued-btn {
     display: inline-block;
-    font-weight: 400;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    border: 1px solid $primary;
-    padding: 9px 13px;
-    font-size: 13px;
-    line-height: 1;
-    border-radius: 3px;
-    transition:
-        color .15s ease-in-out,
-        background-color .15s ease-in-out,
-        border-color .15s ease-in-out,
-        box-shadow .15s ease-in-out;
-    color: $primary;
     background-color: #fff;
-    overflow: visible;
-    font-family: inherit;
-
-    &:not(:disabled):not(.disabled) {
-        cursor: pointer;
-    }
+    padding: 8px 12px;
+    font-size: 14px;
+    line-height: 1;
+    color: #000;
+    border: 1px solid $primary;
+    outline: none !important;
+    border-radius: 3px;
+    transition: .12s all;
 
     &:hover {
         color: #fff;
@@ -33,24 +16,9 @@
         border-color: #0062cc;
     }
 
-    &.tued-focus,
     &:focus {
         outline: 0;
         box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
-    }
-
-    &:not(:disabled):not(.tued-disabled).tued-active,
-    &:not(:disabled):not(.tued-disabled):active {
-        color: #fff;
-        background-color: #0062cc;
-        border-color: #005cbf;
-    }
-
-    &.tued-btn-primary {
-        &.tued-focus,
-        &:focus {
-            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.5);
-        }
     }
 }
 
@@ -62,7 +30,7 @@
         box-shadow .15s ease-in-out;
 }
 
-.tued-btn-success {
+.tued-main-btn-success {
     background-color: $success;
     border: 1px solid $success;
     color: #fff;
@@ -72,17 +40,11 @@
     }
 }
 
-.tued-btn-default {
+.tued-main-btn-default {
     background-color: #fff;
     border: 1px solid #dedede;
 
     &:hover {
         background-color: #f1f1f1;
     }
-}
-
-.tued-show > .tued-btn.tued-dropdown-toggle {
-    color: #fff;
-    background-color: #0062cc;
-    border-color: #005cbf;
 }

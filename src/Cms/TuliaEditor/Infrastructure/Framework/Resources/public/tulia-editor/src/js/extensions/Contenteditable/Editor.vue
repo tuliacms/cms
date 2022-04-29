@@ -1,23 +1,22 @@
 <template>
-    <div>
-        <div
-            contenteditable="true"
-            class="tued-ext-contenteditable-element"
-            ref="editable"
-            @keydown="event => preventHtml(event)"
-            @input="_changed"
-            @paste="onPaste"
-            :data-placeholder="this.translator.trans('startTypingPlaceholder')"
-        ></div>
-    </div>
+    <span
+        contenteditable="true"
+        class="tued-ext-contenteditable-element"
+        ref="editable"
+        @keydown="event => preventHtml(event)"
+        @input="_changed"
+        @paste="onPaste"
+        :data-placeholder="this.translator.trans('startTypingPlaceholder')"
+    ></span>
 </template>
 
 <style scoped lang="scss">
 .tued-ext-contenteditable-element {
+    display: block;
     outline: none !important;
 
     &:hover {
-        outline: 1px dotted #555 !important;
+        outline: 1px dotted #8c8c8c !important;
     }
 
     &:empty:before {

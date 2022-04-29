@@ -9,7 +9,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body p-0 m-0">
                         <div class="tued-block-selector">
                             <div
                                 class="tued-block-item"
@@ -17,8 +17,10 @@
                                 :key="block.code"
                                 @click="blocksPicker.select(block.code)"
                             >
-                                <img :src="block.icon" />
-                                <span>{{ block.name }}</span>
+                                <div class="tued-block-item-inner">
+                                    <img :src="block.icon" />
+                                    <span>{{ block.name }}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
