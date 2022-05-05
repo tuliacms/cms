@@ -11,7 +11,7 @@ const RenderingCanvasComponent = require("components/Editor/Rendering/Canvas.vue
 const ObjectCloner = require("shared/Utils/ObjectCloner.js").default;
 const Selection = require("shared/Structure/Selection/Selection.js").default;
 const StructureManipulator = require('shared/Structure/StructureManipulator.js').default;
-const StyleCompiler = require('shared/Structure/Style/Compiler.js').default;
+const StyleCompiler = require('shared/Structure/Element/Style/Compiler.js').default;
 const Filemanager = require('shared/Filemanager.js').default;
 const TuliaEditor = require('TuliaEditor');
 const { defineProps, provide, reactive, onMounted, toRaw, ref } = require('vue');
@@ -103,5 +103,23 @@ const blocksRegistry = new BlocksRegistry(props.availableBlocks);
 
 provide('blocksRegistry', blocksRegistry);
 provide('blocks', new Blocks(props.options.blocks, props.container.messenger, extensionRegistry));
+
+/**********
+ * Columns
+ **********/
+const Columns = require('shared/Structure/Columns/Columns.js').default;
+provide('columns', new Columns(props.options.columns, props.container.messenger, extensionRegistry));
+
+/**********
+ * Rows
+ **********/
+const Rows = require('shared/Structure/Rows/Rows.js').default;
+provide('rows', new Rows(props.options.rows, props.container.messenger, extensionRegistry));
+
+/**********
+ * Sections
+ **********/
+const Sections = require('shared/Structure/Sections/Sections.js').default;
+provide('sections', new Sections(props.options.sections, props.container.messenger, extensionRegistry));
 </script>
 

@@ -131,7 +131,7 @@ provide('canvas', new Canvas(
 /**********
  * Columns
  **********/
-const ColumnSize = require("shared/Structure/ColumnSize.js").default;
+const ColumnSize = require("shared/Structure/Columns/ColumnSize.js").default;
 provide('columnSize', new ColumnSize(structureManipulator));
 
 
@@ -163,8 +163,8 @@ provide('extensionRegistry', extensionRegistry);
  * Blocks
  *********/
 const Blocks = require('shared/Structure/Blocks/Blocks.js').default;
-const BlocksPicker = require("shared/Structure/Blocks/BlocksPicker.js").default;
-const BlocksRegistry = require("shared/Structure/Blocks/Registry.js").default;
+const BlocksPicker = require('shared/Structure/Blocks/BlocksPicker.js').default;
+const BlocksRegistry = require('shared/Structure/Blocks/Registry.js').default;
 
 const blockPickerData = reactive({
     columnId: null
@@ -174,4 +174,22 @@ const blocksRegistry = new BlocksRegistry(props.availableBlocks);
 provide('blocksRegistry', blocksRegistry);
 provide('blocks', new Blocks(props.options.blocks, props.container.messenger, extensionRegistry));
 provide('blocksPicker', new BlocksPicker(blockPickerData, blocksRegistry, structureManipulator, modals));
+
+/**********
+ * Columns
+ **********/
+const Columns = require('shared/Structure/Columns/Columns.js').default;
+provide('columns', new Columns(props.options.columns, props.container.messenger, extensionRegistry));
+
+/**********
+ * Rows
+ **********/
+const Rows = require('shared/Structure/Rows/Rows.js').default;
+provide('rows', new Rows(props.options.rows, props.container.messenger, extensionRegistry));
+
+/**********
+ * Sections
+ **********/
+const Sections = require('shared/Structure/Sections/Sections.js').default;
+provide('sections', new Sections(props.options.sections, props.container.messenger, extensionRegistry));
 </script>

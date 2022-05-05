@@ -52,7 +52,7 @@ export default class Fixer {
 
         if (!section.data) {
             section.data = {
-                'containerWidth': 'container-xxl',
+                containerWidth: 'default',
             };
         }
 
@@ -90,7 +90,9 @@ export default class Fixer {
         }
 
         if (!row.data) {
-            row.data = {};
+            row.data = {
+                gutters: 'default',
+            };
         }
 
         if (!row.columns || row.columns.length === 0) {

@@ -5,18 +5,18 @@ export default class Data {
     data;
     elementId;
     messenger;
-    prefix;
-    owner;
+    elementType;
+    segment;
     lastUpdateFromOutside = false;
     onChangeCallable;
 
-    constructor (elementId, owner, dataProperty, messenger, prefix) {
+    constructor (elementId, elementType, segment, data, messenger) {
         this.elementId = elementId;
-        this.owner = owner;
+        this.elementType = elementType;
+        this.segment = segment;
         this.messenger = messenger;
-        this.prefix = prefix;
 
-        this.data = reactive(dataProperty);
+        this.data = reactive(data);
 
         this.propagateChangesInThisInstance();
         this.watchForChangesInOtherInstance();
@@ -36,18 +36,23 @@ export default class Data {
                 return;
             }
 
-            this.messenger.execute(`structure.${this.prefix}.data.update`, {
-                owner: this.owner,
+            this.messenger.execute(`structure.element.data.update`, {
+                segment: this.segment,
                 data: toRaw(newData),
                 elementId: this.elementId,
+                elementType: this.elementType,
             });
         });
     }
 
     watchForChangesInOtherInstance () {
-        this.messenger.operation(`structure.${this.prefix}.data.update`, (data, success, fail) => {
+        this.messenger.operation(`structure.element.data.update`, (data, success, fail) => {
             // Catch only operations for the same block in all windows
-            if (data.elementId === this.elementId && data.owner !== this.owner) {
+            if (
+                data.elementId === this.elementId
+                && data.elementType === this.elementType
+                && data.segment !== this.segment
+            ) {
                 this.handleDataUpdate(data);
 
                 if (this.onChangeCallable) {

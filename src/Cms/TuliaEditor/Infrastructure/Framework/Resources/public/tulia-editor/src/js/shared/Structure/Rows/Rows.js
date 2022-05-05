@@ -1,7 +1,7 @@
 const AbstractElements = require('shared/Structure/Element/AbstractElements.js').default;
 
-export default class Blocks extends AbstractElements {
+export default class Rows extends AbstractElements {
     constructor (options, messenger, extensions) {
-        super('block', options, messenger, extensions);
+        super('row', options, messenger, extensions);
     }
 }

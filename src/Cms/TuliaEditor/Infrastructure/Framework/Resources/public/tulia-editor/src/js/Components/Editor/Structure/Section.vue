@@ -9,7 +9,7 @@
     >
         <div :class="containerClassname">
             <Row
-                v-for="row in section.rows"
+                v-for="row in props.section.rows"
                 :id="'tued-structure-row-' + row.id"
                 :key="row.id"
                 :row="row"
@@ -17,24 +17,25 @@
                 @selection-enter="(type, id) => $emit('selection-enter', type, id)"
                 @selection-leave="(type, id) => $emit('selection-leave', type, id)"
             ></Row>
-            <div v-if="section.rows.length === 0">
+            <div v-if="props.section.rows.length === 0">
                 Empty Section
             </div>
         </div>
     </section>
 </template>
 
-<script>
+<script setup>
 const Row = require('./Row.vue').default;
+const { defineProps, inject, computed } = require('vue');
+const props = defineProps(['section']);
+const section = inject('sections').editor(props);
+const selection = inject('selection');
 
-export default {
-    props: ['section'],
-    inject: ['selection'],
-    components: { Row },
-    computed: {
-        containerClassname () {
-            return this.section.data.containerWidth;
-        }
+const containerClassname = computed(() => {
+    switch (section.data.containerWidth) {
+        case 'full-width': return 'container-fluid';
+        case 'full-width-no-padding': return '';
+        default: return 'container-xxl';
     }
-};
+});
 </script>

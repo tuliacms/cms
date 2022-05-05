@@ -79,6 +79,12 @@ export default {
         fallback_locales: ['en'],
         // Blocks options
         blocks: {},
+        // Columns options
+        columns: {},
+        // Rows options
+        rows: {},
+        // Sections options
+        sections: {},
         filemanager: {
             image_resolve_path: null,
             endpoint: null

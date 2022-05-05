@@ -4516,7 +4516,7 @@ provide('canvas', new Canvas(
 /**********
  * Columns
  **********/
-const ColumnSize = (__webpack_require__(/*! shared/Structure/ColumnSize.js */ "./src/js/shared/Structure/ColumnSize.js")["default"]);
+const ColumnSize = (__webpack_require__(/*! shared/Structure/Columns/ColumnSize.js */ "./src/js/shared/Structure/Columns/ColumnSize.js")["default"]);
 provide('columnSize', new ColumnSize(structureManipulator));
 
 
@@ -4560,7 +4560,25 @@ provide('blocksRegistry', blocksRegistry);
 provide('blocks', new Blocks(props.options.blocks, props.container.messenger, extensionRegistry));
 provide('blocksPicker', new BlocksPicker(blockPickerData, blocksRegistry, structureManipulator, modals));
 
-const __returned__ = { CanvasComponent, SidebarComponent, BlockPickerComponent, ObjectCloner, TuliaEditor, defineProps, onMounted, provide, reactive, isProxy, toRaw, props, saveEditor, cancelEditor, StructureManipulator, Selection, structure, previousStructure, selection, structureManipulator, restorePreviousStructure, useCurrentStructureAsPrevious, canvasOptions, Canvas, ColumnSize, Modals, modalsData, modals, ExtensionRegistry, extensionRegistry, Blocks, BlocksPicker, BlocksRegistry, blockPickerData, blocksRegistry }
+/**********
+ * Columns
+ **********/
+const Columns = (__webpack_require__(/*! shared/Structure/Columns/Columns.js */ "./src/js/shared/Structure/Columns/Columns.js")["default"]);
+provide('columns', new Columns(props.options.columns, props.container.messenger, extensionRegistry));
+
+/**********
+ * Rows
+ **********/
+const Rows = (__webpack_require__(/*! shared/Structure/Rows/Rows.js */ "./src/js/shared/Structure/Rows/Rows.js")["default"]);
+provide('rows', new Rows(props.options.rows, props.container.messenger, extensionRegistry));
+
+/**********
+ * Sections
+ **********/
+const Sections = (__webpack_require__(/*! shared/Structure/Sections/Sections.js */ "./src/js/shared/Structure/Sections/Sections.js")["default"]);
+provide('sections', new Sections(props.options.sections, props.container.messenger, extensionRegistry));
+
+const __returned__ = { CanvasComponent, SidebarComponent, BlockPickerComponent, ObjectCloner, TuliaEditor, defineProps, onMounted, provide, reactive, isProxy, toRaw, props, saveEditor, cancelEditor, StructureManipulator, Selection, structure, previousStructure, selection, structureManipulator, restorePreviousStructure, useCurrentStructureAsPrevious, canvasOptions, Canvas, ColumnSize, Modals, modalsData, modals, ExtensionRegistry, extensionRegistry, Blocks, BlocksPicker, BlocksRegistry, blockPickerData, blocksRegistry, Columns, Rows, Sections }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -4831,6 +4849,7 @@ __webpack_require__.r(__webpack_exports__);
 const props = __props
 
 const Section = (__webpack_require__(/*! components/Admin/Sidebar/Selected/Section.vue */ "./src/js/Components/Admin/Sidebar/Selected/Section.vue")["default"]);
+const Row = (__webpack_require__(/*! components/Admin/Sidebar/Selected/Row.vue */ "./src/js/Components/Admin/Sidebar/Selected/Row.vue")["default"]);
 const { defineProps, reactive, inject } = __webpack_require__(/*! vue */ "vue");
 
 const messenger = inject('messenger');
@@ -4852,7 +4871,71 @@ messenger.on('structure.selection.deselected', () => {
     selected.type = null;
 });
 
-const __returned__ = { Section, defineProps, reactive, inject, messenger, translator, props, structure, selected }
+const __returned__ = { Section, Row, defineProps, reactive, inject, messenger, translator, props, structure, selected }
+Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
+return __returned__
+}
+
+});
+
+/***/ }),
+
+/***/ "./src/js/Components/Admin/Sidebar/Selected/Row.vue":
+/*!**********************************************************!*\
+  !*** ./src/js/Components/Admin/Sidebar/Selected/Row.vue ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Row_vue_vue_type_template_id_31a17776__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Row.vue?vue&type=template&id=31a17776 */ "./src/js/Components/Admin/Sidebar/Selected/Row.vue?vue&type=template&id=31a17776");
+/* harmony import */ var _Row_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Row.vue?vue&type=script&setup=true&lang=js */ "./src/js/Components/Admin/Sidebar/Selected/Row.vue?vue&type=script&setup=true&lang=js");
+/* harmony import */ var _home_adam_projects_tuliacms_core_src_Cms_TuliaEditor_Infrastructure_Framework_Resources_public_tulia_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+
+
+
+
+;
+const __exports__ = /*#__PURE__*/(0,_home_adam_projects_tuliacms_core_src_Cms_TuliaEditor_Infrastructure_Framework_Resources_public_tulia_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Row_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Row_vue_vue_type_template_id_31a17776__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"src/js/Components/Admin/Sidebar/Selected/Row.vue"]])
+/* hot reload */
+if (false) {}
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__exports__);
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Components/Admin/Sidebar/Selected/Row.vue?vue&type=script&setup=true&lang=js":
+/*!*****************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Components/Admin/Sidebar/Selected/Row.vue?vue&type=script&setup=true&lang=js ***!
+  \*****************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: ['row'],
+  setup(__props, { expose }) {
+  expose();
+
+const props = __props
+
+const { defineProps, inject } = __webpack_require__(/*! vue */ "vue");
+
+const row = inject('rows').manager(props);
+
+const gutterOptionsList = {
+    'default': 'Default gutters',
+    'no-gutters': 'No gutters',
+};
+
+const __returned__ = { defineProps, inject, props, row, gutterOptionsList }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -4907,18 +4990,17 @@ __webpack_require__.r(__webpack_exports__);
 
 const props = __props
 
-const { defineProps, inject, reactive, watch, ref } = __webpack_require__(/*! vue */ "vue");
+const { defineProps, inject } = __webpack_require__(/*! vue */ "vue");
 
-const messenger = inject('messenger');
-const translator = inject('translator');
-const structureManipulator = inject('structureManipulator');
-const section = reactive(props.section);
+const section = inject('sections').manager(props);
 
-watch(section.data, async () => {
-    structureManipulator.updateElement(section);
-});
+const containerWidthList = {
+    'default': 'Default',
+    'full-width': 'Full width (fluid)',
+    'full-width-no-padding': 'Full width (fluid) with no padding',
+};
 
-const __returned__ = { defineProps, inject, reactive, watch, ref, props, messenger, translator, structureManipulator, section }
+const __returned__ = { defineProps, inject, props, section, containerWidthList }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -5230,7 +5312,7 @@ const RenderingCanvasComponent = (__webpack_require__(/*! components/Editor/Rend
 const ObjectCloner = (__webpack_require__(/*! shared/Utils/ObjectCloner.js */ "./src/js/shared/Utils/ObjectCloner.js")["default"]);
 const Selection = (__webpack_require__(/*! shared/Structure/Selection/Selection.js */ "./src/js/shared/Structure/Selection/Selection.js")["default"]);
 const StructureManipulator = (__webpack_require__(/*! shared/Structure/StructureManipulator.js */ "./src/js/shared/Structure/StructureManipulator.js")["default"]);
-const StyleCompiler = (__webpack_require__(/*! shared/Structure/Style/Compiler.js */ "./src/js/shared/Structure/Style/Compiler.js")["default"]);
+const StyleCompiler = (__webpack_require__(/*! shared/Structure/Element/Style/Compiler.js */ "./src/js/shared/Structure/Element/Style/Compiler.js")["default"]);
 const Filemanager = (__webpack_require__(/*! shared/Filemanager.js */ "./src/js/shared/Filemanager.js")["default"]);
 const TuliaEditor = __webpack_require__(/*! TuliaEditor */ "TuliaEditor");
 const { defineProps, provide, reactive, onMounted, toRaw, ref } = __webpack_require__(/*! vue */ "vue");
@@ -5317,7 +5399,25 @@ const blocksRegistry = new BlocksRegistry(props.availableBlocks);
 provide('blocksRegistry', blocksRegistry);
 provide('blocks', new Blocks(props.options.blocks, props.container.messenger, extensionRegistry));
 
-const __returned__ = { StructureComponent, RenderingCanvasComponent, ObjectCloner, Selection, StructureManipulator, StyleCompiler, Filemanager, TuliaEditor, defineProps, provide, reactive, onMounted, toRaw, ref, props, structure, selection, structureManipulator, renderedContent, ExtensionRegistry, extensionRegistry, Blocks, BlocksRegistry, blocksRegistry }
+/**********
+ * Columns
+ **********/
+const Columns = (__webpack_require__(/*! shared/Structure/Columns/Columns.js */ "./src/js/shared/Structure/Columns/Columns.js")["default"]);
+provide('columns', new Columns(props.options.columns, props.container.messenger, extensionRegistry));
+
+/**********
+ * Rows
+ **********/
+const Rows = (__webpack_require__(/*! shared/Structure/Rows/Rows.js */ "./src/js/shared/Structure/Rows/Rows.js")["default"]);
+provide('rows', new Rows(props.options.rows, props.container.messenger, extensionRegistry));
+
+/**********
+ * Sections
+ **********/
+const Sections = (__webpack_require__(/*! shared/Structure/Sections/Sections.js */ "./src/js/shared/Structure/Sections/Sections.js")["default"]);
+provide('sections', new Sections(props.options.sections, props.container.messenger, extensionRegistry));
+
+const __returned__ = { StructureComponent, RenderingCanvasComponent, ObjectCloner, Selection, StructureManipulator, StyleCompiler, Filemanager, TuliaEditor, defineProps, provide, reactive, onMounted, toRaw, ref, props, structure, selection, structureManipulator, renderedContent, ExtensionRegistry, extensionRegistry, Blocks, BlocksRegistry, blocksRegistry, Columns, Rows, Sections }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -5446,14 +5546,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _Row_vue_vue_type_template_id_7cc13ef0__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Row.vue?vue&type=template&id=7cc13ef0 */ "./src/js/Components/Editor/Structure/Row.vue?vue&type=template&id=7cc13ef0");
-/* harmony import */ var _Row_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Row.vue?vue&type=script&lang=js */ "./src/js/Components/Editor/Structure/Row.vue?vue&type=script&lang=js");
+/* harmony import */ var _Row_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Row.vue?vue&type=script&setup=true&lang=js */ "./src/js/Components/Editor/Structure/Row.vue?vue&type=script&setup=true&lang=js");
 /* harmony import */ var _home_adam_projects_tuliacms_core_src_Cms_TuliaEditor_Infrastructure_Framework_Resources_public_tulia_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_home_adam_projects_tuliacms_core_src_Cms_TuliaEditor_Infrastructure_Framework_Resources_public_tulia_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Row_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Row_vue_vue_type_template_id_7cc13ef0__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"src/js/Components/Editor/Structure/Row.vue"]])
+const __exports__ = /*#__PURE__*/(0,_home_adam_projects_tuliacms_core_src_Cms_TuliaEditor_Infrastructure_Framework_Resources_public_tulia_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Row_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Row_vue_vue_type_template_id_7cc13ef0__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"src/js/Components/Editor/Structure/Row.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -5462,10 +5562,10 @@ if (false) {}
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Components/Editor/Structure/Row.vue?vue&type=script&lang=js":
-/*!************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Components/Editor/Structure/Row.vue?vue&type=script&lang=js ***!
-  \************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Components/Editor/Structure/Row.vue?vue&type=script&setup=true&lang=js":
+/*!***********************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Components/Editor/Structure/Row.vue?vue&type=script&setup=true&lang=js ***!
+  \***********************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -5473,15 +5573,35 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: ['row', 'parent'],
+  setup(__props, { expose }) {
+  expose();
+
+const props = __props
 
 const Column = (__webpack_require__(/*! ./Column.vue */ "./src/js/Components/Editor/Structure/Column.vue")["default"]);
+const { defineProps, inject, computed } = __webpack_require__(/*! vue */ "vue");
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-    props: ['row', 'parent'],
-    inject: ['selection'],
-    components: { Column },
+const row = inject('rows').editor(props);
+const selection = inject('selection');
+
+const rowClassname = computed(() => {
+    let classname = 'tued-structure-row tued-structure-element-selectable row';
+
+    switch (row.data.gutters) {
+        case 'no-gutters': classname += ' g-0'; break;
+    }
+
+    return classname;
 });
 
+const __returned__ = { Column, defineProps, inject, computed, props, row, selection, rowClassname }
+Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
+return __returned__
+}
+
+});
 
 /***/ }),
 
@@ -5497,14 +5617,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _Section_vue_vue_type_template_id_4d532d13__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Section.vue?vue&type=template&id=4d532d13 */ "./src/js/Components/Editor/Structure/Section.vue?vue&type=template&id=4d532d13");
-/* harmony import */ var _Section_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Section.vue?vue&type=script&lang=js */ "./src/js/Components/Editor/Structure/Section.vue?vue&type=script&lang=js");
+/* harmony import */ var _Section_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Section.vue?vue&type=script&setup=true&lang=js */ "./src/js/Components/Editor/Structure/Section.vue?vue&type=script&setup=true&lang=js");
 /* harmony import */ var _home_adam_projects_tuliacms_core_src_Cms_TuliaEditor_Infrastructure_Framework_Resources_public_tulia_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_home_adam_projects_tuliacms_core_src_Cms_TuliaEditor_Infrastructure_Framework_Resources_public_tulia_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Section_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Section_vue_vue_type_template_id_4d532d13__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"src/js/Components/Editor/Structure/Section.vue"]])
+const __exports__ = /*#__PURE__*/(0,_home_adam_projects_tuliacms_core_src_Cms_TuliaEditor_Infrastructure_Framework_Resources_public_tulia_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Section_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Section_vue_vue_type_template_id_4d532d13__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"src/js/Components/Editor/Structure/Section.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -5513,10 +5633,10 @@ if (false) {}
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Components/Editor/Structure/Section.vue?vue&type=script&lang=js":
-/*!****************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Components/Editor/Structure/Section.vue?vue&type=script&lang=js ***!
-  \****************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Components/Editor/Structure/Section.vue?vue&type=script&setup=true&lang=js":
+/*!***************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Components/Editor/Structure/Section.vue?vue&type=script&setup=true&lang=js ***!
+  \***************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -5524,20 +5644,33 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: ['section'],
+  setup(__props, { expose }) {
+  expose();
+
+const props = __props
 
 const Row = (__webpack_require__(/*! ./Row.vue */ "./src/js/Components/Editor/Structure/Row.vue")["default"]);
+const { defineProps, inject, computed } = __webpack_require__(/*! vue */ "vue");
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-    props: ['section'],
-    inject: ['selection'],
-    components: { Row },
-    computed: {
-        containerClassname () {
-            return this.section.data.containerWidth;
-        }
+const section = inject('sections').editor(props);
+const selection = inject('selection');
+
+const containerClassname = computed(() => {
+    switch (section.data.containerWidth) {
+        case 'full-width': return 'container-fluid';
+        case 'full-width-no-padding': return '';
+        default: return 'container-xxl';
     }
 });
 
+const __returned__ = { Row, defineProps, inject, computed, props, section, selection, containerClassname }
+Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
+return __returned__
+}
+
+});
 
 /***/ }),
 
@@ -6884,6 +7017,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/js/Components/Admin/Sidebar/Selected/Row.vue?vue&type=script&setup=true&lang=js":
+/*!*********************************************************************************************!*\
+  !*** ./src/js/Components/Admin/Sidebar/Selected/Row.vue?vue&type=script&setup=true&lang=js ***!
+  \*********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Row_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Row_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./Row.vue?vue&type=script&setup=true&lang=js */ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Components/Admin/Sidebar/Selected/Row.vue?vue&type=script&setup=true&lang=js");
+ 
+
+/***/ }),
+
 /***/ "./src/js/Components/Admin/Sidebar/Selected/Section.vue?vue&type=script&setup=true&lang=js":
 /*!*************************************************************************************************!*\
   !*** ./src/js/Components/Admin/Sidebar/Selected/Section.vue?vue&type=script&setup=true&lang=js ***!
@@ -6996,34 +7145,34 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/js/Components/Editor/Structure/Row.vue?vue&type=script&lang=js":
-/*!****************************************************************************!*\
-  !*** ./src/js/Components/Editor/Structure/Row.vue?vue&type=script&lang=js ***!
-  \****************************************************************************/
+/***/ "./src/js/Components/Editor/Structure/Row.vue?vue&type=script&setup=true&lang=js":
+/*!***************************************************************************************!*\
+  !*** ./src/js/Components/Editor/Structure/Row.vue?vue&type=script&setup=true&lang=js ***!
+  \***************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Row_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Row_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Row_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./Row.vue?vue&type=script&lang=js */ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Components/Editor/Structure/Row.vue?vue&type=script&lang=js");
+/* harmony import */ var _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Row_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./Row.vue?vue&type=script&setup=true&lang=js */ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Components/Editor/Structure/Row.vue?vue&type=script&setup=true&lang=js");
  
 
 /***/ }),
 
-/***/ "./src/js/Components/Editor/Structure/Section.vue?vue&type=script&lang=js":
-/*!********************************************************************************!*\
-  !*** ./src/js/Components/Editor/Structure/Section.vue?vue&type=script&lang=js ***!
-  \********************************************************************************/
+/***/ "./src/js/Components/Editor/Structure/Section.vue?vue&type=script&setup=true&lang=js":
+/*!*******************************************************************************************!*\
+  !*** ./src/js/Components/Editor/Structure/Section.vue?vue&type=script&setup=true&lang=js ***!
+  \*******************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Section_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Section_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Section_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./Section.vue?vue&type=script&lang=js */ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Components/Editor/Structure/Section.vue?vue&type=script&lang=js");
+/* harmony import */ var _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Section_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./Section.vue?vue&type=script&setup=true&lang=js */ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Components/Editor/Structure/Section.vue?vue&type=script&setup=true&lang=js");
  
 
 /***/ }),
@@ -7376,6 +7525,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Selected_vue_vue_type_template_id_5556839a__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Selected_vue_vue_type_template_id_5556839a__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./Selected.vue?vue&type=template&id=5556839a */ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Components/Admin/Sidebar/Selected.vue?vue&type=template&id=5556839a");
+
+
+/***/ }),
+
+/***/ "./src/js/Components/Admin/Sidebar/Selected/Row.vue?vue&type=template&id=31a17776":
+/*!****************************************************************************************!*\
+  !*** ./src/js/Components/Admin/Sidebar/Selected/Row.vue?vue&type=template&id=31a17776 ***!
+  \****************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Row_vue_vue_type_template_id_31a17776__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Row_vue_vue_type_template_id_31a17776__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!../../../../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./Row.vue?vue&type=template&id=31a17776 */ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Components/Admin/Sidebar/Selected/Row.vue?vue&type=template&id=31a17776");
 
 
 /***/ }),
@@ -8235,6 +8400,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
             key: 'row-' + key
           }, [
+            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+              class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({
+                    'tued-structure-selected-options': true,
+                    'tued-structure-selected-active': $setup.selected.id === row.id && $setup.selected.type === 'row'
+                })
+            }, [
+              (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Row"], { row: row }, null, 8 /* PROPS */, ["row"])
+            ], 2 /* CLASS */),
             ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(row.columns, (column, key) => {
               return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
                 key: 'column-' + key
@@ -8267,6 +8440,51 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Components/Admin/Sidebar/Selected/Row.vue?vue&type=template&id=31a17776":
+/*!**********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Components/Admin/Sidebar/Selected/Row.vue?vue&type=template&id=31a17776 ***!
+  \**********************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "vue");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+
+
+const _hoisted_1 = { class: "mb-3" }
+const _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", { class: "form-label" }, "Gutters", -1 /* HOISTED */)
+const _hoisted_3 = ["id", "value"]
+const _hoisted_4 = ["for"]
+
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [
+      _hoisted_2,
+      ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.gutterOptionsList, (label, value) => {
+        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", { key: value }, [
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+            type: "radio",
+            id: `tued-row-data-gutters-${value}`,
+            value: value,
+            "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => (($setup.row.data.gutters) = $event))
+          }, null, 8 /* PROPS */, _hoisted_3), [
+            [vue__WEBPACK_IMPORTED_MODULE_0__.vModelRadio, $setup.row.data.gutters]
+          ]),
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+            for: `tued-row-data-gutters-${value}`
+          }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(label), 9 /* TEXT, PROPS */, _hoisted_4)
+        ])
+      }), 64 /* STABLE_FRAGMENT */))
+    ])
+  ]))
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Components/Admin/Sidebar/Selected/Section.vue?vue&type=template&id=c6be2b60":
 /*!**************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Components/Admin/Sidebar/Selected/Section.vue?vue&type=template&id=c6be2b60 ***!
@@ -8284,31 +8502,28 @@ __webpack_require__.r(__webpack_exports__);
 
 const _hoisted_1 = { class: "mb-3" }
 const _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", { class: "form-label" }, "Container width", -1 /* HOISTED */)
-const _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
-  disabled: "",
-  value: ""
-}, "Please select one", -1 /* HOISTED */)
-const _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", { value: "1" }, "Default", -1 /* HOISTED */)
-const _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", { value: "2" }, "Full width", -1 /* HOISTED */)
-const _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", { value: "3" }, "Full width + gutter free", -1 /* HOISTED */)
-const _hoisted_7 = [
-  _hoisted_3,
-  _hoisted_4,
-  _hoisted_5,
-  _hoisted_6
-]
+const _hoisted_3 = ["id", "value"]
+const _hoisted_4 = ["for"]
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [
       _hoisted_2,
-      (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
-        class: "form-select form-control-raw",
-        "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => ((_ctx.containerWidth) = $event))
-      }, _hoisted_7, 512 /* NEED_PATCH */), [
-        [vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, _ctx.containerWidth]
-      ]),
-      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.section.data.containerWidth), 1 /* TEXT */)
+      ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.containerWidthList, (label, value) => {
+        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", { key: value }, [
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+            type: "radio",
+            id: `tued-section-data-containerWidth-${value}`,
+            value: value,
+            "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => (($setup.section.data.containerWidth) = $event))
+          }, null, 8 /* PROPS */, _hoisted_3), [
+            [vue__WEBPACK_IMPORTED_MODULE_0__.vModelRadio, $setup.section.data.containerWidth]
+          ]),
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+            for: `tued-section-data-containerWidth-${value}`
+          }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(label), 9 /* TEXT, PROPS */, _hoisted_4)
+        ])
+      }), 64 /* STABLE_FRAGMENT */))
     ])
   ]))
 }
@@ -8662,30 +8877,28 @@ const _hoisted_1 = ["id"]
 const _hoisted_2 = { key: 0 }
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_Column = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Column")
-
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
-    class: "tued-structure-row tued-structure-element-selectable row",
-    id: $props.row.id,
-    onMouseenter: _cache[2] || (_cache[2] = $event => (_ctx.$emit('selection-enter', 'row', $props.row.id))),
-    onMouseleave: _cache[3] || (_cache[3] = $event => (_ctx.$emit('selection-leave', 'row', $props.row.id))),
-    onMousedown: _cache[4] || (_cache[4] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($options.selection.select('row', $props.row.id, 'editor')), ["stop"])),
+    class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($setup.rowClassname),
+    id: $setup.row.id,
+    onMouseenter: _cache[2] || (_cache[2] = $event => (_ctx.$emit('selection-enter', 'row', $setup.row.id))),
+    onMouseleave: _cache[3] || (_cache[3] = $event => (_ctx.$emit('selection-leave', 'row', $setup.row.id))),
+    onMousedown: _cache[4] || (_cache[4] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($setup.selection.select('row', $setup.row.id, 'editor')), ["stop"])),
     "data-tagname": "Row"
   }, [
-    ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.row.columns, (column) => {
-      return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Column, {
+    ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.props.row.columns, (column) => {
+      return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)($setup["Column"], {
         id: 'tued-structure-column-' + column.id,
         key: column.id,
         column: column,
-        parent: $props.row,
+        parent: $setup.row,
         onSelectionEnter: _cache[0] || (_cache[0] = (type, id) => _ctx.$emit('selection-enter', type, id)),
         onSelectionLeave: _cache[1] || (_cache[1] = (type, id) => _ctx.$emit('selection-leave', type, id))
       }, null, 8 /* PROPS */, ["id", "column", "parent"]))
     }), 128 /* KEYED_FRAGMENT */)),
-    ($props.row.columns.length === 0)
+    ($setup.props.row.columns.length === 0)
       ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_2, " Empty Row "))
       : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)
-  ], 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_1))
+  ], 42 /* CLASS, PROPS, HYDRATE_EVENTS */, _hoisted_1))
 }
 
 /***/ }),
@@ -8709,30 +8922,28 @@ const _hoisted_1 = ["id"]
 const _hoisted_2 = { key: 0 }
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_Row = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Row")
-
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("section", {
     class: "tued-structure-section tued-structure-element-selectable",
-    id: $props.section.id,
-    onMouseenter: _cache[2] || (_cache[2] = $event => (_ctx.$emit('selection-enter', 'section', $props.section.id))),
-    onMouseleave: _cache[3] || (_cache[3] = $event => (_ctx.$emit('selection-leave', 'section', $props.section.id))),
-    onMousedown: _cache[4] || (_cache[4] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($options.selection.select('section', $props.section.id, 'editor')), ["stop"])),
+    id: $setup.section.id,
+    onMouseenter: _cache[2] || (_cache[2] = $event => (_ctx.$emit('selection-enter', 'section', $setup.section.id))),
+    onMouseleave: _cache[3] || (_cache[3] = $event => (_ctx.$emit('selection-leave', 'section', $setup.section.id))),
+    onMousedown: _cache[4] || (_cache[4] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($setup.selection.select('section', $setup.section.id, 'editor')), ["stop"])),
     "data-tagname": "Section"
   }, [
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-      class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($options.containerClassname)
+      class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($setup.containerClassname)
     }, [
-      ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.section.rows, (row) => {
-        return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Row, {
+      ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.props.section.rows, (row) => {
+        return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)($setup["Row"], {
           id: 'tued-structure-row-' + row.id,
           key: row.id,
           row: row,
-          parent: $props.section,
+          parent: $setup.section,
           onSelectionEnter: _cache[0] || (_cache[0] = (type, id) => _ctx.$emit('selection-enter', type, id)),
           onSelectionLeave: _cache[1] || (_cache[1] = (type, id) => _ctx.$emit('selection-leave', type, id))
         }, null, 8 /* PROPS */, ["id", "row", "parent"]))
       }), 128 /* KEYED_FRAGMENT */)),
-      ($props.section.rows.length === 0)
+      ($setup.props.section.rows.length === 0)
         ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_2, " Empty Section "))
         : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)
     ], 2 /* CLASS */)
@@ -15457,46 +15668,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Blocks)
 /* harmony export */ });
-const Render = (__webpack_require__(/*! shared/Structure/Blocks/Segment/Render.js */ "./src/js/shared/Structure/Blocks/Segment/Render.js")["default"]);
-const Manager = (__webpack_require__(/*! shared/Structure/Blocks/Segment/Manager.js */ "./src/js/shared/Structure/Blocks/Segment/Manager.js")["default"]);
-const Editor = (__webpack_require__(/*! shared/Structure/Blocks/Segment/Editor.js */ "./src/js/shared/Structure/Blocks/Segment/Editor.js")["default"]);
+const AbstractElements = (__webpack_require__(/*! shared/Structure/Element/AbstractElements.js */ "./src/js/shared/Structure/Element/AbstractElements.js")["default"]);
 
-class Blocks {
-    blocksOptions;
-    messenger;
-    extensions;
-
-    constructor (blocksOptions, messenger, extensions) {
-        this.blocksOptions = blocksOptions;
-        this.messenger = messenger;
-        this.extensions = extensions;
-    }
-
-    editor (props) {
-        return new Editor(
-            props.block,
-            this.blocksOptions[props.block.code] ?? {},
-            this.messenger,
-            this.extensions
-        );
-    }
-
-    manager (props) {
-        return new Manager(
-            props.block,
-            this.blocksOptions[props.block.code] ?? {},
-            this.messenger,
-            this.extensions
-        );
-    }
-
-    render (props) {
-        return new Render(
-            props.block,
-            this.blocksOptions[props.block.code] ?? {},
-            this.messenger,
-            this.extensions
-        );
+class Blocks extends AbstractElements {
+    constructor (options, messenger, extensions) {
+        super('block', options, messenger, extensions);
     }
 }
 
@@ -15550,92 +15726,6 @@ class BlocksPicker {
 
 /***/ }),
 
-/***/ "./src/js/shared/Structure/Blocks/Data.js":
-/*!************************************************!*\
-  !*** ./src/js/shared/Structure/Blocks/Data.js ***!
-  \************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Data)
-/* harmony export */ });
-const { reactive, toRaw, watch } = __webpack_require__(/*! vue */ "vue");
-const _ = __webpack_require__(/*! lodash */ "lodash");
-
-class Data {
-    data;
-    elementId;
-    messenger;
-    prefix;
-    owner;
-    lastUpdateFromOutside = false;
-    onChangeCallable;
-
-    constructor (elementId, owner, dataProperty, messenger, prefix) {
-        this.elementId = elementId;
-        this.owner = owner;
-        this.messenger = messenger;
-        this.prefix = prefix;
-
-        this.data = reactive(dataProperty);
-
-        this.propagateChangesInThisInstance();
-        this.watchForChangesInOtherInstance();
-    }
-
-    get reactiveData () {
-        return this.data;
-    }
-
-    onChange (callable) {
-        this.onChangeCallable = callable;
-    }
-
-    propagateChangesInThisInstance () {
-        watch(this.data, async (newData, oldData) => {
-            if (this.lastUpdateFromOutside) {
-                return;
-            }
-
-            this.messenger.execute(`structure.${this.prefix}.data.update`, {
-                owner: this.owner,
-                data: toRaw(newData),
-                elementId: this.elementId,
-            });
-        });
-    }
-
-    watchForChangesInOtherInstance () {
-        this.messenger.operation(`structure.${this.prefix}.data.update`, (data, success, fail) => {
-            // Catch only operations for the same block in all windows
-            if (data.elementId === this.elementId && data.owner !== this.owner) {
-                this.handleDataUpdate(data);
-
-                if (this.onChangeCallable) {
-                    this.onChangeCallable();
-                }
-            }
-
-            success();
-        });
-    }
-
-    handleDataUpdate (newData) {
-        if (_.isEqual(newData.data, toRaw(this.data)) === false) {
-            for (let i in newData.data) {
-                this.lastUpdateFromOutside = true;
-                this.data[i] = newData.data[i];
-            }
-            this.lastUpdateFromOutside = false;
-        }
-    }
-}
-
-
-/***/ }),
-
 /***/ "./src/js/shared/Structure/Blocks/Registry.js":
 /*!****************************************************!*\
   !*** ./src/js/shared/Structure/Blocks/Registry.js ***!
@@ -15662,179 +15752,10 @@ class Registry {
 
 /***/ }),
 
-/***/ "./src/js/shared/Structure/Blocks/Segment/AbstractSegment.js":
-/*!*******************************************************************!*\
-  !*** ./src/js/shared/Structure/Blocks/Segment/AbstractSegment.js ***!
-  \*******************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ AbstractSegment)
-/* harmony export */ });
-const Data = (__webpack_require__(/*! shared/Structure/Blocks/Data.js */ "./src/js/shared/Structure/Blocks/Data.js")["default"]);
-const ElementStyle = (__webpack_require__(/*! shared/Structure/Style/ElementStyle.js */ "./src/js/shared/Structure/Style/ElementStyle.js")["default"]);
-
-class AbstractSegment {
-    segment;
-    id;
-    code;
-    props;
-    options;
-    messenger;
-    extensions;
-
-    constructor (segment, props, options, messenger, extensions) {
-        this.segment = segment;
-        this.id = props.id;
-        this.code = props.code;
-        this.options = options;
-        this.messenger = messenger;
-        this.extensions = extensions;
-        this.dataSynchronizer = new Data(props.id, segment, props.data, this.messenger, 'block');
-        this.styleSynchronizer = new ElementStyle(props.style);
-
-        this.init();
-    }
-
-    init () {}
-
-    on (event, listener) {
-        this.messenger.on(this.generateBlockPrefix(event), listener);
-    }
-
-    execute (operation, body) {
-        return this.messenger.execute(this.generateBlockPrefix(operation), body);
-    }
-
-    notify (notification, ...body) {
-        this.messenger.notify(this.generateBlockPrefix(notification), ...body);
-    }
-
-    operation (operation, listener) {
-        this.messenger.operation(this.generateBlockPrefix(operation), listener);
-    }
-
-    get data () {
-        return this.dataSynchronizer.reactiveData;
-    }
-
-    generateBlockPrefix (operation) {
-        return `structure.block.instance.${this.id}.${operation}`;
-    }
-
-    extension (name, ...params) {
-        const extension = this.extensions.get(name);
-
-        if (this.segment === 'render') {
-            return extension.Render;
-        }
-        if (this.segment === 'manager') {
-            return extension.Manager;
-        }
-        if (this.segment === 'editor') {
-            return extension.Editor;
-        }
-    }
-}
-
-
-/***/ }),
-
-/***/ "./src/js/shared/Structure/Blocks/Segment/Editor.js":
-/*!**********************************************************!*\
-  !*** ./src/js/shared/Structure/Blocks/Segment/Editor.js ***!
-  \**********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Editor)
-/* harmony export */ });
-const AbstractSegment = (__webpack_require__(/*! shared/Structure/Blocks/Segment/AbstractSegment.js */ "./src/js/shared/Structure/Blocks/Segment/AbstractSegment.js")["default"]);
-
-class Editor extends AbstractSegment {
-    constructor (props, options, messenger, extensions) {
-        super('editor', props, options, messenger, extensions);
-    }
-
-    init () {
-        this.dataSynchronizer.onChange(() => {
-            this.messenger.notify('structure.element.updated', this.id);
-        });
-    }
-}
-
-
-/***/ }),
-
-/***/ "./src/js/shared/Structure/Blocks/Segment/Manager.js":
-/*!***********************************************************!*\
-  !*** ./src/js/shared/Structure/Blocks/Segment/Manager.js ***!
-  \***********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Manager)
-/* harmony export */ });
-const AbstractSegment = (__webpack_require__(/*! shared/Structure/Blocks/Segment/AbstractSegment.js */ "./src/js/shared/Structure/Blocks/Segment/AbstractSegment.js")["default"]);
-
-class Manager extends AbstractSegment {
-    constructor (props, options, messenger, extensions) {
-        super('manager', props, options, messenger, extensions);
-    }
-
-    init () {
-        this.messenger.on('structure.element.created', (type, id) => {
-            if (type === 'block' && id === this.id) {
-                this.notify('created');
-            }
-        });
-    }
-}
-
-
-/***/ }),
-
-/***/ "./src/js/shared/Structure/Blocks/Segment/Render.js":
-/*!**********************************************************!*\
-  !*** ./src/js/shared/Structure/Blocks/Segment/Render.js ***!
-  \**********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Render)
-/* harmony export */ });
-const _ = __webpack_require__(/*! lodash */ "lodash");
-const AbstractSegment = (__webpack_require__(/*! shared/Structure/Blocks/Segment/AbstractSegment.js */ "./src/js/shared/Structure/Blocks/Segment/AbstractSegment.js")["default"]);
-
-class Render extends AbstractSegment {
-    constructor (props, options, messenger, extensions) {
-        super('render', props, options, messenger, extensions);
-    }
-
-    style (styles) {
-        let id = _.uniqueId(`tued-element-style-`);
-
-        this.styleSynchronizer.reactiveStyle[id] = styles;
-
-        return id;
-    }
-}
-
-
-/***/ }),
-
-/***/ "./src/js/shared/Structure/ColumnSize.js":
-/*!***********************************************!*\
-  !*** ./src/js/shared/Structure/ColumnSize.js ***!
-  \***********************************************/
+/***/ "./src/js/shared/Structure/Columns/ColumnSize.js":
+/*!*******************************************************!*\
+  !*** ./src/js/shared/Structure/Columns/ColumnSize.js ***!
+  \*******************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -15891,6 +15812,28 @@ class ColumnSize {
         }
 
         return this.changeTo(column, breakpoint, size - 1);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/shared/Structure/Columns/Columns.js":
+/*!****************************************************!*\
+  !*** ./src/js/shared/Structure/Columns/Columns.js ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Columns)
+/* harmony export */ });
+const AbstractElements = (__webpack_require__(/*! shared/Structure/Element/AbstractElements.js */ "./src/js/shared/Structure/Element/AbstractElements.js")["default"]);
+
+class Columns extends AbstractElements {
+    constructor (options, messenger, extensions) {
+        super('column', options, messenger, extensions);
     }
 }
 
@@ -16022,6 +15965,435 @@ class DraggableDeltaTranslator {
 
 /***/ }),
 
+/***/ "./src/js/shared/Structure/Element/AbstractElements.js":
+/*!*************************************************************!*\
+  !*** ./src/js/shared/Structure/Element/AbstractElements.js ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ AbstractElements)
+/* harmony export */ });
+const Render = (__webpack_require__(/*! shared/Structure/Element/Render.js */ "./src/js/shared/Structure/Element/Render.js")["default"]);
+const Manager = (__webpack_require__(/*! shared/Structure/Element/Manager.js */ "./src/js/shared/Structure/Element/Manager.js")["default"]);
+const Editor = (__webpack_require__(/*! shared/Structure/Element/Editor.js */ "./src/js/shared/Structure/Element/Editor.js")["default"]);
+
+class AbstractElements {
+    type;
+    options;
+    messenger;
+    extensions;
+
+    constructor (type, options, messenger, extensions) {
+        this.type = type;
+        this.options = options;
+        this.messenger = messenger;
+        this.extensions = extensions;
+    }
+
+    editor (props) {
+        return new Editor(
+            this.type,
+            this.getElementByType(props),
+            this.getOptionsByType(props),
+            this.messenger,
+            this.extensions
+        );
+    }
+
+    manager (props) {
+        return new Manager(
+            this.type,
+            this.getElementByType(props),
+            this.getOptionsByType(props),
+            this.messenger,
+            this.extensions
+        );
+    }
+
+    render (props) {
+        return new Render(
+            this.type,
+            this.getElementByType(props),
+            this.getOptionsByType(props),
+            this.messenger,
+            this.extensions
+        );
+    }
+
+    getOptionsByType (props) {
+        switch (this.type) {
+            case 'block': return this.options[props.block.code] ?? {};
+            case 'column': return this.options['column'] ?? {};
+            case 'row': return this.options['row'] ?? {};
+            case 'section': return this.options['section'] ?? {};
+        }
+    }
+
+    getElementByType (props) {
+        switch (this.type) {
+            case 'block': return props.block;
+            case 'column': return props.column;
+            case 'row': return props.row;
+            case 'section': return props.section;
+        }
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/shared/Structure/Element/AbstractSegment.js":
+/*!************************************************************!*\
+  !*** ./src/js/shared/Structure/Element/AbstractSegment.js ***!
+  \************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ AbstractSegment)
+/* harmony export */ });
+const Data = (__webpack_require__(/*! shared/Structure/Element/Data/Data.js */ "./src/js/shared/Structure/Element/Data/Data.js")["default"]);
+const ElementStyle = (__webpack_require__(/*! shared/Structure/Element/Style/ElementStyle.js */ "./src/js/shared/Structure/Element/Style/ElementStyle.js")["default"]);
+
+class AbstractSegment {
+    segment;
+    id;
+    code;
+    props;
+    options;
+    messenger;
+    extensions;
+
+    constructor (segment, type, element, options, messenger, extensions) {
+        this.segment = segment;
+        this.type = type;
+        this.id = element.id;
+        this.code = element.code;
+        this.options = options;
+        this.messenger = messenger;
+        this.extensions = extensions;
+        this.dataSynchronizer = new Data(element.id, this.type, segment, element.data, this.messenger);
+        this.styleSynchronizer = new ElementStyle(element.style);
+
+        this.init();
+    }
+
+    init () {}
+
+    on (event, listener) {
+        this.messenger.on(this.generateBlockPrefix(event), listener);
+    }
+
+    execute (operation, body) {
+        return this.messenger.execute(this.generateBlockPrefix(operation), body);
+    }
+
+    notify (notification, ...body) {
+        this.messenger.notify(this.generateBlockPrefix(notification), ...body);
+    }
+
+    operation (operation, listener) {
+        this.messenger.operation(this.generateBlockPrefix(operation), listener);
+    }
+
+    get data () {
+        return this.dataSynchronizer.reactiveData;
+    }
+
+    generateBlockPrefix (operation) {
+        return `structure.${this.type}.instance.${this.id}.${operation}`;
+    }
+
+    extension (name, ...params) {
+        const extension = this.extensions.get(name);
+
+        if (this.segment === 'render') {
+            return extension.Render;
+        }
+        if (this.segment === 'manager') {
+            return extension.Manager;
+        }
+        if (this.segment === 'editor') {
+            return extension.Editor;
+        }
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/shared/Structure/Element/Data/Data.js":
+/*!******************************************************!*\
+  !*** ./src/js/shared/Structure/Element/Data/Data.js ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Data)
+/* harmony export */ });
+const { reactive, toRaw, watch } = __webpack_require__(/*! vue */ "vue");
+const _ = __webpack_require__(/*! lodash */ "lodash");
+
+class Data {
+    data;
+    elementId;
+    messenger;
+    elementType;
+    segment;
+    lastUpdateFromOutside = false;
+    onChangeCallable;
+
+    constructor (elementId, elementType, segment, data, messenger) {
+        this.elementId = elementId;
+        this.elementType = elementType;
+        this.segment = segment;
+        this.messenger = messenger;
+
+        this.data = reactive(data);
+
+        this.propagateChangesInThisInstance();
+        this.watchForChangesInOtherInstance();
+    }
+
+    get reactiveData () {
+        return this.data;
+    }
+
+    onChange (callable) {
+        this.onChangeCallable = callable;
+    }
+
+    propagateChangesInThisInstance () {
+        watch(this.data, async (newData, oldData) => {
+            if (this.lastUpdateFromOutside) {
+                return;
+            }
+
+            this.messenger.execute(`structure.element.data.update`, {
+                segment: this.segment,
+                data: toRaw(newData),
+                elementId: this.elementId,
+                elementType: this.elementType,
+            });
+        });
+    }
+
+    watchForChangesInOtherInstance () {
+        this.messenger.operation(`structure.element.data.update`, (data, success, fail) => {
+            // Catch only operations for the same block in all windows
+            if (
+                data.elementId === this.elementId
+                && data.elementType === this.elementType
+                && data.segment !== this.segment
+            ) {
+                this.handleDataUpdate(data);
+
+                if (this.onChangeCallable) {
+                    this.onChangeCallable();
+                }
+            }
+
+            success();
+        });
+    }
+
+    handleDataUpdate (newData) {
+        if (_.isEqual(newData.data, toRaw(this.data)) === false) {
+            for (let i in newData.data) {
+                this.lastUpdateFromOutside = true;
+                this.data[i] = newData.data[i];
+            }
+            this.lastUpdateFromOutside = false;
+        }
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/shared/Structure/Element/Editor.js":
+/*!***************************************************!*\
+  !*** ./src/js/shared/Structure/Element/Editor.js ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Editor)
+/* harmony export */ });
+const AbstractSegment = (__webpack_require__(/*! shared/Structure/Element/AbstractSegment.js */ "./src/js/shared/Structure/Element/AbstractSegment.js")["default"]);
+
+class Editor extends AbstractSegment {
+    constructor (type, element, options, messenger, extensions) {
+        super('editor', type, element, options, messenger, extensions);
+    }
+
+    init () {
+        this.dataSynchronizer.onChange(() => {
+            this.messenger.notify('structure.element.updated', this.id);
+        });
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/shared/Structure/Element/Manager.js":
+/*!****************************************************!*\
+  !*** ./src/js/shared/Structure/Element/Manager.js ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Manager)
+/* harmony export */ });
+const AbstractSegment = (__webpack_require__(/*! shared/Structure/Element/AbstractSegment.js */ "./src/js/shared/Structure/Element/AbstractSegment.js")["default"]);
+
+class Manager extends AbstractSegment {
+    constructor (type, element, options, messenger, extensions) {
+        super('manager', type, element, options, messenger, extensions);
+    }
+
+    init () {
+        this.messenger.on('structure.element.created', (type, id) => {
+            if (type === this.type && id === this.id) {
+                this.notify('created');
+            }
+        });
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/shared/Structure/Element/Render.js":
+/*!***************************************************!*\
+  !*** ./src/js/shared/Structure/Element/Render.js ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Render)
+/* harmony export */ });
+const AbstractSegment = (__webpack_require__(/*! shared/Structure/Element/AbstractSegment.js */ "./src/js/shared/Structure/Element/AbstractSegment.js")["default"]);
+const _ = __webpack_require__(/*! lodash */ "lodash");
+
+class Render extends AbstractSegment {
+    constructor (type, element, options, messenger, extensions) {
+        super('render', type, element, options, messenger, extensions);
+    }
+
+    style (styles) {
+        let id = _.uniqueId(`tued-element-style-`);
+
+        this.styleSynchronizer.reactiveStyle[id] = styles;
+
+        return id;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/shared/Structure/Element/Style/Compiler.js":
+/*!***********************************************************!*\
+  !*** ./src/js/shared/Structure/Element/Style/Compiler.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Compiler)
+/* harmony export */ });
+class Compiler {
+    structure;
+
+    constructor (structure) {
+        this.structure = structure;
+    }
+
+    compile () {
+        let styles = [];
+
+        for (let s in this.structure.sections) {
+            let section = this.structure.sections[s];
+            styles.push(this.compileElementStyle(section.id, section.style));
+
+            for (let r in section.rows) {
+                let row = section.rows[r];
+                styles.push(this.compileElementStyle(row.id, row.style));
+
+                for (let c in row.columns) {
+                    let column = row.columns[c];
+                    styles.push(this.compileElementStyle(column.id, column.style));
+
+                    for (let b in column.blocks) {
+                        let block = column.blocks[b];
+                        styles.push(this.compileElementStyle(block.id, block.style));
+                    }
+                }
+            }
+        }
+
+        return styles.join('');
+    }
+
+    compileElementStyle (id, styles) {
+        let compiled = [];
+
+        for (let elementId in styles) {
+            for (let style in styles[elementId]) {
+                compiled.push(`#tued-block-${id} #${elementId} {${style}:${styles[elementId][style]()}}`);
+            }
+        }
+
+        return compiled.join('');
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/shared/Structure/Element/Style/ElementStyle.js":
+/*!***************************************************************!*\
+  !*** ./src/js/shared/Structure/Element/Style/ElementStyle.js ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ElementStyle)
+/* harmony export */ });
+const { reactive } = __webpack_require__(/*! vue */ "vue");
+
+class ElementStyle {
+    style;
+
+    constructor (styleProperty) {
+        this.style = reactive(styleProperty);
+    }
+
+    get reactiveStyle () {
+        return this.style;
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/js/shared/Structure/Fixer.js":
 /*!******************************************!*\
   !*** ./src/js/shared/Structure/Fixer.js ***!
@@ -16087,7 +16459,7 @@ class Fixer {
 
         if (!section.data) {
             section.data = {
-                'containerWidth': 'container-xxl',
+                containerWidth: 'default',
             };
         }
 
@@ -16125,7 +16497,9 @@ class Fixer {
         }
 
         if (!row.data) {
-            row.data = {};
+            row.data = {
+                gutters: 'default',
+            };
         }
 
         if (!row.columns || row.columns.length === 0) {
@@ -16222,6 +16596,50 @@ class Fixer {
         }
 
         this.usedIds.push(element.id);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/shared/Structure/Rows/Rows.js":
+/*!**********************************************!*\
+  !*** ./src/js/shared/Structure/Rows/Rows.js ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Rows)
+/* harmony export */ });
+const AbstractElements = (__webpack_require__(/*! shared/Structure/Element/AbstractElements.js */ "./src/js/shared/Structure/Element/AbstractElements.js")["default"]);
+
+class Rows extends AbstractElements {
+    constructor (options, messenger, extensions) {
+        super('row', options, messenger, extensions);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/shared/Structure/Sections/Sections.js":
+/*!******************************************************!*\
+  !*** ./src/js/shared/Structure/Sections/Sections.js ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Sections)
+/* harmony export */ });
+const AbstractElements = (__webpack_require__(/*! shared/Structure/Element/AbstractElements.js */ "./src/js/shared/Structure/Element/AbstractElements.js")["default"]);
+
+class Sections extends AbstractElements {
+    constructor (options, messenger, extensions) {
+        super('section', options, messenger, extensions);
     }
 }
 
@@ -16933,94 +17351,6 @@ class StructureManipulator {
 
 /***/ }),
 
-/***/ "./src/js/shared/Structure/Style/Compiler.js":
-/*!***************************************************!*\
-  !*** ./src/js/shared/Structure/Style/Compiler.js ***!
-  \***************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Compiler)
-/* harmony export */ });
-class Compiler {
-    structure;
-
-    constructor (structure) {
-        this.structure = structure;
-    }
-
-    compile () {
-        let styles = [];
-
-        for (let s in this.structure.sections) {
-            let section = this.structure.sections[s];
-            styles.push(this.compileElementStyle(section.id, section.style));
-
-            for (let r in section.rows) {
-                let row = section.rows[r];
-                styles.push(this.compileElementStyle(row.id, row.style));
-
-                for (let c in row.columns) {
-                    let column = row.columns[c];
-                    styles.push(this.compileElementStyle(column.id, column.style));
-
-                    for (let b in column.blocks) {
-                        let block = column.blocks[b];
-                        styles.push(this.compileElementStyle(block.id, block.style));
-                    }
-                }
-            }
-        }
-
-        return styles.join('');
-    }
-
-    compileElementStyle (id, styles) {
-        let compiled = [];
-
-        for (let elementId in styles) {
-            for (let style in styles[elementId]) {
-                compiled.push(`#tued-block-${id} #${elementId} {${style}:${styles[elementId][style]()}}`);
-            }
-        }
-
-        return compiled.join('');
-    }
-}
-
-
-/***/ }),
-
-/***/ "./src/js/shared/Structure/Style/ElementStyle.js":
-/*!*******************************************************!*\
-  !*** ./src/js/shared/Structure/Style/ElementStyle.js ***!
-  \*******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ ElementStyle)
-/* harmony export */ });
-const { reactive } = __webpack_require__(/*! vue */ "vue");
-
-class ElementStyle {
-    style;
-
-    constructor (styleProperty) {
-        this.style = reactive(styleProperty);
-    }
-
-    get reactiveStyle () {
-        return this.style;
-    }
-}
-
-
-/***/ }),
-
 /***/ "./src/js/shared/Utils/ClassObserver.js":
 /*!**********************************************!*\
   !*** ./src/js/shared/Utils/ClassObserver.js ***!
@@ -17324,6 +17654,12 @@ const Editor = (__webpack_require__(/*! ./Editor.js */ "./src/js/Editor.js")["de
         fallback_locales: ['en'],
         // Blocks options
         blocks: {},
+        // Columns options
+        columns: {},
+        // Rows options
+        rows: {},
+        // Sections options
+        sections: {},
         filemanager: {
             image_resolve_path: null,
             endpoint: null

@@ -1,5 +1,5 @@
-const Data = require('shared/Structure/Blocks/Data.js').default;
-const ElementStyle = require('shared/Structure/Style/ElementStyle.js').default;
+const Data = require('shared/Structure/Element/Data/Data.js').default;
+const ElementStyle = require('shared/Structure/Element/Style/ElementStyle.js').default;
 
 export default class AbstractSegment {
     segment;
@@ -10,15 +10,16 @@ export default class AbstractSegment {
     messenger;
     extensions;
 
-    constructor (segment, props, options, messenger, extensions) {
+    constructor (segment, type, element, options, messenger, extensions) {
         this.segment = segment;
-        this.id = props.id;
-        this.code = props.code;
+        this.type = type;
+        this.id = element.id;
+        this.code = element.code;
         this.options = options;
         this.messenger = messenger;
         this.extensions = extensions;
-        this.dataSynchronizer = new Data(props.id, segment, props.data, this.messenger, 'block');
-        this.styleSynchronizer = new ElementStyle(props.style);
+        this.dataSynchronizer = new Data(element.id, this.type, segment, element.data, this.messenger);
+        this.styleSynchronizer = new ElementStyle(element.style);
 
         this.init();
     }
@@ -46,7 +47,7 @@ export default class AbstractSegment {
     }
 
     generateBlockPrefix (operation) {
-        return `structure.block.instance.${this.id}.${operation}`;
+        return `structure.${this.type}.instance.${this.id}.${operation}`;
     }
 
     extension (name, ...params) {

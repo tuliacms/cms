@@ -1,9 +1,9 @@
+const AbstractSegment = require('shared/Structure/Element/AbstractSegment.js').default;
 const _ = require('lodash');
-const AbstractSegment = require('shared/Structure/Blocks/Segment/AbstractSegment.js').default;
 
 export default class Render extends AbstractSegment {
-    constructor (props, options, messenger, extensions) {
-        super('render', props, options, messenger, extensions);
+    constructor (type, element, options, messenger, extensions) {
+        super('render', type, element, options, messenger, extensions);
     }
 
     style (styles) {

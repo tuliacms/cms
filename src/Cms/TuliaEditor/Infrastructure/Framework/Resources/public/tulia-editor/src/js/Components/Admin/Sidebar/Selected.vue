@@ -14,6 +14,12 @@
                 v-for="(row, key) in section.rows"
                 :key="'row-' + key"
             >
+                <div :class="{
+                    'tued-structure-selected-options': true,
+                    'tued-structure-selected-active': selected.id === row.id && selected.type === 'row'
+                }">
+                    <Row :row="row"></Row>
+                </div>
                 <div
                     v-for="(column, key) in row.columns"
                     :key="'column-' + key"
@@ -43,6 +49,7 @@
 
 <script setup>
 const Section = require('components/Admin/Sidebar/Selected/Section.vue').default;
+const Row = require('components/Admin/Sidebar/Selected/Row.vue').default;
 const { defineProps, reactive, inject } = require('vue');
 
 const messenger = inject('messenger');
