@@ -25,6 +25,11 @@ const props = defineProps([
 ]);
 
 const structure = reactive(ObjectCloner.deepClone(props.structure));
+
+if (!structure.sections) {
+    structure.sections = [];
+}
+
 const selection = new Selection(structure, props.container.messenger);
 const structureManipulator = new StructureManipulator(structure, props.container.messenger);
 

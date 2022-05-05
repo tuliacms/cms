@@ -3,16 +3,18 @@ const _ = require('lodash');
 
 export default class Data {
     data;
-    blockId;
+    elementId;
     messenger;
+    prefix;
     owner;
     lastUpdateFromOutside = false;
     onChangeCallable;
 
-    constructor (blockId, owner, dataProperty, messenger) {
-        this.blockId = blockId;
+    constructor (elementId, owner, dataProperty, messenger, prefix) {
+        this.elementId = elementId;
         this.owner = owner;
         this.messenger = messenger;
+        this.prefix = prefix;
 
         this.data = reactive(dataProperty);
 
@@ -34,18 +36,18 @@ export default class Data {
                 return;
             }
 
-            this.messenger.execute('structure.block.data.update', {
+            this.messenger.execute(`structure.${this.prefix}.data.update`, {
                 owner: this.owner,
                 data: toRaw(newData),
-                blockId: this.blockId,
+                elementId: this.elementId,
             });
         });
     }
 
     watchForChangesInOtherInstance () {
-        this.messenger.operation('structure.block.data.update', (data, success, fail) => {
+        this.messenger.operation(`structure.${this.prefix}.data.update`, (data, success, fail) => {
             // Catch only operations for the same block in all windows
-            if (data.blockId === this.blockId && data.owner !== this.owner) {
+            if (data.elementId === this.elementId && data.owner !== this.owner) {
                 this.handleDataUpdate(data);
 
                 if (this.onChangeCallable) {

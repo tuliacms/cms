@@ -21,6 +21,20 @@ export default class Fixer {
             section.type = 'section';
         }
 
+        /*let sec = {
+            id: 'asd',
+            type: 'section',
+            metadata: {
+                hovered: false,
+                selected: false,
+                parent: null
+            },
+            data: {
+
+            },
+            rows: []
+        };*/
+
         if (!section.metadata) {
             section.metadata = {
                 hovered: false,
@@ -34,6 +48,12 @@ export default class Fixer {
 
         if (!section.rows || section.rows.length === 0) {
             section.rows = [{}];
+        }
+
+        if (!section.data) {
+            section.data = {
+                'containerWidth': 'container-xxl',
+            };
         }
 
         if (!section.style) {
@@ -67,6 +87,10 @@ export default class Fixer {
 
         if (!row.style) {
             row.style = {};
+        }
+
+        if (!row.data) {
+            row.data = {};
         }
 
         if (!row.columns || row.columns.length === 0) {
@@ -111,6 +135,10 @@ export default class Fixer {
 
         if (!column.style) {
             column.style = {};
+        }
+
+        if (!column.data) {
+            column.data = {};
         }
 
         if (!column.blocks) {

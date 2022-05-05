@@ -202,8 +202,8 @@ export default class StructureManipulator {
 
             // Implement basic comparison, only replace every key from newElement to currentElement.
             // @todo Try to detect which data changed, and update only the changed.
-            for (let ni in data.element) {
-                currentElement[ni] = data.element[ni];
+            for (let ni in data.element.data) {
+                currentElement.data[ni] = data.element.data[ni];
             }
 
             success();

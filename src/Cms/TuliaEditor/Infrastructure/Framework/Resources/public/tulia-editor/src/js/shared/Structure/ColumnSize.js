@@ -1,5 +1,3 @@
-const { toRaw } = require('vue');
-
 export default class ColumnSize {
     structureManipulator;
 

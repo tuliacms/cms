@@ -4,6 +4,12 @@
             v-for="(section, key) in structure.sections"
             :key="'section-' + key"
         >
+            <div :class="{
+                'tued-structure-selected-options': true,
+                'tued-structure-selected-active': selected.id === section.id && selected.type === 'section'
+            }">
+                <Section :section="section"></Section>
+            </div>
             <div
                 v-for="(row, key) in section.rows"
                 :key="'row-' + key"
@@ -15,12 +21,16 @@
                     <div
                         v-for="(block, key) in column.blocks"
                         :key="'block-' + key"
-                        :class="{ 'tued-structure-selected-options': true, 'tued-structure-selected-active': selected.id === block.id && selected.type === 'block' }"
                     >
-                        <component
-                            :is="'block-' + block.code + '-manager'"
-                            :block="block"
-                        ></component>
+                        <div :class="{
+                            'tued-structure-selected-options': true,
+                            'tued-structure-selected-active': selected.id === block.id && selected.type === 'block'
+                        }">
+                            <component
+                                :is="'block-' + block.code + '-manager'"
+                                :block="block"
+                            ></component>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -32,6 +42,7 @@
 </template>
 
 <script setup>
+const Section = require('components/Admin/Sidebar/Selected/Section.vue').default;
 const { defineProps, reactive, inject } = require('vue');
 
 const messenger = inject('messenger');

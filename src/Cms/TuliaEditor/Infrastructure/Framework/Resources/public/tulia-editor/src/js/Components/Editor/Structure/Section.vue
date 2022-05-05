@@ -7,7 +7,7 @@
         @mousedown.stop="selection.select('section', section.id, 'editor')"
         data-tagname="Section"
     >
-        <div class="container-xxl">
+        <div :class="containerClassname">
             <Row
                 v-for="row in section.rows"
                 :id="'tued-structure-row-' + row.id"
@@ -30,6 +30,11 @@ const Row = require('./Row.vue').default;
 export default {
     props: ['section'],
     inject: ['selection'],
-    components: { Row }
+    components: { Row },
+    computed: {
+        containerClassname () {
+            return this.section.data.containerWidth;
+        }
+    }
 };
 </script>

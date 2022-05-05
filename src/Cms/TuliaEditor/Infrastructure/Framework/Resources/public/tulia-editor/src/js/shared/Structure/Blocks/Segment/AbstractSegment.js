@@ -17,7 +17,7 @@ export default class AbstractSegment {
         this.options = options;
         this.messenger = messenger;
         this.extensions = extensions;
-        this.dataSynchronizer = new Data(props.id, segment, props.data, this.messenger);
+        this.dataSynchronizer = new Data(props.id, segment, props.data, this.messenger, 'block');
         this.styleSynchronizer = new ElementStyle(props.style);
 
         this.init();

@@ -73,6 +73,11 @@ const Selection = require("shared/Structure/Selection/Selection.js").default;
 // 'structure' store structure live updated from Editor iframe instance.
 // Default value of this field is a value from 'options' passed in new instance creation.
 const structure = reactive(props.structure);
+
+if (!structure.sections) {
+    structure.sections = [];
+}
+
 let previousStructure = ObjectCloner.deepClone(props.structure);
 
 const selection = new Selection(structure, props.container.messenger);
@@ -169,5 +174,4 @@ const blocksRegistry = new BlocksRegistry(props.availableBlocks);
 provide('blocksRegistry', blocksRegistry);
 provide('blocks', new Blocks(props.options.blocks, props.container.messenger, extensionRegistry));
 provide('blocksPicker', new BlocksPicker(blockPickerData, blocksRegistry, structureManipulator, modals));
-
 </script>

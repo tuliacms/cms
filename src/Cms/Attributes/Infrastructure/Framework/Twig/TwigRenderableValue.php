@@ -32,6 +32,10 @@ class TwigRenderableValue implements RenderableValueInterface
             return $this->rendered;
         }
 
+        if (!$this->source) {
+            return '';
+        }
+
         try {
             $this->rendered = $this->engine->renderString(
                 $this->source,

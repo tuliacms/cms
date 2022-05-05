@@ -11,9 +11,11 @@
             @selection-enter="(type, id) => selectionEnter(type, id)"
             @selection-leave="(type, id) => selectionLeave(type, id)"
         ></Section>
+
         <div class="tued-structure-new-element" @click="structureManipulator.newSection()">
             {{ translator.trans('newSection') }}
         </div>
+
         <div
             class="tued-element-boundaries tued-element-selected-boundaries"
             :style="{
