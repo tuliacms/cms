@@ -5271,8 +5271,28 @@ const columnClass = (column) => {
         ['tued-column']
     )).generate();
 };
+const rowClass = (row) => {
+    let classname = 'tued-row row';
 
-const __returned__ = { ref, defineProps, inject, props, messenger, renderPreview, SizesClassnameGenerator, columnClass }
+    if (row.data.gutters === 'no-gutters') {
+        classname += ' g-0';
+    }
+
+    return classname;
+};
+const containerClass = (section) => {
+    let classname = 'tued-container';
+
+    if (section.data.containerWidth === 'full-width') {
+        classname += ' container-fluid';
+    } else if (section.data.containerWidth === 'default') {
+        classname += ' container-xxl';
+    }
+
+    return classname;
+};
+
+const __returned__ = { ref, defineProps, inject, props, messenger, renderPreview, SizesClassnameGenerator, columnClass, rowClass, containerClass }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -8708,10 +8728,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const _hoisted_1 = ["id"]
-const _hoisted_2 = { class: "tued-container container-xxl" }
+const _hoisted_2 = ["id"]
 const _hoisted_3 = ["id"]
 const _hoisted_4 = ["id"]
-const _hoisted_5 = ["id"]
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
@@ -8723,11 +8742,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         class: "tued-section",
         id: `tued-section-${section.id}`
       }, [
-        (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [
+        (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+          class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($setup.containerClass(section))
+        }, [
           ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(section.rows, (row, key) => {
             return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
               key: 'row-' + key,
-              class: "tued-row row",
+              class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($setup.rowClass(row)),
               id: `tued-row-${row.id}`
             }, [
               ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(row.columns, (column, key) => {
@@ -8743,13 +8764,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                       id: `tued-block-${block.id}`
                     }, [
                       ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)((0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveDynamicComponent)('block-' + block.code + '-render'), { block: block }, null, 8 /* PROPS */, ["block"]))
-                    ], 8 /* PROPS */, _hoisted_5))
+                    ], 8 /* PROPS */, _hoisted_4))
                   }), 128 /* KEYED_FRAGMENT */))
-                ], 10 /* CLASS, PROPS */, _hoisted_4))
+                ], 10 /* CLASS, PROPS */, _hoisted_3))
               }), 128 /* KEYED_FRAGMENT */))
-            ], 8 /* PROPS */, _hoisted_3))
+            ], 10 /* CLASS, PROPS */, _hoisted_2))
           }), 128 /* KEYED_FRAGMENT */))
-        ])
+        ], 2 /* CLASS */)
       ], 8 /* PROPS */, _hoisted_1))
     }), 128 /* KEYED_FRAGMENT */))
   ], 2 /* CLASS */))

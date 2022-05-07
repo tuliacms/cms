@@ -6,11 +6,11 @@
             class="tued-section"
             :id="`tued-section-${section.id}`"
         >
-            <div class="tued-container container-xxl">
+            <div :class="containerClass(section)">
                 <div
                     v-for="(row, key) in section.rows"
                     :key="'row-' + key"
-                    class="tued-row row"
+                    :class="rowClass(row)"
                     :id="`tued-row-${row.id}`"
                 >
                     <div
@@ -62,5 +62,25 @@ const columnClass = (column) => {
         column,
         ['tued-column']
     )).generate();
+};
+const rowClass = (row) => {
+    let classname = 'tued-row row';
+
+    if (row.data.gutters === 'no-gutters') {
+        classname += ' g-0';
+    }
+
+    return classname;
+};
+const containerClass = (section) => {
+    let classname = 'tued-container';
+
+    if (section.data.containerWidth === 'full-width') {
+        classname += ' container-fluid';
+    } else if (section.data.containerWidth === 'default') {
+        classname += ' container-xxl';
+    }
+
+    return classname;
 };
 </script>
