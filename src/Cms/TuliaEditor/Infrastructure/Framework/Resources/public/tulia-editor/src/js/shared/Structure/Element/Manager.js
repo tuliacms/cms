@@ -1,8 +1,8 @@
 const AbstractSegment = require('shared/Structure/Element/AbstractSegment.js').default;
 
 export default class Manager extends AbstractSegment {
-    constructor (type, element, options, messenger, extensions) {
-        super('manager', type, element, options, messenger, extensions);
+    constructor (type, element, options, messenger, extensions, childrenManager) {
+        super('manager', type, element, options, messenger, extensions, childrenManager);
     }
 
     init () {
@@ -11,5 +11,15 @@ export default class Manager extends AbstractSegment {
                 this.notify('created');
             }
         });
+    }
+
+    getChildren (sourceChildren) {
+        let children = [];
+
+        for (let i in sourceChildren) {
+            children.push(this.childrenManager.manager(sourceChildren[i]));
+        }
+
+        return children;
     }
 }

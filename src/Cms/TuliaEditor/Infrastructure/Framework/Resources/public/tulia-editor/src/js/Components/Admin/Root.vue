@@ -170,26 +170,29 @@ const blockPickerData = reactive({
     columnId: null
 });
 const blocksRegistry = new BlocksRegistry(props.availableBlocks);
+const blocksManager = new Blocks(props.options.blocks, props.container.messenger, extensionRegistry);
 
 provide('blocksRegistry', blocksRegistry);
-provide('blocks', new Blocks(props.options.blocks, props.container.messenger, extensionRegistry));
+provide('blocks', blocksManager);
 provide('blocksPicker', new BlocksPicker(blockPickerData, blocksRegistry, structureManipulator, modals));
 
 /**********
  * Columns
  **********/
 const Columns = require('shared/Structure/Columns/Columns.js').default;
-provide('columns', new Columns(props.options.columns, props.container.messenger, extensionRegistry));
+const columnsManager = new Columns(props.options.columns, props.container.messenger, extensionRegistry, blocksManager);
+provide('columns', columnsManager);
 
 /**********
  * Rows
  **********/
 const Rows = require('shared/Structure/Rows/Rows.js').default;
-provide('rows', new Rows(props.options.rows, props.container.messenger, extensionRegistry));
+const rowsManager = new Rows(props.options.rows, props.container.messenger, extensionRegistry, columnsManager);
+provide('rows', rowsManager);
 
 /**********
  * Sections
  **********/
 const Sections = require('shared/Structure/Sections/Sections.js').default;
-provide('sections', new Sections(props.options.sections, props.container.messenger, extensionRegistry));
+provide('sections', new Sections(props.options.sections, props.container.messenger, extensionRegistry, rowsManager));
 </script>

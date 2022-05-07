@@ -7,41 +7,69 @@ export default class AbstractElements {
     options;
     messenger;
     extensions;
+    childrenManager;
+    instances = {
+        editor: [],
+        manager: [],
+        render: [],
+    };
 
-    constructor (type, options, messenger, extensions) {
+    constructor (type, options, messenger, extensions, childrenManager) {
         this.type = type;
         this.options = options;
         this.messenger = messenger;
         this.extensions = extensions;
+        this.childrenManager = childrenManager;
     }
 
     editor (props) {
-        return new Editor(
+        const element = this.getElementByType(props);
+
+        if (this.instances.editor[element.id]) {
+            return this.instances.editor[element.id];
+        }
+
+        return this.instances.editor[element.id] = new Editor(
             this.type,
-            this.getElementByType(props),
+            element,
             this.getOptionsByType(props),
             this.messenger,
-            this.extensions
+            this.extensions,
+            this.childrenManager
         );
     }
 
     manager (props) {
-        return new Manager(
+        const element = this.getElementByType(props);
+
+        if (this.instances.manager[element.id]) {
+            return this.instances.manager[element.id];
+        }
+
+        return this.instances.manager[element.id] = new Manager(
             this.type,
-            this.getElementByType(props),
+            element,
             this.getOptionsByType(props),
             this.messenger,
-            this.extensions
+            this.extensions,
+            this.childrenManager
         );
     }
 
     render (props) {
-        return new Render(
+        const element = this.getElementByType(props);
+
+        if (this.instances.render[element.id]) {
+            return this.instances.render[element.id];
+        }
+
+        return this.instances.render[element.id] = new Render(
             this.type,
-            this.getElementByType(props),
+            element,
             this.getOptionsByType(props),
             this.messenger,
-            this.extensions
+            this.extensions,
+            this.childrenManager
         );
     }
 

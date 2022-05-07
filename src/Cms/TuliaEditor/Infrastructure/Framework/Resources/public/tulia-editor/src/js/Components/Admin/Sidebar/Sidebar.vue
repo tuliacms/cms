@@ -28,7 +28,7 @@
 
 <script>
 const Structure = require('components/Admin/Sidebar/Structure.vue').default;
-const Selected = require('components/Admin/Sidebar/Selected.vue').default;
+const Selected = require('components/Admin/Sidebar/Selected/Selected.vue').default;
 
 export default {
     props: ['structure'],
