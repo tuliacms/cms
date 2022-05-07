@@ -58,6 +58,12 @@ export default class Editor {
         }
     }
 
+    loadControls (vueApp) {
+        for (let i in TuliaEditor.controls) {
+            vueApp.component(i, TuliaEditor.controls[i]);
+        }
+    }
+
     loadExtensions (vueApp) {
         for (let i in TuliaEditor.extensions) {
             vueApp.component(i, TuliaEditor.extensions[i]);
@@ -158,6 +164,7 @@ export default class Editor {
 
         this.vue = Vue.createApp(AdminRoot, data);
 
+        this.loadControls(this.vue);
         this.loadExtensions(this.vue);
         this.loadBlocks(this.vue);
 

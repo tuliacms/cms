@@ -4915,6 +4915,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const props = __props
 
+const Select = (__webpack_require__(/*! controls/Select.vue */ "./src/js/Controls/Select.vue")["default"]);
 const { defineProps, inject, ref, watch } = __webpack_require__(/*! vue */ "vue");
 
 const section = inject('sections').manager(props);
@@ -4929,26 +4930,23 @@ const containerWidthList = {
     'full-width-no-padding': 'Full width (fluid) with no padding',
 };
 const containerWidth = ref(section.data.containerWidth);
+
 watch(containerWidth, async () => {
     section.data.containerWidth = containerWidth.value;
+    let value;
 
     if (containerWidth.value === 'full-width-no-padding') {
-        setAllRowsDataValue('gutters', 'no-gutters');
+        value = 'no-gutters';
     } else {
-        setAllRowsDataValue('gutters', 'default');
+        value = 'default';
+    }
+
+    for (let i in section.children) {
+        section.children[i].data.gutters = value;
     }
 });
 
-/******************
- * Rows management
- *****************/
-const setAllRowsDataValue = (key, value) => {
-    for (let i in section.children) {
-        section.children[i].data[key] = value;
-    }
-};
-
-const __returned__ = { defineProps, inject, ref, watch, props, section, containerWidthList, containerWidth, setAllRowsDataValue }
+const __returned__ = { Select, defineProps, inject, ref, watch, props, section, containerWidthList, containerWidth }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -5921,6 +5919,76 @@ const { toRaw } = __webpack_require__(/*! vue */ "vue");
 
 /***/ }),
 
+/***/ "./src/js/Controls/Select.vue":
+/*!************************************!*\
+  !*** ./src/js/Controls/Select.vue ***!
+  \************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Select_vue_vue_type_template_id_10964470__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Select.vue?vue&type=template&id=10964470 */ "./src/js/Controls/Select.vue?vue&type=template&id=10964470");
+/* harmony import */ var _Select_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Select.vue?vue&type=script&setup=true&lang=js */ "./src/js/Controls/Select.vue?vue&type=script&setup=true&lang=js");
+/* harmony import */ var _home_adam_projects_tuliacms_core_src_Cms_TuliaEditor_Infrastructure_Framework_Resources_public_tulia_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+
+
+
+
+;
+const __exports__ = /*#__PURE__*/(0,_home_adam_projects_tuliacms_core_src_Cms_TuliaEditor_Infrastructure_Framework_Resources_public_tulia_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Select_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Select_vue_vue_type_template_id_10964470__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"src/js/Controls/Select.vue"]])
+/* hot reload */
+if (false) {}
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__exports__);
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Controls/Select.vue?vue&type=script&setup=true&lang=js":
+/*!*******************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Controls/Select.vue?vue&type=script&setup=true&lang=js ***!
+  \*******************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: {
+    multiple: { require: false, default: false },
+    choices: { require: true },
+    modelValue: { require: true },
+    label: { require: true },
+},
+  emits: ['update:modelValue'],
+  setup(__props, { expose, emit }) {
+  expose();
+
+const props = __props
+
+const { defineProps, inject, defineEmits, ref, watch } = __webpack_require__(/*! vue */ "vue");
+
+
+const model = ref(props.modelValue);
+
+watch(model, async (newValue, oldValue) => {
+    emit('update:modelValue', newValue);
+});
+
+const __returned__ = { defineProps, inject, defineEmits, ref, watch, emit, props, model }
+Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
+return __returned__
+}
+
+});
+
+/***/ }),
+
 /***/ "./src/js/blocks/ImageBlock/Editor.vue":
 /*!*********************************************!*\
   !*** ./src/js/blocks/ImageBlock/Editor.vue ***!
@@ -6406,7 +6474,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 const __default__ = {
-    name: 'BackgroundImageManager'
+    name: 'BackgroundImageManagerControl'
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (/*#__PURE__*/Object.assign(__default__, {
@@ -6414,6 +6482,10 @@ const __default__ = {
     block: {
         required: true,
         type: Object
+    },
+    label: {
+        required: true,
+        type: String
     },
     modelValue: {
         required: true,
@@ -6467,10 +6539,6 @@ const getFilemanager = () => {
 };
 
 onMounted(() => {
-    props.block.on('created', () => {
-        getFilemanager().show();
-    });
-
     props.block.operation('chose-image', (data, success, fail) => {
         if (data.placement === props.placement) {
             getFilemanager().show();
@@ -7242,6 +7310,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/js/Controls/Select.vue?vue&type=script&setup=true&lang=js":
+/*!***********************************************************************!*\
+  !*** ./src/js/Controls/Select.vue?vue&type=script&setup=true&lang=js ***!
+  \***********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Select_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Select_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./Select.vue?vue&type=script&setup=true&lang=js */ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Controls/Select.vue?vue&type=script&setup=true&lang=js");
+ 
+
+/***/ }),
+
 /***/ "./src/js/blocks/ImageBlock/Editor.vue?vue&type=script&setup=true&lang=js":
 /*!********************************************************************************!*\
   !*** ./src/js/blocks/ImageBlock/Editor.vue?vue&type=script&setup=true&lang=js ***!
@@ -7750,6 +7834,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Structure_vue_vue_type_template_id_4d3491be__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Structure_vue_vue_type_template_id_4d3491be__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./Structure.vue?vue&type=template&id=4d3491be */ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Components/Editor/Structure/Structure.vue?vue&type=template&id=4d3491be");
+
+
+/***/ }),
+
+/***/ "./src/js/Controls/Select.vue?vue&type=template&id=10964470":
+/*!******************************************************************!*\
+  !*** ./src/js/Controls/Select.vue?vue&type=template&id=10964470 ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Select_vue_vue_type_template_id_10964470__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Select_vue_vue_type_template_id_10964470__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./Select.vue?vue&type=template&id=10964470 */ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Controls/Select.vue?vue&type=template&id=10964470");
 
 
 /***/ }),
@@ -8448,31 +8548,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 
 
-const _hoisted_1 = { class: "mb-3" }
-const _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", { class: "form-label" }, "Container width", -1 /* HOISTED */)
-const _hoisted_3 = ["id", "value"]
-const _hoisted_4 = ["for"]
-
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [
-      _hoisted_2,
-      ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.containerWidthList, (label, value) => {
-        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", { key: value }, [
-          (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
-            type: "radio",
-            id: `tued-section-data-containerWidth-${value}`,
-            value: value,
-            "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => (($setup.containerWidth) = $event))
-          }, null, 8 /* PROPS */, _hoisted_3), [
-            [vue__WEBPACK_IMPORTED_MODULE_0__.vModelRadio, $setup.containerWidth]
-          ]),
-          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
-            for: `tued-section-data-containerWidth-${value}`
-          }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(label), 9 /* TEXT, PROPS */, _hoisted_4)
-        ])
-      }), 64 /* STABLE_FRAGMENT */))
-    ])
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Select"], {
+      modelValue: $setup.containerWidth,
+      "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => (($setup.containerWidth) = $event)),
+      choices: $setup.containerWidthList,
+      label: "Container width"
+    }, null, 8 /* PROPS */, ["modelValue"])
   ]))
 }
 
@@ -9089,6 +9172,49 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Controls/Select.vue?vue&type=template&id=10964470":
+/*!************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Controls/Select.vue?vue&type=template&id=10964470 ***!
+  \************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "vue");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+
+
+const _hoisted_1 = { class: "mb-3" }
+const _hoisted_2 = { class: "form-label" }
+const _hoisted_3 = ["id", "value"]
+const _hoisted_4 = ["for"]
+
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.props.label), 1 /* TEXT */),
+    ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.props.choices, (label, value) => {
+      return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", { key: value }, [
+        (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+          type: "radio",
+          id: `tued-section-data-containerWidth-${value}`,
+          value: value,
+          "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => (($setup.model) = $event))
+        }, null, 8 /* PROPS */, _hoisted_3), [
+          [vue__WEBPACK_IMPORTED_MODULE_0__.vModelRadio, $setup.model]
+        ]),
+        (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+          for: `tued-section-data-containerWidth-${value}`
+        }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(label), 9 /* TEXT, PROPS */, _hoisted_4)
+      ]))
+    }), 128 /* KEYED_FRAGMENT */))
+  ]))
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/blocks/ImageBlock/Editor.vue?vue&type=template&id=3505231e":
 /*!*********************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/blocks/ImageBlock/Editor.vue?vue&type=template&id=3505231e ***!
@@ -9280,17 +9406,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 
 
-const _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", { class: "btn-icon fas fa-image" }, null, -1 /* HOISTED */)
+const _hoisted_1 = { class: "mb-3" }
+const _hoisted_2 = { class: "form-label" }
+const _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", { class: "btn-icon fas fa-image" }, null, -1 /* HOISTED */)
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-      class: "btn btn-primary btn-icon-left",
-      type: "button",
-      onClick: _cache[0] || (_cache[0] = $event => ($setup.props.block.execute('chose-image', { placement: $setup.props.placement })))
-    }, [
-      _hoisted_1,
-      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translator.trans('choseImage')), 1 /* TEXT */)
+  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.props.label), 1 /* TEXT */),
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+        class: "btn btn-primary btn-icon-left",
+        type: "button",
+        onClick: _cache[0] || (_cache[0] = $event => ($setup.props.block.execute('chose-image', { placement: $setup.props.placement })))
+      }, [
+        _hoisted_3,
+        (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translator.trans('choseImage')), 1 /* TEXT */)
+      ])
     ])
   ]))
 }
@@ -14653,6 +14784,7 @@ class Canvas {
                     availableBlocks: TuliaEditor.blocks,
                     structure: ObjectCloner.deepClone(options.structure.source)
                 });
+                self.loadControls(self.vue);
                 self.loadExtensions(self.vue);
                 self.loadBlocks(self.vue);
                 self.vue.config.devtools = true;
@@ -14661,6 +14793,12 @@ class Canvas {
                 self.vue.mount('#tulia-editor');
             });
         });
+    }
+
+    loadControls (vueApp) {
+        for (let i in TuliaEditor.controls) {
+            vueApp.component(i, TuliaEditor.controls[i]);
+        }
     }
 
     loadExtensions (vueApp) {
@@ -14676,6 +14814,26 @@ class Canvas {
         }
     }
 }
+
+
+/***/ }),
+
+/***/ "./src/js/Controls/controls.js":
+/*!*************************************!*\
+  !*** ./src/js/Controls/controls.js ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+const Select = (__webpack_require__(/*! ./Select.vue */ "./src/js/Controls/Select.vue")["default"]);
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+    Select,
+});
 
 
 /***/ }),
@@ -14749,6 +14907,12 @@ class Editor {
 
         if (this.options.start_point === 'editor') {
             this.openEditor();
+        }
+    }
+
+    loadControls (vueApp) {
+        for (let i in TuliaEditor.controls) {
+            vueApp.component(i, TuliaEditor.controls[i]);
         }
     }
 
@@ -14852,6 +15016,7 @@ class Editor {
 
         this.vue = Vue.createApp(AdminRoot, data);
 
+        this.loadControls(this.vue);
         this.loadExtensions(this.vue);
         this.loadBlocks(this.vue);
 
@@ -17714,6 +17879,7 @@ const Editor = (__webpack_require__(/*! ./Editor.js */ "./src/js/Editor.js")["de
     },
     extensions: (__webpack_require__(/*! extensions/extensions.js */ "./src/js/extensions/extensions.js")["default"]),
     blocks: (__webpack_require__(/*! blocks/blocks.js */ "./src/js/blocks/blocks.js")["default"]),
+    controls: (__webpack_require__(/*! controls/controls.js */ "./src/js/Controls/controls.js")["default"]),
     translations: {
         en: {
             save: 'Save',

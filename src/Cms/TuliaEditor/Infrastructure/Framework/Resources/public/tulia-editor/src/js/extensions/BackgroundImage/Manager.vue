@@ -1,9 +1,12 @@
 <template>
-    <div>
-        <button class="btn btn-primary btn-icon-left" type="button" @click="props.block.execute('chose-image', { placement: props.placement })">
-            <i class="btn-icon fas fa-image"></i>
-            {{ translator.trans('choseImage') }}
-        </button>
+    <div class="mb-3">
+        <label class="form-label">{{ props.label }}</label>
+        <div>
+            <button class="btn btn-primary btn-icon-left" type="button" @click="props.block.execute('chose-image', { placement: props.placement })">
+                <i class="btn-icon fas fa-image"></i>
+                {{ translator.trans('choseImage') }}
+            </button>
+        </div>
     </div>
 </template>
 
@@ -14,6 +17,10 @@ const props = defineProps({
     block: {
         required: true,
         type: Object
+    },
+    label: {
+        required: true,
+        type: String
     },
     modelValue: {
         required: true,
@@ -59,10 +66,6 @@ const getFilemanager = () => {
 };
 
 onMounted(() => {
-    props.block.on('created', () => {
-        getFilemanager().show();
-    });
-
     props.block.operation('chose-image', (data, success, fail) => {
         if (data.placement === props.placement) {
             getFilemanager().show();
@@ -74,6 +77,6 @@ onMounted(() => {
 
 <script>
 export default {
-    name: 'BackgroundImageManager'
+    name: 'BackgroundImageManagerControl'
 }
 </script>

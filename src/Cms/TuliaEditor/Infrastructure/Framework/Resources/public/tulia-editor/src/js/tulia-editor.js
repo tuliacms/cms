@@ -31,6 +31,7 @@ export default {
     },
     extensions: require("extensions/extensions.js").default,
     blocks: require("blocks/blocks.js").default,
+    controls: require("controls/controls.js").default,
     translations: {
         en: {
             save: 'Save',

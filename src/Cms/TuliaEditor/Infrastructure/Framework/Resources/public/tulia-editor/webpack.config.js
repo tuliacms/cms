@@ -54,6 +54,7 @@ module.exports = {
         extensions: ['.js', '.scss'],
         alias: {
             components: path.resolve(__dirname, 'src/js/Components'),
+            controls: path.resolve(__dirname, 'src/js/Controls'),
             blocks: path.resolve(__dirname, 'src/js/blocks'),
             extensions: path.resolve(__dirname, 'src/js/extensions'),
             shared: path.resolve(__dirname, 'src/js/shared'),
