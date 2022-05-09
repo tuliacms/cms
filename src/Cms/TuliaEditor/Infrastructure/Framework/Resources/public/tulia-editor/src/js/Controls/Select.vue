@@ -2,8 +2,7 @@
     <div class="mb-3">
         <label class="form-label">{{ props.label }}</label>
         <div v-for="(label, value) in props.choices" :key="value">
-            <input type="radio" :id="`tued-section-data-containerWidth-${value}`" :value="value" v-model="model" />
-            <label :for="`tued-section-data-containerWidth-${value}`">{{ label }}</label>
+            <label><input type="radio" :value="value" v-model="model" /> {{ label }}</label>
         </div>
     </div>
 </template>

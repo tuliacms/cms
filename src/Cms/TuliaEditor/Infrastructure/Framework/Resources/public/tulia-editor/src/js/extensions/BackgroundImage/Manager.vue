@@ -1,44 +1,11 @@
-<template>
-    <div class="mb-3">
-        <label class="form-label">{{ props.label }}</label>
-        <div>
-            <button class="btn btn-primary btn-icon-left" type="button" @click="props.block.execute('chose-image', { placement: props.placement })">
-                <i class="btn-icon fas fa-image"></i>
-                {{ translator.trans('choseImage') }}
-            </button>
-        </div>
-    </div>
-</template>
+<template></template>
 
 <script setup>
-const { computed, onMounted, defineProps, inject, reactive } = require('vue');
-
-const props = defineProps({
-    block: {
-        required: true,
-        type: Object
-    },
-    label: {
-        required: true,
-        type: String
-    },
-    modelValue: {
-        required: true,
-        type: Object
-    },
-    placement: {
-        required: false,
-        type: String,
-        default () {
-            return 'image';
-        }
-    }
-});
+const { inject, defineProps } = require('vue');
 const Tulia = require('Tulia');
 const options = inject('options');
-const translator = inject('translator');
-
-const modelValue = reactive(props.modelValue);
+const props = defineProps(['instance']);
+const extension = inject('extension.instance').manager('BackgroundImage', props.instance);
 const filemanager = {
     instance: null
 };
@@ -59,24 +26,22 @@ const getFilemanager = () => {
                 return;
             }
 
-            modelValue.id = files[0].id;
-            modelValue.filename = files[0].name;
+            extension.execute('image-chosen', {
+                id: files[0].id,
+                filename: files[0].name
+            });
         }
     });
 };
 
-onMounted(() => {
-    props.block.operation('chose-image', (data, success, fail) => {
-        if (data.placement === props.placement) {
-            getFilemanager().show();
-        }
-        success();
-    });
+extension.operation('chose-image', (data, success, fail) => {
+    getFilemanager().show();
+    success();
 });
 </script>
 
 <script>
 export default {
-    name: 'BackgroundImageManagerControl'
+    name: 'BackgroundImageManager'
 }
 </script>

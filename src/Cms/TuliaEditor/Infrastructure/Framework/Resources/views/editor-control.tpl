@@ -16,6 +16,9 @@
             choseImage: '{{ 'choseImage'|trans({}, 'tulia-editor') }}',
             removeItem: '{{ 'removeItem'|trans({}, 'tulia-editor') }}',
             addItem: '{{ 'addItem'|trans({}, 'tulia-editor') }}',
+            selectIcon: '{{ 'selectIcon'|trans({}, 'tulia-editor') }}',
+            searchForIcon: '{{ 'searchForIcon'|trans({}, 'tulia-editor') }}',
+            emptySearchResults: '{{ 'emptySearchResults'|trans({}, 'tulia-editor') }}',
         };
 
         let structureSelector = '.tulia-editor-structure-field[data-tulia-editor-group-id="{{ params.group_id }}"]';

@@ -15,6 +15,9 @@
                 :blockPickerData="blockPickerData"
             ></BlockPickerComponent>
         </div>
+        <div v-for="(ext, key) in mountedExtensions" :key="key">
+            <component :is="ext.code + 'Manager'" :instance="ext.instance"></component>
+        </div>
     </div>
 </template>
 
@@ -154,8 +157,37 @@ provide('modals', modals);
  * Extensions
  ************/
 const ExtensionRegistry = require("shared/Extension/Registry.js").default;
+const Instantiator = require("shared/Extension/Instance/Instantiator.js").default;
 const extensionRegistry = new ExtensionRegistry(TuliaEditor.extensions);
 provide('extensionRegistry', extensionRegistry);
+provide('extension.instance', new Instantiator(props.container.messenger));
+
+const mountedExtensions = reactive([]);
+
+props.container.messenger.operation('extention.mount', (data, success, fail) => {
+    mountedExtensions.push({
+        instance: data.instance,
+        code: data.code
+    });
+
+    success();
+});
+
+props.container.messenger.operation('extention.unmount', (data, success, fail) => {
+    let index = null;
+
+    for (let i in mountedExtensions) {
+        if (mountedExtensions[i].instance === data.instance) {
+            index = i;
+            break;
+        }
+    }
+
+    mountedExtensions.splice(index, 1);
+
+    success();
+});
+
 
 
 

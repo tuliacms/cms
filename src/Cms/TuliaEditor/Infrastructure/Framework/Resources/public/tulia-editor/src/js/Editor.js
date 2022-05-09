@@ -66,7 +66,9 @@ export default class Editor {
 
     loadExtensions (vueApp) {
         for (let i in TuliaEditor.extensions) {
-            vueApp.component(i, TuliaEditor.extensions[i]);
+            if (TuliaEditor.extensions[i].Manager) {
+                vueApp.component(i + 'Manager', TuliaEditor.extensions[i].Manager);
+            }
         }
     }
 

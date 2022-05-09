@@ -26,37 +26,30 @@
     </div>
 </template>
 
-<script>
+<script setup>
 const Structure = require('components/Admin/Sidebar/Structure.vue').default;
 const Selected = require('components/Admin/Sidebar/Selected/Selected.vue').default;
+const { defineProps, ref, defineEmits, inject, provide, onMounted } = require('vue');
 
-export default {
-    props: ['structure'],
-    inject: ['messenger', 'translator'],
-    components: {
-        Structure,
-        Selected
-    },
-    provide () {
-        return {
-            structureDragOptions: {
-                animation: 200,
-                disabled: false,
-                ghostClass: 'tued-structure-draggable-ghost'
-            }
-        };
-    },
-    data () {
-        return {
-            sidebar: 'structure'
-        };
-    },
-    mounted () {
-        this.messenger.on('structure.selection.selected', (id, type, trigger) => {
-            if (trigger !== 'sidebar') {
-                this.sidebar = 'selected';
-            }
-        });
+const props = defineProps(['structure']);
+const messenger = inject('messenger');
+const translator = inject('translator');
+
+provide('structureDragOptions', {
+    structureDragOptions: {
+        animation: 200,
+        disabled: false,
+        ghostClass: 'tued-structure-draggable-ghost'
     }
-};
+});
+
+const sidebar = ref('structure');
+
+onMounted(() => {
+    messenger.on('structure.selection.selected', (id, type, trigger) => {
+        if (trigger !== 'sidebar') {
+            sidebar.value = 'selected';
+        }
+    });
+});
 </script>

@@ -56,7 +56,12 @@ export default class Canvas {
 
     loadExtensions (vueApp) {
         for (let i in TuliaEditor.extensions) {
-            vueApp.component(i, TuliaEditor.extensions[i]);
+            if (TuliaEditor.extensions[i].Editor) {
+                vueApp.component(i + 'Editor', TuliaEditor.extensions[i].Editor);
+            }
+            if (TuliaEditor.extensions[i].Render) {
+                vueApp.component(i + 'Render', TuliaEditor.extensions[i].Render);
+            }
         }
     }
 

@@ -601,5 +601,49 @@ body {
     display: inline-block;
 }
 
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/extensions/FontIcon/Manager.vue?vue&type=style&index=0&id=54330b74&scoped=true&lang=scss ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************/
+.tued-ext-font-icon-list[data-v-54330b74] {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -5px;
+  margin-right: -5px;
+}
+.tued-ext-font-icon-list .tued-ext-font-icon-list-item[data-v-54330b74] {
+    flex: 1 1 100px;
+    padding: 5px;
+    display: flex;
+}
+.tued-ext-font-icon-list .tued-ext-font-icon-list-item .tued-ext-font-icon-list-item-inner[data-v-54330b74] {
+      flex: 1;
+      background-color: #f3f3f3;
+      padding: 4px;
+      border-radius: 3px;
+      text-align: center;
+      font-size: 31px;
+      max-width: 100%;
+}
+.tued-ext-font-icon-list .tued-ext-font-icon-list-item .tued-ext-font-icon-list-item-inner span[data-v-54330b74] {
+        display: block;
+        font-size: 12px;
+        word-wrap: break-word;
+}
+.tued-ext-font-icon-list .tued-ext-font-icon-list-item .tued-ext-font-icon-list-item-inner[data-v-54330b74]:hover {
+        background-color: #e0e0e0;
+        cursor: pointer;
+}
+
+/*!***************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/extensions/FontIcon/Editor.vue?vue&type=style&index=0&id=533a3bf6&scoped=true&lang=scss ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************************************/
+.tued-ext-fonticon-element[data-v-533a3bf6] {
+  outline: none !important;
+}
+.tued-ext-fonticon-element[data-v-533a3bf6]:hover {
+    outline: 1px dotted #8c8c8c !important;
+    cursor: pointer;
+}
+
 
 /*# sourceMappingURL=main.css.map*/

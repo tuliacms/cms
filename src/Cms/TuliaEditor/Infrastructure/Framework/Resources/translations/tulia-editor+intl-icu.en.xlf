@@ -42,6 +42,18 @@
                 <source>addItem</source>
                 <target>Add item</target>
             </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.11">
+                <source>selectIcon</source>
+                <target>Select icon</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.12">
+                <source>emptySearchResults</source>
+                <target>Empty search results...</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.13">
+                <source>searchForIcon</source>
+                <target>Search for icon</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

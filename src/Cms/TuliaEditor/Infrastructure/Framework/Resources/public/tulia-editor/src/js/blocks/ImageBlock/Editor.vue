@@ -1,7 +1,6 @@
 <template>
     <ImageEditor
         @updated="$emit('updated')"
-        :block="block"
         v-model="block.data.image"
     ></ImageEditor>
 </template>

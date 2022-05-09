@@ -88,8 +88,10 @@ onMounted(() => {
  * Extensions
  ************/
 const ExtensionRegistry = require("shared/Extension/Registry.js").default;
+const Instantiator = require("shared/Extension/Instance/Instantiator.js").default;
 const extensionRegistry = new ExtensionRegistry(TuliaEditor.extensions);
 provide('extensionRegistry', extensionRegistry);
+provide('extension.instance', new Instantiator(props.container.messenger));
 
 
 
