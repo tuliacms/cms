@@ -90,7 +90,7 @@ onMounted(() => {
 const ExtensionRegistry = require("shared/Extension/Registry.js").default;
 const Instantiator = require("shared/Extension/Instance/Instantiator.js").default;
 const extensionRegistry = new ExtensionRegistry(TuliaEditor.extensions);
-provide('extensionRegistry', extensionRegistry);
+provide('extension.registry', extensionRegistry);
 provide('extension.instance', new Instantiator(props.container.messenger));
 
 
@@ -104,27 +104,27 @@ const BlocksRegistry = require("shared/Structure/Blocks/Registry.js").default;
 const blocksRegistry = new BlocksRegistry(props.availableBlocks);
 const blocksManager = new Blocks(props.options.blocks, props.container.messenger, extensionRegistry);
 
-provide('blocksRegistry', blocksRegistry);
-provide('blocks', blocksManager);
+provide('blocks.registry', blocksRegistry);
+provide('blocks.instance', blocksManager);
 
 /**********
  * Columns
  **********/
 const Columns = require('shared/Structure/Columns/Columns.js').default;
 const columnsManager = new Columns(props.options.columns, props.container.messenger, extensionRegistry, blocksManager);
-provide('columns', columnsManager);
+provide('columns.instance', columnsManager);
 
 /**********
  * Rows
  **********/
 const Rows = require('shared/Structure/Rows/Rows.js').default;
 const rowsManager = new Rows(props.options.rows, props.container.messenger, extensionRegistry, columnsManager);
-provide('rows', rowsManager);
+provide('rows.instance', rowsManager);
 
 /**********
  * Sections
  **********/
 const Sections = require('shared/Structure/Sections/Sections.js').default;
-provide('sections', new Sections(props.options.sections, props.container.messenger, extensionRegistry, rowsManager));
+provide('sections.instance', new Sections(props.options.sections, props.container.messenger, extensionRegistry, rowsManager));
 </script>
 

@@ -26,7 +26,7 @@
 const Column = require('./Column.vue').default;
 const { defineProps, inject, computed } = require('vue');
 const props = defineProps(['row', 'parent']);
-const row = inject('rows').editor(props);
+const row = inject('rows.instance').editor(props);
 const selection = inject('selection');
 
 const rowClassname = computed(() => {

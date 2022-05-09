@@ -8,5 +8,5 @@
  ****************/
 const { defineProps, inject } = require('vue');
 const props = defineProps(['block']);
-const block = inject('blocks').render(props);
+const block = inject('blocks.instance').render(props);
 </script>

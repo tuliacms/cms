@@ -28,7 +28,7 @@
 const Row = require('./Row.vue').default;
 const { defineProps, inject, computed } = require('vue');
 const props = defineProps(['section']);
-const section = inject('sections').editor(props);
+const section = inject('sections.instance').editor(props);
 const selection = inject('selection');
 
 const containerClassname = computed(() => {

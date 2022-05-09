@@ -13,7 +13,7 @@
 <script setup>
 const { defineProps, inject } = require('vue');
 const props = defineProps(['row']);
-const row = inject('rows').manager(props);
+const row = inject('rows.instance').manager(props);
 /*
 const gutterOptionsList = {
     'default': 'Default gutters',

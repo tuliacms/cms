@@ -59,7 +59,7 @@ const Blocks = require('components/Admin/Sidebar/Blocks.vue').default;
 
 export default {
     props: ['parent', 'columns'],
-    inject: ['selection', 'canvas', 'columnSize', 'structureDragOptions', 'translator'],
+    inject: ['selection', 'canvas', 'columns.size', 'structureDragOptions', 'translator'],
     components: {
         draggable,
         Blocks

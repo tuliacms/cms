@@ -4203,7 +4203,7 @@ const props = __props
 
 const { defineProps, inject } = __webpack_require__(/*! vue */ "vue");
 
-const blocksPicker = inject('blocksPicker');
+const blocksPicker = inject('blocks.picker');
 const translator = inject('translator');
 
 
@@ -4537,18 +4537,6 @@ provide('canvas', new Canvas(
 
 
 
-
-
-/**********
- * Columns
- **********/
-const ColumnSize = (__webpack_require__(/*! shared/Structure/Columns/ColumnSize.js */ "./src/js/shared/Structure/Columns/ColumnSize.js")["default"]);
-provide('columnSize', new ColumnSize(structureManipulator));
-
-
-
-
-
 /*********
  * Modals
  *********/
@@ -4567,7 +4555,7 @@ provide('modals', modals);
 const ExtensionRegistry = (__webpack_require__(/*! shared/Extension/Registry.js */ "./src/js/shared/Extension/Registry.js")["default"]);
 const Instantiator = (__webpack_require__(/*! shared/Extension/Instance/Instantiator.js */ "./src/js/shared/Extension/Instance/Instantiator.js")["default"]);
 const extensionRegistry = new ExtensionRegistry(TuliaEditor.extensions);
-provide('extensionRegistry', extensionRegistry);
+provide('extension.registry', extensionRegistry);
 provide('extension.instance', new Instantiator(props.container.messenger));
 
 const mountedExtensions = reactive([]);
@@ -4612,31 +4600,34 @@ const blockPickerData = reactive({
 const blocksRegistry = new BlocksRegistry(props.availableBlocks);
 const blocksManager = new Blocks(props.options.blocks, props.container.messenger, extensionRegistry);
 
-provide('blocksRegistry', blocksRegistry);
-provide('blocks', blocksManager);
-provide('blocksPicker', new BlocksPicker(blockPickerData, blocksRegistry, structureManipulator, modals));
+provide('blocks.registry', blocksRegistry);
+provide('blocks.instance', blocksManager);
+provide('blocks.picker', new BlocksPicker(blockPickerData, blocksRegistry, structureManipulator, modals));
 
 /**********
  * Columns
  **********/
 const Columns = (__webpack_require__(/*! shared/Structure/Columns/Columns.js */ "./src/js/shared/Structure/Columns/Columns.js")["default"]);
 const columnsManager = new Columns(props.options.columns, props.container.messenger, extensionRegistry, blocksManager);
-provide('columns', columnsManager);
+provide('columns.instance', columnsManager);
+
+const ColumnSize = (__webpack_require__(/*! shared/Structure/Columns/ColumnSize.js */ "./src/js/shared/Structure/Columns/ColumnSize.js")["default"]);
+provide('columns.size', new ColumnSize(structureManipulator));
 
 /**********
  * Rows
  **********/
 const Rows = (__webpack_require__(/*! shared/Structure/Rows/Rows.js */ "./src/js/shared/Structure/Rows/Rows.js")["default"]);
 const rowsManager = new Rows(props.options.rows, props.container.messenger, extensionRegistry, columnsManager);
-provide('rows', rowsManager);
+provide('rows.instance', rowsManager);
 
 /**********
  * Sections
  **********/
 const Sections = (__webpack_require__(/*! shared/Structure/Sections/Sections.js */ "./src/js/shared/Structure/Sections/Sections.js")["default"]);
-provide('sections', new Sections(props.options.sections, props.container.messenger, extensionRegistry, rowsManager));
+provide('sections.instance', new Sections(props.options.sections, props.container.messenger, extensionRegistry, rowsManager));
 
-const __returned__ = { CanvasComponent, SidebarComponent, BlockPickerComponent, ObjectCloner, TuliaEditor, defineProps, onMounted, provide, reactive, isProxy, toRaw, props, saveEditor, cancelEditor, StructureManipulator, Selection, structure, previousStructure, selection, structureManipulator, restorePreviousStructure, useCurrentStructureAsPrevious, canvasOptions, Canvas, ColumnSize, Modals, modalsData, modals, ExtensionRegistry, Instantiator, extensionRegistry, mountedExtensions, Blocks, BlocksPicker, BlocksRegistry, blockPickerData, blocksRegistry, blocksManager, Columns, columnsManager, Rows, rowsManager, Sections }
+const __returned__ = { CanvasComponent, SidebarComponent, BlockPickerComponent, ObjectCloner, TuliaEditor, defineProps, onMounted, provide, reactive, isProxy, toRaw, props, saveEditor, cancelEditor, StructureManipulator, Selection, structure, previousStructure, selection, structureManipulator, restorePreviousStructure, useCurrentStructureAsPrevious, canvasOptions, Canvas, Modals, modalsData, modals, ExtensionRegistry, Instantiator, extensionRegistry, mountedExtensions, Blocks, BlocksPicker, BlocksRegistry, blockPickerData, blocksRegistry, blocksManager, Columns, columnsManager, ColumnSize, Rows, rowsManager, Sections }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -4657,14 +4648,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _Blocks_vue_vue_type_template_id_440c8276__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Blocks.vue?vue&type=template&id=440c8276 */ "./src/js/Components/Admin/Sidebar/Blocks.vue?vue&type=template&id=440c8276");
-/* harmony import */ var _Blocks_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Blocks.vue?vue&type=script&lang=js */ "./src/js/Components/Admin/Sidebar/Blocks.vue?vue&type=script&lang=js");
+/* harmony import */ var _Blocks_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Blocks.vue?vue&type=script&setup=true&lang=js */ "./src/js/Components/Admin/Sidebar/Blocks.vue?vue&type=script&setup=true&lang=js");
 /* harmony import */ var _home_adam_projects_tuliacms_core_src_Cms_TuliaEditor_Infrastructure_Framework_Resources_public_tulia_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_home_adam_projects_tuliacms_core_src_Cms_TuliaEditor_Infrastructure_Framework_Resources_public_tulia_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Blocks_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Blocks_vue_vue_type_template_id_440c8276__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"src/js/Components/Admin/Sidebar/Blocks.vue"]])
+const __exports__ = /*#__PURE__*/(0,_home_adam_projects_tuliacms_core_src_Cms_TuliaEditor_Infrastructure_Framework_Resources_public_tulia_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Blocks_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Blocks_vue_vue_type_template_id_440c8276__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"src/js/Components/Admin/Sidebar/Blocks.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -4673,10 +4664,10 @@ if (false) {}
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Components/Admin/Sidebar/Blocks.vue?vue&type=script&lang=js":
-/*!************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Components/Admin/Sidebar/Blocks.vue?vue&type=script&lang=js ***!
-  \************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Components/Admin/Sidebar/Blocks.vue?vue&type=script&setup=true&lang=js":
+/*!***********************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Components/Admin/Sidebar/Blocks.vue?vue&type=script&setup=true&lang=js ***!
+  \***********************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -4684,17 +4675,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: ['parent', 'blocks'],
+  setup(__props, { expose }) {
+  expose();
 
+const props = __props
+
+const { inject, defineProps } = __webpack_require__(/*! vue */ "vue");
 const draggable = __webpack_require__(/*! vuedraggable */ "./node_modules/vuedraggable/dist/vuedraggable.umd.js");
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-    props: ['parent', 'blocks'],
-    inject: ['selection', 'structureDragOptions', 'translator', 'blocksPicker', 'blocksRegistry'],
-    components: {
-        draggable,
-    }
-});
 
+
+const selection = inject('selection');
+const structureDragOptions = inject('structureDragOptions');
+const translator = inject('translator');
+const blocksRegistry = inject('blocks.registry');
+const blocksPicker = inject('blocks.picker');
+
+const __returned__ = { inject, defineProps, draggable, props, selection, structureDragOptions, translator, blocksRegistry, blocksPicker }
+Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
+return __returned__
+}
+
+});
 
 /***/ }),
 
@@ -4743,7 +4747,7 @@ const Blocks = (__webpack_require__(/*! components/Admin/Sidebar/Blocks.vue */ "
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
     props: ['parent', 'columns'],
-    inject: ['selection', 'canvas', 'columnSize', 'structureDragOptions', 'translator'],
+    inject: ['selection', 'canvas', 'columns.size', 'structureDragOptions', 'translator'],
     components: {
         draggable,
         Blocks
@@ -4908,7 +4912,7 @@ const props = __props
 
 const { defineProps, inject } = __webpack_require__(/*! vue */ "vue");
 
-const row = inject('rows').manager(props);
+const row = inject('rows.instance').manager(props);
 /*
 const gutterOptionsList = {
     'default': 'Default gutters',
@@ -4973,7 +4977,7 @@ const props = __props
 const Select = (__webpack_require__(/*! controls/Select.vue */ "./src/js/Controls/Select.vue")["default"]);
 const { defineProps, inject, ref, watch } = __webpack_require__(/*! vue */ "vue");
 
-const section = inject('sections').manager(props);
+const section = inject('sections.instance').manager(props);
 
 
 /******************
@@ -5489,7 +5493,7 @@ onMounted(() => {
 const ExtensionRegistry = (__webpack_require__(/*! shared/Extension/Registry.js */ "./src/js/shared/Extension/Registry.js")["default"]);
 const Instantiator = (__webpack_require__(/*! shared/Extension/Instance/Instantiator.js */ "./src/js/shared/Extension/Instance/Instantiator.js")["default"]);
 const extensionRegistry = new ExtensionRegistry(TuliaEditor.extensions);
-provide('extensionRegistry', extensionRegistry);
+provide('extension.registry', extensionRegistry);
 provide('extension.instance', new Instantiator(props.container.messenger));
 
 
@@ -5503,28 +5507,28 @@ const BlocksRegistry = (__webpack_require__(/*! shared/Structure/Blocks/Registry
 const blocksRegistry = new BlocksRegistry(props.availableBlocks);
 const blocksManager = new Blocks(props.options.blocks, props.container.messenger, extensionRegistry);
 
-provide('blocksRegistry', blocksRegistry);
-provide('blocks', blocksManager);
+provide('blocks.registry', blocksRegistry);
+provide('blocks.instance', blocksManager);
 
 /**********
  * Columns
  **********/
 const Columns = (__webpack_require__(/*! shared/Structure/Columns/Columns.js */ "./src/js/shared/Structure/Columns/Columns.js")["default"]);
 const columnsManager = new Columns(props.options.columns, props.container.messenger, extensionRegistry, blocksManager);
-provide('columns', columnsManager);
+provide('columns.instance', columnsManager);
 
 /**********
  * Rows
  **********/
 const Rows = (__webpack_require__(/*! shared/Structure/Rows/Rows.js */ "./src/js/shared/Structure/Rows/Rows.js")["default"]);
 const rowsManager = new Rows(props.options.rows, props.container.messenger, extensionRegistry, columnsManager);
-provide('rows', rowsManager);
+provide('rows.instance', rowsManager);
 
 /**********
  * Sections
  **********/
 const Sections = (__webpack_require__(/*! shared/Structure/Sections/Sections.js */ "./src/js/shared/Structure/Sections/Sections.js")["default"]);
-provide('sections', new Sections(props.options.sections, props.container.messenger, extensionRegistry, rowsManager));
+provide('sections.instance', new Sections(props.options.sections, props.container.messenger, extensionRegistry, rowsManager));
 
 const __returned__ = { StructureComponent, RenderingCanvasComponent, ObjectCloner, Selection, StructureManipulator, StyleCompiler, Filemanager, TuliaEditor, defineProps, provide, reactive, onMounted, toRaw, ref, props, structure, selection, structureManipulator, renderedContent, ExtensionRegistry, Instantiator, extensionRegistry, Blocks, BlocksRegistry, blocksRegistry, blocksManager, Columns, columnsManager, Rows, rowsManager, Sections }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
@@ -5692,7 +5696,7 @@ const props = __props
 const Column = (__webpack_require__(/*! ./Column.vue */ "./src/js/Components/Editor/Structure/Column.vue")["default"]);
 const { defineProps, inject, computed } = __webpack_require__(/*! vue */ "vue");
 
-const row = inject('rows').editor(props);
+const row = inject('rows.instance').editor(props);
 const selection = inject('selection');
 
 const rowClassname = computed(() => {
@@ -5763,7 +5767,7 @@ const props = __props
 const Row = (__webpack_require__(/*! ./Row.vue */ "./src/js/Components/Editor/Structure/Row.vue")["default"]);
 const { defineProps, inject, computed } = __webpack_require__(/*! vue */ "vue");
 
-const section = inject('sections').editor(props);
+const section = inject('sections.instance').editor(props);
 const selection = inject('selection');
 
 const containerClassname = computed(() => {
@@ -6099,7 +6103,7 @@ const props = __props
 
 const { defineProps, inject } = __webpack_require__(/*! vue */ "vue");
 
-const block = inject('blocks').editor(props);
+const block = inject('blocks.instance').editor(props);
 
 const ImageEditor = block.extension('Image');
 
@@ -6163,7 +6167,7 @@ const props = __props
  ****************/
 const { defineProps, inject } = __webpack_require__(/*! vue */ "vue");
 
-const block = inject('blocks').render(props);
+const block = inject('blocks.instance').render(props);
 
 const __returned__ = { defineProps, inject, props, block }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
@@ -6222,7 +6226,7 @@ const props = __props
 
 const { defineProps, inject } = __webpack_require__(/*! vue */ "vue");
 
-const block = inject('blocks').editor(props);
+const block = inject('blocks.instance').editor(props);
 
 const WysiwygEditor = block.extension('WysiwygEditor');
 
@@ -6283,7 +6287,7 @@ const props = __props
 
 const { defineProps, inject } = __webpack_require__(/*! vue */ "vue");
 
-const block = inject('blocks').manager(props);
+const block = inject('blocks.instance').manager(props);
 
 const __returned__ = { defineProps, inject, props, block }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
@@ -6342,7 +6346,7 @@ const props = __props
 
 const { defineProps, inject } = __webpack_require__(/*! vue */ "vue");
 
-const block = inject('blocks').render(props);
+const block = inject('blocks.instance').render(props);
 
 const __returned__ = { defineProps, inject, props, block }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
@@ -7282,18 +7286,18 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/js/Components/Admin/Sidebar/Blocks.vue?vue&type=script&lang=js":
-/*!****************************************************************************!*\
-  !*** ./src/js/Components/Admin/Sidebar/Blocks.vue?vue&type=script&lang=js ***!
-  \****************************************************************************/
+/***/ "./src/js/Components/Admin/Sidebar/Blocks.vue?vue&type=script&setup=true&lang=js":
+/*!***************************************************************************************!*\
+  !*** ./src/js/Components/Admin/Sidebar/Blocks.vue?vue&type=script&setup=true&lang=js ***!
+  \***************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Blocks_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Blocks_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Blocks_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./Blocks.vue?vue&type=script&lang=js */ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Components/Admin/Sidebar/Blocks.vue?vue&type=script&lang=js");
+/* harmony import */ var _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Blocks_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./Blocks.vue?vue&type=script&setup=true&lang=js */ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/Components/Admin/Sidebar/Blocks.vue?vue&type=script&setup=true&lang=js");
  
 
 /***/ }),
@@ -8561,13 +8565,11 @@ const _hoisted_5 = [
 ]
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_draggable = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("draggable")
-
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_draggable, (0,vue__WEBPACK_IMPORTED_MODULE_0__.mergeProps)({
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["draggable"], (0,vue__WEBPACK_IMPORTED_MODULE_0__.mergeProps)({
       group: "blocks",
       list: $props.blocks
-    }, $options.structureDragOptions, {
+    }, $setup.structureDragOptions, {
       handle: ".tued-structure-element-block > .tued-label > .tued-structure-draggable-handler",
       "item-key": "id",
       tag: "div",
@@ -8580,15 +8582,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [
           (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
             class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({ 'tued-label': true, 'tued-element-selected': element.metadata.selected, 'tued-element-hovered': element.metadata.hovered }),
-            onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($options.selection.select('block', element.id, 'sidebar')), ["stop"]),
-            onMouseenter: $event => ($options.selection.hover('block', element.id, 'sidebar')),
-            onMouseleave: _cache[0] || (_cache[0] = $event => ($options.selection.resetHovered()))
+            onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($setup.selection.select('block', element.id, 'sidebar')), ["stop"]),
+            onMouseenter: $event => ($setup.selection.hover('block', element.id, 'sidebar')),
+            onMouseleave: _cache[0] || (_cache[0] = $event => ($setup.selection.resetHovered()))
           }, [
             (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
               class: "tued-structure-draggable-handler",
-              onMousedown: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($options.selection.select('block', element.id, 'sidebar')), ["stop"])
+              onMousedown: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($setup.selection.select('block', element.id, 'sidebar')), ["stop"])
             }, _hoisted_5, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_3),
-            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.blocksRegistry.get(element.code).name), 1 /* TEXT */)
+            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.blocksRegistry.get(element.code).name), 1 /* TEXT */)
           ], 42 /* CLASS, PROPS, HYDRATE_EVENTS */, _hoisted_2)
         ])
       ]),
@@ -8596,8 +8598,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }, 16 /* FULL_PROPS */, ["list", "component-data"]),
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
       class: "tued-structure-new-element",
-      onClick: _cache[4] || (_cache[4] = $event => ($options.blocksPicker.newAt($props.parent.id)))
-    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translator.trans('newBlock')), 1 /* TEXT */)
+      onClick: _cache[4] || (_cache[4] = $event => ($setup.blocksPicker.newAt($props.parent.id)))
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translator.trans('newBlock')), 1 /* TEXT */)
   ]))
 }
 

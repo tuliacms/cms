@@ -34,14 +34,15 @@
     </div>
 </template>
 
-<script>
+<script setup>
+const { inject, defineProps } = require('vue');
 const draggable = require('vuedraggable');
 
-export default {
-    props: ['parent', 'blocks'],
-    inject: ['selection', 'structureDragOptions', 'translator', 'blocksPicker', 'blocksRegistry'],
-    components: {
-        draggable,
-    }
-};
+const props = defineProps(['parent', 'blocks']);
+
+const selection = inject('selection');
+const structureDragOptions = inject('structureDragOptions');
+const translator = inject('translator');
+const blocksRegistry = inject('blocks.registry');
+const blocksPicker = inject('blocks.picker');
 </script>

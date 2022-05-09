@@ -11,7 +11,7 @@
 const Select = require('controls/Select.vue').default;
 const { defineProps, inject, ref, watch } = require('vue');
 const props = defineProps(['section']);
-const section = inject('sections').manager(props);
+const section = inject('sections.instance').manager(props);
 
 
 /******************

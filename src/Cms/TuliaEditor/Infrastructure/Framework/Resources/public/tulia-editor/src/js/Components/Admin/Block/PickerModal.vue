@@ -36,7 +36,7 @@
 <script setup>
 const { defineProps, inject } = require('vue');
 
-const blocksPicker = inject('blocksPicker');
+const blocksPicker = inject('blocks.picker');
 const translator = inject('translator');
 
 const props = defineProps(['availableBlocks', 'blockPickerData']);
