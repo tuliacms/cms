@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-const { defineProps, inject, defineEmits, ref, watch } = require('vue');
+const { defineProps, inject, defineEmits, ref, watch, computed } = require('vue');
 const emit = defineEmits(['update:modelValue']);
 const props = defineProps({
     multiple: { require: false, default: false },
@@ -16,9 +16,9 @@ const props = defineProps({
     modelValue: { require: true },
     label: { require: true },
 });
-const model = ref(props.modelValue);
 
-watch(model, async (newValue, oldValue) => {
-    emit('update:modelValue', newValue);
+const model = computed({
+    get: () => props.modelValue,
+    set: (value) => emit('update:modelValue', value)
 });
 </script>

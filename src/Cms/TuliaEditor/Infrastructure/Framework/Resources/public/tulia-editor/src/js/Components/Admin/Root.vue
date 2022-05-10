@@ -179,10 +179,22 @@ props.container.messenger.operation('extention.unmount', (data, success, fail) =
 
 
 
+/*********************
+ * Elements instances
+ ********************/
+const ElementsInstantiator = require('shared/Structure/Element/Instantiator.js').default;
+const instantiator = new ElementsInstantiator(props.options, props.container.messenger, extensionRegistry, structureManipulator);
+
+provide('blocks.instance', instantiator.instantiator('block'));
+provide('columns.instance', instantiator.instantiator('column'));
+provide('rows.instance', instantiator.instantiator('row'));
+provide('sections.instance', instantiator.instantiator('section'));
+
+
+
 /*********
  * Blocks
  *********/
-const Blocks = require('shared/Structure/Blocks/Blocks.js').default;
 const BlocksPicker = require('shared/Structure/Blocks/BlocksPicker.js').default;
 const BlocksRegistry = require('shared/Structure/Blocks/Registry.js').default;
 
@@ -190,32 +202,14 @@ const blockPickerData = reactive({
     columnId: null
 });
 const blocksRegistry = new BlocksRegistry(props.availableBlocks);
-const blocksManager = new Blocks(props.options.blocks, props.container.messenger, extensionRegistry);
 
 provide('blocks.registry', blocksRegistry);
-provide('blocks.instance', blocksManager);
 provide('blocks.picker', new BlocksPicker(blockPickerData, blocksRegistry, structureManipulator, modals));
+
 
 /**********
  * Columns
  **********/
-const Columns = require('shared/Structure/Columns/Columns.js').default;
-const columnsManager = new Columns(props.options.columns, props.container.messenger, extensionRegistry, blocksManager);
-provide('columns.instance', columnsManager);
-
 const ColumnSize = require("shared/Structure/Columns/ColumnSize.js").default;
 provide('columns.size', new ColumnSize(structureManipulator));
-
-/**********
- * Rows
- **********/
-const Rows = require('shared/Structure/Rows/Rows.js').default;
-const rowsManager = new Rows(props.options.rows, props.container.messenger, extensionRegistry, columnsManager);
-provide('rows.instance', rowsManager);
-
-/**********
- * Sections
- **********/
-const Sections = require('shared/Structure/Sections/Sections.js').default;
-provide('sections.instance', new Sections(props.options.sections, props.container.messenger, extensionRegistry, rowsManager));
 </script>

@@ -27,12 +27,13 @@ const Column = require('./Column.vue').default;
 const { defineProps, inject, computed } = require('vue');
 const props = defineProps(['row', 'parent']);
 const row = inject('rows.instance').editor(props);
+const section = row.getParent();
 const selection = inject('selection');
 
 const rowClassname = computed(() => {
     let classname = 'tued-structure-row tued-structure-element-selectable row';
 
-    switch (row.data.gutters) {
+    switch (section.data.containerWidth === 'full-width-no-padding') {
         case 'no-gutters': classname += ' g-0'; break;
     }
 

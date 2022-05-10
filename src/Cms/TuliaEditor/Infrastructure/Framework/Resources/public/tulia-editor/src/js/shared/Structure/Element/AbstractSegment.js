@@ -5,48 +5,33 @@ export default class AbstractSegment {
     segment;
     id;
     code;
-    props;
     options;
     messenger;
     extensions;
-    childrenManager;
-    children = [];
+    structureTraversator;
 
-    constructor (segment, type, element, options, messenger, extensions, childrenManager) {
-        this.segment = segment;
+    constructor (type, element, options, messenger, extensions, structureTraversator) {
+        this.segment = this.getSegment();
         this.type = type;
         this.id = element.id;
         this.code = element.code;
         this.options = options;
         this.messenger = messenger;
         this.extensions = extensions;
-        this.childrenManager = childrenManager;
-        this.dataSynchronizer = new Data(element.id, this.type, segment, element.data, this.messenger);
+        this.structureTraversator = structureTraversator;
+        this.dataSynchronizer = new Data(element.id, this.type, this.segment, element.data, this.messenger);
         this.styleSynchronizer = new ElementStyle(element.style);
-
-        let children = [];
-        if (this.type === 'section') {
-            for (let i in element.rows) {
-                children.push({row: element.rows[i]});
-            }
-        } else if (this.type === 'row') {
-            for (let i in element.columns) {
-                children.push({column: element.columns[i]});
-            }
-        } else if (this.type === 'column') {
-            for (let i in element.blocks) {
-                children.push({block: element.blocks[i]});
-            }
-        }
-
-        this.children = this.getChildren(children);
 
         this.init();
     }
 
     init () {}
 
-    getChildren (sourceChildren) {}
+    getSegment () {}
+
+    getParent () {
+        return this.structureTraversator.getParent();
+    }
 
     on (event, listener) {
         this.messenger.on(this.generateBlockPrefix(event), listener);

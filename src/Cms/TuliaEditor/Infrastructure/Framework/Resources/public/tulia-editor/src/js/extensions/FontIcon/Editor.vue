@@ -1,7 +1,5 @@
 <template>
-    <span class="tued-ext-fonticon-element" @click="extension.execute('chose-icon')">
-        <i :class="props.modelValue"></i>
-    </span>
+    <i :class="iconClassname" @click="extension.execute('chose-icon')"></i>
 </template>
 
 <style scoped lang="scss">
@@ -16,10 +14,14 @@
 </style>
 
 <script setup>
-const { defineProps, defineEmits, inject, onUnmounted } = require('vue');
-const props = defineProps(['modelValue']);
+const { defineProps, defineEmits, inject, onUnmounted, computed } = require('vue');
+const props = defineProps(['modelValue', 'class']);
 const extension = inject('extension.instance').editor('FontIcon');
 const emit = defineEmits(['update:modelValue']);
+
+const iconClassname = computed(() => {
+    return `tued-ext-fonticon-element ${props.class} ${props.modelValue}`;
+});
 
 extension.operation('icon-chosen', (data, success, fail) => {
     emit('update:modelValue', data.icon);

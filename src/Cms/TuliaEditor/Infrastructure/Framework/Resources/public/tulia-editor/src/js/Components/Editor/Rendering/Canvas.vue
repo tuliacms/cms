@@ -10,7 +10,7 @@
                 <div
                     v-for="(row, key) in section.rows"
                     :key="'row-' + key"
-                    :class="rowClass(row)"
+                    :class="rowClass(row, section)"
                     :id="`tued-row-${row.id}`"
                 >
                     <div
@@ -63,10 +63,10 @@ const columnClass = (column) => {
         ['tued-column']
     )).generate();
 };
-const rowClass = (row) => {
+const rowClass = (row, section) => {
     let classname = 'tued-row row';
 
-    if (row.data.gutters === 'no-gutters') {
+    if (section.data.containerWidth === 'full-width-no-padding') {
         classname += ' g-0';
     }
 

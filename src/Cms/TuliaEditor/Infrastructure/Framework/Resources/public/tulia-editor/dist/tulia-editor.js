@@ -4587,10 +4587,22 @@ props.container.messenger.operation('extention.unmount', (data, success, fail) =
 
 
 
+/*********************
+ * Elements instances
+ ********************/
+const ElementsInstantiator = (__webpack_require__(/*! shared/Structure/Element/Instantiator.js */ "./src/js/shared/Structure/Element/Instantiator.js")["default"]);
+const instantiator = new ElementsInstantiator(props.options, props.container.messenger, extensionRegistry, structureManipulator);
+
+provide('blocks.instance', instantiator.instantiator('block'));
+provide('columns.instance', instantiator.instantiator('column'));
+provide('rows.instance', instantiator.instantiator('row'));
+provide('sections.instance', instantiator.instantiator('section'));
+
+
+
 /*********
  * Blocks
  *********/
-const Blocks = (__webpack_require__(/*! shared/Structure/Blocks/Blocks.js */ "./src/js/shared/Structure/Blocks/Blocks.js")["default"]);
 const BlocksPicker = (__webpack_require__(/*! shared/Structure/Blocks/BlocksPicker.js */ "./src/js/shared/Structure/Blocks/BlocksPicker.js")["default"]);
 const BlocksRegistry = (__webpack_require__(/*! shared/Structure/Blocks/Registry.js */ "./src/js/shared/Structure/Blocks/Registry.js")["default"]);
 
@@ -4598,36 +4610,18 @@ const blockPickerData = reactive({
     columnId: null
 });
 const blocksRegistry = new BlocksRegistry(props.availableBlocks);
-const blocksManager = new Blocks(props.options.blocks, props.container.messenger, extensionRegistry);
 
 provide('blocks.registry', blocksRegistry);
-provide('blocks.instance', blocksManager);
 provide('blocks.picker', new BlocksPicker(blockPickerData, blocksRegistry, structureManipulator, modals));
+
 
 /**********
  * Columns
  **********/
-const Columns = (__webpack_require__(/*! shared/Structure/Columns/Columns.js */ "./src/js/shared/Structure/Columns/Columns.js")["default"]);
-const columnsManager = new Columns(props.options.columns, props.container.messenger, extensionRegistry, blocksManager);
-provide('columns.instance', columnsManager);
-
 const ColumnSize = (__webpack_require__(/*! shared/Structure/Columns/ColumnSize.js */ "./src/js/shared/Structure/Columns/ColumnSize.js")["default"]);
 provide('columns.size', new ColumnSize(structureManipulator));
 
-/**********
- * Rows
- **********/
-const Rows = (__webpack_require__(/*! shared/Structure/Rows/Rows.js */ "./src/js/shared/Structure/Rows/Rows.js")["default"]);
-const rowsManager = new Rows(props.options.rows, props.container.messenger, extensionRegistry, columnsManager);
-provide('rows.instance', rowsManager);
-
-/**********
- * Sections
- **********/
-const Sections = (__webpack_require__(/*! shared/Structure/Sections/Sections.js */ "./src/js/shared/Structure/Sections/Sections.js")["default"]);
-provide('sections.instance', new Sections(props.options.sections, props.container.messenger, extensionRegistry, rowsManager));
-
-const __returned__ = { CanvasComponent, SidebarComponent, BlockPickerComponent, ObjectCloner, TuliaEditor, defineProps, onMounted, provide, reactive, isProxy, toRaw, props, saveEditor, cancelEditor, StructureManipulator, Selection, structure, previousStructure, selection, structureManipulator, restorePreviousStructure, useCurrentStructureAsPrevious, canvasOptions, Canvas, Modals, modalsData, modals, ExtensionRegistry, Instantiator, extensionRegistry, mountedExtensions, Blocks, BlocksPicker, BlocksRegistry, blockPickerData, blocksRegistry, blocksManager, Columns, columnsManager, ColumnSize, Rows, rowsManager, Sections }
+const __returned__ = { CanvasComponent, SidebarComponent, BlockPickerComponent, ObjectCloner, TuliaEditor, defineProps, onMounted, provide, reactive, isProxy, toRaw, props, saveEditor, cancelEditor, StructureManipulator, Selection, structure, previousStructure, selection, structureManipulator, restorePreviousStructure, useCurrentStructureAsPrevious, canvasOptions, Canvas, Modals, modalsData, modals, ExtensionRegistry, Instantiator, extensionRegistry, mountedExtensions, ElementsInstantiator, instantiator, BlocksPicker, BlocksRegistry, blockPickerData, blocksRegistry, ColumnSize }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -4975,37 +4969,17 @@ __webpack_require__.r(__webpack_exports__);
 const props = __props
 
 const Select = (__webpack_require__(/*! controls/Select.vue */ "./src/js/Controls/Select.vue")["default"]);
-const { defineProps, inject, ref, watch } = __webpack_require__(/*! vue */ "vue");
+const { defineProps, inject, reactive, watch } = __webpack_require__(/*! vue */ "vue");
 
 const section = inject('sections.instance').manager(props);
 
-
-/******************
- * Container width
- ******************/
 const containerWidthList = {
     'default': 'Default width',
     'full-width': 'Full width (fluid)',
     'full-width-no-padding': 'Full width (fluid) with no padding',
 };
-const containerWidth = ref(section.data.containerWidth);
 
-watch(containerWidth, async () => {
-    section.data.containerWidth = containerWidth.value;
-    let value;
-
-    if (containerWidth.value === 'full-width-no-padding') {
-        value = 'no-gutters';
-    } else {
-        value = 'default';
-    }
-
-    for (let i in section.children) {
-        section.children[i].data.gutters = value;
-    }
-});
-
-const __returned__ = { Select, defineProps, inject, ref, watch, props, section, containerWidthList, containerWidth }
+const __returned__ = { Select, defineProps, inject, reactive, watch, props, section, containerWidthList }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -5333,10 +5307,10 @@ const columnClass = (column) => {
         ['tued-column']
     )).generate();
 };
-const rowClass = (row) => {
+const rowClass = (row, section) => {
     let classname = 'tued-row row';
 
-    if (row.data.gutters === 'no-gutters') {
+    if (section.data.containerWidth === 'full-width-no-padding') {
         classname += ' g-0';
     }
 
@@ -5498,39 +5472,25 @@ provide('extension.instance', new Instantiator(props.container.messenger));
 
 
 
+/*********************
+ * Elements instances
+ ********************/
+const ElementsInstantiator = (__webpack_require__(/*! shared/Structure/Element/Instantiator.js */ "./src/js/shared/Structure/Element/Instantiator.js")["default"]);
+const instantiator = new ElementsInstantiator(props.options, props.container.messenger, extensionRegistry, structureManipulator);
+
+provide('blocks.instance', instantiator.instantiator('block'));
+provide('columns.instance', instantiator.instantiator('column'));
+provide('rows.instance', instantiator.instantiator('row'));
+provide('sections.instance', instantiator.instantiator('section'));
+
 
 /*********
  * Blocks
  *********/
-const Blocks = (__webpack_require__(/*! shared/Structure/Blocks/Blocks.js */ "./src/js/shared/Structure/Blocks/Blocks.js")["default"]);
 const BlocksRegistry = (__webpack_require__(/*! shared/Structure/Blocks/Registry.js */ "./src/js/shared/Structure/Blocks/Registry.js")["default"]);
-const blocksRegistry = new BlocksRegistry(props.availableBlocks);
-const blocksManager = new Blocks(props.options.blocks, props.container.messenger, extensionRegistry);
+provide('blocks.registry', new BlocksRegistry(props.availableBlocks));
 
-provide('blocks.registry', blocksRegistry);
-provide('blocks.instance', blocksManager);
-
-/**********
- * Columns
- **********/
-const Columns = (__webpack_require__(/*! shared/Structure/Columns/Columns.js */ "./src/js/shared/Structure/Columns/Columns.js")["default"]);
-const columnsManager = new Columns(props.options.columns, props.container.messenger, extensionRegistry, blocksManager);
-provide('columns.instance', columnsManager);
-
-/**********
- * Rows
- **********/
-const Rows = (__webpack_require__(/*! shared/Structure/Rows/Rows.js */ "./src/js/shared/Structure/Rows/Rows.js")["default"]);
-const rowsManager = new Rows(props.options.rows, props.container.messenger, extensionRegistry, columnsManager);
-provide('rows.instance', rowsManager);
-
-/**********
- * Sections
- **********/
-const Sections = (__webpack_require__(/*! shared/Structure/Sections/Sections.js */ "./src/js/shared/Structure/Sections/Sections.js")["default"]);
-provide('sections.instance', new Sections(props.options.sections, props.container.messenger, extensionRegistry, rowsManager));
-
-const __returned__ = { StructureComponent, RenderingCanvasComponent, ObjectCloner, Selection, StructureManipulator, StyleCompiler, Filemanager, TuliaEditor, defineProps, provide, reactive, onMounted, toRaw, ref, props, structure, selection, structureManipulator, renderedContent, ExtensionRegistry, Instantiator, extensionRegistry, Blocks, BlocksRegistry, blocksRegistry, blocksManager, Columns, columnsManager, Rows, rowsManager, Sections }
+const __returned__ = { StructureComponent, RenderingCanvasComponent, ObjectCloner, Selection, StructureManipulator, StyleCompiler, Filemanager, TuliaEditor, defineProps, provide, reactive, onMounted, toRaw, ref, props, structure, selection, structureManipulator, renderedContent, ExtensionRegistry, Instantiator, extensionRegistry, ElementsInstantiator, instantiator, BlocksRegistry }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -5697,19 +5657,20 @@ const Column = (__webpack_require__(/*! ./Column.vue */ "./src/js/Components/Edi
 const { defineProps, inject, computed } = __webpack_require__(/*! vue */ "vue");
 
 const row = inject('rows.instance').editor(props);
+const section = row.getParent();
 const selection = inject('selection');
 
 const rowClassname = computed(() => {
     let classname = 'tued-structure-row tued-structure-element-selectable row';
 
-    switch (row.data.gutters) {
+    switch (section.data.containerWidth === 'full-width-no-padding') {
         case 'no-gutters': classname += ' g-0'; break;
     }
 
     return classname;
 });
 
-const __returned__ = { Column, defineProps, inject, computed, props, row, selection, rowClassname }
+const __returned__ = { Column, defineProps, inject, computed, props, row, section, selection, rowClassname }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -6037,16 +5998,16 @@ __webpack_require__.r(__webpack_exports__);
 
 const props = __props
 
-const { defineProps, inject, defineEmits, ref, watch } = __webpack_require__(/*! vue */ "vue");
+const { defineProps, inject, defineEmits, ref, watch, computed } = __webpack_require__(/*! vue */ "vue");
 
 
-const model = ref(props.modelValue);
 
-watch(model, async (newValue, oldValue) => {
-    emit('update:modelValue', newValue);
+const model = computed({
+    get: () => props.modelValue,
+    set: (value) => emit('update:modelValue', value)
 });
 
-const __returned__ = { defineProps, inject, defineEmits, ref, watch, emit, props, model }
+const __returned__ = { defineProps, inject, defineEmits, ref, watch, computed, emit, props, model }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -6695,17 +6656,21 @@ const __default__ = {
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (/*#__PURE__*/Object.assign(__default__, {
-  props: ['modelValue'],
+  props: ['modelValue', 'class'],
   emits: ['update:modelValue'],
   setup(__props, { expose, emit }) {
   expose();
 
 const props = __props
 
-const { defineProps, defineEmits, inject, onUnmounted } = __webpack_require__(/*! vue */ "vue");
+const { defineProps, defineEmits, inject, onUnmounted, computed } = __webpack_require__(/*! vue */ "vue");
 
 const extension = inject('extension.instance').editor('FontIcon');
 
+
+const iconClassname = computed(() => {
+    return `tued-ext-fonticon-element ${props.class} ${props.modelValue}`;
+});
 
 extension.operation('icon-chosen', (data, success, fail) => {
     emit('update:modelValue', data.icon);
@@ -6714,7 +6679,7 @@ extension.operation('icon-chosen', (data, success, fail) => {
 
 onUnmounted(() => extension.unmount());
 
-const __returned__ = { defineProps, defineEmits, inject, onUnmounted, props, extension, emit }
+const __returned__ = { defineProps, defineEmits, inject, onUnmounted, computed, props, extension, emit, iconClassname }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -8804,8 +8769,8 @@ __webpack_require__.r(__webpack_exports__);
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Select"], {
-      modelValue: $setup.containerWidth,
-      "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => (($setup.containerWidth) = $event)),
+      modelValue: $setup.section.data.containerWidth,
+      "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => (($setup.section.data.containerWidth) = $event)),
       choices: $setup.containerWidthList,
       label: "Container width"
     }, null, 8 /* PROPS */, ["modelValue"])
@@ -9081,7 +9046,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(section.rows, (row, key) => {
             return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
               key: 'row-' + key,
-              class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($setup.rowClass(row)),
+              class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($setup.rowClass(row, section)),
               id: `tued-row-${row.id}`
             }, [
               ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(row.columns, (column, key) => {
@@ -9673,14 +9638,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", {
-    class: "tued-ext-fonticon-element",
+  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("i", {
+    class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($setup.iconClassname),
     onClick: _cache[0] || (_cache[0] = $event => ($setup.extension.execute('chose-icon')))
-  }, [
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
-      class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($setup.props.modelValue)
-    }, null, 2 /* CLASS */)
-  ]))
+  }, null, 2 /* CLASS */))
 }
 
 /***/ }),
@@ -16338,28 +16299,6 @@ class Modals {
 
 /***/ }),
 
-/***/ "./src/js/shared/Structure/Blocks/Blocks.js":
-/*!**************************************************!*\
-  !*** ./src/js/shared/Structure/Blocks/Blocks.js ***!
-  \**************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Blocks)
-/* harmony export */ });
-const AbstractElements = (__webpack_require__(/*! shared/Structure/Element/AbstractElements.js */ "./src/js/shared/Structure/Element/AbstractElements.js")["default"]);
-
-class Blocks extends AbstractElements {
-    constructor (options, messenger, extensions) {
-        super('block', options, messenger, extensions);
-    }
-}
-
-
-/***/ }),
-
 /***/ "./src/js/shared/Structure/Blocks/BlocksPicker.js":
 /*!********************************************************!*\
   !*** ./src/js/shared/Structure/Blocks/BlocksPicker.js ***!
@@ -16499,28 +16438,6 @@ class ColumnSize {
 
 /***/ }),
 
-/***/ "./src/js/shared/Structure/Columns/Columns.js":
-/*!****************************************************!*\
-  !*** ./src/js/shared/Structure/Columns/Columns.js ***!
-  \****************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Columns)
-/* harmony export */ });
-const AbstractElements = (__webpack_require__(/*! shared/Structure/Element/AbstractElements.js */ "./src/js/shared/Structure/Element/AbstractElements.js")["default"]);
-
-class Columns extends AbstractElements {
-    constructor (options, messenger, extensions, childrenManager) {
-        super('column', options, messenger, extensions, childrenManager);
-    }
-}
-
-
-/***/ }),
-
 /***/ "./src/js/shared/Structure/Columns/SizesClassnameGenerator.js":
 /*!********************************************************************!*\
   !*** ./src/js/shared/Structure/Columns/SizesClassnameGenerator.js ***!
@@ -16646,114 +16563,6 @@ class DraggableDeltaTranslator {
 
 /***/ }),
 
-/***/ "./src/js/shared/Structure/Element/AbstractElements.js":
-/*!*************************************************************!*\
-  !*** ./src/js/shared/Structure/Element/AbstractElements.js ***!
-  \*************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ AbstractElements)
-/* harmony export */ });
-const Render = (__webpack_require__(/*! shared/Structure/Element/Render.js */ "./src/js/shared/Structure/Element/Render.js")["default"]);
-const Manager = (__webpack_require__(/*! shared/Structure/Element/Manager.js */ "./src/js/shared/Structure/Element/Manager.js")["default"]);
-const Editor = (__webpack_require__(/*! shared/Structure/Element/Editor.js */ "./src/js/shared/Structure/Element/Editor.js")["default"]);
-
-class AbstractElements {
-    type;
-    options;
-    messenger;
-    extensions;
-    childrenManager;
-    instances = {
-        editor: [],
-        manager: [],
-        render: [],
-    };
-
-    constructor (type, options, messenger, extensions, childrenManager) {
-        this.type = type;
-        this.options = options;
-        this.messenger = messenger;
-        this.extensions = extensions;
-        this.childrenManager = childrenManager;
-    }
-
-    editor (props) {
-        const element = this.getElementByType(props);
-
-        if (this.instances.editor[element.id]) {
-            return this.instances.editor[element.id];
-        }
-
-        return this.instances.editor[element.id] = new Editor(
-            this.type,
-            element,
-            this.getOptionsByType(props),
-            this.messenger,
-            this.extensions,
-            this.childrenManager
-        );
-    }
-
-    manager (props) {
-        const element = this.getElementByType(props);
-
-        if (this.instances.manager[element.id]) {
-            return this.instances.manager[element.id];
-        }
-
-        return this.instances.manager[element.id] = new Manager(
-            this.type,
-            element,
-            this.getOptionsByType(props),
-            this.messenger,
-            this.extensions,
-            this.childrenManager
-        );
-    }
-
-    render (props) {
-        const element = this.getElementByType(props);
-
-        if (this.instances.render[element.id]) {
-            return this.instances.render[element.id];
-        }
-
-        return this.instances.render[element.id] = new Render(
-            this.type,
-            element,
-            this.getOptionsByType(props),
-            this.messenger,
-            this.extensions,
-            this.childrenManager
-        );
-    }
-
-    getOptionsByType (props) {
-        switch (this.type) {
-            case 'block': return this.options[props.block.code] ?? {};
-            case 'column': return this.options['column'] ?? {};
-            case 'row': return this.options['row'] ?? {};
-            case 'section': return this.options['section'] ?? {};
-        }
-    }
-
-    getElementByType (props) {
-        switch (this.type) {
-            case 'block': return props.block;
-            case 'column': return props.column;
-            case 'row': return props.row;
-            case 'section': return props.section;
-        }
-    }
-}
-
-
-/***/ }),
-
 /***/ "./src/js/shared/Structure/Element/AbstractSegment.js":
 /*!************************************************************!*\
   !*** ./src/js/shared/Structure/Element/AbstractSegment.js ***!
@@ -16772,48 +16581,33 @@ class AbstractSegment {
     segment;
     id;
     code;
-    props;
     options;
     messenger;
     extensions;
-    childrenManager;
-    children = [];
+    structureTraversator;
 
-    constructor (segment, type, element, options, messenger, extensions, childrenManager) {
-        this.segment = segment;
+    constructor (type, element, options, messenger, extensions, structureTraversator) {
+        this.segment = this.getSegment();
         this.type = type;
         this.id = element.id;
         this.code = element.code;
         this.options = options;
         this.messenger = messenger;
         this.extensions = extensions;
-        this.childrenManager = childrenManager;
-        this.dataSynchronizer = new Data(element.id, this.type, segment, element.data, this.messenger);
+        this.structureTraversator = structureTraversator;
+        this.dataSynchronizer = new Data(element.id, this.type, this.segment, element.data, this.messenger);
         this.styleSynchronizer = new ElementStyle(element.style);
-
-        let children = [];
-        if (this.type === 'section') {
-            for (let i in element.rows) {
-                children.push({row: element.rows[i]});
-            }
-        } else if (this.type === 'row') {
-            for (let i in element.columns) {
-                children.push({column: element.columns[i]});
-            }
-        } else if (this.type === 'column') {
-            for (let i in element.blocks) {
-                children.push({block: element.blocks[i]});
-            }
-        }
-
-        this.children = this.getChildren(children);
 
         this.init();
     }
 
     init () {}
 
-    getChildren (sourceChildren) {}
+    getSegment () {}
+
+    getParent () {
+        return this.structureTraversator.getParent();
+    }
 
     on (event, listener) {
         this.messenger.on(this.generateBlockPrefix(event), listener);
@@ -16962,24 +16756,125 @@ __webpack_require__.r(__webpack_exports__);
 const AbstractSegment = (__webpack_require__(/*! shared/Structure/Element/AbstractSegment.js */ "./src/js/shared/Structure/Element/AbstractSegment.js")["default"]);
 
 class Editor extends AbstractSegment {
-    constructor (type, element, options, messenger, extensions, childrenManager) {
-        super('editor', type, element, options, messenger, extensions, childrenManager);
-    }
-
     init () {
         this.dataSynchronizer.onChange(() => {
             this.messenger.notify('structure.element.updated', this.id);
         });
     }
 
-    getChildren (sourceChildren) {
-        let children = [];
+    getSegment () {
+        return 'editor';
+    }
+}
 
-        for (let i in sourceChildren) {
-            children.push(this.childrenManager.editor(sourceChildren[i]));
+
+/***/ }),
+
+/***/ "./src/js/shared/Structure/Element/Instantiator.js":
+/*!*********************************************************!*\
+  !*** ./src/js/shared/Structure/Element/Instantiator.js ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ElementsInstantiator)
+/* harmony export */ });
+const Render = (__webpack_require__(/*! shared/Structure/Element/Render.js */ "./src/js/shared/Structure/Element/Render.js")["default"]);
+const Manager = (__webpack_require__(/*! shared/Structure/Element/Manager.js */ "./src/js/shared/Structure/Element/Manager.js")["default"]);
+const Editor = (__webpack_require__(/*! shared/Structure/Element/Editor.js */ "./src/js/shared/Structure/Element/Editor.js")["default"]);
+
+class ElementsInstantiator {
+    options;
+    messenger;
+    extensions;
+    structureManipulator;
+    instances = {};
+
+    constructor (options, messenger, extensions, structureManipulator) {
+        this.options = options;
+        this.messenger = messenger;
+        this.extensions = extensions;
+        this.structureManipulator = structureManipulator;
+    }
+
+    instantiator (type) {
+        const self = this;
+
+        return {
+            manager (props) {
+                return self.instance(type, 'manager', props);
+            },
+            render (props) {
+                return self.instance(type, 'render', props);
+            },
+            editor (props) {
+                return self.instance(type, 'editor', props);
+            }
+        };
+    }
+
+    structureTraversator (type, id, segment) {
+        const self = this;
+
+        return {
+            getParent () {
+                const parent = self.structureManipulator.findParent(id);
+                let props = {};
+                props[parent.type] = parent;
+
+                return self.instance(parent.type, segment, props);
+            }
+        };
+    }
+
+    instance (type, segment, props) {
+        const element = this.getElementByType(props, type);
+        const instanceKey = `${type}-${segment}-${element.id}`;
+
+        if (this.instances[instanceKey]) {
+            return this.instances[instanceKey];
         }
 
-        return children;
+        const args = [
+            type,
+            element,
+            this.getOptionsByType(props, type),
+            this.messenger,
+            this.extensions,
+            this.structureTraversator(type, element.id, segment)
+        ];
+
+        let instance;
+
+        if (segment === 'manager') {
+            instance = new Manager(...args);
+        } else if (segment === 'editor') {
+            instance = new Editor(...args);
+        } else if (segment === 'render') {
+            instance = new Render(...args);
+        }
+
+        return this.instances[instanceKey] = instance;
+    }
+
+    getOptionsByType (props, type) {
+        switch (type) {
+            case 'block': return this.options.blocks[props.block.code] ?? {};
+            case 'column': return this.options.columns ?? {};
+            case 'row': return this.options.rows ?? {};
+            case 'section': return this.options.sections ?? {};
+        }
+    }
+
+    getElementByType (props, type) {
+        switch (type) {
+            case 'block': return props.block;
+            case 'column': return props.column;
+            case 'row': return props.row;
+            case 'section': return props.section;
+        }
     }
 }
 
@@ -17000,10 +16895,6 @@ __webpack_require__.r(__webpack_exports__);
 const AbstractSegment = (__webpack_require__(/*! shared/Structure/Element/AbstractSegment.js */ "./src/js/shared/Structure/Element/AbstractSegment.js")["default"]);
 
 class Manager extends AbstractSegment {
-    constructor (type, element, options, messenger, extensions, childrenManager) {
-        super('manager', type, element, options, messenger, extensions, childrenManager);
-    }
-
     init () {
         this.messenger.on('structure.element.created', (type, id) => {
             if (type === this.type && id === this.id) {
@@ -17012,14 +16903,8 @@ class Manager extends AbstractSegment {
         });
     }
 
-    getChildren (sourceChildren) {
-        let children = [];
-
-        for (let i in sourceChildren) {
-            children.push(this.childrenManager.manager(sourceChildren[i]));
-        }
-
-        return children;
+    getSegment () {
+        return 'manager';
     }
 }
 
@@ -17041,10 +16926,6 @@ const AbstractSegment = (__webpack_require__(/*! shared/Structure/Element/Abstra
 const _ = __webpack_require__(/*! lodash */ "lodash");
 
 class Render extends AbstractSegment {
-    constructor (type, element, options, messenger, extensions, childrenManager) {
-        super('render', type, element, options, messenger, extensions, childrenManager);
-    }
-
     style (styles) {
         let id = _.uniqueId(`tued-element-style-`);
 
@@ -17053,14 +16934,8 @@ class Render extends AbstractSegment {
         return id;
     }
 
-    getChildren (sourceChildren) {
-        let children = [];
-
-        for (let i in sourceChildren) {
-            children.push(this.childrenManager.render(sourceChildren[i]));
-        }
-
-        return children;
+    getSegment () {
+        return 'render';
     }
 }
 
@@ -17357,50 +17232,6 @@ class Fixer {
         }
 
         this.usedIds.push(element.id);
-    }
-}
-
-
-/***/ }),
-
-/***/ "./src/js/shared/Structure/Rows/Rows.js":
-/*!**********************************************!*\
-  !*** ./src/js/shared/Structure/Rows/Rows.js ***!
-  \**********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Rows)
-/* harmony export */ });
-const AbstractElements = (__webpack_require__(/*! shared/Structure/Element/AbstractElements.js */ "./src/js/shared/Structure/Element/AbstractElements.js")["default"]);
-
-class Rows extends AbstractElements {
-    constructor (options, messenger, extensions, childrenManager) {
-        super('row', options, messenger, extensions, childrenManager);
-    }
-}
-
-
-/***/ }),
-
-/***/ "./src/js/shared/Structure/Sections/Sections.js":
-/*!******************************************************!*\
-  !*** ./src/js/shared/Structure/Sections/Sections.js ***!
-  \******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Sections)
-/* harmony export */ });
-const AbstractElements = (__webpack_require__(/*! shared/Structure/Element/AbstractElements.js */ "./src/js/shared/Structure/Element/AbstractElements.js")["default"]);
-
-class Sections extends AbstractElements {
-    constructor (options, messenger, extensions, childrenManager) {
-        super('section', options, messenger, extensions, childrenManager);
     }
 }
 
