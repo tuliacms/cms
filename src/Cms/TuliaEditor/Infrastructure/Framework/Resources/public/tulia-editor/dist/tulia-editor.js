@@ -5663,8 +5663,8 @@ const selection = inject('selection');
 const rowClassname = computed(() => {
     let classname = 'tued-structure-row tued-structure-element-selectable row';
 
-    switch (section.data.containerWidth === 'full-width-no-padding') {
-        case 'no-gutters': classname += ' g-0'; break;
+    if (section.data.containerWidth === 'full-width-no-padding') {
+        classname += ' g-0';
     }
 
     return classname;
@@ -5830,7 +5830,6 @@ const { toRaw } = __webpack_require__(/*! vue */ "vue");
                 },
                 activeness: {
                     selectParent: false,
-                    duplicate: true,
                     delete: true,
                 }
             }
@@ -9298,22 +9297,15 @@ const _hoisted_1 = {
   ref: "structure"
 }
 const _hoisted_2 = { class: "tued-node-name" }
-const _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", { class: "fas fa-long-arrow-alt-up" }, null, -1 /* HOISTED */)
-const _hoisted_4 = [
-  _hoisted_3
+const _hoisted_3 = ["title"]
+const _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", { class: "fas fa-long-arrow-alt-up" }, null, -1 /* HOISTED */)
+const _hoisted_5 = [
+  _hoisted_4
 ]
-const _hoisted_5 = {
-  key: 1,
-  class: "tued-element-action",
-  title: "Duplikuj"
-}
-const _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", { class: "fas fa-copy" }, null, -1 /* HOISTED */)
-const _hoisted_7 = [
-  _hoisted_6
-]
-const _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", { class: "fas fa-trash" }, null, -1 /* HOISTED */)
-const _hoisted_9 = [
-  _hoisted_8
+const _hoisted_6 = ["title"]
+const _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", { class: "fas fa-trash" }, null, -1 /* HOISTED */)
+const _hoisted_8 = [
+  _hoisted_7
 ]
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -9366,20 +9358,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
             key: 0,
             class: "tued-element-action",
-            title: "Zaznacz blok wyżej",
+            title: $options.translator.trans('selectParentElement'),
             onClick: _cache[3] || (_cache[3] = $event => ($options.selectParentSelectable()))
-          }, _hoisted_4))
-        : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true),
-      ($data.actions.activeness.duplicate)
-        ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_5, _hoisted_7))
+          }, _hoisted_5, 8 /* PROPS */, _hoisted_3))
         : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true),
       ($data.actions.activeness.delete)
         ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
-            key: 2,
+            key: 1,
             class: "tued-element-action",
-            title: "Usuń",
+            title: $options.translator.trans('delete'),
             onClick: _cache[4] || (_cache[4] = $event => ($options.deleteSelectedElement()))
-          }, _hoisted_9))
+          }, _hoisted_8, 8 /* PROPS */, _hoisted_6))
         : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)
     ], 4 /* STYLE */)
   ], 512 /* NEED_PATCH */))
@@ -15489,6 +15478,78 @@ class Render {
 
 /***/ }),
 
+/***/ "./src/js/extensions/Collection/Collection.js":
+/*!****************************************************!*\
+  !*** ./src/js/extensions/Collection/Collection.js ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+const Editor = (__webpack_require__(/*! ./Editor.js */ "./src/js/extensions/Collection/Editor.js")["default"]);
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+    Editor
+});
+
+
+/***/ }),
+
+/***/ "./src/js/extensions/Collection/Editor.js":
+/*!************************************************!*\
+  !*** ./src/js/extensions/Collection/Editor.js ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Collection)
+/* harmony export */ });
+const _ = __webpack_require__(/*! lodash */ "lodash");
+
+class Collection {
+    collection;
+    prototype;
+
+    constructor (collection, prototype) {
+        this.collection = this.createIdFieldFor(collection);
+        this.prototype = prototype;
+    }
+
+    remove (element) {
+        for (let i in this.collection) {
+            if (this.collection[i].id === element.id) {
+                this.collection.splice(i, 1);
+            }
+        }
+    }
+
+    add () {
+        let element = _.assign({}, this.prototype);
+        element.id = this.generateId();
+
+        this.collection.push(element);
+    }
+
+    generateId () {
+        return `tued-collection-${_.uniqueId()}`;
+    }
+
+    createIdFieldFor (collection) {
+        for (let i in collection) {
+            collection[i].id = this.generateId();
+        }
+        return collection;
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/js/extensions/Contenteditable/Contenteditable.js":
 /*!**************************************************************!*\
   !*** ./src/js/extensions/Contenteditable/Contenteditable.js ***!
@@ -15589,6 +15650,7 @@ const Contenteditable = (__webpack_require__(/*! ./Contenteditable/Contenteditab
 const Image = (__webpack_require__(/*! ./Image/Image.js */ "./src/js/extensions/Image/Image.js")["default"]);
 const BackgroundImage = (__webpack_require__(/*! ./BackgroundImage/BackgroundImage.js */ "./src/js/extensions/BackgroundImage/BackgroundImage.js")["default"]);
 const FontIcon = (__webpack_require__(/*! ./FontIcon/FontIcon.js */ "./src/js/extensions/FontIcon/FontIcon.js")["default"]);
+const Collection = (__webpack_require__(/*! ./Collection/Collection.js */ "./src/js/extensions/Collection/Collection.js")["default"]);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
     WysiwygEditor,
@@ -15596,6 +15658,7 @@ const FontIcon = (__webpack_require__(/*! ./FontIcon/FontIcon.js */ "./src/js/ex
     Image,
     BackgroundImage,
     FontIcon,
+    Collection,
 });
 
 

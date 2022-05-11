@@ -54,6 +54,14 @@
                 <source>searchForIcon</source>
                 <target>Search for icon</target>
             </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.14">
+                <source>selectParentElement</source>
+                <target>Select parent element</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.15">
+                <source>delete</source>
+                <target>Delete</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -48,18 +48,13 @@
         >
             <div
                 class="tued-element-action"
-                title="Zaznacz blok wyżej"
+                :title="translator.trans('selectParentElement')"
                 @click="selectParentSelectable()"
                 v-if="actions.activeness.selectParent"
             ><i class="fas fa-long-arrow-alt-up"></i></div>
             <div
                 class="tued-element-action"
-                title="Duplikuj"
-                v-if="actions.activeness.duplicate"
-            ><i class="fas fa-copy"></i></div>
-            <div
-                class="tued-element-action"
-                title="Usuń"
+                :title="translator.trans('delete')"
                 @click="deleteSelectedElement()"
                 v-if="actions.activeness.delete"
             ><i class="fas fa-trash"></i></div>
@@ -110,7 +105,6 @@ export default {
                 },
                 activeness: {
                     selectParent: false,
-                    duplicate: true,
                     delete: true,
                 }
             }

@@ -33,8 +33,8 @@ const selection = inject('selection');
 const rowClassname = computed(() => {
     let classname = 'tued-structure-row tued-structure-element-selectable row';
 
-    switch (section.data.containerWidth === 'full-width-no-padding') {
-        case 'no-gutters': classname += ' g-0'; break;
+    if (section.data.containerWidth === 'full-width-no-padding') {
+        classname += ' g-0';
     }
 
     return classname;

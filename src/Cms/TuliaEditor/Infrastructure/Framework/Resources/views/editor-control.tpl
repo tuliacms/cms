@@ -19,6 +19,8 @@
             selectIcon: '{{ 'selectIcon'|trans({}, 'tulia-editor') }}',
             searchForIcon: '{{ 'searchForIcon'|trans({}, 'tulia-editor') }}',
             emptySearchResults: '{{ 'emptySearchResults'|trans({}, 'tulia-editor') }}',
+            selectParentElement: '{{ 'selectParentElement'|trans({}, 'tulia-editor') }}',
+            delete: '{{ 'delete'|trans({}, 'tulia-editor') }}',
         };
 
         let structureSelector = '.tulia-editor-structure-field[data-tulia-editor-group-id="{{ params.group_id }}"]';
