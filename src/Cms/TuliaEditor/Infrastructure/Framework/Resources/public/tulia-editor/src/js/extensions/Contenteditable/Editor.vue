@@ -4,15 +4,17 @@
         class="tued-ext-contenteditable-element"
         ref="editable"
         @keydown="event => preventHtml(event)"
-        @input="_changed"
+        @input="onChange"
         @paste="onPaste"
+        @focusin="preventSelfUpdate = true"
+        @focusout="preventSelfUpdate = false"
         :data-placeholder="this.translator.trans('startTypingPlaceholder')"
     ></span>
 </template>
 
 <style scoped lang="scss">
 .tued-ext-contenteditable-element {
-    display: block;
+    display: inline-block;
     outline: none !important;
 
     &:hover {
@@ -28,60 +30,84 @@
 }
 </style>
 
+<script setup>
+const { defineProps, inject, defineEmits, ref, watch, computed, onMounted } = require('vue');
+const props = defineProps({
+    modelValue: {
+        required: true,
+        default: ''
+    }
+});
+const emit = defineEmits(['update:modelValue']);
+const messenger = inject('messenger');
+const translator = inject('translator');
+const preventSelfUpdate = ref(false);
+
+const editable = ref(props.modelValue);
+
+const model = computed({
+    get: () => props.modelValue,
+    set: (value) => emit('update:modelValue', value)
+});
+
+watch(model, async (newValue) => {
+    if (preventSelfUpdate.value === false) {
+        editable.value.innerHTML = newValue;
+    }
+});
+
+const preventHtml = (e) => {
+    if (e.ctrlKey) {
+        if (e.key === 'c' || e.key === 'v' || e.key === 'x' || e.key === 'a' || e.key === 'z') {
+            return;
+        }
+    } else {
+        return;
+    }
+
+    e.preventDefault();
+    return false;
+};
+
+const onPaste = (e) => {
+    const data = (e.clipboardData || window.clipboardData).getData('Text');
+
+    insertTextAtCaret(data);
+
+    e.preventDefault();
+    return false;
+};
+
+const insertTextAtCaret = (text) => {
+    text = text.replace(/<\/?[^>]+(>|$)/g, '');
+
+    if (window.getSelection) {
+        let sel = window.getSelection();
+
+        if (sel.getRangeAt && sel.rangeCount) {
+            let range = sel.getRangeAt(0);
+            range.deleteContents();
+            range.insertNode(document.createTextNode(text));
+            onChange();
+        }
+    } else if (document.selection && document.selection.createRange) {
+        document.selection.createRange().text = text;
+        onChange();
+    }
+};
+
+const onChange = () => {
+    model.value = editable.value.innerHTML;
+};
+
+onMounted(() => {
+    editable.value.innerHTML = model.value;
+});
+
+</script>
+
 <script>
 export default {
-    props: {
-        modelValue: {
-            required: true,
-            default: ''
-        }
-    },
     name: 'Contenteditable',
-    inject: ['messenger', 'translator'],
-    methods: {
-        onPaste (e) {
-            const data = (e.clipboardData || window.clipboardData).getData('Text');
-
-            this.insertTextAtCaret(data);
-
-            e.preventDefault();
-            return false;
-        },
-        insertTextAtCaret(text) {
-            text = text.replace(/<\/?[^>]+(>|$)/g, '');
-
-            if (window.getSelection) {
-                let sel = window.getSelection();
-
-                if (sel.getRangeAt && sel.rangeCount) {
-                    let range = sel.getRangeAt(0);
-                    range.deleteContents();
-                    range.insertNode(document.createTextNode(text));
-                    this._changed();
-                }
-            } else if (document.selection && document.selection.createRange) {
-                document.selection.createRange().text = text;
-                this._changed();
-            }
-        },
-        preventHtml (e) {
-            if (e.ctrlKey) {
-                if (e.key === 'c' || e.key === 'v' || e.key === 'x' || e.key === 'a' || e.key === 'z') {
-                    return;
-                }
-            } else {
-                return;
-            }
-
-            e.preventDefault();
-            return false;
-        },
-        _changed () {
-            this.$emit('update:modelValue', this.$refs.editable.innerHTML);
-        }
-    },
-    mounted () {
-        this.$refs.editable.innerHTML = this.modelValue;
-    }
 };
 </script>
