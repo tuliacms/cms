@@ -1,12 +1,19 @@
-.tued-sidebar {
-    bottom: 200px;
-}
+.tued-editor-debugar-opened {
+    .tued-sidebar {
+        bottom: 200px;
+    }
 
-.tued-canvas .tued-canvas-inner {
-    bottom: 200px;
+    .tued-canvas .tued-canvas-inner {
+        bottom: 200px;
+    }
+
+    .tued-debugbar {
+        display: block;
+    }
 }
 
 .tued-debugbar {
+    display: none;
     position: fixed;
     height: 200px;
     left: 0;

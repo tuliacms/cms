@@ -577,13 +577,17 @@ body {
   .tued-structure-selected-options.tued-structure-selected-active {
     display: block; }
 
-.tued-sidebar {
+.tued-editor-debugar-opened .tued-sidebar {
   bottom: 200px; }
 
-.tued-canvas .tued-canvas-inner {
+.tued-editor-debugar-opened .tued-canvas .tued-canvas-inner {
   bottom: 200px; }
+
+.tued-editor-debugar-opened .tued-debugbar {
+  display: block; }
 
 .tued-debugbar {
+  display: none;
   position: fixed;
   height: 200px;
   left: 0;

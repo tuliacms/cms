@@ -6,6 +6,7 @@ const Translator = require('shared/I18n/Translator.js').default;
 const Messenger = require('shared/Messaging/Messenger.js').default;
 const AdminRoot = require("components/Admin/Root.vue").default;
 const ObjectCloner = require("shared/Utils/ObjectCloner.js").default;
+const Location = require('shared/Utils/Location.js').default;
 
 let instances = 0;
 
@@ -173,9 +174,17 @@ export default class Editor {
         this.vue.config.devtools = true;
         this.vue.config.performance = true;
         this.vue.mount(`#tued-editor-window-inner-${this.instanceId}`);
+
+        if (Location.getQueryVariable('showDebugbar') === 'true') {
+            this.toggleDebugbar();
+        }
     };
 
     toggleRenderPreview () {
         this.container.messenger.execute('editor.canvas.preview.toggle');
+    };
+
+    toggleDebugbar () {
+        this.editor.toggleClass('tued-editor-debugar-opened');
     }
 }

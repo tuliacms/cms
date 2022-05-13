@@ -165,7 +165,7 @@ class DbalQuery extends AbstractDbalQuery
 
     protected function searchById(array $criteria): void
     {
-        if ($criteria['id']) {
+        if ($criteria['id'] !== null) {
             $this->queryBuilder
                 ->andWhere('tm.id = :tm_id')
                 ->setParameter('tm_id', $criteria['id'], PDO::PARAM_STR)
