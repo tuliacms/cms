@@ -5,6 +5,7 @@
  */
 const Canvas = require('./Canvas.js').default;
 const Editor = require('./Editor.js').default;
+const _ = require('lodash');
 
 export default {
     Canvas,
@@ -29,23 +30,20 @@ export default {
 
         this.blocks[block.code] = block;
     },
+    trans: function (locale, domain, translations) {
+        if (!this.translations[locale]) {
+            this.translations[locale] = {};
+        }
+        if (!this.translations[locale][domain]) {
+            this.translations[locale][domain] = {};
+        }
+
+        _.assign(this.translations[locale][domain], translations);
+    },
     extensions: require("extensions/extensions.js").default,
     blocks: require("blocks/blocks.js").default,
     controls: require("controls/controls.js").default,
-    translations: {
-        en: {
-            save: 'Save',
-            cancel: 'Cancel',
-            newSection: 'New section',
-            newBlock: 'New block',
-            section: 'Section',
-            row: 'Row',
-            column: 'Column',
-            block: 'Block',
-            selected: 'Selected',
-            structure: 'Structure',
-        }
-    },
+    translations: {},
     instances: {},
     defaults: {
         structure: {},

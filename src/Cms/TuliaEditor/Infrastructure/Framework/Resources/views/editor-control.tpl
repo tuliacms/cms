@@ -4,7 +4,7 @@
 
 <script>
     $(function () {
-        TuliaEditor.translations['{{ user().locale }}'] = {
+        TuliaEditor.trans('{{ user().locale }}', 'default', {
             save: '{{ 'save'|trans }}',
             cancel: '{{ 'cancel'|trans }}',
             section: '{{ 'section'|trans({}, 'tulia-editor') }}',
@@ -25,7 +25,7 @@
             moveForward: '{{ 'moveForward'|trans({}, 'tulia-editor') }}',
             moveUp: '{{ 'moveUp'|trans({}, 'tulia-editor') }}',
             moveDown: '{{ 'moveDown'|trans({}, 'tulia-editor') }}',
-        };
+        });
 
         let structureSelector = '.tulia-editor-structure-field[data-tulia-editor-group-id="{{ params.group_id }}"]';
         let contentSelector = '.tulia-editor-content-field[data-tulia-editor-group-id="{{ params.group_id }}"]';
@@ -59,7 +59,6 @@
                 image_resolve_path: '{{ path('filemanager.resolve.image.size', { size: '{size}', id: '{id}', filename: '{filename}' }) }}',
                 endpoint: '{{ path('backend.filemanager.endpoint') }}',
             },
-            //lang: '{{ user().locale }}',
             start_point: 'editor',
             locale: '{{ user().locale }}'
         });

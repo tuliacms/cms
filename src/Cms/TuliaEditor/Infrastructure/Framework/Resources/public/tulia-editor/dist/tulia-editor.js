@@ -17172,14 +17172,16 @@ class Translator {
         this.fallbackLocales = fallbackLocales;
     }
 
-    trans (name) {
+    trans (name, domain) {
+        domain = domain ? domain : 'default';
+
         let locales = [this.locale].concat(this.fallbackLocales);
         let translation = null;
 
         locales = this.resolveLocalesCodes(locales);
 
         for (let locale of locales) {
-            translation = this.getCatalogue(locale).get(name);
+            translation = this.getCatalogue(locale, domain).get(name);
 
             // Break if found in this locale.
             if (translation !== null) {
@@ -17194,14 +17196,22 @@ class Translator {
         return translation;
     }
 
-    getCatalogue (locale) {
-        if (this.catalogues[locale]) {
-            return this.catalogues[locale];
+    getCatalogue (locale, domain) {
+        if (this.catalogues[locale] && this.catalogues[locale][domain]) {
+            return this.catalogues[locale][domain];
         }
 
-        this.catalogues[locale] = new Catalogue(this.translations[locale] ?? {});
+        if (!this.catalogues[locale]) {
+            this.catalogues[locale] = {};
+        }
 
-        return this.catalogues[locale];
+        this.catalogues[locale][domain] = new Catalogue(
+            this.translations[locale] && this.translations[locale][domain]
+                ? this.translations[locale][domain]
+                : {}
+        );
+
+        return this.catalogues[locale][domain];
     }
 
     /**
@@ -19334,7 +19344,7 @@ class Location {
             }
         }
 
-        console.error('Query variable %s not found', variable);
+        return null;
     }
 };
 
@@ -19491,6 +19501,7 @@ __webpack_require__.r(__webpack_exports__);
  */
 const Canvas = (__webpack_require__(/*! ./Canvas.js */ "./src/js/Canvas.js")["default"]);
 const Editor = (__webpack_require__(/*! ./Editor.js */ "./src/js/Editor.js")["default"]);
+const _ = __webpack_require__(/*! lodash */ "lodash");
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
     Canvas,
@@ -19515,23 +19526,20 @@ const Editor = (__webpack_require__(/*! ./Editor.js */ "./src/js/Editor.js")["de
 
         this.blocks[block.code] = block;
     },
+    trans: function (locale, domain, translations) {
+        if (!this.translations[locale]) {
+            this.translations[locale] = {};
+        }
+        if (!this.translations[locale][domain]) {
+            this.translations[locale][domain] = {};
+        }
+
+        _.assign(this.translations[locale][domain], translations);
+    },
     extensions: (__webpack_require__(/*! extensions/extensions.js */ "./src/js/extensions/extensions.js")["default"]),
     blocks: (__webpack_require__(/*! blocks/blocks.js */ "./src/js/blocks/blocks.js")["default"]),
     controls: (__webpack_require__(/*! controls/controls.js */ "./src/js/Controls/controls.js")["default"]),
-    translations: {
-        en: {
-            save: 'Save',
-            cancel: 'Cancel',
-            newSection: 'New section',
-            newBlock: 'New block',
-            section: 'Section',
-            row: 'Row',
-            column: 'Column',
-            block: 'Block',
-            selected: 'Selected',
-            structure: 'Structure',
-        }
-    },
+    translations: {},
     instances: {},
     defaults: {
         structure: {},

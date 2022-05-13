@@ -12,14 +12,16 @@ export default class Translator {
         this.fallbackLocales = fallbackLocales;
     }
 
-    trans (name) {
+    trans (name, domain) {
+        domain = domain ? domain : 'default';
+
         let locales = [this.locale].concat(this.fallbackLocales);
         let translation = null;
 
         locales = this.resolveLocalesCodes(locales);
 
         for (let locale of locales) {
-            translation = this.getCatalogue(locale).get(name);
+            translation = this.getCatalogue(locale, domain).get(name);
 
             // Break if found in this locale.
             if (translation !== null) {
@@ -34,14 +36,22 @@ export default class Translator {
         return translation;
     }
 
-    getCatalogue (locale) {
-        if (this.catalogues[locale]) {
-            return this.catalogues[locale];
+    getCatalogue (locale, domain) {
+        if (this.catalogues[locale] && this.catalogues[locale][domain]) {
+            return this.catalogues[locale][domain];
         }
 
-        this.catalogues[locale] = new Catalogue(this.translations[locale] ?? {});
+        if (!this.catalogues[locale]) {
+            this.catalogues[locale] = {};
+        }
 
-        return this.catalogues[locale];
+        this.catalogues[locale][domain] = new Catalogue(
+            this.translations[locale] && this.translations[locale][domain]
+                ? this.translations[locale][domain]
+                : {}
+        );
+
+        return this.catalogues[locale][domain];
     }
 
     /**

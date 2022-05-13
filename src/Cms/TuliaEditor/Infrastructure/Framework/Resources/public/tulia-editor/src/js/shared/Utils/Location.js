@@ -11,6 +11,6 @@ export default class Location {
             }
         }
 
-        console.error('Query variable %s not found', variable);
+        return null;
     }
 };
