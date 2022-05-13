@@ -45,7 +45,7 @@ class Renderer
         return implode('', $result);
     }
 
-    private function renderBlock(array $block): string
+    public function renderBlock(array $block): string
     {
         if (!$block['visible']) {
             return '';
@@ -79,7 +79,7 @@ class Renderer
          * Views priority:
          * - Theme views - This allows to overwrite views from modules
          * - Modules views
-         * - Fallback views -  At the end, we have to add empty view, in case of any previous views are not defined.
+         * - Fallback views - At the end, we have to add empty view, in case of any previous views are not defined.
          */
         array_unshift($this->paths, '@theme/content-block/');
     }

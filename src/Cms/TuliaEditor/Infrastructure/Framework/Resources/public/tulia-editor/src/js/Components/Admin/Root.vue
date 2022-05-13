@@ -10,6 +10,7 @@
                 @cancel="cancelEditor"
                 @save="saveEditor"
             ></SidebarComponent>
+            <Debugbar></Debugbar>
             <BlockPickerComponent
                 :availableBlocks="availableBlocks"
                 :blockPickerData="blockPickerData"
@@ -25,6 +26,7 @@
 const CanvasComponent = require("components/Admin/Canvas/Canvas.vue").default;
 const SidebarComponent = require("components/Admin/Sidebar/Sidebar.vue").default;
 const BlockPickerComponent = require("components/Admin/Block/PickerModal.vue").default;
+const Debugbar = require("components/Admin/Debugbar/Debugbar.vue").default;
 const ObjectCloner = require("shared/Utils/ObjectCloner.js").default;
 const TuliaEditor = require('TuliaEditor');
 const { defineProps, onMounted, provide, reactive, isProxy, toRaw } = require('vue');
@@ -178,12 +180,25 @@ props.container.messenger.operation('extention.unmount', (data, success, fail) =
 
 
 
+/***********
+ * Controls
+ **********/
+const ControlRegistry = require("shared/Control/Registry.js").default;
+const controlRegistry = new ControlRegistry(TuliaEditor.controls);
+provide('control.registry', controlRegistry);
+
 
 /*********************
  * Elements instances
  ********************/
 const ElementsInstantiator = require('shared/Structure/Element/Instantiator.js').default;
-const instantiator = new ElementsInstantiator(props.options, props.container.messenger, extensionRegistry, structureManipulator);
+const instantiator = new ElementsInstantiator(
+    props.options,
+    props.container.messenger,
+    extensionRegistry,
+    controlRegistry,
+    structureManipulator
+);
 
 provide('blocks.instance', instantiator.instantiator('block'));
 provide('columns.instance', instantiator.instantiator('column'));

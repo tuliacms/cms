@@ -44,12 +44,14 @@ abstract class AbstractFinder
     public function findOne(array $criteria, string $scope)
     {
         $criteria['limit'] = 1;
+        $criteria = $this->transformStringableObjectToPrimitives($criteria);
 
         return $this->find($criteria, $scope)->first();
     }
 
     public function find(array $criteria, string $scope): Collection
     {
+        $criteria = $this->transformStringableObjectToPrimitives($criteria);
         [$criteria, $scope] = $this->prepareFetch($criteria, $scope);
         $query = $this->createQuery();
         $query->setPluginsRegistry($this->pluginRegistry);
@@ -65,6 +67,19 @@ abstract class AbstractFinder
         $this->eventDispatcher->dispatch($event);
 
         return [$event->getCriteria(), $event->getScope()];
+    }
+
+    protected function transformStringableObjectToPrimitives(array $criteria): array
+    {
+        foreach ($criteria as $key => $val) {
+            // Transforms \Tulia\Cms\Attributes\Domain\ReadModel\Model\AttributeValue to string,
+            // to prevents errors when casting to integers in pagination query.
+            if (is_object($val) && $val instanceof \Stringable) {
+                $criteria[$key] = (string) $val;
+            }
+        }
+
+        return $criteria;
     }
 
     protected function afterQuery(Collection $collection, array $criteria, string $scope): Collection

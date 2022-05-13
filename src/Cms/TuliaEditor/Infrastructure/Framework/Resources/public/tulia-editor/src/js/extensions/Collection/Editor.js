@@ -5,7 +5,9 @@ export default class Collection {
     prototype;
 
     constructor (collection, prototype) {
-        this.collection = this.createIdFieldFor(collection);
+        this._assertThatAllElementsContainsId(collection);
+
+        this.collection = collection;
         this.prototype = prototype;
     }
 
@@ -19,19 +21,54 @@ export default class Collection {
 
     add () {
         let element = _.assign({}, this.prototype);
-        element.id = this.generateId();
+        element.id = this._generateId();
 
         this.collection.push(element);
     }
 
-    generateId () {
+    moveBackward (element) {
+        let index = this._findIndex(element);
+
+        if (!index) {
+            return;
+        }
+
+        this.moveToIndex(element, index, index - 1);
+    }
+
+    moveForward (element) {
+        let index = this._findIndex(element);
+
+        if (!index) {
+            return;
+        }
+
+        this.moveToIndex(element, index, index + 1);
+    }
+
+    moveToIndex (element, oldIndex, newIndex) {
+        this.collection.splice(oldIndex, 1);
+        this.collection.splice(newIndex, 0, element);
+    }
+
+    _findIndex (element) {
+        for (let i in this.collection) {
+            if (this.collection[i].id === element.id) {
+                return i;
+            }
+        }
+    }
+
+    _generateId () {
         return `tued-collection-${_.uniqueId()}`;
     }
 
-    createIdFieldFor (collection) {
+    _assertThatAllElementsContainsId (collection) {
         for (let i in collection) {
-            collection[i].id = this.generateId();
+            if (!collection[i].id) {
+                console.log(collection[i]);
+                throw new Error('All elements of Collection must contains ID property.');
+            }
         }
-        return collection;
     }
 }

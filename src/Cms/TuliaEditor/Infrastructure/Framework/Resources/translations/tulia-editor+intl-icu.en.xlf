@@ -62,6 +62,22 @@
                 <source>delete</source>
                 <target>Delete</target>
             </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.16">
+                <source>moveBackward</source>
+                <target>Move backward</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.17">
+                <source>moveForward</source>
+                <target>Move forward</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.18">
+                <source>moveUp</source>
+                <target>Move up</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.19">
+                <source>moveDown</source>
+                <target>Move down</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

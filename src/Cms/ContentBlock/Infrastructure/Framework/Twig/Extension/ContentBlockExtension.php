@@ -27,6 +27,7 @@ class ContentBlockExtension extends AbstractExtension
     {
         return [
             new TwigFunction('content_block_render', [$this, 'contentBlockRender'], ['is_safe' => [ 'html' ]]),
+            new TwigFunction('dynamic_block_render', [$this, 'dynamicBlockRender'], ['is_safe' => [ 'html' ]]),
         ];
     }
 
@@ -36,5 +37,13 @@ class ContentBlockExtension extends AbstractExtension
         $model = json_decode($model, true, JSON_THROW_ON_ERROR);
 
         return $this->renderer->render($model);
+    }
+
+    public function dynamicBlockRender(?string $source): string
+    {
+        $model = base64_decode($source);
+        $model = json_decode($model, true, JSON_THROW_ON_ERROR);
+
+        return $this->renderer->renderBlock($model);
     }
 }

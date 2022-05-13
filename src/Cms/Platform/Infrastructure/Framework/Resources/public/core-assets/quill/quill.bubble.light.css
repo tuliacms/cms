@@ -595,7 +595,7 @@
 .ql-bubble .ql-direction.ql-active svg:first-child {
   display: none;
 }
-.ql-bubble .ql-editor h1 {
+/*.ql-bubble .ql-editor h1 {
   font-size: 2em;
 }
 .ql-bubble .ql-editor h2 {
@@ -644,7 +644,7 @@
 }
 .ql-bubble .ql-editor img {
   max-width: 100%;
-}
+}*/
 .ql-bubble .ql-picker {
   color: #ccc;
   display: inline-block;

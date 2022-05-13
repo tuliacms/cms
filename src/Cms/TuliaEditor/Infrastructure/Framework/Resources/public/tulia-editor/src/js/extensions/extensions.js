@@ -4,12 +4,16 @@ const Image = require('./Image/Image.js').default;
 const BackgroundImage = require('./BackgroundImage/BackgroundImage.js').default;
 const FontIcon = require('./FontIcon/FontIcon.js').default;
 const Collection = require('./Collection/Collection.js').default;
+const CollectionActions = require('./Collection/Collection.Actions.js').default;
+const DynamicBlock = require('./DynamicBlock/DynamicBlock.js').default;
 
 export default {
-    WysiwygEditor,
-    Contenteditable,
-    Image,
-    BackgroundImage,
-    FontIcon,
-    Collection,
+    'WysiwygEditor': WysiwygEditor,
+    'Contenteditable': Contenteditable,
+    'Image': Image,
+    'BackgroundImage': BackgroundImage,
+    'FontIcon': FontIcon,
+    'Collection': Collection,
+    'Collection.Actions': CollectionActions,
+    'DynamicBlock': DynamicBlock,
 }

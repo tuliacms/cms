@@ -65,6 +65,8 @@ export default {
         let editorToolbar = this.$el.getElementsByClassName('editor-toolbar')[0];
         editorContent.innerHTML = this.modelValue ?? null;
 
+        Quill.register(Quill.import('attributors/style/align'), true);
+
         let quill = new Quill(editorContent, {
             theme: 'bubble',
             placeholder: this.translator.trans('startTypingPlaceholder'),

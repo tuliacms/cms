@@ -20,6 +20,13 @@
         outline: 0;
         box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
     }
+
+    &.tued-btn-danger {
+        &:hover {
+            border-color: red;
+            background-color: red;
+        }
+    }
 }
 
 .tued-main-btn {

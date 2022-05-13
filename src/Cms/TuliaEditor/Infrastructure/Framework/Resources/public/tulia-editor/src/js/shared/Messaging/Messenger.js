@@ -9,6 +9,7 @@ export default class Messenger {
     notificationListeners = [];
     operationListeners = [];
     promises = [];
+    messageReceivers = [];
 
     constructor (instanceId, windowName, windows) {
         this.instanceId = parseInt(instanceId);
@@ -16,6 +17,10 @@ export default class Messenger {
         this.windows = windows;
 
         this.start();
+    }
+
+    onMessageReceive (callback) {
+        this.messageReceivers.push(callback);
     }
 
     start () {
@@ -30,6 +35,10 @@ export default class Messenger {
 
             if (event.data.header.instanceId !== this.instanceId) {
                 return;
+            }
+
+            for (let i in this.messageReceivers) {
+                this.messageReceivers[i].call(null, event.data);
             }
 
             if (event.data.header.type === 'notification') {

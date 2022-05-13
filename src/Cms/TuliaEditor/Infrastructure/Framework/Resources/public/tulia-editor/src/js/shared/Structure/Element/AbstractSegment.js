@@ -8,9 +8,10 @@ export default class AbstractSegment {
     options;
     messenger;
     extensions;
+    controls;
     structureTraversator;
 
-    constructor (type, element, options, messenger, extensions, structureTraversator) {
+    constructor (type, element, options, messenger, extensions, controls, structureTraversator) {
         this.segment = this.getSegment();
         this.type = type;
         this.id = element.id;
@@ -18,6 +19,7 @@ export default class AbstractSegment {
         this.options = options;
         this.messenger = messenger;
         this.extensions = extensions;
+        this.controls = controls;
         this.structureTraversator = structureTraversator;
         this.dataSynchronizer = new Data(element.id, this.type, this.segment, element.data, this.messenger);
         this.styleSynchronizer = new ElementStyle(element.style);
@@ -31,6 +33,10 @@ export default class AbstractSegment {
 
     getParent () {
         return this.structureTraversator.getParent();
+    }
+
+    expectsFullWidthSection () {
+        this.getParent().getParent().getParent().data.containerWidth = 'full-width-no-padding';
     }
 
     on (event, listener) {
@@ -57,7 +63,7 @@ export default class AbstractSegment {
         return `structure.${this.type}.instance.${this.id}.${operation}`;
     }
 
-    extension (name, ...params) {
+    extension (name) {
         const extension = this.extensions.get(name);
 
         if (this.segment === 'render') {
@@ -69,5 +75,9 @@ export default class AbstractSegment {
         if (this.segment === 'editor') {
             return extension.Editor;
         }
+    }
+
+    control (name) {
+        return this.controls.get(name);
     }
 }

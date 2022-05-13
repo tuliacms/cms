@@ -29,6 +29,9 @@
   .tued-btn:focus {
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
+  .tued-btn.tued-btn-danger:hover {
+    border-color: red;
+    background-color: red; }
 
 .tued-main-btn {
   transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out; }
@@ -216,6 +219,9 @@ body {
   .tued-btn:focus {
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
+  .tued-btn.tued-btn-danger:hover {
+    border-color: red;
+    background-color: red; }
 
 .tued-main-btn {
   transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out; }
@@ -571,6 +577,25 @@ body {
   .tued-structure-selected-options.tued-structure-selected-active {
     display: block; }
 
+.tued-sidebar {
+  bottom: 200px; }
+
+.tued-canvas .tued-canvas-inner {
+  bottom: 200px; }
+
+.tued-debugbar {
+  position: fixed;
+  height: 200px;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: #fff;
+  z-index: 250;
+  border-top: 1px solid #ddd;
+  box-shadow: 4px 4px rgba(0, 0, 0, 0.1); }
+  .tued-debugbar .nav-tabs .nav-link {
+    padding: 4px 11px; }
+
 .tued-editor-opened {
   overflow: hidden !important; }
 
@@ -588,7 +613,7 @@ body {
   !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/extensions/Contenteditable/Editor.vue?vue&type=style&index=0&id=4f2d7e8d&scoped=true&lang=scss ***!
   \**********************************************************************************************************************************************************************************************************************************************************************************************************************/
 .tued-ext-contenteditable-element[data-v-4f2d7e8d] {
-  display: block;
+  display: inline-block;
   outline: none !important;
 }
 .tued-ext-contenteditable-element[data-v-4f2d7e8d]:hover {

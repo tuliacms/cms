@@ -95,11 +95,25 @@ provide('extension.instance', new Instantiator(props.container.messenger));
 
 
 
+/***********
+ * Controls
+ **********/
+const ControlRegistry = require("shared/Control/Registry.js").default;
+const controlRegistry = new ControlRegistry(TuliaEditor.controls);
+provide('control.registry', controlRegistry);
+
+
 /*********************
  * Elements instances
  ********************/
 const ElementsInstantiator = require('shared/Structure/Element/Instantiator.js').default;
-const instantiator = new ElementsInstantiator(props.options, props.container.messenger, extensionRegistry, structureManipulator);
+const instantiator = new ElementsInstantiator(
+    props.options,
+    props.container.messenger,
+    extensionRegistry,
+    controlRegistry,
+    structureManipulator
+);
 
 provide('blocks.instance', instantiator.instantiator('block'));
 provide('columns.instance', instantiator.instantiator('column'));

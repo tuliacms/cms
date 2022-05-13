@@ -6,13 +6,15 @@ export default class ElementsInstantiator {
     options;
     messenger;
     extensions;
+    controls;
     structureManipulator;
     instances = {};
 
-    constructor (options, messenger, extensions, structureManipulator) {
+    constructor (options, messenger, extensions, controls, structureManipulator) {
         this.options = options;
         this.messenger = messenger;
         this.extensions = extensions;
+        this.controls = controls;
         this.structureManipulator = structureManipulator;
     }
 
@@ -60,6 +62,7 @@ export default class ElementsInstantiator {
             this.getOptionsByType(props, type),
             this.messenger,
             this.extensions,
+            this.controls,
             this.structureTraversator(type, element.id, segment)
         ];
 

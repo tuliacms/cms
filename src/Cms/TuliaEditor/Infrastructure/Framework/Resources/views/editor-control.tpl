@@ -21,6 +21,10 @@
             emptySearchResults: '{{ 'emptySearchResults'|trans({}, 'tulia-editor') }}',
             selectParentElement: '{{ 'selectParentElement'|trans({}, 'tulia-editor') }}',
             delete: '{{ 'delete'|trans({}, 'tulia-editor') }}',
+            moveBackward: '{{ 'moveBackward'|trans({}, 'tulia-editor') }}',
+            moveForward: '{{ 'moveForward'|trans({}, 'tulia-editor') }}',
+            moveUp: '{{ 'moveUp'|trans({}, 'tulia-editor') }}',
+            moveDown: '{{ 'moveDown'|trans({}, 'tulia-editor') }}',
         };
 
         let structureSelector = '.tulia-editor-structure-field[data-tulia-editor-group-id="{{ params.group_id }}"]';
