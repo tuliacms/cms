@@ -16,4 +16,8 @@ class Editor extends AbstractController
     {
         return $this->view('@backend/tulia-editor/editor-window.tpl');
     }
+    public function preview(): ViewInterface
+    {
+        return $this->view('@backend/tulia-editor/preview-window.tpl');
+    }
 }

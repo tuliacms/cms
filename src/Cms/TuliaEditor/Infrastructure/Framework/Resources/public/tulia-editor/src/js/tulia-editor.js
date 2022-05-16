@@ -49,6 +49,7 @@ export default {
         structure: {},
         editor: {
             view: null,
+            preview: null,
         },
         /**
          * 'default' - default view.

@@ -1,0 +1,15 @@
+.tued-dynamic-block {
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+
+    &:before {
+        display: block;
+        content: "dynamic block";
+        margin-bottom: 8px;
+        font-size: 12px;
+        color: rgba(0,0,0,.3);
+        text-transform: uppercase;
+    }
+}

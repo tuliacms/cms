@@ -1,6 +1,6 @@
 {% assets ['tulia_editor'] %}
 
-<div id="{{ params.id }}-qaaaa"></div>
+<div id="{{ params.id }}"></div>
 
 <script>
     $(function () {
@@ -25,6 +25,12 @@
             moveForward: '{{ 'moveForward'|trans({}, 'tulia-editor') }}',
             moveUp: '{{ 'moveUp'|trans({}, 'tulia-editor') }}',
             moveDown: '{{ 'moveDown'|trans({}, 'tulia-editor') }}',
+            edit: '{{ 'edit'|trans({}, 'tulia-editor') }}',
+            contentPreview: '{{ 'contentPreview'|trans({}, 'tulia-editor') }}',
+            newSection: '{{ 'newSection'|trans({}, 'tulia-editor') }}',
+            newBlock: '{{ 'newBlock'|trans({}, 'tulia-editor') }}',
+            selected: '{{ 'selected'|trans({}, 'tulia-editor') }}',
+            structure: '{{ 'structure'|trans({}, 'tulia-editor') }}',
         });
 
         let structureSelector = '.tulia-editor-structure-field[data-tulia-editor-group-id="{{ params.group_id }}"]';
@@ -38,16 +44,18 @@
             structure = JSON.parse(structure);
         }
 
-        new TuliaEditor.Editor('#{{ params.id }}-qaaaa', {
+        new TuliaEditor.Editor('#{{ params.id }}', {
             sink: {
                 structure: structureSelector,
                 content: contentSelector
             },
             structure: {
-                source: structure
+                source: structure,
+                preview: $(contentSelector).val(),
             },
             editor: {
                 view: '{{ path('backend.tulia_editor.editor_view') }}',
+                preview: '{{ path('backend.tulia_editor.editor_preview') }}',
             },
             /*blocks: {
                 "core-imageblock": {
@@ -59,7 +67,7 @@
                 image_resolve_path: '{{ path('filemanager.resolve.image.size', { size: '{size}', id: '{id}', filename: '{filename}' }) }}',
                 endpoint: '{{ path('backend.filemanager.endpoint') }}',
             },
-            start_point: 'editor',
+            //start_point: 'editor',
             locale: '{{ user().locale }}'
         });
     });

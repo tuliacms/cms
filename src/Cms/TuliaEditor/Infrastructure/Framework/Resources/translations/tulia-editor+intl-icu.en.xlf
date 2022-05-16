@@ -78,6 +78,34 @@
                 <source>moveDown</source>
                 <target>Move down</target>
             </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.20">
+                <source>edit</source>
+                <target>Edit</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.21">
+                <source>contentPreview</source>
+                <target>Content preview</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.22">
+                <source>editContent</source>
+                <target>Edit content</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.23">
+                <source>newSection</source>
+                <target>New section</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.24">
+                <source>newBlock</source>
+                <target>New block</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.25">
+                <source>selected</source>
+                <target>Selected</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.26">
+                <source>structure</source>
+                <target>Structure</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

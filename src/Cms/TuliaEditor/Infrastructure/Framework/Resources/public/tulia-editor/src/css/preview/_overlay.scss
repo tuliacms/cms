@@ -1,0 +1,41 @@
+.tued-preview-wrapper {
+    position: relative;
+
+    .tued-preview-overlay {
+        position: absolute;
+        z-index: 9999999999999;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        transition: .12s all;
+        background-color: rgba(0,0,0,.3);
+        opacity: 0;
+
+        &:hover {
+            opacity: 1;
+            cursor: pointer;
+        }
+
+        .tued-preview-edit {
+            display: block;
+            position: absolute;
+            left: 50%;
+            top: 200px;
+            transform: translateX(-50%);
+            background-color: #fff;
+            border-radius: 3px;
+            padding: 6px 20px;
+            text-align: center;
+            border: 2px solid $primary;
+            font-size: 17px;
+            transition: .12s all;
+            box-shadow: 0 0 23px 6px rgba(0,0,0,.22);
+
+            &:hover {
+                color: #fff;
+                background-color: $primary;
+            }
+        }
+    }
+}

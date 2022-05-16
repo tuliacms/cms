@@ -1,5 +1,5 @@
 <template>
-    [dynamic_block {{ attributes }}]
+    <div class="tued-dynamic-block">[dynamic_block {{ attributes }}]</div>
 </template>
 
 <script setup>
