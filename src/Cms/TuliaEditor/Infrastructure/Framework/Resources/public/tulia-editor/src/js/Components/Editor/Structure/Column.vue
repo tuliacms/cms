@@ -17,26 +17,26 @@
             @selection-leave="(type, id) => $emit('selection-leave', type, id)"
         ></Block>
         <div v-if="column.blocks.length === 0">
-            Empty Column
+            <div class="tued-structure-new-element" @click="messenger.execute('structure.create.block', { columnId: column.id })">
+                {{ translator.trans('newBlock') }}
+            </div>
         </div>
     </div>
 </template>
 
-<script>
+<script setup>
+const { defineProps, inject, computed } = require('vue');
 const Block = require('./Block.vue').default;
 const SizesClassnameGenerator = require('shared/Structure/Columns/SizesClassnameGenerator.js').default;
 
-export default {
-    props: ['column', 'parent'],
-    inject: ['selection'],
-    components: {Block},
-    computed: {
-        columnClass: function () {
-            return (new SizesClassnameGenerator(
-                this.column,
-                ['tued-structure-column', 'tued-structure-element-selectable']
-            )).generate();
-        }
-    }
-};
+const props = defineProps(['column', 'parent']);
+const selection = inject('selection');
+const translator = inject('translator');
+
+const columnClass = computed(() => {
+    return (new SizesClassnameGenerator(
+        props.column,
+        ['tued-structure-column', 'tued-structure-element-selectable']
+    )).generate();
+});
 </script>

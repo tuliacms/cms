@@ -205,6 +205,9 @@ export default class StructureManipulator {
             for (let ni in data.element.data) {
                 currentElement.data[ni] = data.element.data[ni];
             }
+            for (let ni in data.element.sizes) {
+                currentElement.sizes[ni] = data.element.sizes[ni];
+            }
 
             success();
         });

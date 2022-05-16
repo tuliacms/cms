@@ -11,7 +11,7 @@
         <div class="tued-preview-overlay">
             <div class="tued-preview-edit">{{ 'editContent'|trans({}, 'tulia-editor') }}</div>
         </div>
-        <div id="tulia-editor-preview"></div>
+        <div id="tulia-editor-preview"><div class="tued-empty-content">{{ 'startCreatingNewContent'|trans({}, 'tulia-editor') }}</div></div>
     </div>
     <style>
         body {overflow: hidden !important;}

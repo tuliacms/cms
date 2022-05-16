@@ -41,11 +41,12 @@
 const { ref, defineProps, inject } = require('vue');
 const props = defineProps(['structure']);
 const messenger = inject('messenger');
+const options = inject('options');
 
 /**********************
  * Render area preview
  **********************/
-const renderPreview = ref(true);
+const renderPreview = ref(options.show_preview_in_canvas);
 messenger.operation('editor.canvas.preview.toggle', (params, success, fail) => {
     renderPreview.value = !renderPreview.value;
 

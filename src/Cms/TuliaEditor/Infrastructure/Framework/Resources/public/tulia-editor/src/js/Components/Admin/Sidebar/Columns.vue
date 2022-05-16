@@ -2,7 +2,7 @@
     <div>
         <draggable
             group="columns"
-            :list="columns"
+            :list="props.columns"
             v-bind="structureDragOptions"
             handle=".tued-structure-element-column > .tued-label > .tued-structure-draggable-handler"
             item-key="id"
@@ -53,68 +53,73 @@
     </div>
 </template>
 
-<script>
+<script setup>
+const { defineProps, computed, inject, ref } = require('vue');
 const draggable = require('vuedraggable');
 const Blocks = require('components/Admin/Sidebar/Blocks.vue').default;
+const props = defineProps(['parent', 'columns']);
+const selection = inject('selection');
+const canvas = inject('canvas');
+const columnsSize = inject('columns.size');
+const structureDragOptions = inject('structureDragOptions');
+const translator = inject('translator');
 
-export default {
-    props: ['parent', 'columns'],
-    inject: ['selection', 'canvas', 'columns.size', 'structureDragOptions', 'translator'],
-    components: {
-        draggable,
-        Blocks
-    },
-    computed: {
-        breakpointSize: function () {
-            return this.canvas.getBreakpointName();
-        },
-    },
-    methods: {
-        changeSizeWithArrows: function (column, event) {
-            switch (event.key) {
-                case '+':
-                case 'ArrowUp':
-                    this.$refs['column-' + column.id].value = this.columnSize.increment(column, this.canvas.getBreakpointName());
-                    break;
-                case '-':
-                case 'ArrowDown':
-                    this.$refs['column-' + column.id].value = this.columnSize.decrement(column, this.canvas.getBreakpointName());
-                    break;
-                default:
-                    return;
-            }
-        },
-        changeSize: function (column, event) {
-            switch (event.key) {
-                case '1':
-                case '2':
-                case '3':
-                case '4':
-                case '5':
-                case '6':
-                case '7':
-                case '8':
-                case '9':
-                case '0':
-                    break;
-                case 'ArrowUp':
-                case 'ArrowDown':
-                case 'ArrowLeft':
-                case 'ArrowRight':
-                case 'Backspace':
-                case 'Delete':
-                    return;
-                default:
-                    event.preventDefault();
-            }
+const columns = {};
 
-            let input = this.$refs['column-' + column.id];
+for (let i in props.columns) {
+    columns['column-' + props.columns[i].id] = ref('column-' + props.columns[i].id);
+}
 
-            input.value = this.columnSize.changeTo(column, this.canvas.getBreakpointName(), input.value);
-        },
-        columnSizeByBreakpoint: function (column) {
-            return column.sizes[this.canvas.getBreakpointName()].size;
-        },
+const breakpointSize = computed (() => {
+    return canvas.getBreakpointName();
+});
+
+const changeSizeWithArrows = (column, event) => {
+    switch (event.key) {
+        case '+':
+        case 'ArrowUp':
+            columns['column-' + column.id].value = columnsSize.increment(column, canvas.getBreakpointName());
+            break;
+        case '-':
+        case 'ArrowDown':
+            columns['column-' + column.id].value = columnsSize.decrement(column, canvas.getBreakpointName());
+            break;
+        default:
+            return;
     }
 };
+
+const changeSize = (column, event) => {
+    switch (event.key) {
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+        case '0':
+            break;
+        case 'ArrowUp':
+        case 'ArrowDown':
+        case 'ArrowLeft':
+        case 'ArrowRight':
+        case 'Backspace':
+        case 'Delete':
+            return;
+        default:
+            event.preventDefault();
+    }
+
+    let input = columns['column-' + column.id];
+
+    input.value = columnsSize.changeTo(column, canvas.getBreakpointName(), input.value);
+};
+
+const columnSizeByBreakpoint = (column) => {
+    return column.sizes[canvas.getBreakpointName()].size;
+};
 </script>
+

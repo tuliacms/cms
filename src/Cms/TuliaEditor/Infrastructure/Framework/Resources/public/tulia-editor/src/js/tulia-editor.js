@@ -51,9 +51,10 @@ export default {
             view: null,
             preview: null,
         },
+        show_preview_in_canvas: false,
         /**
-         * 'default' - default view.
-         * 'editor' - opens editor immediately
+         * 'default' - Default view, only preview.
+         * 'editor' - Opens editor immediately.
          */
         start_point: 'default',
         sink: {

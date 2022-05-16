@@ -1,6 +1,28 @@
 .tued-preview-wrapper {
     position: relative;
 
+    #tulia-editor-preview {
+        min-height: 420px;
+
+        .tued-empty-content {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            font-size: 16px;
+
+            &:before {
+                display: block;
+                content: "\f56b";
+                font-family: "Font Awesome 5 Free", serif;
+                font-weight: bold;
+                font-size: 60px;
+                color: rgba(0,0,0,.3);
+            }
+        }
+    }
+
     .tued-preview-overlay {
         position: absolute;
         z-index: 9999999999999;
@@ -24,7 +46,7 @@
             top: 200px;
             transform: translateX(-50%);
             background-color: #fff;
-            border-radius: 3px;
+            border-radius: 6px;
             padding: 6px 20px;
             text-align: center;
             border: 2px solid $primary;

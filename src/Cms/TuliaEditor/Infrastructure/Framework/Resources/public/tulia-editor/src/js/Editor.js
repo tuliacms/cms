@@ -108,10 +108,6 @@ export default class Editor {
     }
 
     bindEvents () {
-        $('[data-tued-action=edit]').click(() => {
-            this.openEditor();
-        });
-
         this.root.find('.tued-preview')[0].onload = () => {
             this.container.messenger.addWindow(this.root.find('.tued-preview')[0].contentWindow);
             this.container.messenger.notify('editor.segment.ready', 'preview');
@@ -120,8 +116,14 @@ export default class Editor {
 
     updateContent (structure, content, style) {
         document.querySelector(this.options.sink.structure).value = JSON.stringify(structure);
-        document.querySelector(this.options.sink.content).value = content + `<style>${style}</style>`;
-        this.updatePreview(content + `<style>${style}</style>`);
+
+        if (!content) {
+            this.updatePreview('');
+            document.querySelector(this.options.sink.content).value = '';
+        } else {
+            this.updatePreview(content + `<style>${style}</style>`);
+            document.querySelector(this.options.sink.content).value = content + `<style>${style}</style>`;
+        }
     };
 
     renderEditorWindow () {
@@ -136,15 +138,14 @@ export default class Editor {
     renderMainWindow () {
         this.root.append('<div class="tued-main-window">' +
             '<div class="tued-header">' +
-            '<div class="tued-preview-headline">' +
-            '<span class="tued-logo">Tulia Editor</span> - ' + this.container.translator.trans('contentPreview') +
-            '</div>' +
-            '<button type="button" class="tued-btn" data-tued-action="edit">' + this.container.translator.trans('edit') + '</button>' +
+                '<div class="tued-preview-headline">' +
+                '<span class="tued-logo">Tulia Editor</span> - ' + this.container.translator.trans('contentPreview') +
+                '</div>' +
             '</div>' +
             '<div class="tued-preview">' +
-            '<iframe class="tued-preview" src="' + this.options.editor.preview + '?tuliaEditorInstance=' + this.instanceId + '"></iframe>' +
+                '<iframe class="tued-preview" src="' + this.options.editor.preview + '?tuliaEditorInstance=' + this.instanceId + '"></iframe>' +
             '</div>' +
-            '</div>');
+        '</div>');
     };
 
     renderModalsContainer () {
@@ -184,6 +185,10 @@ export default class Editor {
     }
 
     updatePreview (preview) {
+        if (!preview) {
+            preview = '<div class="tued-empty-content">' + this.container.translator.trans('startCreatingNewContent') + '</div>';
+        }
+
         this.previewRoot.querySelector('#tulia-editor-preview').innerHTML = preview;
     }
 

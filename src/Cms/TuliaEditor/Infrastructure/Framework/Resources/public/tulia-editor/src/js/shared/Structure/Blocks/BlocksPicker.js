@@ -1,13 +1,13 @@
 export default class BlocksPicker {
     config;
-    structure;
+    structureManipulator;
     modals;
     blocksRegistry;
 
-    constructor (config, blocksRegistry, structure, modals) {
+    constructor (config, blocksRegistry, structureManipulator, modals) {
         this.blocksRegistry = blocksRegistry;
         this.config = config;
-        this.structure = structure;
+        this.structureManipulator = structureManipulator;
         this.modals = modals;
     }
 
@@ -26,7 +26,7 @@ export default class BlocksPicker {
     }
 
     select (code) {
-        this.structure.newBlock(code, this.config.columnId, this.blocksRegistry.get(code).defaults);
+        this.structureManipulator.newBlock(code, this.config.columnId, this.blocksRegistry.get(code).defaults);
         this.close();
     }
 }

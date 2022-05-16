@@ -31,6 +31,7 @@
             newBlock: '{{ 'newBlock'|trans({}, 'tulia-editor') }}',
             selected: '{{ 'selected'|trans({}, 'tulia-editor') }}',
             structure: '{{ 'structure'|trans({}, 'tulia-editor') }}',
+            startCreatingNewContent: '{{ 'startCreatingNewContent'|trans({}, 'tulia-editor') }}',
         });
 
         let structureSelector = '.tulia-editor-structure-field[data-tulia-editor-group-id="{{ params.group_id }}"]';
