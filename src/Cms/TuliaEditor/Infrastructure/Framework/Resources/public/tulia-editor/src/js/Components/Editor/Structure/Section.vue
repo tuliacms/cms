@@ -17,9 +17,12 @@
                 @selection-enter="(type, id) => $emit('selection-enter', type, id)"
                 @selection-leave="(type, id) => $emit('selection-leave', type, id)"
             ></Row>
-            <div v-if="props.section.rows.length === 0">
-                Empty Section
-            </div>
+        </div>
+        <div
+            class="tued-structure-empty-element"
+            v-if="props.section.rows.length === 0"
+        >
+            {{ translator.trans('emptySection') }}
         </div>
     </section>
 </template>
@@ -30,6 +33,7 @@ const { defineProps, inject, computed } = require('vue');
 const props = defineProps(['section']);
 const section = inject('sections.instance').editor(props);
 const selection = inject('selection');
+const translator = inject('translator');
 
 const containerClassname = computed(() => {
     switch (section.data.containerWidth) {

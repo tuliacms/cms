@@ -32,6 +32,9 @@
             selected: '{{ 'selected'|trans({}, 'tulia-editor') }}',
             structure: '{{ 'structure'|trans({}, 'tulia-editor') }}',
             startCreatingNewContent: '{{ 'startCreatingNewContent'|trans({}, 'tulia-editor') }}',
+            emptySection: '{{ 'emptySection'|trans({}, 'tulia-editor') }}',
+            emptyRow: '{{ 'emptyRow'|trans({}, 'tulia-editor') }}',
+            emptyColumn: '{{ 'emptyColumn'|trans({}, 'tulia-editor') }}',
         });
 
         let structureSelector = '.tulia-editor-structure-field[data-tulia-editor-group-id="{{ params.group_id }}"]';

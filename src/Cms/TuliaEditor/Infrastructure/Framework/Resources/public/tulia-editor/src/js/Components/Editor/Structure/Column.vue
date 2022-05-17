@@ -1,25 +1,26 @@
 <template>
     <div
         :class="columnClass"
-        :id="column.id"
-        @mouseenter="$emit('selection-enter', 'column', column.id)"
-        @mouseleave="$emit('selection-leave', 'column', column.id)"
-        @mousedown.stop="selection.select('column', column.id, 'editor')"
+        :id="props.column.id"
+        @mouseenter="$emit('selection-enter', 'column', props.column.id)"
+        @mouseleave="$emit('selection-leave', 'column', props.column.id)"
+        @mousedown.stop="selection.select('column', props.column.id, 'editor')"
         data-tagname="Column"
     >
         <Block
-            v-for="block in column.blocks"
+            v-for="block in props.column.blocks"
             :id="'tued-structure-block-' + block.id"
             :key="block.id"
             :block="block"
-            :parent="column"
+            :parent="props.column"
             @selection-enter="(type, id) => $emit('selection-enter', type, id)"
             @selection-leave="(type, id) => $emit('selection-leave', type, id)"
         ></Block>
-        <div v-if="column.blocks.length === 0">
-            <div class="tued-structure-new-element" @click="messenger.execute('structure.create.block', { columnId: column.id })">
-                {{ translator.trans('newBlock') }}
-            </div>
+        <div
+            class="tued-structure-empty-element"
+            v-if="props.column.blocks.length === 0"
+        >
+            {{ translator.trans('emptyColumn') }}
         </div>
     </div>
 </template>

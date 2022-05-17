@@ -21,20 +21,6 @@ export default class Fixer {
             section.type = 'section';
         }
 
-        /*let sec = {
-            id: 'asd',
-            type: 'section',
-            metadata: {
-                hovered: false,
-                selected: false,
-                parent: null
-            },
-            data: {
-
-            },
-            rows: []
-        };*/
-
         if (!section.metadata) {
             section.metadata = {
                 hovered: false,
@@ -46,8 +32,8 @@ export default class Fixer {
             };
         }
 
-        if (!section.rows || section.rows.length === 0) {
-            section.rows = [{}];
+        if (!section.rows) {
+            section.rows = [];
         }
 
         if (!section.data) {
@@ -95,8 +81,8 @@ export default class Fixer {
             };
         }
 
-        if (!row.columns || row.columns.length === 0) {
-            row.columns = [{}];
+        if (!row.columns) {
+            row.columns = [];
         }
 
         for (let i in row.columns) {

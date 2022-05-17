@@ -5849,6 +5849,7 @@ const { defineProps, inject, computed } = __webpack_require__(/*! vue */ "vue");
 const row = inject('rows.instance').editor(props);
 const section = row.getParent();
 const selection = inject('selection');
+const translator = inject('translator');
 
 const rowClassname = computed(() => {
     let classname = 'tued-structure-row tued-structure-element-selectable row';
@@ -5860,7 +5861,7 @@ const rowClassname = computed(() => {
     return classname;
 });
 
-const __returned__ = { Column, defineProps, inject, computed, props, row, section, selection, rowClassname }
+const __returned__ = { Column, defineProps, inject, computed, props, row, section, selection, translator, rowClassname }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -5920,6 +5921,7 @@ const { defineProps, inject, computed } = __webpack_require__(/*! vue */ "vue");
 
 const section = inject('sections.instance').editor(props);
 const selection = inject('selection');
+const translator = inject('translator');
 
 const containerClassname = computed(() => {
     switch (section.data.containerWidth) {
@@ -5929,7 +5931,7 @@ const containerClassname = computed(() => {
     }
 });
 
-const __returned__ = { Row, defineProps, inject, computed, props, section, selection, containerClassname }
+const __returned__ = { Row, defineProps, inject, computed, props, section, selection, translator, containerClassname }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -10085,34 +10087,32 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const _hoisted_1 = ["id"]
-const _hoisted_2 = { key: 0 }
+const _hoisted_2 = {
+  key: 0,
+  class: "tued-structure-empty-element"
+}
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
     class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($setup.columnClass),
-    id: $props.column.id,
-    onMouseenter: _cache[3] || (_cache[3] = $event => (_ctx.$emit('selection-enter', 'column', $props.column.id))),
-    onMouseleave: _cache[4] || (_cache[4] = $event => (_ctx.$emit('selection-leave', 'column', $props.column.id))),
-    onMousedown: _cache[5] || (_cache[5] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($setup.selection.select('column', $props.column.id, 'editor')), ["stop"])),
+    id: $setup.props.column.id,
+    onMouseenter: _cache[2] || (_cache[2] = $event => (_ctx.$emit('selection-enter', 'column', $setup.props.column.id))),
+    onMouseleave: _cache[3] || (_cache[3] = $event => (_ctx.$emit('selection-leave', 'column', $setup.props.column.id))),
+    onMousedown: _cache[4] || (_cache[4] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($setup.selection.select('column', $setup.props.column.id, 'editor')), ["stop"])),
     "data-tagname": "Column"
   }, [
-    ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.column.blocks, (block) => {
+    ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.props.column.blocks, (block) => {
       return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)($setup["Block"], {
         id: 'tued-structure-block-' + block.id,
         key: block.id,
         block: block,
-        parent: $props.column,
+        parent: $setup.props.column,
         onSelectionEnter: _cache[0] || (_cache[0] = (type, id) => _ctx.$emit('selection-enter', type, id)),
         onSelectionLeave: _cache[1] || (_cache[1] = (type, id) => _ctx.$emit('selection-leave', type, id))
       }, null, 8 /* PROPS */, ["id", "block", "parent"]))
     }), 128 /* KEYED_FRAGMENT */)),
-    ($props.column.blocks.length === 0)
-      ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_2, [
-          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-            class: "tued-structure-new-element",
-            onClick: _cache[2] || (_cache[2] = $event => (_ctx.messenger.execute('structure.create.block', { columnId: $props.column.id })))
-          }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translator.trans('newBlock')), 1 /* TEXT */)
-        ]))
+    ($setup.props.column.blocks.length === 0)
+      ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translator.trans('emptyColumn')), 1 /* TEXT */))
       : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)
   ], 42 /* CLASS, PROPS, HYDRATE_EVENTS */, _hoisted_1))
 }
@@ -10135,7 +10135,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const _hoisted_1 = ["id"]
-const _hoisted_2 = { key: 0 }
+const _hoisted_2 = {
+  key: 0,
+  class: "tued-structure-empty-element"
+}
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
@@ -10157,7 +10160,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, null, 8 /* PROPS */, ["id", "column", "parent"]))
     }), 128 /* KEYED_FRAGMENT */)),
     ($setup.props.row.columns.length === 0)
-      ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_2, " Empty Row "))
+      ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translator.trans('emptyRow')), 1 /* TEXT */))
       : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)
   ], 42 /* CLASS, PROPS, HYDRATE_EVENTS */, _hoisted_1))
 }
@@ -10180,7 +10183,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const _hoisted_1 = ["id"]
-const _hoisted_2 = { key: 0 }
+const _hoisted_2 = {
+  key: 0,
+  class: "tued-structure-empty-element"
+}
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("section", {
@@ -10203,11 +10209,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           onSelectionEnter: _cache[0] || (_cache[0] = (type, id) => _ctx.$emit('selection-enter', type, id)),
           onSelectionLeave: _cache[1] || (_cache[1] = (type, id) => _ctx.$emit('selection-leave', type, id))
         }, null, 8 /* PROPS */, ["id", "row", "parent"]))
-      }), 128 /* KEYED_FRAGMENT */)),
-      ($setup.props.section.rows.length === 0)
-        ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_2, " Empty Section "))
-        : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)
-    ], 2 /* CLASS */)
+      }), 128 /* KEYED_FRAGMENT */))
+    ], 2 /* CLASS */),
+    ($setup.props.section.rows.length === 0)
+      ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translator.trans('emptySection')), 1 /* TEXT */))
+      : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)
   ], 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_1))
 }
 
@@ -17835,7 +17841,7 @@ class ColumnSize {
         let size = column.sizes[breakpoint].size;
 
         if (!size) {
-            return size;
+            size = 12;
         }
 
         return this.changeTo(column, breakpoint, size - 1);
@@ -18484,20 +18490,6 @@ class Fixer {
             section.type = 'section';
         }
 
-        /*let sec = {
-            id: 'asd',
-            type: 'section',
-            metadata: {
-                hovered: false,
-                selected: false,
-                parent: null
-            },
-            data: {
-
-            },
-            rows: []
-        };*/
-
         if (!section.metadata) {
             section.metadata = {
                 hovered: false,
@@ -18509,8 +18501,8 @@ class Fixer {
             };
         }
 
-        if (!section.rows || section.rows.length === 0) {
-            section.rows = [{}];
+        if (!section.rows) {
+            section.rows = [];
         }
 
         if (!section.data) {
@@ -18558,8 +18550,8 @@ class Fixer {
             };
         }
 
-        if (!row.columns || row.columns.length === 0) {
-            row.columns = [{}];
+        if (!row.columns) {
+            row.columns = [];
         }
 
         for (let i in row.columns) {

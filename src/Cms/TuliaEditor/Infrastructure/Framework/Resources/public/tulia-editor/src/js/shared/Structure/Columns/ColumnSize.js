@@ -43,7 +43,7 @@ export default class ColumnSize {
         let size = column.sizes[breakpoint].size;
 
         if (!size) {
-            return size;
+            size = 12;
         }
 
         return this.changeTo(column, breakpoint, size - 1);

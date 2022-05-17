@@ -16,8 +16,11 @@
             @selection-enter="(type, id) => $emit('selection-enter', type, id)"
             @selection-leave="(type, id) => $emit('selection-leave', type, id)"
         ></Column>
-        <div v-if="props.row.columns.length === 0">
-            Empty Row
+        <div
+            class="tued-structure-empty-element"
+            v-if="props.row.columns.length === 0"
+        >
+            {{ translator.trans('emptyRow') }}
         </div>
     </div>
 </template>
@@ -29,6 +32,7 @@ const props = defineProps(['row', 'parent']);
 const row = inject('rows.instance').editor(props);
 const section = row.getParent();
 const selection = inject('selection');
+const translator = inject('translator');
 
 const rowClassname = computed(() => {
     let classname = 'tued-structure-row tued-structure-element-selectable row';

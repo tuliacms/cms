@@ -1,6 +1,20 @@
 .tued-structure {
     margin: 40px 0;
 
+    .tued-structure-empty-element {
+        border: 1px dashed #e8e8e8;
+        border-radius: 5px;
+        padding: 25px;
+        text-align: center;
+        transition: .12s all;
+        text-transform: uppercase;
+        color: rgba(0, 0, 0, 0.2);
+        font-size: 13px;
+        font-style: italic;
+        pointer-events: none;
+        margin: 10px 0;
+    }
+
     .tued-structure-new-element {
         border: 2px dashed #c5c5c5;
         border-radius: 5px;

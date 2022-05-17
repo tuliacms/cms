@@ -110,6 +110,18 @@
                 <source>startCreatingNewContent</source>
                 <target>Start creating new content</target>
             </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.28">
+                <source>emptySection</source>
+                <target>Empty section</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.29">
+                <source>emptyRow</source>
+                <target>Empty row</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.30">
+                <source>emptyColumn</source>
+                <target>Empty column</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
