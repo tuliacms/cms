@@ -1,9 +1,11 @@
 <footer>
     <div class="cms-status">
-        <i class="status-icon fas fa-stopwatch"></i>
-        <span class="status-text">Zapisano automatycznie szkic 2 minuty temu.</span>
+        <a href="http://tuliacms.org/help" target="_blank" title="Need help?" rel="noopener">
+            <i class="status-icon fas fa-question-circle"></i>
+            <span class="status-text">Need help?</span>
+        </a>
     </div>
-    <div class="cms-version"><a href="#" target="_blank" title="Tulia CMS" rel="noopener">Tulia CMS {{ constant('Tulia\\Cms\\Platform\\Version::VERSION') }}</a></div>
+    <div class="cms-version"><a href="http://tuliacms.org/" target="_blank" title="Tulia CMS" rel="noopener">Tulia CMS v. {{ constant('Tulia\\Cms\\Platform\\Version::VERSION') }}</a></div>
 </footer>
 
 <div class="search-anything-container" id="search-anything">

@@ -14,7 +14,7 @@
         let bgImages = {{ bgImages|json_encode|raw }};
         let Login = function () {
             this.viewbox = null;
-            this.animationTime = 500;
+            this.animationTime = 300;
 
             this.init = function () {
                 let self = this;
@@ -109,14 +109,8 @@
         <div class="vertical-centered-box viewbox" id="viewbox-loader">
             <div class="loader-content">
                 <div class="loader-circle"></div>
-                <div class="loader-line-mask">
-                    <div class="loader-line"></div>
-                </div>
-                <svg class="loader-logo" width="40px" height="40px" viewBox="0 0 200 241.29" xmlns="http://www.w3.org/2000/svg">
-                    <g transform="matrix(8.0645 0 0 8.0645 -4.5161 -80.645)" fill="#fff" featurekey="nameFeature-0">
-                        <path d="m6.08 10q0.6 0 1.02 0.42t0.42 1.02v2.92q0 0.6-0.42 1.02t-1.02 0.42h-4.12q-0.56 0-0.98-0.42t-0.42-1.02v-2.92q0-0.6 0.42-1.02t0.98-0.42h4.12zm17.88 0q0.56 0 0.98 0.42t0.42 1.02v2.92q0 0.6-0.42 1.02t-0.98 0.42h-8.04v22.72q0 0.56-0.42 0.98t-0.98 0.42h-3.08q-0.6 0-1.02-0.42t-0.42-0.98v-27.08q0-0.6 0.42-1.02t1.02-0.42h12.52z"/>
-                    </g>
-                </svg>
+                <div class="loader-line-mask"><div class="loader-line"></div></div>
+                <svg class="loader-logo" width="60" height="60" xmlns="http://www.w3.org/2000/svg" version="1.1" xml:space="preserve"><g stroke="null"><path stroke="null" class="st0" d="m55.84563,5.5l-51.77311,0l-4.07252,7.02239l25.6376,43.72672l8.63825,0l25.6376,-43.72672l-4.06782,-7.02239zm-42.10147,13.45293l4.11949,0l15.86732,27.06087l21.49932,-37.11299l2.09967,3.61688l-23.67885,40.38697l-19.90695,-33.95174zm6.71237,0l19.26343,0l-9.62937,16.42629l-9.63406,-16.42629zm-15.09697,-11.21704l47.96364,0l-19.60163,33.839l-2.33923,-3.98797l15.35532,-26.18718l-43.50595,0l2.12786,-3.66386zm-2.11846,5.89975l39.59314,0l-1.80844,3.0814l-31.18036,0l21.87041,37.29618l-4.79589,0l-23.67885,-40.37758z" fill="#0076F8" id="svg_1"/><g stroke="null" id="svg_2"/></g></svg>
             </div>
         </div>
         <div class="vertical-centered-box viewbox" id="viewbox-login">
@@ -124,7 +118,7 @@
                 <div class="box">
                     <div class="box-body">
                         <div class="logo">
-                            <img class="logo-image" src="{{ asset('/assets/core/backend/theme/images/logo.svg') }}" alt="Tulia CMS" />
+                            <img class="logo-image" src="{{ asset('/assets/core/backend/theme/images/logo-reverse.svg') }}" alt="Tulia CMS" />
                         </div>
                         <p class="logo-slogan">Login to Your Administration Panel.</p>
                         {{ flashes() }}
@@ -151,7 +145,7 @@
                                     <input type="password" class="form-control form-control-autofocus" id="password" name="_password" placeholder="{{ 'password'|trans }}" value="MyP4$$w0rdT04Dm!n" />
                                 </div>
                             </fieldset>
-                            <div class="form-check mb-3">
+                            <div class="form-check" style="margin-bottom:50px">
                                 <input class="form-check-input" type="checkbox" value="" id="remember-me-checkbox" name="_remember_me">
                                 <label class="form-check-label" for="remember-me-checkbox">
                                     {{ 'rememberMe'|trans }}
@@ -169,9 +163,11 @@
             <div class="centered-element">
                 <div class="box">
                     <div class="box-body">
-                        <div class="logo">Tulia CMS</div>
+                        <div class="logo">
+                            <img class="logo-image" src="{{ asset('/assets/core/backend/theme/images/logo-reverse.svg') }}" alt="Tulia CMS" />
+                        </div>
                         <p class="logo-slogan">Insert Your e-mail address to restore password.</p>
-                        <fieldset class="form-group mb-3">
+                        <fieldset class="form-group" style="margin-bottom:50px">
                             <label class="d-none">Username</label>
                             <div class="input-group mb-1">
                                 <div class="input-group-prepend">

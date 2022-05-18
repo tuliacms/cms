@@ -2,7 +2,7 @@
     <div class="sidebar-container">
         <div class="noselect" data-simplebar>
             <a class="cms-logo" href="{{ path('backend.homepage') }}">
-                <img class="logo-image" src="{{ asset('/assets/core/backend/theme/images/logo.svg') }}" alt="Tulia CMS" />
+                <img class="logo-image" src="{{ asset('/assets/core/backend/theme/images/logo-reverse.svg') }}" alt="Tulia CMS" />
             </a>
             <div class="user-area">
                 {% set user = user() %}

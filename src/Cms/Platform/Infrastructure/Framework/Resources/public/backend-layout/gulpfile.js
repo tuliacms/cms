@@ -33,7 +33,7 @@ gulp.task('theme.images', () => {
 gulp.task('publish', () => {
     return gulp.src([
         'dist/**'
-    ]).pipe(gulp.dest('../../../../../../../../public/assets/core/backend'));
+    ]).pipe(gulp.dest('../../../../../../../../../public/assets/core/backend'));
 });
 
 gulp.task('default', gulp.series(['theme.js', 'theme.sass', 'theme.images', 'publish'], () => {

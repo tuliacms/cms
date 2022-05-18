@@ -62,7 +62,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="action-box notifications-list" data-toggle="tooltip" data-placement="left" title="{{ 'notifications'|trans }}">
+                {#<div class="action-box notifications-list" data-toggle="tooltip" data-placement="left" title="{{ 'notifications'|trans }}">
                     <div class="dropdown dropdown-prevent-close">
                         <button class="btn btn-icon-only action-btn" type="button" data-bs-toggle="dropdown">
                             <span class="badge badge-primary">12</span>
@@ -120,7 +120,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>#}
                 <div class="action-box" data-toggle="tooltip" data-placement="left" title="{{ 'pagePreview'|trans }}">
                     <a href="{{ previewLink }}" target="_blank" class="btn btn-icon-only action-btn"><i class="btn-icon fas fa-eye"></i></a>
                 </div>

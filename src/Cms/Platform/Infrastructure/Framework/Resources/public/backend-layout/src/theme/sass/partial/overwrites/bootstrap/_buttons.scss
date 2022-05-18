@@ -4,6 +4,7 @@
     padding: 0 $btn-padding-side;
     height: $btn-height;
     line-height: $btn-height - ($btn-border-size * 2);
+    box-shadow: none !important;
 
     &:hover {
         text-decoration: none;

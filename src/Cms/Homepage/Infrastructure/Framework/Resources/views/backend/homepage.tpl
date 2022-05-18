@@ -16,7 +16,7 @@
                 {#<div class="dashboard-widgets loading">#}
                 <div class="dashboard-widgets">
                     {{ dashboard_widgets('backend.dashboard') }}
-                    {#
+
                     <div class="widget">
                         <div class="widget-inner">
                             <div class="pane">
@@ -214,7 +214,6 @@
                             </div>
                         </div>
                     </div>
-                    #}
                 </div>
             </div>
             <div class="modal fade" id="widget-gestione-news-settings" tabindex="-1">

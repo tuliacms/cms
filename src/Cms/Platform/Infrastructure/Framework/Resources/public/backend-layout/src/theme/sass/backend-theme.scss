@@ -217,17 +217,17 @@ main {margin-top:-50px;position:relative;}
 
 aside {position:fixed;left:0;top:0;bottom:0;z-index:600;width:270px;background-color:#2b2b3c;}
 aside:before {display:block;content:"";position:absolute;top:0;right:0;bottom:0;left:0;z-index:0;background-image:url('../images/sidebar-bg-2.jpg');background-position:center top;background-size:cover;opacity:.06;}
-aside:after {content:"";display:block;position:absolute;top:0;right:0;bottom:0;pointer-events:none;width:12px;background-color:red;z-index:20;background: -moz-linear-gradient(left, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 25%, rgba(0,0,0,0.37) 100%);background: -webkit-linear-gradient(left, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 25%,rgba(0,0,0,0.37) 100%);background: linear-gradient(to right, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 25%,rgba(0,0,0,0.37) 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#5e000000',GradientType=1);}
+aside:after {content:"";display:block;position:absolute;top:0;right:0;bottom:0;pointer-events:none;width:12px;background-color:red;z-index:20;background: -moz-linear-gradient(left, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 25%, rgba(0,0,0,0.1) 100%);background: -webkit-linear-gradient(left, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 25%,rgba(0,0,0,0.1) 100%);background: linear-gradient(to right, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 25%,rgba(0,0,0,0.1) 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#5e000000',GradientType=1);}
 
 aside .cms-logo {
     display: block;
-    padding: 33px 30px;
+    padding: 23px 10px;
     text-align: center;
 
     img {
         display: inline-block;
         max-width: 100%;
-        width: 130px;
+        width: 170px;
         transition: all $transition-time;
     }
 
