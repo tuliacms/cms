@@ -821,6 +821,22 @@
                 <source>copy</source>
                 <target>Copy</target>
             </trans-unit>
+            <trans-unit id="tuliacms.messages.205">
+                <source>systemUpdates</source>
+                <target>System updates</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.206">
+                <source>yourTuliaCmsVersion</source>
+                <target>Your Tulia CMS versions</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.207">
+                <source>releasedAt</source>
+                <target>Released at</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.208">
+                <source>seeWhatsNewInThisVersion</source>
+                <target>See what's new in this version</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -28,6 +28,11 @@
                     Missing widget content...
                 {% endif %}
             </div>
+            {% if block('footer') is defined %}
+                <div class="pane-footer py-1">
+                    {{ block('footer') }}
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>

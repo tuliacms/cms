@@ -39,7 +39,7 @@ class ForwardSlashBackendFixer
         }
 
         if (empty($request->getContentPath())) {
-            $event->setResponse(new RedirectResponse($this->router->generate('backend', [], RouterInterface::TYPE_URL)));
+            $event->setResponse(new RedirectResponse($this->router->generate('backend.homepage', [], RouterInterface::TYPE_URL)));
             $event->stopPropagation();
         }
     }

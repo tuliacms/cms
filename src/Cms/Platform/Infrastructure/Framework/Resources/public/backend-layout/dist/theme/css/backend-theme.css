@@ -12226,6 +12226,7 @@ body .typeahead__list .typeahead__item > a {
 
 .dashboard {
   padding: 0 8px;
+  position: relative;
 }
 
 .dashboard-widgets {
@@ -12269,6 +12270,19 @@ body .typeahead__list .typeahead__item > a {
 
 .dashboard-widgets .pane-header {
   padding-right: 0;
+}
+
+.masonry-content-loader {
+  opacity: 0;
+  transition: 0.2s all;
+  pointer-events: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.masonry-content-loader.loading {
+  opacity: 1;
 }
 
 .activity-list {
@@ -12387,15 +12401,15 @@ body .typeahead__list .typeahead__item > a {
 }
 
 .system-update-widget .status-icon {
-  font-size: 60px;
-  color: green;
+  font-size: 40px;
+  color: rgba(0, 0, 0, 0.7);
   text-align: center;
-  margin-bottom: 10px;
   margin-top: 0;
+  font-weight: bold;
 }
 
 .system-update-widget p {
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   text-align: center;
 }
 
@@ -12874,64 +12888,6 @@ body.login-page .form-check label {
   color: rgba(255, 255, 255, 0.5);
 }
 
-#viewbox-loader {
-  text-align: center;
-}
-
-.loader-content {
-  box-sizing: border-box;
-  display: inline-block;
-  vertical-align: middle;
-  font-size: 0;
-}
-
-.loader-circle {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-  margin-left: -60px;
-  margin-top: -60px;
-}
-
-.loader-line-mask {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 60px;
-  height: 120px;
-  margin-left: -60px;
-  margin-top: -60px;
-  overflow: hidden;
-  transform-origin: 60px 60px;
-  -webkit-mask-image: -webkit-linear-gradient(top, #fff, rgba(255, 255, 255, 0));
-  animation: rotate 1.2s infinite linear;
-}
-
-.loader-line-mask .loader-line {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.8);
-}
-
-@keyframes rotate {
-  0% {
-    -webkit-transform: rotate(0deg);
-    -moz-transform: rotate(0deg);
-    -ms-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-    -moz-transform: rotate(360deg);
-    -ms-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
 .centered-element {
   position: absolute;
   left: 50%;
@@ -13587,7 +13543,7 @@ aside:after {
 
 aside .cms-logo {
   display: block;
-  padding: 23px 10px;
+  padding: 27px 10px 26px;
   text-align: center;
 }
 aside .cms-logo img {
@@ -14194,5 +14150,74 @@ footer .cms-version:before {
 }
 .boxur-depth.boxur-depth-10:before, .boxur-depth.boxur-depth-10:after {
   display: block;
+}
+
+.content-loader {
+  text-align: center;
+  position: relative;
+}
+
+.content-loader-inner {
+  box-sizing: border-box;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 0;
+}
+
+.content-loader-circle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  margin-left: -60px;
+  margin-top: -60px;
+}
+
+.content-loader-line-mask {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 60px;
+  height: 120px;
+  margin-left: -60px;
+  margin-top: -60px;
+  overflow: hidden;
+  transform-origin: 60px 60px;
+  -webkit-mask-image: -webkit-linear-gradient(top, #fff, rgba(255, 255, 255, 0));
+  animation: rotate 1.2s infinite linear;
+}
+.content-loader-line-mask .content-loader-line {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+}
+
+.content-loader-dark .content-loader-circle {
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+.content-loader-dark .content-loader-line-mask {
+  -webkit-mask-image: -webkit-linear-gradient(top, #fff, rgba(0, 0, 0, 0));
+}
+.content-loader-dark .content-loader-line-mask .content-loader-line {
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.8);
+}
+
+@keyframes rotate {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
 }
 /*# sourceMappingURL=maps/backend-theme.css.map */

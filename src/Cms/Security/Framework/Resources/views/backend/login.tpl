@@ -29,24 +29,7 @@
                 this.showViewbox('viewbox-login');
 
                 $('.login-btn').click(function (e) {
-                    //e.preventDefault();
-
                     self.showViewbox('viewbox-loader');
-
-                    /*if($('#login-username').val() == '')
-                    {
-                        setTimeout(function () {
-                            $('#viewbox-login .centered-element .alert').remove();
-                            $('#viewbox-login .centered-element').prepend('<div class="alert alert-warning">Wprowadzone dane są nieprawidłowe.</div>');
-                            self.showViewbox('viewbox-login');
-                        }, 1000);
-                    }
-                    else
-                    {
-                        setTimeout(function () {
-                            document.location.href = '/gestione-layout/dashboard.php';
-                        }, 1000);
-                    }*/
                 });
             };
 
@@ -106,11 +89,11 @@
         <div class="image-copyrights">Images by <a href="https://unsplash.com/" target="_blank" rel="noopener noreferer">unsplash.com</a></div>
     </div>
     <div class="right-side">
-        <div class="vertical-centered-box viewbox" id="viewbox-loader">
-            <div class="loader-content">
-                <div class="loader-circle"></div>
-                <div class="loader-line-mask"><div class="loader-line"></div></div>
-                <svg class="loader-logo" width="60" height="60" xmlns="http://www.w3.org/2000/svg" version="1.1" xml:space="preserve"><g stroke="null"><path stroke="null" class="st0" d="m55.84563,5.5l-51.77311,0l-4.07252,7.02239l25.6376,43.72672l8.63825,0l25.6376,-43.72672l-4.06782,-7.02239zm-42.10147,13.45293l4.11949,0l15.86732,27.06087l21.49932,-37.11299l2.09967,3.61688l-23.67885,40.38697l-19.90695,-33.95174zm6.71237,0l19.26343,0l-9.62937,16.42629l-9.63406,-16.42629zm-15.09697,-11.21704l47.96364,0l-19.60163,33.839l-2.33923,-3.98797l15.35532,-26.18718l-43.50595,0l2.12786,-3.66386zm-2.11846,5.89975l39.59314,0l-1.80844,3.0814l-31.18036,0l21.87041,37.29618l-4.79589,0l-23.67885,-40.37758z" fill="#0076F8" id="svg_1"/><g stroke="null" id="svg_2"/></g></svg>
+        <div class="vertical-centered-box viewbox content-loader" id="viewbox-loader">
+            <div class="content-loader-inner">
+                <div class="content-loader-circle"></div>
+                <div class="content-loader-line-mask"><div class="content-loader-line"></div></div>
+                <svg class="content-loader-logo" width="60" height="60" xmlns="http://www.w3.org/2000/svg" version="1.1" xml:space="preserve"><g stroke="null"><path stroke="null" class="st0" d="m55.84563,5.5l-51.77311,0l-4.07252,7.02239l25.6376,43.72672l8.63825,0l25.6376,-43.72672l-4.06782,-7.02239zm-42.10147,13.45293l4.11949,0l15.86732,27.06087l21.49932,-37.11299l2.09967,3.61688l-23.67885,40.38697l-19.90695,-33.95174zm6.71237,0l19.26343,0l-9.62937,16.42629l-9.63406,-16.42629zm-15.09697,-11.21704l47.96364,0l-19.60163,33.839l-2.33923,-3.98797l15.35532,-26.18718l-43.50595,0l2.12786,-3.66386zm-2.11846,5.89975l39.59314,0l-1.80844,3.0814l-31.18036,0l21.87041,37.29618l-4.79589,0l-23.67885,-40.37758z" fill="#0076F8" id="svg_1"/><g stroke="null" id="svg_2"/></g></svg>
             </div>
         </div>
         <div class="vertical-centered-box viewbox" id="viewbox-login">
@@ -221,7 +204,7 @@
 <div id="particles-foreground" class="vertical-centered-box"></div>
 <div class="vertical-centered-box viewbox" id="viewbox-loader">
     <div class="content">
-        <div class="loader-circle"></div>
+        <div class="content-loader-circle"></div>
         <div class="loader-line-mask">
             <div class="loader-line"></div>
         </div>

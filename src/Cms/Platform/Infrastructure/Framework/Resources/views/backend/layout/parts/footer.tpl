@@ -1,6 +1,6 @@
 <footer>
     <div class="cms-status">
-        <a href="http://tuliacms.org/help" target="_blank" title="Need help?" rel="noopener">
+        <a href="https://tuliacms.org/intl/help" target="_blank" title="Need help?" rel="noopener">
             <i class="status-icon fas fa-question-circle"></i>
             <span class="status-text">Need help?</span>
         </a>

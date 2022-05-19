@@ -13,11 +13,19 @@
     <div class="page-content">
         <div class="page">
             <div class="dashboard">
-                {#<div class="dashboard-widgets loading">#}
-                <div class="dashboard-widgets">
+                <div class="masonry-content-loader loading">
+                    <div class="content-loader content-loader-dark">
+                        <div class="content-loader-inner">
+                            <div class="content-loader-circle"></div>
+                            <div class="content-loader-line-mask"><div class="content-loader-line"></div></div>
+                            <svg class="content-loader-logo" width="60" height="60" xmlns="http://www.w3.org/2000/svg" version="1.1" xml:space="preserve"><g stroke="null"><path stroke="null" class="st0" d="m55.84563,5.5l-51.77311,0l-4.07252,7.02239l25.6376,43.72672l8.63825,0l25.6376,-43.72672l-4.06782,-7.02239zm-42.10147,13.45293l4.11949,0l15.86732,27.06087l21.49932,-37.11299l2.09967,3.61688l-23.67885,40.38697l-19.90695,-33.95174zm6.71237,0l19.26343,0l-9.62937,16.42629l-9.63406,-16.42629zm-15.09697,-11.21704l47.96364,0l-19.60163,33.839l-2.33923,-3.98797l15.35532,-26.18718l-43.50595,0l2.12786,-3.66386zm-2.11846,5.89975l39.59314,0l-1.80844,3.0814l-31.18036,0l21.87041,37.29618l-4.79589,0l-23.67885,-40.37758z" fill="#0076F8" id="svg_1"/><g stroke="null" id="svg_2"/></g></svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-widgets loading">
                     {{ dashboard_widgets('backend.dashboard') }}
 
-                    <div class="widget">
+                    {#<div class="widget">
                         <div class="widget-inner">
                             <div class="pane">
                                 <div class="pane-header">
@@ -93,7 +101,7 @@
                                                 <i class="btn-icon fas fa-ellipsis-v"></i>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right">
-                                                <a class="dropdown-item dropdown-item-with-icon" href="#" data-toggle="modal" data-target="#widget-gestione-news-settings"><i class="fas fa-cogs dropdown-icon"></i> Ustawienia</a>
+                                                <a class="dropdown-item dropdown-item-with-icon" href="#" data-bs-toggle="modal" data-bs-target="#widget-tulia-news-settings"><i class="fas fa-cogs dropdown-icon"></i> Ustawienia</a>
                                                 <div class="dropdown-divider"></div>
                                                 <a class="dropdown-item dropdown-item-with-icon" href="#"><i class="fas fa-eye-slash dropdown-icon"></i> Ukryj ten widget</a>
                                             </div>
@@ -103,7 +111,7 @@
                                     <div class="pane-title">Aktualności</div>
                                 </div>
                                 <div class="pane-body">
-                                    <div class="gestione-news-widget">
+                                    <div class="tulia-news-widget">
                                         <div class="news-item">
                                             <div class="news-date">2 maja, 2019</div>
                                             <a href="#">Lorem ipsum dolor sit amit, elit enim at minim veniam quis nostrud</a>
@@ -187,36 +195,10 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="widget">
-                        <div class="widget-inner">
-                            <div class="pane">
-                                <div class="pane-header">
-                                    <div class="pane-buttons">
-                                        <div class="dropdown">
-                                            <button class="btn btn-icon-only" type="button" data-bs-toggle="dropdown">
-                                                <i class="btn-icon fas fa-ellipsis-v"></i>
-                                            </button>
-                                            <div class="dropdown-menu dropdown-menu-right">
-                                                <a class="dropdown-item dropdown-item-with-icon" href="#"><i class="fas fa-eye-slash dropdown-icon"></i> Ukryj ten widget</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <i class="pane-header-icon fas fa-charging-station"></i>
-                                    <div class="pane-title">Aktualizacje systemu</div>
-                                </div>
-                                <div class="pane-body">
-                                    <div class="system-update-widget">
-                                        <div class="status-icon"><i class="fas fa-check"></i></div>
-                                        <p>System jest zaktualizowany do najnowszej wersji.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    </div>#}
                 </div>
             </div>
-            <div class="modal fade" id="widget-gestione-news-settings" tabindex="-1">
+            <div class="modal fade" id="widget-tulia-news-settings" tabindex="-1">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -245,20 +227,21 @@
     </div>
     <script nonce="{{ csp_nonce() }}">
         $(function () {
-            var masonry = $('.dashboard-widgets').masonry({
+            let masonry = $('.dashboard-widgets').masonry({
                 itemSelector: '.widget',
                 percentPosition: true
             });
 
             masonry.on('layoutComplete', function () {
                 masonry.removeClass('loading');
+                $('.masonry-content-loader').removeClass('loading');
             });
 
-            var masonryLayoutTimeout = null;
-            var masonryLayoutCall = function () {
+            let masonryLayoutTimeout = null;
+            let masonryLayoutCall = function () {
                 masonry.masonry('layout');
             };
-            var masonryLayoutReset = function () {
+            let masonryLayoutReset = function () {
                 clearTimeout(masonryLayoutTimeout);
                 masonryLayoutTimeout = setTimeout(masonryLayoutCall, 100);
             };

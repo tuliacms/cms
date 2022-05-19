@@ -1,4 +1,4 @@
-.dashboard {padding:0 8px;}
+.dashboard {padding:0 8px;position: relative;}
 .dashboard-widgets {opacity:1;transition:.2s all}
 .dashboard-widgets.loading {opacity:0;}
 .dashboard-widgets .widget {width:33.3333%;margin:0;padding:0;}
@@ -9,6 +9,20 @@
 .dashboard-widgets .widget .widget-inner {margin:0 8px 16px;}
 .dashboard-widgets .pane {margin-bottom:0;}
 .dashboard-widgets .pane-header {padding-right:0}
+
+.masonry-content-loader {
+    opacity: 0;
+    transition:.2s all;
+    pointer-events: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    &.loading {
+        opacity: 1;
+    }
+}
 
 .activity-list {position:relative;padding:0 10px;}
 .activity-list:before {content:"";display:block;position:absolute;left:23px;top:10px;bottom:-15px;z-index:1;width:4px;background-color:#e7e9f5;}
@@ -31,8 +45,8 @@
 .news-date {display:block;margin-bottom:5px;color:#999;font-size:10px}
 .news-date:before {content:"\f133";font-family:$base-font-awesome;font-weight:bold;display:inline-block;margin-right:5px;}
 
-.system-update-widget .status-icon {font-size:60px;color:green;text-align:center;margin-bottom:10px;margin-top:0;}
-.system-update-widget p {margin-bottom:30px;text-align:center}
+.system-update-widget .status-icon {font-size:40px;color:rgba(0,0,0,.7);text-align:center;margin-top:0;font-weight:bold;}
+.system-update-widget p {margin-bottom:10px;text-align:center}
 
 .statistics-widget .statistics-canvas-container {padding-top:10px;position:relative;}
 
