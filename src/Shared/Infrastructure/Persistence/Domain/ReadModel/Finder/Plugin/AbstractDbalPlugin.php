@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Plugin;
 
+use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\AbstractQuery;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\AbstractDbalQuery;
 
 /**
@@ -21,7 +22,7 @@ abstract class AbstractDbalPlugin implements DbalPluginInterface
         return $criteria;
     }
 
-    public function handle(AbstractDbalQuery $query, array $criteria): void
+    public function handle(AbstractQuery $query, array $criteria): void
     {
     }
 }

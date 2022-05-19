@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContactForm\Infrastructure\Persistence\Domain\ReadModel\Finder;
 
 use Tulia\Cms\ContactForm\Domain\ReadModel\Finder\ContactFormFinderInterface;
-use Tulia\Cms\Shared\Domain\ReadModel\Finder\AbstractFinder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\AbstractFinder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\QueryInterface;
 
 /**

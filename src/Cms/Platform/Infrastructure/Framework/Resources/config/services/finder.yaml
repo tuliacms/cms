@@ -3,4 +3,4 @@ services:
         autowire: true
         autoconfigure: true
 
-    Tulia\Cms\Shared\Domain\ReadModel\Finder\Plugin\PluginRegistry: ~
+    Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Plugin\PluginRegistry: ~

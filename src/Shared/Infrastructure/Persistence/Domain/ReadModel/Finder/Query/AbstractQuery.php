@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query;
 
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
-use Tulia\Cms\Shared\Domain\ReadModel\Finder\Plugin\PluginRegistry;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Plugin\PluginRegistry;
 
 /**
  * @author Adam Banaszkiewicz

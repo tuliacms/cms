@@ -6,8 +6,8 @@ namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\Finder\Quer
 
 use Tulia\Cms\Attributes\Domain\ReadModel\Service\AttributesFinder;
 use Tulia\Cms\Menu\Domain\ReadModel\Finder\MenuFinderInterface;
-use Tulia\Cms\Shared\Domain\ReadModel\Finder\AbstractFinder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\AbstractFinder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\QueryInterface;
 
 /**

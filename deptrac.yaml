@@ -1,0 +1,16 @@
+parameters:
+    paths:
+        - ./src
+    exclude_files:
+        - '#.*\.yaml#'
+    layers:
+        - name: Shared/Domain
+          collectors:
+              - { type: directory, regex: src/Shared/Domain/*. }
+        - name: Shared/Infrastructure
+          collectors:
+              - { type: directory, regex: src/Shared/Infrastructure/*. }
+    ruleset:
+        Shared/Domain: ~
+        Shared/Infrastructure:
+            - Shared/Domain

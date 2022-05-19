@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Shared\Domain\ReadModel\Finder;
+namespace Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Event\QueryFilterEvent;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Event\QueryPrepareEvent;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
-use Tulia\Cms\Shared\Domain\ReadModel\Finder\Plugin\PluginRegistry;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Plugin\PluginRegistry;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\QueryInterface;
 
 /**
@@ -19,8 +19,6 @@ abstract class AbstractFinder
     protected EventDispatcherInterface $eventDispatcher;
 
     protected PluginRegistry $pluginRegistry;
-
-    protected array $plugins = [];
 
     abstract public function getAlias(): string;
 

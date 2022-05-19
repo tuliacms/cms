@@ -8,7 +8,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use Tulia\Cms\Shared\Domain\ReadModel\Finder\Plugin\PluginRegistry;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Plugin\PluginRegistry;
 
 /**
  * @author Adam Banaszkiewicz
@@ -17,7 +17,7 @@ class FinderPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        foreach ($container->findTaggedServiceIds('DbalFinder') as $id => $tags) {
+        foreach ($container->findTaggedServiceIds('finder') as $id => $tags) {
             $definition = $container->getDefinition($id);
             $definition->addMethodCall('setEventDispatcher', [new Reference(EventDispatcherInterface::class)]);
             $definition->addMethodCall('setPluginsRegistry', [new Reference(PluginRegistry::class)]);

@@ -44,8 +44,9 @@ class TuliaCmsExtension extends FrameworkExtension
         $this->registerViewFilters($container);
 
         // Finders
-        $container->registerForAutoconfiguration(\Tulia\Cms\Shared\Domain\ReadModel\Finder\AbstractFinder::class)
-            ->addTag('DbalFinder');
+        $container->registerForAutoconfiguration(
+            \Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\AbstractFinder::class)
+            ->addTag('finder');
         $container->registerForAutoconfiguration(\Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Plugin\PluginInterface::class)
             ->addTag('finder.plugin');
         // Themes
