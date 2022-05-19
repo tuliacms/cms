@@ -827,7 +827,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.messages.206">
                 <source>yourTuliaCmsVersion</source>
-                <target>Your Tulia CMS versions</target>
+                <target>Your Tulia CMS version</target>
             </trans-unit>
             <trans-unit id="tuliacms.messages.207">
                 <source>releasedAt</source>

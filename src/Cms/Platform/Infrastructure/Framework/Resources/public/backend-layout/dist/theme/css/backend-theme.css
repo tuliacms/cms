@@ -12276,13 +12276,20 @@ body .typeahead__list .typeahead__item > a {
   opacity: 0;
   transition: 0.2s all;
   pointer-events: none;
+  position: fixed;
+  left: 270px;
+  top: 148px;
+  right: 0;
+  bottom: 0;
+}
+.masonry-content-loader.loading {
+  opacity: 1;
+}
+.masonry-content-loader .content-loader {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-}
-.masonry-content-loader.loading {
-  opacity: 1;
 }
 
 .activity-list {

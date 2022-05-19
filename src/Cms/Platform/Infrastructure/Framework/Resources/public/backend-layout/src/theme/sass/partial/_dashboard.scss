@@ -14,13 +14,21 @@
     opacity: 0;
     transition:.2s all;
     pointer-events: none;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    position: fixed;
+    left: 270px;
+    top: 148px;
+    right: 0;
+    bottom: 0;
 
     &.loading {
         opacity: 1;
+    }
+
+    .content-loader {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
     }
 }
 
