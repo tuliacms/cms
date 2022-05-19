@@ -6,8 +6,8 @@ namespace Tulia\Cms\User\Infrastructure\Persistence\Dbal\WriteModel;
 
 use Tulia\Cms\Attributes\Domain\WriteModel\AttributesRepository;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
+use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
-use Tulia\Cms\Shared\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Cms\User\Domain\WriteModel\Model\AggregateId;
 use Tulia\Cms\User\Domain\WriteModel\Model\User;
 use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;

@@ -9,7 +9,7 @@ use Tulia\Cms\Menu\Domain\WriteModel\ActionsChain\MenuActionsChainInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\MenuRepositoryInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Menu;
-use Tulia\Cms\Shared\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
+use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**

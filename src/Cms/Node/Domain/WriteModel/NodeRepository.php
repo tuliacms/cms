@@ -10,7 +10,7 @@ use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\ContentTypeNotExistsExc
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodeWriteStorageInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChainInterface;
-use Tulia\Cms\Shared\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
+use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**

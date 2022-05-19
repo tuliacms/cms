@@ -6,8 +6,8 @@ namespace Tulia\Cms\Widget\Domain\WriteModel;
 
 use Tulia\Cms\Attributes\Domain\WriteModel\AttributesRepository;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
+use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
-use Tulia\Cms\Shared\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Cms\Widget\Domain\Catalog\Registry\WidgetRegistryInterface;
 use Tulia\Cms\Widget\Domain\WriteModel\Event\WidgetDeleted;
 use Tulia\Cms\Widget\Domain\WriteModel\Event\WidgetUpdated;

@@ -4,13 +4,55 @@ parameters:
     exclude_files:
         - '#.*\.yaml#'
     layers:
+        - name: Activity
+          collectors:
+              - { type: directory, regex: "src/Cms/Activity/*." }
+        - name: Attributes/Domain
+          collectors:
+              - { type: directory, regex: "src/Cms/Attributes/Domain/*." }
+        - name: Attributes/Infrastructure
+          collectors:
+              - { type: directory, regex: "src/Cms/Attributes/Infrastructure/*." }
+        - name: BackendMenu/Domain
+          collectors:
+              - { type: directory, regex: "src/Cms/BackendMenu/Domain/*." }
+        - name: BackendMenu/Infrastructure
+          collectors:
+              - { type: directory, regex: "src/Cms/BackendMenu/Infrastructure/*." }
+        - name: BodyClass
+          collectors:
+              - { type: directory, regex: "src/Cms/BodyClass/*." }
+        - name: Breadcrumbs
+          collectors:
+              - { type: directory, regex: "src/Cms/Breadcrumbs/*." }
         - name: Shared/Domain
           collectors:
-              - { type: directory, regex: src/Shared/Domain/*. }
+              - { type: directory, regex: "src/Shared/Domain/*." }
         - name: Shared/Infrastructure
           collectors:
-              - { type: directory, regex: src/Shared/Infrastructure/*. }
+              - { type: directory, regex: "src/Shared/Infrastructure/*." }
     ruleset:
         Shared/Domain: ~
         Shared/Infrastructure:
             - Shared/Domain
+        Activity:
+            - Shared/Domain
+            - Shared/Infrastructure
+        Attributes/Domain:
+            - Shared/Domain
+        Attributes/Infrastructure:
+            - Shared/Domain
+            - Shared/Infrastructure
+            - Attributes/Domain
+        BackendMenu/Domain:
+            - Shared/Domain
+        BackendMenu/Infrastructure:
+            - Shared/Domain
+            - Shared/Infrastructure
+            - BackendMenu/Domain
+        BodyClass:
+            - Shared/Domain
+            - Shared/Infrastructure
+        Breadcrumbs:
+            - Shared/Domain
+            - Shared/Infrastructure

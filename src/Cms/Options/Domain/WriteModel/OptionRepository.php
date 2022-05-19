@@ -6,7 +6,7 @@ namespace Tulia\Cms\Options\Domain\WriteModel;
 
 use Tulia\Cms\Options\Domain\WriteModel\Exception\OptionNotFoundException;
 use Tulia\Cms\Options\Domain\WriteModel\Model\Option;
-use Tulia\Cms\Shared\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
+use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**

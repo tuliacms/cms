@@ -8,8 +8,8 @@ use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\ContentTypeSt
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Event\ContentTypeDeleted;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\Field;
+use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
-use Tulia\Cms\Shared\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 
 /**
  * @author Adam Banaszkiewicz
