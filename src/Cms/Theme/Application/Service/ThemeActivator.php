@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Theme\Application\Service;
 
-use Psr\EventDispatcher\EventDispatcherInterface;
+use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Theme\Application\Exception\ThemeNotFoundException;
 use Tulia\Cms\Theme\Domain\Event\ThemeActivated;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
@@ -19,18 +19,18 @@ class ThemeActivator
 {
     private ManagerInterface $manager;
     private ActivatorInterface $activator;
-    private EventDispatcherInterface $eventDispatcher;
+    private EventBusInterface $eventBus;
     private CurrentWebsiteInterface $currentWebsite;
 
     public function __construct(
         ManagerInterface $manager,
         ActivatorInterface $activator,
-        EventDispatcherInterface $eventDispatcher,
+        EventBusInterface $eventBus,
         CurrentWebsiteInterface $currentWebsite
     ) {
         $this->manager = $manager;
         $this->activator = $activator;
-        $this->eventDispatcher = $eventDispatcher;
+        $this->eventBus = $eventBus;
         $this->currentWebsite = $currentWebsite;
     }
 
@@ -48,6 +48,6 @@ class ThemeActivator
 
         $this->activator->activate($theme->getName());
 
-        $this->eventDispatcher->dispatch(new ThemeActivated($name, $this->currentWebsite->getId()));
+        $this->eventBus->dispatch(new ThemeActivated($name, $this->currentWebsite->getId()));
     }
 }

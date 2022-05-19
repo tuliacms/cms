@@ -12,7 +12,7 @@ use Tulia\Cms\ContactForm\Domain\Exception\FormNotFoundException;
 use Tulia\Cms\ContactForm\Domain\FieldsParser\Exception\InvalidFieldNameException;
 use Tulia\Cms\ContactForm\Domain\FieldsParser\Exception\MultipleFieldsInTemplateException;
 use Tulia\Cms\ContactForm\Domain\FieldType\FieldsTypeRegistryInterface;
-use Tulia\Cms\ContactForm\Domain\WriteModel\FormRepository;
+use Tulia\Cms\ContactForm\Domain\WriteModel\FormRepositoryInterface;
 use Tulia\Cms\ContactForm\Infrastructure\Persistence\Domain\ReadModel\Datatable\DatatableFinder;
 use Tulia\Cms\ContactForm\UserInterface\Web\Backend\Form\Form as FormType;
 use Tulia\Cms\ContactForm\UserInterface\Web\Backend\Form\ModelTransformer\DomainModelTransformer;
@@ -26,12 +26,11 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class Form extends AbstractController
 {
-    private FormRepository $repository;
-
+    private FormRepositoryInterface $repository;
     private FieldsTypeRegistryInterface $typesRegistry;
 
     public function __construct(
-        FormRepository $repository,
+        FormRepositoryInterface $repository,
         FieldsTypeRegistryInterface $typesRegistry
     ) {
         $this->repository = $repository;

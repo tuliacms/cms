@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Website\Domain\WriteModel;
 
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
+use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteCreated;
 use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteDeleted;
 use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteUpdated;
@@ -20,16 +20,16 @@ class WebsiteRepository implements WebsiteRepositoryInterface
 {
     private WebsiteStorageInterface $storage;
     private UuidGeneratorInterface $uuidGenerator;
-    private EventDispatcherInterface $eventDispatcher;
+    private EventBusInterface $eventBus;
 
     public function __construct(
         WebsiteStorageInterface $storage,
         UuidGeneratorInterface $uuidGenerator,
-        EventDispatcherInterface $eventDispatcher
+        EventBusInterface $eventBus
     ) {
         $this->storage = $storage;
         $this->uuidGenerator = $uuidGenerator;
-        $this->eventDispatcher = $eventDispatcher;
+        $this->eventBus = $eventBus;
     }
 
     public function createNew(array $data = []): Website
@@ -61,7 +61,7 @@ class WebsiteRepository implements WebsiteRepositoryInterface
     public function create(Website $website): void
     {
         $this->storage->insert($this->extract($website));
-        $this->eventDispatcher->dispatch(new WebsiteCreated($website->getId()->getValue()));
+        $this->eventBus->dispatch(new WebsiteCreated($website->getId()->getValue()));
     }
 
     /**
@@ -70,7 +70,7 @@ class WebsiteRepository implements WebsiteRepositoryInterface
     public function update(Website $website): void
     {
         $this->storage->update($this->extract($website));
-        $this->eventDispatcher->dispatch(new WebsiteUpdated($website->getId()->getValue()));
+        $this->eventBus->dispatch(new WebsiteUpdated($website->getId()->getValue()));
     }
 
     /**
@@ -79,7 +79,7 @@ class WebsiteRepository implements WebsiteRepositoryInterface
     public function delete(string $id): void
     {
         $this->storage->delete($id);
-        $this->eventDispatcher->dispatch(new WebsiteDeleted($id));
+        $this->eventBus->dispatch(new WebsiteDeleted($id));
     }
 
     private function extract(Website $website): array

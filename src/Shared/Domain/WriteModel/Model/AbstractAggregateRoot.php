@@ -7,7 +7,7 @@ namespace Tulia\Cms\Shared\Domain\WriteModel\Model;
 /**
  * @author Adam Banaszkiewicz
  */
-abstract class AggregateRoot
+abstract class AbstractAggregateRoot
 {
     use AggregateRootTrait;
 }

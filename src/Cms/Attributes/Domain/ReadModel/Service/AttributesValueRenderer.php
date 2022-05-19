@@ -12,16 +12,11 @@ use Tulia\Cms\Attributes\Domain\ReadModel\ValueRender\ValueRendererInterface;
 class AttributesValueRenderer
 {
     private ValueRendererInterface $valueRenderer;
-
-    /**
-     * @var array|string[]
-     */
+    /** @var string[] */
     private array $scopesByType;
 
-    public function __construct(
-        ValueRendererInterface $valueRenderer,
-        array $scopes
-    ) {
+    public function __construct(ValueRendererInterface $valueRenderer, array $scopes)
+    {
         $this->valueRenderer = $valueRenderer;
         $this->scopesByType = $scopes;
     }

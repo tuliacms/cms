@@ -7,7 +7,7 @@ namespace Tulia\Cms\Node\Domain\WriteModel\ActionsChain;
 use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionInterface;
-use Tulia\Cms\Shared\Domain\WriteModel\Model\AggregateRoot;
+use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
 use Tulia\Component\Shortcode\ProcessorInterface;
 
 /**
@@ -39,7 +39,7 @@ class ContentShortcodeCompiler implements AggregateActionInterface
         return Node::class;
     }
 
-    public function execute(AggregateRoot $node): void
+    public function execute(AbstractAggregateRoot $node): void
     {
         /** @var Node $node */
         foreach ($node->getAttributes() as $attribute) {

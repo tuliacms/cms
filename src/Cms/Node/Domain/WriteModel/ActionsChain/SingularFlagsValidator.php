@@ -10,7 +10,7 @@ use Tulia\Cms\Node\Domain\WriteModel\Exception\SingularFlagImposedOnMoreThanOneN
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodeByFlagFinderInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionInterface;
-use Tulia\Cms\Shared\Domain\WriteModel\Model\AggregateRoot;
+use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
 
 /**
  * @author Adam Banaszkiewicz
@@ -43,7 +43,7 @@ class SingularFlagsValidator implements AggregateActionInterface
      * @throws SingularFlagImposedOnMoreThanOneNodeException
      * @throws FlagNotFoundException
      */
-    public function execute(AggregateRoot $node): void
+    public function execute(AbstractAggregateRoot $node): void
     {
         $singularFlags = [];
 

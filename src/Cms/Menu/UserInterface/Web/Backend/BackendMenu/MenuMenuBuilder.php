@@ -6,9 +6,9 @@ namespace Tulia\Cms\Menu\UserInterface\Web\Backend\BackendMenu;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Tulia\Cms\BackendMenu\Domain\Builder\BuilderInterface;
-use Tulia\Cms\BackendMenu\Domain\Builder\Helper\BuilderHelperInterface;
-use Tulia\Cms\BackendMenu\Domain\Builder\Registry\ItemRegistryInterface;
+use Tulia\Cms\BackendMenu\Builder\BuilderInterface;
+use Tulia\Cms\BackendMenu\Builder\Helper\BuilderHelperInterface;
+use Tulia\Cms\BackendMenu\Builder\Registry\ItemRegistryInterface;
 use Tulia\Cms\Menu\Domain\ReadModel\Finder\MenuFinderInterface;
 use Tulia\Cms\Menu\Domain\ReadModel\Finder\MenuFinderScopeEnum;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuCreated;

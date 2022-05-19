@@ -13,18 +13,24 @@ parameters:
         - name: Attributes/Infrastructure
           collectors:
               - { type: directory, regex: "src/Cms/Attributes/Infrastructure/*." }
-        - name: BackendMenu/Domain
+        - name: BackendMenu
           collectors:
-              - { type: directory, regex: "src/Cms/BackendMenu/Domain/*." }
-        - name: BackendMenu/Infrastructure
-          collectors:
-              - { type: directory, regex: "src/Cms/BackendMenu/Infrastructure/*." }
+              - { type: directory, regex: "src/Cms/BackendMenu/*." }
         - name: BodyClass
           collectors:
               - { type: directory, regex: "src/Cms/BodyClass/*." }
         - name: Breadcrumbs
           collectors:
               - { type: directory, regex: "src/Cms/Breadcrumbs/*." }
+        - name: ContactForm/Domain
+          collectors:
+              - { type: directory, regex: "src/Cms/ContactForm/Domain/*." }
+        - name: ContactForm/Infrastructure
+          collectors:
+              - { type: directory, regex: "src/Cms/ContactForm/Infrastructure/*." }
+        - name: ContactForm/UserInterface
+          collectors:
+              - { type: directory, regex: "src/Cms/ContactForm/UserInterface/*." }
         - name: Shared/Domain
           collectors:
               - { type: directory, regex: "src/Shared/Domain/*." }
@@ -44,9 +50,7 @@ parameters:
             - Shared/Domain
             - Shared/Infrastructure
             - Attributes/Domain
-        BackendMenu/Domain:
-            - Shared/Domain
-        BackendMenu/Infrastructure:
+        BackendMenu:
             - Shared/Domain
             - Shared/Infrastructure
             - BackendMenu/Domain
@@ -56,3 +60,15 @@ parameters:
         Breadcrumbs:
             - Shared/Domain
             - Shared/Infrastructure
+        ContactForm/Domain:
+            - Shared/Domain
+        ContactForm/Infrastructure:
+            - Shared/Domain
+            - Shared/Infrastructure
+            - Attributes/Domain
+            - ContactForm/Domain
+        ContactForm/UserInterface:
+            - Shared/Domain
+            - ContactForm/Domain
+            - ContactForm/Infrastructure
+            - BackendMenu

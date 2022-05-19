@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tulia\Bundle\FrameworkBundle\DependencyInjection\CompilerPass;
 
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Plugin\PluginRegistry;
 
 /**
@@ -19,7 +19,7 @@ class FinderPass implements CompilerPassInterface
     {
         foreach ($container->findTaggedServiceIds('finder') as $id => $tags) {
             $definition = $container->getDefinition($id);
-            $definition->addMethodCall('setEventDispatcher', [new Reference(EventDispatcherInterface::class)]);
+            $definition->addMethodCall('setEventBus', [new Reference(EventBusInterface::class)]);
             $definition->addMethodCall('setPluginsRegistry', [new Reference(PluginRegistry::class)]);
         }
 

@@ -9,12 +9,12 @@ use Tulia\Cms\Menu\Domain\WriteModel\Event\ItemRemoved;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\ItemUpdated;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\CannotModifyRootItemException;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\ParentItemReccurencyException;
-use Tulia\Cms\Shared\Domain\WriteModel\Model\AggregateRoot;
+use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
 
 /**
  * @author Adam Banaszkiewicz
  */
-final class Menu extends AggregateRoot
+final class Menu extends AbstractAggregateRoot
 {
     protected string $id;
     protected string $websiteId;

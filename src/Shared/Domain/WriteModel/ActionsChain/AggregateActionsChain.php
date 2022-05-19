@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Shared\Domain\WriteModel\ActionsChain;
 
-use Tulia\Cms\Shared\Domain\WriteModel\Model\AggregateRoot;
+use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
 
 /**
  * @author Adam Banaszkiewicz
@@ -18,7 +18,7 @@ class AggregateActionsChain implements AggregateActionsChainInterface
         $this->actions[$name][$supportedClass][$priority][] = $action;
     }
 
-    public function execute(string $name, AggregateRoot $aggregate): void
+    public function execute(string $name, AbstractAggregateRoot $aggregate): void
     {
         $classname = get_class($aggregate);
 

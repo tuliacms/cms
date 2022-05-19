@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContactForm\UserInterface\Web\Frontend\Form;
+namespace Tulia\Cms\ContactForm\Infrastructure\FormBuilder;
 
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\ContactForm\Domain\ReadModel\Model\Form;
+use Tulia\Cms\ContactForm\Infrastructure\Framework\Form\ContactFormFramework;
 
 /**
  * @author Adam Banaszkiewicz

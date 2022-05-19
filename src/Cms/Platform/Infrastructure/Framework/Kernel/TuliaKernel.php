@@ -25,7 +25,7 @@ class TuliaKernel extends Kernel
                 $base . '/Platform/Infrastructure/Framework/Resources/config',
                 $base . '/Attributes/Infrastructure/Framework/Resources/config',
                 $base . '/Activity/Framework/Resources/config',
-                $base . '/BackendMenu/Infrastructure/Framework/Resources/config',
+                $base . '/BackendMenu/Framework/Resources/config',
                 $base . '/BodyClass/Framework/Resources/config',
                 $base . '/Breadcrumbs/Framework/Resources/config',
                 $base . '/ContactForm/Infrastructure/Framework/Resources/config',

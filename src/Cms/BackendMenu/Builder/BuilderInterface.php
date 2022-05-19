@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\BackendMenu\Domain\Builder;
+namespace Tulia\Cms\BackendMenu\Builder;
 
-use Tulia\Cms\BackendMenu\Domain\Builder\Registry\ItemRegistryInterface;
+use Tulia\Cms\BackendMenu\Builder\Registry\ItemRegistryInterface;
 
 /**
  * @author Adam Banaszkiewicz

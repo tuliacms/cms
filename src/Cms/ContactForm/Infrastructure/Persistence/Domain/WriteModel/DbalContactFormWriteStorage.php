@@ -14,11 +14,12 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterfac
 class DbalContactFormWriteStorage extends AbstractLocalizableStorage implements ContactFormWriteStorageInterface
 {
     private ConnectionInterface $connection;
-
     private DbalFieldWriteStorage $fieldStorage;
 
-    public function __construct(ConnectionInterface $connection, DbalFieldWriteStorage $fieldStorage)
-    {
+    public function __construct(
+        ConnectionInterface $connection,
+        DbalFieldWriteStorage $fieldStorage
+    ) {
         $this->connection = $connection;
         $this->fieldStorage = $fieldStorage;
     }

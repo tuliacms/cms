@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder;
 
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Event\QueryFilterEvent;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Event\QueryPrepareEvent;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
+use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Plugin\PluginRegistry;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\QueryInterface;
 
@@ -16,7 +16,7 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\Qu
  */
 abstract class AbstractFinder
 {
-    protected EventDispatcherInterface $eventDispatcher;
+    protected EventBusInterface $eventBus;
 
     protected PluginRegistry $pluginRegistry;
 
@@ -24,9 +24,9 @@ abstract class AbstractFinder
 
     abstract public function createQuery(): QueryInterface;
 
-    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher): void
+    public function setEventBus(EventBusInterface $eventBus): void
     {
-        $this->eventDispatcher = $eventDispatcher;
+        $this->eventBus = $eventBus;
     }
 
     public function setPluginsRegistry(PluginRegistry $pluginRegistry): void
@@ -62,7 +62,7 @@ abstract class AbstractFinder
     protected function prepareFetch(array $criteria, string $scope): array
     {
         $event = new QueryPrepareEvent($criteria, $scope, []);
-        $this->eventDispatcher->dispatch($event);
+        $this->eventBus->dispatch($event);
 
         return [$event->getCriteria(), $event->getScope()];
     }
@@ -83,7 +83,7 @@ abstract class AbstractFinder
     protected function afterQuery(Collection $collection, array $criteria, string $scope): Collection
     {
         $event = new QueryFilterEvent($collection, $criteria, $scope, $this->getAlias(), []);
-        $this->eventDispatcher->dispatch($event);
+        $this->eventBus->dispatch($event);
 
         return $event->getCollection();
     }

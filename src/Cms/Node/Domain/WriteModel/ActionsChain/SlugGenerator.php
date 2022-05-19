@@ -8,7 +8,7 @@ use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionInterface;
-use Tulia\Cms\Shared\Domain\WriteModel\Model\AggregateRoot;
+use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
 use Tulia\Cms\Shared\Infrastructure\Utils\Slug\SluggerInterface;
 
 /**
@@ -38,7 +38,7 @@ class SlugGenerator implements AggregateActionInterface
         return Node::class;
     }
 
-    public function execute(AggregateRoot $node): void
+    public function execute(AbstractAggregateRoot $node): void
     {
         $slug  = $node->getSlug();
         $title = $node->getTitle();

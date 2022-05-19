@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\ContactForm\Domain\ReadModel\Finder\ContactFormFinderInterface;
 use Tulia\Cms\ContactForm\Domain\ReadModel\Finder\ContactFormFinderScopeEnum;
 use Tulia\Cms\ContactForm\Domain\ReadModel\Model\Form;
-use Tulia\Cms\ContactForm\UserInterface\Web\Frontend\Form\ContactFormBuilderInterface;
+use Tulia\Cms\ContactForm\Infrastructure\FormBuilder\ContactFormBuilderInterface;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;

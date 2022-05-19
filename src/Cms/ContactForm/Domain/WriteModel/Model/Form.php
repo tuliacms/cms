@@ -10,12 +10,12 @@ use Tulia\Cms\ContactForm\Domain\FieldsParser\Exception\MultipleFieldsInTemplate
 use Tulia\Cms\ContactForm\Domain\FieldsParser\FieldsParserInterface;
 use Tulia\Cms\ContactForm\Domain\WriteModel\Model\ValueObject\FormId;
 use Tulia\Cms\Shared\Domain\WriteModel\EntitiesChangelog;
-use Tulia\Cms\Shared\Domain\WriteModel\Model\AggregateRoot;
+use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
 
 /**
  * @author Adam Banaszkiewicz
  */
-final class Form extends AggregateRoot
+final class Form extends AbstractAggregateRoot
 {
     private FormId $id;
 

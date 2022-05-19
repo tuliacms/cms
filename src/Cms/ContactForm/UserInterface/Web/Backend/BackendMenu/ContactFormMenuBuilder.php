@@ -4,23 +4,17 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContactForm\UserInterface\Web\Backend\BackendMenu;
 
-use Tulia\Cms\BackendMenu\Domain\Builder\BuilderInterface;
-use Tulia\Cms\BackendMenu\Domain\Builder\Helper\BuilderHelperInterface;
-use Tulia\Cms\BackendMenu\Domain\Builder\Registry\ItemRegistryInterface;
+use Tulia\Cms\BackendMenu\Builder\BuilderInterface;
+use Tulia\Cms\BackendMenu\Builder\Helper\BuilderHelperInterface;
+use Tulia\Cms\BackendMenu\Builder\Registry\ItemRegistryInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class ContactFormMenuBuilder implements BuilderInterface
 {
-    /**
-     * @var BuilderHelperInterface
-     */
-    protected $helper;
+    protected BuilderHelperInterface $helper;
 
-    /**
-     * @param BuilderHelperInterface $helper
-     */
     public function __construct(BuilderHelperInterface $helper)
     {
         $this->helper = $helper;

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\BackendMenu\Domain\Builder;
+namespace Tulia\Cms\BackendMenu\Builder;
 
-use Tulia\Cms\BackendMenu\Domain\Builder\Helper\BuilderHelperInterface;
-use Tulia\Cms\BackendMenu\Domain\Builder\Registry\ItemRegistry;
+use Tulia\Cms\BackendMenu\Builder\Helper\BuilderHelperInterface;
+use Tulia\Cms\BackendMenu\Builder\Registry\ItemRegistry;
 
 /**
  * @author Adam Banaszkiewicz

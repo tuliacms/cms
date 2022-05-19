@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Shared\Domain\WriteModel\ActionsChain;
 
-use Tulia\Cms\Shared\Domain\WriteModel\Model\AggregateRoot;
+use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
 
 /**
  * @author Adam Banaszkiewicz
@@ -23,5 +23,5 @@ interface AggregateActionInterface
      */
     public static function supports(): string;
 
-    public function execute(AggregateRoot $aggregate): void;
+    public function execute(AbstractAggregateRoot $aggregate): void;
 }

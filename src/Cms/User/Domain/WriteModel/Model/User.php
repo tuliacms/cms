@@ -7,14 +7,14 @@ namespace Tulia\Cms\User\Domain\WriteModel\Model;
 use Tulia\Cms\Attributes\Domain\WriteModel\MagickAttributesTrait;
 use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
-use Tulia\Cms\Shared\Domain\WriteModel\Model\AggregateRoot;
+use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
 use Tulia\Cms\User\Domain\WriteModel\Event;
 use Tulia\Cms\User\Domain\WriteModel\Event\AttributeUpdated;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class User extends AggregateRoot implements AttributesAwareInterface
+class User extends AbstractAggregateRoot implements AttributesAwareInterface
 {
     use MagickAttributesTrait;
 

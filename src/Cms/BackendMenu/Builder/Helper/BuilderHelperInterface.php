@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\BackendMenu\Domain\Builder\Helper;
+namespace Tulia\Cms\BackendMenu\Builder\Helper;
 
 use Symfony\Component\Routing\RouterInterface;
 

@@ -11,14 +11,8 @@ use Psr\EventDispatcher\EventDispatcherInterface;
  */
 class PsrEventDispatcher implements EventBusInterface, EventDispatcherInterface
 {
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $dispatcher;
+    private EventDispatcherInterface $dispatcher;
 
-    /**
-     * @param EventDispatcherInterface $dispatcher
-     */
     public function __construct(EventDispatcherInterface $dispatcher)
     {
         $this->dispatcher = $dispatcher;

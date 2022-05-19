@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\User\Domain\WriteModel\ActionsChain;
 
 use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionInterface;
-use Tulia\Cms\Shared\Domain\WriteModel\Model\AggregateRoot;
+use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
 use Tulia\Cms\User\Domain\WriteModel\Exception\CannotDeleteYourselfException;
 use Tulia\Cms\User\Domain\WriteModel\Model\User;
@@ -37,7 +37,7 @@ class SelfUserDeleteDetector implements AggregateActionInterface
     /**
      * @throws CannotDeleteYourselfException
      */
-    public function execute(AggregateRoot $user): void
+    public function execute(AbstractAggregateRoot $user): void
     {
         if ($user->getId()->getValue() === $this->authenticatedUserProvider->getUser()->getId()) {
             throw new CannotDeleteYourselfException('Cannot delete Yourself.');

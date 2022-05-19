@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContactForm\Domain\WriteModel;
+namespace Tulia\Cms\ContactForm\Infrastructure\Persistence\Domain\WriteModel;
 
 use Tulia\Cms\ContactForm\Domain\Event\FormDeleted;
 use Tulia\Cms\ContactForm\Domain\Exception\FormNotFoundException;
+use Tulia\Cms\ContactForm\Domain\WriteModel\ContactFormWriteStorageInterface;
+use Tulia\Cms\ContactForm\Domain\WriteModel\FormRepositoryInterface;
 use Tulia\Cms\ContactForm\Domain\WriteModel\Model\Field;
 use Tulia\Cms\ContactForm\Domain\WriteModel\Model\Form;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
@@ -15,14 +17,11 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-class FormRepository
+class DbalFormRepository implements FormRepositoryInterface
 {
     private CurrentWebsiteInterface $currentWebsite;
-
     private UuidGeneratorInterface $uuidGenerator;
-
     private ContactFormWriteStorageInterface $storage;
-
     private EventBusInterface $eventBus;
 
     public function __construct(
@@ -44,25 +43,6 @@ class FormRepository
             $this->currentWebsite->getId(),
             $this->currentWebsite->getLocale()->getCode(),
         );
-    }
-
-    public function createNewField(array $data): Field
-    {
-        return Field::buildFromArray($data);
-    }
-
-    /**
-     * @return Field[]
-     */
-    public function createNewFields(array $fields): array
-    {
-        $result = [];
-
-        foreach ($fields as $field) {
-            $result[$field['name']] = $this->createNewField($field);
-        }
-
-        return $result;
     }
 
     /**

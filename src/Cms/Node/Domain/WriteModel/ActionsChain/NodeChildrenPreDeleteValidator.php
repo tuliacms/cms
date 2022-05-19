@@ -10,7 +10,7 @@ use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeCannotBeRemovedException;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionInterface;
-use Tulia\Cms\Shared\Domain\WriteModel\Model\AggregateRoot;
+use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
 
 /**
  * This class is responsible to detect if deleting node has children.
@@ -46,7 +46,7 @@ class NodeChildrenPreDeleteValidator implements AggregateActionInterface
     /**
      * @throws NodeCannotBeRemovedException
      */
-    public function execute(AggregateRoot $node): void
+    public function execute(AbstractAggregateRoot $node): void
     {
         $nodes = $this->nodeFinder->find([
             'children_of' => $node->getId(),

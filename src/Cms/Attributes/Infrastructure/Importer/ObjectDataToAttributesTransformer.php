@@ -63,6 +63,9 @@ class ObjectDataToAttributesTransformer
         return $attributes;
     }
 
+    /**
+     * @param mixed $value
+     */
     private function appendAttribute(string $attributeName, $value): array
     {
         $field = $this->contentType->getField($attributeName);

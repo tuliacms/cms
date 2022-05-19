@@ -3,7 +3,7 @@ services:
         autowire: true
         autoconfigure: true
 
-    Tulia\Cms\Shared\Infrastructure\Utils\Uuid\UuidGeneratorInterface:
+    Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface:
         class: Tulia\Cms\Shared\Infrastructure\Utils\Uuid\RamseyUuidGenerator
 
     Tulia\Cms\Shared\Infrastructure\Utils\Annotations\AnnotationsReaderInterface:

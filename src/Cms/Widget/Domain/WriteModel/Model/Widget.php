@@ -7,14 +7,14 @@ namespace Tulia\Cms\Widget\Domain\WriteModel\Model;
 use Tulia\Cms\Attributes\Domain\WriteModel\AttributesAwareTrait;
 use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
-use Tulia\Cms\Shared\Domain\WriteModel\Model\AggregateRoot;
+use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
 use Tulia\Cms\Widget\Domain\WriteModel\Event;
 use Tulia\Cms\Widget\Domain\WriteModel\Model\ValueObject\WidgetId;
 
 /**
  * @author Adam Banaszkiewicz
  */
-final class Widget extends AggregateRoot implements AttributesAwareInterface
+final class Widget extends AbstractAggregateRoot implements AttributesAwareInterface
 {
     use AttributesAwareTrait {
         AttributesAwareTrait::updateAttributes as baseUpdateAttributes;

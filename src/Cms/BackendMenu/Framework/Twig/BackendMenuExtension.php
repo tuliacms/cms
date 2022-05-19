@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\BackendMenu\Infrastructure\Framework\Twig;
+namespace Tulia\Cms\BackendMenu\Framework\Twig;
 
-use Twig\TwigFunction;
+use Tulia\Cms\BackendMenu\Builder\HtmlBuilderInterface;
 use Twig\Extension\AbstractExtension;
-use Tulia\Cms\BackendMenu\Domain\Builder\HtmlBuilderInterface;
+use Twig\TwigFunction;
 
 /**
  * @author Adam Banaszkiewicz
