@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserAvatar;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeHandler\FieldTypeHandlerInterface;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\FieldTypeHandler\FieldTypeHandlerInterface;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\Field;
 use Tulia\Cms\User\Application\Service\Avatar\UploaderInterface;
 
 /**

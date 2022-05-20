@@ -21,11 +21,8 @@ use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
 class Form extends AbstractController
 {
     private ContactFormBuilderInterface $builder;
-
     private ContactFormFinderInterface $finder;
-
     private SenderInterface $sender;
-
     private FormDataExtractor $dataExtractor;
 
     public function __construct(

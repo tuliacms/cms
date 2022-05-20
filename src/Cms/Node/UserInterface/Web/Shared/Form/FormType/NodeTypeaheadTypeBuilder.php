@@ -6,9 +6,9 @@ namespace Tulia\Cms\Node\UserInterface\Web\Shared\Form\FormType;
 
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\AbstractFieldTypeBuilder;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\FieldTypeBuilder\AbstractFieldTypeBuilder;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\ContentType;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\Field;
 
 /**
  * @author Adam Banaszkiewicz

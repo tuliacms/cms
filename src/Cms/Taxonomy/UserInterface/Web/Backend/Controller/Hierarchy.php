@@ -6,7 +6,7 @@ namespace Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\Taxonomy\Domain\Service\TaxonomyHierarchy;

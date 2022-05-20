@@ -7,14 +7,14 @@ namespace Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderRegistry;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeHandler\FieldTypeHandlerRegistry;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeDecorator;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
-use Tulia\Cms\ContentBuilder\Domain\WriteModel\Routing\Strategy\ContentTypeRoutingStrategyRegistry;
-use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\ConstraintTypeMappingRegistry;
-use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
-use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeBuilderRegistry;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderRegistry;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\FieldTypeHandler\FieldTypeHandlerRegistry;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Service\ContentTypeDecorator;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Service\ContentTypeRegistryInterface;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\Routing\Strategy\ContentTypeRoutingStrategyRegistry;
+use Tulia\Cms\ContentBuilder\Layout\LayoutType\Service\ConstraintTypeMappingRegistry;
+use Tulia\Cms\ContentBuilder\Layout\LayoutType\Service\FieldTypeMappingRegistry;
+use Tulia\Cms\ContentBuilder\Layout\LayoutType\Service\LayoutTypeBuilderRegistry;
 
 /**
  * @author Adam Banaszkiewicz

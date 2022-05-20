@@ -50,7 +50,7 @@ cms:
         content_type:
             node:
                 controller: 'Tulia\Cms\Node\UserInterface\Web\Frontend\Controller\Node::show'
-                layout_builder: 'Tulia\Cms\ContentBuilder\Infrastructure\Presentation\TwigRoutableContentTypeLayoutBuilder'
+                layout_builder: 'Tulia\Cms\ContentBuilder\ContentType\Infrastructure\Presentation\TwigRoutableContentTypeLayoutBuilder'
         data_types:
             mapping:
                 node_select:

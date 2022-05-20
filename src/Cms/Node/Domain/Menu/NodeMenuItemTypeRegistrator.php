@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\Menu;
 
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Menu\Domain\Builder\Type\RegistratorInterface;
 use Tulia\Cms\Menu\Domain\Builder\Type\RegistryInterface;
 use Tulia\Cms\Node\UserInterface\Web\Backend\Menu\Selector;

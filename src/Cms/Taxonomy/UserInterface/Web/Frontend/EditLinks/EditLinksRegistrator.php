@@ -6,7 +6,7 @@ namespace Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\EditLinks;
 
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\EditLinks\Model\Collection;
 use Tulia\Cms\EditLinks\Service\EditLinksCollectorInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Model\Term;

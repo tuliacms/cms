@@ -6,9 +6,9 @@ namespace Tulia\Cms\ContactForm\Infrastructure\FormBuilder;
 
 use Tulia\Cms\ContactForm\Domain\ReadModel\Finder\ContactFormFinderInterface;
 use Tulia\Cms\ContactForm\Domain\ReadModel\Finder\ContactFormFinderScopeEnum;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\AbstractFieldTypeBuilder;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\FieldTypeBuilder\AbstractFieldTypeBuilder;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\ContentType;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\Field;
 
 /**
  * @author Adam Banaszkiewicz

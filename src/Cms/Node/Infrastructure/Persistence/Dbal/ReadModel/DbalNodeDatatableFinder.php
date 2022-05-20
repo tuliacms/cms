@@ -6,7 +6,7 @@ namespace Tulia\Cms\Node\Infrastructure\Persistence\Dbal\ReadModel;
 
 use PDO;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\Node\Domain\ReadModel\Datatable\NodeDatatableFinderInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;

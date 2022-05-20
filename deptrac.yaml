@@ -31,6 +31,16 @@ parameters:
         - name: ContactForm/UserInterface
           collectors:
               - { type: directory, regex: "src/Cms/ContactForm/UserInterface/*." }
+        - name: ContentBuilder/Domain
+          collectors:
+              - { type: directory, regex: "src/Cms/ContentBuilder/Domain/*." }
+        - name: ContentBuilder/Infrastructure
+          collectors:
+              - { type: directory, regex: "src/Cms/ContentBuilder/Infrastructure/*." }
+        - name: ContentBuilder/UserInterface
+          collectors:
+              - { type: directory, regex: "src/Cms/ContentBuilder/UserInterface/*." }
+        # Shared
         - name: Shared/Domain
           collectors:
               - { type: directory, regex: "src/Shared/Domain/*." }
@@ -50,6 +60,7 @@ parameters:
             - Shared/Domain
             - Shared/Infrastructure
             - Attributes/Domain
+            - ContentBuilder/Domain
         BackendMenu:
             - Shared/Domain
             - Shared/Infrastructure
@@ -67,8 +78,24 @@ parameters:
             - Shared/Infrastructure
             - Attributes/Domain
             - ContactForm/Domain
+            - ContentBuilder/Domain
         ContactForm/UserInterface:
             - Shared/Domain
             - ContactForm/Domain
             - ContactForm/Infrastructure
             - BackendMenu
+        ContentBuilder/Domain:
+            - Shared/Domain
+            - Attributes/Domain
+        ContentBuilder/Infrastructure:
+            - Shared/Domain
+            - Shared/Infrastructure
+            - Attributes/Domain
+            - ContentBuilder/Domain
+        ContentBuilder/UserInterface:
+            - Shared/Domain
+            - ContentBuilder/Domain
+            - ContentBuilder/Infrastructure
+            - BackendMenu
+
+        # Złączyć ContentBuilder z Attributes

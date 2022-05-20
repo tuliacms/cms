@@ -6,9 +6,9 @@ namespace Tulia\Cms\ContentBlock\UserInterface\Web\Backend\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
-use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\ContentTypeFormDescriptor;
-use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\SymfonyFormBuilderCreator;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Service\ContentTypeRegistryInterface;
+use Tulia\Cms\ContentBuilder\ContentType\Infrastructure\Framework\Form\ContentTypeFormDescriptor;
+use Tulia\Cms\ContentBuilder\ContentType\Infrastructure\Framework\Form\Service\SymfonyFormBuilderCreator;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
 

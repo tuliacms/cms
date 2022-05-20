@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\UserInterface\Web\Shared\Form\FormType;
 
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\AbstractFieldTypeBuilder;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\FieldTypeBuilder\AbstractFieldTypeBuilder;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\ContentType;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\Field;
 use Tulia\Cms\Node\Domain\NodeFlag\NodeFlagRegistryInterface;
 
 /**

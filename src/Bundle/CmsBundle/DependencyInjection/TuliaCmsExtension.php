@@ -84,19 +84,25 @@ class TuliaCmsExtension extends Extension
             ->addTag('term.action_chain');
 
         // ContentBuilder
-        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeDecoratorInterface::class)
+        $container->registerForAutoconfiguration(
+            \Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Service\ContentTypeDecoratorInterface::class)
             ->addTag('content_builder.content_type.decorator');
-        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeProviderInterface::class)
+        $container->registerForAutoconfiguration(
+            \Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Service\ContentTypeProviderInterface::class)
             ->addTag('content_builder.content_type.provider');
-        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\WriteModel\Routing\Strategy\ContentTypeRoutingStrategyInterface::class)
+        $container->registerForAutoconfiguration(
+            \Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\Routing\Strategy\ContentTypeRoutingStrategyInterface::class)
             ->addTag('content_builder.content_type.routing_strategy');
-        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeBuilderInterface::class)
+        $container->registerForAutoconfiguration(
+            \Tulia\Cms\ContentBuilder\Layout\LayoutType\Service\LayoutTypeBuilderInterface::class)
             ->addTag('content_builder.layout_type.builder');
-        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderInterface::class)
+        $container->registerForAutoconfiguration(
+            \Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderInterface::class)
             ->addTag('content_builder.data_types.builder')
             ->setShared(false)
             ->setLazy(true);
-        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeHandler\FieldTypeHandlerInterface::class)
+        $container->registerForAutoconfiguration(
+            \Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\FieldTypeHandler\FieldTypeHandlerInterface::class)
             ->addTag('content_builder.data_types.handler')
             ->setShared(false)
             ->setLazy(true);

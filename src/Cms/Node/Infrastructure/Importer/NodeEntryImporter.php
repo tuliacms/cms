@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\Infrastructure\Importer;
 
 use Tulia\Cms\Attributes\Infrastructure\Importer\ObjectDataToAttributesTransformer;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Node\Application\UseCase\CreateNode;
 use Tulia\Cms\Node\Domain\WriteModel\NodeRepository;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;

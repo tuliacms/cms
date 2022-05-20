@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\Domain\ReadModel\Routing\Strategy;
 
 use Psr\Log\LoggerInterface;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
-use Tulia\Cms\ContentBuilder\Domain\WriteModel\Routing\Strategy\ContentTypeRoutingStrategyInterface;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\ContentType;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Service\ContentTypeRegistryInterface;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\Routing\Strategy\ContentTypeRoutingStrategyInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderScopeEnum;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Model\Term;

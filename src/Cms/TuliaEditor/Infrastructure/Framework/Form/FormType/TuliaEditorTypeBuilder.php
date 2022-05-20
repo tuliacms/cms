@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\TuliaEditor\Infrastructure\Framework\Form\FormType;
 
 use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\AbstractFieldTypeBuilder;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\FieldTypeBuilder\AbstractFieldTypeBuilder;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\Field;
 
 /**
  * @author Adam Banaszkiewicz

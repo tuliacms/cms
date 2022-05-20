@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Attributes\Infrastructure\Importer;
 
 use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\ContentType;
 use Tulia\Component\Importer\Structure\ObjectData;
 
 /**

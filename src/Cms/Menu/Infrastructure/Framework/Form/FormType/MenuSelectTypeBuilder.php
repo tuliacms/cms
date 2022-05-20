@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Infrastructure\Framework\Form\FormType;
 
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\AbstractFieldTypeBuilder;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
+use Symfony\Component\Validator\Constraints as Assert;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\FieldTypeBuilder\AbstractFieldTypeBuilder;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\ContentType;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\Field;
 use Tulia\Cms\Menu\Domain\ReadModel\Finder\MenuFinderInterface;
 use Tulia\Cms\Menu\Domain\ReadModel\Finder\MenuFinderScopeEnum;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @author Adam Banaszkiewicz

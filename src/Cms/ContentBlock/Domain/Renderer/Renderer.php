@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBlock\Domain\Renderer;
 
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Attributes\Domain\ReadModel\Model\AttributeValue;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Component\Templating\View;
 

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Widget\Infrastructure\Framework\Form\FormType;
 
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\AbstractFieldTypeBuilder;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
-use Tulia\Component\Theme\ManagerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\FieldTypeBuilder\AbstractFieldTypeBuilder;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\ContentType;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\Field;
+use Tulia\Component\Theme\ManagerInterface;
 
 /**
  * @author Adam Banaszkiewicz
