@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Domain\WriteModel\Model;
 
-use Tulia\Cms\Attributes\Domain\WriteModel\MagickAttributesTrait;
-use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
-use Tulia\Cms\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
+use Tulia\Cms\ContentBuilder\Attributes\Domain\WriteModel\MagickAttributesTrait;
+use Tulia\Cms\ContentBuilder\Attributes\Domain\WriteModel\Model\Attribute;
+use Tulia\Cms\ContentBuilder\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\AttributeUpdated;
 
 use function is_string;

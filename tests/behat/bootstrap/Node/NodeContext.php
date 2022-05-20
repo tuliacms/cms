@@ -2,10 +2,9 @@
 
 namespace Node;
 
-use Behat\Behat\Tester\Exception\PendingException;
 use Assert;
 use Behat\Behat\Context\Context;
-use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
+use Tulia\Cms\ContentBuilder\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 

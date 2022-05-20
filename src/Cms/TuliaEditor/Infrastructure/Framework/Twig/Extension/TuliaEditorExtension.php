@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\TuliaEditor\Infrastructure\Framework\Twig\Extension;
 
-use Tulia\Cms\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Component\Templating\View;
 use Twig\Extension\AbstractExtension;

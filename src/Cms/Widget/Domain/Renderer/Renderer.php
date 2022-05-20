@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Widget\Domain\Renderer;
 
-use Tulia\Cms\Attributes\Domain\ReadModel\Service\AttributesFinder;
+use Tulia\Cms\ContentBuilder\Attributes\Domain\ReadModel\Service\AttributesFinder;
 use Tulia\Cms\Widget\Domain\Catalog\Configuration\ArrayConfiguration;
 use Tulia\Cms\Widget\Domain\Catalog\Registry\WidgetRegistryInterface;
 use Tulia\Cms\Widget\Domain\Catalog\Storage\StorageInterface;

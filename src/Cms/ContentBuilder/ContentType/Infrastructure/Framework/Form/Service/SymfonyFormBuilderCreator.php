@@ -7,7 +7,7 @@ namespace Tulia\Cms\ContentBuilder\ContentType\Infrastructure\Framework\Form\Ser
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
-use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
+use Tulia\Cms\ContentBuilder\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\Field;
 use Tulia\Cms\ContentBuilder\Layout\LayoutType\Exception\ConstraintNotExistsException;

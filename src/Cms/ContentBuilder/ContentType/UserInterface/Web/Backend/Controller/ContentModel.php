@@ -9,9 +9,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\ContentType\Service\Configuration;
 use Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\ContentTypeRepositoryInterface;
-use Tulia\Cms\ContentBuilder\ContentType\Infrastructure\Framework\Form\ContentType\FormDataToModelTransformer;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\Service\ArrayToModelTransformer;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\Service\ModelToArrayTransformer;
 use Tulia\Cms\ContentBuilder\ContentType\Infrastructure\Framework\Form\ContentType\FormHandler;
-use Tulia\Cms\ContentBuilder\ContentType\Infrastructure\Framework\Form\ContentType\ModelToFormDataTransformer;
 use Tulia\Cms\ContentBuilder\Layout\LayoutType\Service\LayoutTypeBuilderRegistry;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
@@ -22,20 +22,20 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class ContentModel extends AbstractController
 {
-    private FormDataToModelTransformer $formDataToModelTransformer;
+    private ArrayToModelTransformer $arrayToModelTransformer;
     private ContentTypeRepositoryInterface $contentTypeRepository;
     private ContentTypeRegistryInterface $contentTypeRegistry;
     private Configuration $configuration;
     private LayoutTypeBuilderRegistry $layoutTypeBuilderRegistry;
 
     public function __construct(
-        FormDataToModelTransformer $formDataToModelTransformer,
+        ArrayToModelTransformer $arrayToModelTransformer,
         ContentTypeRepositoryInterface $contentTypeRepository,
         ContentTypeRegistryInterface $contentTypeRegistry,
         Configuration $configuration,
         LayoutTypeBuilderRegistry $layoutTypeBuilderRegistry
     ) {
-        $this->formDataToModelTransformer = $formDataToModelTransformer;
+        $this->arrayToModelTransformer = $arrayToModelTransformer;
         $this->contentTypeRepository = $contentTypeRepository;
         $this->contentTypeRegistry = $contentTypeRegistry;
         $this->configuration = $configuration;
@@ -70,8 +70,8 @@ class ContentModel extends AbstractController
         $data = $nodeTypeFormHandler->handle($request, $data);
 
         if ($nodeTypeFormHandler->isRequestValid()) {
-            $layoutType = $this->formDataToModelTransformer->produceLayoutType($data);
-            $nodeType = $this->formDataToModelTransformer->produceContentType($data, $contentType, $layoutType);
+            $layoutType = $this->arrayToModelTransformer->produceLayoutType($data);
+            $nodeType = $this->arrayToModelTransformer->produceContentType($data, $contentType, $layoutType);
 
             try {
                 $this->contentTypeRepository->insert($nodeType);
@@ -116,12 +116,12 @@ class ContentModel extends AbstractController
 
         $layout = $contentType->getLayout();
 
-        $data = (new ModelToFormDataTransformer())->transform($contentType, $layout);
+        $data = (new ModelToArrayTransformer())->transform($contentType, $layout);
         $data = $nodeTypeFormHandler->handle($request, $data, true);
 
         if ($nodeTypeFormHandler->isRequestValid()) {
-            $layoutType = $this->formDataToModelTransformer->produceLayoutType($data);
-            $nodeType = $this->formDataToModelTransformer->produceContentType($data, $contentType->getType(), $layoutType);
+            $layoutType = $this->arrayToModelTransformer->produceLayoutType($data);
+            $nodeType = $this->arrayToModelTransformer->produceContentType($data, $contentType->getType(), $layoutType);
 
             try {
                 $this->contentTypeRepository->update($nodeType);

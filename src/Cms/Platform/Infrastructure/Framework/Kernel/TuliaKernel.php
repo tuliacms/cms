@@ -23,7 +23,6 @@ class TuliaKernel extends Kernel
         return array_merge(
             [
                 $base . '/Platform/Infrastructure/Framework/Resources/config',
-                $base . '/Attributes/Infrastructure/Framework/Resources/config',
                 $base . '/Activity/Framework/Resources/config',
                 $base . '/BackendMenu/Framework/Resources/config',
                 $base . '/BodyClass/Framework/Resources/config',
@@ -47,6 +46,7 @@ class TuliaKernel extends Kernel
                 $base . '/Widget/Infrastructure/Framework/Resources/config',
                 $base . '/WysiwygEditor/Infrastructure/Framework/Resources/config',
                 $base . '/TuliaEditor/Infrastructure/Framework/Resources/config',
+                $base . '/ContentBuilder/Attributes/Infrastructure/Framework/Resources/config',
                 $base . '/ContentBuilder/ContentType/Infrastructure/Framework/Resources/config',
                 $base . '/ContentBuilder/Layout/Infrastructure/Framework/Resources/config',
                 $base . '/ContentBlock/Infrastructure/Framework/Resources/config',

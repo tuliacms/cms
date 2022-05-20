@@ -4,15 +4,10 @@ parameters:
     exclude_files:
         - '#.*\.yaml#'
     layers:
+        # Modules
         - name: Activity
           collectors:
               - { type: directory, regex: "src/Cms/Activity/*." }
-        - name: Attributes/Domain
-          collectors:
-              - { type: directory, regex: "src/Cms/Attributes/Domain/*." }
-        - name: Attributes/Infrastructure
-          collectors:
-              - { type: directory, regex: "src/Cms/Attributes/Infrastructure/*." }
         - name: BackendMenu
           collectors:
               - { type: directory, regex: "src/Cms/BackendMenu/*." }
@@ -33,13 +28,15 @@ parameters:
               - { type: directory, regex: "src/Cms/ContactForm/UserInterface/*." }
         - name: ContentBuilder/Domain
           collectors:
-              - { type: directory, regex: "src/Cms/ContentBuilder/Domain/*." }
+              - { type: directory, regex: "src/Cms/ContentBuilder/ContentType/Domain/*." }
+              - { type: directory, regex: "src/Cms/ContentBuilder/Attributes/Domain/*." }
         - name: ContentBuilder/Infrastructure
           collectors:
-              - { type: directory, regex: "src/Cms/ContentBuilder/Infrastructure/*." }
+              - { type: directory, regex: "src/Cms/ContentBuilder/ContentType/Infrastructure/*." }
+              - { type: directory, regex: "src/Cms/ContentBuilder/Attributes/Infrastructure/*." }
         - name: ContentBuilder/UserInterface
           collectors:
-              - { type: directory, regex: "src/Cms/ContentBuilder/UserInterface/*." }
+              - { type: directory, regex: "src/Cms/ContentBuilder/ContentType/UserInterface/*." }
         # Shared
         - name: Shared/Domain
           collectors:
@@ -48,19 +45,17 @@ parameters:
           collectors:
               - { type: directory, regex: "src/Shared/Infrastructure/*." }
     ruleset:
+        # Global rules:
+        #   - Domain should not depends on anything
+        #   - Infrastructure should depends only on Domain
+        #   - Application should depends on Domain and Infrastructure
+        #   - UserInterface should depends on Application and Infrastructure
         Shared/Domain: ~
         Shared/Infrastructure:
             - Shared/Domain
         Activity:
             - Shared/Domain
             - Shared/Infrastructure
-        Attributes/Domain:
-            - Shared/Domain
-        Attributes/Infrastructure:
-            - Shared/Domain
-            - Shared/Infrastructure
-            - Attributes/Domain
-            - ContentBuilder/Domain
         BackendMenu:
             - Shared/Domain
             - Shared/Infrastructure
@@ -76,26 +71,20 @@ parameters:
         ContactForm/Infrastructure:
             - Shared/Domain
             - Shared/Infrastructure
-            - Attributes/Domain
             - ContactForm/Domain
             - ContentBuilder/Domain
         ContactForm/UserInterface:
             - Shared/Domain
-            - ContactForm/Domain
+            - ContactForm/Domain # This dependency should not exists?
             - ContactForm/Infrastructure
             - BackendMenu
         ContentBuilder/Domain:
             - Shared/Domain
-            - Attributes/Domain
         ContentBuilder/Infrastructure:
             - Shared/Domain
             - Shared/Infrastructure
-            - Attributes/Domain
             - ContentBuilder/Domain
         ContentBuilder/UserInterface:
             - Shared/Domain
             - ContentBuilder/Domain
             - ContentBuilder/Infrastructure
-            - BackendMenu
-
-        # Złączyć ContentBuilder z Attributes

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\WriteModel\Model;
 
-use Tulia\Cms\Attributes\Domain\WriteModel\AttributesAwareTrait;
-use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
-use Tulia\Cms\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
+use Tulia\Cms\ContentBuilder\Attributes\Domain\WriteModel\AttributesAwareTrait;
+use Tulia\Cms\ContentBuilder\Attributes\Domain\WriteModel\Model\Attribute;
+use Tulia\Cms\ContentBuilder\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Event;
 use Tulia\Cms\Node\Domain\WriteModel\Event\AttributeUpdated;
 use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\NodeId;

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\User\Infrastructure\Persistence\Dbal\ReadModel;
 
 use PDO;
-use Tulia\Cms\Attributes\Domain\ReadModel\Service\AttributesFinder;
+use Tulia\Cms\ContentBuilder\Attributes\Domain\ReadModel\Service\AttributesFinder;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Connection;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;

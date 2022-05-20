@@ -69,7 +69,7 @@ class FormHandler
         ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
+            // Do nothing if valid
         } else {
             $formsAreValid = false;
             $errors['type'] = $this->getErrorMessages($form);
@@ -82,7 +82,7 @@ class FormHandler
         $form = $this->formFactory->create(LayoutSectionType::class, [], ['max_depth_fields' => 5]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
+            // Do nothing if valid
         } else {
             $formsAreValid = false;
             $errors['layout']['sidebar'] = $this->getErrorMessages($form);
@@ -95,7 +95,7 @@ class FormHandler
         $form = $this->formFactory->create(LayoutSectionType::class, [], ['max_depth_fields' => 5]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
+            // Do nothing if valid
         } else {
             $formsAreValid = false;
             $errors['layout']['main'] = $this->getErrorMessages($form);

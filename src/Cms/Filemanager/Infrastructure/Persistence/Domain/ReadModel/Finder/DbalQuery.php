@@ -6,7 +6,7 @@ namespace Tulia\Cms\Filemanager\Infrastructure\Persistence\Domain\ReadModel\Find
 
 use Exception;
 use PDO;
-use Tulia\Cms\Attributes\Domain\ReadModel\Service\AttributesFinder;
+use Tulia\Cms\ContentBuilder\Attributes\Domain\ReadModel\Service\AttributesFinder;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Model\File;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
