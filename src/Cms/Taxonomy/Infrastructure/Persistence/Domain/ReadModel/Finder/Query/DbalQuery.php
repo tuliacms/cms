@@ -7,7 +7,7 @@ namespace Tulia\Cms\Taxonomy\Infrastructure\Persistence\Domain\ReadModel\Finder\
 use Doctrine\DBAL\Connection;
 use Exception;
 use PDO;
-use Tulia\Cms\ContentBuilder\Attributes\Domain\ReadModel\Service\AttributesFinder;
+use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\AttributesFinder;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\WriteModel;
 
-use Tulia\Cms\ContentBuilder\Attributes\Domain\WriteModel\AttributesRepository;
+use Tulia\Cms\Content\Attributes\Domain\WriteModel\AttributesRepository;
 use Tulia\Cms\Menu\Domain\WriteModel\ActionsChain\MenuActionsChainInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\MenuRepositoryInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;

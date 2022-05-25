@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Widget\Infrastructure\Persistence\ContainerProvider;
 
-use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Service\AbstractContentTypeProvider;
-use Tulia\Cms\ContentBuilder\ContentType\Infrastructure\Persistence\ContentProvider\SymfonyContainerStandarizableTrait;
+use Tulia\Cms\Content\Type\Domain\ReadModel\Service\AbstractContentTypeProvider;
+use Tulia\Cms\Content\Type\Infrastructure\Persistence\ContentProvider\SymfonyContainerStandarizableTrait;
 
 /**
  * @author Adam Banaszkiewicz

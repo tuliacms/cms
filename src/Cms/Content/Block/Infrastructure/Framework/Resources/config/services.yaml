@@ -1,0 +1,15 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    Tulia\Cms\Content\Block\:
+        resource: '../../../../**'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources/**'
+
+    Tulia\Cms\Content\Block\Domain\Renderer\Renderer:
+        bind:
+            $environment: '%kernel.environment%'
+            $paths: '%cms.content_blocks.templating.paths%'

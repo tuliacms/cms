@@ -6,7 +6,7 @@ namespace Tulia\Cms\User\UserInterface\Web\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\ContentBuilder\ContentType\Infrastructure\Framework\Form\Service\ContentFormService;
+use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Service\ContentFormService;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;

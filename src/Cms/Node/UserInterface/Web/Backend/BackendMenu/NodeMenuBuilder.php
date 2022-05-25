@@ -7,8 +7,8 @@ namespace Tulia\Cms\Node\UserInterface\Web\Backend\BackendMenu;
 use Tulia\Cms\BackendMenu\Builder\BuilderInterface;
 use Tulia\Cms\BackendMenu\Builder\Helper\BuilderHelperInterface;
 use Tulia\Cms\BackendMenu\Builder\Registry\ItemRegistryInterface;
-use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\ContentType;
-use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Service\ContentTypeRegistryInterface;
+use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
+use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -54,7 +54,7 @@ class NodeMenuBuilder implements BuilderInterface
             'parent' => $root,
         ]);
 
-        // TODO Finish listing of taxonomies attached to ContentType
+        // TODO Finish listing of taxonomies attached to Type
         /*foreach ($type->getFields() as $field) {
             if ($field->getType() !== 'taxonomy') {
                 continue;

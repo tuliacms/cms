@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\Finder\Query;
 
-use Tulia\Cms\ContentBuilder\Attributes\Domain\ReadModel\Service\AttributesFinder;
+use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\AttributesFinder;
 use Tulia\Cms\Menu\Domain\ReadModel\Finder\MenuFinderInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\AbstractFinder;

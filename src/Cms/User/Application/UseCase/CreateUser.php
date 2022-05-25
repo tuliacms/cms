@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\User\Application\UseCase;
 
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Tulia\Cms\ContentBuilder\Attributes\Domain\WriteModel\Model\Attribute;
+use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Security\Framework\Security\Core\User\User as CoreUser;
 use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChainInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;

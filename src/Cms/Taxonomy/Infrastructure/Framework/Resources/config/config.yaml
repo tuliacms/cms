@@ -12,7 +12,7 @@ cms:
         content_type:
             taxonomy:
                 controller: 'Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Controller\Term::show'
-                layout_builder: 'Tulia\Cms\ContentBuilder\ContentType\Infrastructure\Presentation\TwigRoutableContentTypeLayoutBuilder'
+                layout_builder: 'Tulia\Cms\Content\Type\Infrastructure\Presentation\TwigRoutableContentTypeLayoutBuilder'
         data_types:
             mapping:
                 taxonomy:

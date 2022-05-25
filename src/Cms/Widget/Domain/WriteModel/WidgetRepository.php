@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Widget\Domain\WriteModel;
 
-use Tulia\Cms\ContentBuilder\Attributes\Domain\WriteModel\AttributesRepository;
-use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Service\ContentTypeRegistryInterface;
+use Tulia\Cms\Content\Attributes\Domain\WriteModel\AttributesRepository;
+use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Widget\Domain\Catalog\Registry\WidgetRegistryInterface;

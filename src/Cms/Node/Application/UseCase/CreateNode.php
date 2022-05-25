@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Application\UseCase;
 
-use Tulia\Cms\ContentBuilder\Attributes\Domain\WriteModel\Model\Attribute;
+use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\Attribute;
 
 /**
  * @author Adam Banaszkiewicz

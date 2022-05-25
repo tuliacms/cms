@@ -85,24 +85,24 @@ class TuliaCmsExtension extends Extension
 
         // ContentBuilder
         $container->registerForAutoconfiguration(
-            \Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Service\ContentTypeDecoratorInterface::class)
+            \Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeDecoratorInterface::class)
             ->addTag('content_builder.content_type.decorator');
         $container->registerForAutoconfiguration(
-            \Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Service\ContentTypeProviderInterface::class)
+            \Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeProviderInterface::class)
             ->addTag('content_builder.content_type.provider');
         $container->registerForAutoconfiguration(
-            \Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\Routing\Strategy\ContentTypeRoutingStrategyInterface::class)
+            \Tulia\Cms\Content\Type\Domain\WriteModel\Routing\Strategy\ContentTypeRoutingStrategyInterface::class)
             ->addTag('content_builder.content_type.routing_strategy');
         $container->registerForAutoconfiguration(
-            \Tulia\Cms\ContentBuilder\Layout\Service\LayoutTypeBuilderInterface::class)
+            \Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Service\LayoutTypeBuilderInterface::class)
             ->addTag('content_builder.layout_type.builder');
         $container->registerForAutoconfiguration(
-            \Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderInterface::class)
+            \Tulia\Cms\Content\Type\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderInterface::class)
             ->addTag('content_builder.data_types.builder')
             ->setShared(false)
             ->setLazy(true);
         $container->registerForAutoconfiguration(
-            \Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\FieldTypeHandler\FieldTypeHandlerInterface::class)
+            \Tulia\Cms\Content\Type\Domain\ReadModel\FieldTypeHandler\FieldTypeHandlerInterface::class)
             ->addTag('content_builder.data_types.handler')
             ->setShared(false)
             ->setLazy(true);

@@ -1,0 +1,22 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        bind:
+            $environment: '%kernel.environment%'
+
+    Tulia\Cms\Content\Attributes\:
+        resource: '../../../../**'
+        exclude:
+            - '../../../../**/Resources/**'
+            - '../../../../**/Model/**'
+            - '../../../../**/*Exception.php'
+            - '../../../../**/*Trait.php'
+
+    Tulia\Cms\Content\Attributes\Domain\ReadModel\ValueRender\ValueRendererInterface:
+        class: Tulia\Cms\Content\Attributes\Infrastructure\Framework\Twig\TwigValueRenderer
+        lazy: true
+
+    Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\AttributesValueRenderer:
+        bind:
+            $scopes: '%cms.attributes.finder.types%'

@@ -7,7 +7,7 @@ namespace Tulia\Cms\Node\Infrastructure\Persistence\Dbal\ReadModel;
 use Doctrine\DBAL\Connection;
 use Exception;
 use PDO;
-use Tulia\Cms\ContentBuilder\Attributes\Domain\ReadModel\Service\AttributesFinder;
+use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\AttributesFinder;
 use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Enum\TermTypeEnum;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;

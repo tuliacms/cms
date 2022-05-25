@@ -8,8 +8,8 @@ use DateTime;
 use DateTimeImmutable;
 use Exception;
 use InvalidArgumentException;
-use Tulia\Cms\ContentBuilder\Attributes\Domain\ReadModel\MagickAttributesTrait;
-use Tulia\Cms\ContentBuilder\Attributes\Domain\ReadModel\Model\AttributesAwareInterface;
+use Tulia\Cms\Content\Attributes\Domain\ReadModel\MagickAttributesTrait;
+use Tulia\Cms\Content\Attributes\Domain\ReadModel\Model\AttributesAwareInterface;
 
 /**
  * @author Adam Banaszkiewicz

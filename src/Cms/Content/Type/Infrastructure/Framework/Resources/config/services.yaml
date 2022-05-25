@@ -1,0 +1,37 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    Tulia\Cms\Content\Type\:
+        resource: '../../../../**'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources/**'
+            - '../../../../Domain/**/Model/**'
+            - '../../../../Domain/**/Exception/**'
+            - '../../../../UserInterface/LayoutType/Model/**'
+
+    Tulia\Cms\Content\Type\Domain\ReadModel\Service\AbstractContentTypeProvider:
+        abstract: true
+        calls:
+            - setArrayToReadModelTransformer: [ '@Tulia\Cms\Content\Type\Domain\ReadModel\Service\ArrayToReadModelTransformer' ]
+
+    Tulia\Cms\Content\Type\Infrastructure\Persistence\ContentProvider\ContentTypeDatabaseProvider:
+        parent: Tulia\Cms\Content\Type\Domain\ReadModel\Service\AbstractContentTypeProvider
+
+    Tulia\Cms\Content\Type\Infrastructure\Persistence\ContentProvider\ContentTypeContainerProvider:
+        parent: Tulia\Cms\Content\Type\Domain\ReadModel\Service\AbstractContentTypeProvider
+        arguments:
+            $configuration: '%cms.content_builder.content_type_entry.config%'
+
+    Tulia\Cms\Content\Type\Infrastructure\Framework\Form\ContentType\FormHandler:
+        shared: false
+
+    Tulia\Cms\Content\Type\Domain\WriteModel\Service\Configuration:
+        arguments:
+            $configuration: '%cms.content_builder.content_type.config%'
+
+    Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface:
+        class: Tulia\Cms\Content\Type\Infrastructure\Persistence\ContentProvider\CachedContentTypeRegistry
+

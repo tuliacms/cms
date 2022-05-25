@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Domain\ReadModel\Model;
 
-use Tulia\Cms\ContentBuilder\Attributes\Domain\ReadModel\MagickAttributesTrait;
-use Tulia\Cms\ContentBuilder\Attributes\Domain\ReadModel\Model\AttributesAwareInterface;
+use Tulia\Cms\Content\Attributes\Domain\ReadModel\MagickAttributesTrait;
+use Tulia\Cms\Content\Attributes\Domain\ReadModel\Model\AttributesAwareInterface;
 
 /**
  * @author Adam Banaszkiewicz

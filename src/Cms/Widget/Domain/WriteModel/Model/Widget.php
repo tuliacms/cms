@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Widget\Domain\WriteModel\Model;
 
-use Tulia\Cms\ContentBuilder\Attributes\Domain\WriteModel\AttributesAwareTrait;
-use Tulia\Cms\ContentBuilder\Attributes\Domain\WriteModel\Model\Attribute;
-use Tulia\Cms\ContentBuilder\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
+use Tulia\Cms\Content\Attributes\Domain\WriteModel\AttributesAwareTrait;
+use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\Attribute;
+use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
 use Tulia\Cms\Widget\Domain\WriteModel\Event;
 use Tulia\Cms\Widget\Domain\WriteModel\Model\ValueObject\WidgetId;

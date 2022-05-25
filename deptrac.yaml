@@ -28,15 +28,15 @@ parameters:
               - { type: directory, regex: "src/Cms/ContactForm/UserInterface/*." }
         - name: ContentBuilder/Domain
           collectors:
-              - { type: directory, regex: "src/Cms/ContentBuilder/ContentType/Domain/*." }
-              - { type: directory, regex: "src/Cms/ContentBuilder/Attributes/Domain/*." }
+              - { type: directory, regex: "src/Cms/Content/Type/Domain/*." }
+              - { type: directory, regex: "src/Cms/Content/Attributes/Domain/*." }
         - name: ContentBuilder/Infrastructure
           collectors:
-              - { type: directory, regex: "src/Cms/ContentBuilder/ContentType/Infrastructure/*." }
-              - { type: directory, regex: "src/Cms/ContentBuilder/Attributes/Infrastructure/*." }
+              - { type: directory, regex: "src/Cms/Content/Type/Infrastructure/*." }
+              - { type: directory, regex: "src/Cms/Content/Attributes/Infrastructure/*." }
         - name: ContentBuilder/UserInterface
           collectors:
-              - { type: directory, regex: "src/Cms/ContentBuilder/ContentType/UserInterface/*." }
+              - { type: directory, regex: "src/Cms/Content/Type/UserInterface/*." }
         # Shared
         - name: Shared/Domain
           collectors:

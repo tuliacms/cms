@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tulia\Tests\Unit\Cms\ContentBuilder\UserInterface\LayoutType\Service;
 
-use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderRegistry;
-use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\FieldTypeHandler\FieldTypeHandlerRegistry;
-use Tulia\Cms\ContentBuilder\Layout\Service\ConstraintTypeMappingRegistry;
-use Tulia\Cms\ContentBuilder\Layout\Service\FieldTypeMappingRegistry;
+use Tulia\Cms\Content\Type\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderRegistry;
+use Tulia\Cms\Content\Type\Domain\ReadModel\FieldTypeHandler\FieldTypeHandlerRegistry;
+use Tulia\Cms\Content\Type\Domain\ReadModel\Service\FieldTypeMappingRegistry;
+use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Service\ConstraintTypeMappingRegistry;
 use Tulia\Tests\Unit\TestCase;
 
 /**

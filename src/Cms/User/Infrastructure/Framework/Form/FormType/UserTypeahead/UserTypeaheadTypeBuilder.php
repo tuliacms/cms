@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserTypeahead;
 
-use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\FieldTypeBuilder\AbstractFieldTypeBuilder;
-use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\ContentType;
-use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\Field;
+use Tulia\Cms\Content\Type\Domain\ReadModel\FieldTypeBuilder\AbstractFieldTypeBuilder;
+use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
+use Tulia\Cms\Content\Type\Domain\ReadModel\Model\Field;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
 use Tulia\Cms\User\Domain\ReadModel\Model\User;
 

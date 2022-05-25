@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\Core;
 
-use Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\Routing\Router;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Routing\Router;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\TaxonomyActionInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Taxonomy;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term;

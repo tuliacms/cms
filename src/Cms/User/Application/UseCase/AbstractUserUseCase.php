@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Application\UseCase;
 
-use Tulia\Cms\ContentBuilder\Attributes\Domain\WriteModel\Model\Attribute;
+use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChainInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\User\Domain\WriteModel\Event\UserUpdated;
