@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Tiles;
+namespace Tulia\Cms\ContentBuilder\ContentType\UserInterface\Web\Backend\Tiles;
 
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -28,7 +28,7 @@ class SystemTilesCollector implements DashboardTilesCollector
         $collection
             ->add('content_model', [
                 'name' => $this->translator->trans('contentModel', [], 'content_builder'),
-                'link' => $this->router->generate('backend.content_builder.homepage'),
+                'link' => $this->router->generate('backend.content.type.homepage'),
                 'icon' => 'fas fa-box',
             ])
         ;

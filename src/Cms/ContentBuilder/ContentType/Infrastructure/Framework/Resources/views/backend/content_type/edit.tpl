@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block breadcrumbs %}
-    <li class="breadcrumb-item"><a href="{{ path('backend.content_builder.homepage') }}">{{ 'contentModel'|trans }}</a></li>
+    <li class="breadcrumb-item"><a href="{{ path('backend.content.type.homepage') }}">{{ 'contentModel'|trans }}</a></li>
     <li class="breadcrumb-item active" aria-current="page">{{ 'editContentTypeOf'|trans({ name: type|trans }) }}</li>
 {% endblock %}
 

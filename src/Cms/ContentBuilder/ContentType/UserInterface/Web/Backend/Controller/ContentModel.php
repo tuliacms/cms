@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Controller;
+namespace Tulia\Cms\ContentBuilder\ContentType\UserInterface\Web\Backend\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,7 +58,7 @@ class ContentModel extends AbstractController
     {
         if ($this->configuration->typeExists($contentType) === false) {
             $this->addFlash('danger', $this->trans('contentTypeOfNotExists', ['name' => $contentType], 'content_builder'));
-            return $this->redirectToRoute('backend.content_builder.homepage');
+            return $this->redirectToRoute('backend.content.type.homepage');
         }
 
         if ($request->isMethod('POST')) {
@@ -80,7 +80,7 @@ class ContentModel extends AbstractController
             }
 
             $this->setFlash('success', $this->trans('contentTypeCreatedSuccessfully', [], 'content_builder'));
-            return $this->redirectToRoute('backend.content_builder.homepage');
+            return $this->redirectToRoute('backend.content.type.homepage');
         }
 
         $layoutBuilder = $this->layoutTypeBuilderRegistry->get($this->configuration->getLayoutBuilder($contentType));
@@ -104,14 +104,14 @@ class ContentModel extends AbstractController
     ) {
         if ($this->configuration->typeExists($contentType) === false) {
             $this->addFlash('danger', $this->trans('contentTypeOfNotExists', ['name' => $contentType], 'content_builder'));
-            return $this->redirectToRoute('backend.content_builder.homepage');
+            return $this->redirectToRoute('backend.content.type.homepage');
         }
 
         $contentType = $this->contentTypeRepository->find($id);
 
         if ($contentType === null) {
             $this->setFlash('danger', $this->trans('contentTypeNotExists', [], 'content_builder'));
-            return $this->redirectToRoute('backend.content_builder.homepage');
+            return $this->redirectToRoute('backend.content.type.homepage');
         }
 
         $layout = $contentType->getLayout();
@@ -130,7 +130,7 @@ class ContentModel extends AbstractController
             }
 
             $this->setFlash('success', $this->trans('contentTypeUpdatedSuccessfully', [], 'content_builder'));
-            return $this->redirectToRoute('backend.content_builder.homepage');
+            return $this->redirectToRoute('backend.content.type.homepage');
         }
 
         $layoutBuilder = $this->layoutTypeBuilderRegistry->get($this->configuration->getLayoutBuilder($contentType->getType()));
@@ -151,12 +151,12 @@ class ContentModel extends AbstractController
 
         if ($contentType === null) {
             $this->setFlash('danger', $this->trans('contentTypeNotExists', [], 'content_builder'));
-            return $this->redirectToRoute('backend.content_builder.homepage');
+            return $this->redirectToRoute('backend.content.type.homepage');
         }
 
         $this->contentTypeRepository->delete($contentType);
 
         $this->setFlash('success', $this->trans('contentTypeWasRemoved', [], 'content_builder'));
-        return $this->redirectToRoute('backend.content_builder.homepage');
+        return $this->redirectToRoute('backend.content.type.homepage');
     }
 }

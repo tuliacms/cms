@@ -75,7 +75,7 @@ parameters:
             - ContentBuilder/Domain
         ContactForm/UserInterface:
             - Shared/Domain
-            - ContactForm/Domain # This dependency should not exists?
+            - ContactForm/Domain
             - ContactForm/Infrastructure
             - BackendMenu
         ContentBuilder/Domain:

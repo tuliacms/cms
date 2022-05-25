@@ -22,7 +22,7 @@
                     {{ type.name|trans({}, 'node') }}
                 </h4>
             {% else %}
-                <a href="{{ path('backend.content_builder.content_type.edit', { id: type.id, contentType: type.type }) }}">
+                <a href="{{ path('backend.content.type.content_type.edit', { id: type.id, contentType: type.type }) }}">
                     <h4 class="card-title">
                         {% if type.icon %}
                             <i class="{{ type.icon }}"></i> &nbsp;
@@ -44,14 +44,14 @@
         </ul>
         {% if type.isInternal == false %}
             <div class="card-footer py-0 pr-0">
-                <a href="{{ path('backend.content_builder.content_type.edit', { id: type.id, contentType: type.type }) }}" class="card-link py-3 d-inline-block" title="{{ 'edit'|trans({}, 'messages') }}">{{ 'edit'|trans({}, 'messages') }}</a>
+                <a href="{{ path('backend.content.type.content_type.edit', { id: type.id, contentType: type.type }) }}" class="card-link py-3 d-inline-block" title="{{ 'edit'|trans({}, 'messages') }}">{{ 'edit'|trans({}, 'messages') }}</a>
                 <a href="#" class="card-link"></a>
                 <div class="dropup d-inline-block float-right">
                     <a href="#" class="card-link d-inline-block px-4 py-3 text-dark" data-bs-toggle="dropdown">
                         <i class="fas fa-ellipsis-v"></i>
                     </a>
                     <div class="dropdown-menu">
-                        <a href="#" data-href="{{ path('backend.content_builder.content_type.delete', { id: type.id, contentType: type.type }) }}" class="dropdown-item dropdown-item-danger dropdown-item-with-icon content-type-delete-trigger" title="{{ 'delete'|trans({}, 'messages') }}" data-id="{{ type.code }}"><i class="dropdown-icon fas fa-times"></i>{{ 'delete'|trans({}, 'messages') }}</a>
+                        <a href="#" data-href="{{ path('backend.content.type.content_type.delete', { id: type.id, contentType: type.type }) }}" class="dropdown-item dropdown-item-danger dropdown-item-with-icon content-type-delete-trigger" title="{{ 'delete'|trans({}, 'messages') }}" data-id="{{ type.code }}"><i class="dropdown-icon fas fa-times"></i>{{ 'delete'|trans({}, 'messages') }}</a>
                     </div>
                 </div>
             </div>
@@ -94,7 +94,7 @@
                     {% endfor %}
                     <div class="col mb-4">
                         <div class="card">
-                            <a href="{{ path('backend.content_builder.content_type.create', { contentType: type }) }}" class="content-type-create-button">
+                            <a href="{{ path('backend.content.type.content_type.create', { contentType: type }) }}" class="content-type-create-button">
                                 <div class="content-type-create-button-inner">
                                     <i class="fas fa-plus"></i>
                                     {{ 'createContentTypeOf'|trans({ name: type|trans }) }}

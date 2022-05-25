@@ -4,12 +4,12 @@ services:
         autoconfigure: true
         public: false
 
-    Tulia\Cms\ContentBlock\:
+    Tulia\Cms\ContentBuilder\ContentBlock\:
         resource: '../../../../**'
         exclude:
             - '../../../../Infrastructure/Framework/Resources/**'
 
-    Tulia\Cms\ContentBlock\Domain\Renderer\Renderer:
+    Tulia\Cms\ContentBuilder\ContentBlock\Domain\Renderer\Renderer:
         bind:
             $environment: '%kernel.environment%'
             $paths: '%cms.content_blocks.templating.paths%'

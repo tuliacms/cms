@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBlock\Domain\Shortcode;
+namespace Tulia\Cms\ContentBuilder\ContentBlock\Domain\Shortcode;
 
 use Tulia\Component\Shortcode\Compiler\ShortcodeCompilerInterface;
 use Tulia\Component\Shortcode\ShortcodeInterface;

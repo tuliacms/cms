@@ -8,7 +8,7 @@ use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\FieldTypeBuilder\Abstr
 use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\Field;
 
-use function Tulia\Cms\ContentBuilder\UserInterface\Web\Shared\Form\FormType\count;
+use function Tulia\Cms\ContentBuilder\ContentType\UserInterface\Web\Shared\Form\FormType\count;
 
 /**
  * @author Adam Banaszkiewicz

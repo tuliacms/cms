@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBlock\Infrastructure\Framework\Form\FormType;
+namespace Tulia\Cms\ContentBuilder\ContentBlock\Infrastructure\Framework\Form\FormType;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
@@ -58,7 +58,7 @@ class ContentBlockBuilderType extends AbstractType
                     'code' => $type->getCode(),
                     'name' => $type->getName(),
                     'icon' => $this->requestStack->getCurrentRequest()->getUriForPath((string) $icon),
-                    'block_panel_url' => $this->router->generate('backend.content_block.block_panel.builder', [ 'type' => $type->getCode() ]),
+                    'block_panel_url' => $this->router->generate('backend.content.block.panel.builder', [ 'type' => $type->getCode() ]),
                 ];
             }
         }

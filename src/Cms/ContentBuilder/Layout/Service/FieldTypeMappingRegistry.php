@@ -13,7 +13,7 @@ use Tulia\Cms\ContentBuilder\Layout\Exception\FieldTypeNotExistsException;
 /**
  * @author Adam Banaszkiewicz
  */
-// @todo Move Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry to Domain layer
+// @todo Move Tulia\Cms\ContentBuilder\ContentType\UserInterface\LayoutType\Service\FieldTypeMappingRegistry to Domain layer
 class FieldTypeMappingRegistry
 {
     private ConstraintTypeMappingRegistry $constraintTypeMappingRegistry;

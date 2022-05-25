@@ -62,7 +62,7 @@
         errors: {{ errors|json_encode|raw }},
         multilingual: {{ multilingual ? 'true' : 'false' }},
         creationMode: {{ creationMode ? 'true' : 'false' }},
-        listingUrl: '{{ path('backend.content_builder.homepage') }}',
+        listingUrl: '{{ path('backend.content.type.homepage') }}',
         csrfToken: '{{ csrf_token('create-content-type') }}',
     };
 </script>

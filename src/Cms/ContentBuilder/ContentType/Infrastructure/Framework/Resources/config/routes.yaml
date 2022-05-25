@@ -1,23 +1,23 @@
-backend.content_builder.homepage:
-    path: /administrator/content-builder/content-type
+backend.content.type.homepage:
+    path: /administrator/content/type
     controller: Tulia\Cms\ContentBuilder\ContentType\UserInterface\Web\Backend\Controller\ContentModel::index
 
-backend.content_builder.content_type.create:
-    path: /administrator/content-builder/content-type/{contentType}/create
+backend.content.type.content_type.create:
+    path: /administrator/content/type/{contentType}/create
     controller: Tulia\Cms\ContentBuilder\ContentType\UserInterface\Web\Backend\Controller\ContentModel::create
     methods: [GET, POST]
     requirements:
         contentType: '[a-zA-Z0-9_]+'
 
-backend.content_builder.content_type.edit:
-    path: /administrator/content-builder/content-type/{contentType}/edit/{id}
+backend.content.type.content_type.edit:
+    path: /administrator/content/type/{contentType}/edit/{id}
     controller: Tulia\Cms\ContentBuilder\ContentType\UserInterface\Web\Backend\Controller\ContentModel::edit
     methods: [GET, POST]
     requirements:
         contentType: '[a-zA-Z0-9_]+'
 
-backend.content_builder.content_type.delete:
-    path: /administrator/content-builder/content-type/{contentType}/delete/{id}
+backend.content.type.content_type.delete:
+    path: /administrator/content/type/{contentType}/delete/{id}
     controller: Tulia\Cms\ContentBuilder\ContentType\UserInterface\Web\Backend\Controller\ContentModel::delete
     methods: [GET, POST]
     requirements:

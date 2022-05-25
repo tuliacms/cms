@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBlock\Infrastructure\Framework\Twig\Extension;
+namespace Tulia\Cms\ContentBuilder\ContentBlock\Infrastructure\Framework\Twig\Extension;
 
-use Tulia\Cms\ContentBlock\Domain\Renderer\Renderer;
+use Tulia\Cms\ContentBuilder\ContentBlock\Domain\Renderer\Renderer;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 

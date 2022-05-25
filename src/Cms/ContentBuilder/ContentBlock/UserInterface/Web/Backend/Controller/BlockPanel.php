@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBlock\UserInterface\Web\Backend\Controller;
+namespace Tulia\Cms\ContentBuilder\ContentBlock\UserInterface\Web\Backend\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

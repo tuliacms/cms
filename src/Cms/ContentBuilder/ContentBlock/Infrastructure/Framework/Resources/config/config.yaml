@@ -1,13 +1,13 @@
 framework:
     translator:
         paths:
-            - '%cms.core_dir%/Cms/ContentBlock/Infrastructure/Framework/Resources/translations'
+            - '%cms.core_dir%/Cms/ContentBuilder/ContentBlock/Infrastructure/Framework/Resources/translations'
     public_paths:
-        - { source: '%cms.core_dir%/Cms/ContentBlock/Infrastructure/Framework/Resources/public/content-blocks-builder/dist', target: '/core/content-block-builder' }
+        - { source: '%cms.core_dir%/Cms/ContentBuilder/ContentBlock/Infrastructure/Framework/Resources/public/content-blocks-builder/dist', target: '/core/content-block-builder' }
     templating:
         paths:
-            - { name: backend/content_block, path: '%cms.core_dir%/Cms/ContentBlock/Infrastructure/Framework/Resources/views/backend' }
-            - { name: cms/content_block, path: '%cms.core_dir%/Cms/ContentBlock/Infrastructure/Framework/Resources/views/frontend' }
+            - { name: backend/content_block, path: '%cms.core_dir%/Cms/ContentBuilder/ContentBlock/Infrastructure/Framework/Resources/views/backend' }
+            - { name: cms/content_block, path: '%cms.core_dir%/Cms/ContentBuilder/ContentBlock/Infrastructure/Framework/Resources/views/frontend' }
     assetter:
         assets:
             content_block_builder:
@@ -24,13 +24,13 @@ cms:
         content_type:
             content_block:
                 controller: ''
-                layout_builder: 'Tulia\Cms\ContentBuilder\Infrastructure\Presentation\TwigContentBlockTypeLayoutBuilder'
+                layout_builder: 'Tulia\Cms\ContentBuilder\ContentType\Infrastructure\Presentation\TwigContentBlockTypeLayoutBuilder'
                 multilingual: false
         data_types:
             mapping:
                 content_blocks:
                     label: Content Blocks builder
-                    classname: 'Tulia\Cms\ContentBlock\Infrastructure\Framework\Form\FormType\ContentBlockBuilderType'
+                    classname: 'Tulia\Cms\ContentBuilder\ContentBlock\Infrastructure\Framework\Form\FormType\ContentBlockBuilderType'
                     exclude_for_types: [ content_block ]
                     constraints: [ required ]
                     flags: [ compilable, renderable ]
