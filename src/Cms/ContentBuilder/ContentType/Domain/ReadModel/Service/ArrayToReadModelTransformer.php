@@ -9,8 +9,8 @@ use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\Field;
 use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\FieldsGroup;
 use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\LayoutType;
 use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\Section;
-use Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\ContentType\Service\Configuration;
-use Tulia\Cms\ContentBuilder\Layout\LayoutType\Service\FieldTypeMappingRegistry;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\Service\Configuration;
+use Tulia\Cms\ContentBuilder\Layout\Service\FieldTypeMappingRegistry;
 
 /**
  * @author Adam Banaszkiewicz

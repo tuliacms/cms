@@ -8,7 +8,7 @@ use Tulia\Cms\ContentBuilder\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\ContentBuilder\Attributes\Domain\WriteModel\Service\UriToArrayTransformer;
 use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\ContentBuilder\ContentType\Infrastructure\Framework\Form\ContentTypeFormDescriptor;
-use Tulia\Cms\ContentBuilder\Layout\LayoutType\Service\FieldTypeMappingRegistry;
+use Tulia\Cms\ContentBuilder\Layout\Service\FieldTypeMappingRegistry;
 
 /**
  * @author Adam Banaszkiewicz

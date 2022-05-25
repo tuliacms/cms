@@ -7,7 +7,7 @@ namespace Tulia\Cms\ContentBuilder\ContentType\Domain\AbstractModel;
 /**
  * @author Adam Banaszkiewicz
  */
-class AbstractFieldsGroup
+abstract class AbstractFieldsGroup
 {
     protected string $code;
     protected string $name;

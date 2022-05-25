@@ -8,7 +8,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\ContentType\Service\Configuration;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\Service\Configuration;
 
 /**
  * @author Adam Banaszkiewicz

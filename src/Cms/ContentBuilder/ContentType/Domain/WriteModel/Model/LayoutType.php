@@ -9,6 +9,6 @@ use Tulia\Cms\ContentBuilder\ContentType\Domain\AbstractModel\AbstractLayoutType
 /**
  * @author Adam Banaszkiewicz
  */
-class LayoutType extends AbstractLayoutType
+final class LayoutType extends AbstractLayoutType
 {
 }

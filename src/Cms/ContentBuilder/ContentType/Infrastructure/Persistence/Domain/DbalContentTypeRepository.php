@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\ContentType\Infrastructure\Persistence\Domain;
 
-use Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\ContentType\Service\ContentTypeStorageInterface;
 use Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\ContentTypeRepositoryInterface;
 use Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\Event\ContentTypeDeleted;
 use Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\Model\Field;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\Service\ContentTypeStorageInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 

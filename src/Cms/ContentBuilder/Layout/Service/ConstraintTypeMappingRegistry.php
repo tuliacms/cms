@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\Layout\LayoutType\Service;
+namespace Tulia\Cms\ContentBuilder\Layout\Service;
 
 use Symfony\Component\Validator\Constraint;
-use Tulia\Cms\ContentBuilder\Layout\LayoutType\Exception\ConstraintNotExistsException;
+use Tulia\Cms\ContentBuilder\Layout\Exception\ConstraintNotExistsException;
 
 /**
  * @author Adam Banaszkiewicz

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\Layout\LayoutType\Exception;
+namespace Tulia\Cms\ContentBuilder\Layout\Exception;
 
 /**
  * @author Adam Banaszkiewicz

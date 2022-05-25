@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\ContentType\Service;
+namespace Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\Service;
 
 /**
  * @author Adam Banaszkiewicz

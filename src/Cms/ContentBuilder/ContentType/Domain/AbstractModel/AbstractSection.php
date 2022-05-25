@@ -9,7 +9,7 @@ use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\FieldsGroup;
 /**
  * @author Adam Banaszkiewicz
  */
-class AbstractSection
+abstract class AbstractSection
 {
     protected string $code;
 

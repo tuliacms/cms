@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContentBuilder\ContentType\Infrastructure\Framework\Twig\Extension;
 
 use Tulia\Cms\ContentBuilder\ContentType\Infrastructure\Framework\Form\ContentTypeFormDescriptor;
-use Tulia\Cms\ContentBuilder\Layout\LayoutType\Exception\LayoutNotExists;
-use Tulia\Cms\ContentBuilder\Layout\LayoutType\Service\LayoutBuilder;
+use Tulia\Cms\ContentBuilder\Layout\Exception\LayoutNotExists;
+use Tulia\Cms\ContentBuilder\Layout\Service\LayoutBuilder;
 use Tulia\Component\Templating\Engine;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;

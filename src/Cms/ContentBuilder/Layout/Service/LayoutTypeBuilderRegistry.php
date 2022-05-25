@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\Layout\LayoutType\Service;
+namespace Tulia\Cms\ContentBuilder\Layout\Service;
 
 /**
  * @author Adam Banaszkiewicz

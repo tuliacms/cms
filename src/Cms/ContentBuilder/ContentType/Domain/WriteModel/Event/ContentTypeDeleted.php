@@ -10,7 +10,7 @@ use Tulia\Cms\Shared\Domain\WriteModel\Event\DomainEvent;
 /**
  * @author Adam Banaszkiewicz
  */
-class ContentTypeDeleted extends DomainEvent
+final class ContentTypeDeleted extends DomainEvent
 {
     private string $id;
     private string $type;

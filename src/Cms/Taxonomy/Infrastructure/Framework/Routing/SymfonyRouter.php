@@ -12,7 +12,7 @@ use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Service\ContentTypeRegistryInterface;
-use Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\ContentType\Service\Router;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\Routing\Router;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\FrontendRouteSuffixResolver;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderScopeEnum;

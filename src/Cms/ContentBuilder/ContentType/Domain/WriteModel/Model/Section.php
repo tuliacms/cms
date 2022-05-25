@@ -9,6 +9,6 @@ use Tulia\Cms\ContentBuilder\ContentType\Domain\AbstractModel\AbstractSection;
 /**
  * @author Adam Banaszkiewicz
  */
-class Section extends AbstractSection
+final class Section extends AbstractSection
 {
 }

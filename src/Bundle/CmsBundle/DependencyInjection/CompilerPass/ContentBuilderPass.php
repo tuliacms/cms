@@ -12,9 +12,9 @@ use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\FieldTypeHandler\Field
 use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Service\ContentTypeDecorator;
 use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\Routing\Strategy\ContentTypeRoutingStrategyRegistry;
-use Tulia\Cms\ContentBuilder\Layout\LayoutType\Service\ConstraintTypeMappingRegistry;
-use Tulia\Cms\ContentBuilder\Layout\LayoutType\Service\FieldTypeMappingRegistry;
-use Tulia\Cms\ContentBuilder\Layout\LayoutType\Service\LayoutTypeBuilderRegistry;
+use Tulia\Cms\ContentBuilder\Layout\Service\ConstraintTypeMappingRegistry;
+use Tulia\Cms\ContentBuilder\Layout\Service\FieldTypeMappingRegistry;
+use Tulia\Cms\ContentBuilder\Layout\Service\LayoutTypeBuilderRegistry;
 
 /**
  * @author Adam Banaszkiewicz

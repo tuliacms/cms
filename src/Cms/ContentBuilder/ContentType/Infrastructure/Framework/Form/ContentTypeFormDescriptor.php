@@ -13,7 +13,7 @@ use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\FieldTypeBuilder\Field
 use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\FieldTypeHandler\FieldTypeHandlerInterface;
 use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\Field;
-use Tulia\Cms\ContentBuilder\Layout\LayoutType\Service\FieldTypeMappingRegistry;
+use Tulia\Cms\ContentBuilder\Layout\Service\FieldTypeMappingRegistry;
 
 /**
  * @author Adam Banaszkiewicz

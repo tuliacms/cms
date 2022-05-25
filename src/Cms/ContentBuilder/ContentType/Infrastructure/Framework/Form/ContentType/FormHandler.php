@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\ContentBuilder\ContentType\Infrastructure\Framework\Form\ContentType\FormType\ContentTypeForm;
 use Tulia\Cms\ContentBuilder\ContentType\Infrastructure\Framework\Form\ContentType\FormType\LayoutSectionType;
 use Tulia\Cms\ContentBuilder\ContentType\Infrastructure\Framework\Form\Validator\CodenameValidator;
-use Tulia\Cms\ContentBuilder\Layout\LayoutType\Service\FieldTypeMappingRegistry;
+use Tulia\Cms\ContentBuilder\Layout\Service\FieldTypeMappingRegistry;
 
 /**
  * @author Adam Banaszkiewicz

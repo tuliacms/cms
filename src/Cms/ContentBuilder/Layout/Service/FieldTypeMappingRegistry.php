@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\Layout\LayoutType\Service;
+namespace Tulia\Cms\ContentBuilder\Layout\Service;
 
 use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderInterface;
 use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderRegistry;
 use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\FieldTypeHandler\FieldTypeHandlerInterface;
 use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\FieldTypeHandler\FieldTypeHandlerRegistry;
-use Tulia\Cms\ContentBuilder\Layout\LayoutType\Exception\FieldTypeNotExistsException;
+use Tulia\Cms\ContentBuilder\Layout\Exception\FieldTypeNotExistsException;
 
 /**
  * @author Adam Banaszkiewicz

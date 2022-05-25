@@ -9,7 +9,7 @@ use Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\Exception\EmptyRoutin
 /**
  * @author Adam Banaszkiewicz
  */
-class AbstractContentType
+abstract class AbstractContentType
 {
     protected string $type;
     protected ?string $controller = null;

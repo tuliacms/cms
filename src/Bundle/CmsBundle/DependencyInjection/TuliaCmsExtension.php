@@ -94,7 +94,7 @@ class TuliaCmsExtension extends Extension
             \Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\Routing\Strategy\ContentTypeRoutingStrategyInterface::class)
             ->addTag('content_builder.content_type.routing_strategy');
         $container->registerForAutoconfiguration(
-            \Tulia\Cms\ContentBuilder\Layout\LayoutType\Service\LayoutTypeBuilderInterface::class)
+            \Tulia\Cms\ContentBuilder\Layout\Service\LayoutTypeBuilderInterface::class)
             ->addTag('content_builder.layout_type.builder');
         $container->registerForAutoconfiguration(
             \Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderInterface::class)

@@ -10,10 +10,10 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Tulia\Cms\ContentBuilder\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\Field;
-use Tulia\Cms\ContentBuilder\Layout\LayoutType\Exception\ConstraintNotExistsException;
-use Tulia\Cms\ContentBuilder\Layout\LayoutType\Exception\FieldTypeNotExistsException;
-use Tulia\Cms\ContentBuilder\Layout\LayoutType\Service\ConstraintsBuilder;
-use Tulia\Cms\ContentBuilder\Layout\LayoutType\Service\FieldTypeMappingRegistry;
+use Tulia\Cms\ContentBuilder\Layout\Exception\ConstraintNotExistsException;
+use Tulia\Cms\ContentBuilder\Layout\Exception\FieldTypeNotExistsException;
+use Tulia\Cms\ContentBuilder\Layout\Service\ConstraintsBuilder;
+use Tulia\Cms\ContentBuilder\Layout\Service\FieldTypeMappingRegistry;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\CancelType;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\SubmitType;
 

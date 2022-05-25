@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContentBuilder\ContentType\Infrastructure\Framework\Form\ContentType;
 
 use Tulia\Cms\ContentBuilder\ContentType\Infrastructure\Framework\Form\Validator\CodenameValidator;
-use Tulia\Cms\ContentBuilder\Layout\LayoutType\Service\FieldTypeMappingRegistry;
+use Tulia\Cms\ContentBuilder\Layout\Service\FieldTypeMappingRegistry;
 
 /**
  * @author Adam Banaszkiewicz

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\ContentType\Infrastructure\Importer;
 
-use Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\ContentType\Service\Configuration;
 use Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\ContentTypeRepositoryInterface;
 use Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\Model\ContentType;
-use Tulia\Cms\ContentBuilder\Layout\LayoutType\Service\FieldTypeMappingRegistry;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\Service\Configuration;
+use Tulia\Cms\ContentBuilder\Layout\Service\FieldTypeMappingRegistry;
 use Tulia\Component\Importer\ObjectImporter\ObjectImporterInterface;
 use Tulia\Component\Importer\Structure\ObjectData;
 

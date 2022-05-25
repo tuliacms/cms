@@ -6,7 +6,7 @@ namespace Tulia\Cms\User\Infrastructure\Presentation;
 
 use Symfony\Component\Form\FormView;
 use Tulia\Cms\ContentBuilder\ContentType\Domain\ReadModel\Model\ContentType;
-use Tulia\Cms\ContentBuilder\Layout\LayoutType\Service\LayoutTypeBuilderInterface;
+use Tulia\Cms\ContentBuilder\Layout\Service\LayoutTypeBuilderInterface;
 use Tulia\Component\Templating\View;
 
 /**

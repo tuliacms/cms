@@ -11,7 +11,7 @@ use Tulia\Cms\Shared\Domain\WriteModel\Model\AggregateRootTrait;
 /**
  * @author Adam Banaszkiewicz
  */
-class ContentType extends AbstractContentType
+final class ContentType extends AbstractContentType
 {
     use AggregateRootTrait;
 

@@ -7,7 +7,7 @@ namespace Tulia\Cms\ContentBuilder\ContentType\Domain\AbstractModel;
 /**
  * @author Adam Banaszkiewicz
  */
-class AbstractField
+abstract class AbstractField
 {
     protected array $options;
     protected static $defaults = [

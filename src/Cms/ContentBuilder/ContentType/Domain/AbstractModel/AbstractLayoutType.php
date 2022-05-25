@@ -7,7 +7,7 @@ namespace Tulia\Cms\ContentBuilder\ContentType\Domain\AbstractModel;
 /**
  * @author Adam Banaszkiewicz
  */
-class AbstractLayoutType
+abstract class AbstractLayoutType
 {
     protected string $code;
     protected string $name;

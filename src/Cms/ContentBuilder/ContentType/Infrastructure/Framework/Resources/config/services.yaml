@@ -28,7 +28,7 @@ services:
     Tulia\Cms\ContentBuilder\ContentType\Infrastructure\Framework\Form\ContentType\FormHandler:
         shared: false
 
-    Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\ContentType\Service\Configuration:
+    Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\Service\Configuration:
         arguments:
             $configuration: '%cms.content_builder.content_type.config%'
 

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\Layout\LayoutType\Service;
+namespace Tulia\Cms\ContentBuilder\Layout\Service;
 
-use Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\ContentType\Service\Configuration;
+use Tulia\Cms\ContentBuilder\ContentType\Domain\WriteModel\Service\Configuration;
 use Tulia\Cms\ContentBuilder\ContentType\Infrastructure\Framework\Form\ContentTypeFormDescriptor;
-use Tulia\Cms\ContentBuilder\Layout\LayoutType\Exception\LayoutNotExists;
+use Tulia\Cms\ContentBuilder\Layout\Exception\LayoutNotExists;
 use Tulia\Component\Templating\View;
 
 /**

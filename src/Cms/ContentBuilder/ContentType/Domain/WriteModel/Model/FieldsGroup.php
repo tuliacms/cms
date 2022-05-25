@@ -9,6 +9,6 @@ use Tulia\Cms\ContentBuilder\ContentType\Domain\AbstractModel\AbstractFieldsGrou
 /**
  * @author Adam Banaszkiewicz
  */
-class FieldsGroup extends AbstractFieldsGroup
+final class FieldsGroup extends AbstractFieldsGroup
 {
 }

@@ -9,7 +9,7 @@ use Tulia\Cms\ContentBuilder\ContentType\Domain\AbstractModel\AbstractField;
 /**
  * @author Adam Banaszkiewicz
  */
-class Field extends AbstractField
+final class Field extends AbstractField
 {
     /**
      * @return Field[]
