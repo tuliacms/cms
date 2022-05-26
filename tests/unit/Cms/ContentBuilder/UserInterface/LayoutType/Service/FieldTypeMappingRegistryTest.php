@@ -6,8 +6,8 @@ namespace Tulia\Tests\Unit\Cms\ContentBuilder\UserInterface\LayoutType\Service;
 
 use Tulia\Cms\Content\Type\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderRegistry;
 use Tulia\Cms\Content\Type\Domain\ReadModel\FieldTypeHandler\FieldTypeHandlerRegistry;
+use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ConstraintTypeMappingRegistry;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\FieldTypeMappingRegistry;
-use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Service\ConstraintTypeMappingRegistry;
 use Tulia\Tests\Unit\TestCase;
 
 /**

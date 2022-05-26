@@ -26,17 +26,20 @@ parameters:
         - name: ContactForm/UserInterface
           collectors:
               - { type: directory, regex: "src/Cms/ContactForm/UserInterface/*." }
-        - name: ContentBuilder/Domain
+        - name: Content/Domain
           collectors:
               - { type: directory, regex: "src/Cms/Content/Type/Domain/*." }
               - { type: directory, regex: "src/Cms/Content/Attributes/Domain/*." }
-        - name: ContentBuilder/Infrastructure
+              - { type: directory, regex: "src/Cms/Content/Block/Domain/*." }
+        - name: Content/Infrastructure
           collectors:
               - { type: directory, regex: "src/Cms/Content/Type/Infrastructure/*." }
               - { type: directory, regex: "src/Cms/Content/Attributes/Infrastructure/*." }
-        - name: ContentBuilder/UserInterface
+              - { type: directory, regex: "src/Cms/Content/Block/Infrastructure/*." }
+        - name: Content/UserInterface
           collectors:
               - { type: directory, regex: "src/Cms/Content/Type/UserInterface/*." }
+              - { type: directory, regex: "src/Cms/Content/Block/UserInterface/*." }
         # Shared
         - name: Shared/Domain
           collectors:
@@ -72,19 +75,19 @@ parameters:
             - Shared/Domain
             - Shared/Infrastructure
             - ContactForm/Domain
-            - ContentBuilder/Domain
+            - Content/Domain
         ContactForm/UserInterface:
             - Shared/Domain
             - ContactForm/Domain
             - ContactForm/Infrastructure
             - BackendMenu
-        ContentBuilder/Domain:
+        Content/Domain:
             - Shared/Domain
-        ContentBuilder/Infrastructure:
+        Content/Infrastructure:
             - Shared/Domain
             - Shared/Infrastructure
-            - ContentBuilder/Domain
-        ContentBuilder/UserInterface:
+            - Content/Domain
+        Content/UserInterface:
             - Shared/Domain
-            - ContentBuilder/Domain
-            - ContentBuilder/Infrastructure
+            - Content/Domain
+            - Content/Infrastructure

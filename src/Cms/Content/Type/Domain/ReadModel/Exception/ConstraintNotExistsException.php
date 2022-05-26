@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Exception;
+namespace Tulia\Cms\Content\Type\Domain\ReadModel\Exception;
 
 /**
  * @author Adam Banaszkiewicz

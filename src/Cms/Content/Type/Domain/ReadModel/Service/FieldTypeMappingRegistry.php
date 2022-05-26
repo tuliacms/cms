@@ -9,25 +9,24 @@ use Tulia\Cms\Content\Type\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderInt
 use Tulia\Cms\Content\Type\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderRegistry;
 use Tulia\Cms\Content\Type\Domain\ReadModel\FieldTypeHandler\FieldTypeHandlerInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\FieldTypeHandler\FieldTypeHandlerRegistry;
-use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Service\ConstraintTypeMappingRegistry;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class FieldTypeMappingRegistry
 {
-    private ConstraintTypeMappingRegistry $constraintTypeMappingRegistry;
+    private ConstraintsResolverInterface $constraintsResolver;
     private array $mapping = [];
     private bool $mappingResolved = false;
     private FieldTypeBuilderRegistry $builderRegistry;
     private FieldTypeHandlerRegistry $handlerRegistry;
 
     public function __construct(
-        ConstraintTypeMappingRegistry $constraintTypeMappingRegistry,
+        ConstraintsResolverInterface $constraintsResolver,
         FieldTypeBuilderRegistry $builderRegistry,
         FieldTypeHandlerRegistry $handlerRegistry
     ) {
-        $this->constraintTypeMappingRegistry = $constraintTypeMappingRegistry;
+        $this->constraintsResolver = $constraintsResolver;
         $this->builderRegistry = $builderRegistry;
         $this->handlerRegistry = $handlerRegistry;
     }
@@ -136,19 +135,7 @@ class FieldTypeMappingRegistry
         }
 
         foreach ($this->mapping as $typeKey => $val) {
-            $constraints = [];
-
-            foreach ($this->mapping[$typeKey]['constraints'] as $constraint) {
-                $constraints[$constraint] = $this->constraintTypeMappingRegistry->get($constraint);
-            }
-
-            $this->mapping[$typeKey]['constraints'] = array_merge(
-                $constraints,
-                $this->mapping[$typeKey]['custom_constraints']
-            );
-
-            // Remove custom constraints as those were merged with named constraints
-            unset($this->mapping[$typeKey]['custom_constraints']);
+            $this->mapping[$typeKey] = $this->constraintsResolver->resolve($this->mapping[$typeKey]);
         }
 
         $this->mappingResolved = true;

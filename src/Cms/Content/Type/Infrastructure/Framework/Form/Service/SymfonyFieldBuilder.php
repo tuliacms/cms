@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\Field;
+use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ConstraintsBuilderInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\FieldTypeMappingRegistry;
 use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\FormType\RepeatableGroupType;
 
@@ -17,11 +18,11 @@ use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\FormType\RepeatableGrou
 class SymfonyFieldBuilder
 {
     private FieldTypeMappingRegistry $mappingRegistry;
-    private ConstraintsBuilder $constraintsBuilder;
+    private ConstraintsBuilderInterface $constraintsBuilder;
 
     public function __construct(
         FieldTypeMappingRegistry $mappingRegistry,
-        ConstraintsBuilder $constraintsBuilder
+        ConstraintsBuilderInterface $constraintsBuilder
     ) {
         $this->mappingRegistry = $mappingRegistry;
         $this->constraintsBuilder = $constraintsBuilder;

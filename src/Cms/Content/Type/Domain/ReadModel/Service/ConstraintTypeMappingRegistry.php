@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Service;
+namespace Tulia\Cms\Content\Type\Domain\ReadModel\Service;
 
 use Symfony\Component\Validator\Constraint;
-use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Exception\ConstraintNotExistsException;
+use Tulia\Cms\Content\Type\Domain\ReadModel\Exception\ConstraintNotExistsException;
 
 /**
  * @author Adam Banaszkiewicz

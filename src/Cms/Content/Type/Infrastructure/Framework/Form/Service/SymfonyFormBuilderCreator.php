@@ -8,11 +8,12 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\Attribute;
+use Tulia\Cms\Content\Type\Domain\ReadModel\Exception\ConstraintNotExistsException;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Exception\FieldTypeNotExistsException;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\Field;
+use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ConstraintsBuilder;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\FieldTypeMappingRegistry;
-use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Exception\ConstraintNotExistsException;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\CancelType;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\SubmitType;
 
