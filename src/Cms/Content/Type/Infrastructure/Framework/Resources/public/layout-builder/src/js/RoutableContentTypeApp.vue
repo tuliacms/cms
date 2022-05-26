@@ -2,8 +2,8 @@
     <div class="pane pane-lead">
         <div class="pane-header">
             <div class="pane-buttons">
-                <a :href="listingUrl" class="btn btn-secondary btn-icon-left"><i class="btn-icon fas fa-times"></i> Anuluj</a>
-                <button class="btn btn-success btn-icon-left" type="button" @click="save()"><i class="btn-icon fas fa-save"></i> Zapisz</button>
+                <a :href="options.listingUrl" class="btn btn-secondary btn-icon-left"><i class="btn-icon fas fa-times"></i> Anuluj</a>
+                <button class="btn btn-success btn-icon-left" type="button" @click="form.save()"><i class="btn-icon fas fa-save"></i> Zapisz</button>
             </div>
             <i class="pane-header-icon fas fa-box"></i>
             <h1 class="pane-title">{{ translations.pageTitle }}</h1>
@@ -13,7 +13,7 @@
                 <div class="page-form-sidebar">
                     <form method="POST" id="ctb-form" style="display:none">
                         <textarea name="node_type" id="ctb-form-field-node-type"></textarea>
-                        <input type="text" name="_token" :value="csrfToken"/>
+                        <input type="text" name="_token" :value="options.csrfToken"/>
                     </form>
                     <div class="ctb-sections-container">
                         <div class="ctb-section ctb-section-internal-fields">
@@ -35,7 +35,7 @@
                     <SectionsList
                         :translations="translations"
                         :sections="model.layout.sidebar.sections"
-                        :errors="$get(view.errors, 'layout.sidebar.sections', [])"
+                        :errors="ObjectUtils.get(view.errors, 'layout.sidebar.sections', [])"
                     ></SectionsList>
                 </div>
                 <div class="page-form-content">
@@ -45,7 +45,7 @@
                                 <div class="col-6">
                                     <div class="mb-3">
                                         <label class="form-label" for="ctb-node-type-name">{{ translations.contentTypeName }}</label>
-                                        <input type="text" :class="{ 'form-control': true, 'is-invalid': view.form.type_validation.name.valid === false }" id="ctb-node-type-name" v-model="model.type.name" @keyup="generateTypeCode()" @change="validate()" />
+                                        <input type="text" :class="{ 'form-control': true, 'is-invalid': view.form.type_validation.name.valid === false }" id="ctb-node-type-name" v-model="model.type.name" @keyup="generateTypeCode()" @change="form.validate()" />
                                         <div class="form-text">{{ translations.contentTypeNameInfo }}</div>
                                         <div v-if="view.form.type_validation.name.valid === false" class="invalid-feedback">{{ view.form.type_validation.name.message }}</div>
                                     </div>
@@ -53,7 +53,7 @@
                                 <div class="col-6">
                                     <div class="mb-3">
                                         <label class="form-label" for="ctb-node-type-code">{{ translations.contentTypeCode }}</label>
-                                        <input type="text" :disabled="view.creation_mode !== true" :class="{ 'form-control': true, 'is-invalid': view.form.type_validation.code.valid === false }" id="ctb-node-type-code" v-model="model.type.code" @change="validate()" />
+                                        <input type="text" :disabled="view.creation_mode !== true" :class="{ 'form-control': true, 'is-invalid': view.form.type_validation.code.valid === false }" id="ctb-node-type-code" v-model="model.type.code" @change="form.validate()" />
                                         <div class="form-text">{{ translations.contentTypeCodeHelp }}</div>
                                         <div v-if="view.form.type_validation.code.valid === false" class="invalid-feedback">{{ view.form.type_validation.code.message }}</div>
                                     </div>
@@ -66,27 +66,27 @@
                                 </div>
                                 <div class="col-6 mb-3">
                                     <label for="ctb-form-type-hierarchical" class="form-label">{{ translations.hierarchicalType }}</label>
-                                    <chosen-select id="ctb-form-type-hierarchical" v-model="model.type.isHierarchical">
+                                    <ChosenSelect id="ctb-form-type-hierarchical" v-model="model.type.isHierarchical">
                                         <option value="1">{{ translations.yes }}</option>
                                         <option value="0">{{ translations.no }}</option>
-                                    </chosen-select>
+                                    </ChosenSelect>
                                     <div class="form-text">{{ translations.hierarchicalTypeHelp }}</div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-6 mb-3">
                                     <label for="ctb-form-type-routable" class="form-label">{{ translations.routableType }}</label>
-                                    <chosen-select id="ctb-form-type-routable" v-model="model.type.isRoutable">
+                                    <ChosenSelect id="ctb-form-type-routable" v-model="model.type.isRoutable">
                                         <option value="1">{{ translations.yes }}</option>
                                         <option value="0">{{ translations.no }}</option>
-                                    </chosen-select>
+                                    </ChosenSelect>
                                     <div class="form-text">{{ translations.routableTypeHelp }}</div>
                                 </div>
                                 <div class="col-6 mb-3" v-if="model.type.isRoutable === '1'">
                                     <label for="ctb-form-type-routing-strategy" class="form-label">{{ translations.routingStrategy }}</label>
-                                    <chosen-select id="ctb-form-type-routing-strategy" v-model="model.type.routingStrategy">
-                                        <option v-for="strategy in routingStrategies" :id="strategy.id" :value="strategy.id">{{ strategy.label }}</option>
-                                    </chosen-select>
+                                    <ChosenSelect id="ctb-form-type-routing-strategy" v-model="model.type.routingStrategy">
+                                        <option v-for="strategy in options.routingStrategies" :id="strategy.id" :value="strategy.id">{{ strategy.label }}</option>
+                                    </ChosenSelect>
                                     <div class="form-text">{{ translations.routingStrategyHelp }}</div>
                                 </div>
                             </div>
@@ -94,126 +94,121 @@
                     </div>
                     <div class="tab-content ctb-section-main-tabs-contents">
                         <SectionsList
-                            :translations="translations"
                             :sections="model.layout.main.sections"
-                            :errors="$get(view.errors, 'layout.main.sections', [])"
+                            :errors="ObjectUtils.get(view.errors, 'layout.main.sections', [])"
                         ></SectionsList>
                     </div>
                 </div>
             </div>
             <FieldCreator
-                @confirm="createFieldUsingCreatorData"
-                :translations="translations"
-                :fieldTypes="fieldTypes"
+                :fieldTypes="options.fieldTypes"
                 :showMultilingualOption="true"
             ></FieldCreator>
             <FieldEditor
-                @confirm="editFieldUsingCreatorData"
-                :translations="translations"
                 :field="view.form.field_editor"
-                :fieldTypes="fieldTypes"
+                :fieldTypes="options.fieldTypes"
                 :showMultilingualOption="true"
             ></FieldEditor>
         </div>
     </div>
 </template>
 
-<script>
-import FieldCreator from './components/FieldCreator';
-import FieldEditor from './components/FieldEditor';
-import SectionsList from './components/SectionsList';
-import draggable from 'vuedraggable';
-import framework from './framework';
+<script setup>
+const { defineProps, provide, onMounted, reactive } = require('vue');
+const FieldCreator = require('./components/FieldCreator.vue').default;
+const FieldEditor = require('./components/FieldEditor.vue').default;
+const SectionsList = require('./components/SectionsList.vue').default;
+const ChosenSelect = require('./components/ChosenSelect.vue').default;
+const ObjectUtils = require('./shared/ObjectUtils.js').default;
 
-export default {
-    name: 'ContentLayoutBuilder',
-    data() {
-        let model = window.ContentBuilderLayoutBuilder.model;
-        let errors = window.ContentBuilderLayoutBuilder.errors;
-        let typeValidation = {
-            name: { valid: !this.$get(errors, 'type.name.0'), message: this.$get(errors, 'type.name.0') },
-            code: { valid: !this.$get(errors, 'type.code.0'), message: this.$get(errors, 'type.code.0') },
-            icon: { valid: !this.$get(errors, 'type.icon.0'), message: this.$get(errors, 'type.icon.0') },
-            isRoutable: { valid: !this.$get(errors, 'type.isRoutable.0'), message: this.$get(errors, 'type.isRoutable.0') },
-            isHierarchical: { valid: !this.$get(errors, 'type.isHierarchical.0'), message: this.$get(errors, 'type.isHierarchical.0') }
-        };
-
-        return {
-            translations: window.ContentBuilderLayoutBuilder.translations,
-            fieldTypes: window.ContentBuilderLayoutBuilder.fieldTypes,
-            routingStrategies: window.ContentBuilderLayoutBuilder.routingStrategies,
-            listingUrl: window.ContentBuilderLayoutBuilder.listingUrl,
-            csrfToken: window.ContentBuilderLayoutBuilder.csrfToken,
-            view: {
-                modal: {
-                    field_creator: null,
-                    field_editor: null,
-                },
-                errors: errors,
-                form: {
-                    code_field_changed: false,
-                    field_creator_section_code: null,
-                    field_creator_parent_field: null,
-                    field_editor: {
-                        code: {value: null, valid: true, message: null},
-                        type: {value: null, valid: true, message: null},
-                        name: {value: null, valid: true, message: null},
-                        multilingual: {value: null, valid: true, message: null},
-                        constraints: [],
-                        configuration: [],
-                    },
-                    type_validation: typeValidation
-                },
-                creation_mode: window.ContentBuilderLayoutBuilder.creationMode,
-                is_multilingual: window.ContentBuilderLayoutBuilder.multilingual,
-            },
-            model: {
-                type: {
-                    name: this.$get(model, 'type.name'),
-                    code: this.$get(model, 'type.code'),
-                    icon: this.$get(model, 'type.icon', 'fas fa-boxes'),
-                    isRoutable: this.$get(model, 'type.isRoutable', false) ? '1' : '0',
-                    isHierarchical: this.$get(model, 'type.isHierarchical', false) ? '1' : '0',
-                    routingStrategy: this.$get(model, 'type.routingStrategy', null),
-                },
-                layout: {
-                    sidebar: {
-                        sections: this.$get(model, 'layout.sidebar.sections', [])
-                    },
-                    main: {
-                        sections: this.$get(model, 'layout.main.sections', [])
-                    }
-                }
-            }
-        };
+const errors = window.ContentBuilderLayoutBuilder.errors;
+const view = reactive({
+    modal: {
+        field_creator: null,
+        field_editor: null,
     },
-    components: {
-        FieldCreator,
-        FieldEditor,
-        SectionsList,
-        draggable
+    errors: errors,
+    form: {
+        code_field_changed: false,
+        field_creator_section_code: null,
+        field_creator_parent_field: null,
+        field_editor: {
+            code: {value: null, valid: true, message: null},
+            type: {value: null, valid: true, message: null},
+            name: {value: null, valid: true, message: null},
+            multilingual: {value: null, valid: true, message: null},
+            constraints: [],
+            configuration: [],
+        },
+        type_validation: {
+            name: { valid: !ObjectUtils.get(errors, 'type.name.0'), message: ObjectUtils.get(errors, 'type.name.0') },
+            code: { valid: !ObjectUtils.get(errors, 'type.code.0'), message: ObjectUtils.get(errors, 'type.code.0') },
+            icon: { valid: !ObjectUtils.get(errors, 'type.icon.0'), message: ObjectUtils.get(errors, 'type.icon.0') },
+            isRoutable: { valid: !ObjectUtils.get(errors, 'type.isRoutable.0'), message: ObjectUtils.get(errors, 'type.isRoutable.0') },
+            isHierarchical: { valid: !ObjectUtils.get(errors, 'type.isHierarchical.0'), message: ObjectUtils.get(errors, 'type.isHierarchical.0') }
+        }
     },
-    methods: framework.methods,
-    mounted: function () {
-        let creationModal = document.getElementById('ctb-create-field-modal');
-        this.view.modal.field_creator = new bootstrap.Modal(creationModal);
+    creation_mode: window.ContentBuilderLayoutBuilder.creationMode,
+    is_multilingual: window.ContentBuilderLayoutBuilder.multilingual,
+});
 
-        creationModal.addEventListener('shown.bs.modal', function () {
-            $(creationModal).find('.ctb-autofocus').focus();
-        });
-
-        this.view.modal.field_editor = new bootstrap.Modal(document.getElementById('ctb-edit-field-modal'));
-
-        this.$root.$on('field:add', (sectionCode, parentField) => {
-            this.openCreateFieldModel(sectionCode, parentField);
-        });
-        this.$root.$on('field:edit', (fieldCode) => {
-            this.openEditFieldModel(fieldCode);
-        });
-        this.$root.$on('field:remove', (fieldCode) => {
-            this.removeField(fieldCode);
-        });
+const sourceModel = window.ContentBuilderLayoutBuilder.model;
+const model = reactive({
+    type: {
+        name: ObjectUtils.get(sourceModel, 'type.name'),
+        code: ObjectUtils.get(sourceModel, 'type.code'),
+        icon: ObjectUtils.get(sourceModel, 'type.icon', 'fas fa-boxes'),
+        isRoutable: ObjectUtils.get(sourceModel, 'type.isRoutable', false) ? '1' : '0',
+        isHierarchical: ObjectUtils.get(sourceModel, 'type.isHierarchical', false) ? '1' : '0',
+        routingStrategy: ObjectUtils.get(sourceModel, 'type.routingStrategy', null),
+    },
+    layout: {
+        sidebar: {
+            sections: ObjectUtils.get(sourceModel, 'layout.sidebar.sections', [])
+        },
+        main: {
+            sections: ObjectUtils.get(sourceModel, 'layout.main.sections', [])
+        }
     }
-};
-</script>
+});
 
+const ContainerBuilder = require('./shared/ContainerBuilder.js').default;
+const {
+    eventDispatcher,
+    options,
+    translations,
+    form,
+    model: modelManager
+} = ContainerBuilder.build(
+    view,
+    model,
+    (name, service) => provide(name, service)
+);
+
+const generateTypeCode = () => {
+    if (view.creation_mode === false) {
+        return;
+    }
+
+    if (model.type.code === '') {
+        view.form.code_field_changed = false;
+    }
+
+    if (view.form.code_field_changed) {
+        return;
+    }
+
+    model.type.code = model.type.name.toLowerCase().replace(/[^a-z0-9_]+/g, '_').replace(/_+/is, '_');
+};
+
+onMounted(() => {
+    let creationModal = document.getElementById('ctb-create-field-modal');
+    view.modal.field_creator = new bootstrap.Modal(creationModal);
+
+    creationModal.addEventListener('shown.bs.modal', function () {
+        $(creationModal).find('.ctb-autofocus').focus();
+    });
+
+    view.modal.field_editor = new bootstrap.Modal(document.getElementById('ctb-edit-field-modal'));
+});
+</script>

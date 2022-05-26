@@ -1,16 +1,22 @@
 <template>
     <div>
-        <draggable group="sections" :list="sections" v-bind="dragOptions" handle=".ctb-section-sortable-handler" class="ctb-sections-container">
-            <transition-group type="transition" :name="!drag ? 'flip-list' : null" class="ctb-sortable-placeholder" tag="div" :data-label="translations.addNewSection">
+        <draggable
+            group="sections"
+            :list="sections"
+            v-bind="dragOptions"
+            handle=".ctb-section-sortable-handler"
+            item-key="code"
+            tag="div"
+            :component-data="{ class: 'ctb-sections-container' }"
+        >
+            <template #item="{element}">
                 <Section
-                    v-for="(section, id) in sections"
-                    :key="section.code"
-                    :section="section"
-                    :translations="translations"
-                    :errors="$get(errors, id, {})"
-                    @section:remove="removeSection"
+                    :key="element.code"
+                    :section="element"
+                    errors="ObjectUtils.get(errors, id, {})"
+                    @section:remove="removeSection()"
                 ></Section>
-            </transition-group>
+            </template>
         </draggable>
         <div class="text-center">
             <div class="ctb-new-section-button" @click="addSection()">
@@ -22,14 +28,21 @@
 </template>
 
 <script>
-import Section from './Section';
-import draggable from 'vuedraggable';
+const Section = require('./Section.vue').default;
+const draggable = require('vuedraggable');
+const ObjectUtils = require('./../shared/ObjectUtils.js').default;
 
 export default {
-    props: ['sections', 'errors', 'translations'],
+    props: ['sections', 'errors'],
     components: {
         Section,
         draggable
+    },
+    inject: ['translations'],
+    data () {
+        return {
+            ObjectUtils: ObjectUtils
+        };
     },
     computed: {
         dragOptions() {

@@ -77,13 +77,14 @@
 </template>
 
 <script>
-import FormControl from './FormControl';
+const FormControl = require('./FormControl.vue').default;
 
 export default {
-    props: ['field', 'fieldTypes', 'translations', 'defaultMultilingualValue', 'showMultilingualOption'],
+    props: ['field', 'fieldTypes', 'defaultMultilingualValue', 'showMultilingualOption'],
     components: {
         FormControl
     },
+    inject: ['eventDispatcher', 'translations', 'editFieldModal'],
     data: function () {
         return {
             model: {
@@ -133,7 +134,7 @@ export default {
                 });
             }
 
-            this.$emit('confirm', model);
+            this.editFieldModal.update(model);
         },
         _validate: function () {
             let status = true;
@@ -273,7 +274,7 @@ export default {
         },
     },
     mounted: function () {
-        this.$root.$on('field:edit:modal:opened', () => {
+        this.eventDispatcher.on('field:edit:modal:opened', () => {
             this._initiate();
         });
     }

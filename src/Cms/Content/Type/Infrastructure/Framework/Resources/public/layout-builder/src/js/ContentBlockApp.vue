@@ -2,12 +2,12 @@
     <div class="pane pane-lead content-builder-content-block-type">
         <form method="POST" id="ctb-form" style="display:none">
             <textarea name="node_type" id="ctb-form-field-node-type"></textarea>
-            <input type="text" name="_token" :value="csrfToken"/>
+            <input type="text" name="_token" :value="options.csrfToken"/>
         </form>
         <div class="pane-header">
             <div class="pane-buttons">
-                <a :href="listingUrl" class="btn btn-secondary btn-icon-left"><i class="btn-icon fas fa-times"></i> Anuluj</a>
-                <button class="btn btn-success btn-icon-left" type="button" @click="save()"><i class="btn-icon fas fa-save"></i> Zapisz</button>
+                <a :href="options.listingUrl" class="btn btn-secondary btn-icon-left"><i class="btn-icon fas fa-times"></i> Anuluj</a>
+                <button class="btn btn-success btn-icon-left" type="button" @click="form.save()"><i class="btn-icon fas fa-save"></i> Zapisz</button>
             </div>
             <i class="pane-header-icon fas fa-box"></i>
             <h1 class="pane-title">{{ translations.pageTitle }}</h1>
@@ -21,7 +21,7 @@
                                 <div class="col-6">
                                     <div class="mb-3">
                                         <label class="form-label" for="ctb-node-type-name">{{ translations.contentTypeName }}</label>
-                                        <input type="text" :class="{ 'form-control': true, 'is-invalid': view.form.type_validation.name.valid === false }" id="ctb-node-type-name" v-model="model.type.name" @keyup="generateTypeCode()" @change="validate()" />
+                                        <input type="text" :class="{ 'form-control': true, 'is-invalid': view.form.type_validation.name.valid === false }" id="ctb-node-type-name" v-model="model.type.name" @keyup="generateTypeCode()" @change="form.validate()" />
                                         <div class="form-text">{{ translations.contentTypeNameInfo }}</div>
                                         <div v-if="view.form.type_validation.name.valid === false" class="invalid-feedback">{{ view.form.type_validation.name.message }}</div>
                                     </div>
@@ -29,7 +29,7 @@
                                 <div class="col-6">
                                     <div class="mb-3">
                                         <label class="form-label" for="ctb-node-type-code">{{ translations.contentTypeCode }}</label>
-                                        <input type="text" :disabled="view.creation_mode !== true" :class="{ 'form-control': true, 'is-invalid': view.form.type_validation.code.valid === false }" id="ctb-node-type-code" v-model="model.type.code" @change="validate()" />
+                                        <input type="text" :disabled="view.creation_mode !== true" :class="{ 'form-control': true, 'is-invalid': view.form.type_validation.code.valid === false }" id="ctb-node-type-code" v-model="model.type.code" @change="form.validate()" />
                                         <div class="form-text">{{ translations.contentTypeCodeHelp }}</div>
                                         <div v-if="view.form.type_validation.code.valid === false" class="invalid-feedback">{{ view.form.type_validation.code.message }}</div>
                                     </div>
@@ -53,139 +53,137 @@
                 </div>
             </div>
             <FieldCreator
-                @confirm="createFieldUsingCreatorData"
-                :translations="translations"
-                :fieldTypes="fieldTypes"
-                :showMultilingualOption="view.is_multilingual"
+                :fieldTypes="options.fieldTypes"
+                :showMultilingualOption="true"
             ></FieldCreator>
             <FieldEditor
-                @confirm="editFieldUsingCreatorData"
-                :translations="translations"
                 :field="view.form.field_editor"
-                :fieldTypes="fieldTypes"
-                :showMultilingualOption="view.is_multilingual"
+                :fieldTypes="options.fieldTypes"
+                :showMultilingualOption="true"
             ></FieldEditor>
         </div>
     </div>
 </template>
 
-<script>
-import FieldCreator from './components/FieldCreator';
-import FieldEditor from './components/FieldEditor';
-import SectionsList from './components/SectionsList';
-import Fields from './components/Fields';
-import draggable from 'vuedraggable';
-import framework from './framework';
+<script setup>
+const { defineProps, provide, onMounted, reactive, computed } = require('vue');
+const FieldCreator = require('./components/FieldCreator.vue').default;
+const FieldEditor = require('./components/FieldEditor.vue').default;
+const Fields = require('./components/Fields.vue').default;
+const ObjectUtils = require('./shared/ObjectUtils.js').default;
 
-export default {
-    name: 'ContentLayoutBuilder',
-    data() {
-        let model = window.ContentBuilderLayoutBuilder.model;
-        let errors = window.ContentBuilderLayoutBuilder.errors;
-        let sections = this.$get(model, 'layout.main.sections', []);
-        let typeValidation = {
-            name: { valid: !this.$get(errors, 'type.name.0'), message: this.$get(errors, 'type.name.0') },
-            code: { valid: !this.$get(errors, 'type.code.0'), message: this.$get(errors, 'type.code.0') },
-        };
-
-        /**
-         * Vue needs at least one section. Creating new type of Content Block we dont'have any sections,
-         * so we need to create one, default section when no sections comes fromt backend.
-         */
-        if (sections.length === 0) {
-            sections.push({
-                code: _.uniqueId('section_'),
-                name: {
-                    value: 'Section',
-                    valid: true,
-                    message: null
-                },
-                fields: []
-            });
-        }
-
-        return {
-            translations: window.ContentBuilderLayoutBuilder.translations,
-            fieldTypes: window.ContentBuilderLayoutBuilder.fieldTypes,
-            listingUrl: window.ContentBuilderLayoutBuilder.listingUrl,
-            csrfToken: window.ContentBuilderLayoutBuilder.csrfToken,
-            view: {
-                modal: {
-                    field_creator: null,
-                    field_editor: null,
-                },
-                errors: errors,
-                form: {
-                    code_field_changed: false,
-                    field_creator_section_code: null,
-                    field_creator_parent_field: null,
-                    field_editor: {
-                        code: {value: null, valid: true, message: null},
-                        type: {value: null, valid: true, message: null},
-                        name: {value: null, valid: true, message: null},
-                        multilingual: {value: null, valid: true, message: null},
-                        constraints: [],
-                        configuration: [],
-                    },
-                    type_validation: typeValidation
-                },
-                creation_mode: window.ContentBuilderLayoutBuilder.creationMode,
-                is_multilingual: window.ContentBuilderLayoutBuilder.multilingual,
-            },
-            model: {
-                type: {
-                    name: this.$get(model, 'type.name'),
-                    code: this.$get(model, 'type.code'),
-                    icon: '',
-                    isRoutable: '0',
-                    isHierarchical: '0',
-                },
-                layout: {
-                    main: {
-                        sections: sections
-                    }
-                }
-            }
-        };
+const errors = window.ContentBuilderLayoutBuilder.errors;
+const view = reactive({
+    modal: {
+        field_creator: null,
+        field_editor: null,
     },
-    computed: {
-        dragOptions() {
-            return {
-                animation: 200,
-                group: 'fields',
-                disabled: false,
-                ghostClass: 'ctb-draggable-ghost'
-            };
+    errors: errors,
+    form: {
+        code_field_changed: false,
+        field_creator_section_code: null,
+        field_creator_parent_field: null,
+        field_editor: {
+            code: {value: null, valid: true, message: null},
+            type: {value: null, valid: true, message: null},
+            name: {value: null, valid: true, message: null},
+            multilingual: {value: null, valid: true, message: null},
+            constraints: [],
+            configuration: [],
+        },
+        type_validation: {
+            name: { valid: !ObjectUtils.get(errors, 'type.name.0'), message: ObjectUtils.get(errors, 'type.name.0') },
+            code: { valid: !ObjectUtils.get(errors, 'type.code.0'), message: ObjectUtils.get(errors, 'type.code.0') },
+            icon: { valid: !ObjectUtils.get(errors, 'type.icon.0'), message: ObjectUtils.get(errors, 'type.icon.0') },
+            isRoutable: { valid: !ObjectUtils.get(errors, 'type.isRoutable.0'), message: ObjectUtils.get(errors, 'type.isRoutable.0') },
+            isHierarchical: { valid: !ObjectUtils.get(errors, 'type.isHierarchical.0'), message: ObjectUtils.get(errors, 'type.isHierarchical.0') }
         }
     },
-    components: {
-        FieldCreator,
-        FieldEditor,
-        SectionsList,
-        Fields,
-        draggable
+    creation_mode: window.ContentBuilderLayoutBuilder.creationMode,
+    is_multilingual: window.ContentBuilderLayoutBuilder.multilingual,
+});
+
+const sourceModel = window.ContentBuilderLayoutBuilder.model;
+
+/**
+ * Vue needs at least one section. Creating new type of Content Block we dont'have any sections,
+ * so we need to create one, default section when no sections comes fromt backend.
+ */
+let sections = ObjectUtils.get(sourceModel, 'layout.main.sections', []);
+if (sections.length === 0) {
+    sections.push({
+        code: _.uniqueId('section_'),
+        name: {
+            value: 'Section',
+            valid: true,
+            message: null
+        },
+        fields: []
+    });
+}
+
+const model = reactive({
+    type: {
+        name: ObjectUtils.get(sourceModel, 'type.name'),
+        code: ObjectUtils.get(sourceModel, 'type.code'),
+        icon: ObjectUtils.get(sourceModel, 'type.icon', 'fas fa-boxes'),
+        isRoutable: ObjectUtils.get(sourceModel, 'type.isRoutable', false) ? '1' : '0',
+        isHierarchical: ObjectUtils.get(sourceModel, 'type.isHierarchical', false) ? '1' : '0',
     },
-    methods: framework.methods,
-    mounted: function () {
-        let creationModal = document.getElementById('ctb-create-field-modal');
-        this.view.modal.field_creator = new bootstrap.Modal(creationModal);
-
-        creationModal.addEventListener('shown.bs.modal', function () {
-            $(creationModal).find('.ctb-autofocus').focus();
-        });
-
-        this.view.modal.field_editor = new bootstrap.Modal(document.getElementById('ctb-edit-field-modal'));
-
-        this.$root.$on('field:add', (sectionCode, parentField) => {
-            this.openCreateFieldModel(sectionCode, parentField);
-        });
-        this.$root.$on('field:edit', (fieldCode) => {
-            this.openEditFieldModel(fieldCode);
-        });
-        this.$root.$on('field:remove', (fieldCode) => {
-            this.removeField(fieldCode);
-        });
+    layout: {
+        main: {
+            sections: sections
+        }
     }
+});
+
+const ContainerBuilder = require('./shared/ContainerBuilder.js').default;
+const {
+    eventDispatcher,
+    options,
+    translations,
+    form,
+    model: modelManager
+} = ContainerBuilder.build(
+    view,
+    model,
+    (name, service) => provide(name, service)
+);
+
+const generateTypeCode = () => {
+    if (view.creation_mode === false) {
+        return;
+    }
+
+    if (model.type.code === '') {
+        view.form.code_field_changed = false;
+    }
+
+    if (view.form.code_field_changed) {
+        return;
+    }
+
+    model.type.code = model.type.name.toLowerCase().replace(/[^a-z0-9_]+/g, '_').replace(/_+/is, '_');
 };
+
+const dragOptions = computed(() => {
+    return {
+        animation: 200,
+        group: 'fields',
+        disabled: false,
+        ghostClass: 'ctb-draggable-ghost'
+    };
+});
+
+onMounted(() => {
+    let creationModal = document.getElementById('ctb-create-field-modal');
+    view.modal.field_creator = new bootstrap.Modal(creationModal);
+
+    creationModal.addEventListener('shown.bs.modal', function () {
+        $(creationModal).find('.ctb-autofocus').focus();
+    });
+
+    view.modal.field_editor = new bootstrap.Modal(document.getElementById('ctb-edit-field-modal'));
+});
 </script>
 

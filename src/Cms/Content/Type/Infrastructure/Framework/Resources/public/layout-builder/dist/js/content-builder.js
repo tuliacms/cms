@@ -3826,14 +3826,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _ContentBlockApp_vue_vue_type_template_id_6f0515c0__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ContentBlockApp.vue?vue&type=template&id=6f0515c0 */ "./src/js/ContentBlockApp.vue?vue&type=template&id=6f0515c0");
-/* harmony import */ var _ContentBlockApp_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ContentBlockApp.vue?vue&type=script&setup=true&lang=js */ "./src/js/ContentBlockApp.vue?vue&type=script&setup=true&lang=js");
+/* harmony import */ var _ContentBlockApp_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ContentBlockApp.vue?vue&type=script&lang=js */ "./src/js/ContentBlockApp.vue?vue&type=script&lang=js");
 /* harmony import */ var _home_adam_projects_tuliacms_core_src_Cms_Content_Type_Infrastructure_Framework_Resources_public_layout_builder_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_home_adam_projects_tuliacms_core_src_Cms_Content_Type_Infrastructure_Framework_Resources_public_layout_builder_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_ContentBlockApp_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_ContentBlockApp_vue_vue_type_template_id_6f0515c0__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"src/js/ContentBlockApp.vue"]])
+const __exports__ = /*#__PURE__*/(0,_home_adam_projects_tuliacms_core_src_Cms_Content_Type_Infrastructure_Framework_Resources_public_layout_builder_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_ContentBlockApp_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_ContentBlockApp_vue_vue_type_template_id_6f0515c0__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"src/js/ContentBlockApp.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -3842,10 +3842,10 @@ if (false) {}
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/ContentBlockApp.vue?vue&type=script&setup=true&lang=js":
-/*!*******************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/ContentBlockApp.vue?vue&type=script&setup=true&lang=js ***!
-  \*******************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/ContentBlockApp.vue?vue&type=script&lang=js":
+/*!********************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/ContentBlockApp.vue?vue&type=script&lang=js ***!
+  \********************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -3853,137 +3853,125 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'ContentBlockApp',
-  setup(__props, { expose }) {
-  expose();
 
-const { defineProps, provide, onMounted, reactive, computed } = __webpack_require__(/*! vue */ "vue");
 const FieldCreator = (__webpack_require__(/*! ./components/FieldCreator.vue */ "./src/js/components/FieldCreator.vue")["default"]);
 const FieldEditor = (__webpack_require__(/*! ./components/FieldEditor.vue */ "./src/js/components/FieldEditor.vue")["default"]);
+const SectionsList = (__webpack_require__(/*! ./components/SectionsList.vue */ "./src/js/components/SectionsList.vue")["default"]);
 const Fields = (__webpack_require__(/*! ./components/Fields.vue */ "./src/js/components/Fields.vue")["default"]);
-const ObjectUtils = (__webpack_require__(/*! ./shared/ObjectUtils.js */ "./src/js/shared/ObjectUtils.js")["default"]);
+const draggable = __webpack_require__(/*! vuedraggable */ "./node_modules/vuedraggable/dist/vuedraggable.umd.js");
+const framework = (__webpack_require__(/*! ./framework.js */ "./src/js/framework.js")["default"]);
 
-const errors = window.ContentBuilderLayoutBuilder.errors;
-const view = reactive({
-    modal: {
-        field_creator: null,
-        field_editor: null,
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+    name: 'ContentLayoutBuilder',
+    data() {
+        let model = window.ContentBuilderLayoutBuilder.model;
+        let errors = window.ContentBuilderLayoutBuilder.errors;
+        let sections = this.$get(model, 'layout.main.sections', []);
+        let typeValidation = {
+            name: { valid: !this.$get(errors, 'type.name.0'), message: this.$get(errors, 'type.name.0') },
+            code: { valid: !this.$get(errors, 'type.code.0'), message: this.$get(errors, 'type.code.0') },
+        };
+
+        /**
+         * Vue needs at least one section. Creating new type of Content Block we dont'have any sections,
+         * so we need to create one, default section when no sections comes fromt backend.
+         */
+        if (sections.length === 0) {
+            sections.push({
+                code: _.uniqueId('section_'),
+                name: {
+                    value: 'Section',
+                    valid: true,
+                    message: null
+                },
+                fields: []
+            });
+        }
+
+        return {
+            translations: window.ContentBuilderLayoutBuilder.translations,
+            fieldTypes: window.ContentBuilderLayoutBuilder.fieldTypes,
+            listingUrl: window.ContentBuilderLayoutBuilder.listingUrl,
+            csrfToken: window.ContentBuilderLayoutBuilder.csrfToken,
+            view: {
+                modal: {
+                    field_creator: null,
+                    field_editor: null,
+                },
+                errors: errors,
+                form: {
+                    code_field_changed: false,
+                    field_creator_section_code: null,
+                    field_creator_parent_field: null,
+                    field_editor: {
+                        code: {value: null, valid: true, message: null},
+                        type: {value: null, valid: true, message: null},
+                        name: {value: null, valid: true, message: null},
+                        multilingual: {value: null, valid: true, message: null},
+                        constraints: [],
+                        configuration: [],
+                    },
+                    type_validation: typeValidation
+                },
+                creation_mode: window.ContentBuilderLayoutBuilder.creationMode,
+                is_multilingual: window.ContentBuilderLayoutBuilder.multilingual,
+            },
+            model: {
+                type: {
+                    name: this.$get(model, 'type.name'),
+                    code: this.$get(model, 'type.code'),
+                    icon: '',
+                    isRoutable: '0',
+                    isHierarchical: '0',
+                },
+                layout: {
+                    main: {
+                        sections: sections
+                    }
+                }
+            }
+        };
     },
-    errors: errors,
-    form: {
-        code_field_changed: false,
-        field_creator_section_code: null,
-        field_creator_parent_field: null,
-        field_editor: {
-            code: {value: null, valid: true, message: null},
-            type: {value: null, valid: true, message: null},
-            name: {value: null, valid: true, message: null},
-            multilingual: {value: null, valid: true, message: null},
-            constraints: [],
-            configuration: [],
-        },
-        type_validation: {
-            name: { valid: !ObjectUtils.get(errors, 'type.name.0'), message: ObjectUtils.get(errors, 'type.name.0') },
-            code: { valid: !ObjectUtils.get(errors, 'type.code.0'), message: ObjectUtils.get(errors, 'type.code.0') },
-            icon: { valid: !ObjectUtils.get(errors, 'type.icon.0'), message: ObjectUtils.get(errors, 'type.icon.0') },
-            isRoutable: { valid: !ObjectUtils.get(errors, 'type.isRoutable.0'), message: ObjectUtils.get(errors, 'type.isRoutable.0') },
-            isHierarchical: { valid: !ObjectUtils.get(errors, 'type.isHierarchical.0'), message: ObjectUtils.get(errors, 'type.isHierarchical.0') }
+    computed: {
+        dragOptions() {
+            return {
+                animation: 200,
+                group: 'fields',
+                disabled: false,
+                ghostClass: 'ctb-draggable-ghost'
+            };
         }
     },
-    creation_mode: window.ContentBuilderLayoutBuilder.creationMode,
-    is_multilingual: window.ContentBuilderLayoutBuilder.multilingual,
-});
-
-const sourceModel = window.ContentBuilderLayoutBuilder.model;
-
-/**
- * Vue needs at least one section. Creating new type of Content Block we dont'have any sections,
- * so we need to create one, default section when no sections comes fromt backend.
- */
-let sections = ObjectUtils.get(sourceModel, 'layout.main.sections', []);
-if (sections.length === 0) {
-    sections.push({
-        code: _.uniqueId('section_'),
-        name: {
-            value: 'Section',
-            valid: true,
-            message: null
-        },
-        fields: []
-    });
-}
-
-const model = reactive({
-    type: {
-        name: ObjectUtils.get(sourceModel, 'type.name'),
-        code: ObjectUtils.get(sourceModel, 'type.code'),
-        icon: ObjectUtils.get(sourceModel, 'type.icon', 'fas fa-boxes'),
-        isRoutable: ObjectUtils.get(sourceModel, 'type.isRoutable', false) ? '1' : '0',
-        isHierarchical: ObjectUtils.get(sourceModel, 'type.isHierarchical', false) ? '1' : '0',
+    components: {
+        FieldCreator,
+        FieldEditor,
+        SectionsList,
+        Fields,
+        draggable
     },
-    layout: {
-        main: {
-            sections: sections
-        }
+    methods: framework.methods,
+    mounted: function () {
+        let creationModal = document.getElementById('ctb-create-field-modal');
+        this.view.modal.field_creator = new bootstrap.Modal(creationModal);
+
+        creationModal.addEventListener('shown.bs.modal', function () {
+            $(creationModal).find('.ctb-autofocus').focus();
+        });
+
+        this.view.modal.field_editor = new bootstrap.Modal(document.getElementById('ctb-edit-field-modal'));
+
+        this.$root.$on('field:add', (sectionCode, parentField) => {
+            this.openCreateFieldModel(sectionCode, parentField);
+        });
+        this.$root.$on('field:edit', (fieldCode) => {
+            this.openEditFieldModel(fieldCode);
+        });
+        this.$root.$on('field:remove', (fieldCode) => {
+            this.removeField(fieldCode);
+        });
     }
 });
 
-const ContainerBuilder = (__webpack_require__(/*! ./shared/ContainerBuilder.js */ "./src/js/shared/ContainerBuilder.js")["default"]);
-const {
-    eventDispatcher,
-    options,
-    translations,
-    form,
-    model: modelManager
-} = ContainerBuilder.build(
-    view,
-    model,
-    (name, service) => provide(name, service)
-);
-
-const generateTypeCode = () => {
-    if (view.creation_mode === false) {
-        return;
-    }
-
-    if (model.type.code === '') {
-        view.form.code_field_changed = false;
-    }
-
-    if (view.form.code_field_changed) {
-        return;
-    }
-
-    model.type.code = model.type.name.toLowerCase().replace(/[^a-z0-9_]+/g, '_').replace(/_+/is, '_');
-};
-
-const dragOptions = computed(() => {
-    return {
-        animation: 200,
-        group: 'fields',
-        disabled: false,
-        ghostClass: 'ctb-draggable-ghost'
-    };
-});
-
-onMounted(() => {
-    let creationModal = document.getElementById('ctb-create-field-modal');
-    view.modal.field_creator = new bootstrap.Modal(creationModal);
-
-    creationModal.addEventListener('shown.bs.modal', function () {
-        $(creationModal).find('.ctb-autofocus').focus();
-    });
-
-    view.modal.field_editor = new bootstrap.Modal(document.getElementById('ctb-edit-field-modal'));
-});
-
-const __returned__ = { defineProps, provide, onMounted, reactive, computed, FieldCreator, FieldEditor, Fields, ObjectUtils, errors, view, sourceModel, sections, model, ContainerBuilder, eventDispatcher, options, translations, form, modelManager, generateTypeCode, dragOptions }
-Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
-return __returned__
-}
-
-});
 
 /***/ }),
 
@@ -3999,14 +3987,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _RoutableContentTypeApp_vue_vue_type_template_id_41b00cfe__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./RoutableContentTypeApp.vue?vue&type=template&id=41b00cfe */ "./src/js/RoutableContentTypeApp.vue?vue&type=template&id=41b00cfe");
-/* harmony import */ var _RoutableContentTypeApp_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./RoutableContentTypeApp.vue?vue&type=script&setup=true&lang=js */ "./src/js/RoutableContentTypeApp.vue?vue&type=script&setup=true&lang=js");
+/* harmony import */ var _RoutableContentTypeApp_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./RoutableContentTypeApp.vue?vue&type=script&lang=js */ "./src/js/RoutableContentTypeApp.vue?vue&type=script&lang=js");
 /* harmony import */ var _home_adam_projects_tuliacms_core_src_Cms_Content_Type_Infrastructure_Framework_Resources_public_layout_builder_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_home_adam_projects_tuliacms_core_src_Cms_Content_Type_Infrastructure_Framework_Resources_public_layout_builder_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_RoutableContentTypeApp_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_RoutableContentTypeApp_vue_vue_type_template_id_41b00cfe__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"src/js/RoutableContentTypeApp.vue"]])
+const __exports__ = /*#__PURE__*/(0,_home_adam_projects_tuliacms_core_src_Cms_Content_Type_Infrastructure_Framework_Resources_public_layout_builder_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_RoutableContentTypeApp_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_RoutableContentTypeApp_vue_vue_type_template_id_41b00cfe__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"src/js/RoutableContentTypeApp.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -4015,10 +4003,10 @@ if (false) {}
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/RoutableContentTypeApp.vue?vue&type=script&setup=true&lang=js":
-/*!**************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/RoutableContentTypeApp.vue?vue&type=script&setup=true&lang=js ***!
-  \**************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/RoutableContentTypeApp.vue?vue&type=script&lang=js":
+/*!***************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/RoutableContentTypeApp.vue?vue&type=script&lang=js ***!
+  \***************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -4026,176 +4014,101 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'RoutableContentTypeApp',
-  setup(__props, { expose }) {
-  expose();
 
-const { defineProps, provide, onMounted, reactive } = __webpack_require__(/*! vue */ "vue");
 const FieldCreator = (__webpack_require__(/*! ./components/FieldCreator.vue */ "./src/js/components/FieldCreator.vue")["default"]);
 const FieldEditor = (__webpack_require__(/*! ./components/FieldEditor.vue */ "./src/js/components/FieldEditor.vue")["default"]);
 const SectionsList = (__webpack_require__(/*! ./components/SectionsList.vue */ "./src/js/components/SectionsList.vue")["default"]);
-const ChosenSelect = (__webpack_require__(/*! ./components/ChosenSelect.vue */ "./src/js/components/ChosenSelect.vue")["default"]);
-const ObjectUtils = (__webpack_require__(/*! ./shared/ObjectUtils.js */ "./src/js/shared/ObjectUtils.js")["default"]);
-
-const errors = window.ContentBuilderLayoutBuilder.errors;
-const view = reactive({
-    modal: {
-        field_creator: null,
-        field_editor: null,
-    },
-    errors: errors,
-    form: {
-        code_field_changed: false,
-        field_creator_section_code: null,
-        field_creator_parent_field: null,
-        field_editor: {
-            code: {value: null, valid: true, message: null},
-            type: {value: null, valid: true, message: null},
-            name: {value: null, valid: true, message: null},
-            multilingual: {value: null, valid: true, message: null},
-            constraints: [],
-            configuration: [],
-        },
-        type_validation: {
-            name: { valid: !ObjectUtils.get(errors, 'type.name.0'), message: ObjectUtils.get(errors, 'type.name.0') },
-            code: { valid: !ObjectUtils.get(errors, 'type.code.0'), message: ObjectUtils.get(errors, 'type.code.0') },
-            icon: { valid: !ObjectUtils.get(errors, 'type.icon.0'), message: ObjectUtils.get(errors, 'type.icon.0') },
-            isRoutable: { valid: !ObjectUtils.get(errors, 'type.isRoutable.0'), message: ObjectUtils.get(errors, 'type.isRoutable.0') },
-            isHierarchical: { valid: !ObjectUtils.get(errors, 'type.isHierarchical.0'), message: ObjectUtils.get(errors, 'type.isHierarchical.0') }
-        }
-    },
-    creation_mode: window.ContentBuilderLayoutBuilder.creationMode,
-    is_multilingual: window.ContentBuilderLayoutBuilder.multilingual,
-});
-
-const sourceModel = window.ContentBuilderLayoutBuilder.model;
-const model = reactive({
-    type: {
-        name: ObjectUtils.get(sourceModel, 'type.name'),
-        code: ObjectUtils.get(sourceModel, 'type.code'),
-        icon: ObjectUtils.get(sourceModel, 'type.icon', 'fas fa-boxes'),
-        isRoutable: ObjectUtils.get(sourceModel, 'type.isRoutable', false) ? '1' : '0',
-        isHierarchical: ObjectUtils.get(sourceModel, 'type.isHierarchical', false) ? '1' : '0',
-        routingStrategy: ObjectUtils.get(sourceModel, 'type.routingStrategy', null),
-    },
-    layout: {
-        sidebar: {
-            sections: ObjectUtils.get(sourceModel, 'layout.sidebar.sections', [])
-        },
-        main: {
-            sections: ObjectUtils.get(sourceModel, 'layout.main.sections', [])
-        }
-    }
-});
-
-const ContainerBuilder = (__webpack_require__(/*! ./shared/ContainerBuilder.js */ "./src/js/shared/ContainerBuilder.js")["default"]);
-const {
-    eventDispatcher,
-    options,
-    translations,
-    form,
-    model: modelManager
-} = ContainerBuilder.build(
-    view,
-    model,
-    (name, service) => provide(name, service)
-);
-
-const generateTypeCode = () => {
-    if (view.creation_mode === false) {
-        return;
-    }
-
-    if (model.type.code === '') {
-        view.form.code_field_changed = false;
-    }
-
-    if (view.form.code_field_changed) {
-        return;
-    }
-
-    model.type.code = model.type.name.toLowerCase().replace(/[^a-z0-9_]+/g, '_').replace(/_+/is, '_');
-};
-
-onMounted(() => {
-    let creationModal = document.getElementById('ctb-create-field-modal');
-    view.modal.field_creator = new bootstrap.Modal(creationModal);
-
-    creationModal.addEventListener('shown.bs.modal', function () {
-        $(creationModal).find('.ctb-autofocus').focus();
-    });
-
-    view.modal.field_editor = new bootstrap.Modal(document.getElementById('ctb-edit-field-modal'));
-});
-
-const __returned__ = { defineProps, provide, onMounted, reactive, FieldCreator, FieldEditor, SectionsList, ChosenSelect, ObjectUtils, errors, view, sourceModel, model, ContainerBuilder, eventDispatcher, options, translations, form, modelManager, generateTypeCode }
-Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
-return __returned__
-}
-
-});
-
-/***/ }),
-
-/***/ "./src/js/components/ChosenSelect.vue":
-/*!********************************************!*\
-  !*** ./src/js/components/ChosenSelect.vue ***!
-  \********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _ChosenSelect_vue_vue_type_template_id_3d36064c__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ChosenSelect.vue?vue&type=template&id=3d36064c */ "./src/js/components/ChosenSelect.vue?vue&type=template&id=3d36064c");
-/* harmony import */ var _ChosenSelect_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ChosenSelect.vue?vue&type=script&lang=js */ "./src/js/components/ChosenSelect.vue?vue&type=script&lang=js");
-/* harmony import */ var _home_adam_projects_tuliacms_core_src_Cms_Content_Type_Infrastructure_Framework_Resources_public_layout_builder_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
-
-
-
-
-;
-const __exports__ = /*#__PURE__*/(0,_home_adam_projects_tuliacms_core_src_Cms_Content_Type_Infrastructure_Framework_Resources_public_layout_builder_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_ChosenSelect_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_ChosenSelect_vue_vue_type_template_id_3d36064c__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"src/js/components/ChosenSelect.vue"]])
-/* hot reload */
-if (false) {}
-
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__exports__);
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/components/ChosenSelect.vue?vue&type=script&lang=js":
-/*!****************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/components/ChosenSelect.vue?vue&type=script&lang=js ***!
-  \****************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
+const draggable = __webpack_require__(/*! vuedraggable */ "./node_modules/vuedraggable/dist/vuedraggable.umd.js");
+const framework = (__webpack_require__(/*! ./framework.js */ "./src/js/framework.js")["default"]);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-    props: {
-        value: [String, Array],
-        multiple: Boolean,
+    name: 'ContentLayoutBuilder',
+    data() {
+        let model = window.ContentBuilderLayoutBuilder.model;
+        let errors = window.ContentBuilderLayoutBuilder.errors;
+        let typeValidation = {
+            name: { valid: !this.$get(errors, 'type.name.0'), message: this.$get(errors, 'type.name.0') },
+            code: { valid: !this.$get(errors, 'type.code.0'), message: this.$get(errors, 'type.code.0') },
+            icon: { valid: !this.$get(errors, 'type.icon.0'), message: this.$get(errors, 'type.icon.0') },
+            isRoutable: { valid: !this.$get(errors, 'type.isRoutable.0'), message: this.$get(errors, 'type.isRoutable.0') },
+            isHierarchical: { valid: !this.$get(errors, 'type.isHierarchical.0'), message: this.$get(errors, 'type.isHierarchical.0') }
+        };
+
+        return {
+            translations: window.ContentBuilderLayoutBuilder.translations,
+            fieldTypes: window.ContentBuilderLayoutBuilder.fieldTypes,
+            routingStrategies: window.ContentBuilderLayoutBuilder.routingStrategies,
+            listingUrl: window.ContentBuilderLayoutBuilder.listingUrl,
+            csrfToken: window.ContentBuilderLayoutBuilder.csrfToken,
+            view: {
+                modal: {
+                    field_creator: null,
+                    field_editor: null,
+                },
+                errors: errors,
+                form: {
+                    code_field_changed: false,
+                    field_creator_section_code: null,
+                    field_creator_parent_field: null,
+                    field_editor: {
+                        code: {value: null, valid: true, message: null},
+                        type: {value: null, valid: true, message: null},
+                        name: {value: null, valid: true, message: null},
+                        multilingual: {value: null, valid: true, message: null},
+                        constraints: [],
+                        configuration: [],
+                    },
+                    type_validation: typeValidation
+                },
+                creation_mode: window.ContentBuilderLayoutBuilder.creationMode,
+                is_multilingual: window.ContentBuilderLayoutBuilder.multilingual,
+            },
+            model: {
+                type: {
+                    name: this.$get(model, 'type.name'),
+                    code: this.$get(model, 'type.code'),
+                    icon: this.$get(model, 'type.icon', 'fas fa-boxes'),
+                    isRoutable: this.$get(model, 'type.isRoutable', false) ? '1' : '0',
+                    isHierarchical: this.$get(model, 'type.isHierarchical', false) ? '1' : '0',
+                    routingStrategy: this.$get(model, 'type.routingStrategy', null),
+                },
+                layout: {
+                    sidebar: {
+                        sections: this.$get(model, 'layout.sidebar.sections', [])
+                    },
+                    main: {
+                        sections: this.$get(model, 'layout.main.sections', [])
+                    }
+                }
+            }
+        };
     },
-    mounted () {
-        $(this.$el)
-            .val(this.value)
-            .chosen()
-            .on('change', e => this.$emit('input', $(this.$el).val()))
+    components: {
+        FieldCreator,
+        FieldEditor,
+        SectionsList,
+        draggable
     },
-    watch: {
-        value (val) {
-            $(this.$el).val(val).trigger('chosen:updated');
-        }
-    },
-    destroyed () {
-        $(this.$el).chosen('destroy');
+    methods: framework.methods,
+    mounted: function () {
+        let creationModal = document.getElementById('ctb-create-field-modal');
+        this.view.modal.field_creator = new bootstrap.Modal(creationModal);
+
+        creationModal.addEventListener('shown.bs.modal', function () {
+            $(creationModal).find('.ctb-autofocus').focus();
+        });
+
+        this.view.modal.field_editor = new bootstrap.Modal(document.getElementById('ctb-edit-field-modal'));
+
+        this.$root.$on('field:add', (sectionCode, parentField) => {
+            this.openCreateFieldModel(sectionCode, parentField);
+        });
+        this.$root.$on('field:edit', (fieldCode) => {
+            this.openEditFieldModel(fieldCode);
+        });
+        this.$root.$on('field:remove', (fieldCode) => {
+            this.removeField(fieldCode);
+        });
     }
 });
 
@@ -4245,11 +4158,10 @@ __webpack_require__.r(__webpack_exports__);
 const FormControl = (__webpack_require__(/*! ./FormControl.vue */ "./src/js/components/FormControl.vue")["default"]);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-    props: ['fieldTypes', 'defaultMultilingualValue', 'showMultilingualOption'],
+    props: ['fieldTypes', 'translations', 'defaultMultilingualValue', 'showMultilingualOption'],
     components: {
         FormControl
     },
-    inject: ['eventDispatcher', 'translations', 'createFieldModal'],
     data: function () {
         return {
             idFieldChanged: false,
@@ -4307,8 +4219,7 @@ const FormControl = (__webpack_require__(/*! ./FormControl.vue */ "./src/js/comp
                 });
             }
 
-            //this.$emit('confirm', model);
-            this.createFieldModal.create(model);
+            this.$emit('confirm', model);
         },
         _updateFieldTypeConfiguration: function () {
             this.model.configuration = [];
@@ -4392,7 +4303,7 @@ const FormControl = (__webpack_require__(/*! ./FormControl.vue */ "./src/js/comp
         },
     },
     mounted: function () {
-        this.eventDispatcher.on('field:create:modal:opened', () => {
+        this.$root.$on('field:create:modal:opened', () => {
             this._initiate();
         });
     }
@@ -4444,11 +4355,10 @@ __webpack_require__.r(__webpack_exports__);
 const FormControl = (__webpack_require__(/*! ./FormControl.vue */ "./src/js/components/FormControl.vue")["default"]);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-    props: ['field', 'fieldTypes', 'defaultMultilingualValue', 'showMultilingualOption'],
+    props: ['field', 'fieldTypes', 'translations', 'defaultMultilingualValue', 'showMultilingualOption'],
     components: {
         FormControl
     },
-    inject: ['eventDispatcher', 'translations', 'editFieldModal'],
     data: function () {
         return {
             model: {
@@ -4498,7 +4408,7 @@ const FormControl = (__webpack_require__(/*! ./FormControl.vue */ "./src/js/comp
                 });
             }
 
-            this.editFieldModal.update(model);
+            this.$emit('confirm', model);
         },
         _validate: function () {
             let status = true;
@@ -4638,7 +4548,7 @@ const FormControl = (__webpack_require__(/*! ./FormControl.vue */ "./src/js/comp
         },
     },
     mounted: function () {
-        this.eventDispatcher.on('field:edit:modal:opened', () => {
+        this.$root.$on('field:edit:modal:opened', () => {
             this._initiate();
         });
     }
@@ -4691,11 +4601,10 @@ const draggable = __webpack_require__(/*! vuedraggable */ "./node_modules/vuedra
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
     name: 'fields',
-    props: ['fields', 'group', 'section', 'parent_field'],
+    props: ['fields', 'translations', 'group', 'section', 'parent_field'],
     components: {
         draggable
     },
-    inject: ['eventDispatcher', 'translations', 'model', 'createFieldModal', 'editFieldModal'],
     computed: {
         dragOptions() {
             return {
@@ -4750,11 +4659,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 
-const ChosenSelect = (__webpack_require__(/*! ./ChosenSelect.vue */ "./src/js/components/ChosenSelect.vue")["default"]);
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-    props: ['id', 'field', 'translations'],
-    components: {ChosenSelect}
+    props: ['id', 'field', 'translations']
 });
 
 
@@ -4803,9 +4709,10 @@ __webpack_require__.r(__webpack_exports__);
 const Fields = (__webpack_require__(/*! ./Fields.vue */ "./src/js/components/Fields.vue")["default"]);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-    props: ['section'],
-    inject: ['translations'],
-    components: { Fields }
+    props: ['section', 'translations'],
+    components: {
+        Fields
+    }
 });
 
 
@@ -4853,19 +4760,12 @@ __webpack_require__.r(__webpack_exports__);
 
 const Section = (__webpack_require__(/*! ./Section.vue */ "./src/js/components/Section.vue")["default"]);
 const draggable = __webpack_require__(/*! vuedraggable */ "./node_modules/vuedraggable/dist/vuedraggable.umd.js");
-const ObjectUtils = (__webpack_require__(/*! ./../shared/ObjectUtils.js */ "./src/js/shared/ObjectUtils.js")["default"]);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-    props: ['sections', 'errors'],
+    props: ['sections', 'errors', 'translations'],
     components: {
         Section,
         draggable
-    },
-    inject: ['translations'],
-    data () {
-        return {
-            ObjectUtils: ObjectUtils
-        };
     },
     computed: {
         dragOptions() {
@@ -4906,50 +4806,34 @@ const ObjectUtils = (__webpack_require__(/*! ./../shared/ObjectUtils.js */ "./sr
 
 /***/ }),
 
-/***/ "./src/js/ContentBlockApp.vue?vue&type=script&setup=true&lang=js":
-/*!***********************************************************************!*\
-  !*** ./src/js/ContentBlockApp.vue?vue&type=script&setup=true&lang=js ***!
-  \***********************************************************************/
+/***/ "./src/js/ContentBlockApp.vue?vue&type=script&lang=js":
+/*!************************************************************!*\
+  !*** ./src/js/ContentBlockApp.vue?vue&type=script&lang=js ***!
+  \************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_ContentBlockApp_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_ContentBlockApp_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_ContentBlockApp_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./ContentBlockApp.vue?vue&type=script&setup=true&lang=js */ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/ContentBlockApp.vue?vue&type=script&setup=true&lang=js");
+/* harmony import */ var _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_ContentBlockApp_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./ContentBlockApp.vue?vue&type=script&lang=js */ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/ContentBlockApp.vue?vue&type=script&lang=js");
  
 
 /***/ }),
 
-/***/ "./src/js/RoutableContentTypeApp.vue?vue&type=script&setup=true&lang=js":
-/*!******************************************************************************!*\
-  !*** ./src/js/RoutableContentTypeApp.vue?vue&type=script&setup=true&lang=js ***!
-  \******************************************************************************/
+/***/ "./src/js/RoutableContentTypeApp.vue?vue&type=script&lang=js":
+/*!*******************************************************************!*\
+  !*** ./src/js/RoutableContentTypeApp.vue?vue&type=script&lang=js ***!
+  \*******************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_RoutableContentTypeApp_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_RoutableContentTypeApp_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_RoutableContentTypeApp_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./RoutableContentTypeApp.vue?vue&type=script&setup=true&lang=js */ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/RoutableContentTypeApp.vue?vue&type=script&setup=true&lang=js");
- 
-
-/***/ }),
-
-/***/ "./src/js/components/ChosenSelect.vue?vue&type=script&lang=js":
-/*!********************************************************************!*\
-  !*** ./src/js/components/ChosenSelect.vue?vue&type=script&lang=js ***!
-  \********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_ChosenSelect_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
-/* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_ChosenSelect_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./ChosenSelect.vue?vue&type=script&lang=js */ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/components/ChosenSelect.vue?vue&type=script&lang=js");
+/* harmony import */ var _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_RoutableContentTypeApp_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./RoutableContentTypeApp.vue?vue&type=script&lang=js */ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/RoutableContentTypeApp.vue?vue&type=script&lang=js");
  
 
 /***/ }),
@@ -5078,22 +4962,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_RoutableContentTypeApp_vue_vue_type_template_id_41b00cfe__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_RoutableContentTypeApp_vue_vue_type_template_id_41b00cfe__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./RoutableContentTypeApp.vue?vue&type=template&id=41b00cfe */ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/RoutableContentTypeApp.vue?vue&type=template&id=41b00cfe");
-
-
-/***/ }),
-
-/***/ "./src/js/components/ChosenSelect.vue?vue&type=template&id=3d36064c":
-/*!**************************************************************************!*\
-  !*** ./src/js/components/ChosenSelect.vue?vue&type=template&id=3d36064c ***!
-  \**************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_ChosenSelect_vue_vue_type_template_id_3d36064c__WEBPACK_IMPORTED_MODULE_0__.render)
-/* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_ChosenSelect_vue_vue_type_template_id_3d36064c__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./ChosenSelect.vue?vue&type=template&id=3d36064c */ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/components/ChosenSelect.vue?vue&type=template&id=3d36064c");
 
 
 /***/ }),
@@ -5271,29 +5139,33 @@ const _hoisted_34 = { class: "ctb-sections-container" }
 const _hoisted_35 = { class: "ctb-section-fields-container" }
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_Fields = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Fields")
+  const _component_FieldCreator = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("FieldCreator")
+  const _component_FieldEditor = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("FieldEditor")
+
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", _hoisted_2, [
       _hoisted_3,
       (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
         type: "text",
         name: "_token",
-        value: $setup.options.csrfToken
+        value: $data.csrfToken
       }, null, 8 /* PROPS */, _hoisted_4)
     ]),
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [
       (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [
         (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
-          href: $setup.options.listingUrl,
+          href: $data.listingUrl,
           class: "btn btn-secondary btn-icon-left"
         }, _hoisted_10, 8 /* PROPS */, _hoisted_7),
         (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
           class: "btn btn-success btn-icon-left",
           type: "button",
-          onClick: _cache[0] || (_cache[0] = $event => ($setup.form.save()))
+          onClick: _cache[0] || (_cache[0] = $event => (_ctx.save()))
         }, _hoisted_13)
       ]),
       _hoisted_14,
-      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", _hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translations.pageTitle), 1 /* TEXT */)
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", _hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.translations.pageTitle), 1 /* TEXT */)
     ]),
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [
       (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [
@@ -5303,39 +5175,39 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, [
                 (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_22, [
                   (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [
-                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_24, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translations.contentTypeName), 1 /* TEXT */),
+                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_24, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.translations.contentTypeName), 1 /* TEXT */),
                     (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
                       type: "text",
-                      class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({ 'form-control': true, 'is-invalid': $setup.view.form.type_validation.name.valid === false }),
+                      class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({ 'form-control': true, 'is-invalid': $data.view.form.type_validation.name.valid === false }),
                       id: "ctb-node-type-name",
-                      "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => (($setup.model.type.name) = $event)),
-                      onKeyup: _cache[2] || (_cache[2] = $event => ($setup.generateTypeCode())),
-                      onChange: _cache[3] || (_cache[3] = $event => ($setup.form.validate()))
+                      "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => (($data.model.type.name) = $event)),
+                      onKeyup: _cache[2] || (_cache[2] = $event => (_ctx.generateTypeCode())),
+                      onChange: _cache[3] || (_cache[3] = $event => (_ctx.validate()))
                     }, null, 34 /* CLASS, HYDRATE_EVENTS */), [
-                      [vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.model.type.name]
+                      [vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.model.type.name]
                     ]),
-                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translations.contentTypeNameInfo), 1 /* TEXT */),
-                    ($setup.view.form.type_validation.name.valid === false)
-                      ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_26, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.view.form.type_validation.name.message), 1 /* TEXT */))
+                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.translations.contentTypeNameInfo), 1 /* TEXT */),
+                    ($data.view.form.type_validation.name.valid === false)
+                      ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_26, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.view.form.type_validation.name.message), 1 /* TEXT */))
                       : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)
                   ])
                 ]),
                 (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_27, [
                   (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_28, [
-                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_29, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translations.contentTypeCode), 1 /* TEXT */),
+                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_29, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.translations.contentTypeCode), 1 /* TEXT */),
                     (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
                       type: "text",
-                      disabled: $setup.view.creation_mode !== true,
-                      class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({ 'form-control': true, 'is-invalid': $setup.view.form.type_validation.code.valid === false }),
+                      disabled: $data.view.creation_mode !== true,
+                      class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({ 'form-control': true, 'is-invalid': $data.view.form.type_validation.code.valid === false }),
                       id: "ctb-node-type-code",
-                      "onUpdate:modelValue": _cache[4] || (_cache[4] = $event => (($setup.model.type.code) = $event)),
-                      onChange: _cache[5] || (_cache[5] = $event => ($setup.form.validate()))
+                      "onUpdate:modelValue": _cache[4] || (_cache[4] = $event => (($data.model.type.code) = $event)),
+                      onChange: _cache[5] || (_cache[5] = $event => (_ctx.validate()))
                     }, null, 42 /* CLASS, PROPS, HYDRATE_EVENTS */, _hoisted_30), [
-                      [vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.model.type.code]
+                      [vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.model.type.code]
                     ]),
-                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_31, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translations.contentTypeCodeHelp), 1 /* TEXT */),
-                    ($setup.view.form.type_validation.code.valid === false)
-                      ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_32, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.view.form.type_validation.code.message), 1 /* TEXT */))
+                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_31, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.translations.contentTypeCodeHelp), 1 /* TEXT */),
+                    ($data.view.form.type_validation.code.valid === false)
+                      ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_32, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.view.form.type_validation.code.message), 1 /* TEXT */))
                       : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)
                   ])
                 ])
@@ -5345,10 +5217,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_33, [
             (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_34, [
               (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_35, [
-                (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Fields"], {
-                  translations: $setup.translations,
-                  fields: $setup.model.layout.main.sections[0].fields,
-                  section: $setup.model.layout.main.sections[0],
+                (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Fields, {
+                  translations: $data.translations,
+                  fields: $data.model.layout.main.sections[0].fields,
+                  section: $data.model.layout.main.sections[0],
                   group: 'fields',
                   parent_field: null
                 }, null, 8 /* PROPS */, ["translations", "fields", "section"])
@@ -5357,15 +5229,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           ])
         ])
       ]),
-      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["FieldCreator"], {
-        fieldTypes: $setup.options.fieldTypes,
-        showMultilingualOption: true
-      }, null, 8 /* PROPS */, ["fieldTypes"]),
-      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["FieldEditor"], {
-        field: $setup.view.form.field_editor,
-        fieldTypes: $setup.options.fieldTypes,
-        showMultilingualOption: true
-      }, null, 8 /* PROPS */, ["field", "fieldTypes"])
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FieldCreator, {
+        onConfirm: _ctx.createFieldUsingCreatorData,
+        translations: $data.translations,
+        fieldTypes: $data.fieldTypes,
+        showMultilingualOption: $data.view.is_multilingual
+      }, null, 8 /* PROPS */, ["onConfirm", "translations", "fieldTypes", "showMultilingualOption"]),
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FieldEditor, {
+        onConfirm: _ctx.editFieldUsingCreatorData,
+        translations: $data.translations,
+        field: $data.view.form.field_editor,
+        fieldTypes: $data.fieldTypes,
+        showMultilingualOption: $data.view.is_multilingual
+      }, null, 8 /* PROPS */, ["onConfirm", "translations", "field", "fieldTypes", "showMultilingualOption"])
     ])
   ]))
 }
@@ -5501,21 +5377,26 @@ const _hoisted_68 = { class: "form-text" }
 const _hoisted_69 = { class: "tab-content ctb-section-main-tabs-contents" }
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_SectionsList = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("SectionsList")
+  const _component_chosen_select = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("chosen-select")
+  const _component_FieldCreator = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("FieldCreator")
+  const _component_FieldEditor = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("FieldEditor")
+
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [
       (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [
         (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
-          href: $setup.options.listingUrl,
+          href: $data.listingUrl,
           class: "btn btn-secondary btn-icon-left"
         }, _hoisted_7, 8 /* PROPS */, _hoisted_4),
         (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
           class: "btn btn-success btn-icon-left",
           type: "button",
-          onClick: _cache[0] || (_cache[0] = $event => ($setup.form.save()))
+          onClick: _cache[0] || (_cache[0] = $event => (_ctx.save()))
         }, _hoisted_10)
       ]),
       _hoisted_11,
-      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translations.pageTitle), 1 /* TEXT */)
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.translations.pageTitle), 1 /* TEXT */)
     ]),
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [
       (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [
@@ -5525,40 +5406,40 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
               type: "text",
               name: "_token",
-              value: $setup.options.csrfToken
+              value: $data.csrfToken
             }, null, 8 /* PROPS */, _hoisted_18)
           ]),
           (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, [
             (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_20, [
-              (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translations.internalFields), 1 /* TEXT */),
+              (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.translations.internalFields), 1 /* TEXT */),
               (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_22, [
                 (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [
                   (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_24, [
-                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_25, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translations.title), 1 /* TEXT */)
+                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_25, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.translations.title), 1 /* TEXT */)
                   ]),
                   (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_26, [
-                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_27, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translations.slug), 1 /* TEXT */)
+                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_27, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.translations.slug), 1 /* TEXT */)
                   ]),
                   (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_28, [
-                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_29, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translations.publishedAt), 1 /* TEXT */)
+                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_29, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.translations.publishedAt), 1 /* TEXT */)
                   ]),
                   (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_30, [
-                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_31, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translations.publicationStatus), 1 /* TEXT */)
+                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_31, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.translations.publicationStatus), 1 /* TEXT */)
                   ]),
                   (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_32, [
-                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_33, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translations.author), 1 /* TEXT */)
+                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_33, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.translations.author), 1 /* TEXT */)
                   ]),
                   (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_34, [
-                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_35, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translations.nodePurpose), 1 /* TEXT */)
+                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_35, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.translations.nodePurpose), 1 /* TEXT */)
                   ])
                 ])
               ])
             ])
           ]),
-          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["SectionsList"], {
-            translations: $setup.translations,
-            sections: $setup.model.layout.sidebar.sections,
-            errors: $setup.ObjectUtils.get($setup.view.errors, 'layout.sidebar.sections', [])
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_SectionsList, {
+            translations: $data.translations,
+            sections: $data.model.layout.sidebar.sections,
+            errors: _ctx.$get($data.view.errors, 'layout.sidebar.sections', [])
           }, null, 8 /* PROPS */, ["translations", "sections", "errors"])
         ]),
         (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_36, [
@@ -5567,97 +5448,97 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_39, [
                 (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_40, [
                   (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_41, [
-                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_42, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translations.contentTypeName), 1 /* TEXT */),
+                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_42, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.translations.contentTypeName), 1 /* TEXT */),
                     (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
                       type: "text",
-                      class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({ 'form-control': true, 'is-invalid': $setup.view.form.type_validation.name.valid === false }),
+                      class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({ 'form-control': true, 'is-invalid': $data.view.form.type_validation.name.valid === false }),
                       id: "ctb-node-type-name",
-                      "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => (($setup.model.type.name) = $event)),
-                      onKeyup: _cache[2] || (_cache[2] = $event => ($setup.generateTypeCode())),
-                      onChange: _cache[3] || (_cache[3] = $event => ($setup.form.validate()))
+                      "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => (($data.model.type.name) = $event)),
+                      onKeyup: _cache[2] || (_cache[2] = $event => (_ctx.generateTypeCode())),
+                      onChange: _cache[3] || (_cache[3] = $event => (_ctx.validate()))
                     }, null, 34 /* CLASS, HYDRATE_EVENTS */), [
-                      [vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.model.type.name]
+                      [vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.model.type.name]
                     ]),
-                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_43, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translations.contentTypeNameInfo), 1 /* TEXT */),
-                    ($setup.view.form.type_validation.name.valid === false)
-                      ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_44, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.view.form.type_validation.name.message), 1 /* TEXT */))
+                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_43, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.translations.contentTypeNameInfo), 1 /* TEXT */),
+                    ($data.view.form.type_validation.name.valid === false)
+                      ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_44, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.view.form.type_validation.name.message), 1 /* TEXT */))
                       : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)
                   ])
                 ]),
                 (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_45, [
                   (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_46, [
-                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_47, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translations.contentTypeCode), 1 /* TEXT */),
+                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_47, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.translations.contentTypeCode), 1 /* TEXT */),
                     (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
                       type: "text",
-                      disabled: $setup.view.creation_mode !== true,
-                      class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({ 'form-control': true, 'is-invalid': $setup.view.form.type_validation.code.valid === false }),
+                      disabled: $data.view.creation_mode !== true,
+                      class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({ 'form-control': true, 'is-invalid': $data.view.form.type_validation.code.valid === false }),
                       id: "ctb-node-type-code",
-                      "onUpdate:modelValue": _cache[4] || (_cache[4] = $event => (($setup.model.type.code) = $event)),
-                      onChange: _cache[5] || (_cache[5] = $event => ($setup.form.validate()))
+                      "onUpdate:modelValue": _cache[4] || (_cache[4] = $event => (($data.model.type.code) = $event)),
+                      onChange: _cache[5] || (_cache[5] = $event => (_ctx.validate()))
                     }, null, 42 /* CLASS, PROPS, HYDRATE_EVENTS */, _hoisted_48), [
-                      [vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.model.type.code]
+                      [vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.model.type.code]
                     ]),
-                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_49, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translations.contentTypeCodeHelp), 1 /* TEXT */),
-                    ($setup.view.form.type_validation.code.valid === false)
-                      ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_50, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.view.form.type_validation.code.message), 1 /* TEXT */))
+                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_49, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.translations.contentTypeCodeHelp), 1 /* TEXT */),
+                    ($data.view.form.type_validation.code.valid === false)
+                      ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_50, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.view.form.type_validation.code.message), 1 /* TEXT */))
                       : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)
                   ])
                 ])
               ]),
               (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_51, [
                 (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_52, [
-                  (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_53, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translations.icon), 1 /* TEXT */),
+                  (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_53, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.translations.icon), 1 /* TEXT */),
                   (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
                     type: "email",
                     class: "form-control",
                     id: "ctb-form-type-icon",
-                    "onUpdate:modelValue": _cache[6] || (_cache[6] = $event => (($setup.model.type.icon) = $event))
+                    "onUpdate:modelValue": _cache[6] || (_cache[6] = $event => (($data.model.type.icon) = $event))
                   }, null, 512 /* NEED_PATCH */), [
-                    [vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.model.type.icon]
+                    [vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.model.type.icon]
                   ])
                 ]),
                 (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_54, [
-                  (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_55, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translations.hierarchicalType), 1 /* TEXT */),
-                  (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["ChosenSelect"], {
+                  (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_55, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.translations.hierarchicalType), 1 /* TEXT */),
+                  (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_chosen_select, {
                     id: "ctb-form-type-hierarchical",
-                    modelValue: $setup.model.type.isHierarchical,
-                    "onUpdate:modelValue": _cache[7] || (_cache[7] = $event => (($setup.model.type.isHierarchical) = $event))
+                    modelValue: $data.model.type.isHierarchical,
+                    "onUpdate:modelValue": _cache[7] || (_cache[7] = $event => (($data.model.type.isHierarchical) = $event))
                   }, {
                     default: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(() => [
-                      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", _hoisted_56, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translations.yes), 1 /* TEXT */),
-                      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", _hoisted_57, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translations.no), 1 /* TEXT */)
+                      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", _hoisted_56, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.translations.yes), 1 /* TEXT */),
+                      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", _hoisted_57, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.translations.no), 1 /* TEXT */)
                     ]),
                     _: 1 /* STABLE */
                   }, 8 /* PROPS */, ["modelValue"]),
-                  (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_58, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translations.hierarchicalTypeHelp), 1 /* TEXT */)
+                  (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_58, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.translations.hierarchicalTypeHelp), 1 /* TEXT */)
                 ])
               ]),
               (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_59, [
                 (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_60, [
-                  (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_61, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translations.routableType), 1 /* TEXT */),
-                  (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["ChosenSelect"], {
+                  (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_61, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.translations.routableType), 1 /* TEXT */),
+                  (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_chosen_select, {
                     id: "ctb-form-type-routable",
-                    modelValue: $setup.model.type.isRoutable,
-                    "onUpdate:modelValue": _cache[8] || (_cache[8] = $event => (($setup.model.type.isRoutable) = $event))
+                    modelValue: $data.model.type.isRoutable,
+                    "onUpdate:modelValue": _cache[8] || (_cache[8] = $event => (($data.model.type.isRoutable) = $event))
                   }, {
                     default: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(() => [
-                      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", _hoisted_62, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translations.yes), 1 /* TEXT */),
-                      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", _hoisted_63, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translations.no), 1 /* TEXT */)
+                      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", _hoisted_62, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.translations.yes), 1 /* TEXT */),
+                      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", _hoisted_63, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.translations.no), 1 /* TEXT */)
                     ]),
                     _: 1 /* STABLE */
                   }, 8 /* PROPS */, ["modelValue"]),
-                  (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_64, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translations.routableTypeHelp), 1 /* TEXT */)
+                  (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_64, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.translations.routableTypeHelp), 1 /* TEXT */)
                 ]),
-                ($setup.model.type.isRoutable === '1')
+                ($data.model.type.isRoutable === '1')
                   ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_65, [
-                      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_66, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translations.routingStrategy), 1 /* TEXT */),
-                      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["ChosenSelect"], {
+                      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_66, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.translations.routingStrategy), 1 /* TEXT */),
+                      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_chosen_select, {
                         id: "ctb-form-type-routing-strategy",
-                        modelValue: $setup.model.type.routingStrategy,
-                        "onUpdate:modelValue": _cache[9] || (_cache[9] = $event => (($setup.model.type.routingStrategy) = $event))
+                        modelValue: $data.model.type.routingStrategy,
+                        "onUpdate:modelValue": _cache[9] || (_cache[9] = $event => (($data.model.type.routingStrategy) = $event))
                       }, {
                         default: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(() => [
-                          ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.options.routingStrategies, (strategy) => {
+                          ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.routingStrategies, (strategy) => {
                             return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
                               id: strategy.id,
                               value: strategy.id
@@ -5666,59 +5547,36 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                         ]),
                         _: 1 /* STABLE */
                       }, 8 /* PROPS */, ["modelValue"]),
-                      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_68, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translations.routingStrategyHelp), 1 /* TEXT */)
+                      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_68, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.translations.routingStrategyHelp), 1 /* TEXT */)
                     ]))
                   : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)
               ])
             ])
           ]),
           (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_69, [
-            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["SectionsList"], {
-              sections: $setup.model.layout.main.sections,
-              errors: $setup.ObjectUtils.get($setup.view.errors, 'layout.main.sections', [])
-            }, null, 8 /* PROPS */, ["sections", "errors"])
+            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_SectionsList, {
+              translations: $data.translations,
+              sections: $data.model.layout.main.sections,
+              errors: _ctx.$get($data.view.errors, 'layout.main.sections', [])
+            }, null, 8 /* PROPS */, ["translations", "sections", "errors"])
           ])
         ])
       ]),
-      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["FieldCreator"], {
-        fieldTypes: $setup.options.fieldTypes,
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FieldCreator, {
+        onConfirm: _ctx.createFieldUsingCreatorData,
+        translations: $data.translations,
+        fieldTypes: $data.fieldTypes,
         showMultilingualOption: true
-      }, null, 8 /* PROPS */, ["fieldTypes"]),
-      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["FieldEditor"], {
-        field: $setup.view.form.field_editor,
-        fieldTypes: $setup.options.fieldTypes,
+      }, null, 8 /* PROPS */, ["onConfirm", "translations", "fieldTypes"]),
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FieldEditor, {
+        onConfirm: _ctx.editFieldUsingCreatorData,
+        translations: $data.translations,
+        field: $data.view.form.field_editor,
+        fieldTypes: $data.fieldTypes,
         showMultilingualOption: true
-      }, null, 8 /* PROPS */, ["field", "fieldTypes"])
+      }, null, 8 /* PROPS */, ["onConfirm", "translations", "field", "fieldTypes"])
     ])
   ]))
-}
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/components/ChosenSelect.vue?vue&type=template&id=3d36064c":
-/*!********************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/components/ChosenSelect.vue?vue&type=template&id=3d36064c ***!
-  \********************************************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render)
-/* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "vue");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
-
-
-const _hoisted_1 = ["multiple"]
-
-function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("select", {
-    multiple: $props.multiple,
-    class: "form-control"
-  }, [
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderSlot)(_ctx.$slots, "default")
-  ], 8 /* PROPS */, _hoisted_1))
 }
 
 /***/ }),
@@ -5807,13 +5665,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [
       (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [
         (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [
-          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translations.addNewField), 1 /* TEXT */),
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.translations.addNewField), 1 /* TEXT */),
           _hoisted_6
         ]),
         (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [
           (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [
             (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [
-              (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translations.fieldLabel), 1 /* TEXT */),
+              (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.translations.fieldLabel), 1 /* TEXT */),
               (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
                 type: "text",
                 class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({ 'form-control': true, 'ctb-autofocus': true, 'is-invalid': _ctx.model.name.valid === false }),
@@ -5827,10 +5685,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               (_ctx.model.name.valid === false)
                 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.model.name.message), 1 /* TEXT */))
                 : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true),
-              (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translations.fieldLabelHelp), 1 /* TEXT */)
+              (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.translations.fieldLabelHelp), 1 /* TEXT */)
             ]),
             (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [
-              (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translations.fieldCode), 1 /* TEXT */),
+              (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.translations.fieldCode), 1 /* TEXT */),
               (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
                 type: "text",
                 class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({ 'form-control': true, 'is-invalid': _ctx.model.code.valid === false }),
@@ -5844,7 +5702,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               (_ctx.model.code.valid === false)
                 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.model.code.message), 1 /* TEXT */))
                 : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true),
-              (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translations.fieldCodeHelp), 1 /* TEXT */)
+              (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.translations.fieldCodeHelp), 1 /* TEXT */)
             ])
           ]),
           ($props.showMultilingualOption)
@@ -5858,13 +5716,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                   }, null, 512 /* NEED_PATCH */), [
                     [vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, _ctx.model.multilingual.value]
                   ]),
-                  (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translations.multilingualField), 1 /* TEXT */)
+                  (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.translations.multilingualField), 1 /* TEXT */)
                 ]),
-                (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_20, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translations.multilingualFieldInfo), 1 /* TEXT */)
+                (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_20, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.translations.multilingualFieldInfo), 1 /* TEXT */)
               ]))
             : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true),
           (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, [
-            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_22, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translations.fieldType), 1 /* TEXT */),
+            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_22, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.translations.fieldType), 1 /* TEXT */),
             (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [
               ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.fieldTypes, (type) => {
                 return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
@@ -5885,7 +5743,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                         class: "col-6 ctb-field-constraint mb-4"
                       }, [
                         (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FormControl, {
-                          translations: $options.translations,
+                          translations: $props.translations,
                           field: configuration,
                           id: 'ctb-new-field-configuration-' + id
                         }, null, 8 /* PROPS */, ["translations", "field", "id"])
@@ -5901,8 +5759,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             type: "button",
             class: "btn btn-success",
             onClick: _cache[7] || (_cache[7] = $event => ($options.saveField()))
-          }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translations.create), 1 /* TEXT */),
-          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", _hoisted_29, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translations.cancel), 1 /* TEXT */)
+          }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.translations.create), 1 /* TEXT */),
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", _hoisted_29, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.translations.cancel), 1 /* TEXT */)
         ])
       ])
     ])
@@ -6007,13 +5865,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [
       (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [
         (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [
-          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translations.editField), 1 /* TEXT */),
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.translations.editField), 1 /* TEXT */),
           _hoisted_6
         ]),
         (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [
           (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [
             (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [
-              (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translations.fieldLabel), 1 /* TEXT */),
+              (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.translations.fieldLabel), 1 /* TEXT */),
               (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
                 type: "text",
                 class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({ 'form-control': true, 'ctb-autofocus': true, 'is-invalid': _ctx.model.name.valid === false }),
@@ -6026,10 +5884,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               (_ctx.model.name.valid === false)
                 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.model.name.message), 1 /* TEXT */))
                 : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true),
-              (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translations.fieldLabelHelp), 1 /* TEXT */)
+              (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.translations.fieldLabelHelp), 1 /* TEXT */)
             ]),
             (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [
-              (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translations.fieldCode), 1 /* TEXT */),
+              (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.translations.fieldCode), 1 /* TEXT */),
               (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
                 type: "text",
                 class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({ 'form-control': true, 'is-invalid': _ctx.model.code.valid === false }),
@@ -6055,9 +5913,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                   }, null, 512 /* NEED_PATCH */), [
                     [vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, _ctx.model.multilingual.value]
                   ]),
-                  (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_18, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translations.multilingualField), 1 /* TEXT */)
+                  (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_18, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.translations.multilingualField), 1 /* TEXT */)
                 ]),
-                (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translations.multilingualFieldInfo), 1 /* TEXT */)
+                (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.translations.multilingualFieldInfo), 1 /* TEXT */)
               ]))
             : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true),
           (_ctx.model.configuration.length !== 0)
@@ -6070,7 +5928,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                         class: "col-6 ctb-field-constraint mb-4"
                       }, [
                         (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FormControl, {
-                          translations: $options.translations,
+                          translations: $props.translations,
                           field: configuration,
                           id: 'ctb-new-field-configuration-' + id
                         }, null, 8 /* PROPS */, ["translations", "field", "id"])
@@ -6115,7 +5973,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                   class: "col-6 ctb-field-constraint mb-4"
                                 }, [
                                   (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FormControl, {
-                                    translations: $options.translations,
+                                    translations: $props.translations,
                                     field: modificator,
                                     id: 'ctb-edit-field-modificator-' + modificator.id
                                   }, null, 8 /* PROPS */, ["translations", "field", "id"])
@@ -6135,8 +5993,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             type: "button",
             class: "btn btn-success",
             onClick: _cache[4] || (_cache[4] = $event => ($options.updateField()))
-          }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translations.save), 1 /* TEXT */),
-          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", _hoisted_32, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translations.cancel), 1 /* TEXT */)
+          }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.translations.save), 1 /* TEXT */),
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", _hoisted_32, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.translations.cancel), 1 /* TEXT */)
         ])
       ])
     ])
@@ -6188,60 +6046,76 @@ const _hoisted_12 = {
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_fields = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("fields", true)
   const _component_draggable = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("draggable")
+  const _directive_bs_tooltip = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveDirective)("bs-tooltip")
 
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_draggable, (0,vue__WEBPACK_IMPORTED_MODULE_0__.mergeProps)({
-      group: $props.group,
-      list: $props.fields
-    }, $options.dragOptions, {
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_draggable, (0,vue__WEBPACK_IMPORTED_MODULE_0__.mergeProps)({ class: "ctb-sortable-fields" }, $options.dragOptions, {
+      list: $props.fields,
       handle: ".ctb-sortable-handler",
-      "item-key": "code",
-      tag: "div",
+      group: $props.group,
+      onStart: _cache[0] || (_cache[0] = $event => (_ctx.drag=true)),
+      onEnd: _cache[1] || (_cache[1] = $event => (_ctx.drag=false)),
       "ghost-class": "ctb-draggable-ghost",
-      "component-data": { class: 'ctb-sortable-fields' }
+      tag: "div"
     }), {
-      item: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(({element}) => [
-        (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-          class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({ 'ctb-field': true, 'ctb-field-has-error': element.metadata.has_errors, 'ctb-field-has-children': element.children.length > 0 })
-        }, [
-          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [
-            _hoisted_2,
-            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(element.name.value), 1 /* TEXT */),
-            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [
-              (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
-                onClick: $event => ($options.editFieldModal.open(element.code.value)),
-                "data-bs-tooltip": "",
-                title: $options.translations.editField
-              }, _hoisted_7, 8 /* PROPS */, _hoisted_5),
-              (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
-                onClick: $event => ($options.model.removeField(element.code.value)),
-                "data-bs-tooltip": "",
-                title: $options.translations.removeField
-              }, _hoisted_10, 8 /* PROPS */, _hoisted_8)
-            ])
+      default: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(() => [
+        (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(vue__WEBPACK_IMPORTED_MODULE_0__.TransitionGroup, {
+          type: "transition",
+          name: !_ctx.drag ? 'flip-list' : null,
+          class: "ctb-sortable-placeholder",
+          tag: "div"
+        }, {
+          default: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(() => [
+            ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.fields, (field, key) => {
+              return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+                key: field.code.value,
+                class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({ 'ctb-field': true, 'ctb-field-has-error': field.metadata.has_errors, 'ctb-field-has-children': field.children.length > 0 })
+              }, [
+                (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [
+                  _hoisted_2,
+                  (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(field.name.value), 1 /* TEXT */),
+                  (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [
+                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)(((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", {
+                      onClick: $event => (_ctx.$root.$emit('field:edit', field.code.value)),
+                      title: $props.translations.editField
+                    }, _hoisted_7, 8 /* PROPS */, _hoisted_5)), [
+                      [_directive_bs_tooltip]
+                    ]),
+                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)(((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", {
+                      onClick: $event => (_ctx.$root.$emit('field:remove', field.code.value)),
+                      title: $props.translations.removeField
+                    }, _hoisted_10, 8 /* PROPS */, _hoisted_8)), [
+                      [_directive_bs_tooltip]
+                    ])
+                  ])
+                ]),
+                (field.type.value === 'repeatable')
+                  ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_11, [
+                      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_fields, {
+                        translations: $props.translations,
+                        fields: field.children,
+                        section: $props.section,
+                        group: field.code.value + '_fields',
+                        parent_field: field
+                      }, null, 8 /* PROPS */, ["translations", "fields", "section", "group", "parent_field"])
+                    ]))
+                  : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)
+              ], 2 /* CLASS */))
+            }), 128 /* KEYED_FRAGMENT */))
           ]),
-          (element.type.value === 'repeatable')
-            ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_11, [
-                (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_fields, {
-                  fields: element.children,
-                  section: $props.section,
-                  group: element.code.value + '_fields',
-                  parent_field: element
-                }, null, 8 /* PROPS */, ["fields", "section", "group", "parent_field"])
-              ]))
-            : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)
-        ], 2 /* CLASS */)
+          _: 1 /* STABLE */
+        }, 8 /* PROPS */, ["name"])
       ]),
       _: 1 /* STABLE */
-    }, 16 /* FULL_PROPS */, ["group", "list"]),
+    }, 16 /* FULL_PROPS */, ["list", "group"]),
     ($props.parent_field === null || $props.parent_field.type.value === 'repeatable')
       ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_12, [
           (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
             class: "ctb-button",
             type: "button",
-            onClick: _cache[0] || (_cache[0] = $event => ($options.createFieldModal.open($props.section.code, $props.parent_field ? $props.parent_field.code.value : null)))
+            onClick: _cache[2] || (_cache[2] = $event => (_ctx.$root.$emit('field:add', $props.section.code, $props.parent_field ? $props.parent_field.code.value : null)))
           }, [
-            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translations.addNewField), 1 /* TEXT */)
+            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.translations.addNewField), 1 /* TEXT */)
           ])
         ]))
       : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)
@@ -6290,7 +6164,7 @@ const _hoisted_11 = {
 }
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_ChosenSelect = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("ChosenSelect")
+  const _component_chosen_select = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("chosen-select")
 
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
@@ -6336,7 +6210,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ])
       : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true),
     ($props.field.type === 'choice')
-      ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_ChosenSelect, {
+      ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_chosen_select, {
           key: 3,
           id: $props.id,
           onChange: _cache[6] || (_cache[6] = $event => (_ctx.$emit('change'))),
@@ -6357,7 +6231,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         }, 8 /* PROPS */, ["id", "modelValue", "class"]))
       : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true),
     ($props.field.type === 'yes_no')
-      ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_ChosenSelect, {
+      ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_chosen_select, {
           key: 4,
           id: $props.id,
           onChange: _cache[8] || (_cache[8] = $event => (_ctx.$emit('change'))),
@@ -6415,34 +6289,39 @@ const _hoisted_9 = { class: "ctb-section-fields-container" }
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_Fields = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Fields")
+  const _directive_bs_tooltip = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveDirective)("bs-tooltip")
 
-  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [
-      _hoisted_3,
-      (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
-        type: "text",
-        "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => (($props.section.name.value) = $event)),
-        class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({ 'ctb-section-label-input': true, 'ctb-section-label-input-has-error': ! $props.section.name.valid }),
-        "data-bs-tooltip": "",
-        title: $props.section.name.message
-      }, null, 10 /* CLASS, PROPS */, _hoisted_4), [
-        [vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $props.section.name.value]
+  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [
+        _hoisted_3,
+        (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+          type: "text",
+          "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => (($props.section.name.value) = $event)),
+          class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({ 'ctb-section-label-input': true, 'ctb-section-label-input-has-error': ! $props.section.name.valid }),
+          title: $props.section.name.message
+        }, null, 10 /* CLASS, PROPS */, _hoisted_4), [
+          [vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $props.section.name.value],
+          [_directive_bs_tooltip]
+        ]),
+        (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)(((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", {
+            onClick: _cache[1] || (_cache[1] = $event => (_ctx.$emit('section:remove', $props.section.code))),
+            title: $props.translations.removeSection
+          }, _hoisted_8, 8 /* PROPS */, _hoisted_6)), [
+            [_directive_bs_tooltip]
+          ])
+        ])
       ]),
-      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [
-        (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
-          onClick: _cache[1] || (_cache[1] = $event => (_ctx.$emit('section:remove', $props.section.code))),
-          "data-bs-tooltip": "",
-          title: $options.translations.removeSection
-        }, _hoisted_8, 8 /* PROPS */, _hoisted_6)
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [
+        (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Fields, {
+          translations: $props.translations,
+          fields: $props.section.fields,
+          section: $props.section,
+          group: 'fields',
+          parent_field: null
+        }, null, 8 /* PROPS */, ["translations", "fields", "section"])
       ])
-    ]),
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [
-      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Fields, {
-        fields: $props.section.fields,
-        section: $props.section,
-        group: "fields",
-        parent_field: null
-      }, null, 8 /* PROPS */, ["fields", "section"])
     ])
   ]))
 }
@@ -6477,27 +6356,39 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       list: $props.sections
     }, $options.dragOptions, {
       handle: ".ctb-section-sortable-handler",
-      "item-key": "code",
-      tag: "div",
-      "component-data": { class: 'ctb-sections-container' }
+      class: "ctb-sections-container"
     }), {
-      item: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(({element}) => [
-        ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Section, {
-          key: element.code,
-          section: element,
-          errors: "ObjectUtils.get(errors, id, {})",
-          "onSection:remove": _cache[0] || (_cache[0] = $event => ($options.removeSection()))
-        }, null, 8 /* PROPS */, ["section"]))
+      default: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(() => [
+        (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(vue__WEBPACK_IMPORTED_MODULE_0__.TransitionGroup, {
+          type: "transition",
+          name: !_ctx.drag ? 'flip-list' : null,
+          class: "ctb-sortable-placeholder",
+          tag: "div",
+          "data-label": $props.translations.addNewSection
+        }, {
+          default: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(() => [
+            ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.sections, (section, id) => {
+              return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Section, {
+                key: section.code,
+                section: section,
+                translations: $props.translations,
+                errors: _ctx.$get($props.errors, id, {}),
+                "onSection:remove": $options.removeSection
+              }, null, 8 /* PROPS */, ["section", "translations", "errors", "onSection:remove"]))
+            }), 128 /* KEYED_FRAGMENT */))
+          ]),
+          _: 1 /* STABLE */
+        }, 8 /* PROPS */, ["name", "data-label"])
       ]),
       _: 1 /* STABLE */
     }, 16 /* FULL_PROPS */, ["list"]),
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [
       (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
         class: "ctb-new-section-button",
-        onClick: _cache[1] || (_cache[1] = $event => ($options.addSection()))
+        onClick: _cache[0] || (_cache[0] = $event => ($options.addSection()))
       }, [
         _hoisted_2,
-        (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.translations.addNewSection), 1 /* TEXT */)
+        (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.translations.addNewSection), 1 /* TEXT */)
       ])
     ])
   ]))
@@ -11683,428 +11574,217 @@ module.exports = NATIVE_SYMBOL
 
 /***/ }),
 
-/***/ "./src/js/shared/ContainerBuilder.js":
-/*!*******************************************!*\
-  !*** ./src/js/shared/ContainerBuilder.js ***!
-  \*******************************************/
+/***/ "./src/js/framework.js":
+/*!*****************************!*\
+  !*** ./src/js/framework.js ***!
+  \*****************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ ContainerBuilder)
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-const EventDispatcher = (__webpack_require__(/*! ./EventDispatcher.js */ "./src/js/shared/EventDispatcher.js")["default"]);
-const Form = (__webpack_require__(/*! ./Form.js */ "./src/js/shared/Form.js")["default"]);
-const Model = (__webpack_require__(/*! ./Model.js */ "./src/js/shared/Model.js")["default"]);
-const CreateField = (__webpack_require__(/*! ./Modals/CreateField.js */ "./src/js/shared/Modals/CreateField.js")["default"]);
-const EditField = (__webpack_require__(/*! ./Modals/EditField.js */ "./src/js/shared/Modals/EditField.js")["default"]);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+    methods: {
+        save: function () {
+            if (this.validate() === false) {
+                return;
+            }
 
-class ContainerBuilder {
-    static build (view, model, provider) {
-        const s = {};
-        s.translations = window.ContentBuilderLayoutBuilder.translations;
-        s.options = window.ContentBuilderLayoutBuilder;
-        s.eventDispatcher = new EventDispatcher();
-        s.form = new Form(model, view, s.translations);
-        s.model = new Model(model);
-        s.createFieldModal = new CreateField(view, s.model, s.eventDispatcher, s.translations);
-        s.editFieldModal = new EditField(view, s.model, s.eventDispatcher, s.translations);
+            $('#ctb-form-field-node-type').val(JSON.stringify({
+                layout: this.model.layout,
+                type: this.model.type
+            }));
+            $('#ctb-form').submit();
+        },
+        validate: function () {
+            let status = true;
 
-        provider('options', s.options);
-        provider('translations', s.translations);
-        provider('eventDispatcher', s.eventDispatcher);
-        provider('form', s.form);
-        provider('model', s.model);
-        provider('createFieldModal', s.createFieldModal);
-        provider('editFieldModal', s.editFieldModal);
+            this.view.form.type_validation.name.valid = true;
+            this.view.form.type_validation.name.message = null;
+            this.view.form.type_validation.code.valid = true;
+            this.view.form.type_validation.code.message = null;
 
-        return s;
-    }
-}
+            if (!this.model.type.name) {
+                status = false;
+                this.view.form.type_validation.name.valid = false;
+                this.view.form.type_validation.name.message = this.translations.pleaseFillThisField;
+            }
 
+            if (!this.model.type.code) {
+                status = false;
+                this.view.form.type_validation.code.valid = false;
+                this.view.form.type_validation.code.message = this.translations.pleaseFillThisField;
+            } else if (!/^[0-9a-z_]+$/g.test(this.model.type.code)) {
+                status = false;
+                this.view.form.type_validation.code.valid = false;
+                this.view.form.type_validation.code.message = this.translations.fieldCodeMustContainOnlyAlphanumsAndUnderline;
+            }
 
-/***/ }),
+            return status;
+        },
+        removeField: function (fieldCode) {
+            Tulia.Confirmation.warning().then((result) => {
+                if (!result.value) {
+                    return;
+                }
 
-/***/ "./src/js/shared/EventDispatcher.js":
-/*!******************************************!*\
-  !*** ./src/js/shared/EventDispatcher.js ***!
-  \******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ EventDispatcher)
-/* harmony export */ });
-class EventDispatcher {
-    listeners = [];
-
-    on (event, listener) {
-        if (!this.listeners[event]) {
-            this.listeners[event] = [];
-        }
-
-        this.listeners[event].push(listener);
-    }
-
-    emit (event, ...args) {
-        if (!this.listeners[event]) {
-            return;
-        }
-
-        for (let i in this.listeners[event]) {
-            this.listeners[event][i].call(null, ...args);
-        }
-    }
-}
-
-
-/***/ }),
-
-/***/ "./src/js/shared/Form.js":
-/*!*******************************!*\
-  !*** ./src/js/shared/Form.js ***!
-  \*******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Form)
-/* harmony export */ });
-class Form {
-    model;
-    view;
-    translations;
-
-    constructor (model, view, translations) {
-        this.model = model;
-        this.view = view;
-        this.translations = translations;
-    }
-
-    save () {
-        if (this.validate() === false) {
-            return;
-        }
-
-        $('#ctb-form-field-node-type').val(JSON.stringify({
-            layout: this.model.layout,
-            type: this.model.type
-        }));
-        $('#ctb-form').submit();
-    }
-
-    validate () {
-        let status = true;
-
-        this.view.form.type_validation.name.valid = true;
-        this.view.form.type_validation.name.message = null;
-        this.view.form.type_validation.code.valid = true;
-        this.view.form.type_validation.code.message = null;
-
-        if (!this.model.type.name) {
-            status = false;
-            this.view.form.type_validation.name.valid = false;
-            this.view.form.type_validation.name.message = this.translations.pleaseFillThisField;
-        }
-
-        if (!this.model.type.code) {
-            status = false;
-            this.view.form.type_validation.code.valid = false;
-            this.view.form.type_validation.code.message = this.translations.pleaseFillThisField;
-        } else if (!/^[0-9a-z_]+$/g.test(this.model.type.code)) {
-            status = false;
-            this.view.form.type_validation.code.valid = false;
-            this.view.form.type_validation.code.message = this.translations.fieldCodeMustContainOnlyAlphanumsAndUnderline;
-        }
-
-        return status;
-    }
-}
-
-
-/***/ }),
-
-/***/ "./src/js/shared/Modals/CreateField.js":
-/*!*********************************************!*\
-  !*** ./src/js/shared/Modals/CreateField.js ***!
-  \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ CreateField)
-/* harmony export */ });
-class CreateField {
-    view;
-    model;
-    eventDispatcher;
-    translations;
-
-    constructor (view, model, eventDispatcher, translations) {
-        this.view = view;
-        this.model = model;
-        this.eventDispatcher = eventDispatcher;
-        this.translations = translations;
-    }
-
-    open (sectionCode, parentField) {
-        this.view.form.field_creator_section_code = sectionCode;
-        this.view.form.field_creator_parent_field = parentField;
-        this.view.modal.field_creator.show();
-
-        this.eventDispatcher.emit('field:create:modal:opened');
-    }
-
-    create (data) {
-        let section = this.model.findSection(this.view.form.field_creator_section_code);
-
-        if (this.model.findField(data.code)) {
-            Tulia.Info.info({
-                title: this.translations.youCannotCreateTwoFieldsWithTheSameCode,
-                type: 'warning'
+                this._removeField(fieldCode);
             });
-            return;
-        }
+        },
+        openCreateFieldModel: function (sectionCode, parentField) {
+            this.view.form.field_creator_section_code = sectionCode;
+            this.view.form.field_creator_parent_field = parentField;
+            this.view.modal.field_creator.show();
 
-        let newField = {
-            metadata: {has_errors: false},
-            code: {value: data.code, valid: true, message: null},
-            name: {value: data.name, valid: true, message: null},
-            type: {value: data.type, valid: true, message: null},
-            multilingual: {value: data.multilingual, valid: true, message: null},
-            configuration: data.configuration,
-            constraints: [],
-            children: [],
-        };
+            this.$root.$emit('field:create:modal:opened');
+        },
+        openEditFieldModel: function (fieldCode) {
+            let field = this._findField(fieldCode);
 
-        if (this.view.form.field_creator_parent_field) {
-            let parent = this._findField(this.view.form.field_creator_parent_field);
+            if (!field) {
+                throw new Error('Cannot open edit modal, field not exists.');
+            }
 
-            if (!parent) {
-                alert('ERROR: Parent field not exists. Cannot create this field.');
+            this.view.form.field_editor.code = field.code;
+            this.view.form.field_editor.type = field.type;
+            this.view.form.field_editor.name = field.name;
+            this.view.form.field_editor.multilingual = field.multilingual;
+            this.view.form.field_editor.constraints = field.constraints;
+            this.view.form.field_editor.configuration = field.configuration;
+            this.view.modal.field_editor.show();
+
+            this.$root.$emit('field:edit:modal:opened');
+        },
+        createFieldUsingCreatorData: function (data) {
+            let section = this._findSection(this.view.form.field_creator_section_code);
+
+            if (this._findField(data.code)) {
+                Tulia.Info.info({
+                    title: this.translations.youCannotCreateTwoFieldsWithTheSameCode,
+                    type: 'warning'
+                });
                 return;
             }
 
-            parent.children.push(newField);
-        } else {
-            section.fields.push(newField);
-        }
+            let newField = {
+                metadata: {has_errors: false},
+                code: {value: data.code, valid: true, message: null},
+                name: {value: data.name, valid: true, message: null},
+                type: {value: data.type, valid: true, message: null},
+                multilingual: {value: data.multilingual, valid: true, message: null},
+                configuration: data.configuration,
+                constraints: [],
+                children: [],
+            };
 
-        this.view.modal.field_creator.hide();
-        //this.openEditFieldModel(data.code);
-        //this.$forceUpdate();
-    }
-}
+            if (this.view.form.field_creator_parent_field) {
+                let parent = this._findField(this.view.form.field_creator_parent_field);
 
-
-/***/ }),
-
-/***/ "./src/js/shared/Modals/EditField.js":
-/*!*******************************************!*\
-  !*** ./src/js/shared/Modals/EditField.js ***!
-  \*******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ EditField)
-/* harmony export */ });
-class EditField {
-    view;
-    model;
-    eventDispatcher;
-    translations;
-
-    constructor (view, model, eventDispatcher, translations) {
-        this.view = view;
-        this.model = model;
-        this.eventDispatcher = eventDispatcher;
-        this.translations = translations;
-    }
-
-    open (fieldCode) {
-        let field = this.model.findField(fieldCode);
-
-        if (!field) {
-            throw new Error('Cannot open edit modal, field not exists.');
-        }
-
-        this.view.form.field_editor.code = field.code;
-        this.view.form.field_editor.type = field.type;
-        this.view.form.field_editor.name = field.name;
-        this.view.form.field_editor.multilingual = field.multilingual;
-        this.view.form.field_editor.constraints = field.constraints;
-        this.view.form.field_editor.configuration = field.configuration;
-        this.view.modal.field_editor.show();
-
-        this.eventDispatcher.emit('field:edit:modal:opened');
-    }
-
-    update (data) {
-        let field = this.model.findField(this.view.form.field_editor.code.value, this.model);
-
-        if (!field) {
-            return;
-        }
-
-        field.metadata.has_errors = false;
-        field.code.message = null;
-        field.code.valid = true;
-        field.name.value = data.name;
-        field.name.message = null;
-        field.name.valid = true;
-        field.multilingual.value = data.multilingual;
-        field.multilingual.message = null;
-        field.multilingual.valid = true;
-        field.configuration = data.configuration;
-        field.constraints = data.constraints;
-
-        this.view.modal.field_editor.hide();
-        //this.$forceUpdate();
-    }
-}
-
-
-/***/ }),
-
-/***/ "./src/js/shared/Model.js":
-/*!********************************!*\
-  !*** ./src/js/shared/Model.js ***!
-  \********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Model)
-/* harmony export */ });
-class Model {
-    model;
-
-    constructor (model) {
-        this.model = model;
-    }
-
-    removeField (fieldCode) {
-        Tulia.Confirmation.warning().then((result) => {
-            if (!result.value) {
-                return;
-            }
-
-            this._removeField(fieldCode);
-        });
-    }
-
-    _removeField (code) {
-        for (let k in this.model.layout) {
-            for (let s in this.model.layout[k].sections) {
-                this._removeFieldFromList(this.model.layout[k].sections[s].fields, code);
-            }
-        }
-    }
-
-    _removeFieldFromList (fields, code) {
-        for (let f in fields) {
-            if (fields[f].code.value === code) {
-                fields.splice(f, 1);
-                return;
-            }
-
-            this._removeFieldFromList(fields[f].children, code);
-        }
-    }
-
-    findField (code) {
-        for (let k in this.model.layout) {
-            for (let s in this.model.layout[k].sections) {
-                let field = this._findInFields(this.model.layout[k].sections[s].fields, code);
-
-                if (field) {
-                    return field;
+                if (!parent) {
+                    alert('ERROR: Parent field not exists. Cannot create this field.');
+                    return;
                 }
-            }
-        }
-    }
 
-    _findInFields (fields, code) {
-        for (let f in fields) {
-            if (fields[f].code.value === code) {
-                return fields[f];
-            }
-
-            let fieldFromChildren = this._findInFields(fields[f].children, code);
-
-            if (fieldFromChildren) {
-                return fieldFromChildren;
-            }
-        }
-    }
-
-    findSection (code) {
-        for (let k in this.model.layout) {
-            for (let s in this.model.layout[k].sections) {
-                if (this.model.layout[k].sections[s].code === code) {
-                    return this.model.layout[k].sections[s];
-                }
-            }
-        }
-    }
-}
-
-
-/***/ }),
-
-/***/ "./src/js/shared/ObjectUtils.js":
-/*!**************************************!*\
-  !*** ./src/js/shared/ObjectUtils.js ***!
-  \**************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ ObjectUtils)
-/* harmony export */ });
-class ObjectUtils {
-    static isEmpty (object) {
-        return JSON.stringify(object) === JSON.stringify({});
-    }
-
-    static get (object, path, defaultValue = null) {
-        let result = object;
-        let slices = [];
-        let breaked = false;
-
-        // Cast to string, for integer inded arrays
-        path = String(path);
-
-        if (path.indexOf('.') >= 0) {
-            slices = path.split('.');
-        } else {
-            slices = [path];
-        }
-
-        for (let piece of slices) {
-            if (result[piece]) {
-                result = result[piece];
+                parent.children.push(newField);
             } else {
-                breaked = true;
-                break;
+                section.fields.push(newField);
+            }
+
+            this.view.modal.field_creator.hide();
+            this.openEditFieldModel(data.code);
+            this.$forceUpdate();
+        },
+        editFieldUsingCreatorData: function (data) {
+            let field = this._findField(this.view.form.field_editor.code.value);
+
+            if (!field) {
+                return;
+            }
+
+            field.metadata.has_errors = false;
+            field.code.message = null;
+            field.code.valid = true;
+            field.name.value = data.name;
+            field.name.message = null;
+            field.name.valid = true;
+            field.multilingual.value = data.multilingual;
+            field.multilingual.message = null;
+            field.multilingual.valid = true;
+            field.configuration = data.configuration;
+            field.constraints = data.constraints;
+
+            this.view.modal.field_editor.hide();
+            this.$forceUpdate();
+        },
+        generateTypeCode: function () {
+            if (this.view.creation_mode === false) {
+                return;
+            }
+
+            if (this.model.type.code === '') {
+                this.code_field_changed = false;
+            }
+
+            if (this.code_field_changed) {
+                return;
+            }
+
+            this.model.type.code = this.model.type.name.toLowerCase().replace(/[^a-z0-9_]+/g, '_').replace(/_+/is, '_');
+        },
+        _findSection: function (code) {
+            for (let k in this.model.layout) {
+                for (let s in this.model.layout[k].sections) {
+                    if (this.model.layout[k].sections[s].code === code) {
+                        return this.model.layout[k].sections[s];
+                    }
+                }
+            }
+        },
+        _findField: function (code) {
+            for (let k in this.model.layout) {
+                for (let s in this.model.layout[k].sections) {
+                    let field = this._findInFields(this.model.layout[k].sections[s].fields, code);
+
+                    if (field) {
+                        return field;
+                    }
+                }
+            }
+        },
+        _findInFields: function (fields, code) {
+            for (let f in fields) {
+                if (fields[f].code.value === code) {
+                    return fields[f];
+                }
+
+                let fieldFromChildren = this._findInFields(fields[f].children, code);
+
+                if (fieldFromChildren) {
+                    return fieldFromChildren;
+                }
+            }
+        },
+        _removeField: function (code) {
+            for (let k in this.model.layout) {
+                for (let s in this.model.layout[k].sections) {
+                    this._removeFieldFromList(this.model.layout[k].sections[s].fields, code);
+                }
+            }
+        },
+        _removeFieldFromList: function (fields, code) {
+            for (let f in fields) {
+                if (fields[f].code.value === code) {
+                    fields.splice(f, 1);
+                    return;
+                }
+
+                this._removeFieldFromList(fields[f].children, code);
             }
         }
-
-        if (breaked) {
-            return defaultValue;
-        }
-
-        return result || defaultValue;
-    };
-}
+    }
+});
 
 
 /***/ }),
@@ -12198,12 +11878,71 @@ const RoutableContentTypeApp = (__webpack_require__(/*! ./RoutableContentTypeApp
 const ContentBlockApp = (__webpack_require__(/*! ./ContentBlockApp.vue */ "./src/js/ContentBlockApp.vue")["default"]);
 const Vue = __webpack_require__(/*! vue */ "vue");
 
-/*
+/*Vue.use(draggable);
+
 Vue.directive('bs-tooltip', function(el) {
     let tooltip = new bootstrap.Tooltip(el);
     tooltip.enable();
 });
-*/
+
+Vue.component('chosen-select', {
+    props: {
+        value: [String, Array],
+        multiple: Boolean,
+    },
+    template:`<select :multiple="multiple" class="form-control"><slot></slot></select>`,
+    mounted () {
+        $(this.$el)
+            .val(this.value)
+            .chosen()
+            .on('change', e => this.$emit('input', $(this.$el).val()))
+    },
+    watch: {
+        value (val) {
+            $(this.$el).val(val).trigger('chosen:updated');
+        }
+    },
+    destroyed () {
+        $(this.$el).chosen('destroy');
+    }
+});
+
+Vue.mixin({
+    methods: {
+        $objectIsEmpty: function (object) {
+            return JSON.stringify(object) === JSON.stringify({});
+        },
+        $get: function (object, path, defaultValue = null) {
+            let result = object;
+            let slices = [];
+            let breaked = false;
+
+            // Cast to string, for integer inded arrays
+            path = String(path);
+
+            if (path.indexOf('.') >= 0) {
+                slices = path.split('.');
+            } else {
+                slices = [path];
+            }
+
+            for (let piece of slices) {
+                if (result[piece]) {
+                    result = result[piece];
+                } else {
+                    breaked = true;
+                    break;
+                }
+            }
+
+            if (breaked) {
+                return defaultValue;
+            }
+
+            return result || defaultValue;
+        }
+    }
+});*/
 
 $(function () {
     let vue;
@@ -12226,4 +11965,4 @@ $(function () {
 
 /******/ })()
 ;
-//# sourceMappingURL=build.js.map
+//# sourceMappingURL=content-builder.js.map

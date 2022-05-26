@@ -62,13 +62,14 @@
 </template>
 
 <script>
-import FormControl from './FormControl';
+const FormControl = require('./FormControl.vue').default;
 
 export default {
-    props: ['fieldTypes', 'translations', 'defaultMultilingualValue', 'showMultilingualOption'],
+    props: ['fieldTypes', 'defaultMultilingualValue', 'showMultilingualOption'],
     components: {
         FormControl
     },
+    inject: ['eventDispatcher', 'translations', 'createFieldModal'],
     data: function () {
         return {
             idFieldChanged: false,
@@ -126,7 +127,8 @@ export default {
                 });
             }
 
-            this.$emit('confirm', model);
+            //this.$emit('confirm', model);
+            this.createFieldModal.create(model);
         },
         _updateFieldTypeConfiguration: function () {
             this.model.configuration = [];
@@ -210,7 +212,7 @@ export default {
         },
     },
     mounted: function () {
-        this.$root.$on('field:create:modal:opened', () => {
+        this.eventDispatcher.on('field:create:modal:opened', () => {
             this._initiate();
         });
     }

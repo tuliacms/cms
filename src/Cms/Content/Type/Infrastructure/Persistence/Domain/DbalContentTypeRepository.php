@@ -40,7 +40,7 @@ class DbalContentTypeRepository implements ContentTypeRepositoryInterface
     {
         $contentType = $this->storage->find($id);
 
-        if ($contentType === []) {
+        if (empty($contentType)) {
             return null;
         }
 
