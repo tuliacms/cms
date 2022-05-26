@@ -78,6 +78,7 @@ class DbalContentTypeStorage implements ContentTypeStorageInterface
                 'name' => $field['name'],
                 'parent' => $field['parent'],
                 'is_multilingual' => $field['is_multilingual'] ? '1' : '0',
+                'position' => $field['position'],
             ]);
 
             foreach ($field['configuration'] as $code => $value) {
@@ -124,7 +125,7 @@ class DbalContentTypeStorage implements ContentTypeStorageInterface
                     'name' => $group['name'],
                     'section' => $section['code'],
                     'layout_type' => $contentType['layout']['code'],
-                    '`order`' => $groupPosition++,
+                    'position' => $groupPosition++,
                 ]);
 
                 $fieldPosition = 0;
@@ -132,7 +133,7 @@ class DbalContentTypeStorage implements ContentTypeStorageInterface
                     $this->connection->insert('#__content_type_layout_group_field', [
                         'group_id' => $groupId,
                         'code' => $field,
-                        '`order`' => $fieldPosition++,
+                        'position' => $fieldPosition++,
                     ]);
                 }
             }
@@ -178,7 +179,7 @@ class DbalContentTypeStorage implements ContentTypeStorageInterface
     private function collectFields(string $contentTypeId): array
     {
         $fields = $this->connection->fetchAllAssociative(
-            'SELECT * FROM #__content_type_field WHERE content_type_id = :content_type_id',
+            'SELECT * FROM #__content_type_field WHERE content_type_id = :content_type_id ORDER BY `position`',
             ['content_type_id' => $contentTypeId]
         );
 
@@ -248,13 +249,13 @@ class DbalContentTypeStorage implements ContentTypeStorageInterface
         $layout = $layout[0];
 
         $sourceGroups = $this->connection->fetchAllAssociative(
-            'SELECT * FROM #__content_type_layout_group WHERE layout_type = :layout_type ORDER BY `order` ASC',
+            'SELECT * FROM #__content_type_layout_group WHERE layout_type = :layout_type ORDER BY `position` ASC',
             ['layout_type' => $code]
         );
 
         foreach ($sourceGroups as $group) {
             $groupFields = $this->connection->fetchFirstColumn(
-                'SELECT code FROM #__content_type_layout_group_field WHERE group_id = :group_id ORDER BY `order` ASC',
+                'SELECT code FROM #__content_type_layout_group_field WHERE group_id = :group_id ORDER BY `position` ASC',
                 ['group_id' => $group['id']]
             );
 

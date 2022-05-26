@@ -69,7 +69,7 @@ class ContentTypeDatabaseProvider extends AbstractContentTypeProvider
     private function getFields(string $contentTypeId, ?string $parent = null): array
     {
         if ($this->fieldsSource === []) {
-            $this->fieldsSource = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type_field');
+            $this->fieldsSource = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type_field ORDER BY `position`');
         }
 
         $fields = [];
@@ -175,7 +175,7 @@ class ContentTypeDatabaseProvider extends AbstractContentTypeProvider
     private function getGroups(string $layoutCode, string $section): array
     {
         if ($this->groupsSource === []) {
-            $this->groupsSource = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type_layout_group ORDER BY `order` ASC');
+            $this->groupsSource = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type_layout_group ORDER BY `position` ASC');
         }
 
         $result = [];
@@ -194,7 +194,7 @@ class ContentTypeDatabaseProvider extends AbstractContentTypeProvider
     private function getLayoutFields(string $groupId): array
     {
         if ($this->fieldsListSource === []) {
-            $this->fieldsListSource = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type_layout_group_field ORDER BY `order` ASC');
+            $this->fieldsListSource = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type_layout_group_field ORDER BY `position` ASC');
         }
 
         $result = [];

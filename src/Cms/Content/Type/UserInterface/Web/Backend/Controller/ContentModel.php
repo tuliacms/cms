@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Content\Type\Domain\WriteModel\ContentTypeRepositoryInterface;
-use Tulia\Cms\Content\Type\Domain\WriteModel\Service\ArrayToModelTransformer;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Service\ArrayToWriteModelTransformer;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Service\Configuration;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Service\ModelToArrayTransformer;
 use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\ContentType\FormHandler;
@@ -22,14 +22,14 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class ContentModel extends AbstractController
 {
-    private ArrayToModelTransformer $arrayToModelTransformer;
+    private ArrayToWriteModelTransformer $arrayToModelTransformer;
     private ContentTypeRepositoryInterface $contentTypeRepository;
     private ContentTypeRegistryInterface $contentTypeRegistry;
     private Configuration $configuration;
     private LayoutTypeBuilderRegistry $layoutTypeBuilderRegistry;
 
     public function __construct(
-        ArrayToModelTransformer $arrayToModelTransformer,
+        ArrayToWriteModelTransformer $arrayToModelTransformer,
         ContentTypeRepositoryInterface $contentTypeRepository,
         ContentTypeRegistryInterface $contentTypeRegistry,
         Configuration $configuration,

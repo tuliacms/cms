@@ -174,6 +174,7 @@ class DbalContentTypeRepository implements ContentTypeRepositoryInterface
                 'name' => $field->getName(),
                 'is_multilingual' => $field->isMultilingual(),
                 'configuration' => $field->getConfiguration(),
+                'position' => $field->getPosition(),
                 'constraints' => $constraints,
                 'parent' => $parent,
             ]];

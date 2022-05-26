@@ -15,7 +15,7 @@ use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-class ArrayToModelTransformer
+class ArrayToWriteModelTransformer
 {
     private UuidGeneratorInterface $uuidGenerator;
 
@@ -66,8 +66,8 @@ class ArrayToModelTransformer
     {
         $result = [];
 
-        foreach ($fields as $field) {
-            $result[] = new Field([
+        foreach ($fields as $position => $field) {
+            $result[$field['code']['value']] = new Field([
                 'code' => $field['code']['value'],
                 'type' => $field['type']['value'],
                 'name' => $field['name']['value'],
@@ -75,6 +75,7 @@ class ArrayToModelTransformer
                 'configuration' => $this->transformConfiguration($field['configuration']),
                 'constraints' => $this->transformConstraints($field['constraints']),
                 'children' => $this->collectFields($field['children']),
+                'position' => $position,
             ]);
         }
 

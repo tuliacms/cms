@@ -86,6 +86,7 @@ final class ContentType extends AbstractContentType
                 $field['children'] = self::createFields($field['children']);
             }
 
+            $field['position'] = (int) $field['position'];
             $result[$field['code']] = new Field($field);
         }
 

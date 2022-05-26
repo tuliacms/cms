@@ -21,6 +21,7 @@ abstract class AbstractField
         'configuration' => [],
         'constraints' => [],
         'children' => [],
+        'position' => 0,
     ];
 
     public function __construct(array $options) {
@@ -36,6 +37,7 @@ abstract class AbstractField
         \assert(\is_array($this->options['configuration']), 'The "configuration" option must be an array.');
         \assert(\is_array($this->options['constraints']), 'The "constraints" option must be an array.');
         \assert(\is_array($this->options['children']), 'The "children" option must be an array.');
+        \assert(\is_int($this->options['position']), 'The "position" option must be an integer.');
 
         foreach ($this->options['children'] as $code => $child) {
             \assert(\is_string($code), 'The children array must be associative. Please use field code as key.');
@@ -143,5 +145,10 @@ abstract class AbstractField
     public function hasNonscalarValue(): bool
     {
         return $this->options['has_nonscalar_value'];
+    }
+
+    public function getPosition(): int
+    {
+        return $this->options['position'];
     }
 }
