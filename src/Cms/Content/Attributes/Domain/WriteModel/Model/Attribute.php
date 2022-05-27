@@ -17,8 +17,6 @@ class Attribute implements \Stringable, \Traversable, \ArrayAccess, \IteratorAgg
     private $compiledValue;
     private array $payload;
     private array $flags;
-    private bool $multilingual;
-    private bool $hasNonscalarValue;
 
     /**
      * @param mixed $value
@@ -30,9 +28,7 @@ class Attribute implements \Stringable, \Traversable, \ArrayAccess, \IteratorAgg
         $value,
         $compiledValue,
         array $payload,
-        array $flags,
-        bool $multilingual,
-        bool $hasNonscalarValue
+        array $flags
     ) {
         $this->code = $code;
         $this->uri = $uri;
@@ -40,8 +36,6 @@ class Attribute implements \Stringable, \Traversable, \ArrayAccess, \IteratorAgg
         $this->compiledValue = $compiledValue;
         $this->payload = $payload;
         $this->flags = $flags;
-        $this->multilingual = $multilingual;
-        $this->hasNonscalarValue = $hasNonscalarValue;
     }
 
     public static function fromArray(array $data): self
@@ -52,9 +46,7 @@ class Attribute implements \Stringable, \Traversable, \ArrayAccess, \IteratorAgg
             $data['value'],
             $data['compiled_value'],
             $data['payload'],
-            $data['flags'],
-            $data['multilingual'] ? true : false,
-            $data['has_nonscalar_value'] ? true : false
+            $data['flags']
         );
     }
 
@@ -67,8 +59,6 @@ class Attribute implements \Stringable, \Traversable, \ArrayAccess, \IteratorAgg
             'payload' => $this->payload,
             'uri' => $this->uri,
             'flags' => $this->flags,
-            'multilingual' => $this->multilingual,
-            'has_nonscalar_value' => $this->hasNonscalarValue,
         ];
     }
 
@@ -115,20 +105,6 @@ class Attribute implements \Stringable, \Traversable, \ArrayAccess, \IteratorAgg
     public function __toString(): string
     {
         return (string) $this->compiledValue;
-    }
-
-    public function produceUriWithModificator(string $modificator): string
-    {
-        if ($this->uri[strlen($this->uri) - 1] === ']') {
-            return substr($this->uri, 0, -1).':'.$modificator.']';
-        } else {
-            return $this->uri.':'.$modificator;
-        }
-    }
-
-    public function produceCodeWithModificator(string $modificator): string
-    {
-        return $this->code.':'.$modificator;
     }
 
     public function getCode(): string
@@ -182,17 +158,17 @@ class Attribute implements \Stringable, \Traversable, \ArrayAccess, \IteratorAgg
 
     public function isMultilingual(): bool
     {
-        return $this->multilingual;
+        return $this->is('multilingual');
     }
 
-    public function hasNonscalarValue(): bool
+    public function isNonscalarValue(): bool
     {
-        return $this->hasNonscalarValue;
+        return $this->is('non_scalar_value');
     }
 
     public function getIterator(): \Iterator
     {
-        if ($this->hasNonscalarValue) {
+        if ($this->isNonscalarValue()) {
             return new \ArrayIterator($this->value);
         }
 
@@ -201,7 +177,7 @@ class Attribute implements \Stringable, \Traversable, \ArrayAccess, \IteratorAgg
 
     public function offsetExists($offset): bool
     {
-        return $this->hasNonscalarValue && isset($this->value[$offset]);
+        return $this->isNonscalarValue() && isset($this->value[$offset]);
     }
 
     /**
@@ -209,16 +185,16 @@ class Attribute implements \Stringable, \Traversable, \ArrayAccess, \IteratorAgg
      */
     public function offsetGet($offset)
     {
-        return $this->hasNonscalarValue ? $this->value[$offset] : $this->value;
+        return $this->isNonscalarValue() ? $this->value[$offset] : $this->value;
     }
 
     public function offsetSet($offset, $value): void
     {
-        throw new \LogicException('Cannot change value of attribute.');
+        throw new \LogicException('Cannot change value of Value Object.');
     }
 
     public function offsetUnset($offset): void
     {
-
+        throw new \LogicException('Cannot change value of Value Object.');
     }
 }

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Content\Attributes\Domain\ReadModel\Model;
 
-use function Tulia\Cms\Attributes\Domain\ReadModel\Model\count;
-
 /**
  * @author Adam Banaszkiewicz
  */

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Content\Attributes\Infrastructure\Framework\Twig;
 
-use Tulia\Cms\Content\Attributes\Domain\ReadModel\ValueRender\RenderableValueInterface;
+use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\ValueRendering\RenderableValueInterface;
 use Tulia\Component\Templating\EngineInterface;
 
 /**

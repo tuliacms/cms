@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Content\Attributes\Domain\ReadModel\ValueRender;
+namespace Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\ValueRendering;
 
 use Stringable;
 

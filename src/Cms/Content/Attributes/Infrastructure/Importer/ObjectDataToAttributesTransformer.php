@@ -54,9 +54,10 @@ class ObjectDataToAttributesTransformer
                 $attribute['value'],
                 $attribute['compiled_value'] ?? null,
                 $attribute['payload'] ?? [],
-                $field->getFlags(),
-                $field->isMultilingual(),
-                $field->hasNonscalarValue()
+                $field->getFlags() + [
+                    'multilingual' => $field->isMultilingual(),
+                    'non_scalar_value' => $field->hasNonscalarValue(),
+                ]
             );
         }
 

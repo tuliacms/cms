@@ -158,9 +158,10 @@ class ContentTypeFormDescriptor
                     $rawData[$field->getCode()],
                     null,
                     [],
-                    $field->getFlags(),
-                    $field->isMultilingual(),
-                    $field->hasNonscalarValue()
+                    $field->getFlags() + [
+                        'multilingual' => $field->isMultilingual(),
+                        'non_scalar_value' => $field->hasNonscalarValue(),
+                    ]
                 );
 
                 $builder = $this->fieldTypeMappingRegistry->getTypeBuilder($field->getType());

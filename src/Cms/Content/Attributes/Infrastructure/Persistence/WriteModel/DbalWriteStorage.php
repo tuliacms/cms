@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Content\Attributes\Infrastructure\Persistence\WriteModel;
 
-use Tulia\Cms\Content\Attributes\Domain\WriteModel\Service\AttributesWriteStorageInterface;
 use Tulia\Cms\Platform\Infrastructure\Persistence\Domain\AbstractLocalizableStorage;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class DbalAttributesWriteStorage extends AbstractLocalizableStorage implements AttributesWriteStorageInterface
+class DbalWriteStorage extends AbstractLocalizableStorage
 {
     private ConnectionInterface $connection;
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\WriteModel;
 
-use Tulia\Cms\Content\Attributes\Domain\WriteModel\AttributesRepository;
+use Tulia\Cms\Content\Attributes\Domain\WriteModel\AttributesRepositoryInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Exception\ContentTypeNotExistsException;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
@@ -20,7 +20,7 @@ class NodeRepository
 {
     private NodeWriteStorageInterface $storage;
     private CurrentWebsiteInterface $currentWebsite;
-    private AttributesRepository $attributeRepository;
+    private AttributesRepositoryInterface $attributeRepository;
     private UuidGeneratorInterface $uuidGenerator;
     private AggregateActionsChainInterface $actionsChain;
     private ContentTypeRegistryInterface $contentTypeRegistry;
@@ -28,7 +28,7 @@ class NodeRepository
     public function __construct(
         NodeWriteStorageInterface $storage,
         CurrentWebsiteInterface $currentWebsite,
-        AttributesRepository $attributeRepository,
+        AttributesRepositoryInterface $attributeRepository,
         UuidGeneratorInterface $uuidGenerator,
         AggregateActionsChainInterface $actionsChain,
         ContentTypeRegistryInterface $contentTypeRegistry

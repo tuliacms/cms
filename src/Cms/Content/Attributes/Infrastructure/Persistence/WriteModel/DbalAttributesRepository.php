@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Content\Attributes\Domain\WriteModel;
+namespace Tulia\Cms\Content\Attributes\Infrastructure\Persistence\WriteModel;
 
+use Tulia\Cms\Content\Attributes\Domain\WriteModel\AttributesRepositoryInterface;
 use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\Attribute;
-use Tulia\Cms\Content\Attributes\Domain\WriteModel\Service\AttributesWriteStorageInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class AttributesRepository
+class DbalAttributesRepository implements AttributesRepositoryInterface
 {
-    private AttributesWriteStorageInterface $storage;
+    private DbalWriteStorage $storage;
     private CurrentWebsiteInterface $currentWebsite;
     private UuidGeneratorInterface $uuidGenerator;
 
     public function __construct(
-        AttributesWriteStorageInterface $storage,
+        DbalWriteStorage $storage,
         CurrentWebsiteInterface $currentWebsite,
         UuidGeneratorInterface $uuidGenerator
     ) {
@@ -60,9 +60,10 @@ class AttributesRepository
                     $value,
                     $element['compiled_value'],
                     $element['payload'],
-                    $flags,
-                    $info[$element['name']]['is_multilingual'],
-                    $info[$element['name']]['has_nonscalar_value'],
+                    $flags + [
+                        'multilingual' => $info[$element['name']]['is_multilingual'],
+                        'non_scalar_value' => $info[$element['name']]['has_nonscalar_value'],
+                    ]
                 );
             }
         }
@@ -86,7 +87,7 @@ class AttributesRepository
         foreach ($metadata as $uri => $attribute) {
             $structure[$uri] = [
                 'id' => $this->uuidGenerator->generate(),
-                'value' => $attribute->hasNonscalarValue() ? serialize($attribute->getValue()) : $attribute->getValue(),
+                'value' => $attribute->isNonscalarValue() ? serialize($attribute->getValue()) : $attribute->getValue(),
                 'compiled_value' => $attribute->getCompiledValue(),
                 'payload' => $attribute->getPayload(),
                 'owner_id' => $ownerId,
@@ -96,7 +97,7 @@ class AttributesRepository
                 'type' => $type,
                 'is_multilingual' => $attribute->isMultilingual(),
                 'is_renderable' => $attribute->is('renderable'),
-                'has_nonscalar_value' => $attribute->hasNonscalarValue(),
+                'has_nonscalar_value' => $attribute->isNonscalarValue(),
             ];
         }
 

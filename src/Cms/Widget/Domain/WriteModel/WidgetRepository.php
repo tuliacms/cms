@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Widget\Domain\WriteModel;
 
-use Tulia\Cms\Content\Attributes\Domain\WriteModel\AttributesRepository;
+use Tulia\Cms\Content\Attributes\Domain\WriteModel\AttributesRepositoryInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
@@ -24,7 +24,7 @@ class WidgetRepository
     private CurrentWebsiteInterface $currentWebsite;
     private WidgetRegistryInterface $widgetRegistry;
     private UuidGeneratorInterface $uuidGenerator;
-    private AttributesRepository $attributeRepository;
+    private AttributesRepositoryInterface $attributeRepository;
     private EventBusInterface $eventBus;
     private ContentTypeRegistryInterface $contentTypeRegistry;
 
@@ -33,7 +33,7 @@ class WidgetRepository
         CurrentWebsiteInterface $currentWebsite,
         WidgetRegistryInterface $widgetRegistry,
         UuidGeneratorInterface $uuidGenerator,
-        AttributesRepository $attributeRepository,
+        AttributesRepositoryInterface $attributeRepository,
         EventBusInterface $eventBus,
         ContentTypeRegistryInterface $contentTypeRegistry
     ) {

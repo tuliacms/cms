@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Domain\WriteModel;
 
-use Tulia\Cms\Content\Attributes\Domain\WriteModel\AttributesRepository;
+use Tulia\Cms\Content\Attributes\Domain\WriteModel\AttributesRepositoryInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
@@ -31,7 +31,7 @@ class TaxonomyRepository
 
     private CurrentWebsiteInterface $currentWebsite;
 
-    private AttributesRepository $metadataRepository;
+    private AttributesRepositoryInterface $metadataRepository;
 
     private UuidGeneratorInterface $uuidGenerator;
 
@@ -42,7 +42,7 @@ class TaxonomyRepository
     public function __construct(
         TermWriteStorageInterface $storage,
         CurrentWebsiteInterface $currentWebsite,
-        AttributesRepository $metadataRepository,
+        AttributesRepositoryInterface $metadataRepository,
         UuidGeneratorInterface $uuidGenerator,
         EventBusInterface $eventBus,
         TaxonomyActionsChainInterface $actionsChain,

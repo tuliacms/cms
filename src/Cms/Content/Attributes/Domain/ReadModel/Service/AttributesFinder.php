@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Content\Attributes\Domain\ReadModel\Service;
 
 use Tulia\Cms\Content\Attributes\Domain\ReadModel\Model\AttributeValue;
+use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\ValueRendering\AttributesValueRenderer;
 use Tulia\Cms\Content\Attributes\Domain\WriteModel\Service\UriToArrayTransformer;
 
 /**
