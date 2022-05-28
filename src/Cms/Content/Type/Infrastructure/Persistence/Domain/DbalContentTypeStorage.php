@@ -77,7 +77,7 @@ class DbalContentTypeStorage implements ContentTypeStorageInterface
                 'type' => $field['type'],
                 'name' => $field['name'],
                 'parent' => $field['parent'],
-                'is_multilingual' => $field['is_multilingual'] ? '1' : '0',
+                'is_multilingual' => in_array('multilingual', $field['flags'], true) ? '1' : '0',
                 'position' => $field['position'],
             ]);
 
@@ -184,10 +184,18 @@ class DbalContentTypeStorage implements ContentTypeStorageInterface
         );
 
         foreach ($fields as $key => $field) {
-            $fields[$key]['has_nonscalar_value'] = (bool) $fields[$key]['has_nonscalar_value'];
-            $fields[$key]['is_multilingual'] = (bool) $fields[$key]['is_multilingual'];
             $fields[$key]['configuration'] = $this->getFieldConfiguration($field['id']);
             $fields[$key]['constraints'] = $this->getFieldConstraints($field['id']);
+            $fields[$key]['flags'] = [];
+
+            if ((bool) $fields[$key]['has_nonscalar_value']) {
+                $fields[$key]['flags'][] = 'nonscalar_value';
+            }
+            if ((bool) $fields[$key]['is_multilingual']) {
+                $fields[$key]['flags'][] = 'multilingual';
+            }
+
+            unset($fields[$key]['has_nonscalar_value'], $fields[$key]['is_multilingual']);
         }
 
         return $this->sortFieldsHierarchically(null, $fields);
@@ -243,7 +251,7 @@ class DbalContentTypeStorage implements ContentTypeStorageInterface
         );
 
         if ($layout === []) {
-            // @todo What to do when Layout is any case not exists in storage? Throw domain exception?
+            // @todo What to do when Layout in any case not exists in storage? Throw domain exception?
         }
 
         $layout = $layout[0];

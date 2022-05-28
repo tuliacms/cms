@@ -229,8 +229,8 @@ class TaxonomyRepository
         foreach ($contentType->getFields() as $field) {
             $result[$field->getCode()] = [
                 'is_multilingual' => $field->isMultilingual(),
-                'is_compilable' => $field->hasFlag('compilable'),
-                'has_nonscalar_value' => $field->hasNonscalarValue(),
+                'is_compilable' => $field->is('compilable'),
+                'has_nonscalar_value' => $field->isNonscalarValue(),
                 'is_taxonomy' => $field->getType() === 'taxonomy',
             ];
         }

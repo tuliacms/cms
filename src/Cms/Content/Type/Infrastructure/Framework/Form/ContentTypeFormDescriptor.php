@@ -152,16 +152,18 @@ class ContentTypeFormDescriptor
                     $uri = $uniquePrefix . $field->getCode();
                 }
 
+                $flags = $field->getFlags();
+
+                $field->isMultilingual() ? $flags[] = 'multilingual' : null;
+                $field->isNonscalarValue() ? $flags[] = 'nonscalar_value' : null;
+
                 $result[$uri] = new Attribute(
                     $prefix . $field->getCode(),
                     $uri,
                     $rawData[$field->getCode()],
                     null,
                     [],
-                    $field->getFlags() + [
-                        'multilingual' => $field->isMultilingual(),
-                        'non_scalar_value' => $field->hasNonscalarValue(),
-                    ]
+                    $flags
                 );
 
                 $builder = $this->fieldTypeMappingRegistry->getTypeBuilder($field->getType());

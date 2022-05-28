@@ -168,15 +168,21 @@ class DbalContentTypeRepository implements ContentTypeRepositoryInterface
                 ];
             }
 
+            $flags = [];
+
+            if ($field->isMultilingual()) {
+                $flags[] = 'multilingual';
+            }
+
             $result[] = [[
                 'code' => $field->getCode(),
                 'type' => $field->getType(),
                 'name' => $field->getName(),
-                'is_multilingual' => $field->isMultilingual(),
                 'configuration' => $field->getConfiguration(),
                 'position' => $field->getPosition(),
                 'constraints' => $constraints,
                 'parent' => $parent,
+                'flags' => $flags,
             ]];
 
             if ($field->getChildren() !== []) {

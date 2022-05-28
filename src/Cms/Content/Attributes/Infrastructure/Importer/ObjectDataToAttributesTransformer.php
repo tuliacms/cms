@@ -47,6 +47,10 @@ class ObjectDataToAttributesTransformer
             }
 
             $field = $this->contentType->getField($attribute['name']);
+            $flags = $field->getFlags();
+
+            $field->isMultilingual() ? $flags[] = 'multilingual' : null;
+            $field->isNonscalarValue() ? $flags[] = 'nonscalar_value' : null;
 
             $attributes[$attribute['name']] = new Attribute(
                 $attribute['name'],
@@ -54,10 +58,7 @@ class ObjectDataToAttributesTransformer
                 $attribute['value'],
                 $attribute['compiled_value'] ?? null,
                 $attribute['payload'] ?? [],
-                $field->getFlags() + [
-                    'multilingual' => $field->isMultilingual(),
-                    'non_scalar_value' => $field->hasNonscalarValue(),
-                ]
+                $flags
             );
         }
 
@@ -75,8 +76,8 @@ class ObjectDataToAttributesTransformer
             'name' => $attributeName,
             'uri' => $attributeName,
             'value' => $value,
-            'is_renderable' => $field->hasFlag('compilable'),
-            'has_nonscalar_value' => $field->hasNonscalarValue(),
+            'is_renderable' => $field->is('compilable'),
+            'has_nonscalar_value' => $field->isNonscalarValue(),
         ];
     }
 }

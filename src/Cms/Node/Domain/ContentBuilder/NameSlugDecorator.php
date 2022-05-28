@@ -23,7 +23,7 @@ class NameSlugDecorator implements ContentTypeDecoratorInterface
             'code' => 'title',
             'type' => 'text',
             'name' => 'title',
-            'is_multilingual' => true,
+            'flags' => [ 'multilingual' ],
             'constraints' => [
                 'required' => [],
             ],
@@ -35,7 +35,7 @@ class NameSlugDecorator implements ContentTypeDecoratorInterface
                     'code' => 'slug',
                     'type' => 'text',
                     'name' => 'slug',
-                    'is_multilingual' => true,
+                    'flags' => [ 'multilingual' ],
                     // @todo Create constraint for globally uniqueness of the slug
                     /*'constraints' => [
                         ['name' => 'unique', 'flags' => 'globally'],

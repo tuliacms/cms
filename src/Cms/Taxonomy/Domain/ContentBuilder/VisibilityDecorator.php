@@ -23,7 +23,7 @@ class VisibilityDecorator implements ContentTypeDecoratorInterface
             'code' => 'visibility',
             'name' => 'visibility',
             'type' => 'yes_no',
-            'is_multilingual' => true,
+            'flags' => [ 'multilingual' ],
             'constraints' => [
                 'required' => [],
             ],

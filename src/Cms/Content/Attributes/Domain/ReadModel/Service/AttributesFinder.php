@@ -33,23 +33,6 @@ class AttributesFinder
         $result = [];
 
         foreach ($source as $ownerId => $attributes) {
-            foreach ($attributes as $uri => $attribute) {
-                if ($attribute['has_nonscalar_value']) {
-                    try {
-                        $value = (array) unserialize(
-                            (string) $attribute['value'],
-                            ['allowed_classes' => []]
-                        );
-                    } catch (\ErrorException $e) {
-                        // If error, than empty or cannot be unserialized from singular value
-                    }
-                } else {
-                    $value = $attribute['value'];
-                }
-
-                $attributes[$uri]['value'] = $value;
-            }
-
             $attributes = $this->attributesValueRenderer->renderValues($attributes, $type, $scope);
             $result[$ownerId] = $this->uriToArrayTransformer->transform($attributes);
 

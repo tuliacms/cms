@@ -17,7 +17,7 @@
             {% if type.isInternal %}
                 <h4 class="card-title">
                     {% if type.icon %}
-                        <i class="{{ type.icon }}"></i> &nbsp;
+                        <i class="{{ type.icon }}"></i>&nbsp;
                     {% endif %}
                     {{ type.name|trans({}, 'node') }}
                 </h4>
@@ -25,7 +25,7 @@
                 <a href="{{ path('backend.content.type.content_type.edit', { id: type.id, contentType: type.type }) }}">
                     <h4 class="card-title">
                         {% if type.icon %}
-                            <i class="{{ type.icon }}"></i> &nbsp;
+                            <i class="{{ type.icon }}"></i>&nbsp;
                         {% endif %}
                         {{ type.name|trans({}, 'node') }}
                     </h4>

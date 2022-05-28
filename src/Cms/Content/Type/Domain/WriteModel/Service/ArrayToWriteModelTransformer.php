@@ -67,15 +67,21 @@ class ArrayToWriteModelTransformer
         $result = [];
 
         foreach ($fields as $position => $field) {
+            $flags = [];
+
+            if ($field['multilingual']['value']) {
+                $flags[] = 'multilingual';
+            }
+
             $result[$field['code']['value']] = new Field([
                 'code' => $field['code']['value'],
                 'type' => $field['type']['value'],
                 'name' => $field['name']['value'],
-                'is_multilingual' => $field['multilingual']['value'],
                 'configuration' => $this->transformConfiguration($field['configuration']),
                 'constraints' => $this->transformConstraints($field['constraints']),
                 'children' => $this->collectFields($field['children']),
                 'position' => $position,
+                'flags' => $flags,
             ]);
         }
 

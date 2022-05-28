@@ -163,7 +163,7 @@ class Attribute implements \Stringable, \Traversable, \ArrayAccess, \IteratorAgg
 
     public function isNonscalarValue(): bool
     {
-        return $this->is('non_scalar_value');
+        return $this->is('nonscalar_value');
     }
 
     public function getIterator(): \Iterator

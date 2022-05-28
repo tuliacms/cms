@@ -165,6 +165,7 @@ abstract class AbstractContentType
 
     public function buildAttributesMapping(): array
     {
+        dump($this->fields);
         return $this->buildAttributesMappingRecursive($this->fields);
     }
 
@@ -176,6 +177,7 @@ abstract class AbstractContentType
         $result = [];
 
         foreach ($fields as $field) {
+            dump($field->getCode(), $field->isNonscalarValue(), $field);
             if ($field->isType('repeatable')) {
                 foreach ($this->buildAttributesMappingRecursive($field->getChildren(), $prefix.$field->getCode().'.') as $code => $subfield) {
                     $result[$code] = $subfield;
@@ -183,15 +185,15 @@ abstract class AbstractContentType
             } else {
                 $result[$prefix.$field->getCode()] = [
                     'is_multilingual' => $field->isMultilingual(),
-                    'is_compilable' => $field->hasFlag('compilable'),
-                    'has_nonscalar_value' => $field->hasNonscalarValue(),
+                    'is_compilable' => $field->is('compilable'),
+                    'has_nonscalar_value' => $field->isNonscalarValue(),
                 ];
 
-                if ($field->hasFlag('compilable')) {
+                if ($field->is('compilable')) {
                     $result[$prefix.$field->getCode().':compiled'] = [
                         'is_multilingual' => $field->isMultilingual(),
                         'is_compilable' => false,
-                        'has_nonscalar_value' => $field->hasNonscalarValue(),
+                        'has_nonscalar_value' => $field->isNonscalarValue(),
                     ];
                 }
             }

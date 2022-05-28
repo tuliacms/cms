@@ -53,6 +53,12 @@ class DbalAttributesRepository implements AttributesRepositoryInterface
                 if ($info[$element['name']]['is_compilable']) {
                     $flags[] = 'compilable';
                 }
+                if ($info[$element['name']]['is_multilingual']) {
+                    $flags[] = 'multilingual';
+                }
+                if ($info[$element['name']]['has_nonscalar_value']) {
+                    $flags[] = 'nonscalar_value';
+                }
 
                 $result[$ownerId][$key] = new Attribute(
                     $element['name'],
@@ -60,10 +66,7 @@ class DbalAttributesRepository implements AttributesRepositoryInterface
                     $value,
                     $element['compiled_value'],
                     $element['payload'],
-                    $flags + [
-                        'multilingual' => $info[$element['name']]['is_multilingual'],
-                        'non_scalar_value' => $info[$element['name']]['has_nonscalar_value'],
-                    ]
+                    $flags
                 );
             }
         }

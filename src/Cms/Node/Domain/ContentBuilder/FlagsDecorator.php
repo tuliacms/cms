@@ -23,8 +23,7 @@ class FlagsDecorator implements ContentTypeDecoratorInterface
             'code' => 'flags',
             'type' => 'node_purpose',
             'name' => 'nodePurpose',
-            'is_multilingual' => false,
-            'has_nonscalar_value' => true
+            'flags' => [ 'nonscalar_value' ]
         ]));
     }
 }

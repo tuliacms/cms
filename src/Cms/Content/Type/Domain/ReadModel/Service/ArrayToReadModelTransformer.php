@@ -114,17 +114,22 @@ class ArrayToReadModelTransformer
         $result = [];
 
         foreach ($fields as $code => $field) {
+            $flags = $this->fieldTypeMappingRegistry->getTypeFlags($field['type']);
+
+            if ($field['is_multilingual'] ?? false) {
+                $flags[] = 'multilingual';
+            }
+
             $result[$code] = new Field([
                 'code' => $code,
                 'type' => $field['type'],
                 'name' => (string) $field['name'],
-                'is_multilingual' => (bool) ($field['is_multilingual'] ?? false),
                 'taxonomy' => $field['taxonomy'] ?? null,
                 'translation_domain' => $field['translation_domain'] ?? 'content_builder.field',
                 'configuration' => $field['configuration'] ?? [],
                 'constraints' => $field['constraints'] ?? [],
                 'children' => $this->buildFields($field['children'] ?? []),
-                'flags' => $this->fieldTypeMappingRegistry->getTypeFlags($field['type']),
+                'flags' => $flags,
             ]);
         }
 

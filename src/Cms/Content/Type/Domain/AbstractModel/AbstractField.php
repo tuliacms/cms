@@ -14,8 +14,6 @@ abstract class AbstractField
         'code' => '',
         'type' => '',
         'name' => '',
-        'is_multilingual' => false,
-        'has_nonscalar_value' => false,
         'translation_domain' => 'content_builder.field',
         'flags' => [],
         'configuration' => [],
@@ -31,8 +29,6 @@ abstract class AbstractField
         \assert(\is_string($this->options['type']), 'The "type" option must be a string.');
         \assert(\is_string($this->options['name']), 'The "name" option must be a string.');
         \assert(\is_string($this->options['translation_domain']), 'The "translation_domain" option must be a string.');
-        \assert(\is_bool($this->options['is_multilingual']), 'The "is_multilingual" option must be a boolean.');
-        \assert(\is_bool($this->options['has_nonscalar_value']), 'The "has_nonscalar_value" option must be a boolean.');
         \assert(\is_array($this->options['flags']), 'The "flags" option must be an array.');
         \assert(\is_array($this->options['configuration']), 'The "configuration" option must be an array.');
         \assert(\is_array($this->options['constraints']), 'The "constraints" option must be an array.');
@@ -84,7 +80,12 @@ abstract class AbstractField
 
     public function isMultilingual(): bool
     {
-        return $this->options['is_multilingual'];
+        return $this->is('multilingual');
+    }
+
+    public function isNonscalarValue(): bool
+    {
+        return $this->is('nonscalar_value');
     }
 
     public function getName(): string
@@ -129,7 +130,7 @@ abstract class AbstractField
         return $this->options['children'];
     }
 
-    public function hasFlag(string $flag): bool
+    public function is(string $flag): bool
     {
         return \in_array($flag, $this->options['flags'], true);
     }
@@ -140,11 +141,6 @@ abstract class AbstractField
     public function getFlags(): array
     {
         return $this->options['flags'];
-    }
-
-    public function hasNonscalarValue(): bool
-    {
-        return $this->options['has_nonscalar_value'];
     }
 
     public function getPosition(): int

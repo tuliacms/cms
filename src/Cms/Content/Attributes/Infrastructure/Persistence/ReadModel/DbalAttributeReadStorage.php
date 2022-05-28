@@ -49,6 +49,17 @@ class DbalAttributeReadStorage implements AttributeReadStorageInterface
         $result = [];
 
         foreach ($source as $row) {
+            if ($row['has_nonscalar_value']) {
+                try {
+                    $row['value'] = (array) unserialize(
+                        (string) $row['value'],
+                        ['allowed_classes' => []]
+                    );
+                } catch (\ErrorException $e) {
+                    // If error, than empty or cannot be unserialized from singular value
+                }
+            }
+
             $result[$row['owner_id']][$row['uri']] = [
                 'value' => $row['value'],
                 'compiled_value' => $row['compiled_value'],
