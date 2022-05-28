@@ -27,27 +27,59 @@ class ArrayToWriteModelTransformer
     /**
      * @throws EmptyRoutingStrategyForRoutableContentTypeException
      */
-    public function produceContentType(array $data, string $type, LayoutType $layout): ContentType
+    public function fillContentType(ContentType $contentType, array $data): ContentType
     {
-        $nodeType = ContentType::create($this->uuidGenerator->generate(), $data['type']['code'], $type, $layout, false);
-        $nodeType->setName($data['type']['name']);
-        $nodeType->setIcon($data['type']['icon']);
-        $nodeType->setIsHierarchical((bool) $data['type']['icon']);
-        $nodeType->setRoutingStrategy($data['type']['routingStrategy'] ?? '');
-        $nodeType->setIsRoutable((bool) $data['type']['isRoutable']);
+        $contentType->setName($data['type']['name']);
+        $contentType->setIcon($data['type']['icon']);
+        $contentType->setIsHierarchical((bool) $data['type']['icon']);
+        $contentType->setRoutingStrategy($data['type']['routingStrategy'] ?? '');
+        $contentType->setIsRoutable((bool) $data['type']['isRoutable']);
 
         foreach ($data['layout'] as $section) {
             foreach ($section['sections'] as $group) {
                 foreach ($this->collectFields($group['fields']) as $field) {
-                    $nodeType->addField($field);
+                    $contentType->addField($field);
                 }
             }
         }
 
-        return $nodeType;
+        foreach ($this->transformSections($data['layout']) as $section) {
+            $contentType->getLayout()->addSection($section);
+        }
+
+        return $contentType;
     }
 
-    public function produceLayoutType(array $data): LayoutType
+    /**
+     * @throws EmptyRoutingStrategyForRoutableContentTypeException
+     */
+    public function produceContentType(string $type, array $data): ContentType
+    {
+        $contentType = ContentType::create(
+            $this->uuidGenerator->generate(),
+            $data['type']['code'],
+            $type,
+            $this->produceLayoutType($data),
+            false
+        );
+        $contentType->setName($data['type']['name']);
+        $contentType->setIcon($data['type']['icon']);
+        $contentType->setIsHierarchical((bool) $data['type']['icon']);
+        $contentType->setRoutingStrategy($data['type']['routingStrategy'] ?? '');
+        $contentType->setIsRoutable((bool) $data['type']['isRoutable']);
+
+        foreach ($data['layout'] as $section) {
+            foreach ($section['sections'] as $group) {
+                foreach ($this->collectFields($group['fields']) as $field) {
+                    $contentType->addField($field);
+                }
+            }
+        }
+
+        return $contentType;
+    }
+
+    private function produceLayoutType(array $data): LayoutType
     {
         $layoutType = new LayoutType($data['type']['code'] . '_layout');
         $layoutType->setName($data['type']['name'] . ' Layout');

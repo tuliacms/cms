@@ -40,4 +40,9 @@ class ContentType extends AbstractContentType
     {
         return $this->isInternal;
     }
+
+    protected function recordChange(): void
+    {
+        // void
+    }
 }

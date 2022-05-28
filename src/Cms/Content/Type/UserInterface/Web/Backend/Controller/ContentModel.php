@@ -70,8 +70,7 @@ class ContentModel extends AbstractController
         $data = $nodeTypeFormHandler->handle($request, $data);
 
         if ($nodeTypeFormHandler->isRequestValid()) {
-            $layoutType = $this->arrayToModelTransformer->produceLayoutType($data);
-            $nodeType = $this->arrayToModelTransformer->produceContentType($data, $contentType, $layoutType);
+            $nodeType = $this->arrayToModelTransformer->produceContentType($contentType, $data);
 
             try {
                 $this->contentTypeRepository->insert($nodeType);
@@ -107,37 +106,34 @@ class ContentModel extends AbstractController
             return $this->redirectToRoute('backend.content.type.homepage');
         }
 
-        $contentType = $this->contentTypeRepository->find($id);
+        $contentTypeAggregate = $this->contentTypeRepository->find($id);
 
-        if ($contentType === null) {
+        if ($contentTypeAggregate === null) {
             $this->setFlash('danger', $this->trans('contentTypeNotExists', [], 'content_builder'));
             return $this->redirectToRoute('backend.content.type.homepage');
         }
 
-        $layout = $contentType->getLayout();
-
-        $data = (new ModelToArrayTransformer())->transform($contentType, $layout);
+        $data = (new ModelToArrayTransformer())->transform($contentTypeAggregate);
         $data = $nodeTypeFormHandler->handle($request, $data, true);
 
         if ($nodeTypeFormHandler->isRequestValid()) {
-            $layoutType = $this->arrayToModelTransformer->produceLayoutType($data);
-            $nodeType = $this->arrayToModelTransformer->produceContentType($data, $contentType->getType(), $layoutType);
+            $contentTypeAggregate = $this->arrayToModelTransformer->fillContentType($contentTypeAggregate, $data);
 
             try {
-                $this->contentTypeRepository->update($nodeType);
+                $this->contentTypeRepository->update($contentTypeAggregate);
             } catch (\Exception $e) {
                 dump($e);exit;
             }
 
             $this->setFlash('success', $this->trans('contentTypeUpdatedSuccessfully', [], 'content_builder'));
-            return $this->redirectToRoute('backend.content.type.homepage');
+            return $this->redirectToRoute('backend.content.type.content_type.edit', ['contentType' => $contentType, 'id' => $contentTypeAggregate->getId()]);
         }
 
-        $layoutBuilder = $this->layoutTypeBuilderRegistry->get($this->configuration->getLayoutBuilder($contentType->getType()));
+        $layoutBuilder = $this->layoutTypeBuilderRegistry->get($this->configuration->getLayoutBuilder($contentType));
 
         return $this->view('@backend/content_builder/content_type/edit.tpl', [
-            'type' => $contentType->getType(),
-            'builderView' => $layoutBuilder->builderView($contentType->getType(), $data, $nodeTypeFormHandler->getErrors(), false),
+            'type' => $contentType,
+            'builderView' => $layoutBuilder->builderView($contentType, $data, $nodeTypeFormHandler->getErrors(), false),
             'cleaningResult' => $nodeTypeFormHandler->getCleaningResult(),
         ]);
     }

@@ -6,6 +6,7 @@ namespace Tulia\Cms\Content\Type\Domain\WriteModel\Model;
 
 use Tulia\Cms\Content\Type\Domain\AbstractModel\AbstractContentType;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Event\ContentTypeCreated;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Event\ContentTypeUpdated;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AggregateRootTrait;
 
 /**
@@ -17,6 +18,7 @@ final class ContentType extends AbstractContentType
 
     protected string $id;
     protected LayoutType $layout;
+    private bool $changed = false;
 
     private function __construct(string $id, string $code, string $type, LayoutType $layout, bool $isInternal = false)
     {
@@ -40,7 +42,7 @@ final class ContentType extends AbstractContentType
         $layout = new LayoutType($data['layout']['code']);
         $layout->setName($data['layout']['name']);
 
-        foreach ($data['layout']['sections'] as $sectionCode => $section) {
+        foreach ($data['layout']['sections'] ?? [] as $sectionCode => $section) {
             $groups = [];
 
             foreach ($section['groups'] as $groupName => $group) {
@@ -72,6 +74,14 @@ final class ContentType extends AbstractContentType
     public function getFields(): array
     {
         return parent::getFields();
+    }
+
+    protected function recordChange(): void
+    {
+        if (!$this->changed) {
+            $this->recordThat(ContentTypeUpdated::fromModel($this));
+            $this->changed = true;
+        }
     }
 
     /**

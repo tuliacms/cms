@@ -7,6 +7,7 @@ namespace Tulia\Cms\Content\Type\Infrastructure\Bus\EventBus\EventListener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Event\ContentTypeCreated;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Event\ContentTypeDeleted;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Event\ContentTypeUpdated;
 use Tulia\Cms\Content\Type\Infrastructure\Persistence\ContentProvider\CachedContentTypeRegistry;
 
 /**
@@ -25,11 +26,12 @@ class CacheClearerSubscriber implements EventSubscriberInterface
     {
         return [
             ContentTypeCreated::class => 'clearCache',
+            ContentTypeUpdated::class => 'clearCache',
             ContentTypeDeleted::class => 'clearCache',
         ];
     }
 
-    public function clearCache(ContentTypeCreated $event): void
+    public function clearCache(): void
     {
         $this->registry->clearCache();
     }

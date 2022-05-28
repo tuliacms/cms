@@ -67,84 +67,35 @@ class DbalContentTypeStorage implements ContentTypeStorageInterface
             'layout' => $contentType['layout']['code'],
         ]);
 
-        foreach ($contentType['fields'] as $field) {
-            $fieldId = $this->uuidGenerator->generate();
-
-            $this->connection->insert('#__content_type_field', [
-                'id' => $fieldId,
-                'code' => $field['code'],
-                'content_type_id' => $contentType['id'],
-                'type' => $field['type'],
-                'name' => $field['name'],
-                'parent' => $field['parent'],
-                'is_multilingual' => in_array('multilingual', $field['flags'], true) ? '1' : '0',
-                'position' => $field['position'],
-            ]);
-
-            foreach ($field['configuration'] as $code => $value) {
-                $this->connection->insert('#__content_type_field_configuration', [
-                    'field_id' => $fieldId,
-                    'code' => $code,
-                    'value' => $value,
-                ]);
-            }
-
-            foreach ($field['constraints'] as $constraint) {
-                $constraintId = $this->uuidGenerator->generate();
-
-                $this->connection->insert('#__content_type_field_constraint', [
-                    'id' => $constraintId,
-                    'field_id' => $fieldId,
-                    'code' => $constraint['code'],
-                ]);
-
-                foreach ($constraint['modificators'] as $modificator => $value) {
-                    $this->connection->insert('#__content_type_field_constraint_modificator', [
-                        'constraint_id' => $constraintId,
-                        'modificator' => $modificator,
-                        'value' => $value,
-                    ]);
-                }
-            }
-        }
+        $this->insertFields($contentType['fields'], $contentType['id']);
 
         $this->connection->insert('#__content_type_layout', [
             'code' => $contentType['layout']['code'],
             'name' => $contentType['layout']['name'],
         ]);
 
-        foreach ($contentType['layout']['sections'] as $section) {
-            $groupPosition = 0;
-
-            foreach ($section['field_groups'] as $group) {
-                $groupId = $this->uuidGenerator->generate();
-
-                $this->connection->insert('#__content_type_layout_group', [
-                    'id' => $groupId,
-                    'code' => $group['code'],
-                    'name' => $group['name'],
-                    'section' => $section['code'],
-                    'layout_type' => $contentType['layout']['code'],
-                    'position' => $groupPosition++,
-                ]);
-
-                $fieldPosition = 0;
-                foreach ($group['fields'] as $field) {
-                    $this->connection->insert('#__content_type_layout_group_field', [
-                        'group_id' => $groupId,
-                        'code' => $field,
-                        'position' => $fieldPosition++,
-                    ]);
-                }
-            }
-        }
+        $this->insertSections($contentType['layout']['sections'], $contentType['layout']['code']);
     }
 
     public function update(array $contentType): void
     {
-        // todo update data instead of remove and insert new one
-        $this->delete($contentType);
-        $this->insert($contentType);
+        $this->connection->update('#__content_type', [
+            'name' => $contentType['name'],
+            'icon' => $contentType['icon'],
+            'controller' => $contentType['controller'],
+            'is_routable' => $contentType['is_routable'] ? '1' : '0',
+            'is_hierarchical' => $contentType['is_hierarchical'] ? '1' : '0',
+            'routing_strategy' => $contentType['routing_strategy'],
+            'layout' => $contentType['layout']['code'],
+        ], [
+            'id' => $contentType['id'],
+        ]);
+
+        $this->connection->delete('#__content_type_field', ['content_type_id' => $contentType['id']]);
+        $this->connection->delete('#__content_type_layout_group', ['layout_type' => $contentType['layout']['code']]);
+
+        $this->insertFields($contentType['fields'], $contentType['id']);
+        $this->insertSections($contentType['layout']['sections'], $contentType['layout']['code']);
     }
 
     public function delete(array $contentType): void
@@ -286,5 +237,78 @@ class DbalContentTypeStorage implements ContentTypeStorageInterface
         }
 
         return $result;
+    }
+
+    private function insertFields(array $fields, string $contentTypeId): void
+    {
+        foreach ($fields as $field) {
+            $fieldId = $this->uuidGenerator->generate();
+
+            $this->connection->insert('#__content_type_field', [
+                'id' => $fieldId,
+                'code' => $field['code'],
+                'content_type_id' => $contentTypeId,
+                'type' => $field['type'],
+                'name' => $field['name'],
+                'parent' => $field['parent'],
+                'is_multilingual' => in_array('multilingual', $field['flags'], true) ? '1' : '0',
+                'position' => $field['position'],
+            ]);
+
+            foreach ($field['configuration'] as $code => $value) {
+                $this->connection->insert('#__content_type_field_configuration', [
+                    'field_id' => $fieldId,
+                    'code' => $code,
+                    'value' => $value,
+                ]);
+            }
+
+            foreach ($field['constraints'] as $constraint) {
+                $constraintId = $this->uuidGenerator->generate();
+
+                $this->connection->insert('#__content_type_field_constraint', [
+                    'id' => $constraintId,
+                    'field_id' => $fieldId,
+                    'code' => $constraint['code'],
+                ]);
+
+                foreach ($constraint['modificators'] as $modificator => $value) {
+                    $this->connection->insert('#__content_type_field_constraint_modificator', [
+                        'constraint_id' => $constraintId,
+                        'modificator' => $modificator,
+                        'value' => $value,
+                    ]);
+                }
+            }
+        }
+    }
+
+    private function insertSections(array $sections, string $layoutCode): void
+    {
+        foreach ($sections as $section) {
+            $groupPosition = 0;
+
+            foreach ($section['field_groups'] as $group) {
+                $groupId = $this->uuidGenerator->generate();
+
+                $this->connection->insert('#__content_type_layout_group', [
+                    'id' => $groupId,
+                    'code' => $group['code'],
+                    'name' => $group['name'],
+                    'section' => $section['code'],
+                    'layout_type' => $layoutCode,
+                    'position' => $groupPosition++,
+                ]);
+
+                $fieldPosition = 0;
+                foreach ($group['fields'] as $field) {
+                    $this->connection->insert('#__content_type_layout_group_field', [
+                        'group_id' => $groupId,
+                        'code' => $field,
+                        'position' => $fieldPosition++,
+                    ]);
+                }
+            }
+        }
     }
 }

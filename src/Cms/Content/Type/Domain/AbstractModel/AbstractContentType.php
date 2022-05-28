@@ -34,6 +34,7 @@ abstract class AbstractContentType
     public function setName(string $name): void
     {
         $this->name = $name;
+        $this->recordChange();
     }
 
     public function getIcon(): string
@@ -44,6 +45,7 @@ abstract class AbstractContentType
     public function setIcon(string $icon): void
     {
         $this->icon = $icon;
+        $this->recordChange();
     }
 
     public function getCode(): string
@@ -78,6 +80,7 @@ abstract class AbstractContentType
     public function setController(?string $controller): void
     {
         $this->controller = $controller;
+        $this->recordChange();
     }
 
     public function isRoutable(): bool
@@ -95,6 +98,7 @@ abstract class AbstractContentType
         }
 
         $this->isRoutable = $isRoutable;
+        $this->recordChange();
     }
 
 
@@ -106,6 +110,7 @@ abstract class AbstractContentType
     public function setIsHierarchical(bool $isHierarchical): void
     {
         $this->isHierarchical = $isHierarchical;
+        $this->recordChange();
     }
 
     /**
@@ -119,6 +124,7 @@ abstract class AbstractContentType
     public function setFields(array $fields): void
     {
         $this->fields = $fields;
+        $this->recordChange();
     }
 
     public function getField(string $code): AbstractField
@@ -134,6 +140,7 @@ abstract class AbstractContentType
     public function addField(AbstractField $field): AbstractField
     {
         $this->fields[$field->getCode()] = $field;
+        $this->recordChange();
 
         return $field;
     }
@@ -153,6 +160,7 @@ abstract class AbstractContentType
         }
 
         $this->routingStrategy = $routingStrategy;
+        $this->recordChange();
     }
 
     /**
@@ -165,9 +173,10 @@ abstract class AbstractContentType
 
     public function buildAttributesMapping(): array
     {
-        dump($this->fields);
         return $this->buildAttributesMappingRecursive($this->fields);
     }
+
+    abstract protected function recordChange(): void;
 
     /**
      * @param AbstractField[] $fields

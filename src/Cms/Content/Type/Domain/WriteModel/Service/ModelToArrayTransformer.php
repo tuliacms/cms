@@ -6,14 +6,13 @@ namespace Tulia\Cms\Content\Type\Domain\WriteModel\Service;
 
 use Tulia\Cms\Content\Type\Domain\WriteModel\Model\ContentType;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Model\Field;
-use Tulia\Cms\Content\Type\Domain\WriteModel\Model\LayoutType;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class ModelToArrayTransformer
 {
-    public function transform(ContentType $contentType, LayoutType $layoutType): array
+    public function transform(ContentType $contentType): array
     {
         $data = [
             'type' => [
@@ -26,10 +25,10 @@ class ModelToArrayTransformer
             ],
             'layout' => [
                 'sidebar' => [
-                    'sections' => $this->transformGroups($contentType, $layoutType, 'sidebar'),
+                    'sections' => $this->transformGroups($contentType, 'sidebar'),
                 ],
                 'main' => [
-                    'sections' => $this->transformGroups($contentType, $layoutType, 'main'),
+                    'sections' => $this->transformGroups($contentType, 'main'),
                 ],
             ],
         ];
@@ -37,11 +36,11 @@ class ModelToArrayTransformer
         return $data;
     }
 
-    private function transformGroups(ContentType $contentType, LayoutType $layoutType, string $sectionName): array
+    private function transformGroups(ContentType $contentType, string $sectionName): array
     {
         $groups = [];
 
-        foreach ($layoutType->getSections() as $section) {
+        foreach ($contentType->getLayout()->getSections() as $section) {
             if ($section->getCode() !== $sectionName) {
                 continue;
             }
