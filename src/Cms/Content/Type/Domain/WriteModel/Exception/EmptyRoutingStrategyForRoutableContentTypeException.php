@@ -7,7 +7,7 @@ namespace Tulia\Cms\Content\Type\Domain\WriteModel\Exception;
 /**
  * @author Adam Banaszkiewicz
  */
-class EmptyRoutingStrategyForRoutableContentTypeException extends \Exception
+class EmptyRoutingStrategyForRoutableContentTypeException extends \DomainException
 {
     private string $type;
 

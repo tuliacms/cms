@@ -3,14 +3,14 @@
 <script>
 export default {
     props: {
-        value: [String, Array],
+        modelValue: [String, Array],
         multiple: Boolean,
     },
     mounted () {
         $(this.$el)
             .val(this.value)
             .chosen()
-            .on('change', e => this.$emit('input', $(this.$el).val()))
+            .on('change', e => this.$emit('update:modelValue', $(this.$el).val()))
     },
     watch: {
         value (val) {

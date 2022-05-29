@@ -8,7 +8,6 @@ use Tulia\Cms\Content\Type\Domain\WriteModel\ContentTypeRepositoryInterface;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Event\ContentTypeDeleted;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Model\ContentType;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Model\Field;
-use Tulia\Cms\Content\Type\Domain\WriteModel\Service\ContentTypeStorageInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 
@@ -17,12 +16,12 @@ use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
  */
 class DbalContentTypeRepository implements ContentTypeRepositoryInterface
 {
-    private ContentTypeStorageInterface $storage;
+    private DbalContentTypeStorage $storage;
     private UuidGeneratorInterface $uuidGenerator;
     private EventBusInterface $eventBus;
 
     public function __construct(
-        ContentTypeStorageInterface $contentTypeStorage,
+        DbalContentTypeStorage $contentTypeStorage,
         UuidGeneratorInterface $uuidGenerator,
         EventBusInterface $eventBus
     ) {
@@ -63,9 +62,7 @@ class DbalContentTypeRepository implements ContentTypeRepositoryInterface
         $this->storage->beginTransaction();
 
         try {
-            $data = $this->extract($contentType);
-
-            $this->storage->insert($data);
+            $this->storage->insert($contentType->toArray());
             $this->storage->commit();
         } catch (\Exception $exception) {
             $this->storage->rollback();
@@ -109,7 +106,7 @@ class DbalContentTypeRepository implements ContentTypeRepositoryInterface
         $this->eventBus->dispatch(ContentTypeDeleted::fromModel($contentType));
     }
 
-    private function extract(ContentType $contentType): array
+    /*private function extract(ContentType $contentType): array
     {
         $sections = [];
 
@@ -149,12 +146,12 @@ class DbalContentTypeRepository implements ContentTypeRepositoryInterface
         ];
 
         return $extracted;
-    }
+    }*/
 
     /**
      * @param Field[] $fields
      */
-    private function extractFields(?string $parent, array $fields): array
+    /*private function extractFields(?string $parent, array $fields): array
     {
         $result = [];
 
@@ -191,5 +188,5 @@ class DbalContentTypeRepository implements ContentTypeRepositoryInterface
         }
 
         return array_merge(...$result);
-    }
+    }*/
 }

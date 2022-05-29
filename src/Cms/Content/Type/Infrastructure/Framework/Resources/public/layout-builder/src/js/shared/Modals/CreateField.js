@@ -42,7 +42,7 @@ export default class CreateField {
         };
 
         if (this.view.form.field_creator_parent_field) {
-            let parent = this._findField(this.view.form.field_creator_parent_field);
+            let parent = this.model.findField(this.view.form.field_creator_parent_field);
 
             if (!parent) {
                 alert('ERROR: Parent field not exists. Cannot create this field.');

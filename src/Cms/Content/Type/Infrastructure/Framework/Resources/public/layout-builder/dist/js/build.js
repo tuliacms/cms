@@ -4180,14 +4180,14 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
     props: {
-        value: [String, Array],
+        modelValue: [String, Array],
         multiple: Boolean,
     },
     mounted () {
         $(this.$el)
             .val(this.value)
             .chosen()
-            .on('change', e => this.$emit('input', $(this.$el).val()))
+            .on('change', e => this.$emit('update:modelValue', $(this.$el).val()))
     },
     watch: {
         value (val) {
@@ -4289,7 +4289,7 @@ const FormControl = (__webpack_require__(/*! ./FormControl.vue */ "./src/js/comp
         },
         saveField: function () {
             if (this._validate() === false) {
-                //return;
+                return;
             }
 
             let model = {
@@ -6339,9 +6339,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_ChosenSelect, {
           key: 3,
           id: $props.id,
-          onChange: _cache[6] || (_cache[6] = $event => (_ctx.$emit('change'))),
           modelValue: $props.field.value,
-          "onUpdate:modelValue": _cache[7] || (_cache[7] = $event => (($props.field.value) = $event)),
+          "onUpdate:modelValue": _cache[6] || (_cache[6] = $event => (($props.field.value) = $event)),
           class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({ 'is-invalid': $props.field.valid === false })
         }, {
           default: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(() => [
@@ -6360,9 +6359,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_ChosenSelect, {
           key: 4,
           id: $props.id,
-          onChange: _cache[8] || (_cache[8] = $event => (_ctx.$emit('change'))),
           modelValue: $props.field.value,
-          "onUpdate:modelValue": _cache[9] || (_cache[9] = $event => (($props.field.value) = $event)),
+          "onUpdate:modelValue": _cache[7] || (_cache[7] = $event => (($props.field.value) = $event)),
           class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({ 'is-invalid': $props.field.valid === false })
         }, {
           default: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(() => [
@@ -11882,7 +11880,7 @@ class CreateField {
         };
 
         if (this.view.form.field_creator_parent_field) {
-            let parent = this._findField(this.view.form.field_creator_parent_field);
+            let parent = this.model.findField(this.view.form.field_creator_parent_field);
 
             if (!parent) {
                 alert('ERROR: Parent field not exists. Cannot create this field.');

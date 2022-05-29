@@ -109,7 +109,7 @@ export default {
         },
         saveField: function () {
             if (this._validate() === false) {
-                //return;
+                return;
             }
 
             let model = {

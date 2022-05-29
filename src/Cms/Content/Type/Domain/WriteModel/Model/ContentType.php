@@ -4,102 +4,128 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Content\Type\Domain\WriteModel\Model;
 
-use Tulia\Cms\Content\Type\Domain\AbstractModel\AbstractContentType;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Event\ContentTypeCreated;
-use Tulia\Cms\Content\Type\Domain\WriteModel\Event\ContentTypeUpdated;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Exception\ParentFieldNotExistsException;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AggregateRootTrait;
 
 /**
  * @author Adam Banaszkiewicz
  */
-final class ContentType extends AbstractContentType
+final class ContentType
 {
     use AggregateRootTrait;
 
-    protected string $id;
-    protected LayoutType $layout;
-    private bool $changed = false;
+    private string $code;
+    private string $type;
+    private string $name;
+    private ?string $routingStrategy = null;
+    private ?string $icon = null;
+    private bool $isRoutable = false;
+    private bool $isHierarchical = false;
+    private array $fieldGroups = [];
 
-    private function __construct(string $id, string $code, string $type, LayoutType $layout, bool $isInternal = false)
-    {
-        $this->id = $id;
+    /**
+     * @throws ParentFieldNotExistsException
+     */
+    private function __construct(
+        string $code,
+        string $type,
+        string $name,
+        string $icon,
+        ?string $routingStrategy,
+        bool $isHierarchical,
+        array $fieldGroups = []
+    ) {
         $this->code = $code;
         $this->type = $type;
-        $this->layout = $layout;
-        $this->isInternal = $isInternal;
+        $this->name = $name;
+        $this->icon = $icon;
+        $this->routingStrategy = $routingStrategy;
+        $this->isHierarchical = $isHierarchical;
+
+        if ($routingStrategy) {
+            $this->isRoutable = true;
+        }
+
+        foreach ($fieldGroups as $group) {
+            $fieldsGroup = new FieldsGroup($group['code'], $group['section'], $group['name']);
+            $this->fieldGroups[] = $fieldsGroup;
+
+            foreach ($group['fields'] as $field) {
+                $fieldsGroup->addField(new Field(
+                    $field['code'],
+                    $field['type'],
+                    $field['name'],
+                    $field['flags'],
+                    $field['constraints'],
+                    $field['configuration'],
+                    $field['parent'],
+                ));
+            }
+        }
     }
 
-    public static function create(string $id, string $code, string $type, LayoutType $layout, bool $isInternal = false): self
-    {
-        $self = new self($id, $code, $type, $layout, $isInternal);
-        $self->recordThat(ContentTypeCreated::fromModel($self));
+    public static function create(
+        string $code,
+        string $type,
+        string $name,
+        string $icon,
+        ?string $routingStrategy,
+        bool $isHierarchical,
+        array $fieldGroups = []
+    ): self {
+        $self = new self($code, $type, $name, $icon, $routingStrategy, $isHierarchical, $fieldGroups);
+        $self->recordThat(new ContentTypeCreated($code, $type));
 
         return $self;
     }
 
-    public static function recreateFromArray(array $data): self
+    public function toArray(): array
     {
-        $layout = new LayoutType($data['layout']['code']);
-        $layout->setName($data['layout']['name']);
-
-        foreach ($data['layout']['sections'] ?? [] as $sectionCode => $section) {
-            $groups = [];
-
-            foreach ($section['groups'] as $groupName => $group) {
-                $groups[$groupName] = new FieldsGroup($group['code'], $group['name'], $group['fields']);
-            }
-
-            $layout->addSection(new Section($sectionCode, $groups));
-        }
-
-        $self = new self($data['id'], $data['code'], $data['type'], $layout);
-        $self->name = $data['name'];
-        $self->icon = $data['icon'];
-        $self->isRoutable = (bool) $data['is_routable'];
-        $self->isHierarchical = (bool) $data['is_hierarchical'];
-        $self->routingStrategy = $data['routing_strategy'];
-        $self->fields = self::createFields($data['fields']);
-
-        return $self;
+        return [
+            'code' => $this->code,
+            'type' => $this->type,
+            'name' => $this->name,
+            'routing_strategy' => $this->routingStrategy,
+            'icon' => $this->icon,
+            'is_routable' => $this->isRoutable,
+            'is_hierarchical' => $this->isHierarchical,
+            'fields_groups' => array_map(
+                fn (FieldsGroup $group) => $group->toArray(),
+                $this->fieldGroups
+            ),
+        ];
     }
 
-    public function getId(): string
+    public function rename(string $name): void
     {
-        return $this->id;
+        $this->name = $name;
     }
 
-    /**
-     * @return Field[]
-     */
-    public function getFields(): array
+    public function assignIcon(string $icon): void
     {
-        return parent::getFields();
+        $this->icon = $icon;
     }
 
-    protected function recordChange(): void
+    public function enableRoutable(string $routingStrategy): void
     {
-        if (!$this->changed) {
-            $this->recordThat(ContentTypeUpdated::fromModel($this));
-            $this->changed = true;
-        }
+        $this->isRoutable = true;
+        $this->routingStrategy = $routingStrategy;
     }
 
-    /**
-     * @return Field[]
-     */
-    private static function createFields(array $fields): array
+    public function disableRoutable(): void
     {
-        $result = [];
+        $this->isRoutable = false;
+        $this->routingStrategy = null;
+    }
 
-        foreach ($fields as $field) {
-            if (isset($field['children']) && $field['children'] !== []) {
-                $field['children'] = self::createFields($field['children']);
-            }
+    public function enableHierarchical(): void
+    {
+        $this->isHierachical = true;
+    }
 
-            $field['position'] = (int) $field['position'];
-            $result[$field['code']] = new Field($field);
-        }
-
-        return $result;
+    public function disableHierarchical(): void
+    {
+        $this->isHierachical = false;
     }
 }

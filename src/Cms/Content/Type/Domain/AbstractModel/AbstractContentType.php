@@ -67,11 +67,6 @@ abstract class AbstractContentType
         return in_array($this->type, (array) $type, true);
     }
 
-    public function getLayout(): AbstractLayoutType
-    {
-        return $this->layout;
-    }
-
     public function getController(): ?string
     {
         return $this->controller;

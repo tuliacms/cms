@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Content\Type\Infrastructure\Persistence\Domain;
 
-use Tulia\Cms\Content\Type\Domain\WriteModel\Service\ContentTypeStorageInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class DbalContentTypeStorage implements ContentTypeStorageInterface
+class DbalContentTypeStorage
 {
     private ConnectionInterface $connection;
     private UuidGeneratorInterface $uuidGenerator;
@@ -35,6 +34,10 @@ class DbalContentTypeStorage implements ContentTypeStorageInterface
             return null;
         }
 
+        $type[0]['fields_groups'] = $this->collectFieldGroups($type[0]['id'], $type[0]['layout']);
+
+        dump($type);exit;
+
         return $this->collectDetailsForType($type[0]);
     }
 
@@ -55,26 +58,26 @@ class DbalContentTypeStorage implements ContentTypeStorageInterface
     public function insert(array $contentType): void
     {
         $this->connection->insert('#__content_type', [
-            'id' => $contentType['id'],
             'code' => $contentType['code'],
             'type' => $contentType['type'],
             'name' => $contentType['name'],
             'icon' => $contentType['icon'],
-            'controller' => $contentType['controller'],
             'is_routable' => $contentType['is_routable'] ? '1' : '0',
             'is_hierarchical' => $contentType['is_hierarchical'] ? '1' : '0',
             'routing_strategy' => $contentType['routing_strategy'],
-            'layout' => $contentType['layout']['code'],
         ]);
 
-        $this->insertFields($contentType['fields'], $contentType['id']);
+        foreach ($contentType['fields_groups'] as $groupIndex => $group) {
+            $this->connection->insert('#__content_type_field_group', [
+                'content_type_code' => $contentType['code'],
+                'code' => $group['code'],
+                'name' => $group['name'],
+                'section' => $group['section'],
+                'position' => $groupIndex + 1,
+            ]);
 
-        $this->connection->insert('#__content_type_layout', [
-            'code' => $contentType['layout']['code'],
-            'name' => $contentType['layout']['name'],
-        ]);
-
-        $this->insertSections($contentType['layout']['sections'], $contentType['layout']['code']);
+            $this->insertFields($group['fields'], $group['code'], $contentType['code']);
+        }
     }
 
     public function update(array $contentType): void
@@ -125,6 +128,20 @@ class DbalContentTypeStorage implements ContentTypeStorageInterface
         $type['layout'] = $this->collectLayoutDefault($type['layout']);
 
         return $type;
+    }
+
+    private function collectFieldGroups(string $contentTypeId, string $layoutCode): array
+    {
+        $groups = $this->connection->fetchAllAssociative(
+            'SELECT id, code, name, `section` FROM #__content_type_layout_group WHERE layout_type = :layout_type ORDER BY `position` ASC',
+            ['layout_type' => $layoutCode]
+        );
+
+        foreach ($groups as $key => $group) {
+            //$group[$key]['fields'] = $this->collectFields();
+        }
+
+        return $groups;
     }
 
     private function collectFields(string $contentTypeId): array
@@ -239,27 +256,28 @@ class DbalContentTypeStorage implements ContentTypeStorageInterface
         return $result;
     }
 
-    private function insertFields(array $fields, string $contentTypeId): void
+    private function insertFields(array $fields, string $groupCode, string $contentType): void
     {
-        foreach ($fields as $field) {
+        foreach ($fields as $position => $field) {
             $fieldId = $this->uuidGenerator->generate();
 
             $this->connection->insert('#__content_type_field', [
                 'id' => $fieldId,
                 'code' => $field['code'],
-                'content_type_id' => $contentTypeId,
+                'group_code' => $groupCode,
+                'content_type_code' => $contentType,
                 'type' => $field['type'],
                 'name' => $field['name'],
                 'parent' => $field['parent'],
                 'is_multilingual' => in_array('multilingual', $field['flags'], true) ? '1' : '0',
-                'position' => $field['position'],
+                'position' => $position + 1,
             ]);
 
-            foreach ($field['configuration'] as $code => $value) {
+            foreach ($field['configuration'] as $config) {
                 $this->connection->insert('#__content_type_field_configuration', [
                     'field_id' => $fieldId,
-                    'code' => $code,
-                    'value' => $value,
+                    'code' => $config['code'],
+                    'value' => $config['value'],
                 ]);
             }
 
@@ -272,11 +290,11 @@ class DbalContentTypeStorage implements ContentTypeStorageInterface
                     'code' => $constraint['code'],
                 ]);
 
-                foreach ($constraint['modificators'] as $modificator => $value) {
+                foreach ($constraint['modificators'] as $modificator) {
                     $this->connection->insert('#__content_type_field_constraint_modificator', [
                         'constraint_id' => $constraintId,
-                        'modificator' => $modificator,
-                        'value' => $value,
+                        'modificator' => $modificator['code'],
+                        'value' => $modificator['value'],
                     ]);
                 }
             }

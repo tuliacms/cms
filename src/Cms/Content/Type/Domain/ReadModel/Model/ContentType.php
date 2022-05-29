@@ -41,6 +41,11 @@ class ContentType extends AbstractContentType
         return $this->isInternal;
     }
 
+    public function getLayout(): LayoutType
+    {
+        return $this->layout;
+    }
+
     protected function recordChange(): void
     {
         // void

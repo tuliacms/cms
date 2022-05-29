@@ -7,7 +7,7 @@ namespace Tulia\Cms\Content\Type\Domain\WriteModel\Exception;
 /**
  * @author Adam Banaszkiewicz
  */
-class ContentTypeNotExistsException extends \Exception
+class ContentTypeNotExistsException extends \DomainException
 {
     private string $type;
 

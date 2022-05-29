@@ -11,7 +11,17 @@ use Tulia\Cms\Shared\Domain\WriteModel\Event\DomainEvent;
  */
 trait AggregateRootTrait
 {
-    private array $domainEvents = [];
+    /** @var DomainEvent[] */
+    protected array $domainEvents = [];
+
+    public function collectDomainEvents(): array
+    {
+        $events = $this->domainEvents;
+
+        $this->domainEvents = [];
+
+        return $events;
+    }
 
     protected function recordThat(DomainEvent $event): void
     {
@@ -27,14 +37,5 @@ trait AggregateRootTrait
         }
 
         $this->domainEvents[] = $event;
-    }
-
-    public function collectDomainEvents(): array
-    {
-        $events = $this->domainEvents;
-
-        $this->domainEvents = [];
-
-        return $events;
     }
 }

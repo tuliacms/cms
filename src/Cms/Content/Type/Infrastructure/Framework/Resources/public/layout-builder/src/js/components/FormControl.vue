@@ -11,13 +11,13 @@
             <textarea :id="id" :placeholder="field.placeholder" @change="$emit('change')" :class="{ 'form-control': true, 'is-invalid': field.valid === false }" v-model="field.value"></textarea>
         </template>
         <template v-if="field.type === 'choice'">
-            <ChosenSelect :id="id" @change="$emit('change')" v-model="field.value" :class="{ 'is-invalid': field.valid === false }">
+            <ChosenSelect :id="id" v-model="field.value" :class="{ 'is-invalid': field.valid === false }">
                 <option value="" disabled>{{ field.placeholder ? field.placeholder : translations.pleaseSelectValue }}</option>
                 <option v-for="option in field.choices" :key="option.value" :value="option.value">{{ option.label }}</option>
             </ChosenSelect>
         </template>
         <template v-if="field.type === 'yes_no'">
-            <ChosenSelect :id="id" @change="$emit('change')" v-model="field.value" :class="{ 'is-invalid': field.valid === false }">
+            <ChosenSelect :id="id" v-model="field.value" :class="{ 'is-invalid': field.valid === false }">
                 <option value="" disabled>{{ field.placeholder ? field.placeholder : translations.pleaseSelectValue }}</option>
                 <option value="1">{{ translations.yes }}</option>
                 <option value="0">{{ translations.no }}</option>
