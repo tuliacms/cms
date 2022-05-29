@@ -80,6 +80,19 @@ final class ContentType
         return $self;
     }
 
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['code'],
+            $data['type'],
+            $data['name'],
+            $data['icon'],
+            $data['routing_strategy'],
+            (bool) $data['is_hierarchical'],
+            $data['fields_groups']
+        );
+    }
+
     public function toArray(): array
     {
         return [

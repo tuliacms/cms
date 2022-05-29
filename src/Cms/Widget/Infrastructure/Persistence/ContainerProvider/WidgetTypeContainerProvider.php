@@ -25,6 +25,7 @@ class WidgetTypeContainerProvider extends AbstractContentTypeProvider
 
     public function provide(): array
     {
+        return [];
         $result = [];
 
         foreach ($this->widgets as $code => $widget) {

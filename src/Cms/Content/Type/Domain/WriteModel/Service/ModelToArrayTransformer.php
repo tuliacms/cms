@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tulia\Cms\Content\Type\Domain\WriteModel\Service;
 
 use Tulia\Cms\Content\Type\Domain\WriteModel\Model\ContentType;
-use Tulia\Cms\Content\Type\Domain\WriteModel\Model\Field;
 
 /**
  * @author Adam Banaszkiewicz
@@ -14,21 +13,23 @@ class ModelToArrayTransformer
 {
     public function transform(ContentType $contentType): array
     {
+        $type = $contentType->toArray();
+
         $data = [
             'type' => [
-                'code' => $contentType->getCode(),
-                'name' => $contentType->getName(),
-                'icon' => $contentType->getIcon(),
-                'isRoutable' => $contentType->isRoutable(),
-                'isHierarchical' => $contentType->isHierarchical(),
-                'routingStrategy' => $contentType->getRoutingStrategy(),
+                'code' => $type['code'],
+                'name' => $type['name'],
+                'icon' => $type['icon'],
+                'isRoutable' => $type['is_routable'],
+                'isHierarchical' => $type['is_hierarchical'],
+                'routingStrategy' => $type['routing_strategy'],
             ],
             'layout' => [
                 'sidebar' => [
-                    'sections' => $this->transformGroups($contentType, 'sidebar'),
+                    'sections' => $this->transformGroups($type, 'sidebar'),
                 ],
                 'main' => [
-                    'sections' => $this->transformGroups($contentType, 'main'),
+                    'sections' => $this->transformGroups($type, 'main'),
                 ],
             ],
         ];
@@ -36,76 +37,68 @@ class ModelToArrayTransformer
         return $data;
     }
 
-    private function transformGroups(ContentType $contentType, string $sectionName): array
+    private function transformGroups(array $contentType, string $sectionName): array
     {
         $groups = [];
 
-        foreach ($contentType->getLayout()->getSections() as $section) {
-            if ($section->getCode() !== $sectionName) {
+        foreach ($contentType['fields_groups'] as $group) {
+            if ($group['section'] !== $sectionName) {
                 continue;
             }
 
-            foreach ($section->getFieldsGroups() as $group) {
-                $groups[] = [
-                    'code' => $group->getCode(),
-                    'name' => [
-                        'value' => $group->getName(),
-                        'valid' => true,
-                        'message' => null,
-                    ],
-                    'fields' => $this->transformFields($group->getFields(), $contentType, $contentType->getFields()),
-                ];
-            }
+            $groups[] = [
+                'code' => $group['code'],
+                'name' => [
+                    'value' => $group['name'],
+                    'valid' => true,
+                    'message' => null,
+                ],
+                'fields' => $this->transformFields($group['fields']),
+            ];
         }
 
         return $groups;
     }
 
     /**
-     * @param string[] $allowedFields
-     * @param Field[] $fields
+     * @param array<int, mixed> $fields
      */
-    private function transformFields(array $allowedFields, ContentType $contentType, array $fields): array
+    private function transformFields(array $fields, ?string $parent = null): array
     {
         $result = [];
 
         foreach ($fields as $field) {
-            // Only allowed fields (from defined group) can be returned here.
-            if (!in_array($field->getCode(), $allowedFields, true)) {
+            if ($field['parent'] !== $parent) {
                 continue;
             }
-
-            $allowedSubfields = array_map(function ($field) {
-                return $field->getCode();
-            }, $field->getChildren());
 
             $result[] = [
                 'metadata' => [
                     'has_errors' => false,
                 ],
                 'code' => [
-                    'value' => $field->getCode(),
+                    'value' => $field['code'],
                     'valid' => true,
                     'message' => null,
                 ],
                 'name' => [
-                    'value' => $field->getName(),
+                    'value' => $field['name'],
                     'valid' => true,
                     'message' => null,
                 ],
                 'multilingual' => [
-                    'value' => $field->isMultilingual(),
+                    'value' => \in_array('multilingual', $field['flags'], true),
                     'valid' => true,
                     'message' => null,
                 ],
                 'type' => [
-                    'value' => $field->getType(),
+                    'value' => $field['type'],
                     'valid' => true,
                     'message' => null,
                 ],
-                'configuration' => $this->transformFieldConfiguration($field->getConfiguration()),
-                'constraints' => $this->transformFieldConstraints($field->getConstraints()),
-                'children' => $this->transformFields($allowedSubfields, $contentType, $field->getChildren()),
+                'configuration' => $this->transformFieldConfiguration($field['configuration']),
+                'constraints' => $this->transformFieldConstraints($field['constraints']),
+                'children' => $this->transformFields($fields, $field['code']),
             ];
         }
 

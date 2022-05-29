@@ -32,7 +32,7 @@ class ContentTypeEntryImporter implements ObjectImporterInterface
 
     public function import(ObjectData $objectData): ?array
     {
-        $currentModel = $this->repository->findByCode($objectData['code']);
+        $currentModel = $this->repository->find($objectData['code']);
 
         if ($currentModel) {
             $id = $currentModel->getId();

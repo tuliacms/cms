@@ -43,18 +43,7 @@ class DbalContentTypeRepository implements ContentTypeRepositoryInterface
             return null;
         }
 
-        return ContentType::recreateFromArray($contentType);
-    }
-
-    public function findByCode(string $code): ?ContentType
-    {
-        $contentType = $this->storage->findByCode($code);
-
-        if ($contentType === []) {
-            return null;
-        }
-
-        return ContentType::recreateFromArray($contentType);
+        return ContentType::fromArray($contentType);
     }
 
     public function insert(ContentType $contentType): void

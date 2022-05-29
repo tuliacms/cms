@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Content\Type\Infrastructure\Persistence\ContentProvider;
 
+use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\AbstractContentTypeProvider;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 
@@ -13,14 +14,11 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterfac
 class ContentTypeDatabaseProvider extends AbstractContentTypeProvider
 {
     private ConnectionInterface $connection;
-    private array $fieldsSource = [];
-    private array $configurationsSource = [];
-    private array $constraintsSource = [];
-    private array $modificatorsSource = [];
-    private array $layoutsSource = [];
-    private array $groupsSource = [];
-    private array $fieldsListSource = [];
-    private array $layoutsTypes = [];
+    private array $fieldGroups = [];
+    private array $fields = [];
+    private array $fieldConfigurations = [];
+    private array $fieldConstraints = [];
+    private array $fieldConstraintsModificators = [];
 
     public function __construct(ConnectionInterface $connection)
     {
@@ -29,64 +27,68 @@ class ContentTypeDatabaseProvider extends AbstractContentTypeProvider
 
     public function provide(): array
     {
-        $result = [];
-
-        foreach ($this->getTypes() as $type) {
-            $result[] = $this->buildFromArray($type);
-        }
-
-        return $result;
+        return array_map(
+            fn (array $type) => ContentType::fromArray($type),
+            $this->getTypes()
+        );
     }
 
     private function getTypes(): array
     {
         $types = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type');
 
-        foreach ($types as $key => $type) {
-            $layoutType = $this->getLayoutType($types[$key]['layout']);
-            $fields = $this->getFields($type['id']);
-
-            foreach ($layoutType['sections'] as $sectionName => $section) {
-                foreach ($section['groups'] as $groupName => $group) {
-                    $groupFields = [];
-
-                    foreach ($group['fields'] as $fieldCode) {
-                        if (isset($fields[$fieldCode])) {
-                            $groupFields[$fieldCode] = $fields[$fieldCode];
-                        }
-                    }
-
-                    $layoutType['sections'][$sectionName]['groups'][$groupName]['fields'] = $groupFields;
-                }
-            }
-
-            $types[$key]['layout'] = $layoutType;
+        foreach ($types as $key => $contentType) {
+            $types[$key]['fields_groups'] = $this->getFieldGroups($contentType['code']);
         }
 
         return $types;
     }
 
-    private function getFields(string $contentTypeId, ?string $parent = null): array
+    private function getFieldGroups(string $contentType): array
     {
-        if ($this->fieldsSource === []) {
-            $this->fieldsSource = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type_field ORDER BY `position`');
+        if ($this->fieldGroups === []) {
+            $this->fieldGroups = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type_field_group ORDER BY `position`');
+        }
+
+        $groups = [];
+
+        foreach ($this->fieldGroups as $group) {
+            if ($group['content_type_code'] !== $contentType) {
+                continue;
+            }
+
+            $groups[] = [
+                'code' => $group['code'],
+                'section' => $group['section'],
+                'name' => $group['name'],
+                'fields' => $this->getFields($group['code'], $contentType),
+            ];
+        }
+
+        return $groups;
+    }
+
+    private function getFields(string $groupCode, string $contentType): array
+    {
+        if ($this->fields === []) {
+            $this->fields = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type_field ORDER BY `position`');
         }
 
         $fields = [];
 
-        foreach ($this->fieldsSource as $field) {
-            if ($field['content_type_id'] !== $contentTypeId) {
-                continue;
+        foreach ($this->fields as $field) {
+            if ($field['content_type_code'] === $contentType && $field['group_code'] === $groupCode) {
+                $fields[] = [
+                    'code' => $field['code'],
+                    'type' => $field['type'],
+                    'name' => $field['name'],
+                    'is_multilingual' => $field['is_multilingual'],
+                    'has_nonscalar_value' => $field['has_nonscalar_value'],
+                    'parent' => $field['parent'],
+                    'configuration' => $this->getConfiguration($field['id']),
+                    'constraints' => $this->getConstraints($field['id']),
+                ];
             }
-
-            if ($field['parent'] !== $parent) {
-                continue;
-            }
-
-            $fields[$field['code']] = $field;
-            $fields[$field['code']]['configuration'] = $this->getConfiguration($field['id']);
-            $fields[$field['code']]['constraints'] = $this->getConstraints($field['id']);
-            $fields[$field['code']]['children'] = $this->getFields($contentTypeId, $field['code']);
         }
 
         return $fields;
@@ -94,117 +96,49 @@ class ContentTypeDatabaseProvider extends AbstractContentTypeProvider
 
     private function getConfiguration(string $fieldId): array
     {
-        if ($this->configurationsSource === []) {
-            $this->configurationsSource = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type_field_configuration');
+        if ($this->fieldConfigurations === []) {
+            $this->fieldConfigurations = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type_field_configuration');
         }
 
-        $configs = [];
+        $configuration = [];
 
-        foreach ($this->configurationsSource as $config) {
-            if ($config['field_id'] !== $fieldId) {
-                continue;
+        foreach ($this->fieldConfigurations as $config) {
+            if ($config['field_id'] === $fieldId) {
+                $configuration[$config['code']] = $config['value'];
             }
-
-            $configs[$config['code']] = $config['value'];
         }
 
-        return $configs;
+        return $configuration;
     }
 
     private function getConstraints(string $fieldId): array
     {
-        if ($this->constraintsSource === []) {
-            $this->constraintsSource = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type_field_constraint');
+        if ($this->fieldConstraints === []) {
+            $this->fieldConstraints = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type_field_constraint');
+        }
+        if ($this->fieldConstraintsModificators === []) {
+            $this->fieldConstraintsModificators = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type_field_constraint_modificator');
         }
 
-        $configs = [];
+        $constraints = [];
 
-        foreach ($this->constraintsSource as $constraint) {
-            if ($constraint['field_id'] !== $fieldId) {
-                continue;
-            }
+        foreach ($this->fieldConstraints as $constraint) {
+            if ($constraint['field_id'] === $fieldId) {
+                $modificators = [];
 
-            $configs[$constraint['code']]['modificators'] = $this->getConstraintModificators($constraint['id']);
-        }
+                foreach ($this->fieldConstraintsModificators as $modificator) {
+                    if ($modificator['constraint_id'] === $constraint['id']) {
+                        $modificators[$modificator['code']] = $modificator['value'];
+                    }
+                }
 
-        return $configs;
-    }
-
-    private function getConstraintModificators(string $constraintId): array
-    {
-        if ($this->modificatorsSource === []) {
-            $this->modificatorsSource = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type_field_constraint_modificator');
-        }
-
-        $modificators = [];
-
-        foreach ($this->modificatorsSource as $modificator) {
-            if ($modificator['constraint_id'] !== $constraintId) {
-                continue;
-            }
-
-            $modificators[$modificator['modificator']] = $modificator['value'];
-        }
-
-        return $modificators;
-    }
-
-    public function getLayoutType(string $layoutCode): array
-    {
-        $this->prefetch();
-
-        return $this->layoutsTypes[$layoutCode];
-    }
-
-    private function prefetch(): void
-    {
-        if ($this->layoutsSource === []) {
-            $this->layoutsSource = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type_layout');
-        }
-
-        if ($this->layoutsTypes === []) {
-            foreach ($this->layoutsSource as $type) {
-                $type['sections']['main']['groups'] = $this->getGroups($type['code'], 'main');
-                $type['sections']['sidebar']['groups'] = $this->getGroups($type['code'], 'sidebar');
-
-                $this->layoutsTypes[$type['code']] = $type;
-            }
-        }
-    }
-
-    private function getGroups(string $layoutCode, string $section): array
-    {
-        if ($this->groupsSource === []) {
-            $this->groupsSource = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type_layout_group ORDER BY `position` ASC');
-        }
-
-        $result = [];
-
-        foreach ($this->groupsSource as $group) {
-            if ($group['section'] === $section && $group['layout_type'] === $layoutCode) {
-                $result[$group['code']] = $group;
-                $result[$group['code']]['fields'] = $this->getLayoutFields($group['id']);
-                $result[$group['code']]['interior'] = 'default';
+                $constraints[] = [
+                    'code' => $constraint['code'],
+                    'modificators' => $modificators,
+                ];
             }
         }
 
-        return $result;
-    }
-
-    private function getLayoutFields(string $groupId): array
-    {
-        if ($this->fieldsListSource === []) {
-            $this->fieldsListSource = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type_layout_group_field ORDER BY `position` ASC');
-        }
-
-        $result = [];
-
-        foreach ($this->fieldsListSource as $field) {
-            if ($field['group_id'] === $groupId) {
-                $result[] = $field['code'];
-            }
-        }
-
-        return $result;
+        return $constraints;
     }
 }

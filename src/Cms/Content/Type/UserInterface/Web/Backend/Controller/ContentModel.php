@@ -97,7 +97,7 @@ class ContentModel extends AbstractController
      * @return ViewInterface|RedirectResponse
      */
     public function edit(
-        string $id,
+        string $code,
         string $contentType,
         Request $request,
         FormHandler $contentTypeFormHandler
@@ -107,7 +107,7 @@ class ContentModel extends AbstractController
             return $this->redirectToRoute('backend.content.type.homepage');
         }
 
-        $contentTypeAggregate = $this->contentTypeRepository->find($id);
+        $contentTypeAggregate = $this->contentTypeRepository->find($code);
 
         if ($contentTypeAggregate === null) {
             $this->setFlash('danger', $this->trans('contentTypeNotExists', [], 'content_builder'));
@@ -127,7 +127,7 @@ class ContentModel extends AbstractController
             }
 
             $this->setFlash('success', $this->trans('contentTypeUpdatedSuccessfully', [], 'content_builder'));
-            return $this->redirectToRoute('backend.content.type.content_type.edit', ['contentType' => $contentType, 'id' => $contentTypeAggregate->getId()]);
+            return $this->redirectToRoute('backend.content.type.content_type.edit', ['contentType' => $contentType, 'code' => $code]);
         }
 
         $layoutBuilder = $this->layoutTypeBuilderRegistry->get($this->configuration->getLayoutBuilder($contentType));

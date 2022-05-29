@@ -21,7 +21,7 @@ class ContentTypeContainerProvider extends AbstractContentTypeProvider
     }
 
     public function provide(): array
-    {
+    {return [];
         $result = [];
 
         foreach ($this->configuration as $code => $type) {

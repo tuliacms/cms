@@ -68,7 +68,7 @@ final class Field
     private function validateFlags(array $flags): void
     {
         foreach ($flags as $flag) {
-            if (!is_string($flag)) {
+            if (!\is_string($flag)) {
                 throw new \InvalidArgumentException(sprintf('Flag must be a string, %s given.', gettype($flag)));
             }
         }
@@ -79,40 +79,28 @@ final class Field
      */
     private function validateConstraints(array $constraints): void
     {
-        foreach ($constraints as $constraint) {
-            if (!is_array($constraint)) {
+        foreach ($constraints as $code => $constraint) {
+            if (!\is_array($constraint)) {
                 throw new \InvalidArgumentException(sprintf('Constraint must be an array, %s given.', gettype($constraint)));
             }
 
-            if (!isset($constraint['code'])) {
-                throw new \InvalidArgumentException('Missing "code" of constraint.');
+            if (!\is_string($code)) {
+                throw new \InvalidArgumentException('Code constraint (as array key) musi be string.');
             }
             if (!isset($constraint['modificators'])) {
                 throw new \InvalidArgumentException('Missing "modificators" of constraint.');
             }
 
-            if (!is_array($constraint['modificators'])) {
+            if (!\is_array($constraint['modificators'])) {
                 throw new \InvalidArgumentException(sprintf('Constraint\'s modificators must be an array, %s given.', gettype($constraint['modificators'])));
-            }
-
-            foreach ($constraint['modificators'] as $modificator) {
-                if (!isset($modificator['code'], $modificator['value'])) {
-                    throw new \InvalidArgumentException('Constraint\s modificators must contain array with "code" and "value" keys.');
-                }
             }
         }
     }
 
     private function validateConfiguration(array $configuration): void
     {
-        foreach ($configuration as $config) {
-            if (!is_array($config)) {
-                throw new \InvalidArgumentException(sprintf('Configuration entry must be an array, %s given.', gettype($config)));
-            }
-
-            if (!isset($config['code'], $config['value'])) {
-                throw new \InvalidArgumentException('Configuration entry must contain array with "code" and "value" keys.');
-            }
+        if (!\is_array($configuration)) {
+            throw new \InvalidArgumentException(sprintf('Configuration entry must be an array, %s given.', gettype($config)));
         }
     }
 }

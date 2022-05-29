@@ -23,25 +23,7 @@ class DbalContentTypeStorage
         $this->uuidGenerator = $uuidGenerator;
     }
 
-    public function find(string $id): ?array
-    {
-        $type = $this->connection->fetchAllAssociative(
-            'SELECT * FROM #__content_type WHERE id = :id LIMIT 1',
-            ['id' => $id]
-        );
-
-        if ($type === []) {
-            return null;
-        }
-
-        $type[0]['fields_groups'] = $this->collectFieldGroups($type[0]['id'], $type[0]['layout']);
-
-        dump($type);exit;
-
-        return $this->collectDetailsForType($type[0]);
-    }
-
-    public function findByCode(string $code): ?array
+    public function find(string $code): ?array
     {
         $type = $this->connection->fetchAllAssociative(
             'SELECT * FROM #__content_type WHERE code = :code LIMIT 1',
@@ -52,7 +34,9 @@ class DbalContentTypeStorage
             return null;
         }
 
-        return $this->collectDetailsForType($type[0]);
+        $type[0]['fields_groups'] = $this->collectFieldGroups($type[0]['code']);
+
+        return $type[0];
     }
 
     public function insert(array $contentType): void
@@ -122,54 +106,62 @@ class DbalContentTypeStorage
         $this->connection->rollBack();
     }
 
-    private function collectDetailsForType(array $type): array
-    {
-        $type['fields'] = $this->collectFields($type['id']);
-        $type['layout'] = $this->collectLayoutDefault($type['layout']);
-
-        return $type;
-    }
-
-    private function collectFieldGroups(string $contentTypeId, string $layoutCode): array
+    private function collectFieldGroups(string $contentType): array
     {
         $groups = $this->connection->fetchAllAssociative(
-            'SELECT id, code, name, `section` FROM #__content_type_layout_group WHERE layout_type = :layout_type ORDER BY `position` ASC',
-            ['layout_type' => $layoutCode]
+            'SELECT code, name, `section` FROM #__content_type_field_group WHERE content_type_code = :content_type_code ORDER BY `position` ASC',
+            ['content_type_code' => $contentType]
         );
 
-        foreach ($groups as $key => $group) {
-            //$group[$key]['fields'] = $this->collectFields();
+        $result = [];
+
+        foreach ($groups as $group) {
+            $result[] = [
+                'code' => $group['code'],
+                'section' => $group['section'],
+                'name' => $group['name'],
+                'fields' => $this->collectFields($group['code'], $contentType),
+            ];
         }
 
-        return $groups;
+        return $result;
     }
 
-    private function collectFields(string $contentTypeId): array
+    private function collectFields(string $groupCode, string $contentType): array
     {
         $fields = $this->connection->fetchAllAssociative(
-            'SELECT * FROM #__content_type_field WHERE content_type_id = :content_type_id ORDER BY `position`',
-            ['content_type_id' => $contentTypeId]
+            'SELECT * FROM #__content_type_field WHERE content_type_code = :content_type_code AND group_code = :group_code ORDER BY `position`',
+            ['content_type_code' => $contentType, 'group_code' => $groupCode]
         );
 
-        foreach ($fields as $key => $field) {
-            $fields[$key]['configuration'] = $this->getFieldConfiguration($field['id']);
-            $fields[$key]['constraints'] = $this->getFieldConstraints($field['id']);
-            $fields[$key]['flags'] = [];
+        $result = [];
 
-            if ((bool) $fields[$key]['has_nonscalar_value']) {
-                $fields[$key]['flags'][] = 'nonscalar_value';
+        foreach ($fields as $field) {
+            $flags = [];
+
+            if ((bool) $field['has_nonscalar_value']) {
+                $flags[] = 'nonscalar_value';
             }
-            if ((bool) $fields[$key]['is_multilingual']) {
-                $fields[$key]['flags'][] = 'multilingual';
+            if ((bool) $field['is_multilingual']) {
+                $flags[] = 'multilingual';
             }
 
-            unset($fields[$key]['has_nonscalar_value'], $fields[$key]['is_multilingual']);
+            $result[] = [
+                'code' => $field['code'],
+                'type' => $field['type'],
+                'name' => $field['name'],
+                'flags' => $flags,
+                'parent' => $field['parent'],
+                'configuration' => $this->collectFieldConfiguration($field['id']),
+                'constraints' => $this->collectFieldConstraints($field['id']),
+            ];
         }
 
-        return $this->sortFieldsHierarchically(null, $fields);
+        return $result;
+        return $this->sortFieldsHierarchically($result);
     }
 
-    private function getFieldConfiguration(string $id): array
+    private function collectFieldConfiguration(string $id): array
     {
         $configuration = [];
         $configurationSource = $this->connection->fetchAllAssociative(
@@ -184,7 +176,7 @@ class DbalContentTypeStorage
         return $configuration;
     }
 
-    private function getFieldConstraints(string $id): array
+    private function collectFieldConstraints(string $id): array
     {
         $constraints = [];
         $constraintsSource = $this->connection->fetchAllAssociative(
@@ -195,12 +187,12 @@ class DbalContentTypeStorage
         foreach ($constraintsSource as $constraint) {
             $modificators = [];
             $modificatorsSource = $this->connection->fetchAllAssociative(
-                'SELECT modificator, value FROM #__content_type_field_constraint_modificator WHERE constraint_id = :constraint_id',
+                'SELECT code, `value` FROM #__content_type_field_constraint_modificator WHERE constraint_id = :constraint_id',
                 ['constraint_id' => $constraint['id']]
             );
 
             foreach ($modificatorsSource as $modificator) {
-                $modificators[$modificator['modificator']] = $modificator['value'];
+                $modificators[$modificator['code']] = $modificator['value'];
             }
 
             $constraints[$constraint['code']] = [
@@ -211,44 +203,13 @@ class DbalContentTypeStorage
         return $constraints;
     }
 
-    private function collectLayoutDefault(string $code): array
-    {
-        $layout = $this->connection->fetchAllAssociative(
-            'SELECT * FROM #__content_type_layout WHERE code = :code',
-            ['code' => $code]
-        );
-
-        if ($layout === []) {
-            // @todo What to do when Layout in any case not exists in storage? Throw domain exception?
-        }
-
-        $layout = $layout[0];
-
-        $sourceGroups = $this->connection->fetchAllAssociative(
-            'SELECT * FROM #__content_type_layout_group WHERE layout_type = :layout_type ORDER BY `position` ASC',
-            ['layout_type' => $code]
-        );
-
-        foreach ($sourceGroups as $group) {
-            $groupFields = $this->connection->fetchFirstColumn(
-                'SELECT code FROM #__content_type_layout_group_field WHERE group_id = :group_id ORDER BY `position` ASC',
-                ['group_id' => $group['id']]
-            );
-
-            $group['fields'] = $groupFields;
-            $layout['sections'][$group['section']]['groups'][$group['code']] = $group;
-        }
-
-        return $layout;
-    }
-
-    private function sortFieldsHierarchically(?string $parent, array $fields): array
+    private function sortFieldsHierarchically(array $fields, ?string $parent = null): array
     {
         $result = [];
 
         foreach ($fields as $field) {
             if ($field['parent'] === $parent) {
-                $field['children'] = $this->sortFieldsHierarchically($field['code'], $fields);
+                $field['children'] = $this->sortFieldsHierarchically($fields, $field['code']);
                 $result[] = $field;
             }
         }
