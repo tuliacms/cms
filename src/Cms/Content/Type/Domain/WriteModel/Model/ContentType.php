@@ -122,6 +122,11 @@ final class ContentType
         ];
     }
 
+    public function getCode(): string
+    {
+        return $this->code;
+    }
+
     public function rename(string $name): void
     {
         if ($name !== $this->name) {

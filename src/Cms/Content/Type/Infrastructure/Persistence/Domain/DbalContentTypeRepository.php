@@ -78,6 +78,6 @@ class DbalContentTypeRepository implements ContentTypeRepositoryInterface
             throw $exception;
         }
 
-        $this->eventBus->dispatch(ContentTypeDeleted::fromModel($contentType));
+        $this->eventBus->dispatch(new ContentTypeDeleted($contentType->getCode()));
     }
 }

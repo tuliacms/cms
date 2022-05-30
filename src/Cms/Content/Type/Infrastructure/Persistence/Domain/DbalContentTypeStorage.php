@@ -95,7 +95,6 @@ class DbalContentTypeStorage
     public function delete(array $contentType): void
     {
         $this->connection->delete('#__content_type', ['code' => $contentType['code']]);
-        $this->connection->delete('#__content_type_layout', ['code' => $contentType['layout']['code']]);
     }
 
     public function beginTransaction(): void

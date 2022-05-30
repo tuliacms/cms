@@ -133,9 +133,9 @@ class ContentModel extends AbstractController
     /**
      * @CsrfToken(id="delete-content-type")
      */
-    public function delete(string $id): RedirectResponse
+    public function delete(string $code): RedirectResponse
     {
-        $contentType = $this->contentTypeRepository->find($id);
+        $contentType = $this->contentTypeRepository->find($code);
 
         if ($contentType === null) {
             $this->setFlash('danger', $this->trans('contentTypeNotExists', [], 'content_builder'));
