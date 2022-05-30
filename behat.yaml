@@ -7,8 +7,13 @@ default:
     autoload:
         '': '%paths.base%/tests/behat/bootstrap'
     suites:
+        content_type:
+            paths:
+                features: '%paths.base%/tests/behat/features/content/type'
+            contexts:
+                - Tulia\Cms\Tests\Behat\Content\Type\ContentTypeContext
         node_features:
             paths:
                 features: '%paths.base%/tests/behat/features/node'
             contexts:
-                - Node\NodeContext
+                - Tulia\Cms\Tests\Behat\Node\NodeContext

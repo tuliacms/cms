@@ -15,17 +15,20 @@ final class FieldCreated extends DomainEvent
     private string $code;
     private string $name;
     private string $type;
+    private ?string $parent;
 
     public function __construct(
         string $contentType,
         string $code,
         string $name,
-        string $type
+        string $type,
+        ?string $parent
     ) {
         $this->contentType = $contentType;
         $this->code = $code;
         $this->name = $name;
         $this->type = $type;
+        $this->parent = $parent;
     }
 
     public function getContentType(): string
@@ -46,5 +49,10 @@ final class FieldCreated extends DomainEvent
     public function getType(): string
     {
         return $this->type;
+    }
+
+    public function getParent(): ?string
+    {
+        return $this->parent;
     }
 }

@@ -177,6 +177,19 @@ final class ContentType
         }
     }
 
+    public function addFieldsGroup(string $code, string $name, string $section): void
+    {
+        foreach ($this->fieldGroups as $group) {
+            if ($group->getCode() === $code) {
+                throw GroupWithCodeExistsException::fromCode($code);
+            }
+        }
+
+        $this->fieldGroups[] = new FieldsGroup($code, $section, $name);
+        $this->recordThat(new FieldsGroupAdded($this->code, $code, $section, $name));
+        $this->recordUpdate();
+    }
+
     public function removeFieldsGroup(string $code): void
     {
         foreach ($this->fieldGroups as $key => $group) {
@@ -188,16 +201,15 @@ final class ContentType
         }
     }
 
-    public function addFieldsGroup(string $code, string $name, string $section): void
+    public function renameFieldsGroup(string $groupCode, string $name): void
     {
-        foreach ($this->fieldGroups as $group) {
-            if ($group->getCode() === $code) {
-                throw GroupWithCodeExistsException::fromCode($code);
+        foreach ($this->fieldGroups as $fieldsGroup) {
+            if ($fieldsGroup->getCode() === $groupCode) {
+                if ($fieldsGroup->rename($name)) {
+                    $this->recordUpdate();
+                }
             }
         }
-        $this->fieldGroups[] = new FieldsGroup($code, $section, $name);
-        $this->recordThat(new FieldsGroupAdded($this->code, $code, $section, $name));
-        $this->recordUpdate();
     }
 
     public function addFieldToGroup(
@@ -216,19 +228,8 @@ final class ContentType
                 $field = new Field($code, $type, $name, $flags, $constraints, $configuration, $parent, $position);
                 $fieldsGroup->addField($field);
 
-                $this->recordThat(new FieldCreated($this->code, $field->getCode(), $field->getName(), $field->getType()));
+                $this->recordThat(new FieldCreated($this->code, $field->getCode(), $field->getName(), $field->getType(), $field->getParent()));
                 $this->recordUpdate();
-            }
-        }
-    }
-
-    public function renameFieldsGroup(string $groupCode, string $name): void
-    {
-        foreach ($this->fieldGroups as $fieldsGroup) {
-            if ($fieldsGroup->getCode() === $groupCode) {
-                if ($fieldsGroup->rename($name)) {
-                    $this->recordUpdate();
-                }
             }
         }
     }
@@ -243,10 +244,10 @@ final class ContentType
     ): void {
         foreach ($this->fieldGroups as $group) {
             if ($group->hasField($code)) {
-                $updated = $group->updateField($code, $name, $flags, $constraints, $configuration, $parent);
+                $field = $group->updateField($code, $name, $flags, $constraints, $configuration, $parent);
 
-                if ($updated) {
-                    $this->recordThat(new FieldUpdated($this->code, $code));
+                if ($field) {
+                    $this->recordThat(new FieldUpdated($this->code, $field->getCode()));
                     $this->recordUpdate();
                 }
             }

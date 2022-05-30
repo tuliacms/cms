@@ -87,8 +87,8 @@ final class FieldsGroup
         array $constraints = [],
         array $configuration = [],
         ?string $parent = null,
-        int $position = 0
-    ): bool {
+        ?int $position = null
+    ): ?Field {
         $currentField = null;
         $currentFieldPosition = null;
 
@@ -103,14 +103,14 @@ final class FieldsGroup
             throw new \OutOfBoundsException(sprintf('Field %s not exists, cannot update.', $code));
         }
 
-        $newField = new Field($code, $currentField->getType(), $name, $flags, $constraints, $configuration, $parent, $position);
+        $newField = new Field($code, $currentField->getType(), $name, $flags, $constraints, $configuration, $parent, $position ?? $currentField->getPosition());
 
         if (!$newField->sameAs($currentField)) {
             $this->fields[$currentFieldPosition] = $newField;
-            return true;
+            return $newField;
         }
 
-        return false;
+        return null;
     }
 
     public function removeField(string $code): void

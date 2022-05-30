@@ -1,6 +1,8 @@
 <?php
 
-namespace Node;
+declare(strict_types=1);
+
+namespace Tulia\Cms\Tests\Behat\Node;
 
 use Assert;
 use Behat\Behat\Context\Context;
@@ -9,9 +11,9 @@ use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 
 /**
- * Defines application features from the specific context.
+ * @author Adam Banaszkiewicz
  */
-class NodeContext implements Context
+final class NodeContext implements Context
 {
     private const NODE_ID = 'b43b49dc-dc9a-416f-8bd6-60e8c1a7af76';
     private const WEBSITE_ID = 'ceb7a799-9491-4880-a50e-0c7f0dcba7f5';
