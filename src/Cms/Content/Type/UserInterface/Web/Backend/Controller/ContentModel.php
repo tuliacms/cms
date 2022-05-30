@@ -6,7 +6,6 @@ namespace Tulia\Cms\Content\Type\UserInterface\Web\Backend\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\Content\Type\Application\UseCase\CreateContentType;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Content\Type\Domain\WriteModel\ContentTypeRepositoryInterface;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Service\Configuration;
@@ -73,11 +72,7 @@ class ContentModel extends AbstractController
         if ($contentTypeFormHandler->isRequestValid()) {
             $contentTypeAggregate = $this->arrayToModelTransformer->produceContentType($contentType, $data);
 
-            try {
-                $this->contentTypeRepository->insert($contentTypeAggregate);
-            } catch (\Exception $e) {
-                dump($e);exit;
-            }
+            $this->contentTypeRepository->insert($contentTypeAggregate);
 
             $this->setFlash('success', $this->trans('contentTypeCreatedSuccessfully', [], 'content_builder'));
             return $this->redirectToRoute('backend.content.type.homepage');
@@ -118,13 +113,9 @@ class ContentModel extends AbstractController
         $data = $contentTypeFormHandler->handle($request, $data, true);
 
         if ($contentTypeFormHandler->isRequestValid()) {
-            $contentTypeAggregate = $this->arrayToModelTransformer->fillContentType($contentTypeAggregate, $data);
+            $this->arrayToModelTransformer->fillContentType($contentTypeAggregate, $data);
 
-            try {
-                $this->contentTypeRepository->update($contentTypeAggregate);
-            } catch (\Exception $e) {
-                dump($e);exit;
-            }
+            $this->contentTypeRepository->update($contentTypeAggregate);
 
             $this->setFlash('success', $this->trans('contentTypeUpdatedSuccessfully', [], 'content_builder'));
             return $this->redirectToRoute('backend.content.type.content_type.edit', ['contentType' => $contentType, 'code' => $code]);

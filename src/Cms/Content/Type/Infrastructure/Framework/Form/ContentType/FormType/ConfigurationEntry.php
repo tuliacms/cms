@@ -33,7 +33,7 @@ class ConfigurationEntry extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('id', TextType::class, [
+            ->add('code', TextType::class, [
                 'constraints' => [
                     new NotBlank(),
                     new Callback([$this, 'validateConfigurationExists'], null, ['field_type' => $options['field_type']]),
@@ -57,7 +57,7 @@ class ConfigurationEntry extends AbstractType
                         null,
                         [
                             'field_type' => $event->getForm()->getConfig()->getOption('field_type'),
-                            'configuration_id' => $configuration['id'],
+                            'configuration_code' => $configuration['code'],
                         ],
                     ),
                 ],
@@ -70,7 +70,7 @@ class ConfigurationEntry extends AbstractType
         $resolver->setRequired('field_type');
     }
 
-    public function validateConfigurationExists(string $configurationId, ExecutionContextInterface $context, array $payload): void
+    public function validateConfigurationExists(string $configurationCode, ExecutionContextInterface $context, array $payload): void
     {
         // Validation of node type existence is done in parent
         if ($this->fieldTypeMappingRegistry->hasType($payload['field_type']) === false) {
@@ -79,9 +79,9 @@ class ConfigurationEntry extends AbstractType
 
         $type = $this->fieldTypeMappingRegistry->get($payload['field_type']);
 
-        if (isset($type['configuration'][$configurationId]) === false) {
+        if (isset($type['configuration'][$configurationCode]) === false) {
             $context->buildViolation('Configuration entry named "%name%" not exists in "%type%" field type.')
-                ->setParameter('%name%', $configurationId)
+                ->setParameter('%name%', $configurationCode)
                 ->setParameter('%type%', $payload['field_type'])
                 ->addViolation();
         }
@@ -90,7 +90,7 @@ class ConfigurationEntry extends AbstractType
     public function validateConfiguraionRequirementExists(?string $value, ExecutionContextInterface $context, array $payload): void
     {
         $fieldType = $payload['field_type'];
-        $configurationId = $payload['configuration_id'];
+        $configurationCode = $payload['configuration_code'];
 
         // Validation of node type existence is done in parent
         if ($this->fieldTypeMappingRegistry->hasType($fieldType) === false) {
@@ -100,13 +100,13 @@ class ConfigurationEntry extends AbstractType
         $type = $this->fieldTypeMappingRegistry->get($fieldType);
 
         // COnfiguration existence is done in self::validateConfigurationExists()
-        if (isset($type['configuration'][$configurationId]) === false) {
+        if (isset($type['configuration'][$configurationCode]) === false) {
             return;
         }
 
-        if ($type['configuration'][$configurationId]['required'] && $this->isEmpty($value)) {
+        if ($type['configuration'][$configurationCode]['required'] && $this->isEmpty($value)) {
             $context->buildViolation('Configuration entry "%name%" for "%type%" field type is required, please fill it.')
-                ->setParameter('%name%', $configurationId)
+                ->setParameter('%name%', $configurationCode)
                 ->setParameter('%type%', $fieldType)
                 ->addViolation();
         }

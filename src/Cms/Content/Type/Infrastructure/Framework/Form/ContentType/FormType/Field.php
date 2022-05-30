@@ -135,7 +135,7 @@ class Field extends AbstractType
 
         $type = $this->fieldTypeMappingRegistry->get($payload['field_type']);
 
-        foreach ($type['configuration'] as $configurationId => $requiredConfiguration) {
+        foreach ($type['configuration'] as $configurationCode => $requiredConfiguration) {
             if ($requiredConfiguration['required'] === false) {
                 continue;
             }
@@ -143,7 +143,7 @@ class Field extends AbstractType
             $found = false;
 
             foreach ($payload['configurations'] as $filledConfiguration) {
-                if ($filledConfiguration['id'] === $configurationId) {
+                if ($filledConfiguration['code'] === $configurationCode) {
                     $found = true;
                 }
             }
@@ -151,7 +151,7 @@ class Field extends AbstractType
             if ($found === false) {
                 $context->buildViolation('Configuration named "%name%" for field type "%type%" is required, please fill it.')
                     ->setTranslationDomain('content_builder')
-                    ->setParameter('%name%', $configurationId)
+                    ->setParameter('%name%', $configurationCode)
                     ->setParameter('%type%', $payload['field_type'])
                     ->addViolation();
             }

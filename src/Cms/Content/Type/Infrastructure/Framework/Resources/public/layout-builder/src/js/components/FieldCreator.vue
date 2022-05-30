@@ -41,11 +41,11 @@
                     <div v-if="model.configuration.length !== 0" class="card mb-3">
                         <div class="card-body pb-0">
                             <div class="ctb-field-constraints row">
-                                <div v-for="(configuration, id) in model.configuration" :key="id" class="col-6 ctb-field-constraint mb-4">
+                                <div v-for="configuration in model.configuration" :key="configuration.code" class="col-6 ctb-field-constraint mb-4">
                                     <FormControl
                                         :translations="translations"
                                         :field="configuration"
-                                        :id="'ctb-new-field-configuration-' + id"
+                                        :id="'ctb-new-field-configuration-' + configuration.code"
                                     ></FormControl>
                                 </div>
                             </div>
@@ -122,7 +122,7 @@ export default {
 
             for (let c in this.model.configuration) {
                 model.configuration.push({
-                    id: this.model.configuration[c].id,
+                    code: this.model.configuration[c].code,
                     value: this.model.configuration[c].value,
                 });
             }
@@ -141,7 +141,7 @@ export default {
             let configuration = JSON.parse(JSON.stringify(this.fieldTypes[this.model.type.value].configuration));
 
             for (let i in configuration) {
-                configuration[i].id = i;
+                configuration[i].code = i;
                 configuration[i].value = null;
                 configuration[i].valid = null;
                 configuration[i].message = null;

@@ -25,12 +25,12 @@
                         </div>
                     </div>
                     <div class="ctb-field-children" v-if="element.type.value === 'repeatable'">
-                        <fields
+                        <Fields
                             :fields="element.children"
                             :section="section"
                             :group="element.code.value + '_fields'"
                             :parent_field="element"
-                        ></fields>
+                        ></Fields>
                     </div>
                 </div>
             </template>

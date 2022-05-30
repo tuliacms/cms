@@ -128,6 +128,11 @@ final class ContentType
         $this->routingStrategy = $routingStrategy;
     }
 
+    public function getRoutingStrategy(): ?string
+    {
+        return $this->routingStrategy;
+    }
+
     /**
      * @return Field[]
      */

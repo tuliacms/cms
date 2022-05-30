@@ -111,7 +111,7 @@ class ModelToArrayTransformer
 
         foreach ($configuration as $name => $value) {
             $result[] = [
-                'id' => $name,
+                'code' => $name,
                 'value' => $value,
                 'valid' => true,
                 'message' => null,
@@ -128,9 +128,9 @@ class ModelToArrayTransformer
         foreach ($constraints as $name => $modificatorsSource) {
             $modificators = [];
 
-            foreach ($modificatorsSource['modificators'] as $id => $value) {
+            foreach ($modificatorsSource['modificators'] as $code => $value) {
                 $modificators[] = [
-                    'id' => $id,
+                    'code' => $code,
                     'value' => $value,
                     'valid' => true,
                     'message' => null,
@@ -138,7 +138,7 @@ class ModelToArrayTransformer
             }
 
             $result[] = [
-                'id' => $name,
+                'code' => $name,
                 'enabled' => true,
                 'valid' => true,
                 'message' => null,

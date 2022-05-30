@@ -56,8 +56,10 @@ export default {
     },
     methods: {
         addSection: function () {
+            const d = new Date();
+
             this.sections.push({
-                code: _.uniqueId('section_'),
+                code: _.uniqueId(`section_${d.getTime()}_${d.getMilliseconds()}_`),
                 name: {
                     value: 'New section...',
                     valid: true,

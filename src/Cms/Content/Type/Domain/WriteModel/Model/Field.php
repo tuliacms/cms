@@ -16,6 +16,7 @@ final class Field
     private array $constraints;
     private array $configuration;
     private ?string $parent;
+    private int $position = 0;
 
     public function __construct(
         string $code,
@@ -24,7 +25,8 @@ final class Field
         array $flags = [],
         array $constraints = [],
         array $configuration = [],
-        ?string $parent = null
+        ?string $parent = null,
+        int $position = 0
     ) {
         $this->validateFlags($flags);
         $this->validateConstraints($constraints);
@@ -37,6 +39,7 @@ final class Field
         $this->constraints = $constraints;
         $this->configuration = $configuration;
         $this->parent = $parent;
+        $this->position = $position;
     }
 
     public function toArray(): array
@@ -49,6 +52,7 @@ final class Field
             'constraints' => $this->constraints,
             'configuration' => $this->configuration,
             'parent' => $this->parent,
+            'position' => $this->position,
         ];
     }
 
@@ -60,6 +64,37 @@ final class Field
     public function getCode(): string
     {
         return $this->code;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getPosition(): int
+    {
+        return $this->position;
+    }
+
+    public function sameAs(self $field): bool
+    {
+        $a = $this->toArray();
+        $b = $field->toArray();
+
+        array_multisort($a);
+        array_multisort($b);
+
+        return $a === $b;
+    }
+
+    public function moveToPosition(int $newPosition): void
+    {
+        $this->position = $newPosition;
     }
 
     /**
@@ -85,7 +120,7 @@ final class Field
             }
 
             if (!\is_string($code)) {
-                throw new \InvalidArgumentException('Code constraint (as array key) musi be string.');
+                throw new \InvalidArgumentException('Code constraint (as array key) must be string.');
             }
             if (!isset($constraint['modificators'])) {
                 throw new \InvalidArgumentException('Missing "modificators" of constraint.');

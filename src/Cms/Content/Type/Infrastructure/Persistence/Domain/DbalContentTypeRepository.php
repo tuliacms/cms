@@ -7,8 +7,6 @@ namespace Tulia\Cms\Content\Type\Infrastructure\Persistence\Domain;
 use Tulia\Cms\Content\Type\Domain\WriteModel\ContentTypeRepositoryInterface;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Event\ContentTypeDeleted;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Model\ContentType;
-use Tulia\Cms\Content\Type\Domain\WriteModel\Model\Field;
-use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 
 /**
@@ -17,22 +15,14 @@ use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 class DbalContentTypeRepository implements ContentTypeRepositoryInterface
 {
     private DbalContentTypeStorage $storage;
-    private UuidGeneratorInterface $uuidGenerator;
     private EventBusInterface $eventBus;
 
     public function __construct(
         DbalContentTypeStorage $contentTypeStorage,
-        UuidGeneratorInterface $uuidGenerator,
         EventBusInterface $eventBus
     ) {
         $this->storage = $contentTypeStorage;
-        $this->uuidGenerator = $uuidGenerator;
         $this->eventBus = $eventBus;
-    }
-
-    public function generateId(): string
-    {
-        return $this->uuidGenerator->generate();
     }
 
     public function find(string $id): ?ContentType
@@ -66,9 +56,7 @@ class DbalContentTypeRepository implements ContentTypeRepositoryInterface
         $this->storage->beginTransaction();
 
         try {
-            $data = $this->extract($contentType);
-
-            $this->storage->update($data);
+            $this->storage->update($contentType->toArray());
             $this->storage->commit();
         } catch (\Exception $exception) {
             $this->storage->rollback();
@@ -83,9 +71,7 @@ class DbalContentTypeRepository implements ContentTypeRepositoryInterface
         $this->storage->beginTransaction();
 
         try {
-            $data = $this->extract($contentType);
-
-            $this->storage->delete($data);
+            $this->storage->delete($contentType->toArray());
             $this->storage->commit();
         } catch (\Exception $exception) {
             $this->storage->rollback();
@@ -94,88 +80,4 @@ class DbalContentTypeRepository implements ContentTypeRepositoryInterface
 
         $this->eventBus->dispatch(ContentTypeDeleted::fromModel($contentType));
     }
-
-    /*private function extract(ContentType $contentType): array
-    {
-        $sections = [];
-
-        foreach ($contentType->getLayout()->getSections() as $section) {
-            $fieldsGroups = [];
-
-            foreach ($section->getFieldsGroups() as $fieldsGroup) {
-                $fieldsGroups[] = [
-                    'code' => $fieldsGroup->getCode(),
-                    'name' => $fieldsGroup->getName(),
-                    'fields' => $fieldsGroup->getFields(),
-                ];
-            }
-
-            $sections[] = [
-                'code' => $section->getCode(),
-                'field_groups' => $fieldsGroups,
-            ];
-        }
-
-        $extracted = [
-            'id' => $contentType->getId(),
-            'type' => $contentType->getType(),
-            'controller' => $contentType->getController(),
-            'code' => $contentType->getCode(),
-            'name' => $contentType->getName(),
-            'icon' => $contentType->getIcon(),
-            'is_routable' => $contentType->isRoutable(),
-            'is_hierarchical' => $contentType->isHierarchical(),
-            'routing_strategy' => $contentType->getRoutingStrategy(),
-            'fields' => $this->extractFields(null, $contentType->getFields()),
-            'layout' => [
-                'code' => $contentType->getLayout()->getCode(),
-                'name' => $contentType->getLayout()->getName(),
-                'sections' => $sections,
-            ],
-        ];
-
-        return $extracted;
-    }*/
-
-    /**
-     * @param Field[] $fields
-     */
-    /*private function extractFields(?string $parent, array $fields): array
-    {
-        $result = [];
-
-        foreach ($fields as $field) {
-            $constraints = [];
-
-            foreach ($field->getConstraints() as $code => $info) {
-                $constraints[] = [
-                    'code' => $code,
-                    'modificators' => $info['modificators'] ?? [],
-                ];
-            }
-
-            $flags = [];
-
-            if ($field->isMultilingual()) {
-                $flags[] = 'multilingual';
-            }
-
-            $result[] = [[
-                'code' => $field->getCode(),
-                'type' => $field->getType(),
-                'name' => $field->getName(),
-                'configuration' => $field->getConfiguration(),
-                'position' => $field->getPosition(),
-                'constraints' => $constraints,
-                'parent' => $parent,
-                'flags' => $flags,
-            ]];
-
-            if ($field->getChildren() !== []) {
-                $result[] = $this->extractFields($field->getCode(), $field->getChildren());
-            }
-        }
-
-        return array_merge(...$result);
-    }*/
 }

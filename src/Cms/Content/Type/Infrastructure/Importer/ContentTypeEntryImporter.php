@@ -34,14 +34,7 @@ class ContentTypeEntryImporter implements ObjectImporterInterface
     {
         $currentModel = $this->repository->find($objectData['code']);
 
-        if ($currentModel) {
-            $id = $currentModel->getId();
-        } else {
-            $id = $this->repository->generateId();
-        }
-
         $data = $objectData->toArray();
-        $data['id'] = $id;
 
         $contentType = $this->transformArrayToModel($data);
 

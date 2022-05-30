@@ -5,6 +5,14 @@ declare(strict_types=1);
 namespace Tulia\Cms\Content\Type\Domain\WriteModel\Model;
 
 use Tulia\Cms\Content\Type\Domain\WriteModel\Event\ContentTypeCreated;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Event\ContentTypeUpdated;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldCreated;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldRemoved;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldsGroupAdded;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldsGroupRemoved;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldsSorted;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldUpdated;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Exception\GroupWithCodeExistsException;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Exception\ParentFieldNotExistsException;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AggregateRootTrait;
 
@@ -22,7 +30,9 @@ final class ContentType
     private ?string $icon = null;
     private bool $isRoutable = false;
     private bool $isHierarchical = false;
+    /** @var FieldsGroup[] */
     private array $fieldGroups = [];
+    private bool $updateRecorded = false;
 
     /**
      * @throws ParentFieldNotExistsException
@@ -51,6 +61,7 @@ final class ContentType
             $fieldsGroup = new FieldsGroup($group['code'], $group['section'], $group['name']);
             $this->fieldGroups[] = $fieldsGroup;
 
+            $position = 1;
             foreach ($group['fields'] as $field) {
                 $fieldsGroup->addField(new Field(
                     $field['code'],
@@ -60,6 +71,7 @@ final class ContentType
                     $field['constraints'],
                     $field['configuration'],
                     $field['parent'],
+                    $position++
                 ));
             }
         }
@@ -75,7 +87,7 @@ final class ContentType
         array $fieldGroups = []
     ): self {
         $self = new self($code, $type, $name, $icon, $routingStrategy, $isHierarchical, $fieldGroups);
-        $self->recordThat(new ContentTypeCreated($code, $type));
+        $self->recordThat(new ContentTypeCreated($self->code, $self->type));
 
         return $self;
     }
@@ -112,33 +124,166 @@ final class ContentType
 
     public function rename(string $name): void
     {
-        $this->name = $name;
+        if ($name !== $this->name) {
+            $this->name = $name;
+            $this->recordUpdate();
+        }
     }
 
     public function assignIcon(string $icon): void
     {
-        $this->icon = $icon;
+        if ($icon !== $this->icon) {
+            $this->icon = $icon;
+            $this->recordUpdate();
+        }
     }
 
     public function enableRoutable(string $routingStrategy): void
     {
-        $this->isRoutable = true;
-        $this->routingStrategy = $routingStrategy;
+        if ($this->isRoutable === false || $routingStrategy !== $this->routingStrategy) {
+            $this->isRoutable = true;
+            $this->routingStrategy = $routingStrategy;
+            $this->recordUpdate();
+        }
     }
 
     public function disableRoutable(): void
     {
-        $this->isRoutable = false;
-        $this->routingStrategy = null;
+        if ($this->isRoutable === true) {
+            $this->isRoutable = false;
+            $this->routingStrategy = null;
+            $this->recordUpdate();
+        }
     }
 
     public function enableHierarchical(): void
     {
-        $this->isHierachical = true;
+        if ($this->isHierarchical === false) {
+            $this->isHierarchical = true;
+            $this->recordUpdate();
+        }
     }
 
     public function disableHierarchical(): void
     {
-        $this->isHierachical = false;
+        if ($this->isHierarchical === true) {
+            $this->isHierarchical = false;
+            $this->recordUpdate();
+        }
+    }
+
+    public function removeFieldsGroup(string $code): void
+    {
+        foreach ($this->fieldGroups as $key => $group) {
+            if ($group->getCode() === $code) {
+                unset($this->fieldGroups[$key]);
+                $this->recordThat(new FieldsGroupRemoved($this->code, $code));
+                $this->recordUpdate();
+            }
+        }
+    }
+
+    public function addFieldsGroup(string $code, string $name, string $section): void
+    {
+        foreach ($this->fieldGroups as $group) {
+            if ($group->getCode() === $code) {
+                throw GroupWithCodeExistsException::fromCode($code);
+            }
+        }
+        $this->fieldGroups[] = new FieldsGroup($code, $section, $name);
+        $this->recordThat(new FieldsGroupAdded($this->code, $code, $section, $name));
+        $this->recordUpdate();
+    }
+
+    public function addFieldToGroup(
+        string $groupCode,
+        string $code,
+        string $type,
+        string $name,
+        array $flags = [],
+        array $constraints = [],
+        array $configuration = [],
+        ?string $parent = null,
+        int $position = 0
+    ): void {
+        foreach ($this->fieldGroups as $fieldsGroup) {
+            if ($fieldsGroup->getCode() === $groupCode) {
+                $field = new Field($code, $type, $name, $flags, $constraints, $configuration, $parent, $position);
+                $fieldsGroup->addField($field);
+
+                $this->recordThat(new FieldCreated($this->code, $field->getCode(), $field->getName(), $field->getType()));
+                $this->recordUpdate();
+            }
+        }
+    }
+
+    public function renameFieldsGroup(string $groupCode, string $name): void
+    {
+        foreach ($this->fieldGroups as $fieldsGroup) {
+            if ($fieldsGroup->getCode() === $groupCode) {
+                if ($fieldsGroup->rename($name)) {
+                    $this->recordUpdate();
+                }
+            }
+        }
+    }
+
+    public function updateField(
+        string $code,
+        string $name,
+        array $flags = [],
+        array $constraints = [],
+        array $configuration = [],
+        ?string $parent = null
+    ): void {
+        foreach ($this->fieldGroups as $group) {
+            if ($group->hasField($code)) {
+                $updated = $group->updateField($code, $name, $flags, $constraints, $configuration, $parent);
+
+                if ($updated) {
+                    $this->recordThat(new FieldUpdated($this->code, $code));
+                    $this->recordUpdate();
+                }
+            }
+        }
+    }
+
+    public function removeField(string $code): void
+    {
+        foreach ($this->fieldGroups as $group) {
+            if ($group->hasField($code)) {
+                $group->removeField($code);
+                $this->recordThat(new FieldRemoved($this->code, $code));
+                $this->recordUpdate();
+            }
+        }
+    }
+
+    public function sortFields(array $fieldsCodes): void
+    {
+        if ($fieldsCodes === []) {
+            return;
+        }
+
+        foreach ($this->fieldGroups as $group) {
+            $group->sortFields($fieldsCodes);
+        }
+
+        $newPositions = [[]];
+
+        foreach ($this->fieldGroups as $group) {
+            $newPositions[] = $group->getFieldsCodes();
+        }
+
+        $this->recordThat(new FieldsSorted($this->code, array_merge(...$newPositions)));
+        $this->recordUpdate();
+    }
+
+    private function recordUpdate(): void
+    {
+        if (!$this->updateRecorded) {
+            $this->recordThat(new ContentTypeUpdated($this->code));
+            $this->updateRecorded = true;
+        }
     }
 }

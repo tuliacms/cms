@@ -37,6 +37,26 @@ final class FieldsGroup
         ];
     }
 
+    public function getFieldsCodes(): array
+    {
+        return array_map(fn ($f) => $f->getCode(), $this->fields);
+    }
+
+    public function getCode(): string
+    {
+        return $this->code;
+    }
+
+    public function rename(string $name): bool
+    {
+        if ($this->name !== $name) {
+            $this->name = $name;
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * @throws ParentFieldNotExistsException
      */
@@ -57,6 +77,64 @@ final class FieldsGroup
             }
         }
 
-        $this->fields[] = $field;
+        $this->fields[$field->getCode()] = $field;
+    }
+
+    public function updateField(
+        string $code,
+        string $name,
+        array $flags = [],
+        array $constraints = [],
+        array $configuration = [],
+        ?string $parent = null,
+        int $position = 0
+    ): bool {
+        $currentField = null;
+        $currentFieldPosition = null;
+
+        foreach ($this->fields as $key => $field) {
+            if ($field->getCode() === $code) {
+                $currentField = $field;
+                $currentFieldPosition = $key;
+            }
+        }
+
+        if (!$currentField) {
+            throw new \OutOfBoundsException(sprintf('Field %s not exists, cannot update.', $code));
+        }
+
+        $newField = new Field($code, $currentField->getType(), $name, $flags, $constraints, $configuration, $parent, $position);
+
+        if (!$newField->sameAs($currentField)) {
+            $this->fields[$currentFieldPosition] = $newField;
+            return true;
+        }
+
+        return false;
+    }
+
+    public function removeField(string $code): void
+    {
+        unset($this->fields[$code]);
+    }
+
+    public function hasField(string $code): bool
+    {
+        return isset($this->fields[$code]);
+    }
+
+    public function sortFields(array $fieldsCodes): void
+    {
+        $position = 1;
+
+        foreach ($fieldsCodes as $code) {
+            if (isset($this->fields[$code])) {
+                $this->fields[$code]->moveToPosition($position++);
+            }
+        }
+
+        usort($this->fields, function (Field $field1, Field $field2) {
+            return $field1->getPosition() <=> $field2->getPosition();
+        });
     }
 }

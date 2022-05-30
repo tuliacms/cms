@@ -54,11 +54,11 @@
                                         <div v-if="constraint.help_text" class="form-text">{{ constraint.help_text }}</div>
                                     </div>
                                     <div v-if="constraint.enabled && constraint.modificators.length !== 0" class="ctb-field-constraint-modificators row">
-                                        <div v-for="modificator in constraint.modificators" :key="modificator.id" class="col-6 ctb-field-constraint mb-4">
+                                        <div v-for="modificator in constraint.modificators" :key="modificator.code" class="col-6 ctb-field-constraint mb-4">
                                             <FormControl
                                                 :translations="translations"
                                                 :field="modificator"
-                                                :id="'ctb-edit-field-modificator-' + modificator.id"
+                                                :id="'ctb-edit-field-modificator-' + modificator.code"
                                             ></FormControl>
                                         </div>
                                     </div>
@@ -115,13 +115,13 @@ export default {
 
                 for (let m in this.model.constraints[c].modificators) {
                     modificators.push({
-                        id: m,
+                        code: m,
                         value: this.model.constraints[c].modificators[m].value,
                     });
                 }
 
                 model.constraints.push({
-                    id: this.model.constraints[c].id,
+                    code: this.model.constraints[c].code,
                     enabled: this.model.constraints[c].enabled,
                     modificators: modificators,
                 });
@@ -129,7 +129,7 @@ export default {
 
             for (let c in this.model.configuration) {
                 model.configuration.push({
-                    id: this.model.configuration[c].id,
+                    code: this.model.configuration[c].code,
                     value: this.model.configuration[c].value,
                 });
             }
@@ -194,7 +194,7 @@ export default {
 
             for (let c in constraints) {
                 let newConstraint = constraints[c];
-                newConstraint.id = c;
+                newConstraint.code = c;
 
                 for (let m in newConstraint.modificators) {
                     newConstraint.modificators[m].valid = true;
@@ -204,7 +204,7 @@ export default {
                 for (let cs in this.field.constraints) {
                     let oldConstraint = this.field.constraints[cs];
 
-                    if (oldConstraint.id === newConstraint.id && oldConstraint.enabled) {
+                    if (oldConstraint.code === newConstraint.code && oldConstraint.enabled) {
                         newConstraint.enabled = oldConstraint.enabled;
 
                         for (let nm in newConstraint.modificators) {
@@ -213,7 +213,7 @@ export default {
                             for (let om in oldConstraint.modificators) {
                                 let oldModificator = oldConstraint.modificators[om];
 
-                                if (oldModificator.id === nm) {
+                                if (oldModificator.code === nm) {
                                     newModificator.value = oldModificator.value;
                                     newModificator.valid = oldModificator.valid;
                                     newModificator.message = oldModificator.message;
@@ -237,7 +237,7 @@ export default {
             let configuration = JSON.parse(JSON.stringify(this.fieldTypes[this.model.type.value].configuration));
 
             for (let nc in configuration) {
-                configuration[nc].id = nc;
+                configuration[nc].code = nc;
                 configuration[nc].value = null;
                 configuration[nc].valid = null;
                 configuration[nc].message = null;
@@ -245,7 +245,7 @@ export default {
                 for (let cc in this.field.configuration) {
                     let oldConfiguration = this.field.configuration[cc];
 
-                    if (oldConfiguration.id === configuration[nc].id) {
+                    if (oldConfiguration.code === configuration[nc].code) {
                         configuration[nc].value = oldConfiguration.value;
                         configuration[nc].valid = oldConfiguration.valid;
                         configuration[nc].message = oldConfiguration.message;

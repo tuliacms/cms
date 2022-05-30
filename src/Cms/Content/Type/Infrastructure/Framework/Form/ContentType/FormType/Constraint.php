@@ -38,7 +38,7 @@ class Constraint extends AbstractType
         $choices = ['Yes' => true, 'No' => false];
 
         $builder
-            ->add('id', TextType::class, [
+            ->add('code', TextType::class, [
                 'constraints' => [
                     new NotBlank(),
                     new Callback([$this, 'validateConstraintExists'], null, ['field_type' => $options['field_type']])
@@ -67,7 +67,7 @@ class Constraint extends AbstractType
                 'allow_delete' => true,
                 'entry_options' => [
                     'field_type' => $form->getConfig()->getOption('field_type'),
-                    'constraint_id' => $constraint['id'],
+                    'constraint_code' => $constraint['code'],
                 ],
             ])
         ;

@@ -63,23 +63,23 @@ class ValidationRequestManipulator
 
             foreach ($field['configuration'] as $ck => $conf) {
                 $newConfiguration[$ck] = [
-                    'id' => $conf['id'],
+                    'code' => $conf['code'],
                     'value' => $conf['value'],
                 ];
             }
 
-            foreach ($field['constraints'] as $ck => $constr) {
+            foreach ($field['constraints'] as $constr) {
                 $newModificators = [];
 
                 foreach ($constr['modificators'] as $mk => $modificator) {
                     $newModificators[$mk] = [
-                        'id' => $modificator['id'],
+                        'code' => $modificator['code'],
                         'value' => $modificator['value'],
                     ];
                 }
 
-                $newConstratints[$ck] = [
-                    'id' => $constr['id'],
+                $newConstratints[$constr['code']] = [
+                    'code' => $constr['code'],
                     'enabled' => $constr['enabled'] ?? false,
                     'modificators' => $newModificators,
                 ];

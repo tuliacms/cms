@@ -6,9 +6,6 @@ namespace Tulia\Cms\Content\Type\UserInterface\Service;
 
 use Tulia\Cms\Content\Type\Domain\WriteModel\Exception\EmptyRoutingStrategyForRoutableContentTypeException;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Model\ContentType;
-use Tulia\Cms\Content\Type\Domain\WriteModel\Model\Field;
-use Tulia\Cms\Content\Type\Domain\WriteModel\Model\FieldsGroup;
-use Tulia\Cms\Content\Type\Domain\WriteModel\Model\LayoutType;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
 
 /**
@@ -39,6 +36,138 @@ class ArrayToWriteModelTransformer
             (bool) $data['is_hierarchical'],
             $data['fields_groups']
         );
+    }
+
+    /**
+     * @throws EmptyRoutingStrategyForRoutableContentTypeException
+     */
+    public function fillContentType(ContentType $contentType, array $data): void
+    {
+        $data = $this->transformSource($data);
+
+        $contentType->rename($data['name']);
+        $contentType->assignIcon($data['icon']);
+
+        if ($data['is_hierarchical']) {
+            $contentType->enableHierarchical();
+        } else {
+            $contentType->disableHierarchical();
+        }
+        if ($data['is_routable']) {
+            $contentType->enableRoutable($data['routing_strategy']);
+        } else {
+            $contentType->disableRoutable();
+        }
+
+        $source = $contentType->toArray();
+
+        $this->updateFieldsGroups($contentType, $source['fields_groups'], $data['fields_groups']);
+    }
+
+    private function updateFieldsGroups(ContentType $contentType, array $current, array $new): void
+    {
+        $currentGroups = array_column($current, 'code');
+        $newGroups = array_column($new, 'code');
+
+        $toRemove = array_diff($currentGroups, $newGroups);
+        $toAdd = array_diff($newGroups, $currentGroups);
+        $toUpdate = array_intersect($newGroups, $currentGroups);
+
+        foreach ($toRemove as $code) {
+            $contentType->removeFieldsGroup($code);
+        }
+
+        foreach ($toAdd as $code) {
+            foreach ($new as $newGroup) {
+                if ($newGroup['code'] === $code) {
+                    $contentType->addFieldsGroup(
+                        $newGroup['code'],
+                        $newGroup['name'],
+                        $newGroup['section']
+                    );
+
+                    foreach ($newGroups['fields'] as $field) {
+                        $contentType->addFieldToGroup(
+                            $field['code'],
+                            $field['type'],
+                            $field['name'],
+                            $field['flags'],
+                            $field['constraints'],
+                            $field['configuration'],
+                            $field['parent'],
+                        );
+                    }
+                }
+            }
+        }
+
+        foreach ($toUpdate as $groupCode) {
+            $newFields = [];
+            $currentFields = [];
+
+            foreach ($new as $updatedGroup) {
+                if ($updatedGroup['code'] === $groupCode) {
+                    $contentType->renameFieldsGroup($updatedGroup['code'], $updatedGroup['name']);
+                    $newFields = $updatedGroup['fields'];
+                }
+            }
+
+            foreach ($current as $currentGroup) {
+                if ($currentGroup['code'] === $groupCode) {
+                    $currentFields = $currentGroup['fields'];
+                }
+            }
+
+            $this->updateFields($contentType, $groupCode, $currentFields, $newFields);
+        }
+    }
+
+    private function updateFields(ContentType $contentType, string $groupCode, array $current, array $new): void
+    {
+        $currentFields = array_column($current, 'code');
+        $newFields = array_column($new, 'code');
+
+        $toRemove = array_diff($currentFields, $newFields);
+        $toAdd = array_diff($newFields, $currentFields);
+        $toUpdate = array_intersect($newFields, $currentFields);
+
+        foreach ($toUpdate as $fieldCode) {
+            foreach ($new as $field) {
+                if ($field['code'] === $fieldCode) {
+                    $contentType->updateField(
+                        $field['code'],
+                        $field['name'],
+                        $field['flags'],
+                        $field['constraints'],
+                        $field['configuration'],
+                        $field['parent'],
+                    );
+                }
+            }
+        }
+
+        foreach ($toRemove as $fieldCode) {
+            $contentType->removeField($fieldCode);
+        }
+
+        foreach ($toAdd as $fieldCode) {
+            foreach ($new as $field) {
+                if ($field['code'] === $fieldCode) {
+                    $contentType->addFieldToGroup(
+                        $groupCode,
+                        $field['code'],
+                        $field['type'],
+                        $field['name'],
+                        $field['flags'],
+                        $field['constraints'],
+                        $field['configuration'],
+                        $field['parent'],
+                    );
+                }
+            }
+        }
+
+        $contentType->sortFields(array_column($new, 'code'));
     }
 
     private function transformSource(array $source): array
@@ -76,13 +205,11 @@ class ArrayToWriteModelTransformer
 
             foreach ($field['constraints'] as $constraint) {
                 if ($constraint['enabled']) {
-                    $constraints[] = [
-                        'code' => $constraint['id'],
-                        'modificators' => array_map(
-                            fn ($v) => ['code' => $v['id'], 'value' => $v['value']],
-                            $constraint['modificators']
-                        )
-                    ];
+                    $constraints[$constraint['code']]['modificators'] = [];
+
+                    foreach ($constraint['modificators'] as $modificator) {
+                        $constraints[$constraint['code']]['modificators'][$modificator['code']] = $modificator['value'];
+                    }
                 }
             }
 
@@ -95,11 +222,8 @@ class ArrayToWriteModelTransformer
             $configuration = [];
 
             foreach ($field['configuration'] as $config) {
-                if (isset($config['value'], $config['id'])) {
-                    $configuration[] = [
-                        'code' => $config['id'],
-                        'value' => $config['value'],
-                    ];
+                if (isset($config['value'], $config['code'])) {
+                    $configuration[$config['code']] = $config['value'];
                 }
             }
 
@@ -119,145 +243,5 @@ class ArrayToWriteModelTransformer
         }
 
         return $fields;
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * @throws EmptyRoutingStrategyForRoutableContentTypeException
-     */
-    public function fillContentType(ContentType $contentType, array $data): ContentType
-    {
-        $contentType->setName($data['type']['name']);
-        $contentType->setIcon($data['type']['icon']);
-        $contentType->setIsHierarchical((bool) $data['type']['icon']);
-        $contentType->setRoutingStrategy($data['type']['routingStrategy'] ?? '');
-        $contentType->setIsRoutable((bool) $data['type']['isRoutable']);
-
-        foreach ($data['layout'] as $section) {
-            foreach ($section['sections'] as $group) {
-                foreach ($this->collectFields($group['fields']) as $field) {
-                    $contentType->addField($field);
-                }
-            }
-        }
-
-        foreach ($this->transformSections($data['layout']) as $section) {
-            $contentType->getLayout()->addSection($section);
-        }
-
-        return $contentType;
-    }
-
-    private function produceLayoutType(array $data): LayoutType
-    {
-        $layoutType = new LayoutType($data['type']['code'] . '_layout');
-        $layoutType->setName($data['type']['name'] . ' Layout');
-
-        foreach ($this->transformSections($data['layout']) as $section) {
-            $layoutType->addSection($section);
-        }
-
-        return $layoutType;
-    }
-
-    /**
-     * @return Field[]
-     */
-    private function collectFields(array $fields): array
-    {
-        $result = [];
-
-        foreach ($fields as $position => $field) {
-            $flags = [];
-
-            if ($field['multilingual']['value']) {
-                $flags[] = 'multilingual';
-            }
-
-            $result[$field['code']['value']] = new Field([
-                'code' => $field['code']['value'],
-                'type' => $field['type']['value'],
-                'name' => $field['name']['value'],
-                'configuration' => $this->transformConfiguration($field['configuration']),
-                'constraints' => $this->transformConstraints($field['constraints']),
-                'children' => $this->collectFields($field['children']),
-                'position' => $position,
-                'flags' => $flags,
-            ]);
-        }
-
-        return $result;
-    }
-
-    private function transformConfiguration(array $configuration): array
-    {
-        $result = [];
-
-        foreach ($configuration as $config) {
-            $result[$config['id']] = $config['value'];
-        }
-
-        return $result;
-    }
-
-    private function transformConstraints(array $constraints): array
-    {
-        $result = [];
-
-        foreach ($constraints as $constraint) {
-            if (! $constraint['enabled']) {
-                continue;
-            }
-
-            $modificators = [];
-
-            foreach ($constraint['modificators'] as $modificator) {
-                $modificators[$modificator['id']] = $modificator['value'];
-            }
-
-            $result[$constraint['id']]['modificators'] = $modificators;
-        }
-
-        return $result;
-    }
-
-    private function transformSections(array $sections): array
-    {
-        $result = [];
-
-        foreach ($sections as $name => $data) {
-            $groups = [];
-
-            foreach ($data['sections'] as $group) {
-                $fields = [];
-
-                foreach ($group['fields'] as $field) {
-                    $fields[] = $field['code']['value'];
-                }
-
-                $groups[] = new FieldsGroup(
-                    $group['code'],
-                    $group['name']['value'],
-                    $fields
-                );
-            }
-
-            $result[] = new Section($name, $groups);
-        }
-
-        return $result;
     }
 }

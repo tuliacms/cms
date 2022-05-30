@@ -11,7 +11,6 @@ use Tulia\Cms\Content\Type\Domain\WriteModel\Model\ContentType;
  */
 interface ContentTypeRepositoryInterface
 {
-    public function generateId(): string;
     public function find(string $code): ?ContentType;
     public function insert(ContentType $contentType): void;
     public function update(ContentType $contentType): void;

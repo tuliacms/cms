@@ -83,10 +83,10 @@ class RequestDataValidator
             $type = $this->fieldTypeMappingRegistry->get($field['type']);
 
             foreach ($field['configuration'] as $configurationKey => $configuration) {
-                if (isset($type['configuration'][$configuration['id']]) === false) {
+                if (isset($type['configuration'][$configuration['code']]) === false) {
                     unset($fields['fields'][$fieldKey]['configuration'][$configurationKey]);
                     $this->log('Configuration key {configuration_key} removed, cause: configuration key for {field_type} field not exists.', [
-                        'configuration_key' => $configuration['id'],
+                        'configuration_key' => $configuration['code'],
                         'field_type' => $field['type'],
                     ]);
                 }
@@ -102,10 +102,10 @@ class RequestDataValidator
             $type = $this->fieldTypeMappingRegistry->get($field['type']);
 
             foreach ($field['constraints'] as $constraintKey => $constraint) {
-                if (isset($type['constraints'][$constraint['id']]) === false) {
+                if (isset($type['constraints'][$constraint['code']]) === false) {
                     unset($fields[$fieldKey]['constraints'][$constraintKey]);
-                    $this->log('Constraint {constraint_id} removed, cause: constraint not exists in {field_type} field type.', [
-                        'constraint_id' => $constraint['id'],
+                    $this->log('Constraint {constraint_code} removed, cause: constraint not exists in {field_type} field type.', [
+                        'constraint_code' => $constraint['code'],
                         'field_type' => $field['type'],
                     ]);
                 }

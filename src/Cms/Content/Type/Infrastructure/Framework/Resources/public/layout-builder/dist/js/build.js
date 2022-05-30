@@ -4302,7 +4302,7 @@ const FormControl = (__webpack_require__(/*! ./FormControl.vue */ "./src/js/comp
 
             for (let c in this.model.configuration) {
                 model.configuration.push({
-                    id: this.model.configuration[c].id,
+                    code: this.model.configuration[c].code,
                     value: this.model.configuration[c].value,
                 });
             }
@@ -4321,7 +4321,7 @@ const FormControl = (__webpack_require__(/*! ./FormControl.vue */ "./src/js/comp
             let configuration = JSON.parse(JSON.stringify(this.fieldTypes[this.model.type.value].configuration));
 
             for (let i in configuration) {
-                configuration[i].id = i;
+                configuration[i].code = i;
                 configuration[i].value = null;
                 configuration[i].valid = null;
                 configuration[i].message = null;
@@ -4479,13 +4479,13 @@ const FormControl = (__webpack_require__(/*! ./FormControl.vue */ "./src/js/comp
 
                 for (let m in this.model.constraints[c].modificators) {
                     modificators.push({
-                        id: m,
+                        code: m,
                         value: this.model.constraints[c].modificators[m].value,
                     });
                 }
 
                 model.constraints.push({
-                    id: this.model.constraints[c].id,
+                    code: this.model.constraints[c].code,
                     enabled: this.model.constraints[c].enabled,
                     modificators: modificators,
                 });
@@ -4493,7 +4493,7 @@ const FormControl = (__webpack_require__(/*! ./FormControl.vue */ "./src/js/comp
 
             for (let c in this.model.configuration) {
                 model.configuration.push({
-                    id: this.model.configuration[c].id,
+                    code: this.model.configuration[c].code,
                     value: this.model.configuration[c].value,
                 });
             }
@@ -4558,7 +4558,7 @@ const FormControl = (__webpack_require__(/*! ./FormControl.vue */ "./src/js/comp
 
             for (let c in constraints) {
                 let newConstraint = constraints[c];
-                newConstraint.id = c;
+                newConstraint.code = c;
 
                 for (let m in newConstraint.modificators) {
                     newConstraint.modificators[m].valid = true;
@@ -4568,7 +4568,7 @@ const FormControl = (__webpack_require__(/*! ./FormControl.vue */ "./src/js/comp
                 for (let cs in this.field.constraints) {
                     let oldConstraint = this.field.constraints[cs];
 
-                    if (oldConstraint.id === newConstraint.id && oldConstraint.enabled) {
+                    if (oldConstraint.code === newConstraint.code && oldConstraint.enabled) {
                         newConstraint.enabled = oldConstraint.enabled;
 
                         for (let nm in newConstraint.modificators) {
@@ -4577,7 +4577,7 @@ const FormControl = (__webpack_require__(/*! ./FormControl.vue */ "./src/js/comp
                             for (let om in oldConstraint.modificators) {
                                 let oldModificator = oldConstraint.modificators[om];
 
-                                if (oldModificator.id === nm) {
+                                if (oldModificator.code === nm) {
                                     newModificator.value = oldModificator.value;
                                     newModificator.valid = oldModificator.valid;
                                     newModificator.message = oldModificator.message;
@@ -4601,7 +4601,7 @@ const FormControl = (__webpack_require__(/*! ./FormControl.vue */ "./src/js/comp
             let configuration = JSON.parse(JSON.stringify(this.fieldTypes[this.model.type.value].configuration));
 
             for (let nc in configuration) {
-                configuration[nc].id = nc;
+                configuration[nc].code = nc;
                 configuration[nc].value = null;
                 configuration[nc].valid = null;
                 configuration[nc].message = null;
@@ -4609,7 +4609,7 @@ const FormControl = (__webpack_require__(/*! ./FormControl.vue */ "./src/js/comp
                 for (let cc in this.field.configuration) {
                     let oldConfiguration = this.field.configuration[cc];
 
-                    if (oldConfiguration.id === configuration[nc].id) {
+                    if (oldConfiguration.code === configuration[nc].code) {
                         configuration[nc].value = oldConfiguration.value;
                         configuration[nc].valid = oldConfiguration.valid;
                         configuration[nc].message = oldConfiguration.message;
@@ -4879,8 +4879,10 @@ const ObjectUtils = (__webpack_require__(/*! ./../shared/ObjectUtils.js */ "./sr
     },
     methods: {
         addSection: function () {
+            const d = new Date();
+
             this.sections.push({
-                code: _.uniqueId('section_'),
+                code: _.uniqueId(`section_${d.getTime()}_${d.getMilliseconds()}_`),
                 name: {
                     value: 'New section...',
                     valid: true,
@@ -5879,15 +5881,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_25, [
                 (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_26, [
                   (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_27, [
-                    ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.model.configuration, (configuration, id) => {
+                    ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.model.configuration, (configuration) => {
                       return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
-                        key: id,
+                        key: configuration.code,
                         class: "col-6 ctb-field-constraint mb-4"
                       }, [
                         (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FormControl, {
                           translations: $options.translations,
                           field: configuration,
-                          id: 'ctb-new-field-configuration-' + id
+                          id: 'ctb-new-field-configuration-' + configuration.code
                         }, null, 8 /* PROPS */, ["translations", "field", "id"])
                       ]))
                     }), 128 /* KEYED_FRAGMENT */))
@@ -6111,13 +6113,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                           ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_30, [
                               ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(constraint.modificators, (modificator) => {
                                 return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
-                                  key: modificator.id,
+                                  key: modificator.code,
                                   class: "col-6 ctb-field-constraint mb-4"
                                 }, [
                                   (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FormControl, {
                                     translations: $options.translations,
                                     field: modificator,
-                                    id: 'ctb-edit-field-modificator-' + modificator.id
+                                    id: 'ctb-edit-field-modificator-' + modificator.code
                                   }, null, 8 /* PROPS */, ["translations", "field", "id"])
                                 ]))
                               }), 128 /* KEYED_FRAGMENT */))
@@ -6186,7 +6188,7 @@ const _hoisted_12 = {
 }
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_fields = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("fields", true)
+  const _component_Fields = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Fields", true)
   const _component_draggable = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("draggable")
 
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [
@@ -6222,7 +6224,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           ]),
           (element.type.value === 'repeatable')
             ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_11, [
-                (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_fields, {
+                (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Fields, {
                   fields: element.children,
                   section: $props.section,
                   group: element.code.value + '_fields',

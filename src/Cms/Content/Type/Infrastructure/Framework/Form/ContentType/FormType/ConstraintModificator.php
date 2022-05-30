@@ -43,7 +43,7 @@ class ConstraintModificator extends AbstractType
         $form = $event->getForm();
 
         $form
-            ->add('id', TextType::class, [
+            ->add('code', TextType::class, [
                 'constraints' => [
                     new NotBlank(),
                     new Callback(
@@ -51,8 +51,8 @@ class ConstraintModificator extends AbstractType
                         null,
                         [
                             'field_type' => $event->getForm()->getConfig()->getOption('field_type'),
-                            'constraint_id' => $event->getForm()->getConfig()->getOption('constraint_id'),
-                            'modificator_id' => $modificator['id'],
+                            'constraint_code' => $event->getForm()->getConfig()->getOption('constraint_code'),
+                            'modificator_code' => $modificator['code'],
                         ],
                     )
                 ],
@@ -63,10 +63,10 @@ class ConstraintModificator extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired('field_type');
-        $resolver->setRequired('constraint_id');
+        $resolver->setRequired('constraint_code');
     }
 
-    public function validateConstraintModificatorExistence(string $modificatorId, ExecutionContextInterface $context, array $payload): void
+    public function validateConstraintModificatorExistence(string $modificatorCode, ExecutionContextInterface $context, array $payload): void
     {
         // Validation of node type existence is done in parent
         if ($this->fieldTypeMappingRegistry->hasType($payload['field_type']) === false) {
@@ -74,12 +74,12 @@ class ConstraintModificator extends AbstractType
         }
 
         $type = $this->fieldTypeMappingRegistry->get($payload['field_type']);
-        $constraintId = $payload['constraint_id'];
+        $constraintCode = $payload['constraint_code'];
 
-        if (isset($type['constraints'][$constraintId]['modificators'][$modificatorId]) === false) {
+        if (isset($type['constraints'][$constraintCode]['modificators'][$modificatorCode]) === false) {
             $context->buildViolation('Modificator named "%name%" for "%constraint%" of "%type%" field type not exists.')
-                ->setParameter('%name%', $modificatorId)
-                ->setParameter('%constraint%', $constraintId)
+                ->setParameter('%name%', $modificatorCode)
+                ->setParameter('%constraint%', $constraintCode)
                 ->setParameter('%type%', $payload['field_type'])
                 ->addViolation();
         }
