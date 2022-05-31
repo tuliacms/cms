@@ -6,18 +6,35 @@ namespace Tulia\Cms\Tests\Behat\Content\Type;
 
 use Behat\Behat\Context\Context;
 use Behat\Behat\Tester\Exception\PendingException;
+use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Model\ContentType;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Specification\CreateContentType\CreateContentTypeSpecification;
+use Tulia\Cms\Tests\Behat\AggregateRootSpy;
+use Tulia\Cms\Tests\Behat\Content\Type\TestDoubles\ContentTypeRegistryMock;
 
 /**
  * @author Adam Banaszkiewicz
  */
 final class ContentTypeContext implements Context
 {
-    /**
-     * @When I creates ContentType named :arg1, with code :arg2, with type :arg3
-     */
-    public function iCreatesContenttypeNamedWithCodeWithType($arg1, $arg2, $arg3): void
+    private ?ContentType $contentType = null;
+    private AggregateRootSpy $contentTypeSpy;
+    private ContentTypeRegistryInterface $contentTypeRegistry;
+
+    public function __construct()
     {
-        throw new PendingException();
+        $this->contentTypeRegistry = new ContentTypeRegistryMock(['node']);
+    }
+
+    /**
+     * @When I creates ContentType named :name, with code :code, with type :type
+     */
+    public function iCreatesContenttypeNamedWithCodeWithType(string $name, string $code, string $type): void
+    {
+        $spec = new CreateContentTypeSpecification($this->contentTypeRegistry);
+
+        $this->contentType = ContentType::create($spec, $code, $type, $name);
+        $this->contentTypeSpy = new AggregateRootSpy($this->contentType);
     }
 
     /**
@@ -25,7 +42,7 @@ final class ContentTypeContext implements Context
      */
     public function newContenttypeShouldNotBeCreated(): void
     {
-        throw new PendingException();
+        \Assert::assertNull($this->contentType, 'Content should not be created');
     }
 
     /**

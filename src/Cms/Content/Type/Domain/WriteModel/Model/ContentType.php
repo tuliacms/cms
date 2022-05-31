@@ -14,15 +14,15 @@ use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldsSorted;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldUpdated;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Exception\GroupWithCodeExistsException;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Exception\ParentFieldNotExistsException;
-use Tulia\Cms\Shared\Domain\WriteModel\Model\AggregateRootTrait;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Specification\CreateContentType\CreateContentTypeContext;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Specification\CreateContentType\CreateContentTypeSpecification;
+use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
 
 /**
  * @author Adam Banaszkiewicz
  */
-final class ContentType
+final class ContentType extends AbstractAggregateRoot
 {
-    use AggregateRootTrait;
-
     private string $code;
     private string $type;
     private string $name;
@@ -78,14 +78,19 @@ final class ContentType
     }
 
     public static function create(
+        CreateContentTypeSpecification $spec,
         string $code,
         string $type,
         string $name,
-        string $icon,
-        ?string $routingStrategy,
-        bool $isHierarchical,
+        string $icon = 'fas fa-boxes',
+        ?string $routingStrategy = null,
+        bool $isHierarchical = false,
         array $fieldGroups = []
-    ): self {
+    ): ?self {
+        if ($spec->isSatisfiedBy(new CreateContentTypeContext($code, $type)) === false) {
+            return null;
+        }
+
         $self = new self($code, $type, $name, $icon, $routingStrategy, $isHierarchical, $fieldGroups);
         $self->recordThat(new ContentTypeCreated($self->code, $self->type));
 
