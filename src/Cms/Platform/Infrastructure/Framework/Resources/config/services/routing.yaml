@@ -10,7 +10,7 @@ services:
             - '../../../../../../Component/routing/src/Bridge/Symfony/SymfonyRouterDecorator.php'
 
     Tulia\Component\Routing\Bridge\Symfony\SymfonyRouterDecorator:
-        decorates: router.default
+        decorates: router
         autowire: false
         autoconfigure: false
         arguments:

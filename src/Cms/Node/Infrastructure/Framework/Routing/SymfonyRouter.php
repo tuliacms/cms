@@ -48,10 +48,10 @@ class SymfonyRouter implements RouterInterface, RequestMatcherInterface
         return new RouteCollection();
     }
 
-    public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): ?string
+    public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string
     {
         if (strncmp($name, 'node.', 5) !== 0) {
-            return null;
+            return '';
         }
 
         [, $type, $identity] = explode('.', $name);
