@@ -7,9 +7,12 @@ namespace Tulia\Cms\Tests\Behat\Content\Type;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Tester\Exception\PendingException;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Event\ContentTypeCreated;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Model\ContentType;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Service\ContentTypeExistanceDetectorInterface;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Specification\CreateContentType\CreateContentTypeSpecification;
 use Tulia\Cms\Tests\Behat\AggregateRootSpy;
+use Tulia\Cms\Tests\Behat\Content\Type\TestDoubles\ContentTypeExistanceDetectorMock;
 use Tulia\Cms\Tests\Behat\Content\Type\TestDoubles\ContentTypeRegistryMock;
 
 /**
@@ -20,9 +23,11 @@ final class ContentTypeContext implements Context
     private ?ContentType $contentType = null;
     private AggregateRootSpy $contentTypeSpy;
     private ContentTypeRegistryInterface $contentTypeRegistry;
+    private ContentTypeExistanceDetectorInterface $contentTypeExistanceDetector;
 
     public function __construct()
     {
+        $this->contentTypeExistanceDetector = new ContentTypeExistanceDetectorMock('', false);
         $this->contentTypeRegistry = new ContentTypeRegistryMock(['node']);
     }
 
@@ -31,7 +36,10 @@ final class ContentTypeContext implements Context
      */
     public function iCreatesContenttypeNamedWithCodeWithType(string $name, string $code, string $type): void
     {
-        $spec = new CreateContentTypeSpecification($this->contentTypeRegistry);
+        $spec = new CreateContentTypeSpecification(
+            $this->contentTypeRegistry,
+            $this->contentTypeExistanceDetector
+        );
 
         $this->contentType = ContentType::create($spec, $code, $type, $name);
         $this->contentTypeSpy = new AggregateRootSpy($this->contentType);
@@ -46,11 +54,11 @@ final class ContentTypeContext implements Context
     }
 
     /**
-     * @Given exists ContentType named :arg1, with code :arg2, with type :arg3
+     * @Given exists ContentType named :name, with code :code, with type :type
      */
-    public function existsContenttypeNamedWithCodeWithType($arg1, $arg2, $arg3): void
+    public function existsContenttypeNamedWithCodeWithType(string $name, string $code, string $type): void
     {
-        throw new PendingException();
+        $this->contentTypeExistanceDetector = new ContentTypeExistanceDetectorMock($code, true);
     }
 
     /**
@@ -58,7 +66,9 @@ final class ContentTypeContext implements Context
      */
     public function newContenttypeShouldBeCreated(): void
     {
-        throw new PendingException();
+        $event = $this->contentTypeSpy->findEvent(ContentTypeCreated::class);
+
+        \Assert::assertInstanceOf(ContentTypeCreated::class, $event);
     }
 
     /**

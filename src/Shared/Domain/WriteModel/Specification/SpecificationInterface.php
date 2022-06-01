@@ -9,5 +9,5 @@ namespace Tulia\Cms\Shared\Domain\WriteModel\Specification;
  */
 interface SpecificationInterface
 {
-    public function isSatisfiedBy(ContextInterface $context): bool;
+    public function isSatisfiedBy(object $context): bool;
 }

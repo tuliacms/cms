@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Content\Type\Domain\WriteModel\Specification\CreateContentType;
 
-use Tulia\Cms\Shared\Domain\WriteModel\Specification\ContextInterface;
-
 /**
  * @author Adam Banaszkiewicz
  */
-final class CreateContentTypeContext implements ContextInterface
+final class CreateContentTypeContext
 {
     private string $code;
     private string $type;

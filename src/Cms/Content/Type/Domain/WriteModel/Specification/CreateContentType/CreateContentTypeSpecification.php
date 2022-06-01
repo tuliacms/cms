@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Tulia\Cms\Content\Type\Domain\WriteModel\Specification\CreateContentType;
 
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Service\ContentTypeExistanceDetectorInterface;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Specification\Shared\CodeContainsValidCharactersSpecification;
-use Tulia\Cms\Shared\Domain\WriteModel\Specification\ContextInterface;
+use Tulia\Cms\Shared\Domain\WriteModel\Specification\AndSpecification;
+use Tulia\Cms\Shared\Domain\WriteModel\Specification\NotSpecification;
 use Tulia\Cms\Shared\Domain\WriteModel\Specification\SpecificationInterface;
 
 /**
@@ -14,16 +16,22 @@ use Tulia\Cms\Shared\Domain\WriteModel\Specification\SpecificationInterface;
  */
 final class CreateContentTypeSpecification implements SpecificationInterface
 {
-    private ContentTypeRegistryInterface $contentTypeRegistry;
-
-    public function __construct(ContentTypeRegistryInterface $contentTypeRegistry)
-    {
-        $this->contentTypeRegistry = $contentTypeRegistry;
+    public function __construct(
+        private ContentTypeRegistryInterface $contentTypeRegistry,
+        private ContentTypeExistanceDetectorInterface $detector
+    ) {
     }
 
-    public function isSatisfiedBy(ContextInterface $context): bool
+    public function isSatisfiedBy(object $context): bool
     {
-        return (new TypeExistsSpecification($this->contentTypeRegistry))->isSatisfiedBy($context)
-            && (new CodeContainsValidCharactersSpecification())->isSatisfiedBy($context);
+        $spec = new AndSpecification(
+            new TypeExistsSpecification($this->contentTypeRegistry),
+            new CodeContainsValidCharactersSpecification(),
+            new NotSpecification(
+                new ContentTypeWithCodeExistsSpecification($this->detector)
+            )
+        );
+
+        return $spec->isSatisfiedBy($context);
     }
 }
