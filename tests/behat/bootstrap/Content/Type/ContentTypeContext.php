@@ -6,15 +6,19 @@ namespace Tulia\Cms\Tests\Behat\Content\Type;
 
 use Assert;
 use Behat\Behat\Context\Context;
-use Behat\Behat\Tester\Exception\PendingException;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Event\ContentTypeCreated;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldAdded;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldRemoved;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldsGroupAdded;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldsGroupRemoved;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldsGroupRenamed;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldsGroupsSorted;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldsSorted;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldUpdated;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Exception\ContentTypeCannotBeCreatedException;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Exception\FieldWithThatCodeAlreadyExistsException;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Exception\GroupWithCodeExistsException;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Model\ContentType;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Rules\CanCreateContentType;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Service\ContentTypeExistanceDetectorInterface;
@@ -122,6 +126,8 @@ final class ContentTypeContext implements Context
     public function thereIsAFieldsGroupInThisContenttypeNamedWithCodeForSection(string $name, string $code, string $section): void
     {
         $this->contentType->addFieldsGroup($code, $name, $section);
+        // Clear from the events to prevent fals epositived in fields tests
+        $this->contentType->collectDomainEvents();
     }
 
     /**
@@ -223,16 +229,20 @@ final class ContentTypeContext implements Context
     {
         $event = $this->contentTypeSpy->findEvent(FieldsSorted::class);
 
-        Assert::assertInstanceOf(FieldsSorted::class, $event, 'Fields shoule be sorted');
+        Assert::assertInstanceOf(FieldsSorted::class, $event, 'Fields should be sorted');
         Assert::assertSame(explode(',', $expectedOrder), $event->getNewPositions(), 'Fields was not sorted as expected');
     }
 
     /**
-     * @When I adds new fields group named :arg1 with code :arg2 for section :arg3
+     * @When I adds new fields group named :name with code :code for section :section
      */
-    public function iAddsNewFieldsGroupNamedWithCodeForSection($arg1, $arg2, $arg3): void
+    public function iAddsNewFieldsGroupNamedWithCodeForSection(string $name, string $code, string $section): void
     {
-        throw new PendingException();
+        try {
+            $this->contentType->addFieldsGroup($code, $name, $section);
+        } catch (GroupWithCodeExistsException $e) {
+            // Do nothing. Assetions should be done in separate steps.
+        }
     }
 
     /**
@@ -240,7 +250,9 @@ final class ContentTypeContext implements Context
      */
     public function fieldsGroupShouldNotBeAdded(): void
     {
-        throw new PendingException();
+        $event = $this->contentTypeSpy->findEvent(FieldsGroupAdded::class);
+
+        Assert::assertNull($event, 'Fields group should not be added');
     }
 
     /**
@@ -248,31 +260,36 @@ final class ContentTypeContext implements Context
      */
     public function fieldsGroupShouldBeAdded(): void
     {
-        throw new PendingException();
+        $event = $this->contentTypeSpy->findEvent(FieldsGroupAdded::class);
+
+        Assert::assertInstanceOf(FieldsGroupAdded::class, $event, 'Fields group should be added');
     }
 
     /**
-     * @When I sort fields groups to new order :arg1
+     * @When I sort fields groups to new order :order
      */
-    public function iSortFieldsGroupsToNewOrder($arg1): void
+    public function iSortFieldsGroupsToNewOrder(string $newOrder): void
     {
-        throw new PendingException();
+        $this->contentType->sortFieldsGroups(explode(',', $newOrder));
     }
 
     /**
-     * @Then fields groups should be in order :arg1
+     * @Then fields groups should be in order :expectedOrder
      */
-    public function fieldsGroupsShouldBeInOrder($arg1): void
+    public function fieldsGroupsShouldBeInOrder(string $expectedOrder): void
     {
-        throw new PendingException();
+        $event = $this->contentTypeSpy->findEvent(FieldsGroupsSorted::class);
+
+        Assert::assertInstanceOf(FieldsGroupsSorted::class, $event, 'Fields groups should be sorted');
+        Assert::assertSame(explode(',', $expectedOrder), $event->getNewPositions(), 'Fields groups was not sorted as expected');
     }
 
     /**
-     * @When I remove fields group with code :arg1
+     * @When I remove fields group with code :code
      */
-    public function iRemoveFieldsGroupWithCode($arg1): void
+    public function iRemoveFieldsGroupWithCode(string $code): void
     {
-        throw new PendingException();
+        $this->contentType->removeFieldsGroup($code);
     }
 
     /**
@@ -280,7 +297,9 @@ final class ContentTypeContext implements Context
      */
     public function fieldsGroupShouldNotBeRemoved(): void
     {
-        throw new PendingException();
+        $event = $this->contentTypeSpy->findEvent(FieldsGroupRemoved::class);
+
+        Assert::assertNull($event, 'Fields group should not be removed');
     }
 
     /**
@@ -288,22 +307,28 @@ final class ContentTypeContext implements Context
      */
     public function fieldsGroupShouldBeRemoved(): void
     {
-        throw new PendingException();
+        $event = $this->contentTypeSpy->findEvent(FieldsGroupRemoved::class);
+
+        Assert::assertInstanceOf(FieldsGroupRemoved::class, $event, 'Fields groups should be removed');
     }
 
     /**
-     * @When I rename fields group with code :arg1 to :arg2
+     * @When I rename fields group with code :code to :newName
      */
-    public function iRenameFieldsGroupWithCodeTo($arg1, $arg2): void
+    public function iRenameFieldsGroupWithCodeTo(string $code, string $newName): void
     {
-        throw new PendingException();
+        $this->contentType->renameFieldsGroup($code, $newName);
     }
 
     /**
-     * @Then fields group :arg1 should be renamed to :arg2
+     * @Then fields group :code should be renamed to :expectedName
      */
-    public function fieldsGroupShouldBeRenamedTo($arg1, $arg2): void
+    public function fieldsGroupShouldBeRenamedTo($code, $expectedName): void
     {
-        throw new PendingException();
+        $event = $this->contentTypeSpy->findEvent(FieldsGroupRenamed::class);
+
+        Assert::assertInstanceOf(FieldsGroupRenamed::class, $event, 'Fields groups should be renamed');
+        Assert::assertSame($code, $event->getGroupCode(), 'Renamed fields group is not as expected');
+        Assert::assertSame($expectedName, $event->getName(), 'Fields group name is not as extected');
     }
 }

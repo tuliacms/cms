@@ -120,6 +120,8 @@ class ArrayToWriteModelTransformer
 
             $this->updateFields($contentType, $groupCode, $currentFields, $newFields);
         }
+
+        throw new \Exception('TODO: Sort fields groups');
     }
 
     private function updateFields(ContentType $contentType, string $groupCode, array $current, array $new): void

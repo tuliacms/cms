@@ -10,6 +10,8 @@ use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldAdded;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldRemoved;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldsGroupAdded;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldsGroupRemoved;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldsGroupRenamed;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldsGroupsSorted;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldsSorted;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldUpdated;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Exception\ContentTypeCannotBeCreatedException;
@@ -60,8 +62,8 @@ final class ContentType extends AbstractAggregateRoot
         }
 
         foreach ($fieldGroups as $group) {
-            $fieldsGroup = new FieldsGroup($group['code'], $group['section'], $group['name']);
-            $this->fieldGroups[] = $fieldsGroup;
+            $fieldsGroup = new FieldsGroup($group['code'], $group['section'], $group['name'], $group['position']);
+            $this->fieldGroups[$group['code']] = $fieldsGroup;
 
             $position = 1;
             foreach ($group['fields'] as $field) {
@@ -186,7 +188,7 @@ final class ContentType extends AbstractAggregateRoot
         }
     }
 
-    public function addFieldsGroup(string $code, string $name, string $section): void
+    public function addFieldsGroup(string $code, string $name, string $section, int $position = 0): void
     {
         foreach ($this->fieldGroups as $group) {
             if ($group->getCode() === $code) {
@@ -194,7 +196,7 @@ final class ContentType extends AbstractAggregateRoot
             }
         }
 
-        $this->fieldGroups[] = new FieldsGroup($code, $section, $name);
+        $this->fieldGroups[$code] = new FieldsGroup($code, $section, $name, $position);
         $this->recordThat(new FieldsGroupAdded($this->code, $code, $section, $name));
         $this->recordUpdate();
     }
@@ -215,6 +217,7 @@ final class ContentType extends AbstractAggregateRoot
         foreach ($this->fieldGroups as $fieldsGroup) {
             if ($fieldsGroup->getCode() === $groupCode) {
                 if ($fieldsGroup->rename($name)) {
+                    $this->recordThat(new FieldsGroupRenamed($this->code, $groupCode, $fieldsGroup->getName()));
                     $this->recordUpdate();
                 }
             }
@@ -295,6 +298,30 @@ final class ContentType extends AbstractAggregateRoot
         }
 
         $this->recordThat(new FieldsSorted($this->code, array_merge(...$newPositions)));
+        $this->recordUpdate();
+    }
+
+    public function sortFieldsGroups(array $groupsCodes): void
+    {
+        $position = 1;
+
+        foreach ($groupsCodes as $code) {
+            if (isset($this->fieldGroups[$code])) {
+                $this->fieldGroups[$code]->moveToPosition($position++);
+            }
+        }
+
+        usort($this->fieldGroups, function (FieldsGroup $group1, FieldsGroup $group2) {
+            return $group1->getPosition() <=> $group2->getPosition();
+        });
+
+        $newPositions = [];
+
+        foreach ($this->fieldGroups as $group) {
+            $newPositions[] = $group->getCode();
+        }
+
+        $this->recordThat(new FieldsGroupsSorted($this->code, $newPositions));
         $this->recordUpdate();
     }
 

@@ -15,14 +15,16 @@ final class FieldsGroup
     private string $code;
     private string $section;
     private string $name;
+    private int $position;
     /** @var Field[] */
     private array $fields = [];
 
-    public function __construct(string $code, string $section, string $name)
+    public function __construct(string $code, string $section, string $name, int $position = 0)
     {
         $this->code = $code;
         $this->section = $section;
         $this->name = $name;
+        $this->position = $position;
     }
 
     public function toArray(): array
@@ -31,6 +33,7 @@ final class FieldsGroup
             'code' => $this->code,
             'section' => $this->section,
             'name' => $this->name,
+            'position' => $this->position,
             'fields' => array_map(
                 fn (Field $field) => $field->toArray(),
                 $this->fields
@@ -48,6 +51,11 @@ final class FieldsGroup
         return $this->code;
     }
 
+    public function getPosition(): int
+    {
+        return $this->position;
+    }
+
     public function rename(string $name): bool
     {
         if ($this->name !== $name) {
@@ -56,6 +64,11 @@ final class FieldsGroup
         }
 
         return false;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
     }
 
     /**
@@ -142,5 +155,10 @@ final class FieldsGroup
         usort($this->fields, function (Field $field1, Field $field2) {
             return $field1->getPosition() <=> $field2->getPosition();
         });
+    }
+
+    public function moveToPosition(int $newPosition): void
+    {
+        $this->position = $newPosition;
     }
 }
