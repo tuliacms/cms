@@ -9,7 +9,7 @@ use Tulia\Cms\Shared\Domain\WriteModel\Event\DomainEvent;
 /**
  * @author Adam Banaszkiewicz
  */
-final class FieldCreated extends DomainEvent
+final class FieldAdded extends DomainEvent
 {
     private string $contentType;
     private string $code;

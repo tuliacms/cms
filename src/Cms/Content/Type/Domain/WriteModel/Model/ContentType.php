@@ -6,16 +6,18 @@ namespace Tulia\Cms\Content\Type\Domain\WriteModel\Model;
 
 use Tulia\Cms\Content\Type\Domain\WriteModel\Event\ContentTypeCreated;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Event\ContentTypeUpdated;
-use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldCreated;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldAdded;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldRemoved;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldsGroupAdded;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldsGroupRemoved;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldsSorted;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldUpdated;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Exception\ContentTypeCannotBeCreatedException;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Exception\FieldWithThatCodeAlreadyExistsException;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Exception\GroupWithCodeExistsException;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Exception\ParentFieldNotExistsException;
-use Tulia\Cms\Content\Type\Domain\WriteModel\Specification\CreateContentType\CreateContentTypeContext;
-use Tulia\Cms\Content\Type\Domain\WriteModel\Specification\CreateContentType\CreateContentTypeSpecification;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Rules\CanCreateContentTypeInterface;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Rules\CanCreateContentTypeReason;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
 
 /**
@@ -78,7 +80,7 @@ final class ContentType extends AbstractAggregateRoot
     }
 
     public static function create(
-        CreateContentTypeSpecification $spec,
+        CanCreateContentTypeInterface $rules,
         string $code,
         string $type,
         string $name,
@@ -87,8 +89,10 @@ final class ContentType extends AbstractAggregateRoot
         bool $isHierarchical = false,
         array $fieldGroups = []
     ): ?self {
-        if ($spec->isSatisfiedBy(new CreateContentTypeContext($code, $type)) === false) {
-            return null;
+        $reason = $rules->decide($type, $code);
+
+        if ($reason !== CanCreateContentTypeReason::OK) {
+            throw ContentTypeCannotBeCreatedException::fromReason($reason);
         }
 
         $self = new self($code, $type, $name, $icon, $routingStrategy, $isHierarchical, $fieldGroups);
@@ -217,6 +221,10 @@ final class ContentType extends AbstractAggregateRoot
         }
     }
 
+    /**
+     * @throws ParentFieldNotExistsException
+     * @throws FieldWithThatCodeAlreadyExistsException
+     */
     public function addFieldToGroup(
         string $groupCode,
         string $code,
@@ -233,7 +241,7 @@ final class ContentType extends AbstractAggregateRoot
                 $field = new Field($code, $type, $name, $flags, $constraints, $configuration, $parent, $position);
                 $fieldsGroup->addField($field);
 
-                $this->recordThat(new FieldCreated($this->code, $field->getCode(), $field->getName(), $field->getType(), $field->getParent()));
+                $this->recordThat(new FieldAdded($this->code, $field->getCode(), $field->getName(), $field->getType(), $field->getParent()));
                 $this->recordUpdate();
             }
         }

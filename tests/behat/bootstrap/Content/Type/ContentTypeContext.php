@@ -4,16 +4,24 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Tests\Behat\Content\Type;
 
+use Assert;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Tester\Exception\PendingException;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Event\ContentTypeCreated;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldAdded;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldRemoved;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldsSorted;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Event\FieldUpdated;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Exception\ContentTypeCannotBeCreatedException;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Exception\FieldWithThatCodeAlreadyExistsException;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Model\ContentType;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Rules\CanCreateContentType;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Service\ContentTypeExistanceDetectorInterface;
-use Tulia\Cms\Content\Type\Domain\WriteModel\Specification\CreateContentType\CreateContentTypeSpecification;
 use Tulia\Cms\Tests\Behat\AggregateRootSpy;
-use Tulia\Cms\Tests\Behat\Content\Type\TestDoubles\ContentTypeExistanceDetectorMock;
-use Tulia\Cms\Tests\Behat\Content\Type\TestDoubles\ContentTypeRegistryMock;
+use Tulia\Cms\Tests\Behat\Content\Type\TestDoubles\AlwaysTrueCanCreateContentTypeStub;
+use Tulia\Cms\Tests\Behat\Content\Type\TestDoubles\ContentTypeExistanceDetectorStub;
+use Tulia\Cms\Tests\Behat\Content\Type\TestDoubles\ContentTypeRegistryStub;
 
 /**
  * @author Adam Banaszkiewicz
@@ -27,8 +35,8 @@ final class ContentTypeContext implements Context
 
     public function __construct()
     {
-        $this->contentTypeExistanceDetector = new ContentTypeExistanceDetectorMock('', false);
-        $this->contentTypeRegistry = new ContentTypeRegistryMock(['node']);
+        $this->contentTypeExistanceDetector = new ContentTypeExistanceDetectorStub('', false);
+        $this->contentTypeRegistry = new ContentTypeRegistryStub(['node']);
     }
 
     /**
@@ -36,13 +44,17 @@ final class ContentTypeContext implements Context
      */
     public function iCreatesContenttypeNamedWithCodeWithType(string $name, string $code, string $type): void
     {
-        $spec = new CreateContentTypeSpecification(
-            $this->contentTypeRegistry,
-            $this->contentTypeExistanceDetector
-        );
+        try {
+            $rules = new CanCreateContentType(
+                $this->contentTypeRegistry,
+                $this->contentTypeExistanceDetector
+            );
 
-        $this->contentType = ContentType::create($spec, $code, $type, $name);
-        $this->contentTypeSpy = new AggregateRootSpy($this->contentType);
+            $this->contentType = ContentType::create($rules, $code, $type, $name);
+            $this->contentTypeSpy = new AggregateRootSpy($this->contentType);
+        } catch (ContentTypeCannotBeCreatedException $e) {
+            // Do nothing. Assetions should be done in separate steps.
+        }
     }
 
     /**
@@ -50,7 +62,7 @@ final class ContentTypeContext implements Context
      */
     public function newContenttypeShouldNotBeCreated(): void
     {
-        \Assert::assertNull($this->contentType, 'Content should not be created');
+        Assert::assertNull($this->contentType, 'Content should not be created');
     }
 
     /**
@@ -58,7 +70,7 @@ final class ContentTypeContext implements Context
      */
     public function existsContenttypeNamedWithCodeWithType(string $name, string $code, string $type): void
     {
-        $this->contentTypeExistanceDetector = new ContentTypeExistanceDetectorMock($code, true);
+        $this->contentTypeExistanceDetector = new ContentTypeExistanceDetectorStub($code, true);
     }
 
     /**
@@ -68,23 +80,30 @@ final class ContentTypeContext implements Context
     {
         $event = $this->contentTypeSpy->findEvent(ContentTypeCreated::class);
 
-        \Assert::assertInstanceOf(ContentTypeCreated::class, $event);
+        Assert::assertInstanceOf(ContentTypeCreated::class, $event);
     }
 
     /**
-     * @Given I have ContentType named :arg1, with code :arg2, with type :arg3
+     * @Given I have ContentType named :name, with code :code, with type :type
      */
-    public function iHaveContenttypeNamedWithCodeWithType($arg1, $arg2, $arg3): void
+    public function iHaveContenttypeNamedWithCodeWithType(string $name, string $code, string $type): void
     {
-        throw new PendingException();
+        $rules = new AlwaysTrueCanCreateContentTypeStub();
+
+        $this->contentType = ContentType::create($rules, $code, $type, $name);
+        $this->contentTypeSpy = new AggregateRootSpy($this->contentType);
     }
 
     /**
-     * @When I adds new field named :arg1, with code :arg2, of type :arg3, to group :arg4
+     * @When I adds new field named :name, with code :code, of type :type, to group :group
      */
-    public function iAddsNewFieldNamedWithCodeOfTypeToGroup($arg1, $arg2, $arg3, $arg4): void
+    public function iAddsNewFieldNamedWithCodeOfTypeToGroup(string $name, string $code, string $type, string $group): void
     {
-        throw new PendingException();
+        try {
+            $this->contentType->addFieldToGroup($group, $code, $type, $name);
+        } catch (FieldWithThatCodeAlreadyExistsException $e) {
+            // Do nothing. Assetions should be done in separate steps.
+        }
     }
 
     /**
@@ -92,31 +111,35 @@ final class ContentTypeContext implements Context
      */
     public function fieldShouldNotBeAdded(): void
     {
-        throw new PendingException();
+        $event = $this->contentTypeSpy->findEvent(FieldAdded::class);
+
+        Assert::assertNull($event, 'New field should not be added');
     }
 
     /**
-     * @Given there is a fields group in this ContentType, named :arg1 with code :arg2 for section :arg3
+     * @Given there is a fields group in this ContentType, named :name with code :code for section :section
      */
-    public function thereIsAFieldsGroupInThisContenttypeNamedWithCodeForSection($arg1, $arg2, $arg3): void
+    public function thereIsAFieldsGroupInThisContenttypeNamedWithCodeForSection(string $name, string $code, string $section): void
     {
-        throw new PendingException();
+        $this->contentType->addFieldsGroup($code, $name, $section);
     }
 
     /**
-     * @When I adds new field named :arg1, with code :arg2, of type :arg3, to group :arg4, for parent :arg5
+     * @When I adds new field named :name, with code :code, of type :type, to group :group, for parent :parent
      */
-    public function iAddsNewFieldNamedWithCodeOfTypeToGroupForParent($arg1, $arg2, $arg3, $arg4, $arg5): void
+    public function iAddsNewFieldNamedWithCodeOfTypeToGroupForParent(string $name, string $code, string $type, string $group, string $parent): void
     {
-        throw new PendingException();
+        $this->contentType->addFieldToGroup($group, $code, $type, $name, [], [], [], $parent);
     }
 
     /**
-     * @Given there is a field named :arg1, with code :arg2, of type :arg3, to group :arg4
+     * @Given there is a field named :name, with code :code, of type :type, to group :group
      */
-    public function thereIsAFieldNamedWithCodeOfTypeToGroup($arg1, $arg2, $arg3, $arg4): void
+    public function thereIsAFieldNamedWithCodeOfTypeToGroup(string $name, string $code, string $type, string $group): void
     {
-        throw new PendingException();
+        $this->contentType->addFieldToGroup($group, $code, $type, $name);
+        // Clear from the events to prevent fals epositived in fields tests
+        $this->contentType->collectDomainEvents();
     }
 
     /**
@@ -124,15 +147,17 @@ final class ContentTypeContext implements Context
      */
     public function fieldShouldBeAdded(): void
     {
-        throw new PendingException();
+        $event = $this->contentTypeSpy->findEvent(FieldAdded::class);
+
+        Assert::assertInstanceOf(FieldAdded::class, $event, 'New field should be added');
     }
 
     /**
-     * @When I updates field :arg1 with name :arg2
+     * @When I updates field :code with name :name
      */
-    public function iUpdatesFieldWithName($arg1, $arg2): void
+    public function iUpdatesFieldWithName(string $code, string $name): void
     {
-        throw new PendingException();
+        $this->contentType->updateField($code, $name);
     }
 
     /**
@@ -140,7 +165,9 @@ final class ContentTypeContext implements Context
      */
     public function fieldShouldNotBeUpdated(): void
     {
-        throw new PendingException();
+        $event = $this->contentTypeSpy->findEvent(FieldUpdated::class);
+
+        Assert::assertNull($event, 'Field should not be updated');
     }
 
     /**
@@ -148,15 +175,17 @@ final class ContentTypeContext implements Context
      */
     public function fieldShouldBeUpdated(): void
     {
-        throw new PendingException();
+        $event = $this->contentTypeSpy->findEvent(FieldUpdated::class);
+
+        Assert::assertInstanceOf(FieldUpdated::class, $event, 'Field should be updated');
     }
 
     /**
-     * @When I removes field :arg1
+     * @When I removes field :code
      */
-    public function iRemovesField($arg1): void
+    public function iRemovesField(string $code): void
     {
-        throw new PendingException();
+        $this->contentType->removeField($code);
     }
 
     /**
@@ -164,7 +193,9 @@ final class ContentTypeContext implements Context
      */
     public function fieldShouldNotBeRemoved(): void
     {
-        throw new PendingException();
+        $event = $this->contentTypeSpy->findEvent(FieldRemoved::class);
+
+        Assert::assertNull($event, 'Field should not be removed');
     }
 
     /**
@@ -172,23 +203,28 @@ final class ContentTypeContext implements Context
      */
     public function fieldShouldBeRemoved(): void
     {
-        throw new PendingException();
+        $event = $this->contentTypeSpy->findEvent(FieldRemoved::class);
+
+        Assert::assertInstanceOf(FieldRemoved::class, $event, 'Field should be removed');
     }
 
     /**
-     * @When I sort fields to new order :arg1
+     * @When I sort fields to new order :newOrder
      */
-    public function iSortFieldsToNewOrder($arg1): void
+    public function iSortFieldsToNewOrder(string $newOrder): void
     {
-        throw new PendingException();
+        $this->contentType->sortFields(explode(',', $newOrder));
     }
 
     /**
-     * @Then fields should be in order :arg1
+     * @Then fields should be in order :expectedOrder
      */
-    public function fieldsShouldBeInOrder($arg1): void
+    public function fieldsShouldBeInOrder(string $expectedOrder): void
     {
-        throw new PendingException();
+        $event = $this->contentTypeSpy->findEvent(FieldsSorted::class);
+
+        Assert::assertInstanceOf(FieldsSorted::class, $event, 'Fields shoule be sorted');
+        Assert::assertSame(explode(',', $expectedOrder), $event->getNewPositions(), 'Fields was not sorted as expected');
     }
 
     /**

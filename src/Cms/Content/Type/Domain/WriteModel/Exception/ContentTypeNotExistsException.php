@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Content\Type\Domain\WriteModel\Exception;
 
+use Tulia\Cms\Shared\Domain\WriteModel\Exception\AbstractDomainException;
+
 /**
  * @author Adam Banaszkiewicz
  */
-class ContentTypeNotExistsException extends \DomainException
+class ContentTypeNotExistsException extends AbstractDomainException
 {
     private string $type;
 

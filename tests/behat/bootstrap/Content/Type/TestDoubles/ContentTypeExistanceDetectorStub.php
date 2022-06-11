@@ -9,7 +9,7 @@ use Tulia\Cms\Content\Type\Domain\WriteModel\Service\ContentTypeExistanceDetecto
 /**
  * @author Adam Banaszkiewicz
  */
-final class ContentTypeExistanceDetectorMock implements ContentTypeExistanceDetectorInterface
+final class ContentTypeExistanceDetectorStub implements ContentTypeExistanceDetectorInterface
 {
     public function __construct(
         private string $code,

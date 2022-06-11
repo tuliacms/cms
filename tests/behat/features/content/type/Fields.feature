@@ -55,13 +55,15 @@ Feature: Fields
     When I removes field "field_code"
     Then field should be removed
 
-  Scenario: I can sort fields
+  Scenario Outline: I can sort fields
     Given I have ContentType named "Content type", with code "content_type", with type "node"
     And there is a fields group in this ContentType, named "Group name" with code "group_code" for section "main"
     And there is a field named "Field 1", with code "field_code_1", of type "text", to group "group_code"
     And there is a field named "Field 2", with code "field_code_2", of type "text", to group "group_code"
     And there is a field named "Field 3", with code "field_code_3", of type "text", to group "group_code"
-    When I sort fields to new order "field_code_1,field_code_2,field_code_3"
-    Then fields should be in order "field_code_1,field_code_2,field_code_3"
-    When I sort fields to new order "field_code_2,field_code_3,field_code_1"
-    Then fields should be in order "field_code_2,field_code_3,field_code_1"
+    When I sort fields to new order <positions>
+    Then fields should be in order <expected>
+    Examples:
+      | positions                              | expected                               |
+      | field_code_1,field_code_2,field_code_3 | field_code_1,field_code_2,field_code_3 |
+      | field_code_2,field_code_3,field_code_1 | field_code_2,field_code_3,field_code_1 |

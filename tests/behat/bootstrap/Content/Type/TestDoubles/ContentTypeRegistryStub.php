@@ -11,7 +11,7 @@ use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface
 /**
  * @author Adam Banaszkiewicz
  */
-final class ContentTypeRegistryMock implements ContentTypeRegistryInterface
+final class ContentTypeRegistryStub implements ContentTypeRegistryInterface
 {
     private array $existingContentTypes;
 

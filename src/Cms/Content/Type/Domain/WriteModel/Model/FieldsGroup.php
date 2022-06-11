@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Content\Type\Domain\WriteModel\Model;
 
+use Tulia\Cms\Content\Type\Domain\WriteModel\Exception\FieldWithThatCodeAlreadyExistsException;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Exception\ParentFieldNotExistsException;
 
 /**
@@ -59,9 +60,14 @@ final class FieldsGroup
 
     /**
      * @throws ParentFieldNotExistsException
+     * @throws FieldWithThatCodeAlreadyExistsException
      */
     public function addField(Field $field): void
     {
+        if (isset($this->fields[$field->getCode()])) {
+            throw FieldWithThatCodeAlreadyExistsException::fromCode($field->getCode());
+        }
+
         if ($field->getParent()) {
             $found = false;
 

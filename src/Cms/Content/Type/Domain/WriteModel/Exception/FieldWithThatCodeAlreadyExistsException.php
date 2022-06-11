@@ -9,10 +9,10 @@ use Tulia\Cms\Shared\Domain\WriteModel\Exception\AbstractDomainException;
 /**
  * @author Adam Banaszkiewicz
  */
-final class GroupWithCodeExistsException extends AbstractDomainException
+final class FieldWithThatCodeAlreadyExistsException extends AbstractDomainException
 {
     public static function fromCode(string $code): self
     {
-        return new self(sprintf('Fields group with code %s already exists in aggregate.', $code));
+        return new self(sprintf('Field with code "%s" already exists in this content type.', $code));
     }
 }
