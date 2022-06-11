@@ -6,6 +6,7 @@ namespace Tulia\Cms\Content\Type\UserInterface\Service;
 
 use Tulia\Cms\Content\Type\Domain\WriteModel\Exception\EmptyRoutingStrategyForRoutableContentTypeException;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Model\ContentType;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Rules\CanCreateContentTypeInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
 
 /**
@@ -13,11 +14,10 @@ use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
  */
 class ArrayToWriteModelTransformer
 {
-    private UuidGeneratorInterface $uuidGenerator;
-
-    public function __construct(UuidGeneratorInterface $uuidGenerator)
-    {
-        $this->uuidGenerator = $uuidGenerator;
+    public function __construct(
+        private UuidGeneratorInterface $uuidGenerator,
+        private CanCreateContentTypeInterface $canCreateContentType
+    ) {
     }
 
     /**
@@ -28,6 +28,7 @@ class ArrayToWriteModelTransformer
         $data = $this->transformSource($data);
 
         return ContentType::create(
+            $this->canCreateContentType,
             $data['code'],
             $type,
             $data['name'],
@@ -86,7 +87,7 @@ class ArrayToWriteModelTransformer
                         $newGroup['section']
                     );
 
-                    foreach ($newGroups['fields'] as $field) {
+                    foreach ($newGroups['fields'] ?? [] as $field) {
                         $contentType->addFieldToGroup(
                             $field['code'],
                             $field['type'],
@@ -121,7 +122,7 @@ class ArrayToWriteModelTransformer
             $this->updateFields($contentType, $groupCode, $currentFields, $newFields);
         }
 
-        throw new \Exception('TODO: Sort fields groups');
+        $contentType->sortFieldsGroups($newGroups);
     }
 
     private function updateFields(ContentType $contentType, string $groupCode, array $current, array $new): void
