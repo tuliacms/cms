@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Shared\Domain\ReadModel\Finder\Event;
+namespace Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Event;
 
 use Symfony\Contracts\EventDispatcher\Event;
 

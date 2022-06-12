@@ -1,0 +1,12 @@
+parameters:
+    paths:
+        - ./src/Cms/Activity
+    layers:
+        - name: Activity
+          collectors:
+              - { type: directory, regex: "src/Cms/Activity/*." }
+    ruleset:
+        Activity:
+            - Shared/Domain
+            - Shared/Infrastructure
+            - Vendor

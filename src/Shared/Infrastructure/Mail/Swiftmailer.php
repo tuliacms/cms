@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Shared\Infrastructure\Mail;
 
-use Tulia\Cms\Options\Domain\ReadModel\Options;
-
 /**
  * @author Adam Banaszkiewicz
  */
@@ -13,17 +11,9 @@ class Swiftmailer implements MailerInterface
 {
     private $mailer;
 
-    /**
-     * @var Options
-     */
-    private $options;
-
-    /**
-     * @param Options $options
-     */
-    public function __construct(Options $options)
-    {
-        $this->options = $options;
+    public function __construct(
+        private MailerConfigurationProviderInterface $config
+    ) {
     }
 
     /**
@@ -32,7 +22,7 @@ class Swiftmailer implements MailerInterface
     public function createMessage(string $subject): \Swift_Message
     {
         $message = new \Swift_Message($subject);
-        $message->setSender($this->options->get('mail.from_email'), $this->options->get('mail.from_name'));
+        $message->setSender($this->config->getFromEmail(), $this->config->getFromName());
 
         return $message;
     }
@@ -61,26 +51,18 @@ class Swiftmailer implements MailerInterface
 
     private function createTransport(): \Swift_SmtpTransport
     {
-        $this->options->preload([
-            'mail.host',
-            'mail.port',
-            'mail.encryption',
-            'mail.username',
-            'mail.password',
-        ]);
-
         $transport = new \Swift_SmtpTransport(
-            $this->options->get('mail.host'),
-            $this->options->get('mail.port'),
-            $this->options->get('mail.encryption')
+            $this->config->getHost(),
+            $this->config->getPort(),
+            $this->config->getEncryption()
         );
 
-        if ($this->options->get('mail.username')) {
-            $transport->setUsername($this->options->get('mail.username'));
+        if ($this->config->getUsername()) {
+            $transport->setUsername($this->config->getUsername());
         }
 
-        if ($this->options->get('mail.password')) {
-            $transport->setUsername($this->options->get('mail.password'));
+        if ($this->config->getPassword()) {
+            $transport->setUsername($this->config->getPassword());
         }
 
         return $transport;

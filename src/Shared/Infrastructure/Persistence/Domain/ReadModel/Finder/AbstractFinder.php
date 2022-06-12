@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder;
 
-use Tulia\Cms\Shared\Domain\ReadModel\Finder\Event\QueryFilterEvent;
-use Tulia\Cms\Shared\Domain\ReadModel\Finder\Event\QueryPrepareEvent;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Event\QueryFilterEvent;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Event\QueryPrepareEvent;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Plugin\PluginRegistry;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\QueryInterface;
 

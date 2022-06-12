@@ -1,0 +1,129 @@
+imports:
+    - behat/module.activity.yaml
+
+parameters:
+    paths:
+        - ./src
+    exclude_files:
+        - '#.*\.yaml#'
+    layers:
+        # Modules
+        - name: Activity
+          collectors:
+              - { type: directory, regex: "src/Cms/Activity/*." }
+        - name: BackendMenu
+          collectors:
+              - { type: directory, regex: "src/Cms/BackendMenu/*." }
+        - name: BodyClass
+          collectors:
+              - { type: directory, regex: "src/Cms/BodyClass/*." }
+        - name: Breadcrumbs
+          collectors:
+              - { type: directory, regex: "src/Cms/Breadcrumbs/*." }
+        - name: ContactForm/Domain
+          collectors:
+              - { type: directory, regex: "src/Cms/ContactForm/Domain/*." }
+        - name: ContactForm/Infrastructure
+          collectors:
+              - { type: directory, regex: "src/Cms/ContactForm/Infrastructure/*." }
+        - name: ContactForm/UserInterface
+          collectors:
+              - { type: directory, regex: "src/Cms/ContactForm/UserInterface/*." }
+        - name: Content/Domain
+          collectors:
+              - { type: directory, regex: "src/Cms/Content/Type/Domain/*." }
+              - { type: directory, regex: "src/Cms/Content/Attributes/Domain/*." }
+              - { type: directory, regex: "src/Cms/Content/Block/Domain/*." }
+        - name: Content/Infrastructure
+          collectors:
+              - { type: directory, regex: "src/Cms/Content/Type/Infrastructure/*." }
+              - { type: directory, regex: "src/Cms/Content/Attributes/Infrastructure/*." }
+              - { type: directory, regex: "src/Cms/Content/Block/Infrastructure/*." }
+        - name: Content/UserInterface
+          collectors:
+              - { type: directory, regex: "src/Cms/Content/Type/UserInterface/*." }
+              - { type: directory, regex: "src/Cms/Content/Block/UserInterface/*." }
+        # Shared
+        - name: Shared/Domain
+          collectors:
+              - { type: directory, regex: "src/Shared/Domain/*." }
+        - name: Shared/Infrastructure
+          collectors:
+              - { type: directory, regex: "src/Shared/Infrastructure/*." }
+        # All not specified vendors Vendors
+        - name: Vendor
+          collectors:
+              - type: bool
+                must:
+                    - type: className
+                      regex: .*
+                must_not:
+                    - type: directory
+                      regex: "src/.*"
+                    # Must not be any class that has no namespace. This rule excludes
+                    # all core PHP built-in classess and interfaces.
+                    - type: className
+                      regex: "[^\\\\]+"
+        # Symfony components
+        - name: Symfony/Form
+          collectors:
+              - { type: className, regex: "Symfony\\\\Component\\\\Form\\\\*." }
+    ruleset:
+        # Global rules:
+        #   - Domain should not depends on anything
+        #   - Infrastructure should depends only on Domain
+        #   - Application should depends on Domain
+        #   - UserInterface should depends on Application
+        Vendor: ~
+        Shared/Domain: ~
+        Shared/Infrastructure:
+            - Shared/Domain
+            - Vendor
+        Activity:
+            - Shared/Domain
+            - Shared/Infrastructure
+            - Vendor
+        BackendMenu:
+            - Shared/Domain
+            - Shared/Infrastructure
+            - BackendMenu/Domain
+            - Vendor
+        BodyClass:
+            - Shared/Domain
+            - Shared/Infrastructure
+            - Vendor
+        Breadcrumbs:
+            - Shared/Domain
+            - Shared/Infrastructure
+            - Vendor
+        ContactForm/Domain:
+            - Shared/Domain
+            # ContactForm domain is build on top of the Symfony Form component
+            - Symfony/Form
+        ContactForm/Infrastructure:
+            - Shared/Domain
+            - Shared/Infrastructure
+            - ContactForm/Domain
+            - Content/Domain
+            - Symfony/Form
+            - Vendor
+        ContactForm/UserInterface:
+            - Shared/Domain
+            - ContactForm/Domain
+            - BackendMenu
+            - Symfony/Form
+            - Vendor
+        Content/Domain:
+            - Shared/Domain
+        Content/Infrastructure:
+            - Shared/Domain
+            - Shared/Infrastructure
+            - Content/Domain
+            - Symfony/Form
+            - Vendor
+        Content/UserInterface:
+            - Shared/Domain
+            - Content/Domain
+            - Content/Infrastructure
+            - Symfony/Form
+            - Vendor
