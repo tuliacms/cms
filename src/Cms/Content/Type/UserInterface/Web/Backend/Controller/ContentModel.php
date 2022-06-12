@@ -10,9 +10,9 @@ use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface
 use Tulia\Cms\Content\Type\Domain\WriteModel\ContentTypeRepositoryInterface;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Service\Configuration;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Service\ModelToArrayTransformer;
-use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\ContentType\FormHandler;
 use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Service\LayoutTypeBuilderRegistry;
 use Tulia\Cms\Content\Type\UserInterface\Service\ArrayToWriteModelTransformer;
+use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormHandler;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Templating\ViewInterface;

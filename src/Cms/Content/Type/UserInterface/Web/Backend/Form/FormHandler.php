@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Content\Type\Infrastructure\Framework\Form\ContentType;
+namespace Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form;
 
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\FieldTypeMappingRegistry;
-use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\ContentType\FormType\ContentTypeForm;
-use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\ContentType\FormType\LayoutSectionType;
 use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Validator\CodenameValidator;
+use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormType\ContentTypeForm;
+use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormType\LayoutSectionType;
 
 /**
  * @author Adam Banaszkiewicz
@@ -104,6 +104,8 @@ class FormHandler
         if ($formsAreValid) {
             $this->isRequestValid = true;
         }
+
+        $this->errors = $errors;
 
         return $validationDataManipulator->joinErrorsWithData($formData, $errors);
     }

@@ -25,11 +25,9 @@ final class ImmutableDateTime extends DateTimeImmutable
     }
 
     /**
-     * @param DateTime $dateTime
-     * @return ImmutableDateTime
      * @throws \Exception
      */
-    public static function createFromMutable($object)
+    public static function createFromMutable($object): self|DateTimeImmutable
     {
         $self =  new self();
         $self->datetime = DateTimeImmutable::createFromMutable($object);
@@ -37,10 +35,6 @@ final class ImmutableDateTime extends DateTimeImmutable
         return $self;
     }
 
-    /**
-     * @param ImmutableDateTime $dateTime
-     * @return bool
-     */
     public function sameAs(self $dateTime): bool
     {
         $that = $this->datetime;
@@ -50,11 +44,7 @@ final class ImmutableDateTime extends DateTimeImmutable
             && $that->getTimezone()->getName() === $new->getTimezone()->getName();
     }
 
-    /**
-     * @param string $format
-     * @return string
-     */
-    public function format($format)
+    public function format(string $format): string
     {
         return $this->datetime->format($format);
     }

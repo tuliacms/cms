@@ -175,25 +175,22 @@ class Attribute implements \Stringable, \Traversable, \ArrayAccess, \IteratorAgg
         return new \ArrayIterator([$this->value]);
     }
 
-    public function offsetExists($offset): bool
+    public function offsetExists(mixed $offset): bool
     {
         return $this->isNonscalarValue() && isset($this->value[$offset]);
     }
 
-    /**
-     * @return mixed
-     */
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset): mixed
     {
         return $this->isNonscalarValue() ? $this->value[$offset] : $this->value;
     }
 
-    public function offsetSet($offset, $value): void
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         throw new \LogicException('Cannot change value of Value Object.');
     }
 
-    public function offsetUnset($offset): void
+    public function offsetUnset(mixed $offset): void
     {
         throw new \LogicException('Cannot change value of Value Object.');
     }
