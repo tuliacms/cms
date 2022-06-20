@@ -6,9 +6,9 @@ namespace Tulia\Cms\Node\Domain\WriteModel\ActionsChain;
 
 use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
+use Tulia\Cms\Node\Domain\WriteModel\Service\ShortcodeProcessorInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
-use Tulia\Component\Shortcode\ProcessorInterface;
 
 /**
  * Listener is responsible for parsing and compiling Node's source
@@ -19,11 +19,9 @@ use Tulia\Component\Shortcode\ProcessorInterface;
  */
 class ContentShortcodeCompiler implements AggregateActionInterface
 {
-    protected ProcessorInterface $processor;
-
-    public function __construct(ProcessorInterface $processor)
-    {
-        $this->processor = $processor;
+    public function __construct(
+        private ShortcodeProcessorInterface $processor
+    ) {
     }
 
     public static function listen(): array

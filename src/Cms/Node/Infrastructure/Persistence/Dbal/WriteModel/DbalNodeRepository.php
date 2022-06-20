@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Domain\WriteModel;
+namespace Tulia\Cms\Node\Infrastructure\Persistence\Dbal\WriteModel;
 
 use Tulia\Cms\Content\Attributes\Domain\WriteModel\AttributesRepositoryInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Exception\ContentTypeNotExistsException;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
+use Tulia\Cms\Node\Domain\WriteModel\NodeRepositoryInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodeWriteStorageInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChainInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
@@ -16,7 +17,7 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-class NodeRepository
+final class DbalNodeRepository implements NodeRepositoryInterface
 {
     private NodeWriteStorageInterface $storage;
     private CurrentWebsiteInterface $currentWebsite;

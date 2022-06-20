@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Breadcrumbs\Domain;
 
 use Symfony\Component\HttpFoundation\Request;
+use Tulia\Cms\Options\Domain\ReadModel\Options;
 use Tulia\Cms\Platform\Shared\Breadcrumbs\Breadcrumbs;
 use Tulia\Cms\Platform\Shared\Breadcrumbs\BreadcrumbsInterface;
 
@@ -15,7 +16,7 @@ class BreadcrumbsGenerator implements BreadcrumbsGeneratorInterface
 {
     protected BreadcrumbsResolverRegistryInterface $registry;
 
-    public function __construct(BreadcrumbsResolverRegistryInterface $registry)
+    public function __construct(BreadcrumbsResolverRegistryInterface $registry, Options $options)
     {
         $this->registry = $registry;
     }

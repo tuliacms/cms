@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\Core;
 
-use Tulia\Cms\Shared\Infrastructure\Utils\Slug\SluggerInterface;
+use Tulia\Cms\Shared\Domain\WriteModel\Service\SluggerInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderScopeEnum;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\TaxonomyActionInterface;

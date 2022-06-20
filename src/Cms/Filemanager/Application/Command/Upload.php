@@ -11,9 +11,9 @@ use Tulia\Cms\Filemanager\Application\Command\Helper\FileResponseFormatter;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\FileFinderInterface;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\FileFinderScopeEnum;
 use Tulia\Cms\Filemanager\Domain\WriteModel\FileTypeEnum;
+use Tulia\Cms\Shared\Domain\WriteModel\Service\SluggerInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
-use Tulia\Cms\Shared\Infrastructure\Utils\Slug\SluggerInterface;
 use Tulia\Component\Image\ImageManagerInterface;
 
 /**

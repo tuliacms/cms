@@ -7,7 +7,7 @@ namespace Tulia\Cms\Node\Infrastructure\Importer;
 use Tulia\Cms\Content\Attributes\Infrastructure\Importer\ObjectDataToAttributesTransformer;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Node\Application\UseCase\CreateNode;
-use Tulia\Cms\Node\Domain\WriteModel\NodeRepository;
+use Tulia\Cms\Node\Domain\WriteModel\NodeRepositoryInterface;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
 use Tulia\Component\Importer\ObjectImporter\ObjectImporterInterface;
 use Tulia\Component\Importer\Structure\ObjectData;
@@ -17,13 +17,13 @@ use Tulia\Component\Importer\Structure\ObjectData;
  */
 class NodeEntryImporter implements ObjectImporterInterface
 {
-    private NodeRepository $repository;
+    private NodeRepositoryInterface $repository;
     private CreateNode $createNode;
     private ContentTypeRegistryInterface $contentTypeRegistry;
     private AuthenticatedUserProviderInterface $authenticatedUserProvider;
 
     public function __construct(
-        NodeRepository $repository,
+        NodeRepositoryInterface $repository,
         CreateNode $createNode,
         ContentTypeRegistryInterface $contentTypeRegistry,
         AuthenticatedUserProviderInterface $authenticatedUserProvider

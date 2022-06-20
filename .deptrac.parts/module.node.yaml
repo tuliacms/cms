@@ -1,0 +1,56 @@
+deptrac:
+    paths:
+        - ./src/Cms/Node
+    layers:
+        - name: Node/Domain
+          collectors:
+              - { type: directory, regex: "src/Cms/Node/Domain/*." }
+        - name: Node/Application
+          collectors:
+              - { type: directory, regex: "src/Cms/Node/Application/*." }
+        - name: Node/Infrastructure
+          collectors:
+              - { type: directory, regex: "src/Cms/Node/Infrastructure/*." }
+        - name: Node/UserInterface
+          collectors:
+              - { type: directory, regex: "src/Cms/Node/UserInterface/*." }
+    ruleset:
+        Node/Domain:
+            - Shared/Domain
+            - Content/Attributes/Domain #
+            - Content/Type/Domain #
+            - Shared/Infrastructure #
+            - Tulia/Datatable #
+        Node/Application:
+            - Shared/Domain
+            - Shared/Application
+            - Shared/Infrastructure
+            - Node/Domain
+            - Content/Attributes/Domain
+        Node/Infrastructure:
+            - Shared/Domain
+            - Shared/Infrastructure
+            - Node/Domain
+            - Node/Application
+            - Node/UserInterface #
+            - Content/Type/Domain
+            - Content/Attributes/Domain
+            - Content/Attributes/Infrastructure
+            - Tulia/Shortcode
+            - Tulia/Datatable
+            - Vendor
+        Node/UserInterface:
+            - Shared/Domain
+            - Node/Domain
+            - Node/Application
+            - Content/Type/Domain
+            - Content/Type/Infrastructure
+            - Content/Attributes/Domain
+            - BackendMenu
+            - Breadcrumbs
+            - BodyClass
+            - Tulia/Templating
+            - Tulia/Datatable
+            - Symfony/Validator
+            - Symfony/Form
+            - Vendor

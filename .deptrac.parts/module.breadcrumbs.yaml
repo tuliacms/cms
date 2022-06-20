@@ -1,0 +1,12 @@
+deptrac:
+    paths:
+        - ./src/Cms/Breadcrumbs
+    layers:
+        - name: Breadcrumbs
+          collectors:
+              - { type: directory, regex: "src/Cms/Breadcrumbs/*." }
+    ruleset:
+        Breadcrumbs:
+            - Shared/Domain
+            - Shared/Infrastructure
+            - Vendor

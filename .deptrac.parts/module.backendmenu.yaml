@@ -1,0 +1,13 @@
+deptrac:
+    paths:
+        - ./src/Cms/BackendMenu
+    layers:
+        - name: BackendMenu
+          collectors:
+              - { type: directory, regex: "src/Cms/BackendMenu/*." }
+    ruleset:
+        BackendMenu:
+            - Shared/Domain
+            - Shared/Infrastructure
+            - BackendMenu/Domain
+            - Vendor

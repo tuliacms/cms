@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Content\Block\Infrastructure\Framework\Twig\Extension;
 
-use Tulia\Cms\Content\Block\Domain\Renderer\Renderer;
+use Tulia\Cms\Content\Block\Domain\Renderer\BlockRendererInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -13,9 +13,9 @@ use Twig\TwigFunction;
  */
 class ContentBlockExtension extends AbstractExtension
 {
-    private Renderer $renderer;
+    private BlockRendererInterface $renderer;
 
-    public function __construct(Renderer $renderer)
+    public function __construct(BlockRendererInterface $renderer)
     {
         $this->renderer = $renderer;
     }

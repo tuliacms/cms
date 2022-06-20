@@ -7,7 +7,7 @@ namespace Tulia\Cms\Node\Application\UseCase;
 use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeUpdated;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
-use Tulia\Cms\Node\Domain\WriteModel\NodeRepository;
+use Tulia\Cms\Node\Domain\WriteModel\NodeRepositoryInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChainInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
@@ -17,12 +17,12 @@ use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
  */
 abstract class AbstractNodeUseCase
 {
-    protected NodeRepository $repository;
+    protected NodeRepositoryInterface $repository;
     protected EventBusInterface $eventBus;
     protected AggregateActionsChainInterface $actionsChain;
 
     public function __construct(
-        NodeRepository $repository,
+        NodeRepositoryInterface $repository,
         EventBusInterface $eventBus,
         AggregateActionsChainInterface $actionsChain
     ) {

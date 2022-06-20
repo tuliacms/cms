@@ -9,7 +9,7 @@ services:
         exclude:
             - '../../../../Infrastructure/Framework/Resources/**'
 
-    Tulia\Cms\Content\Block\Domain\Renderer\Renderer:
+    Tulia\Cms\Content\Block\Infrastructure\Framework\Twig\TwigBlockRenderer:
         bind:
             $environment: '%kernel.environment%'
             $paths: '%cms.content_blocks.templating.paths%'

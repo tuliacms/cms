@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Shared\Infrastructure\Utils\Slug;
 
+use Tulia\Cms\Shared\Domain\WriteModel\Service\SluggerInterface;
+
 /**
  * @author Adam Banaszkiewicz
  */

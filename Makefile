@@ -13,6 +13,6 @@ behat:
 
 .PHONY: deptrac
 deptrac:
-	${PHPROOT} php tools/deptrac.phar --fail-on-uncovered --report-uncovered
+	${PHPROOT} php deptrac.phar --fail-on-uncovered --report-uncovered
 
 .SILENT:

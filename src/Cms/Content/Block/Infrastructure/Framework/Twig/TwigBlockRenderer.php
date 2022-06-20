@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Content\Block\Domain\Renderer;
+namespace Tulia\Cms\Content\Block\Infrastructure\Framework\Twig;
 
 use Tulia\Cms\Content\Attributes\Domain\ReadModel\Model\AttributeValue;
+use Tulia\Cms\Content\Block\Domain\Renderer\BlockRendererInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Component\Templating\View;
@@ -12,7 +13,7 @@ use Tulia\Component\Templating\View;
 /**
  * @author Adam Banaszkiewicz
  */
-class Renderer
+final class TwigBlockRenderer implements BlockRendererInterface
 {
     private ContentTypeRegistryInterface $contentTypeRegistry;
     private EngineInterface $engine;

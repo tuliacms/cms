@@ -16,7 +16,7 @@ use Tulia\Cms\Node\Application\UseCase\DeleteNode;
 use Tulia\Cms\Node\Application\UseCase\UpdateNode;
 use Tulia\Cms\Node\Domain\ReadModel\Datatable\NodeDatatableFinderInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\SingularFlagImposedOnMoreThanOneNodeException;
-use Tulia\Cms\Node\Domain\WriteModel\NodeRepository;
+use Tulia\Cms\Node\Domain\WriteModel\NodeRepositoryInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
@@ -30,14 +30,14 @@ use Tulia\Component\Templating\ViewInterface;
 class Node extends AbstractController
 {
     private ContentTypeRegistryInterface $typeRegistry;
-    private NodeRepository $repository;
+    private NodeRepositoryInterface $repository;
     private DatatableFactory $factory;
     private NodeDatatableFinderInterface $finder;
     private ContentFormService $contentFormService;
 
     public function __construct(
         ContentTypeRegistryInterface $typeRegistry,
-        NodeRepository $repository,
+        NodeRepositoryInterface $repository,
         DatatableFactory $factory,
         NodeDatatableFinderInterface $finder,
         ContentFormService $contentFormService

@@ -1,0 +1,12 @@
+deptrac:
+    paths:
+        - ./src/Cms/BodyClass
+    layers:
+        - name: BodyClass
+          collectors:
+              - { type: directory, regex: "src/Cms/BodyClass/*." }
+    ruleset:
+        BodyClass:
+            - Shared/Domain
+            - Shared/Infrastructure
+            - Vendor

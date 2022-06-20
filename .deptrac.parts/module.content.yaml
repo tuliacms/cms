@@ -1,0 +1,82 @@
+deptrac:
+    paths:
+        - ./src/Cms/Content
+    layers:
+        - name: Content/Type/Domain
+          collectors:
+              - { type: directory, regex: "src/Cms/Content/Type/Domain/*." }
+        - name: Content/Attributes/Domain
+          collectors:
+              - { type: directory, regex: "src/Cms/Content/Attributes/Domain/*." }
+        - name: Content/Block/Domain
+          collectors:
+              - { type: directory, regex: "src/Cms/Content/Block/Domain/*." }
+        - name: Content/Type/Infrastructure
+          collectors:
+              - { type: directory, regex: "src/Cms/Content/Type/Infrastructure/*." }
+        - name: Content/Attributes/Infrastructure
+          collectors:
+              - { type: directory, regex: "src/Cms/Content/Attributes/Infrastructure/*." }
+        - name: Content/Block/Infrastructure
+          collectors:
+              - { type: directory, regex: "src/Cms/Content/Block/Infrastructure/*." }
+        - name: Content/Type/UserInterface
+          collectors:
+              - { type: directory, regex: "src/Cms/Content/Type/UserInterface/*." }
+        - name: Content/Block/UserInterface
+          collectors:
+              - { type: directory, regex: "src/Cms/Content/Block/UserInterface/*." }
+    ruleset:
+        Content/Attributes/Domain:
+            - Shared/Domain
+        Content/Type/Domain:
+            - Shared/Domain
+            - Content/Attributes/Domain
+            - Symfony/Validator
+        Content/Block/Domain:
+            - Shared/Domain
+            - Content/Type/Domain
+            - Content/Attributes/Domain
+            - Tulia/Shortcode
+
+        Content/Attributes/Infrastructure:
+            - Shared/Domain
+            - Shared/Infrastructure
+            - Content/Attributes/Domain
+            - Content/Type/Domain
+            - Tulia/Templating
+            - Symfony/Validator
+            - Vendor
+        Content/Type/Infrastructure:
+            - Shared/Domain
+            - Shared/Infrastructure
+            - Content/Type/Domain
+            - Content/Attributes/Domain
+            - Tulia/Templating
+            - Symfony/Form
+            - Symfony/Validator
+            - Vendor
+        Content/Block/Infrastructure:
+            - Shared/Domain
+            - Shared/Infrastructure
+            - Content/Type/Domain
+            - Content/Block/Domain
+            - Content/Attributes/Domain
+            - Symfony/Validator
+            - Symfony/Form
+            - Tulia/Templating
+            - Vendor
+
+        Content/Type/UserInterface:
+            - Shared/Domain
+            - Content/Type/Domain
+            - Content/Type/Infrastructure
+            - Symfony/Validator
+            - Symfony/Form
+            - Tulia/Templating
+            - Vendor
+        Content/Block/UserInterface:
+            - Shared/Domain
+            - Content/Type/Infrastructure
+            - Content/Type/Domain
+            - Vendor

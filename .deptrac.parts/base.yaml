@@ -1,0 +1,63 @@
+deptrac:
+    paths:
+        - ./src/Shared
+    exclude_files:
+        - '.*\.yaml'
+        - '.*\.tpl'
+        - '.*\.js'
+        - '.*\.css'
+        - '.*\.scss'
+    layers:
+        # Shared
+        - name: Shared/Domain
+          collectors:
+              - { type: directory, regex: "src/Shared/Domain/*." }
+        - name: Shared/Infrastructure
+          collectors:
+              - { type: directory, regex: "src/Shared/Infrastructure/*." }
+        # All not specified vendors Vendors
+        - name: Vendor
+          collectors:
+              - type: bool
+                must:
+                    - type: className
+                      regex: .*
+                must_not:
+                    - { type: directory, regex: "src/.*" }
+                    - { type: className, regex: "Tulia\\\\Component\\\\Datatable\\\\*." }
+                    - { type: className, regex: "Tulia\\\\Component\\\\Shortcode\\\\*." }
+                    - { type: className, regex: "Tulia\\\\Component\\\\Templating\\\\*." }
+                    - { type: className, regex: "Symfony\\\\Component\\\\Form\\\\*." }
+                    - { type: className, regex: "Symfony\\\\Component\\\\Validator\\\\*." }
+                    # Must not be any class that has no namespace. This rule excludes
+                    # all core PHP built-in classess and interfaces.
+                    - type: className
+                      regex: "^(DateTime(Immutable)?|Throwable|ArrayIterator|Traversable|ArrayAccess|Countable|Iterator|IteratorAggregate|OutOfBoundsException|InvalidArgumentException|LogicException|Exception|DomainException|Stringable)$"
+        # Tulia components
+        - name: Tulia/Shortcode
+          collectors:
+              - { type: className, regex: "Tulia\\\\Component\\\\Shortcode\\\\*." }
+        - name: Tulia/Templating
+          collectors:
+              - { type: className, regex: "Tulia\\\\Component\\\\Templating\\\\*." }
+        - name: Tulia/Datatable
+          collectors:
+              - { type: className, regex: "Tulia\\\\Component\\\\Datatable\\\\*." }
+        # Symfony components
+        - name: Symfony/Form
+          collectors:
+              - { type: className, regex: "Symfony\\\\Component\\\\Form\\\\*." }
+        - name: Symfony/Validator
+          collectors:
+              - { type: className, regex: "Symfony\\\\Component\\\\Validator\\\\*." }
+    ruleset:
+        # Global rules:
+        #   - Domain should not depends on anything
+        #   - Infrastructure should depends only on Domain
+        #   - Application should depends on Domain
+        #   - UserInterface should depends on Application
+        Vendor: ~
+        Shared/Domain: ~
+        Shared/Infrastructure:
+            - Shared/Domain
+            - Vendor

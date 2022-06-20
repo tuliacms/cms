@@ -1,47 +1,9 @@
 imports:
-    - behat/module.activity.yaml
-
-parameters:
-    paths:
-        - ./src/Shared
-    exclude_files:
-        - '#.*\.yaml#'
-        - '#.*\.tpl#'
-        - '#.*\.js#'
-    layers:
-        # Shared
-        - name: Shared/Domain
-          collectors:
-              - { type: directory, regex: "src/Shared/Domain/*." }
-        - name: Shared/Infrastructure
-          collectors:
-              - { type: directory, regex: "src/Shared/Infrastructure/*." }
-        # All not specified vendors Vendors
-        - name: Vendor
-          collectors:
-              - type: bool
-                must:
-                    - type: className
-                      regex: .*
-                must_not:
-                    - type: directory
-                      regex: "src/.*"
-                    # Must not be any class that has no namespace. This rule excludes
-                    # all core PHP built-in classess and interfaces.
-                    - type: className
-                      regex: "^(DateTime(Immutable)?|ArrayIterator|Traversable|ArrayAccess|IteratorAggregate|InvalidArgumentException|Exception|DomainException)$"
-        # Symfony components
-        - name: Symfony/Form
-          collectors:
-              - { type: className, regex: "Symfony\\\\Component\\\\Form\\\\*." }
-    ruleset:
-        # Global rules:
-        #   - Domain should not depends on anything
-        #   - Infrastructure should depends only on Domain
-        #   - Application should depends on Domain
-        #   - UserInterface should depends on Application
-        Vendor: ~
-        Shared/Domain: ~
-        Shared/Infrastructure:
-            - Shared/Domain
-            - Vendor
+    - .deptrac.parts/base.yaml
+    - .deptrac.parts/module.activity.yaml
+    - .deptrac.parts/module.backendmenu.yaml
+    - .deptrac.parts/module.bodyclass.yaml
+    - .deptrac.parts/module.breadcrumbs.yaml
+    #- .deptrac.parts/module.contactform.yaml
+    - .deptrac.parts/module.content.yaml
+    - .deptrac.parts/module.node.yaml

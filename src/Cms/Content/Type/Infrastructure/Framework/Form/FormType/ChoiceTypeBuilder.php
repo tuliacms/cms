@@ -8,8 +8,6 @@ use Tulia\Cms\Content\Type\Domain\ReadModel\FieldTypeBuilder\AbstractFieldTypeBu
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\Field;
 
-use function Tulia\Cms\Content\Type\UserInterface\Web\Shared\Form\FormType\count;
-
 /**
  * @author Adam Banaszkiewicz
  */

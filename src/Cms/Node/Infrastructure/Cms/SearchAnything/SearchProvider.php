@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Domain\SearchAnything;
+namespace Tulia\Cms\Node\Infrastructure\Cms\SearchAnything;
 
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;

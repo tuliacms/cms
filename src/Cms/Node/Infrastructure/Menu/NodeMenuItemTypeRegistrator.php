@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Domain\Menu;
+namespace Tulia\Cms\Node\Infrastructure\Menu;
 
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Menu\Domain\Builder\Type\RegistratorInterface;

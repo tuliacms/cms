@@ -7,8 +7,6 @@ namespace Tulia\Cms\Content\Type\Domain\ReadModel\Service;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\Field;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\FieldsGroup;
-use Tulia\Cms\Content\Type\Domain\ReadModel\Model\LayoutType;
-use Tulia\Cms\Content\Type\Domain\ReadModel\Model\Section;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Service\Configuration;
 
 /**
@@ -136,7 +134,7 @@ class ArrayToReadModelTransformer
         return $result;
     }
 
-    protected function buildLayoutType(array $type): LayoutType
+    /*protected function buildLayoutType(array $type): LayoutType
     {
         $layoutType = new LayoutType($type['code'] . '_layout');
         $layoutType->setName($type['name'] . ' Layout');
@@ -152,5 +150,5 @@ class ArrayToReadModelTransformer
         }
 
         return $layoutType;
-    }
+    }*/
 }

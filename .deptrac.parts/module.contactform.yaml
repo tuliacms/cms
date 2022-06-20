@@ -1,0 +1,33 @@
+deptrac:
+    paths:
+        - ./src/Cms/ContactForm
+    layers:
+        - name: ContactForm/Domain
+          collectors:
+              - { type: directory, regex: "src/Cms/ContactForm/Domain/*." }
+        - name: ContactForm/Infrastructure
+          collectors:
+              - { type: directory, regex: "src/Cms/ContactForm/Infrastructure/*." }
+        - name: ContactForm/UserInterface
+          collectors:
+              - { type: directory, regex: "src/Cms/ContactForm/UserInterface/*." }
+    ruleset:
+        ContactForm/Domain:
+            - Shared/Domain
+            # ContactForm domain is build on top of the Symfony Form component
+            - Symfony/Form
+            - Tulia/Shortcode
+        ContactForm/Infrastructure:
+            - Shared/Domain
+            - Shared/Infrastructure
+            - ContactForm/Domain
+            - Content/Domain
+            - Symfony/Form
+            - Vendor
+        ContactForm/UserInterface:
+            - Shared/Domain
+            - ContactForm/Domain
+            - ContactForm/Infrastructure
+            - BackendMenu
+            - Symfony/Form
+            - Vendor

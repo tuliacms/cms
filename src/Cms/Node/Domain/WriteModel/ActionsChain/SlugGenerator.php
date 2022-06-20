@@ -9,7 +9,7 @@ use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
-use Tulia\Cms\Shared\Infrastructure\Utils\Slug\SluggerInterface;
+use Tulia\Cms\Shared\Domain\WriteModel\Service\SluggerInterface;
 
 /**
  * @author Adam Banaszkiewicz

@@ -6,7 +6,7 @@ namespace Tulia\Cms\Node\Application\UseCase;
 
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeDeleted;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
-use Tulia\Cms\Node\Domain\WriteModel\NodeRepository;
+use Tulia\Cms\Node\Domain\WriteModel\NodeRepositoryInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChainInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 
@@ -15,12 +15,12 @@ use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
  */
 final class DeleteNode
 {
-    private NodeRepository $repository;
+    private NodeRepositoryInterface $repository;
     private EventBusInterface $eventBus;
     private AggregateActionsChainInterface $actionsChain;
 
     public function __construct(
-        NodeRepository $repository,
+        NodeRepositoryInterface $repository,
         EventBusInterface $eventBus,
         AggregateActionsChainInterface $actionsChain
     ) {
