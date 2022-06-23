@@ -39,7 +39,6 @@ class TwigContentBlockTypeLayoutBuilder implements LayoutTypeBuilderInterface
     {
         return new View('@backend/content_builder/layout/content_block_type/editor.tpl', [
             'contentType' => $contentType,
-            'layout' => $contentType->getLayout(),
             'form' => $formView,
             'context' => $viewContext,
         ]);

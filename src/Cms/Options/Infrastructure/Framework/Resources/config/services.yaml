@@ -14,3 +14,6 @@ services:
     Tulia\Cms\Options\Application\Service\RegisteredOptionsRegistry:
         bind:
             $definitions: '%cms.options.definitions%'
+
+    Tulia\Cms\Shared\Infrastructure\Mail\MailerConfigurationProviderInterface:
+        class: Tulia\Cms\Options\Infrastructure\Mailer\OptionsAwareMailerConfigurationProvider

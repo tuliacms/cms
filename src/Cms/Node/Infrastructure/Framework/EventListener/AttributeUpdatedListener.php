@@ -7,7 +7,6 @@ namespace Tulia\Cms\Node\Infrastructure\Framework\EventListener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Persistence\CategoriesPersistenceInterface;
-use Tulia\Cms\Node\Domain\ReadModel\Persistence\FlagsPersistenceInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Event\AttributeUpdated;
 
 /**
@@ -16,16 +15,13 @@ use Tulia\Cms\Node\Domain\WriteModel\Event\AttributeUpdated;
 class AttributeUpdatedListener implements EventSubscriberInterface
 {
     private ContentTypeRegistryInterface $contentTypeRegistry;
-    private FlagsPersistenceInterface $flagsPersistence;
     private CategoriesPersistenceInterface $categoriesPersistence;
 
     public function __construct(
         ContentTypeRegistryInterface $contentTypeRegistry,
-        FlagsPersistenceInterface $flagsPersistence,
         CategoriesPersistenceInterface $categoriesPersistence
     ) {
         $this->contentTypeRegistry = $contentTypeRegistry;
-        $this->flagsPersistence = $flagsPersistence;
         $this->categoriesPersistence = $categoriesPersistence;
     }
 
@@ -38,11 +34,8 @@ class AttributeUpdatedListener implements EventSubscriberInterface
 
     public function processUpdate(AttributeUpdated $event): void
     {
-        if ($event->getAttribute() === 'flags') {
-            $this->flagsPersistence->update($event->getNodeId(), $event->getValue() ?? []);
-            return;
-        }
-
+        // @todo Rewrite persising categories in Repository implementation
+        return;
         $type = $this->contentTypeRegistry->get($event->getNodeType());
 
         if ($type->hasField($event->getAttribute())) {

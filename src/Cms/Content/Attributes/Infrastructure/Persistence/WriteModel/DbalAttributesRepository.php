@@ -82,12 +82,12 @@ class DbalAttributesRepository implements AttributesRepositoryInterface
     /**
      * @param Attribute[] $metadata
      */
-    public function persist(string $type, string $ownerId, array $metadata): void
+    public function persist(string $type, string $ownerId, array $attributes): void
     {
         $locale = $this->currentWebsite->getLocale()->getCode();
         $structure = [];
 
-        foreach ($metadata as $uri => $attribute) {
+        foreach ($attributes as $uri => $attribute) {
             $structure[$uri] = [
                 'id' => $this->uuidGenerator->generate(),
                 'value' => $attribute->isNonscalarValue() ? serialize($attribute->getValue()) : $attribute->getValue(),

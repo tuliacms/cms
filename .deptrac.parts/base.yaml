@@ -15,7 +15,7 @@ deptrac:
         - name: Shared/Infrastructure
           collectors:
               - { type: directory, regex: "src/Shared/Infrastructure/*." }
-        # All not specified vendors Vendors
+        # All not specified Vendors
         - name: Vendor
           collectors:
               - type: bool

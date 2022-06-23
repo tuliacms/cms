@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Domain\NodeFlag;
+namespace Tulia\Cms\Node\Domain\WriteModel\Service\NodePurpose;
 
-use Tulia\Cms\Node\Domain\NodeFlag\Exception\FlagNotFoundException;
+use Tulia\Cms\Node\Domain\WriteModel\Exception\NodePurposeNotFoundException;
 
 /**
  * @author Adam Banaszkiewicz
  */
-interface NodeFlagRegistryInterface
+interface NodePurposeRegistryInterface
 {
     public function all(): array;
 
     /**
-     * @throws FlagNotFoundException
+     * @throws NodePurposeNotFoundException
      */
     public function isSingular(string $name): bool;
 

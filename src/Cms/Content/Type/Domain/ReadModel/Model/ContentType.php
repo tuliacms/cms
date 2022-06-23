@@ -72,7 +72,29 @@ final class ContentType
 
     public function addField(Field $field): void
     {
+        //throw new \Exception('Please implements this method.');
+    }
 
+    /**
+     * @return Field[]
+     */
+    public function getFields(): array
+    {
+        $source = [[]];
+
+        foreach ($this->fieldGroups as $group) {
+            $source[] = $group->getFields();
+        }
+
+        return array_merge(...$source);
+    }
+
+    /**
+     * @return FieldsGroup[]
+     */
+    public function getFieldGroups(): array
+    {
+        return $this->fieldGroups;
     }
 
     public function isRoutable(): bool
@@ -144,6 +166,11 @@ final class ContentType
     public function buildAttributesMapping(): array
     {
         return $this->buildAttributesMappingRecursive($this->getFields());
+    }
+
+    public function getController(): string
+    {
+        return $this->controller;
     }
 
     /**

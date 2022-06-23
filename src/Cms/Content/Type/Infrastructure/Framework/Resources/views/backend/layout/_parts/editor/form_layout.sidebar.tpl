@@ -4,12 +4,12 @@
     <li class="nav-item">
         <a
             href="#"
-            class="nav-link {{ group.active ? 'active' : '' }}"
+            class="nav-link {{ (group.active ?? false) ? 'active' : '' }}"
             data-bs-toggle="tab"
             data-bs-target="#tab-{{ id }}"
         >
             {{ group.name }}
-            {{ badge.errors_count(form, group.fields|default([])) }}
+            {{ badge.errors_count(form, group.fieldsCodes|default([])) }}
         </a>
     </li>
 {% endmacro %}
@@ -22,7 +22,7 @@
             <div class="row">
                 <div class="col">
                     {% for field in group.fields %}
-                        {{ form_render.form_row(form, field, contentType) }}
+                        {{ form_render.form_row(form, field.code, contentType) }}
                     {% endfor %}
                 </div>
             </div>
@@ -48,16 +48,16 @@
 
     <div class="accordion-section">
         <div
-            class="accordion-section-button{{ group.active ? '' : ' collapsed' }}"
+            class="accordion-section-button{{ (group.active ?? false) ? '' : ' collapsed' }}"
             data-bs-toggle="collapse"
             data-bs-target="#form-collapse-sidebar-{{ id }}"
         >
             {{ group.name|trans({}, translationDomain) }}
-            {{ badge.errors_count(form, group.fields|default([])) }}
+            {{ badge.errors_count(form, group.fieldsCodes|default([])) }}
         </div>
         <div
             id="form-collapse-sidebar-{{ id }}"
-            class="accordion-collapse collapse{{ group.active ? ' show' : '' }}"
+            class="accordion-collapse collapse{{ (group.active ?? false) ? ' show' : '' }}"
         >
             <div class="accordion-section-body">
                 {{ form_render.render_fields(form, group.fields, contentType) }}
@@ -75,20 +75,26 @@
         <div class="page-form-sidebar">
             <div class="accordion">
                 {% block sidebar_accordion %}{% endblock %}
-                {% for id, group in layout.section('sidebar').fieldsGroups %}
-                    {{ _self.section(id, group, form, null, contentType) }}
+                {% for group in contentType.fieldGroups %}
+                    {% if group.section == 'sidebar' %}
+                        {{ _self.section(group.code, group, form, null, contentType) }}
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>
         <div class="page-form-content">
             {% block page_header %}{% endblock %}
             <ul class="nav nav-tabs page-form-tabs" role="tablist">
-                {% for id, group in layout.section('main').fieldsGroups %}
-                    {{ _self.tab(id, {
-                        active: loop.index0 == 0,
-                        name: group.name|trans,
-                        fields: group.fields
-                    }, form) }}
+                {% set loopIndex = 0 %}
+                {% for group in contentType.fieldGroups %}
+                    {% if group.section == 'main' %}
+                        {{ _self.tab(group.code, {
+                            active: loopIndex == 0,
+                            name: group.name|trans,
+                            fields: group.fields
+                        }, form) }}
+                        {% set loopIndex = loopIndex + 1 %}
+                    {% endif %}
                 {% endfor %}
 
                 {{ _self.tab('rest', {
@@ -98,8 +104,12 @@
                 }, form) }}
             </ul>
             <div class="tab-content">
-                {% for id, group in layout.section('main').fieldsGroups %}
-                    {{ _self.tab_content(id, loop.index0 == 0, group, form, contentType) }}
+                {% set loopIndex = 0 %}
+                {% for group in contentType.fieldGroups %}
+                    {% if group.section == 'main' %}
+                        {{ _self.tab_content(group.code, loopIndex == 0, group, form, contentType) }}
+                        {% set loopIndex = loopIndex + 1 %}
+                    {% endif %}
                 {% endfor %}
 
                 {{ _self.tab_rest_content('rest', form) }}

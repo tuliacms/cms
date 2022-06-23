@@ -7,7 +7,7 @@ namespace Tulia\Cms\Content\Type\Infrastructure\Framework\Form;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Tulia\Cms\Content\Type\Domain\AbstractModel\AbstractField;
+use Tulia\Cms\Content\Type\Domain\ReadModel\Model\Field;
 use Tulia\Cms\Content\Type\Domain\ReadModel\FieldTypeHandler\FieldTypeHandlerInterface;
 
 /**
@@ -23,7 +23,7 @@ class ContentBuilderFormExtension extends AbstractTypeExtension
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired('content_builder_field');
-        $resolver->setAllowedTypes('content_builder_field', ['null', AbstractField::class]);
+        $resolver->setAllowedTypes('content_builder_field', ['null', Field::class]);
         $resolver->setDefault('content_builder_field', null);
 
         $resolver->setRequired('content_builder_field_handler');

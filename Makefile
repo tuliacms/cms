@@ -1,4 +1,4 @@
-.PHONY: bash behat
+.PHONY: bash behat deptrac
 
 PHPROOT = docker exec -it --user "$(id -u):$(id -g)" --workdir="/var/www/html/core" tuliacms_tulia_www_1
 ARGS = $(filter-out $@,$(MAKECMDGOALS))

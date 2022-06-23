@@ -13,7 +13,7 @@ interface AttributesRepositoryInterface
 
     public function findAll(string $type, string $ownerId, array $info): array;
 
-    public function persist(string $type, string $ownerId, array $metadata): void;
+    public function persist(string $type, string $ownerId, array $attributes): void;
 
     public function delete(string $type, string $ownerId): void;
 }

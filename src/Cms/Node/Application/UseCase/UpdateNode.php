@@ -15,9 +15,9 @@ class UpdateNode extends AbstractNodeUseCase
     /**
      * @param Attribute[] $attributes
      */
-    public function __invoke(Node $node, array $attributes): void
+    public function __invoke(Node $node, array $details, array $attributes): void
     {
-        $this->updateModel($node, $attributes);
+        $this->updateModel($node, $details, $attributes);
         $this->update($node);
     }
 }

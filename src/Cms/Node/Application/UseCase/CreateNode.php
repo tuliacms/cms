@@ -14,11 +14,11 @@ class CreateNode extends AbstractNodeUseCase
     /**
      * @param Attribute[] $attributes
      */
-    public function __invoke(string $nodeType, array $attributes): void
+    public function __invoke(string $nodeType, string $author, array $details, array $attributes): void
     {
-        $node = $this->repository->createNew($nodeType);
+        $node = $this->repository->createNew($nodeType, $author);
 
-        $this->updateModel($node, $attributes);
+        $this->updateModel($node, $details, $attributes);
         $this->create($node);
     }
 }

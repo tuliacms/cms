@@ -19,15 +19,15 @@ class DbalNodeByFlagFinder implements NodeByFlagFinderInterface
         $this->connection = $connection;
     }
 
-    public function findOtherNodesWithFlags(string $localNode, array $flags, string $websiteId): array
+    public function findOtherNodesWithFlags(string $localNode, array $purposes, string $websiteId): array
     {
-        return $this->connection->fetchAllAssociative('SELECT tm.id, tnhf.flag
+        return $this->connection->fetchAllAssociative('SELECT tm.id, tnhf.purpose
             FROM #__node AS tm
-            INNER JOIN #__node_has_flag AS tnhf
-                ON tm.id = tnhf.node_id AND tnhf.flag IN (:flags)
+            INNER JOIN #__node_has_purpose AS tnhf
+                ON tm.id = tnhf.node_id AND tnhf.purpose IN (:purposes)
             WHERE
                 tm.id != :nodeId AND tm.website_id = :websiteId', [
-            'flags' => $flags,
+            'purposes' => $purposes,
             'nodeId' => $localNode,
             'websiteId' => $websiteId,
         ], [

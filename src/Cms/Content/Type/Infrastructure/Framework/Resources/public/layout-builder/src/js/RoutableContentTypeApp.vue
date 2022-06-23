@@ -15,23 +15,6 @@
                         <textarea name="node_type" id="ctb-form-field-node-type"></textarea>
                         <input type="text" name="_token" :value="options.csrfToken"/>
                     </form>
-                    <div class="ctb-sections-container">
-                        <div class="ctb-section ctb-section-internal-fields">
-                            <div class="ctb-section-label">
-                                {{ translations.internalFields }}
-                            </div>
-                            <div class="ctb-section-fields-container">
-                                <div class="ctb-sortable-fields">
-                                    <div class="ctb-field"><span class="ctb-field-label">{{ translations.title }}</span></div>
-                                    <div class="ctb-field"><span class="ctb-field-label">{{ translations.slug }}</span></div>
-                                    <div class="ctb-field"><span class="ctb-field-label">{{ translations.publishedAt }}</span></div>
-                                    <div class="ctb-field"><span class="ctb-field-label">{{ translations.publicationStatus }}</span></div>
-                                    <div class="ctb-field"><span class="ctb-field-label">{{ translations.author }}</span></div>
-                                    <div class="ctb-field"><span class="ctb-field-label">{{ translations.nodePurpose }}</span></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <SectionsList
                         :translations="translations"
                         :sections="model.layout.sidebar.sections"

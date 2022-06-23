@@ -3,10 +3,12 @@
 {{ form_render.form_begin(form) }}
 
 <div class="cbb-block-type-edit-panel">
-    {% for id, group in layout.section('main').fieldsGroups %}
-        {% for field in group.fields %}
-            {{ form_render.form_row(form, field, contentType) }}
-        {% endfor %}
+    {% for group in contentType.fieldGroups %}
+        {% if group.section == 'main' %}
+            {% for field in group.fields %}
+                {{ form_render.form_row(form, field, contentType) }}
+            {% endfor %}
+        {% endif %}
     {% endfor %}
 </div>
 

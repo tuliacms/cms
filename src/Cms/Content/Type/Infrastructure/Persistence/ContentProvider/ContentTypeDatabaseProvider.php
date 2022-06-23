@@ -6,6 +6,7 @@ namespace Tulia\Cms\Content\Type\Infrastructure\Persistence\ContentProvider;
 
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\AbstractContentTypeProvider;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Service\Configuration;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 
 /**
@@ -13,16 +14,16 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterfac
  */
 class ContentTypeDatabaseProvider extends AbstractContentTypeProvider
 {
-    private ConnectionInterface $connection;
     private array $fieldGroups = [];
     private array $fields = [];
     private array $fieldConfigurations = [];
     private array $fieldConstraints = [];
     private array $fieldConstraintsModificators = [];
 
-    public function __construct(ConnectionInterface $connection)
-    {
-        $this->connection = $connection;
+    public function __construct(
+        private ConnectionInterface $connection,
+        private Configuration $config
+    ) {
     }
 
     public function provide(): array
@@ -39,6 +40,7 @@ class ContentTypeDatabaseProvider extends AbstractContentTypeProvider
 
         foreach ($types as $key => $contentType) {
             $types[$key]['fields_groups'] = $this->getFieldGroups($contentType['code']);
+            $types[$key]['controller'] = $types[$key]['controller'] ?? $this->config->getController($contentType['type']);
         }
 
         return $types;

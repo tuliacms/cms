@@ -101,22 +101,12 @@ interface ConnectionInterface
      */
     public function fetchFirstColumn($statement, array $params = [], array $types = []);
 
-    /**
-     * @param string $query
-     * @param array $params
-     * @param array $types
-     *
-     * @return mixed
-     */
     public function fetchAllAssociative(string $query, array $params = [], array $types = []): array;
+
+    public function fetchOne(string $query, array $params = [], array $types = []): mixed;
 
     public function createQueryBuilder(): QueryBuilder;
 
-    /**
-     * @param string $query
-     *
-     * @return string
-     */
     public function prepareTablePrefix(string $query): string;
 
     /**

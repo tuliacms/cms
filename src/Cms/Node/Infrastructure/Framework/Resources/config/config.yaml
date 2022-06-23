@@ -58,14 +58,3 @@ cms:
                     classname: 'Tulia\Cms\Node\UserInterface\Web\Shared\Form\FormType\NodeTypeaheadType'
                     builder: 'Tulia\Cms\Node\UserInterface\Web\Shared\Form\FormType\NodeTypeaheadTypeBuilder'
                     constraints: [required]
-                node_status:
-                    label: Node status
-                    classname: 'Symfony\Component\Form\Extension\Core\Type\ChoiceType'
-                    builder: 'Tulia\Cms\Node\UserInterface\Web\Shared\Form\FormType\NodeStatusTypeBuilder'
-                    constraints: [required]
-                    # hidden: true
-                node_purpose:
-                    label: Node purpose
-                    classname: 'Symfony\Component\Form\Extension\Core\Type\ChoiceType'
-                    builder: 'Tulia\Cms\Node\UserInterface\Web\Shared\Form\FormType\NodeFlagsTypeBuilder'
-                    only_for_types: [ node ]

@@ -148,6 +148,13 @@ class Connection extends DoctrineConnection implements ConnectionInterface
         return parent::fetchAllAssociative($query, $params, $types);
     }
 
+    public function fetchOne(string $query, array $params = [], array $types = []): mixed
+    {
+        $query = $this->prepareTablePrefix($query);
+
+        return parent::fetchOne($query, $params, $types);
+    }
+
     /**
      * {@inheritdoc}
      */

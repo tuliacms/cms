@@ -20,10 +20,10 @@ final class FieldsGroup
         $this->code = $code;
         $this->section = $section;
         $this->name = $name;
-        $this->fields = array_map(
-            fn (array $field) => new Field($field),
-            $fields
-        );
+
+        foreach ($fields as $field) {
+            $this->fields[$field['code']] = new Field($field);
+        }
     }
 
     public static function fromArray(array $data): self
@@ -34,5 +34,36 @@ final class FieldsGroup
             $data['name'],
             $data['fields']
         );
+    }
+
+    /**
+     * @return Field[]
+     */
+    public function getFields(): array
+    {
+        return $this->fields;
+    }
+
+    public function getFieldsCodes(): array
+    {
+        return array_map(
+            static fn($v) => $v->getCode(),
+            $this->fields
+        );
+    }
+
+    public function getCode(): string
+    {
+        return $this->code;
+    }
+
+    public function getSection(): string
+    {
+        return $this->section;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
     }
 }

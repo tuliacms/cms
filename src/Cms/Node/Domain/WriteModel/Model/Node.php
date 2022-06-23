@@ -9,7 +9,12 @@ use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Event;
 use Tulia\Cms\Node\Domain\WriteModel\Event\AttributeUpdated;
+use Tulia\Cms\Node\Domain\WriteModel\Event\NodeDeleted;
+use Tulia\Cms\Node\Domain\WriteModel\Exception\CannotDeleteNodeException;
+use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\Author;
 use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\NodeId;
+use Tulia\Cms\Node\Domain\WriteModel\Rules\CanDeleteNode\CanDeleteNodeInterface;
+use Tulia\Cms\Node\Domain\WriteModel\Rules\CanDeleteNode\CanDeleteNodeReasonEnum;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 
@@ -28,13 +33,14 @@ final class Node extends AbstractAggregateRoot implements AttributesAwareInterfa
     protected ?ImmutableDateTime $publishedTo = null;
     protected ImmutableDateTime $createdAt;
     protected ?ImmutableDateTime $updatedAt = null;
-    protected ?string $authorId = null;
+    protected Author $author;
     protected ?string $parentId = null;
     protected int $level = 0;
     protected string $locale;
     protected bool $translated = true;
     protected string $title = '';
     protected ?string $slug = null;
+    protected array $purposes = [];
     /** @var Attribute[] */
     protected array $attributes = [];
 
@@ -42,12 +48,14 @@ final class Node extends AbstractAggregateRoot implements AttributesAwareInterfa
         string $id,
         string $type,
         string $websiteId,
-        string $locale
+        string $locale,
+        Author $author
     ) {
         $this->id = new NodeId($id);
         $this->type = $type;
         $this->websiteId = $websiteId;
         $this->locale = $locale;
+        $this->author = $author;
         $this->createdAt = $this->updatedAt = new ImmutableDateTime();
         $this->updatedAt = new ImmutableDateTime();
         $this->publishedAt = new ImmutableDateTime();
@@ -57,9 +65,10 @@ final class Node extends AbstractAggregateRoot implements AttributesAwareInterfa
         string $id,
         string $type,
         string $websiteId,
-        string $locale
+        string $locale,
+        Author $author
     ): self {
-        $self = new self($id, $type, $websiteId, $locale);
+        $self = new self($id, $type, $websiteId, $locale, $author);
         $self->recordThat(new Event\NodeCreated($id, $type, $websiteId, $locale, $type));
 
         return $self;
@@ -71,20 +80,20 @@ final class Node extends AbstractAggregateRoot implements AttributesAwareInterfa
             $data['id'],
             $data['type'],
             $data['website_id'],
-            $data['locale']
+            $data['locale'],
+            new Author($data['author_id'])
         );
         $self->status = $data['status'] ?? 'published';
         $self->createdAt = new ImmutableDateTime($data['created_at']);
         $self->updatedAt = $data['updated_at'] ? new ImmutableDateTime($data['updated_at']) : null;
         $self->publishedAt = new ImmutableDateTime($data['published_at']);
         $self->publishedTo = $data['published_to'] ? new ImmutableDateTime($data['published_to']) : null;
-        $self->authorId = $data['author_id'] ?? null;
         $self->parentId = $data['parent_id'] ?? null;
         $self->title = $data['title'] ?? '';
         $self->slug = $data['slug'] ?? null;
+        $self->purposes = $data['purposes'] ?? [];
         $self->level = (int) ($data['level'] ?? 0);
         $self->translated = (bool) ($data['translated'] ?? true);
-
         $self->attributes = $data['attributes'];
 
         return $self;
@@ -101,15 +110,27 @@ final class Node extends AbstractAggregateRoot implements AttributesAwareInterfa
             'created_at'    => $this->getCreatedAt(),
             'updated_at'    => $this->getUpdatedAt(),
             'status'        => $this->getStatus(),
-            'author_id'     => $this->getAuthorId(),
+            'author_id'     => $this->author->getId(),
             'category_id'   => $this->getCategoryId(),
             'level'         => $this->getLevel(),
             'parent_id'     => $this->getParentId(),
             'locale'        => $this->getLocale(),
             'title'         => $this->getTitle(),
             'slug'          => $this->getSlug(),
+            'purposes'      => $this->getPurposes(),
             'attributes'    => $this->attributes,
         ];
+    }
+
+    public function delete(CanDeleteNodeInterface $rules): void
+    {
+        $reason = $rules->decide($this->id->getValue());
+
+        if (CanDeleteNodeReasonEnum::OK !== $reason) {
+            throw CannotDeleteNodeException::fromReason($reason, $this->id->getValue(), $this->title);
+        }
+
+        $this->recordThat(new NodeDeleted($this->id->getValue(), $this->type, $this->websiteId, $this->locale));
     }
 
     public function getId(): NodeId
@@ -151,16 +172,6 @@ final class Node extends AbstractAggregateRoot implements AttributesAwareInterfa
         unset($this->attributes[$uri]);
 
         $this->markAsUpdated();
-    }
-
-    public function hasFlag(string $flag): bool
-    {
-        return isset($this->attributes['flags']) && \in_array($flag, $this->attributes['flags']->getValue(), true);
-    }
-
-    public function getFlags(): array
-    {
-        return $this->getAttribute('flags')->getValue();
     }
 
     public function getTitle(): string
@@ -239,14 +250,14 @@ final class Node extends AbstractAggregateRoot implements AttributesAwareInterfa
         return $this->updatedAt;
     }
 
-    public function getAuthorId(): ?string
+    public function getAuthor(): Author
     {
-        return $this->authorId;
+        return $this->author;
     }
 
-    public function setAuthorId(?string $authorId): void
+    public function setAuthor(Author $author): void
     {
-        $this->authorId = $authorId;
+        $this->author = $author;
 
         $this->markAsUpdated();
     }
@@ -295,9 +306,19 @@ final class Node extends AbstractAggregateRoot implements AttributesAwareInterfa
         $this->translated = $translated;
     }
 
-    private function updateFlags(array $flags): void
+    public function hasPurpose(string $purpose): bool
     {
-        $this->attributes['flags'] = $this->attributes['flags'] ?? [];
+        return \in_array($purpose, $this->purposes, true);
+    }
+
+    public function getPurposes(): array
+    {
+        return $this->purposes;
+    }
+
+    public function updatePurposes(array $purposes): void
+    {
+        $this->purposes = $purposes;
 
         /*$oldFlags = array_diff($this->attributes['flags'], $flags);
         $newFlags = array_diff($flags, $this->attributes['flags']);*/

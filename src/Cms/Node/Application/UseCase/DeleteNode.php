@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\Application\UseCase;
 
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeDeleted;
-use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Cms\Node\Domain\WriteModel\NodeRepositoryInterface;
+use Tulia\Cms\Node\Domain\WriteModel\Rules\CanDeleteNode\CanDeleteNodeInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChainInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 
@@ -15,30 +15,26 @@ use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
  */
 final class DeleteNode
 {
-    private NodeRepositoryInterface $repository;
-    private EventBusInterface $eventBus;
-    private AggregateActionsChainInterface $actionsChain;
-
     public function __construct(
-        NodeRepositoryInterface $repository,
-        EventBusInterface $eventBus,
-        AggregateActionsChainInterface $actionsChain
+        private NodeRepositoryInterface $repository,
+        private EventBusInterface $eventBus,
+        private AggregateActionsChainInterface $actionsChain,
+        private CanDeleteNodeInterface $canDeleteNode
     ) {
-        $this->repository = $repository;
-        $this->eventBus = $eventBus;
-        $this->actionsChain = $actionsChain;
     }
 
-    public function __invoke(Node $node): void
+    public function __invoke(string $id): void
     {
-        $this->actionsChain->execute('delete', $node);
+        $node = $this->repository->find($id);
 
-        try {
-            $this->repository->delete($node);
-
-            $this->eventBus->dispatch(NodeDeleted::fromNode($node));
-        } catch (\Throwable $e) {
-            throw $e;
+        if (!$node) {
+            return;
         }
+
+        $this->actionsChain->execute('delete', $node);
+        $node->delete($this->canDeleteNode);
+
+        $this->repository->delete($node);
+        $this->eventBus->dispatch(NodeDeleted::fromNode($node));
     }
 }

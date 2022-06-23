@@ -39,8 +39,8 @@
                 <target>Node</target>
             </trans-unit>
             <trans-unit id="tuliacms.messages.10">
-                <source>sketch</source>
-                <target>Sketch</target>
+                <source>draft</source>
+                <target>Draft</target>
             </trans-unit>
             <trans-unit id="tuliacms.messages.11">
                 <source>published</source>

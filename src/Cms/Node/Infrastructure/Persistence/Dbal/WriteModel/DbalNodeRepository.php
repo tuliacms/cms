@@ -8,6 +8,7 @@ use Tulia\Cms\Content\Attributes\Domain\WriteModel\AttributesRepositoryInterface
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Exception\ContentTypeNotExistsException;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
+use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\Author;
 use Tulia\Cms\Node\Domain\WriteModel\NodeRepositoryInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodeWriteStorageInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChainInterface;
@@ -42,7 +43,7 @@ final class DbalNodeRepository implements NodeRepositoryInterface
         $this->contentTypeRegistry = $contentTypeRegistry;
     }
 
-    public function createNew(string $nodeType): Node
+    public function createNew(string $nodeType, string $author): Node
     {
         $this->contentTypeRegistry->get($nodeType);
 
@@ -50,7 +51,8 @@ final class DbalNodeRepository implements NodeRepositoryInterface
             $this->uuidGenerator->generate(),
             $nodeType,
             $this->currentWebsite->getId(),
-            $this->currentWebsite->getLocale()->getCode()
+            $this->currentWebsite->getLocale()->getCode(),
+            new Author($author)
         );
     }
 

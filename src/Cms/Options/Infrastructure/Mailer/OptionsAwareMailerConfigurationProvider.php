@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Options\Infrastructure\Mailer;
 
+use Tulia\Cms\Options\Domain\ReadModel\Options;
 use Tulia\Cms\Shared\Infrastructure\Mail\MailerConfigurationProviderInterface;
 
 /**

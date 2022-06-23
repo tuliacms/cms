@@ -103,8 +103,8 @@
                 <target>User {username} deleted node.</target>
             </trans-unit>
             <trans-unit id="tuliacms.node.26">
-                <source>sketch</source>
-                <target>Sketch</target>
+                <source>draft</source>
+                <target>Draft</target>
             </trans-unit>
             <trans-unit id="tuliacms.node.27">
                 <source>published</source>
@@ -127,8 +127,8 @@
                 <target>Node purpose</target>
             </trans-unit>
             <trans-unit id="tuliacms.node.32">
-                <source>flagWithName</source>
-                <target>Flag: {flag}</target>
+                <source>purposeWithName</source>
+                <target>Purpose: {purpose}</target>
             </trans-unit>
             <trans-unit id="tuliacms.node.33">
                 <source>nodePurposeInfo</source>
@@ -149,6 +149,15 @@
             <trans-unit id="tuliacms.node.37">
                 <source>Page</source>
                 <target>Page</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.38">
+                <source>cannotDeleteNodeReason</source>
+                <target>Cannot delete node "{title}", because: {reason}</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.39">
+                <source>Node has child subnodes</source>
+                <target>Node has child subnodes. First, delete all child nodes, or move childs from this parent.</target>
+                <note>Translation of Tulia\Cms\Node\Domain\WriteModel\Rules\CanDeleteNode::NodeHasChildren</note>
             </trans-unit>
         </body>
     </file>

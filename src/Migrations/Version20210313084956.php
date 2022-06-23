@@ -86,9 +86,9 @@ CREATE TABLE `#__content_type` (
 EOL
 );
         $this->addSql(<<<EOL
-CREATE TABLE `#__node_has_flag` (
+CREATE TABLE `#__node_has_purpose` (
   `node_id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
-  `flag` varchar(64) COLLATE utf8_unicode_ci NOT NULL
+  `purpose` varchar(64) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 EOL
         );
@@ -135,8 +135,8 @@ ALTER TABLE `#__content_type`
 EOL
 );
         $this->addSql(<<<EOL
-ALTER TABLE `#__node_has_flag`
-  ADD UNIQUE KEY `UNIQUE` (`node_id`,`flag`),
+ALTER TABLE `#__node_has_purpose`
+  ADD UNIQUE KEY `UNIQUE` (`node_id`,`purpose`),
   ADD KEY `node_id` (`node_id`);
 EOL
 );
@@ -169,8 +169,8 @@ ALTER TABLE `#__node_term_relationship`
 EOL
 );
         $this->addSql(<<<EOL
-ALTER TABLE `#__node_has_flag`
-  ADD CONSTRAINT `fk_node_has_flag_node_id` FOREIGN KEY (`node_id`) REFERENCES `#__node` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `#__node_has_purpose`
+  ADD CONSTRAINT `fk_node_has_purpose_node_id` FOREIGN KEY (`node_id`) REFERENCES `#__node` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 EOL
 );
     }

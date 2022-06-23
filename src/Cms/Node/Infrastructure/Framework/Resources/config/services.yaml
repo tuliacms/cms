@@ -7,10 +7,10 @@ services:
         resource: '../../../../**'
         exclude: '../../../../{Infrastructure/Framework/Resources}'
 
-    Tulia\Cms\Node\Domain\NodeFlag\NodeFlagRegistryInterface:
-        class: Tulia\Cms\Node\Domain\NodeFlag\NodeFlagRegistry
+    Tulia\Cms\Node\Domain\WriteModel\Service\NodePurpose\NodePurposeRegistryInterface:
+        class: Tulia\Cms\Node\Domain\WriteModel\Service\NodePurpose\NodePurposeRegistry
         bind:
-            $providers: !tagged_iterator node.flag_provider
+            $providers: !tagged_iterator node.purpose_provider
 
     Tulia\Cms\Node\Infrastructure\Framework\Routing\SymfonyRouter:
         tags: [ routing_chain.router ]

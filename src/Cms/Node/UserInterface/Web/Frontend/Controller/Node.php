@@ -6,8 +6,8 @@ namespace Tulia\Cms\Node\UserInterface\Web\Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\Node\Domain\NodeFlag\Enum\NodeFlagEnum;
 use Tulia\Cms\Node\Domain\ReadModel\Model\Node as Model;
+use Tulia\Cms\Node\Domain\WriteModel\Model\Enum\NodePurposeEnum;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderScopeEnum;
@@ -32,7 +32,7 @@ class Node extends AbstractController
     public function show(Model $node, Request $request)
     {
         if (
-            $node->hasFlag(NodeFlagEnum::PAGE_HOMEPAGE)
+            $node->hasFlag(NodePurposeEnum::PAGE_HOMEPAGE)
             && $this->isHomepage($request) === false
         ) {
             return $this->redirectToRoute('homepage');

@@ -15,12 +15,15 @@ use Tulia\Cms\Node\Application\UseCase\CreateNode;
 use Tulia\Cms\Node\Application\UseCase\DeleteNode;
 use Tulia\Cms\Node\Application\UseCase\UpdateNode;
 use Tulia\Cms\Node\Domain\ReadModel\Datatable\NodeDatatableFinderInterface;
+use Tulia\Cms\Node\Domain\WriteModel\Exception\CannotDeleteNodeException;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\SingularFlagImposedOnMoreThanOneNodeException;
 use Tulia\Cms\Node\Domain\WriteModel\NodeRepositoryInterface;
+use Tulia\Cms\Node\UserInterface\Web\Backend\Form\NodeDetailsForm;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Exception\RequestCsrfTokenException;
+use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\Templating\ViewInterface;
 
@@ -34,19 +37,22 @@ class Node extends AbstractController
     private DatatableFactory $factory;
     private NodeDatatableFinderInterface $finder;
     private ContentFormService $contentFormService;
+    private AuthenticatedUserProviderInterface $authenticatedUserProvider;
 
     public function __construct(
         ContentTypeRegistryInterface $typeRegistry,
         NodeRepositoryInterface $repository,
         DatatableFactory $factory,
         NodeDatatableFinderInterface $finder,
-        ContentFormService $contentFormService
+        ContentFormService $contentFormService,
+        AuthenticatedUserProviderInterface $authenticatedUserProvider
     ) {
         $this->typeRegistry = $typeRegistry;
         $this->repository = $repository;
         $this->factory = $factory;
         $this->finder = $finder;
         $this->contentFormService = $contentFormService;
+        $this->authenticatedUserProvider = $authenticatedUserProvider;
     }
 
     public function index(string $node_type): RedirectResponse
@@ -73,24 +79,34 @@ class Node extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param string $node_type
      * @return RedirectResponse|ViewInterface
-     * @throws RequestCsrfTokenException
      * @IgnoreCsrfToken()
      */
     public function create(Request $request, CreateNode $createNode, string $node_type)
     {
         $this->validateCsrfToken($request, $node_type);
 
-        $node = $this->repository->createNew($node_type);
+        $node = $this->repository->createNew($node_type, $this->authenticatedUserProvider->getUser()->getId());
 
-        $formDescriptor = $this->contentFormService->buildFormDescriptor($node->getType(), $node);
+        $nodeType = $this->typeRegistry->get($node_type);
+
+        $nodeDetailsForm = $this->createForm(
+            NodeDetailsForm::class,
+            $node->toArray(),
+            ['content_type' => $nodeType]
+        );
+        $nodeDetailsForm->handleRequest($request);
+
+        $formDescriptor = $this->contentFormService->buildFormDescriptor(
+            $node->getType(),
+            $node->getAttributes(),
+            ['nodeDetailsForm' => $nodeDetailsForm->createView()]
+        );
         $formDescriptor->handleRequest($request);
         $nodeType = $formDescriptor->getContentType();
 
         if ($formDescriptor->isFormValid()) {
-            ($createNode)($node_type, $formDescriptor->getData());
+            ($createNode)($node_type, $this->authenticatedUserProvider->getUser()->getId(), $nodeDetailsForm->getData(), $formDescriptor->getData());
 
             $this->setFlash('success', $this->trans('nodeSaved', [], 'node'));
             return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getCode() ]);
@@ -105,10 +121,9 @@ class Node extends AbstractController
 
     /**
      * @return RedirectResponse|ViewInterface
-     * @throws RequestCsrfTokenException
      * @IgnoreCsrfToken()
      */
-    public function edit(Request $request, UpdateNode $updateNode, string $node_type, string $id)
+    public function edit(string $id, string $node_type, Request $request, UpdateNode $updateNode)
     {
         $this->validateCsrfToken($request, $node_type);
 
@@ -119,14 +134,25 @@ class Node extends AbstractController
             return $this->redirectToRoute('backend.node.list');
         }
 
-        $formDescriptor = $this->contentFormService->buildFormDescriptor($node->getType(), $node->getAttributes());
+        $nodeType = $this->typeRegistry->get($node_type);
+
+        $nodeDetailsForm = $this->createForm(
+            NodeDetailsForm::class,
+            $node->toArray(),
+            ['content_type' => $nodeType]);
+        $nodeDetailsForm->handleRequest($request);
+
+        $formDescriptor = $this->contentFormService->buildFormDescriptor(
+            $node->getType(),
+            $node->getAttributes(),
+            ['nodeDetailsForm' => $nodeDetailsForm->createView()]
+        );
         $formDescriptor->handleRequest($request);
         $form = $formDescriptor->getForm();
-        $nodeType = $formDescriptor->getContentType();
 
         if ($formDescriptor->isFormValid()) {
             try {
-                ($updateNode)($node, $formDescriptor->getData());
+                ($updateNode)($node, $nodeDetailsForm->getData(), $formDescriptor->getData());
                 $this->setFlash('success', $this->trans('nodeSaved', [], 'node'));
                 return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getCode() ]);
             } catch (SingularFlagImposedOnMoreThanOneNodeException $e) {
@@ -143,16 +169,15 @@ class Node extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @return RedirectResponse
      * @CsrfToken(id="node.change-status")
      */
     public function changeStatus(Request $request): RedirectResponse
     {
         $nodeType = $this->findNodeType($request->query->get('node_type', 'page'));
         $status = $request->query->get('status');
+        $payload = $request->request->all();
 
-        foreach ($request->request->get('ids') as $id) {
+        foreach ($payload['ids'] ?? [] as $id) {
             $node = $this->repository->find($id);
 
             if (!$node) {
@@ -179,24 +204,32 @@ class Node extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @return RedirectResponse
      * @CsrfToken(id="node.delete")
      */
     public function delete(Request $request, DeleteNode $deleteNode): RedirectResponse
     {
-        $removedNodes = 0;
+        $payload = $request->request->all();
+        $pretenders = 0;
+        $deleted = 0;
 
-        foreach ($request->request->get('ids') as $id) {
-            $node = $this->repository->find($id);
-
-            if ($node) {
-                ($deleteNode)($node);
-                $removedNodes++;
+        foreach ($payload['ids'] ?? [] as $id) {
+            try {
+                $pretenders++;
+                ($deleteNode)($id);
+                $deleted++;
+            } catch (CannotDeleteNodeException $e) {
+                $this->setFlash('danger', $this->trans(
+                    'cannotDeleteNodeReason',
+                    [
+                        'title' => $e->title,
+                        'reason' => $this->trans($e->reason, [], 'node')
+                    ],
+                    'node'
+                ));
             }
         }
 
-        if ($removedNodes) {
+        if ($pretenders !== 0 && $pretenders === $deleted) {
             $this->setFlash('success', $this->trans('selectedElementsWereDeleted'));
         }
 
@@ -216,6 +249,7 @@ class Node extends AbstractController
 
     private function collectTaxonomies(ContentType $nodeType): array
     {
+        return [];
         $result = [];
 
         foreach ($nodeType->getFields() as $field) {

@@ -7,81 +7,107 @@ namespace Tulia\Cms\Tests\Behat\Node;
 use Assert;
 use Behat\Behat\Context\Context;
 use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\Attribute;
+use Tulia\Cms\Node\Domain\WriteModel\Event\NodeDeleted;
+use Tulia\Cms\Node\Domain\WriteModel\Exception\CannotDeleteNodeException;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
+use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\Author;
+use Tulia\Cms\Node\Domain\WriteModel\Rules\CanDeleteNode\CanDeleteNode;
+use Tulia\Cms\Node\Domain\WriteModel\Service\NodeChildrenDetectorInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
+use Tulia\Cms\Tests\Behat\AggregateRootSpy;
+use Tulia\Cms\Tests\Behat\Node\TestDoubles\NodeChildrenDetectorStub;
 
 /**
  * @author Adam Banaszkiewicz
  */
 final class NodeContext implements Context
 {
-    private const NODE_ID = 'b43b49dc-dc9a-416f-8bd6-60e8c1a7af76';
     private const WEBSITE_ID = 'ceb7a799-9491-4880-a50e-0c7f0dcba7f5';
+    private const AUTHOR_ID = '9e8dc655-f476-4838-8c80-b22b1d401aab';
     private const DATE_FORMAT = 'Y-m-d H:i:s';
 
     private Node $node;
+    private AggregateRootSpy $nodeSpy;
+    private ?string $exceptionReason = null;
 
-    /**
-     * @Given there is a node
-     */
-    public function thereIsANode(): void
+    private NodeChildrenDetectorInterface $nodeChildrenDetector;
+
+    public function __construct()
     {
-        $this->node = Node::createNew(self::NODE_ID, 'page', self::WEBSITE_ID, 'en_US');
+        $this->nodeChildrenDetector = new NodeChildrenDetectorStub();
     }
 
     /**
-     * @Given node has attribute :uri with value :value
+     * @Given there is a node :node
      */
-    public function nodeHasAttributeWithValue($uri, $value): void
+    public function thereIsANode(string $node): void
+    {
+        $this->node = Node::createNew($node, 'page', self::WEBSITE_ID, 'en_US', new Author(self::AUTHOR_ID));
+        $this->nodeSpy = new AggregateRootSpy($this->node);
+    }
+
+    /**
+     * @Given this node has attribute :uri with value :value
+     */
+    public function nodeHasAttributeWithValue(string $uri, string $value): void
     {
         $this->node->addAttribute($this->attribute($uri, $value));
     }
 
     /**
-     * @When admin removes attribute :uri
+     * @When admin removes attribute :uri from this node
      */
-    public function adminRemovesAttribute($uri): void
+    public function adminRemovesAttribute(string $uri): void
     {
         $this->node->removeAttribute($uri);
     }
 
     /**
-     * @Then node dont have attribute :uri
+     * @Then this node don't have attribute :uri
      */
-    public function nodeDontHaveAttribute($uri)
+    public function nodeDontHaveAttribute(string $uri): void
     {
-        Assert::assertFalse($this->node->hasAttribute($uri));
+        $this->node->removeAttribute($uri);
+        $this->node->collectDomainEvents();
     }
 
     /**
-     * @When admin adds attribute :uri with value :value
+     * @When admin adds attribute :uri with value :value to this node
      */
-    public function adminAddsAttributeWithValue($uri, $value): void
+    public function adminAddsAttributeWithValue(string $uri, string $value): void
     {
         $this->node->addAttribute($this->attribute($uri, $value));
     }
 
     /**
-     * @Then node have attribute :uri with value :value
+     * @Then node should have attribute :uri with value :value
      */
-    public function nodeHaveAttributeWithValue($uri, $value): void
+    public function nodeShouldHaveAttributeWithValue(string $uri, string $value): void
     {
         Assert::assertTrue($this->node->hasAttribute($uri));
         Assert::assertSame($value, $this->node->getAttribute($uri)->getValue());
     }
 
     /**
+     * @Then this node should not have attribute :uri
+     */
+    public function thisNodeShouldNotHaveAttribute(string $uri): void
+    {
+        Assert::assertFalse($this->node->hasAttribute($uri));
+    }
+
+    /**
      * @Then node have attribute :uri
      */
-    public function nodeHaveAttribute($uri): void
+    public function nodeHaveAttribute(string $uri): void
     {
         Assert::assertTrue($this->node->hasAttribute($uri));
     }
 
     /**
-     * @Then node is published at :when
+     * @Then node should be published at :when
      */
-    public function nodeIsPublishedAt($when): void
+    public function nodeShouldBePublishedAt(string $when): void
     {
         Assert::assertSame(
             date(self::DATE_FORMAT, strtotime($when)),
@@ -92,15 +118,15 @@ final class NodeContext implements Context
     /**
      * @When admin change published date to :date
      */
-    public function adminChangePublishedDateTo($date): void
+    public function adminChangePublishedDateTo(string $date): void
     {
         $this->node->setPublishedAt(new ImmutableDateTime($date));
     }
 
     /**
-     * @Then node is published forever
+     * @Then node should be published forever
      */
-    public function nodeIsPublishedForever(): void
+    public function nodeShouldBePublishedForever(): void
     {
         Assert::assertNull($this->node->getPublishedTo());
     }
@@ -108,7 +134,7 @@ final class NodeContext implements Context
     /**
      * @When admin change published end date to :date
      */
-    public function adminChangePublishedEndDateTo($date): void
+    public function adminChangePublishedEndDateTo(string $date): void
     {
         $this->node->setPublishedTo(new ImmutableDateTime($date));
     }
@@ -116,7 +142,7 @@ final class NodeContext implements Context
     /**
      * @Then node is published to :when
      */
-    public function nodeIsPublishedTo($when): void
+    public function nodeIsPublishedTo(string $when): void
     {
         Assert::assertSame(
             date(self::DATE_FORMAT, strtotime($when)),
@@ -130,6 +156,47 @@ final class NodeContext implements Context
     public function adminChangeNodeToPublishedForever(): void
     {
         $this->node->setPublishedToForever();
+    }
+
+    /**
+     * @Given there is node :child which is a child node of :parent
+     */
+    public function thereIsNodeWichIsAChildNodeOf(string $child, string $parent): void
+    {
+        $this->nodeChildrenDetector->makeNodeHasChildren($parent, $child);
+    }
+
+    /**
+     * @When I delete this node
+     */
+    public function iDeleteThisNode(): void
+    {
+        try {
+            $this->node->delete(new CanDeleteNode($this->nodeChildrenDetector));
+        } catch (CannotDeleteNodeException $e) {
+            $this->exceptionReason = $e->reason;
+        }
+    }
+
+    /**
+     * @Then this node should not be deleted, because: :reason
+     */
+    public function nodeShouldNotBeDeletedBecause(string $reason): void
+    {
+        $event = $this->nodeSpy->findEvent(NodeDeleted::class);
+
+        Assert::assertNull($event, 'Node should not be deleted');
+        Assert::assertSame($reason, $this->exceptionReason);
+    }
+
+    /**
+     * @Then this node should be deleted
+     */
+    public function thisNodeShouldBeDeleted(): void
+    {
+        $event = $this->nodeSpy->findEvent(NodeDeleted::class);
+
+        Assert::assertInstanceOf(NodeDeleted::class, $event, 'Node should be deleted');
     }
 
     private function attribute(string $uri, string $value): Attribute

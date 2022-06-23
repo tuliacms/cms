@@ -14,11 +14,9 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterfac
  */
 class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWriteStorageInterface
 {
-    private ConnectionInterface $connection;
-
-    public function __construct(ConnectionInterface $connection)
-    {
-        $this->connection = $connection;
+    public function __construct(
+        private ConnectionInterface $connection,
+    ) {
     }
 
     public function find(string $id, string $websiteId, string $locale, string $defaultLocale): array
@@ -33,12 +31,12 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
             SELECT
                 tm.*,
                 COALESCE(tl.locale, :locale) AS locale,
-                GROUP_CONCAT(tnhf.flag SEPARATOR ',') AS flags,
+                GROUP_CONCAT(tnhf.purpose SEPARATOR ',') AS purposes,
                 {$translationColumn}
             FROM #__node AS tm
             LEFT JOIN #__node_lang AS tl
                 ON tm.id = tl.node_id AND tl.locale = :locale
-            LEFT JOIN #__node_has_flag AS tnhf
+            LEFT JOIN #__node_has_purpose AS tnhf
                 ON tm.id = tnhf.node_id
             WHERE tm.id = :id AND tm.website_id = :website_id
             GROUP BY tm.id
@@ -52,6 +50,8 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
             return [];
         }
 
+        $node[0]['purposes'] = $this->findPurposes($id);
+
         return $node[0];
     }
 
@@ -60,7 +60,7 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
         $this->connection->delete('#__node', ['id' => $node['id']]);
         $this->connection->delete('#__node_lang', ['node_id' => $node['id']]);
         $this->connection->delete('#__node_term_relationship', ['node_id' => $node['id']]);
-        $this->connection->delete('#__node_has_flag', ['node_id' => $node['id']]);
+        $this->connection->delete('#__node_has_purpose', ['node_id' => $node['id']]);
     }
 
     public function beginTransaction(): void
@@ -95,6 +95,7 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
         $mainTable['parent_id'] = $data['parent_id'];
 
         $this->connection->insert('#__node', $mainTable);
+        $this->updatePurposes($data['id'], $data['purposes']);
     }
 
     protected function updateMainRow(array $data, bool $foreignLocale): void
@@ -117,6 +118,7 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
         }
 
         $this->connection->update('#__node', $mainTable, ['id' => $data['id']]);
+        $this->updatePurposes($data['id'], $data['purposes']);
     }
 
     protected function insertLangRow(array $data): void
@@ -163,6 +165,26 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
         }
 
         return null;
+    }
+
+    private function updatePurposes(string $nodeId, array $purposes): void
+    {
+        $this->connection->delete('#__node_has_purpose', ['node_id' => $nodeId]);
+
+        foreach ($purposes as $purpose) {
+            $this->connection->insert('#__node_has_purpose', [
+                'node_id' => $nodeId,
+                'purpose' => $purpose,
+            ]);
+        }
+    }
+
+    private function findPurposes(string $nodeId): array
+    {
+        return $this->connection->fetchFirstColumn(
+            'SELECT purpose FROM #__node_has_purpose WHERE node_id = :node_id',
+            ['node_id' => $nodeId]
+        );
     }
 
     /**

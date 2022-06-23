@@ -11,10 +11,10 @@ use Tulia\Cms\Filemanager\Application\Service\ImageUrlResolver;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\FileFinderInterface;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\FileFinderScopeEnum as FilesScopeEnum;
 use Tulia\Cms\Filemanager\Domain\WriteModel\FileTypeEnum;
-use Tulia\Cms\Node\Domain\NodeFlag\NodeFlagRegistryInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum as NodeScopeEnum;
 use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
+use Tulia\Cms\Node\Domain\WriteModel\Service\NodePurpose\NodePurposeRegistryInterface;
 use Tulia\Cms\SearchAnything\Model\Hit;
 use Tulia\Cms\SearchAnything\Model\Results;
 use Tulia\Cms\SearchAnything\Provider\AbstractProvider;
@@ -31,7 +31,7 @@ class SearchProvider extends AbstractProvider
     private TranslatorInterface $translator;
     private ContentTypeRegistryInterface $contentTypeRegistry;
     private ImageUrlResolver $imageUrlResolver;
-    private NodeFlagRegistryInterface $nodeFlagRegistry;
+    private NodePurposeRegistryInterface $nodeFlagRegistry;
 
     public function __construct(
         NodeFinderInterface $nodeFinder,
@@ -40,7 +40,7 @@ class SearchProvider extends AbstractProvider
         TranslatorInterface $translator,
         ContentTypeRegistryInterface $contentTypeRegistry,
         ImageUrlResolver $imageUrlResolver,
-        NodeFlagRegistryInterface $nodeFlagRegistry
+        NodePurposeRegistryInterface $nodeFlagRegistry
     ) {
         $this->nodeFinder  = $nodeFinder;
         $this->filesFinder = $filesFinder;

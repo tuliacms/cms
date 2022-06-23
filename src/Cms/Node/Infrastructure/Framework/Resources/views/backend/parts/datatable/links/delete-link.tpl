@@ -7,7 +7,7 @@
     {{ _self.delete(row, contentType) }}
 {% endif %}
 
-{% if row.status == 'sketch' %}
+{% if row.status == 'draft' %}
     {{ _self.publish(row, contentType) }}
     {{ _self.trash(row, contentType) }}
 {% endif %}

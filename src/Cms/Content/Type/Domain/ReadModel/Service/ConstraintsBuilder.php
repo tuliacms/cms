@@ -26,11 +26,11 @@ class ConstraintsBuilder implements ConstraintsBuilderInterface
 
         $result = [];
 
-        foreach ($constraints as $code => $constraint) {
+        foreach ($constraints as $constraint) {
             if ($constraint instanceof Constraint) {
                 $result[] = $constraint;
             } else {
-                $result[] = $this->mapping->getConstraint($code, [$constraint['modificators'] ?? []]);
+                $result[] = $this->mapping->getConstraint($constraint['code'], [$constraint['modificators'] ?? []]);
             }
         }
 

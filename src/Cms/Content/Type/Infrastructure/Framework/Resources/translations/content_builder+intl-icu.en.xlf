@@ -163,10 +163,6 @@
                 <source>pleaseSelectValue</source>
                 <target>Please select value</target>
             </trans-unit>
-            <trans-unit id="tuliacms.content_builder.44">
-                <source>internalFields</source>
-                <target>Internal fields</target>
-            </trans-unit>
             <trans-unit id="tuliacms.content_builder.45">
                 <source>fieldTypeNotExists</source>
                 <target>Field type "{type}" not exists.</target>

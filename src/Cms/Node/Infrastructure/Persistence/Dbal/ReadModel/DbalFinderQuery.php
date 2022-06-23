@@ -170,10 +170,10 @@ class DbalFinderQuery extends AbstractDbalQuery
             'website' => $this->currentWebsite->getId(),
             'limit' => null,
             /**
-             * Posts with defined flag or flags.
+             * Posts with defined purpose or purposes.
              * @param null|string|array
              */
-            'flag' => null,
+            'purpose' => null,
         ];
     }
 
@@ -190,7 +190,7 @@ class DbalFinderQuery extends AbstractDbalQuery
         $this->buildTaxonomy($criteria);
         $this->buildNodeType($criteria);
         $this->buildNodeStatus($criteria);
-        $this->buildNodeFlag($criteria);
+        $this->buildNodePurpose($criteria);
         $this->buildDate($criteria);
         $this->buildOffset($criteria);
         $this->buildOrderBy($criteria);
@@ -222,7 +222,7 @@ class DbalFinderQuery extends AbstractDbalQuery
                     $row['category'] = $terms[$row['id']][TermTypeEnum::MAIN][0];
                 }
 
-                $row['flags'] = array_filter(explode(',', (string) $row['flags']));
+                $row['purposes'] = array_filter(explode(',', (string) $row['purposes']));
 
                 $collection->append(Node::buildFromArray($row));
             }
@@ -289,7 +289,7 @@ class DbalFinderQuery extends AbstractDbalQuery
                 COALESCE(tl.title, tm.title) AS title,
                 COALESCE(tl.slug, tm.slug) AS slug,
                 COALESCE(tl.locale, :tl_locale) AS locale,
-                GROUP_CONCAT(tnhf.flag SEPARATOR \',\') AS flags
+                GROUP_CONCAT(tnhf.purpose SEPARATOR \',\') AS purposes
             ');
         }
 
@@ -297,7 +297,7 @@ class DbalFinderQuery extends AbstractDbalQuery
             ->from('#__node', 'tm')
             ->leftJoin('tm', '#__node_lang', 'tl', 'tm.id = tl.node_id AND tl.locale = :tl_locale')
             ->setParameter('tl_locale', $criteria['locale'], PDO::PARAM_STR)
-            ->leftJoin('tm', '#__node_has_flag', 'tnhf', 'tm.id = tnhf.node_id')
+            ->leftJoin('tm', '#__node_has_purpose', 'tnhf', 'tm.id = tnhf.node_id')
             ->addGroupBy('tm.id')
         ;
 
@@ -462,19 +462,19 @@ class DbalFinderQuery extends AbstractDbalQuery
         }
     }
 
-    protected function buildNodeFlag(array $criteria): void
+    protected function buildNodePurpose(array $criteria): void
     {
-        if (! $criteria['flag']) {
+        if (! $criteria['purpose']) {
             return;
         }
 
-        if (is_array($criteria['flag']) === false) {
-            $criteria['flag'] = [$criteria['flag']];
+        if (is_array($criteria['purpose']) === false) {
+            $criteria['purpose'] = [$criteria['purpose']];
         }
 
         $this->queryBuilder
-            ->innerJoin('tm', '#__node_has_flag', 'nhf', 'tm.id = nhf.node_id AND nhf.flag IN (:nhf_flag)')
-            ->setParameter('nhf_flag', $criteria['flag'], Connection::PARAM_STR_ARRAY)
+            ->innerJoin('tm', '#__node_has_purpose', 'nhf', 'tm.id = nhf.node_id AND nhf.purpose IN (:nhf_purpose)')
+            ->setParameter('nhf_purpose', $criteria['purpose'], Connection::PARAM_STR_ARRAY)
         ;
     }
 

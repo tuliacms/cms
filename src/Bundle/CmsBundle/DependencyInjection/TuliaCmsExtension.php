@@ -76,8 +76,9 @@ class TuliaCmsExtension extends Extension
             ->addTag('menu.builder.type_registrator');
 
         // Nodes
-        $container->registerForAutoconfiguration(\Tulia\Cms\Node\Domain\NodeFlag\NodeFlagProviderInterface::class)
-            ->addTag('node.flag_provider');
+        $container->registerForAutoconfiguration(
+            \Tulia\Cms\Node\Domain\WriteModel\Service\NodePurpose\NodePurposeProviderInterface::class)
+            ->addTag('node.purpose_provider');
 
         // Terms
         $container->registerForAutoconfiguration(\Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\TaxonomyActionInterface::class)

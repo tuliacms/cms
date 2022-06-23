@@ -43,7 +43,15 @@ final class FieldsGroup
 
     public function getFieldsCodes(): array
     {
-        return array_map(fn ($f) => $f->getCode(), $this->fields);
+        $codes = [];
+
+        foreach ($this->fields as $field) {
+            $codes[$field->getPosition()] = $field->getCode();
+        }
+
+        ksort($codes);
+
+        return $codes;
     }
 
     public function getCode(): string
@@ -108,15 +116,7 @@ final class FieldsGroup
         ?string $parent = null,
         ?int $position = null
     ): ?Field {
-        $currentField = null;
-        $currentFieldPosition = null;
-
-        foreach ($this->fields as $key => $field) {
-            if ($field->getCode() === $code) {
-                $currentField = $field;
-                $currentFieldPosition = $key;
-            }
-        }
+        $currentField = $this->fields[$code] ?? null;
 
         if (!$currentField) {
             throw new \OutOfBoundsException(sprintf('Field %s not exists, cannot update.', $code));
@@ -125,7 +125,7 @@ final class FieldsGroup
         $newField = new Field($code, $currentField->getType(), $name, $flags, $constraints, $configuration, $parent, $position ?? $currentField->getPosition());
 
         if (!$newField->sameAs($currentField)) {
-            $this->fields[$currentFieldPosition] = $newField;
+            $this->fields[$code] = $newField;
             return $newField;
         }
 
@@ -151,10 +151,6 @@ final class FieldsGroup
                 $this->fields[$code]->moveToPosition($position++);
             }
         }
-
-        usort($this->fields, function (Field $field1, Field $field2) {
-            return $field1->getPosition() <=> $field2->getPosition();
-        });
     }
 
     public function moveToPosition(int $newPosition): void

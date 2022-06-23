@@ -142,7 +142,7 @@ export default class Editor {
                 '<span class="tued-logo">Tulia Editor</span> - ' + this.container.translator.trans('contentPreview') +
                 '</div>' +
             '</div>' +
-            '<div class="tued-preview">' +
+            '<div class="">' +
                 '<iframe class="tued-preview" src="' + this.options.editor.preview + '?tuliaEditorInstance=' + this.instanceId + '"></iframe>' +
             '</div>' +
         '</div>');

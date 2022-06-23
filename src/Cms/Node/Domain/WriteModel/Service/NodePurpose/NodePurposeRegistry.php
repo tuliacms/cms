@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Domain\NodeFlag;
+namespace Tulia\Cms\Node\Domain\WriteModel\Service\NodePurpose;
 
-use Tulia\Cms\Node\Domain\NodeFlag\Exception\FlagNotFoundException;
+use Tulia\Cms\Node\Domain\WriteModel\Exception\NodePurposeNotFoundException;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class NodeFlagRegistry implements NodeFlagRegistryInterface
+class NodePurposeRegistry implements NodePurposeRegistryInterface
 {
     /**
-     * @var NodeFlagProviderInterface[]
+     * @var NodePurposeProviderInterface[]
      */
     private iterable $providers;
 
@@ -40,7 +40,7 @@ class NodeFlagRegistry implements NodeFlagRegistryInterface
             }
         }
 
-        throw FlagNotFoundException::fromName($name);
+        throw NodePurposeNotFoundException::fromName($name);
     }
 
     public function has(string $name): bool

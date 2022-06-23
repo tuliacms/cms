@@ -21,9 +21,7 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDatatableFinderInterface
 {
     private ContentType $contentType;
-
     private TermFinderInterface $termFinder;
-
     private TranslatorInterface $translator;
 
     public function __construct(
@@ -126,9 +124,9 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
     {
         $queryBuilder
             ->from('#__node', 'tm')
-            ->addSelect('tm.type, tm.level, tm.parent_id, tm.slug, tm.status, GROUP_CONCAT(tnhf.flag SEPARATOR \',\') AS flags')
+            ->addSelect('tm.type, tm.level, tm.parent_id, tm.slug, tm.status, GROUP_CONCAT(tnhf.purpose SEPARATOR \',\') AS purposes')
             ->leftJoin('tm', '#__node_lang', 'tl', 'tm.id = tl.node_id AND tl.locale = :locale')
-            ->leftJoin('tm', '#__node_has_flag', 'tnhf', 'tm.id = tnhf.node_id')
+            ->leftJoin('tm', '#__node_has_purpose', 'tnhf', 'tm.id = tnhf.node_id')
             ->where('tm.type = :type AND tm.website_id = :website_id')
             ->setParameter('type', $this->contentType->getCode(), PDO::PARAM_STR)
             ->setParameter('locale', $this->currentWebsite->getLocale()->getCode(), PDO::PARAM_STR)
@@ -155,7 +153,7 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
     public function prepareResult(array $result): array
     {
         foreach ($result as $key => $row) {
-            $result[$key]['flags'] = array_filter(explode(',', (string) $row['flags']));
+            $result[$key]['purposes'] = array_filter(explode(',', (string) $row['purposes']));
         }
 
         return $result;

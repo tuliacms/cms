@@ -7,6 +7,7 @@ namespace Tulia\Cms\Node\Application\UseCase;
 use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeUpdated;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
+use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\Author;
 use Tulia\Cms\Node\Domain\WriteModel\NodeRepositoryInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChainInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
@@ -59,28 +60,19 @@ abstract class AbstractNodeUseCase
     /**
      * @param Attribute[] $attributes
      */
-    protected function updateModel(Node $node, array $attributes): void
+    protected function updateModel(Node $node, array $details, array $attributes): void
     {
-        $getValue = function (string $code, $default = null) use ($attributes) {
-            foreach ($attributes as $attribute) {
-                if ($attribute->getCode() === $code) {
-                    return $attribute->getValue();
-                }
-            }
-
-            return $default;
-        };
-
-        $node->setStatus($getValue('status', 'published'));
-        $node->setSlug($getValue('slug'));
-        $node->setTitle($getValue('title'));
-        $node->setPublishedAt(new ImmutableDateTime($getValue('published_at', '')));
-        $node->setParentId($getValue('parent_id'));
-        $node->setAuthorId($getValue('author_id'));
+        $node->setStatus($details['status']);
+        $node->setSlug($details['slug']);
+        $node->setTitle($details['title']);
+        $node->setPublishedAt(new ImmutableDateTime($details['published_at']));
+        $node->setParentId($details['parent_id']);
+        $node->setAuthor(new Author($details['author_id']));
+        $node->updatePurposes($details['purposes']);
         $node->updateAttributes($attributes);
 
-        if ($getValue('published_to')) {
-            $node->setPublishedTo(new ImmutableDateTime($getValue('published_to', '')));
+        if ($details['published_to']) {
+            $node->setPublishedTo(new ImmutableDateTime($details['published_to']));
         } else {
             $node->setPublishedToForever();
         }

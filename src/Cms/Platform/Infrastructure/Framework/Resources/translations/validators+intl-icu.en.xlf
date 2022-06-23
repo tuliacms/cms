@@ -46,11 +46,6 @@
                 <source>usernameContainsNotAllowedCharactersAllowedAre</source>
                 <target>Username contains not allowed characters, allowed are: {allowed_characters}.</target>
             </trans-unit>
-            <trans-unit id="tuliacms.validators.11">
-                <source>cannotDeleteDueToContainingChildren</source>
-                <target><![CDATA[The item <b>{name}</b> cannot be deleted because it contains subitems. Delete all child items to delete this item.]]></target>
-            </trans-unit>
-
         </body>
     </file>
 </xliff>
