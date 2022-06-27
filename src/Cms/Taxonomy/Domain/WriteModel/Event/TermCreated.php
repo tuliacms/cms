@@ -9,7 +9,7 @@ use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term;
 /**
  * @author Adam Banaszkiewicz
  */
-class TermCreated extends DomainEvent
+class TermCreated extends AbstractDomainEvent
 {
     public static function fromTerm(Term $term): self
     {

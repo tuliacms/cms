@@ -9,7 +9,7 @@ use Tulia\Cms\User\Domain\WriteModel\Model\AggregateId;
 /**
  * @author Adam Banaszkiewicz
  */
-class RoleWasGiven extends DomainEvent
+class RoleWasGiven extends AbstractDomainEvent
 {
     private string $role;
 

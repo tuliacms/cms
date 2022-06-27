@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Tests\Behat;
 
-use Tulia\Cms\Shared\Domain\WriteModel\Event\DomainEvent;
+use Tulia\Cms\Shared\Domain\WriteModel\Event\AbstractDomainEvent;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
 
 /**
@@ -12,7 +12,7 @@ use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
  */
 final class AggregateRootSpy
 {
-    /** @var DomainEvent[][] */
+    /** @var AbstractDomainEvent[][] */
     private array $aggregateEventsCollection = [];
     private ?AbstractAggregateRoot $aggregate;
 
@@ -22,7 +22,7 @@ final class AggregateRootSpy
     }
 
     /**
-     * @return DomainEvent[]
+     * @return AbstractDomainEvent[]
      */
     public function collectEvents(): array
     {
@@ -38,7 +38,7 @@ final class AggregateRootSpy
             = $this->aggregate->collectDomainEvents();
     }
 
-    public function findEvent(string $classname): ?DomainEvent
+    public function findEvent(string $classname): ?AbstractDomainEvent
     {
         foreach ($this->collectEvents() as $event) {
             if ($event instanceof $classname) {
@@ -49,7 +49,7 @@ final class AggregateRootSpy
         return null;
     }
 
-    public function findEventOfAny(array $classNames): ?DomainEvent
+    public function findEventOfAny(array $classNames): ?AbstractDomainEvent
     {
         foreach ($this->collectEvents() as $event) {
             if (\in_array(\get_class($event), $classNames, true)) {

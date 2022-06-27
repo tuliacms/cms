@@ -9,7 +9,7 @@ use Tulia\Cms\Widget\Domain\WriteModel\Model\Widget;
 /**
  * @author Adam Banaszkiewicz
  */
-class WidgetCreated extends DomainEvent
+class WidgetCreated extends AbstractDomainEvent
 {
     public static function fromWidget(Widget $widget): self
     {

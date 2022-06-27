@@ -7,7 +7,7 @@ namespace Tulia\Cms\ContactForm\Domain\Event;
 /**
  * @author Adam Banaszkiewicz
  */
-class FormCreated extends DomainEvent
+class FormCreated extends AbstractDomainEvent
 {
     private string $websiteId;
 

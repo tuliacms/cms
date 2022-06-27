@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Shared\Domain\WriteModel\Model;
 
-use Tulia\Cms\Shared\Domain\WriteModel\Event\DomainEvent;
+use Tulia\Cms\Shared\Domain\WriteModel\Event\AbstractDomainEvent;
 
 /**
  * @author Adam Banaszkiewicz
  */
 trait AggregateRootTrait
 {
-    /** @var DomainEvent[] */
+    /** @var AbstractDomainEvent[] */
     protected array $domainEvents = [];
 
     public function collectDomainEvents(): array
@@ -23,12 +23,12 @@ trait AggregateRootTrait
         return $events;
     }
 
-    protected function recordThat(DomainEvent $event): void
+    protected function recordThat(AbstractDomainEvent $event): void
     {
         $this->domainEvents[] = $event;
     }
 
-    protected function recordUniqueThat(DomainEvent $event, callable $isDuplicatedEvent): void
+    protected function recordUniqueThat(AbstractDomainEvent $event, callable $isDuplicatedEvent): void
     {
         foreach ($this->domainEvents as $key => $item) {
             if ($isDuplicatedEvent($item)) {

@@ -9,6 +9,7 @@ use Tulia\Cms\Node\Domain\WriteModel\Event\NodeUpdated;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\Author;
 use Tulia\Cms\Node\Domain\WriteModel\NodeRepositoryInterface;
+use Tulia\Cms\Node\Domain\WriteModel\Rules\CanAddPurpose\CanImposePurposeInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChainInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
@@ -18,18 +19,12 @@ use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
  */
 abstract class AbstractNodeUseCase
 {
-    protected NodeRepositoryInterface $repository;
-    protected EventBusInterface $eventBus;
-    protected AggregateActionsChainInterface $actionsChain;
-
     public function __construct(
-        NodeRepositoryInterface $repository,
-        EventBusInterface $eventBus,
-        AggregateActionsChainInterface $actionsChain
+        protected NodeRepositoryInterface $repository,
+        protected EventBusInterface $eventBus,
+        protected AggregateActionsChainInterface $actionsChain,
+        protected CanImposePurposeInterface $canImposePurpose
     ) {
-        $this->repository = $repository;
-        $this->eventBus = $eventBus;
-        $this->actionsChain = $actionsChain;
     }
 
     protected function create(Node $node): void
@@ -68,7 +63,7 @@ abstract class AbstractNodeUseCase
         $node->setPublishedAt(new ImmutableDateTime($details['published_at']));
         $node->setParentId($details['parent_id']);
         $node->setAuthor(new Author($details['author_id']));
-        $node->updatePurposes($details['purposes']);
+        $node->persistPurposes($this->canImposePurpose, $details['purposes']);
         $node->updateAttributes($attributes);
 
         if ($details['published_to']) {

@@ -14,8 +14,8 @@
         {% if row.purposes is not empty %}
             <br />
             {% for purpose in row.purposes %}
-                {% set porposeLabel = trans_exists('flagType.' ~ purpose, {}, 'node')
-                    ? ('flagType.' ~ purpose)|trans({}, 'node')
+                {% set porposeLabel = trans_exists('purposeType.' ~ purpose, {}, 'node')
+                    ? ('purposeType.' ~ purpose)|trans({}, 'node')
                     : purpose %}
                 <span class="badge badge-secondary">
                     {{ 'purposeWithName'|trans({ purpose: porposeLabel }, 'node') }}

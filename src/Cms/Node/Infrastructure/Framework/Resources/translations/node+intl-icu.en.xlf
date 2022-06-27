@@ -114,10 +114,6 @@
                 <source>trashed</source>
                 <target>Trashed</target>
             </trans-unit>
-            <trans-unit id="tuliacms.node.29">
-                <source>singularFlagImposedOnMoreThanOneNode</source>
-                <target>Singular Node purpose imposed on more than one Node: "{flag}". Please take this purpose off from other Nodes to impose on this one.</target>
-            </trans-unit>
             <trans-unit id="tuliacms.node.30">
                 <source>nodesListOfType</source>
                 <target>Nodes of {type}</target>
@@ -135,15 +131,15 @@
                 <target>Node purpose describes additional purpose of any node. You can set here, i.e. if this node should be a Homepage.</target>
             </trans-unit>
             <trans-unit id="tuliacms.node.34">
-                <source>flagType.page:homepage</source>
+                <source>purposeType.page:homepage</source>
                 <target>Homepage</target>
             </trans-unit>
             <trans-unit id="tuliacms.node.35">
-                <source>flagType.page:contact</source>
+                <source>purposeType.page:contact</source>
                 <target>Contact page</target>
             </trans-unit>
             <trans-unit id="tuliacms.node.36">
-                <source>flagType.page:privacy_policy</source>
+                <source>purposeType.page:privacy_policy</source>
                 <target>Privacy Policy page</target>
             </trans-unit>
             <trans-unit id="tuliacms.node.37">

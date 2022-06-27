@@ -9,7 +9,7 @@ use Tulia\Cms\Menu\Domain\WriteModel\Model\Menu;
 /**
  * @author Adam Banaszkiewicz
  */
-class MenuUpdated extends DomainEvent
+class MenuUpdated extends AbstractDomainEvent
 {
     public static function fromModel(Menu $menu): self
     {

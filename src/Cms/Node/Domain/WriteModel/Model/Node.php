@@ -10,9 +10,13 @@ use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\AttributesAwareInterfac
 use Tulia\Cms\Node\Domain\WriteModel\Event;
 use Tulia\Cms\Node\Domain\WriteModel\Event\AttributeUpdated;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeDeleted;
+use Tulia\Cms\Node\Domain\WriteModel\Event\PurposesUpdated;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\CannotDeleteNodeException;
+use Tulia\Cms\Node\Domain\WriteModel\Exception\CannotImposePurposeToNodeException;
 use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\Author;
 use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\NodeId;
+use Tulia\Cms\Node\Domain\WriteModel\Rules\CanAddPurpose\CanImposePurposeInterface;
+use Tulia\Cms\Node\Domain\WriteModel\Rules\CanAddPurpose\CanImposePurposeReasonEnum;
 use Tulia\Cms\Node\Domain\WriteModel\Rules\CanDeleteNode\CanDeleteNodeInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Rules\CanDeleteNode\CanDeleteNodeReasonEnum;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
@@ -103,21 +107,21 @@ final class Node extends AbstractAggregateRoot implements AttributesAwareInterfa
     {
         return [
             'id'            => $this->getId()->getValue(),
-            'type'          => $this->getType(),
-            'website_id'    => $this->getWebsiteId(),
-            'published_at'  => $this->getPublishedAt(),
-            'published_to'  => $this->getPublishedTo(),
-            'created_at'    => $this->getCreatedAt(),
-            'updated_at'    => $this->getUpdatedAt(),
-            'status'        => $this->getStatus(),
+            'type'          => $this->type,
+            'website_id'    => $this->websiteId,
+            'published_at'  => $this->publishedAt,
+            'published_to'  => $this->publishedTo,
+            'created_at'    => $this->createdAt,
+            'updated_at'    => $this->updatedAt,
+            'status'        => $this->status,
             'author_id'     => $this->author->getId(),
             'category_id'   => $this->getCategoryId(),
-            'level'         => $this->getLevel(),
-            'parent_id'     => $this->getParentId(),
-            'locale'        => $this->getLocale(),
-            'title'         => $this->getTitle(),
-            'slug'          => $this->getSlug(),
-            'purposes'      => $this->getPurposes(),
+            'level'         => $this->level,
+            'parent_id'     => $this->parentId,
+            'locale'        => $this->locale,
+            'title'         => $this->title,
+            'slug'          => $this->slug,
+            'purposes'      => $this->purposes,
             'attributes'    => $this->attributes,
         ];
     }
@@ -306,22 +310,46 @@ final class Node extends AbstractAggregateRoot implements AttributesAwareInterfa
         $this->translated = $translated;
     }
 
-    public function hasPurpose(string $purpose): bool
+    public function persistPurposes(CanImposePurposeInterface $rules, array $purposes): void
     {
-        return \in_array($purpose, $this->purposes, true);
-    }
+        foreach ($purposes as $purpose) {
+            $reason = $rules->decide($this->id->getValue(), $purpose, $this->websiteId, $this->purposes);
 
-    public function getPurposes(): array
-    {
-        return $this->purposes;
-    }
+            if (CanImposePurposeReasonEnum::OK !== $reason) {
+                throw CannotImposePurposeToNodeException::fromReason($reason, $purpose, $this->id->getValue());
+            }
+        }
 
-    public function updatePurposes(array $purposes): void
-    {
         $this->purposes = $purposes;
+        $this->recordThat(new PurposesUpdated(
+            $this->id->getValue(),
+            $this->type,
+            $this->websiteId,
+            $this->locale,
+            $this->purposes
+        ));
+    }
 
-        /*$oldFlags = array_diff($this->attributes['flags'], $flags);
-        $newFlags = array_diff($flags, $this->attributes['flags']);*/
+    public function imposePurpose(CanImposePurposeInterface $rules, string $purpose): void
+    {
+        if (\in_array($purpose, $this->purposes, true)) {
+            return;
+        }
+
+        $reason = $rules->decide($this->id->getValue(), $purpose, $this->websiteId, $this->purposes);
+
+        if (CanImposePurposeReasonEnum::OK !== $reason) {
+            throw CannotImposePurposeToNodeException::fromReason($reason, $purpose, $this->id->getValue());
+        }
+
+        $this->purposes[] = $purpose;
+        $this->recordThat(new PurposesUpdated(
+            $this->id->getValue(),
+            $this->type,
+            $this->websiteId,
+            $this->locale,
+            $this->purposes
+        ));
     }
 
     private function markAsUpdated(): void

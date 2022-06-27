@@ -9,7 +9,7 @@ use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 /**
  * @author Adam Banaszkiewicz
  */
-class AttributeUpdated extends DomainEvent
+class AttributeUpdated extends AbstractDomainEvent
 {
     private string $attribute;
     private $value;

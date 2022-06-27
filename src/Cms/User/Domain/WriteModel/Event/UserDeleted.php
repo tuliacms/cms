@@ -7,6 +7,6 @@ namespace Tulia\Cms\User\Domain\WriteModel\Event;
 /**
  * @author Adam Banaszkiewicz
  */
-class UserDeleted extends DomainEvent
+class UserDeleted extends AbstractDomainEvent
 {
 }

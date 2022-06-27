@@ -9,7 +9,7 @@ use Tulia\Cms\ContactForm\Domain\WriteModel\Model\Form;
 /**
  * @author Adam Banaszkiewicz
  */
-class FormDeleted extends DomainEvent
+class FormDeleted extends AbstractDomainEvent
 {
     public static function fromForm(Form $form): self
     {

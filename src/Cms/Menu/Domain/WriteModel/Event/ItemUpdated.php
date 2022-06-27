@@ -7,7 +7,7 @@ namespace Tulia\Cms\Menu\Domain\WriteModel\Event;
 /**
  * @author Adam Banaszkiewicz
  */
-class ItemUpdated extends DomainEvent
+class ItemUpdated extends AbstractDomainEvent
 {
     private string $itemId;
 

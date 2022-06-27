@@ -20,4 +20,5 @@ interface NodePurposeRegistryInterface
 
     public function has(string $name): bool;
     public function get(string $name): array;
+    public function add(string $name, bool $singular): void;
 }

@@ -24,3 +24,6 @@ services:
     Tulia\Cms\Node\Infrastructure\Cms\SearchAnything\SearchProvider:
         tags:
             - { name: search.provider, priority: 1000 }
+
+    Tulia\Cms\Node\Domain\WriteModel\Rules\CanAddPurpose\CanImposePurposeInterface:
+        class: Tulia\Cms\Node\Domain\WriteModel\Rules\CanAddPurpose\CanImposePurpose

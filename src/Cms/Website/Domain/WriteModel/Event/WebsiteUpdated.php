@@ -7,6 +7,6 @@ namespace Tulia\Cms\Website\Domain\WriteModel\Event;
 /**
  * @author Adam Banaszkiewicz
  */
-class WebsiteUpdated extends DomainEvent
+class WebsiteUpdated extends AbstractDomainEvent
 {
 }

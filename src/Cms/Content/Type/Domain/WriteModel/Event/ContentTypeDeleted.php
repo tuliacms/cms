@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Content\Type\Domain\WriteModel\Event;
 
-use Tulia\Cms\Shared\Domain\WriteModel\Event\DomainEvent;
+use Tulia\Cms\Shared\Domain\WriteModel\Event\AbstractDomainEvent;
 
 /**
  * @author Adam Banaszkiewicz
  */
-final class ContentTypeDeleted extends DomainEvent
+final class ContentTypeDeleted extends AbstractDomainEvent
 {
     private string $code;
 

@@ -9,7 +9,7 @@ use Tulia\Cms\User\Domain\WriteModel\Model\AggregateId;
 /**
  * @author Adam Banaszkiewicz
  */
-class UsernameChanged extends DomainEvent
+class UsernameChanged extends AbstractDomainEvent
 {
     /**
      * @var string

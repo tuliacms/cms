@@ -9,7 +9,7 @@ use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 /**
  * @author Adam Banaszkiewicz
  */
-class NodeUpdated extends DomainEvent
+class NodeUpdated extends AbstractDomainEvent
 {
     public static function fromNode(Node $node): self
     {

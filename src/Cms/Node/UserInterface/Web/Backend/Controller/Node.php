@@ -16,7 +16,7 @@ use Tulia\Cms\Node\Application\UseCase\DeleteNode;
 use Tulia\Cms\Node\Application\UseCase\UpdateNode;
 use Tulia\Cms\Node\Domain\ReadModel\Datatable\NodeDatatableFinderInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\CannotDeleteNodeException;
-use Tulia\Cms\Node\Domain\WriteModel\Exception\SingularFlagImposedOnMoreThanOneNodeException;
+use Tulia\Cms\Node\Domain\WriteModel\Exception\CannotImposePurposeToNodeException;
 use Tulia\Cms\Node\Domain\WriteModel\NodeRepositoryInterface;
 use Tulia\Cms\Node\UserInterface\Web\Backend\Form\NodeDetailsForm;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
@@ -139,25 +139,23 @@ class Node extends AbstractController
         $nodeDetailsForm = $this->createForm(
             NodeDetailsForm::class,
             $node->toArray(),
-            ['content_type' => $nodeType]);
+            ['content_type' => $nodeType, 'csrf_protection' => false]);
         $nodeDetailsForm->handleRequest($request);
 
         $formDescriptor = $this->contentFormService->buildFormDescriptor(
             $node->getType(),
             $node->getAttributes(),
-            ['nodeDetailsForm' => $nodeDetailsForm->createView()]
+            ['nodeDetailsForm' => $nodeDetailsForm]
         );
         $formDescriptor->handleRequest($request);
-        $form = $formDescriptor->getForm();
 
         if ($formDescriptor->isFormValid()) {
             try {
                 ($updateNode)($node, $nodeDetailsForm->getData(), $formDescriptor->getData());
                 $this->setFlash('success', $this->trans('nodeSaved', [], 'node'));
                 return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getCode() ]);
-            } catch (SingularFlagImposedOnMoreThanOneNodeException $e) {
-                $error = new FormError($this->trans('singularFlagImposedOnMoreThanOneNode', ['flag' => $e->getFlag()], 'node'));
-                $form->get('flags')->addError($error);
+            } catch (CannotImposePurposeToNodeException $e) {
+                $nodeDetailsForm->get('purposes')->addError(new FormError($this->trans($e->reason)));
             }
         }
 

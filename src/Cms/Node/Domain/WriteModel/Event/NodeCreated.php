@@ -9,7 +9,7 @@ use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 /**
  * @author Adam Banaszkiewicz
  */
-class NodeCreated extends DomainEvent
+class NodeCreated extends AbstractDomainEvent
 {
     private string $type;
 

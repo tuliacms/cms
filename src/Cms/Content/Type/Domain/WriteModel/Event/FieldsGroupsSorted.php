@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Content\Type\Domain\WriteModel\Event;
 
-use Tulia\Cms\Shared\Domain\WriteModel\Event\DomainEvent;
+use Tulia\Cms\Shared\Domain\WriteModel\Event\AbstractDomainEvent;
 
 /**
  * @author Adam Banaszkiewicz
  */
-final class FieldsGroupsSorted extends DomainEvent
+final class FieldsGroupsSorted extends AbstractDomainEvent
 {
     private string $contentType;
     /** @var string[] */
