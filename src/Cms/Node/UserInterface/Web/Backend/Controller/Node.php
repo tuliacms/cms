@@ -12,8 +12,10 @@ use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Service\ContentFormService;
 use Tulia\Cms\Node\Application\UseCase\CreateNode;
+use Tulia\Cms\Node\Application\UseCase\CreateNodeRequest;
 use Tulia\Cms\Node\Application\UseCase\DeleteNode;
 use Tulia\Cms\Node\Application\UseCase\UpdateNode;
+use Tulia\Cms\Node\Application\UseCase\UpdateNodeRequest;
 use Tulia\Cms\Node\Domain\ReadModel\Datatable\NodeDatatableFinderInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\CannotDeleteNodeException;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\CannotImposePurposeToNodeException;
@@ -93,23 +95,27 @@ class Node extends AbstractController
         $nodeDetailsForm = $this->createForm(
             NodeDetailsForm::class,
             $node->toArray(),
-            ['content_type' => $nodeType]
+            ['content_type' => $nodeType, 'csrf_protection' => false]
         );
         $nodeDetailsForm->handleRequest($request);
 
         $formDescriptor = $this->contentFormService->buildFormDescriptor(
             $node->getType(),
             $node->getAttributes(),
-            ['nodeDetailsForm' => $nodeDetailsForm->createView()]
+            ['nodeDetailsForm' => $nodeDetailsForm]
         );
         $formDescriptor->handleRequest($request);
         $nodeType = $formDescriptor->getContentType();
 
         if ($formDescriptor->isFormValid()) {
-            ($createNode)($node_type, $this->authenticatedUserProvider->getUser()->getId(), $nodeDetailsForm->getData(), $formDescriptor->getData());
+            try {
+                $createNode(new CreateNodeRequest($node_type, $this->authenticatedUserProvider->getUser()->getId(), $nodeDetailsForm->getData(), $formDescriptor->getData()));
 
-            $this->setFlash('success', $this->trans('nodeSaved', [], 'node'));
-            return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getCode() ]);
+                $this->setFlash('success', $this->trans('nodeSaved', [], 'node'));
+                return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getCode() ]);
+            }  catch (CannotImposePurposeToNodeException $e) {
+                $nodeDetailsForm->get('purposes')->addError(new FormError($this->trans($e->reason)));
+            }
         }
 
         return $this->view('@backend/node/create.tpl', [
@@ -151,7 +157,7 @@ class Node extends AbstractController
 
         if ($formDescriptor->isFormValid()) {
             try {
-                ($updateNode)($node, $nodeDetailsForm->getData(), $formDescriptor->getData());
+                $updateNode(new UpdateNodeRequest($node->getId()->getValue(), $nodeDetailsForm->getData(), $formDescriptor->getData()));
                 $this->setFlash('success', $this->trans('nodeSaved', [], 'node'));
                 return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getCode() ]);
             } catch (CannotImposePurposeToNodeException $e) {

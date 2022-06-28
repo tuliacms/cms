@@ -14,3 +14,6 @@ services:
 
     Tulia\Cms\Shared\Infrastructure\Utils\Hydrator\HydratorInterface:
         class: Tulia\Cms\Shared\Infrastructure\Utils\Hydrator\OcramiusHydrator
+
+    Tulia\Cms\Shared\Application\UseCase\TransactionalSessionInterface:
+        class: Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DoctrineTransactionalSession

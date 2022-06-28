@@ -2,76 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7ed1f9a0-f774-4352-aa8d-462c0b33c164" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/Cms/ContactForm/Domain/Event/DomainEvent.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/ContactForm/Domain/Event/AbstractDomainEvent.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/ContactForm/Domain/Event/FormCreated.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/ContactForm/Domain/Event/FormCreated.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/ContactForm/Domain/Event/FormDeleted.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/ContactForm/Domain/Event/FormDeleted.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Content/Type/Domain/WriteModel/Event/ContentTypeCreated.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Content/Type/Domain/WriteModel/Event/ContentTypeCreated.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Content/Type/Domain/WriteModel/Event/ContentTypeDeleted.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Content/Type/Domain/WriteModel/Event/ContentTypeDeleted.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Content/Type/Domain/WriteModel/Event/ContentTypeUpdated.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Content/Type/Domain/WriteModel/Event/ContentTypeUpdated.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Content/Type/Domain/WriteModel/Event/FieldAdded.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Content/Type/Domain/WriteModel/Event/FieldAdded.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Content/Type/Domain/WriteModel/Event/FieldRemoved.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Content/Type/Domain/WriteModel/Event/FieldRemoved.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Content/Type/Domain/WriteModel/Event/FieldUpdated.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Content/Type/Domain/WriteModel/Event/FieldUpdated.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Content/Type/Domain/WriteModel/Event/FieldsGroupAdded.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Content/Type/Domain/WriteModel/Event/FieldsGroupAdded.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Content/Type/Domain/WriteModel/Event/FieldsGroupRemoved.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Content/Type/Domain/WriteModel/Event/FieldsGroupRemoved.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Content/Type/Domain/WriteModel/Event/FieldsGroupRenamed.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Content/Type/Domain/WriteModel/Event/FieldsGroupRenamed.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Content/Type/Domain/WriteModel/Event/FieldsGroupsSorted.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Content/Type/Domain/WriteModel/Event/FieldsGroupsSorted.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Content/Type/Domain/WriteModel/Event/FieldsSorted.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Content/Type/Domain/WriteModel/Event/FieldsSorted.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Content/Type/Infrastructure/Framework/Resources/views/backend/layout/routable_content_type/editor.tpl" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Content/Type/Infrastructure/Framework/Resources/views/backend/layout/routable_content_type/editor.tpl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Menu/Domain/WriteModel/Event/AttributeUpdated.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Menu/Domain/WriteModel/Event/AttributeUpdated.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Menu/Domain/WriteModel/Event/DomainEvent.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Menu/Domain/WriteModel/Event/AbstractDomainEvent.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Menu/Domain/WriteModel/Event/ItemAdded.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Menu/Domain/WriteModel/Event/ItemAdded.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Menu/Domain/WriteModel/Event/ItemRemoved.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Menu/Domain/WriteModel/Event/ItemRemoved.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Menu/Domain/WriteModel/Event/ItemUpdated.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Menu/Domain/WriteModel/Event/ItemUpdated.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Menu/Domain/WriteModel/Event/MenuCreated.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Menu/Domain/WriteModel/Event/MenuCreated.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Menu/Domain/WriteModel/Event/MenuDeleted.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Menu/Domain/WriteModel/Event/MenuDeleted.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Menu/Domain/WriteModel/Event/MenuUpdated.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Menu/Domain/WriteModel/Event/MenuUpdated.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Menu/Infrastructure/Framework/EventListener/MenuCacheClearer.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Menu/Infrastructure/Framework/EventListener/MenuCacheClearer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Bundle/FrameworkBundle/DependencyInjection/TuliaCmsExtension.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Bundle/FrameworkBundle/DependencyInjection/TuliaCmsExtension.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Bundle/FrameworkBundle/TuliaFrameworkBundle.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Bundle/FrameworkBundle/TuliaFrameworkBundle.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Cms/Node/Application/UseCase/AbstractNodeUseCase.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Application/UseCase/AbstractNodeUseCase.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/ActionsChain/SingularFlagsValidator.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Event/AttributeUpdated.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Event/AttributeUpdated.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Event/DomainEvent.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Event/AbstractDomainEvent.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Event/NodeCreated.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Event/NodeCreated.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Event/NodeDeleted.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Event/NodeDeleted.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Event/NodeUpdated.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Event/NodeUpdated.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Exception/SingularFlagImposedOnMoreThanOneNodeException.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Model/Node.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Model/Node.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Service/NodeByFlagFinderInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Service/NodeByPurposeFinderInterface.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Service/NodePurpose/NodePurposeRegistry.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Service/NodePurpose/NodePurposeRegistry.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Service/NodePurpose/NodePurposeRegistryInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Service/NodePurpose/NodePurposeRegistryInterface.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Framework/Resources/config/services.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Framework/Resources/config/services.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Framework/Resources/translations/node+intl-icu.en.xlf" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Framework/Resources/translations/node+intl-icu.en.xlf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Framework/Resources/views/backend/parts/datatable/title.tpl" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Framework/Resources/views/backend/parts/datatable/title.tpl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Persistence/Dbal/WriteModel/DbalNodeByFlagFinder.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Persistence/Dbal/WriteModel/DbalNodeByPurposeFinder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Application/UseCase/CreateNode.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Application/UseCase/CreateNode.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Application/UseCase/UpdateNode.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Application/UseCase/UpdateNode.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Cms/Node/UserInterface/Web/Backend/Controller/Node.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/UserInterface/Web/Backend/Controller/Node.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Taxonomy/Domain/WriteModel/Event/DomainEvent.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Taxonomy/Domain/WriteModel/Event/AbstractDomainEvent.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Taxonomy/Domain/WriteModel/Event/TermCreated.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Taxonomy/Domain/WriteModel/Event/TermCreated.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Taxonomy/Domain/WriteModel/Event/TermDeleted.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Taxonomy/Domain/WriteModel/Event/TermDeleted.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Taxonomy/Domain/WriteModel/Event/TermUpdated.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Taxonomy/Domain/WriteModel/Event/TermUpdated.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/User/Domain/WriteModel/Event/AccountWasDisabled.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/User/Domain/WriteModel/Event/AccountWasDisabled.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/User/Domain/WriteModel/Event/AccountWasEnabled.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/User/Domain/WriteModel/Event/AccountWasEnabled.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/User/Domain/WriteModel/Event/AttributeUpdated.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/User/Domain/WriteModel/Event/AttributeUpdated.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/User/Domain/WriteModel/Event/DomainEvent.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/User/Domain/WriteModel/Event/AbstractDomainEvent.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/User/Domain/WriteModel/Event/EmailChanged.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/User/Domain/WriteModel/Event/EmailChanged.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/User/Domain/WriteModel/Event/LocaleChanged.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/User/Domain/WriteModel/Event/LocaleChanged.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/User/Domain/WriteModel/Event/PasswordChanged.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/User/Domain/WriteModel/Event/PasswordChanged.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/User/Domain/WriteModel/Event/RoleWasGiven.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/User/Domain/WriteModel/Event/RoleWasGiven.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/User/Domain/WriteModel/Event/RoleWasTaken.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/User/Domain/WriteModel/Event/RoleWasTaken.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/User/Domain/WriteModel/Event/UserCreated.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/User/Domain/WriteModel/Event/UserCreated.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/User/Domain/WriteModel/Event/UserDeleted.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/User/Domain/WriteModel/Event/UserDeleted.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/User/Domain/WriteModel/Event/UserUpdated.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/User/Domain/WriteModel/Event/UserUpdated.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/User/Domain/WriteModel/Event/UsernameChanged.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/User/Domain/WriteModel/Event/UsernameChanged.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Website/Domain/WriteModel/Event/DomainEvent.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Website/Domain/WriteModel/Event/AbstractDomainEvent.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Website/Domain/WriteModel/Event/WebsiteCreated.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Website/Domain/WriteModel/Event/WebsiteCreated.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Website/Domain/WriteModel/Event/WebsiteDeleted.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Website/Domain/WriteModel/Event/WebsiteDeleted.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Website/Domain/WriteModel/Event/WebsiteUpdated.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Website/Domain/WriteModel/Event/WebsiteUpdated.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Widget/Domain/WriteModel/Event/DomainEvent.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Widget/Domain/WriteModel/Event/AbstractDomainEvent.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Widget/Domain/WriteModel/Event/WidgetCreated.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Widget/Domain/WriteModel/Event/WidgetCreated.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Widget/Domain/WriteModel/Event/WidgetDeleted.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Widget/Domain/WriteModel/Event/WidgetDeleted.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Widget/Domain/WriteModel/Event/WidgetUpdated.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Widget/Domain/WriteModel/Event/WidgetUpdated.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Shared/Domain/WriteModel/Event/DomainEvent.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Shared/Domain/WriteModel/Event/AbstractDomainEvent.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Shared/Domain/WriteModel/Model/AggregateRootTrait.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Shared/Domain/WriteModel/Model/AggregateRootTrait.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/behat/bootstrap/AggregateRootSpy.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/behat/bootstrap/AggregateRootSpy.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/behat/bootstrap/Node/NodeContext.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/behat/bootstrap/Node/NodeContext.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Platform/Infrastructure/Framework/Resources/config/services/utils.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Platform/Infrastructure/Framework/Resources/config/services/utils.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -272,7 +210,8 @@
       <workItem from="1655999020573" duration="8200000" />
       <workItem from="1656049300357" duration="2659000" />
       <workItem from="1656266042521" duration="1224000" />
-      <workItem from="1656343044452" duration="10787000" />
+      <workItem from="1656343044452" duration="12563000" />
+      <workItem from="1656393433034" duration="308000" />
     </task>
     <servers />
   </component>

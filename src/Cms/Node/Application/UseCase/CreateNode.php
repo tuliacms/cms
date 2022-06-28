@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Application\UseCase;
 
-use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\Attribute;
+use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
+use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class CreateNode extends AbstractNodeUseCase
 {
-    /**
-     * @param Attribute[] $attributes
-     */
-    public function __invoke(string $nodeType, string $author, array $details, array $attributes): void
+    protected function execute(RequestInterface|CreateNodeRequest $request): ?ResultInterface
     {
-        $node = $this->repository->createNew($nodeType, $author);
+        $node = $this->repository->createNew($request->nodeType, $request->author);
 
-        $this->updateModel($node, $details, $attributes);
+        $this->updateModel($node, $request->details, $request->attributes);
         $this->create($node);
+
+        return null;
     }
 }

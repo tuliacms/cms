@@ -10,6 +10,7 @@ use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\Author;
 use Tulia\Cms\Node\Domain\WriteModel\NodeRepositoryInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Rules\CanAddPurpose\CanImposePurposeInterface;
+use Tulia\Cms\Shared\Application\UseCase\AbstractUseTransactionalCase;
 use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChainInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
@@ -17,7 +18,7 @@ use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-abstract class AbstractNodeUseCase
+abstract class AbstractNodeUseCase extends AbstractUseTransactionalCase
 {
     public function __construct(
         protected NodeRepositoryInterface $repository,

@@ -11,6 +11,7 @@ use Tulia\Bundle\FrameworkBundle\DependencyInjection\CompilerPass\FinderPass;
 use Tulia\Bundle\FrameworkBundle\DependencyInjection\CompilerPass\RoutingPass;
 use Tulia\Bundle\FrameworkBundle\DependencyInjection\CompilerPass\TemplatingPass;
 use Tulia\Bundle\FrameworkBundle\DependencyInjection\CompilerPass\ThemePass;
+use Tulia\Bundle\FrameworkBundle\DependencyInjection\CompilerPass\UsecasePass;
 use Tulia\Bundle\FrameworkBundle\DependencyInjection\TuliaCmsExtension;
 use Tulia\Cms\Security\Framework\DependencyInjection\CompilerPass\SecurityPass;
 
@@ -47,6 +48,7 @@ class TuliaFrameworkBundle extends FrameworkBundle
         $container->addCompilerPass(new SecurityPass());
         $container->addCompilerPass(new FinderPass());
         $container->addCompilerPass(new ThemePass());
+        $container->addCompilerPass(new UsecasePass());
     }
 
     private function ensureDynamicConfigFileExists(ContainerBuilder $container, string $path): void

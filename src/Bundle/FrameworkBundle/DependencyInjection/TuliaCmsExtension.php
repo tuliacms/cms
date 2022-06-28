@@ -57,6 +57,9 @@ class TuliaCmsExtension extends FrameworkExtension
         // Import/Export
         $container->registerForAutoconfiguration(\Tulia\Component\Importer\ObjectImporter\ObjectImporterInterface::class)
             ->addTag('importer.object_importer');
+        // Usecases
+        $container->registerForAutoconfiguration(\Tulia\Cms\Shared\Application\UseCase\TransactionalUseCaseInterface::class)
+            ->addTag('usecase.transactional');
 
         $container->getDefinition('cache.adapter.pdo')->replaceArgument(3, ['db_table' => sprintf('%scache_pools', env('DATABASE_PREFIX'))]);
         $container->getDefinition('cache.adapter.doctrine_dbal')->replaceArgument(3, ['db_table' => sprintf('%scache_pools', env('DATABASE_PREFIX'))]);
