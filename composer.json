@@ -3,7 +3,7 @@
     "name": "tuliacms/cms",
     "license": "MIT",
     "minimum-stability": "stable",
-    "version": "0.0.1-alpha",
+    "version": "0.0.1-alpha1",
     "require": {
         "php": ">=8.1",
         "ext-ctype": "*",
