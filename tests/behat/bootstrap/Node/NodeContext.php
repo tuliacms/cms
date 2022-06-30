@@ -300,7 +300,7 @@ final class NodeContext implements Context
         try {
             $this->node->persistPurposes(
                 new CanImposePurpose($this->nodePurposeRegistry, $this->nodeByPurposeFinder),
-                explode(',', $purposes)
+                ...explode(',', $purposes)
             );
         } catch (CannotImposePurposeToNodeException $e) {
             $this->exceptionReason = $e->reason;

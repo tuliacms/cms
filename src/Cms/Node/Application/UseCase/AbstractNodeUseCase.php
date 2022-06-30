@@ -8,8 +8,8 @@ use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeUpdated;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\Author;
-use Tulia\Cms\Node\Domain\WriteModel\NodeRepositoryInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Rules\CanAddPurpose\CanImposePurposeInterface;
+use Tulia\Cms\Node\Domain\WriteModel\Service\NodeRepositoryInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Service\ShortcodeProcessorInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Service\SlugGeneratorStrategy\SlugGeneratorStrategyInterface;
 use Tulia\Cms\Shared\Application\UseCase\AbstractUseTransactionalCase;
@@ -64,8 +64,8 @@ abstract class AbstractNodeUseCase extends AbstractUseTransactionalCase
         $node->setStatus($details['status']);
         $node->setParentId($details['parent_id']);
         $node->setAuthor(new Author($details['author_id']));
-        $node->persistPurposes($this->canImposePurpose, $details['purposes']);
-        $node->updateAttributes($attributes);
+        $node->persistPurposes($this->canImposePurpose, ...$details['purposes']);
+        $node->persistAttributes(...$attributes);
         $node->publishNodeAt(new ImmutableDateTime($details['published_at']));
 
         if ($details['published_to']) {

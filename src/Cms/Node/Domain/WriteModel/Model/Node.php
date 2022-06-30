@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\WriteModel\Model;
 
-use Tulia\Cms\Content\Attributes\Domain\WriteModel\AttributesAwareTrait;
 use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\Attribute;
-use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Event;
 use Tulia\Cms\Node\Domain\WriteModel\Event\AttributeUpdated;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeDeleted;
@@ -14,7 +12,6 @@ use Tulia\Cms\Node\Domain\WriteModel\Event\PurposesUpdated;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\CannotDeleteNodeException;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\CannotImposePurposeToNodeException;
 use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\Author;
-use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\NodeId;
 use Tulia\Cms\Node\Domain\WriteModel\Rules\CanAddPurpose\CanImposePurposeInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Rules\CanAddPurpose\CanImposePurposeReasonEnum;
 use Tulia\Cms\Node\Domain\WriteModel\Rules\CanDeleteNode\CanDeleteNodeInterface;
@@ -26,11 +23,9 @@ use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 /**
  * @author Adam Banaszkiewicz
  */
-final class Node extends AbstractAggregateRoot implements AttributesAwareInterface
+final class Node extends AbstractAggregateRoot
 {
-    use AttributesAwareTrait;
-
-    protected NodeId $id;
+    protected string $id;
     protected string $type;
     protected string $status = 'draft';
     protected string $websiteId;
@@ -56,7 +51,7 @@ final class Node extends AbstractAggregateRoot implements AttributesAwareInterfa
         string $locale,
         Author $author
     ) {
-        $this->id = new NodeId($id);
+        $this->id = $id;
         $this->type = $type;
         $this->websiteId = $websiteId;
         $this->locale = $locale;
@@ -107,7 +102,7 @@ final class Node extends AbstractAggregateRoot implements AttributesAwareInterfa
     public function toArray(): array
     {
         return [
-            'id'            => $this->getId()->getValue(),
+            'id'            => $this->id,
             'type'          => $this->type,
             'website_id'    => $this->websiteId,
             'published_at'  => $this->publishedAt,
@@ -129,16 +124,16 @@ final class Node extends AbstractAggregateRoot implements AttributesAwareInterfa
 
     public function delete(CanDeleteNodeInterface $rules): void
     {
-        $reason = $rules->decide($this->id->getValue());
+        $reason = $rules->decide($this->id);
 
         if (CanDeleteNodeReasonEnum::OK !== $reason) {
-            throw CannotDeleteNodeException::fromReason($reason, $this->id->getValue(), $this->title);
+            throw CannotDeleteNodeException::fromReason($reason, $this->id, $this->title);
         }
 
-        $this->recordThat(new NodeDeleted($this->id->getValue(), $this->type, $this->websiteId, $this->locale));
+        $this->recordThat(new NodeDeleted($this->id, $this->type, $this->websiteId, $this->locale));
     }
 
-    public function getId(): NodeId
+    public function getId(): string
     {
         return $this->id;
     }
@@ -148,6 +143,38 @@ final class Node extends AbstractAggregateRoot implements AttributesAwareInterfa
         return $this->type;
     }
 
+    public function persistAttributes(Attribute ...$attributes): void
+    {
+        $keysNew = array_keys($attributes);
+        $keysOld = array_keys($this->attributes);
+
+        $toAdd = array_diff($keysNew, $keysOld);
+        $toRemove = array_diff($keysOld, $keysNew);
+        $toUpdate = array_intersect($keysNew, $keysOld);
+
+        foreach ($toRemove as $uri) {
+            $this->removeAttribute($uri);
+        }
+        foreach ($toAdd as $uri) {
+            $this->addAttribute($attributes[$uri]);
+        }
+        foreach ($toUpdate as $uri) {
+            $this->addAttribute($attributes[$uri]);
+        }
+
+        $this->markAsUpdated();
+    }
+
+    public function hasAttribute(string $uri): bool
+    {
+        return isset($this->attributes[$uri]);
+    }
+
+    public function getAttribute(string $uri): Attribute
+    {
+        return $this->attributes[$uri];
+    }
+
     public function addAttribute(Attribute $attribute): void
     {
         $uri = $attribute->getUri();
@@ -155,6 +182,7 @@ final class Node extends AbstractAggregateRoot implements AttributesAwareInterfa
 
         if (isset($this->attributes[$uri]) === false || $this->attributes[$uri]->equals($attribute) === false) {
             $this->attributes[$attribute->getUri()] = $attribute;
+
             /**
              * Calling recordUniqueThat() prevents the system to record multiple changes on the same attribute.
              * This may be caused, in example, by SlugGenerator: first time system sets raw value from From,
@@ -179,10 +207,18 @@ final class Node extends AbstractAggregateRoot implements AttributesAwareInterfa
         $this->markAsUpdated();
     }
 
+    /**
+     * @return Attribute[]
+     */
+    public function getAttributes(): array
+    {
+        return $this->attributes;
+    }
+
     public function rename(SlugGeneratorStrategyInterface $slugGenerator, string $title, ?string $slug): void
     {
         $this->title = $title;
-        $this->slug = $slugGenerator->generate($this->websiteId, $this->locale, (string) $slug, $title, $this->id->getValue());
+        $this->slug = $slugGenerator->generate($this->websiteId, $this->locale, (string) $slug, $title, $this->id);
 
         $this->markAsUpdated();
     }
@@ -257,19 +293,19 @@ final class Node extends AbstractAggregateRoot implements AttributesAwareInterfa
         return $this->translated;
     }
 
-    public function persistPurposes(CanImposePurposeInterface $rules, array $purposes): void
+    public function persistPurposes(CanImposePurposeInterface $rules, string ...$purposes): void
     {
         foreach ($purposes as $purpose) {
-            $reason = $rules->decide($this->id->getValue(), $purpose, $this->websiteId, $this->purposes);
+            $reason = $rules->decide($this->id, $purpose, $this->websiteId, $this->purposes);
 
             if (CanImposePurposeReasonEnum::OK !== $reason) {
-                throw CannotImposePurposeToNodeException::fromReason($reason, $purpose, $this->id->getValue());
+                throw CannotImposePurposeToNodeException::fromReason($reason, $purpose, $this->id);
             }
         }
 
         $this->purposes = $purposes;
         $this->recordThat(new PurposesUpdated(
-            $this->id->getValue(),
+            $this->id,
             $this->type,
             $this->websiteId,
             $this->locale,
@@ -284,15 +320,15 @@ final class Node extends AbstractAggregateRoot implements AttributesAwareInterfa
             return;
         }
 
-        $reason = $rules->decide($this->id->getValue(), $purpose, $this->websiteId, $this->purposes);
+        $reason = $rules->decide($this->id, $purpose, $this->websiteId, $this->purposes);
 
         if (CanImposePurposeReasonEnum::OK !== $reason) {
-            throw CannotImposePurposeToNodeException::fromReason($reason, $purpose, $this->id->getValue());
+            throw CannotImposePurposeToNodeException::fromReason($reason, $purpose, $this->id);
         }
 
         $this->purposes[] = $purpose;
         $this->recordThat(new PurposesUpdated(
-            $this->id->getValue(),
+            $this->id,
             $this->type,
             $this->websiteId,
             $this->locale,

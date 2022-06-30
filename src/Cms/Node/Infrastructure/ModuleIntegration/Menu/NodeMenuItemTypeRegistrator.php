@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Infrastructure\Internal\Menu;
+namespace Tulia\Cms\Node\Infrastructure\ModuleIntegration\Menu;
 
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Menu\Domain\Builder\Type\RegistratorInterface;
 use Tulia\Cms\Menu\Domain\Builder\Type\RegistryInterface;
-use Tulia\Cms\Node\UserInterface\Web\Backend\Menu\Selector;
 
 /**
  * @author Adam Banaszkiewicz

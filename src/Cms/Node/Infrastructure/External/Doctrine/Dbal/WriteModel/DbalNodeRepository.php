@@ -9,7 +9,7 @@ use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface
 use Tulia\Cms\Content\Type\Domain\WriteModel\Exception\ContentTypeNotExistsException;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\Author;
-use Tulia\Cms\Node\Domain\WriteModel\NodeRepositoryInterface;
+use Tulia\Cms\Node\Domain\WriteModel\Service\NodeRepositoryInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodeWriteStorageInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
@@ -84,7 +84,7 @@ final class DbalNodeRepository implements NodeRepositoryInterface
         $this->storage->insert($data, $this->currentWebsite->getDefaultLocale()->getCode());
         $this->attributeRepository->persist(
             'node',
-            $node->getId()->getValue(),
+            $node->getId(),
             $data['attributes']
         );
     }
@@ -96,7 +96,7 @@ final class DbalNodeRepository implements NodeRepositoryInterface
         $this->storage->update($data, $this->currentWebsite->getDefaultLocale()->getCode());
         $this->attributeRepository->persist(
             'node',
-            $node->getId()->getValue(),
+            $node->getId(),
             $data['attributes']
         );
     }
@@ -104,6 +104,6 @@ final class DbalNodeRepository implements NodeRepositoryInterface
     public function delete(Node $node): void
     {
         $this->storage->delete($node->toArray());
-        $this->attributeRepository->delete('node', $node->getId()->getValue());
+        $this->attributeRepository->delete('node', $node->getId());
     }
 }

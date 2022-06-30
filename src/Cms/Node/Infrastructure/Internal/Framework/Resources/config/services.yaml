@@ -18,10 +18,10 @@ services:
     Tulia\Cms\Node\Infrastructure\Internal\Menu\IdentityProvider:
         tags: [ menu.identity_provider ]
 
-    Tulia\Cms\Node\UserInterface\Web\Backend\Settings\SettingsFactory:
+    Tulia\Cms\Node\Infrastructure\Internal\Settings\SettingsFactory:
         tags: [ settings.group_factory ]
 
-    Tulia\Cms\Node\Infrastructure\Internal\Cms\SearchAnything\SearchProvider:
+    Tulia\Cms\Node\Infrastructure\Internal\SearchAnything\SearchProvider:
         tags:
             - { name: search.provider, priority: 1000 }
 

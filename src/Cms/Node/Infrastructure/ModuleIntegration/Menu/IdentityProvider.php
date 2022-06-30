@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Infrastructure\Internal\Menu;
+namespace Tulia\Cms\Node\Infrastructure\ModuleIntegration\Menu;
 
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Menu\Domain\Builder\Identity\Identity;

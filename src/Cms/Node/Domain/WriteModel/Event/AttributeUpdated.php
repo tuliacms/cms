@@ -25,7 +25,7 @@ class AttributeUpdated extends AbstractDomainEvent
     public static function fromNode(Node $node, string $attribute, $value): self
     {
         return new self(
-            $node->getId()->getValue(),
+            $node->getId(),
             $node->getType(),
             $node->getWebsiteId(),
             $node->getLocale(),

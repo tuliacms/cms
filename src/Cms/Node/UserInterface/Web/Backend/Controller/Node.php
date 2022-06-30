@@ -19,7 +19,7 @@ use Tulia\Cms\Node\Application\UseCase\UpdateNodeRequest;
 use Tulia\Cms\Node\Domain\ReadModel\Datatable\NodeDatatableFinderInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\CannotDeleteNodeException;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\CannotImposePurposeToNodeException;
-use Tulia\Cms\Node\Domain\WriteModel\NodeRepositoryInterface;
+use Tulia\Cms\Node\Domain\WriteModel\Service\NodeRepositoryInterface;
 use Tulia\Cms\Node\UserInterface\Web\Backend\Form\NodeDetailsForm;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
@@ -29,32 +29,20 @@ use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\Templating\ViewInterface;
 
+
 /**
  * @author Adam Banaszkiewicz
  */
 class Node extends AbstractController
 {
-    private ContentTypeRegistryInterface $typeRegistry;
-    private NodeRepositoryInterface $repository;
-    private DatatableFactory $factory;
-    private NodeDatatableFinderInterface $finder;
-    private ContentFormService $contentFormService;
-    private AuthenticatedUserProviderInterface $authenticatedUserProvider;
-
     public function __construct(
-        ContentTypeRegistryInterface $typeRegistry,
-        NodeRepositoryInterface $repository,
-        DatatableFactory $factory,
-        NodeDatatableFinderInterface $finder,
-        ContentFormService $contentFormService,
-        AuthenticatedUserProviderInterface $authenticatedUserProvider
+        private ContentTypeRegistryInterface $typeRegistry,
+        private NodeRepositoryInterface $repository,
+        private DatatableFactory $factory,
+        private NodeDatatableFinderInterface $finder,
+        private ContentFormService $contentFormService,
+        private AuthenticatedUserProviderInterface $authenticatedUserProvider,
     ) {
-        $this->typeRegistry = $typeRegistry;
-        $this->repository = $repository;
-        $this->factory = $factory;
-        $this->finder = $finder;
-        $this->contentFormService = $contentFormService;
-        $this->authenticatedUserProvider = $authenticatedUserProvider;
     }
 
     public function index(string $node_type): RedirectResponse
@@ -157,7 +145,7 @@ class Node extends AbstractController
 
         if ($formDescriptor->isFormValid()) {
             try {
-                $updateNode(new UpdateNodeRequest($node->getId()->getValue(), $nodeDetailsForm->getData(), $formDescriptor->getData()));
+                $updateNode(new UpdateNodeRequest($node->getId(), $nodeDetailsForm->getData(), $formDescriptor->getData()));
                 $this->setFlash('success', $this->trans('nodeSaved', [], 'node'));
                 return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getCode() ]);
             } catch (CannotImposePurposeToNodeException $e) {

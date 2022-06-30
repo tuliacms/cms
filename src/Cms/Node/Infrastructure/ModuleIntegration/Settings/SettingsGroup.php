@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\UserInterface\Web\Backend\Settings;
+namespace Tulia\Cms\Node\Infrastructure\ModuleIntegration\Settings;
 
 use Symfony\Component\Form\FormInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;

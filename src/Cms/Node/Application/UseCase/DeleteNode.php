@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\Application\UseCase;
 
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeDeleted;
-use Tulia\Cms\Node\Domain\WriteModel\NodeRepositoryInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Rules\CanDeleteNode\CanDeleteNodeInterface;
+use Tulia\Cms\Node\Domain\WriteModel\Service\NodeRepositoryInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChainInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\UserInterface\Web\Backend\Settings;
+namespace Tulia\Cms\Node\Infrastructure\ModuleIntegration\Settings;
 
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Settings\Domain\Group\AbstractSettingsGroupFactory;

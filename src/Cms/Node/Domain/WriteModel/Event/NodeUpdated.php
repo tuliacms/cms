@@ -13,6 +13,6 @@ class NodeUpdated extends AbstractDomainEvent
 {
     public static function fromNode(Node $node): self
     {
-        return new self($node->getId()->getValue(), $node->getType(), $node->getWebsiteId(), $node->getLocale());
+        return new self($node->getId(), $node->getType(), $node->getWebsiteId(), $node->getLocale());
     }
 }
