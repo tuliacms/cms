@@ -19,6 +19,7 @@ use Tulia\Cms\Node\Domain\WriteModel\Rules\CanAddPurpose\CanImposePurposeInterfa
 use Tulia\Cms\Node\Domain\WriteModel\Rules\CanAddPurpose\CanImposePurposeReasonEnum;
 use Tulia\Cms\Node\Domain\WriteModel\Rules\CanDeleteNode\CanDeleteNodeInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Rules\CanDeleteNode\CanDeleteNodeReasonEnum;
+use Tulia\Cms\Node\Domain\WriteModel\Service\SlugGeneratorStrategy\SlugGeneratorStrategyInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 
@@ -178,29 +179,12 @@ final class Node extends AbstractAggregateRoot implements AttributesAwareInterfa
         $this->markAsUpdated();
     }
 
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
-    public function setTitle(string $title): void
+    public function rename(SlugGeneratorStrategyInterface $slugGenerator, string $title, ?string $slug): void
     {
         $this->title = $title;
-    }
+        $this->slug = $slugGenerator->generate($this->websiteId, $this->locale, (string) $slug, $title, $this->id->getValue());
 
-    public function getSlug(): ?string
-    {
-        return $this->slug;
-    }
-
-    public function setSlug(?string $slug): void
-    {
-        $this->slug = $slug;
-    }
-
-    public function getStatus(): string
-    {
-        return $this->status;
+        $this->markAsUpdated();
     }
 
     public function setStatus(string $status): void
@@ -218,7 +202,7 @@ final class Node extends AbstractAggregateRoot implements AttributesAwareInterfa
         return $this->publishedAt;
     }
 
-    public function setPublishedAt(ImmutableDateTime $publishedAt): void
+    public function publishNodeAt(ImmutableDateTime $publishedAt): void
     {
         $this->publishedAt = $publishedAt;
 
@@ -230,33 +214,18 @@ final class Node extends AbstractAggregateRoot implements AttributesAwareInterfa
         return $this->publishedTo;
     }
 
-    public function setPublishedTo(ImmutableDateTime $publishedTo): void
+    public function publishNodeTo(ImmutableDateTime $publishedTo): void
     {
         $this->publishedTo = $publishedTo;
 
         $this->markAsUpdated();
     }
 
-    public function setPublishedToForever(): void
+    public function publishNodeForever(): void
     {
         $this->publishedTo = null;
 
         $this->markAsUpdated();
-    }
-
-    public function getCreatedAt(): ImmutableDateTime
-    {
-        return $this->createdAt;
-    }
-
-    public function getUpdatedAt(): ?ImmutableDateTime
-    {
-        return $this->updatedAt;
-    }
-
-    public function getAuthor(): Author
-    {
-        return $this->author;
     }
 
     public function setAuthor(Author $author): void
@@ -266,26 +235,9 @@ final class Node extends AbstractAggregateRoot implements AttributesAwareInterfa
         $this->markAsUpdated();
     }
 
-    public function getParentId(): ?string
-    {
-        return $this->parentId;
-    }
-
     public function setParentId(?string $parentId): void
     {
         $this->parentId = $parentId;
-
-        $this->markAsUpdated();
-    }
-
-    public function getLevel(): int
-    {
-        return $this->level;
-    }
-
-    public function setLevel(int $level): void
-    {
-        $this->level = $level;
 
         $this->markAsUpdated();
     }
@@ -303,11 +255,6 @@ final class Node extends AbstractAggregateRoot implements AttributesAwareInterfa
     public function isTranslated(): bool
     {
         return $this->translated;
-    }
-
-    public function setTranslated(bool $translated): void
-    {
-        $this->translated = $translated;
     }
 
     public function persistPurposes(CanImposePurposeInterface $rules, array $purposes): void
@@ -328,6 +275,7 @@ final class Node extends AbstractAggregateRoot implements AttributesAwareInterfa
             $this->locale,
             $this->purposes
         ));
+        $this->markAsUpdated();
     }
 
     public function imposePurpose(CanImposePurposeInterface $rules, string $purpose): void
@@ -350,6 +298,7 @@ final class Node extends AbstractAggregateRoot implements AttributesAwareInterfa
             $this->locale,
             $this->purposes
         ));
+        $this->markAsUpdated();
     }
 
     private function markAsUpdated(): void

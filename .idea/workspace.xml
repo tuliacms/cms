@@ -3,13 +3,43 @@
   <component name="ChangeListManager">
     <list default="true" id="7ed1f9a0-f774-4352-aa8d-462c0b33c164" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Bundle/FrameworkBundle/DependencyInjection/TuliaCmsExtension.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Bundle/FrameworkBundle/DependencyInjection/TuliaCmsExtension.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Bundle/FrameworkBundle/TuliaFrameworkBundle.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Bundle/FrameworkBundle/TuliaFrameworkBundle.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Cms/Node/Application/UseCase/AbstractNodeUseCase.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Application/UseCase/AbstractNodeUseCase.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Application/UseCase/CreateNode.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Application/UseCase/CreateNode.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Application/UseCase/UpdateNode.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Application/UseCase/UpdateNode.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/UserInterface/Web/Backend/Controller/Node.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/UserInterface/Web/Backend/Controller/Node.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Platform/Infrastructure/Framework/Resources/config/services/utils.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Platform/Infrastructure/Framework/Resources/config/services/utils.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/ActionsChain/SlugGenerator.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Model/Node.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Model/Node.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Cms/SearchAnything/SearchProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Cms/SearchAnything/SearchProvider.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Framework/EventListener/AttributeUpdatedListener.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Framework/EventListener/AttributeUpdatedListener.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Framework/Resources/config/config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Framework/Resources/config/config.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Framework/Resources/config/routes.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Framework/Resources/config/routes.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Framework/Resources/config/services.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Framework/Resources/config/services.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Framework/Resources/translations/content_builder.field+intl-icu.en.xlf" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Framework/Resources/translations/content_builder.field+intl-icu.en.xlf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Framework/Resources/translations/node+intl-icu.en.xlf" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Framework/Resources/translations/node+intl-icu.en.xlf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Framework/Resources/views/backend/create.tpl" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Framework/Resources/views/backend/create.tpl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Framework/Resources/views/backend/edit.tpl" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Framework/Resources/views/backend/edit.tpl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Framework/Resources/views/backend/list.tpl" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Framework/Resources/views/backend/list.tpl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Framework/Resources/views/backend/menu/selector.tpl" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Framework/Resources/views/backend/menu/selector.tpl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Framework/Resources/views/backend/parts/datatable/links/delete-link.tpl" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Framework/Resources/views/backend/parts/datatable/links/delete-link.tpl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Framework/Resources/views/backend/parts/datatable/links/edit-link.tpl" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Framework/Resources/views/backend/parts/datatable/links/edit-link.tpl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Framework/Resources/views/backend/parts/datatable/links/preview-link.tpl" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Framework/Resources/views/backend/parts/datatable/links/preview-link.tpl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Framework/Resources/views/backend/parts/datatable/published.tpl" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Framework/Resources/views/backend/parts/datatable/published.tpl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Framework/Resources/views/backend/parts/datatable/title.tpl" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Framework/Resources/views/backend/parts/datatable/title.tpl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Framework/Resources/views/backend/settings.tpl" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Framework/Resources/views/backend/settings.tpl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Framework/Resources/views/frontend/node.tpl" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Framework/Resources/views/frontend/node.tpl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Framework/Routing/SymfonyRouter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Framework/Routing/SymfonyRouter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Framework/Twig/Extension/NodeExtension.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Framework/Twig/Extension/NodeExtension.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Importer/NodeEntryImporter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Importer/NodeEntryImporter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Menu/IdentityProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Menu/IdentityProvider.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Menu/NodeMenuItemTypeRegistrator.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Menu/NodeMenuItemTypeRegistrator.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Persistence/Dbal/ReadModel/DbalCategoriesPersistence.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/External/Doctrine/Dbal/ReadModel/DbalCategoriesPersistence.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Persistence/Dbal/ReadModel/DbalFinder.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/External/Doctrine/Dbal/ReadModel/DbalFinder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Persistence/Dbal/ReadModel/DbalFinderQuery.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/External/Doctrine/Dbal/ReadModel/DbalFinderQuery.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Persistence/Dbal/ReadModel/DbalNodeDatatableFinder.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/External/Doctrine/Dbal/ReadModel/DbalNodeDatatableFinder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Persistence/Dbal/WriteModel/DbalNodeByPurposeFinder.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/External/Doctrine/Dbal/WriteModel/DbalNodeByPurposeFinder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Persistence/Dbal/WriteModel/DbalNodeChildrenDetector.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/External/Doctrine/Dbal/WriteModel/DbalNodeChildrenDetector.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Persistence/Dbal/WriteModel/DbalNodeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/External/Doctrine/Dbal/WriteModel/DbalNodeRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Persistence/Dbal/WriteModel/DbalNodeWriteStorage.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/External/Doctrine/Dbal/WriteModel/DbalNodeWriteStorage.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Shortcode/NodeShortcodeProcessor.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Shortcode/NodeShortcodeProcessor.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Platform/Infrastructure/Framework/Kernel/TuliaKernel.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Platform/Infrastructure/Framework/Kernel/TuliaKernel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/behat/bootstrap/Node/NodeContext.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/behat/bootstrap/Node/NodeContext.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -191,6 +221,11 @@
     &quot;php.override.implement.member.chooser.php.doc&quot;: &quot;NONE&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;fileTemplates&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
+      &quot;TEXT&quot;
+    ]
   }
 }</component>
   <component name="RunManager">
@@ -211,7 +246,10 @@
       <workItem from="1656049300357" duration="2659000" />
       <workItem from="1656266042521" duration="1224000" />
       <workItem from="1656343044452" duration="12563000" />
-      <workItem from="1656393433034" duration="308000" />
+      <workItem from="1656393433034" duration="3276000" />
+      <workItem from="1656426075723" duration="2220000" />
+      <workItem from="1656479735260" duration="1128000" />
+      <workItem from="1656600663291" duration="5313000" />
     </task>
     <servers />
   </component>

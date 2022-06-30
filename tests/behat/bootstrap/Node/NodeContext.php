@@ -133,7 +133,7 @@ final class NodeContext implements Context
      */
     public function adminChangePublishedDateTo(string $date): void
     {
-        $this->node->setPublishedAt(new ImmutableDateTime($date));
+        $this->node->publishNodeAt(new ImmutableDateTime($date));
     }
 
     /**
@@ -149,7 +149,7 @@ final class NodeContext implements Context
      */
     public function adminChangePublishedEndDateTo(string $date): void
     {
-        $this->node->setPublishedTo(new ImmutableDateTime($date));
+        $this->node->publishNodeTo(new ImmutableDateTime($date));
     }
 
     /**
@@ -168,7 +168,7 @@ final class NodeContext implements Context
      */
     public function adminChangeNodeToPublishedForever(): void
     {
-        $this->node->setPublishedToForever();
+        $this->node->publishNodeForever();
     }
 
     /**
