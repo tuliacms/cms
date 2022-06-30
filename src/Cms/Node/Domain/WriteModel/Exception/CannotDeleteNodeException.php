@@ -12,14 +12,16 @@ use Tulia\Cms\Shared\Domain\WriteModel\Exception\AbstractDomainException;
  */
 final class CannotDeleteNodeException extends AbstractDomainException
 {
-    public readonly string $reason;
-    public readonly string $title;
+    private function __construct(
+        string $message,
+        public readonly string $reason,
+        public readonly string $title,
+    ) {
+        parent::__construct($message);
+    }
 
     public static function fromReason(CanDeleteNodeReasonEnum $reason, string $nodeId, string $title): self
     {
-        $self = new self(sprintf('Cannot delete node "%s", because: %s', $nodeId, $reason->value));
-        $self->reason = $reason->value;
-        $self->title = $title;
-        return $self;
+        return new self(sprintf('Cannot delete node "%s", because: %s', $nodeId, $reason->value), $reason->value, $title);
     }
 }

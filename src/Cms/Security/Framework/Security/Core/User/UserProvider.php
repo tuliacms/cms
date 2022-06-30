@@ -6,6 +6,7 @@ namespace Tulia\Cms\Security\Framework\Security\Core\User;
 
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -50,7 +51,7 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
         return User::class === $class || is_subclass_of($class, User::class);
     }
 
-    public function upgradePassword(UserInterface $user, string $newEncodedPassword): void
+    public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
         // TODO: when encoded passwords are in use, this method should:
         // 1. persist the new password in the user storage

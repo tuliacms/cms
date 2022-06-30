@@ -12,14 +12,16 @@ use Tulia\Cms\Shared\Domain\WriteModel\Exception\AbstractDomainException;
  */
 final class CannotImposePurposeToNodeException extends AbstractDomainException
 {
-    public readonly string $reason;
-    public readonly string $purpose;
+    private function __construct(
+        string $message,
+        public readonly string $reason,
+        public readonly string $purpose,
+    ) {
+        parent::__construct($message);
+    }
 
     public static function fromReason(CanImposePurposeReasonEnum $reason, string $purpose, string $nodeId): self
     {
-        $self = new self(sprintf('Cannot impose purpose "%s" to node "%s", because: %s', $purpose, $nodeId, $reason->value));
-        $self->reason = $reason->value;
-        $self->purpose = $purpose;
-        return $self;
+        return new self(sprintf('Cannot impose purpose "%s" to node "%s", because: %s', $purpose, $nodeId, $reason->value), $reason->value, $purpose);
     }
 }

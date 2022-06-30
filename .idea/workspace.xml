@@ -3,30 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="7ed1f9a0-f774-4352-aa8d-462c0b33c164" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Application/UseCase/AbstractNodeUseCase.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Application/UseCase/AbstractNodeUseCase.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Application/UseCase/DeleteNode.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Application/UseCase/DeleteNode.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Event/AttributeUpdated.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Event/AttributeUpdated.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Event/NodeCreated.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Event/NodeCreated.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Event/NodeDeleted.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Event/NodeDeleted.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Event/NodeUpdated.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Event/NodeUpdated.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Model/Node.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Model/Node.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Model/ValueObject/NodeId.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/NodeRepositoryInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Service/NodeRepositoryInterface.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/External/Doctrine/Dbal/WriteModel/DbalNodeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/External/Doctrine/Dbal/WriteModel/DbalNodeRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Cms/SearchAnything/SearchProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/ModuleIntegration/SearchAnything/SearchProvider.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Framework/Resources/config/services.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Framework/Resources/config/services.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Importer/NodeEntryImporter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Importer/NodeEntryImporter.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Menu/IdentityProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/ModuleIntegration/Menu/IdentityProvider.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/Internal/Menu/NodeMenuItemTypeRegistrator.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/ModuleIntegration/Menu/NodeMenuItemTypeRegistrator.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/UserInterface/Web/API/Controller/Node.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/UserInterface/Web/Backend/BackendMenu/NodeMenuBuilder.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/ModuleIntegration/BackendMenu/NodeMenuBuilder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/UserInterface/Web/Backend/Controller/Node.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/UserInterface/Web/Backend/Controller/Node.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/UserInterface/Web/Backend/Form/MenuItemSelectorForm.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/ModuleIntegration/Menu/MenuItemSelectorForm.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/UserInterface/Web/Backend/Menu/Selector.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/ModuleIntegration/Menu/Selector.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/UserInterface/Web/Backend/Settings/SettingsFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/ModuleIntegration/Settings/SettingsFactory.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/UserInterface/Web/Backend/Settings/SettingsForm.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/ModuleIntegration/Settings/SettingsForm.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cms/Node/UserInterface/Web/Backend/Settings/SettingsGroup.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Infrastructure/ModuleIntegration/Settings/SettingsGroup.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/behat/bootstrap/Node/NodeContext.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/behat/bootstrap/Node/NodeContext.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Exception/CannotDeleteNodeException.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Exception/CannotDeleteNodeException.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Exception/CannotImposePurposeToNodeException.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Exception/CannotImposePurposeToNodeException.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Exception/NodePurposeNotFoundException.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cms/Node/Domain/WriteModel/Exception/NodePurposeNotFoundException.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -236,7 +215,8 @@
       <workItem from="1656393433034" duration="3276000" />
       <workItem from="1656426075723" duration="2220000" />
       <workItem from="1656479735260" duration="1128000" />
-      <workItem from="1656600663291" duration="7208000" />
+      <workItem from="1656600663291" duration="8110000" />
+      <workItem from="1656609857710" duration="6000" />
     </task>
     <servers />
   </component>
