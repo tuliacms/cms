@@ -11,7 +11,6 @@ use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\Author;
 use Tulia\Cms\Node\Domain\WriteModel\NodeRepositoryInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodeWriteStorageInterface;
-use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChainInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
@@ -24,7 +23,6 @@ final class DbalNodeRepository implements NodeRepositoryInterface
     private CurrentWebsiteInterface $currentWebsite;
     private AttributesRepositoryInterface $attributeRepository;
     private UuidGeneratorInterface $uuidGenerator;
-    private AggregateActionsChainInterface $actionsChain;
     private ContentTypeRegistryInterface $contentTypeRegistry;
 
     public function __construct(
@@ -32,14 +30,12 @@ final class DbalNodeRepository implements NodeRepositoryInterface
         CurrentWebsiteInterface $currentWebsite,
         AttributesRepositoryInterface $attributeRepository,
         UuidGeneratorInterface $uuidGenerator,
-        AggregateActionsChainInterface $actionsChain,
         ContentTypeRegistryInterface $contentTypeRegistry
     ) {
         $this->storage = $storage;
         $this->currentWebsite = $currentWebsite;
         $this->attributeRepository = $attributeRepository;
         $this->uuidGenerator = $uuidGenerator;
-        $this->actionsChain = $actionsChain;
         $this->contentTypeRegistry = $contentTypeRegistry;
     }
 
@@ -78,62 +74,36 @@ final class DbalNodeRepository implements NodeRepositoryInterface
 
         $node = Node::fromArray($node);
 
-        $this->actionsChain->execute('find', $node);
-
         return $node;
     }
 
     public function insert(Node $node): void
     {
-        $this->storage->beginTransaction();
+        $data = $node->toArray();
 
-        try {
-            $data = $node->toArray();
-
-            $this->storage->insert($data, $this->currentWebsite->getDefaultLocale()->getCode());
-            $this->attributeRepository->persist(
-                'node',
-                $node->getId()->getValue(),
-                $data['attributes']
-            );
-            $this->storage->commit();
-        } catch (\Exception $exception) {
-            $this->storage->rollback();
-            throw $exception;
-        }
+        $this->storage->insert($data, $this->currentWebsite->getDefaultLocale()->getCode());
+        $this->attributeRepository->persist(
+            'node',
+            $node->getId()->getValue(),
+            $data['attributes']
+        );
     }
 
     public function update(Node $node): void
     {
-        $this->storage->beginTransaction();
+        $data = $node->toArray();
 
-        try {
-            $data = $node->toArray();
-
-            $this->storage->update($data, $this->currentWebsite->getDefaultLocale()->getCode());
-            $this->attributeRepository->persist(
-                'node',
-                $node->getId()->getValue(),
-                $data['attributes']
-            );
-            $this->storage->commit();
-        } catch (\Exception $exception) {
-            $this->storage->rollback();
-            throw $exception;
-        }
+        $this->storage->update($data, $this->currentWebsite->getDefaultLocale()->getCode());
+        $this->attributeRepository->persist(
+            'node',
+            $node->getId()->getValue(),
+            $data['attributes']
+        );
     }
 
     public function delete(Node $node): void
     {
-        $this->storage->beginTransaction();
-
-        try {
-            $this->storage->delete($node->toArray());
-            $this->attributeRepository->delete('node', $node->getId()->getValue());
-            $this->storage->commit();
-        } catch (\Exception $exception) {
-            $this->storage->rollback();
-            throw $exception;
-        }
+        $this->storage->delete($node->toArray());
+        $this->attributeRepository->delete('node', $node->getId()->getValue());
     }
 }

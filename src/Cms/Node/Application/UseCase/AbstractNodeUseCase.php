@@ -10,9 +10,9 @@ use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\Author;
 use Tulia\Cms\Node\Domain\WriteModel\NodeRepositoryInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Rules\CanAddPurpose\CanImposePurposeInterface;
+use Tulia\Cms\Node\Domain\WriteModel\Service\ShortcodeProcessorInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Service\SlugGeneratorStrategy\SlugGeneratorStrategyInterface;
 use Tulia\Cms\Shared\Application\UseCase\AbstractUseTransactionalCase;
-use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChainInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 
@@ -24,24 +24,20 @@ abstract class AbstractNodeUseCase extends AbstractUseTransactionalCase
     public function __construct(
         protected NodeRepositoryInterface $repository,
         protected EventBusInterface $eventBus,
-        protected AggregateActionsChainInterface $actionsChain,
         protected CanImposePurposeInterface $canImposePurpose,
-        protected SlugGeneratorStrategyInterface $slugGeneratorStrategy
+        protected SlugGeneratorStrategyInterface $slugGeneratorStrategy,
+        protected ShortcodeProcessorInterface $processor
     ) {
     }
 
     protected function create(Node $node): void
     {
-        $this->actionsChain->execute('create', $node);
-
         $this->repository->insert($node);
         $this->eventBus->dispatchCollection($node->collectDomainEvents());
     }
 
     protected function update(Node $node): void
     {
-        $this->actionsChain->execute('update', $node);
-
         $this->repository->update($node);
         $this->eventBus->dispatchCollection($node->collectDomainEvents());
         $this->eventBus->dispatch(NodeUpdated::fromNode($node));
@@ -52,6 +48,18 @@ abstract class AbstractNodeUseCase extends AbstractUseTransactionalCase
      */
     protected function updateModel(Node $node, array $details, array $attributes): void
     {
+        foreach ($attributes as $key => $attribute) {
+            if (! $attribute->getValue()) {
+                continue;
+            }
+
+            if ($attribute->isCompilable() === false) {
+                continue;
+            }
+
+            $attributes[$key] = $attribute->withCompiledValue($this->processor->process($attribute->getValue()));
+        }
+
         $node->rename($this->slugGeneratorStrategy, $details['title'], $details['slug']);
         $node->setStatus($details['status']);
         $node->setParentId($details['parent_id']);

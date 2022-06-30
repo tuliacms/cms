@@ -12,7 +12,10 @@ use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
  */
 class CreateNode extends AbstractNodeUseCase
 {
-    protected function execute(RequestInterface|CreateNodeRequest $request): ?ResultInterface
+    /**
+     * @param RequestInterface&CreateNodeRequest $request
+     */
+    protected function execute(RequestInterface $request): ?ResultInterface
     {
         $node = $this->repository->createNew($request->nodeType, $request->author);
 

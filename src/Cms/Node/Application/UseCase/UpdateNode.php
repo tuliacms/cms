@@ -12,7 +12,10 @@ use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
  */
 class UpdateNode extends AbstractNodeUseCase
 {
-    protected function execute(RequestInterface|UpdateNodeRequest $request): ?ResultInterface
+    /**
+     * @param RequestInterface&UpdateNodeRequest $request
+     */
+    protected function execute(RequestInterface $request): ?ResultInterface
     {
         $node = $this->repository->find($request->id);
 
