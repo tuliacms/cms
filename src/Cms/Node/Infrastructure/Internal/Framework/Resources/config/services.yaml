@@ -15,13 +15,13 @@ services:
     Tulia\Cms\Node\Infrastructure\Internal\Framework\Routing\SymfonyRouter:
         tags: [ routing_chain.router ]
 
-    Tulia\Cms\Node\Infrastructure\Internal\Menu\IdentityProvider:
+    Tulia\Cms\Node\Infrastructure\ModuleIntegration\Menu\IdentityProvider:
         tags: [ menu.identity_provider ]
 
-    Tulia\Cms\Node\Infrastructure\Internal\Settings\SettingsFactory:
+    Tulia\Cms\Node\Infrastructure\ModuleIntegration\Settings\SettingsFactory:
         tags: [ settings.group_factory ]
 
-    Tulia\Cms\Node\Infrastructure\Internal\SearchAnything\SearchProvider:
+    Tulia\Cms\Node\Infrastructure\ModuleIntegration\SearchAnything\SearchProvider:
         tags:
             - { name: search.provider, priority: 1000 }
 
