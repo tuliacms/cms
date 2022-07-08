@@ -13,14 +13,11 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterfac
  */
 class DbalOptionsStorage extends AbstractLocalizableStorage implements OptionsStorageInterface
 {
-    private ConnectionInterface $connection;
-
-    public function __construct(ConnectionInterface $connection)
+    public function __construct(private ConnectionInterface $connection)
     {
-        $this->connection = $connection;
     }
 
-    public function find(string $name, string $websiteId, string $locale): ?array
+    public function find(string $name, string $locale): ?array
     {
         $result = $this->connection->fetchAllAssociative(
             'SELECT
@@ -30,21 +27,19 @@ class DbalOptionsStorage extends AbstractLocalizableStorage implements OptionsSt
             FROM #__option tm
             LEFT JOIN #__option_lang tl
                 ON tm.id = tl.option_id AND tl.locale = :locale
-            WHERE tm.name = :name AND tm.website_id = :websiteId
+            WHERE tm.name = :name
             LIMIT 1', [
             'name' => $name,
             'locale' => $locale,
-            'websiteId' => $websiteId,
         ], [
             'name' => \PDO::PARAM_STR,
             'locale' => \PDO::PARAM_STR,
-            'websiteId' => \PDO::PARAM_STR,
         ]);
 
         return $result[0] ?? null;
     }
 
-    public function findAllForWebsite(string $websiteId, string $locale): array
+    public function findAllForWebsite(string $locale): array
     {
         return $this->connection->fetchAllAssociative(
             'SELECT
@@ -53,13 +48,10 @@ class DbalOptionsStorage extends AbstractLocalizableStorage implements OptionsSt
                 COALESCE(tl.`value`, tm.`value`) AS `value`
             FROM #__option tm
             LEFT JOIN #__option_lang tl
-                ON tm.id = tl.option_id AND tl.locale = :locale
-            WHERE tm.website_id = :websiteId', [
+                ON tm.id = tl.option_id AND tl.locale = :locale', [
             'locale'    => $locale,
-            'websiteId' => $websiteId,
         ], [
             'locale'    => \PDO::PARAM_STR,
-            'websiteId' => \PDO::PARAM_STR,
         ]);
     }
 
@@ -74,7 +66,7 @@ class DbalOptionsStorage extends AbstractLocalizableStorage implements OptionsSt
         $mainTable['multilingual'] = $data['multilingual'] ? '1' : '0';
         $mainTable['autoload'] = $data['autoload'] ? '1' : '0';
 
-        if ($foreignLocale === false || $this->isMultilingualOption($data['name'], $data['website_id']) === false) {
+        if ($foreignLocale === false || $this->isMultilingualOption($data['name']) === false) {
             $mainTable['value'] = $data['value'];
         }
 
@@ -86,7 +78,6 @@ class DbalOptionsStorage extends AbstractLocalizableStorage implements OptionsSt
         $mainTable = [];
         $mainTable['id'] = $data['id'];
         $mainTable['name'] = $data['name'];
-        $mainTable['website_id'] = $data['website_id'];
         $mainTable['value'] = $data['value'];
         $mainTable['multilingual'] = $data['multilingual'] ? '1' : '0';
         $mainTable['autoload'] = $data['autoload'] ? '1' : '0';
@@ -96,7 +87,7 @@ class DbalOptionsStorage extends AbstractLocalizableStorage implements OptionsSt
 
     protected function insertLangRow(array $data): void
     {
-        if ($this->isMultilingualOption($data['name'], $data['website_id']) === false) {
+        if ($this->isMultilingualOption($data['name']) === false) {
             return;
         }
 
@@ -110,7 +101,7 @@ class DbalOptionsStorage extends AbstractLocalizableStorage implements OptionsSt
 
     protected function updateLangRow(array $data): void
     {
-        if ($this->isMultilingualOption($data['name'], $data['website_id']) === false) {
+        if ($this->isMultilingualOption($data['name']) === false) {
             return;
         }
 
@@ -133,14 +124,12 @@ class DbalOptionsStorage extends AbstractLocalizableStorage implements OptionsSt
         return isset($result[0]['option_id']) && $result[0]['option_id'] === $data['id'];
     }
 
-    private function isMultilingualOption(string $name, string $website): bool
+    private function isMultilingualOption(string $name): bool
     {
         return (bool) $this->connection->createQueryBuilder()
             ->select('o.multilingual')
             ->from('#__option', 'o')
             ->andWhere('o.name = :name')
-            ->andWhere('o.website_id = :website')
-            ->setParameter('website', $website, \PDO::PARAM_STR)
             ->setParameter('name', $name, \PDO::PARAM_STR)
             ->execute()
             ->fetchColumn();

@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Component\Routing\Exception\RouteNotFoundException;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -15,19 +16,19 @@ use Tulia\Component\Routing\Exception\RouteNotFoundException;
 class BuilderHelper implements BuilderHelperInterface
 {
     protected TranslatorInterface$translator;
-    protected RequestStack $stack;
+    protected RequestStack $requestStack;
     protected RouterInterface $router;
     protected string $homepageRoute;
     private ?string $pathinfo = null;
     private ?bool $isHomepage = null;
 
     public function __construct(
-        RequestStack $stack,
+        RequestStack $requestStack,
         TranslatorInterface $translator,
         RouterInterface $router,
         string $homepageRoute = 'backend.homepage'
     ) {
-        $this->stack         = $stack;
+        $this->requestStack  = $requestStack;
         $this->translator    = $translator;
         $this->router        = $router;
         $this->homepageRoute = $homepageRoute;
@@ -44,7 +45,7 @@ class BuilderHelper implements BuilderHelperInterface
             return $this->isHomepage;
         }
 
-        $request = $this->stack->getCurrentRequest();
+        $request = $this->requestStack->getCurrentRequest();
 
         if (! $request) {
             return true;
@@ -61,7 +62,7 @@ class BuilderHelper implements BuilderHelperInterface
     public function isInPath(string $path): bool
     {
         if ($this->pathinfo === null) {
-            $request = $this->stack->getCurrentRequest();
+            $request = $this->requestStack->getCurrentRequest();
 
             if (! $request) {
                 return false;

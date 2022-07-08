@@ -12,25 +12,21 @@ use Tulia\Cms\ContactForm\Domain\WriteModel\Model\Field;
 use Tulia\Cms\ContactForm\Domain\WriteModel\Model\Form;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DbalFormRepository implements FormRepositoryInterface
 {
-    private CurrentWebsiteInterface $currentWebsite;
     private UuidGeneratorInterface $uuidGenerator;
     private ContactFormWriteStorageInterface $storage;
     private EventBusInterface $eventBus;
 
     public function __construct(
-        CurrentWebsiteInterface $currentWebsite,
         UuidGeneratorInterface $uuidGenerator,
         ContactFormWriteStorageInterface $storage,
         EventBusInterface $eventBus
     ) {
-        $this->currentWebsite = $currentWebsite;
         $this->uuidGenerator = $uuidGenerator;
         $this->storage = $storage;
         $this->eventBus = $eventBus;

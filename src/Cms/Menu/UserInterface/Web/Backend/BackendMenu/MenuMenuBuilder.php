@@ -14,7 +14,6 @@ use Tulia\Cms\Menu\Domain\ReadModel\Finder\MenuFinderScopeEnum;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuCreated;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuDeleted;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuUpdated;
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -29,18 +28,14 @@ class MenuMenuBuilder implements BuilderInterface, EventSubscriberInterface
 
     protected RequestStack $requestStack;
 
-    protected CurrentWebsiteInterface $currentWebsite;
-
     public function __construct(
         BuilderHelperInterface $helper,
         MenuFinderInterface $menuFinder,
-        RequestStack $requestStack,
-        CurrentWebsiteInterface $currentWebsite
+        RequestStack $requestStack
     ) {
         $this->helper = $helper;
         $this->menuFinder = $menuFinder;
         $this->requestStack  = $requestStack;
-        $this->currentWebsite = $currentWebsite;
     }
 
     public static function getSubscribedEvents(): array
@@ -121,6 +116,6 @@ class MenuMenuBuilder implements BuilderInterface, EventSubscriberInterface
 
     private function getCachekey(): string
     {
-        return sprintf(self::SESSION_KEY, $this->currentWebsite->getId());
+        return self::SESSION_KEY;
     }
 }

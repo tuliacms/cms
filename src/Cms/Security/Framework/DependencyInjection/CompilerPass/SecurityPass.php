@@ -17,6 +17,6 @@ class SecurityPass implements CompilerPassInterface
     public function process(ContainerBuilder $container): void
     {
         $definition = $container->findDefinition('security.http_utils');
-        $definition->replaceArgument(1, new Reference(HttpUtilsUrlMatcher::class));
+        //$definition->replaceArgument(1, new Reference(HttpUtilsUrlMatcher::class));
     }
 }

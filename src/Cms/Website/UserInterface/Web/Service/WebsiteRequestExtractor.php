@@ -7,7 +7,6 @@ namespace Tulia\Cms\Website\UserInterface\Web\Service;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
 use Tulia\Component\Routing\Enum\SslModeEnum;
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -15,12 +14,10 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 class WebsiteRequestExtractor
 {
     protected UuidGeneratorInterface $uuidGenerator;
-    protected CurrentWebsiteInterface $currentWebsite;
 
-    public function __construct(UuidGeneratorInterface $uuidGenerator, CurrentWebsiteInterface $currentWebsite)
+    public function __construct(UuidGeneratorInterface $uuidGenerator)
     {
         $this->uuidGenerator = $uuidGenerator;
-        $this->currentWebsite = $currentWebsite;
     }
 
     /**

@@ -6,7 +6,6 @@ namespace Tulia\Cms\Security\Framework\Security\Http;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
-use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -15,21 +14,14 @@ use Symfony\Component\Routing\RouterInterface;
 class HttpUtilsUrlMatcher implements RequestMatcherInterface
 {
     private RouterInterface $router;
-    private RequestContext $requestContext;
 
-    public function __construct(RouterInterface $router, RequestContext $requestContext)
+    public function __construct(RouterInterface $router)
     {
         $this->router = $router;
-        $this->requestContext = $requestContext;
     }
 
     public function matchRequest(Request $request): array
     {
-        return $this->router->match($request->attributes->get('_content_path'));
-    }
-
-    public function getContext(): RequestContext
-    {
-        return $this->requestContext;
+        return $this->router->matchRequest($request);
     }
 }

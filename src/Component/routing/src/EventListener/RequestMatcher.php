@@ -9,7 +9,6 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\EventListener\RouterListener;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\RouterInterface;
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -18,16 +17,13 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class RequestMatcher implements EventSubscriberInterface
 {
     protected RouterInterface $router;
-    protected CurrentWebsiteInterface $currentWebsite;
     protected RouterListener $symfonyListener;
 
     public function __construct(
         RouterInterface $router,
-        CurrentWebsiteInterface $currentWebsite,
         RouterListener $symfonyListener
     ) {
         $this->router = $router;
-        $this->currentWebsite = $currentWebsite;
         $this->symfonyListener = $symfonyListener;
     }
 
@@ -46,7 +42,7 @@ class RequestMatcher implements EventSubscriberInterface
             return;
         }
 
-        $pathinfo = urldecode($request->attributes->get('_content_path'));
+        $pathinfo = urldecode($request->getPathInfo());
         $fakeRequest = $this->createRequest($pathinfo, $request);
         $fakeEvent = new RequestEvent($event->getKernel(), $fakeRequest, $event->getRequestType());
 

@@ -37,7 +37,7 @@ class CustomizerResolver implements ResolverInterface
         }
 
         $config    = $theme->getConfig();
-        $changeset = $this->storage->getActiveChangeset($theme->getName());
+        $changeset = $this->storage->getActiveChangeset($theme->getName(), 'en_US');
 
         if (! $changeset) {
             $changeset = $this->defaultChangesetFactory->buildForTheme($theme);
@@ -57,8 +57,8 @@ class CustomizerResolver implements ResolverInterface
     {
         $id = $this->detector->getChangesetId();
 
-        if ($this->storage->has($id)) {
-            $changeset = $this->storage->get($id);
+        if ($this->storage->has($id, 'en_US')) {
+            $changeset = $this->storage->get($id, 'en_US');
 
             foreach ($changeset as $key => $val) {
                 $config->add('customizer', $key, $val);

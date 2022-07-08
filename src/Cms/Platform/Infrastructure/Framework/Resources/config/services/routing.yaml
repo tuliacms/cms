@@ -6,8 +6,9 @@ services:
     Tulia\Component\Routing\:
         resource: '../../../../../../../Component/routing/src/*'
         exclude:
-            - '../../../../../../Component/routing/src/**/*Exception.php'
-            - '../../../../../../Component/routing/src/Bridge/Symfony/SymfonyRouterDecorator.php'
+            - '../../../../../../../Component/routing/src/Website/Website.php'
+            - '../../../../../../../Component/routing/src/**/*Exception.php'
+            - '../../../../../../../Component/routing/src/Bridge/Symfony/SymfonyRouterDecorator.php'
 
     Tulia\Component\Routing\Bridge\Symfony\SymfonyRouterDecorator:
         decorates: router
@@ -16,11 +17,12 @@ services:
         arguments:
             - '@.inner'
             - '@Tulia\Component\Routing\ChainRouterInterface'
-            - '@Tulia\Component\Routing\Website\CurrentWebsiteInterface'
-
-    Tulia\Component\Routing\Website\RegistryInterface:
-        factory: Tulia\Component\Routing\Website\WebsiteRegistryFactory::factory
+            - '@Tulia\Component\Routing\WebsitePrefixesResolver'
+            - '@Psr\Log\LoggerInterface'
 
     Tulia\Component\Routing\EventListener\RequestMatcher:
         bind:
             $symfonyListener: '@router_listener'
+
+    Tulia\Component\Routing\Website\WebsiteInterface:
+        synthetic: true

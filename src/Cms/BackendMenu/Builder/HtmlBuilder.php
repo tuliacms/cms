@@ -14,6 +14,7 @@ class HtmlBuilder implements HtmlBuilderInterface
 {
     protected BuilderHelperInterface $helper;
 
+    /** @var BuilderInterface[] */
     protected array $builders = [];
 
     protected array $defaults = [
@@ -35,17 +36,11 @@ class HtmlBuilder implements HtmlBuilderInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function add(BuilderInterface $builder): void
     {
         $this->builders[] = $builder;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function build(array $params = []): string
     {
         $params = array_merge($this->defaults, $params);

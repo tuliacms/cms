@@ -6,7 +6,6 @@ namespace Tulia\Cms\Widget\Infrastructure\Widget\Storage;
 
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 use Tulia\Cms\Widget\Domain\Catalog\Storage\StorageInterface;
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -14,13 +13,11 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 class DatabaseStorage implements StorageInterface
 {
     private ConnectionInterface $connection;
-    private CurrentWebsiteInterface $currentWebsite;
     private static array $cache = [];
 
-    public function __construct(ConnectionInterface $connection, CurrentWebsiteInterface $currentWebsite)
+    public function __construct(ConnectionInterface $connection)
     {
         $this->connection = $connection;
-        $this->currentWebsite = $currentWebsite;
     }
 
     /**
@@ -39,9 +36,7 @@ class DatabaseStorage implements StorageInterface
                 COALESCE(tl.visibility, tm.visibility) AS visibility
             FROM #__widget AS tm
             LEFT JOIN #__widget_lang AS tl
-                ON tl.widget_id = tm.id AND tl.locale = :locale
-            WHERE tm.website_id = :websiteId', [
-            'websiteId' => $this->currentWebsite->getId(),
+                ON tl.widget_id = tm.id AND tl.locale = :locale', [
             'locale'    => $this->getLocale(),
         ]);
     }
@@ -63,9 +58,8 @@ class DatabaseStorage implements StorageInterface
             FROM #__widget AS tm
             LEFT JOIN #__widget_lang AS tl
                 ON tl.widget_id = tm.id AND tl.locale = :locale
-            WHERE tm.id = :id AND tm.website_id = :websiteId
+            WHERE tm.id = :id
             LIMIT 1', [
-            'websiteId' => $this->currentWebsite->getId(),
             'locale'    => $this->getLocale(),
             'id'        => $id,
         ]);
@@ -87,9 +81,8 @@ class DatabaseStorage implements StorageInterface
             FROM #__widget AS tm
             LEFT JOIN #__widget_lang AS tl
                 ON tl.widget_id = tm.id AND tl.locale = :locale
-            WHERE tm.space = :space AND tm.website_id = :websiteId
+            WHERE tm.space = :space
         ', [
-            'websiteId' => $this->currentWebsite->getId(),
             'locale'    => $this->getLocale(),
             'space'     => $space,
         ]);

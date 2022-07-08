@@ -37,7 +37,7 @@ class UserLocaleResolver implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
-        if (! $request->attributes->get('_is_backend')) {
+        if (! $request->server->get('_TULIA_WEBSITE_IS_BACKEND')) {
             return;
         }
 

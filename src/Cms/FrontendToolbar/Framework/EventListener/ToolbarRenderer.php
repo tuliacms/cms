@@ -41,7 +41,7 @@ class ToolbarRenderer implements EventSubscriberInterface
         $request = $event->getRequest();
 
         if (
-            $request->attributes->get('_is_backend')
+            $request->server->get('TULIA_WEBSITE_IS_BACKEND')
             || strncmp($request->getPathInfo(), '/_wdt', 5) === 0
             || strncmp($request->getPathInfo(), '/_profiler', 10) === 0
         ) {

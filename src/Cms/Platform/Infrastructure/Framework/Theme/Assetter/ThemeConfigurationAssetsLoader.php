@@ -29,7 +29,7 @@ class ThemeConfigurationAssetsLoader implements EventSubscriberInterface
 
     public function handle(ViewEvent $event): void
     {
-        if ($event->getRequest()->attributes->get('_is_backend')) {
+        if ($event->getRequest()->server->get('TULIA_WEBSITE_IS_BACKEND')) {
             return;
         }
 

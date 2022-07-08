@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Routing\Bridge\Twig;
 
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
-use Tulia\Component\Routing\Website\RegistryInterface;
-use Tulia\Component\Routing\Website\WebsiteInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -15,45 +13,26 @@ use Twig\TwigFunction;
  */
 class WebsiteExtension extends AbstractExtension
 {
-    protected CurrentWebsiteInterface $currentWebsite;
-    protected RegistryInterface $registry;
-
-    public function __construct(CurrentWebsiteInterface $currentWebsite, RegistryInterface $registry)
-    {
-        $this->currentWebsite = $currentWebsite;
-        $this->registry = $registry;
+    public function __construct(
+        protected RequestStack $requestStack
+    ) {
     }
 
     public function getFunctions(): array
     {
         return [
             new TwigFunction('locales', function () {
-                return $this->currentWebsite->getLocales();
+                return $this->requestStack->getCurrentRequest()->attributes->get('website')->getLocales();
             }, [
                  'is_safe' => [ 'html' ]
             ]),
             new TwigFunction('locale', function () {
-                return $this->currentWebsite->getLocale();
+                return $this->requestStack->getCurrentRequest()->attributes->get('website')->getLocale();
             }, [
                  'is_safe' => [ 'html' ]
             ]),
             new TwigFunction('current_website', function () {
-                return $this->currentWebsite;
-            }, [
-                 'is_safe' => [ 'html' ]
-            ]),
-            new TwigFunction('website_list', function () {
-                return $this->registry;
-            }, [
-                 'is_safe' => [ 'html' ]
-            ]),
-            new TwigFunction('website_url', function (WebsiteInterface $website, string $path = null) {
-                return $website->getAddress() . $path;
-            }, [
-                 'is_safe' => [ 'html' ]
-            ]),
-            new TwigFunction('website_backend_url', function (WebsiteInterface $website, string $path = null) {
-                return $website->getBackendAddress() . $path;
+                return $this->requestStack->getCurrentRequest()->attributes->get('website');
             }, [
                  'is_safe' => [ 'html' ]
             ]),

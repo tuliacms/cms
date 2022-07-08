@@ -25,7 +25,7 @@ class RequestExtension extends AbstractExtension
     {
         return [
             new TwigFunction('is_homepage', function () {
-                return $this->getRequest()->attributes->get('_content_path') === '/';
+                return $this->getRequest()->getPathInfo() === '/';
             }, [
                 'is_safe' => [ 'html' ]
             ]),

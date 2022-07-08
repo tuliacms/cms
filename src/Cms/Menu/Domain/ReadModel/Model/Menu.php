@@ -11,7 +11,6 @@ class Menu
 {
     protected string $id;
     protected string $name;
-    protected string $websiteId;
     protected array $items = [];
 
     public static function buildFromArray(array $data): Menu
@@ -23,7 +22,6 @@ class Menu
         $menu = new self();
         $menu->setId($data['id']);
         $menu->setName($data['name'] ?? '');
-        $menu->setWebsiteId($data['website_id'] ?? null);
 
         foreach ($data['items'] ?? [] as $item) {
             $menu->items[] = Item::buildFromArray($item);
@@ -55,16 +53,6 @@ class Menu
     public function setName(string $name): void
     {
         $this->name = $name;
-    }
-
-    public function getWebsiteId(): ?string
-    {
-        return $this->websiteId;
-    }
-
-    public function setWebsiteId(?string $websiteId): void
-    {
-        $this->websiteId = $websiteId;
     }
 
     /**

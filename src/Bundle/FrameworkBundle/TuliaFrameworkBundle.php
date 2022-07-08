@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Bundle\FrameworkBundle;
 
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
+use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Tulia\Bundle\FrameworkBundle\DependencyInjection\CompilerPass\FinderPass;
@@ -41,7 +42,7 @@ class TuliaFrameworkBundle extends FrameworkBundle
     {
         parent::build($container);
 
-        $this->ensureDynamicConfigFileExists($container, '/config/dynamic/themes.php');
+        $this->ensureDynamicConfigFileExists($container, '/config/dynamic/theme.php');
 
         $container->addCompilerPass(new TemplatingPass());
         $container->addCompilerPass(new RoutingPass());
@@ -49,6 +50,9 @@ class TuliaFrameworkBundle extends FrameworkBundle
         $container->addCompilerPass(new FinderPass());
         $container->addCompilerPass(new ThemePass());
         $container->addCompilerPass(new UsecasePass());
+
+        $container->addResource(new FileResource($container->getParameter('kernel.project_dir').'/config/dynamic/theme.php'));
+        $container->addResource(new FileResource($container->getParameter('kernel.project_dir').'/config/dynamic/website.php'));
     }
 
     private function ensureDynamicConfigFileExists(ContainerBuilder $container, string $path): void

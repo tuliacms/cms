@@ -6,7 +6,6 @@ namespace Tulia\Cms\Content\Attributes\Infrastructure\Persistence\ReadModel;
 
 use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\AttributeReadStorageInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -14,15 +13,13 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 class DbalAttributeReadStorage implements AttributeReadStorageInterface
 {
     protected ConnectionInterface $connection;
-    protected CurrentWebsiteInterface $currentWebsite;
 
-    public function __construct(ConnectionInterface $connection, CurrentWebsiteInterface $currentWebsite)
+    public function __construct(ConnectionInterface $connection)
     {
         $this->connection = $connection;
-        $this->currentWebsite = $currentWebsite;
     }
 
-    public function findAll(string $type, array $ownerId): array
+    public function findAll(string $type, array $ownerId, string $locale): array
     {
         $sql = "SELECT
             tm.owner_id,
@@ -40,7 +37,7 @@ class DbalAttributeReadStorage implements AttributeReadStorageInterface
             tm.owner_id IN (:owner_id)";
 
         $source = $this->connection->fetchAllAssociative($sql, [
-            'locale' => $this->currentWebsite->getLocale()->getCode(),
+            'locale' => $locale,
             'owner_id' => $ownerId,
         ], [
             'owner_id' => ConnectionInterface::PARAM_ARRAY_STR,

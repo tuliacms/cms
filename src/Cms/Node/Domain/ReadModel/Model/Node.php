@@ -19,7 +19,6 @@ class Node implements AttributesAwareInterface
     protected string $id;
     protected string $type;
     protected string $status;
-    protected string $websiteId;
     protected ImmutableDateTime $publishedAt;
     protected ?ImmutableDateTime $publishedTo;
     protected ImmutableDateTime $createdAt;
@@ -42,10 +41,6 @@ class Node implements AttributesAwareInterface
             throw new InvalidArgumentException('Node ID must be provided.');
         }
 
-        if (isset($data['website_id']) === false) {
-            throw new InvalidArgumentException('Node website_id must be provided.');
-        }
-
         if (isset($data['locale']) === false) {
             $data['locale'] = 'en_US';
         }
@@ -58,7 +53,6 @@ class Node implements AttributesAwareInterface
         $node->id = $data['id'];
         $node->type = $data['type'] ?? 'page';
         $node->setStatus($data['status'] ?? 'published');
-        $node->setWebsiteId($data['website_id']);
         $node->setPublishedAt($data['published_at']);
         $node->setPublishedTo($data['published_to']);
         $node->setCreatedAt($data['created_at']);
@@ -107,16 +101,6 @@ class Node implements AttributesAwareInterface
     public function setStatus(string $status): void
     {
         $this->status = $status;
-    }
-
-    public function getWebsiteId(): ?string
-    {
-        return $this->websiteId;
-    }
-
-    public function setWebsiteId(?string $websiteId): void
-    {
-        $this->websiteId = $websiteId;
     }
 
     public function getPublishedAt(): ImmutableDateTime

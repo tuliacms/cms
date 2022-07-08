@@ -18,18 +18,12 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Routing\FrontendRouteSuffixResol
  */
 class SymfonyRouter implements RouterInterface, RequestMatcherInterface
 {
-    private FrontendRouteSuffixResolver $frontendRouteSuffixResolver;
-
-    private Router $contentTypeRouter;
-
     private ?RequestContext $context = null;
 
     public function __construct(
-        FrontendRouteSuffixResolver $frontendRouteSuffixResolver,
-        Router $contentTypeRouter
+        private FrontendRouteSuffixResolver $frontendRouteSuffixResolver,
+        private Router $contentTypeRouter
     ) {
-        $this->frontendRouteSuffixResolver = $frontendRouteSuffixResolver;
-        $this->contentTypeRouter = $contentTypeRouter;
     }
 
     public function setContext(RequestContext $context): void
@@ -57,8 +51,7 @@ class SymfonyRouter implements RouterInterface, RequestMatcherInterface
         [, $type, $identity] = explode('.', $name);
 
         $parameters = array_merge([
-            // @todo Fix routing locales
-            '_locale' => 'en_EN',//$this->getContext()->getParameter('_content_locale'),
+            '_locale' => $parameters['_locale']
         ], $parameters);
 
         $path = $this->contentTypeRouter->generate($type, $identity, $parameters);
@@ -68,20 +61,11 @@ class SymfonyRouter implements RouterInterface, RequestMatcherInterface
 
     public function matchRequest(Request $request): array
     {
-        return $this->match($request->attributes->get('_content_path', $request->getPathInfo()));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function match(string $pathinfo): array
-    {
-        $pathinfo = urldecode($pathinfo);
+        $pathinfo = urldecode($request->getPathInfo());
         $pathinfo = $this->frontendRouteSuffixResolver->removeSuffix($pathinfo);
 
         $parameters = $this->contentTypeRouter->match($pathinfo, [
-            // @todo Fix routing locales
-            '_locale' => 'en_EN',//$this->getContext()->getParameter('_content_locale'),
+            '_locale' => $request->attributes->get('_content_locale'),
         ]);
 
         if ($parameters === []) {
@@ -89,5 +73,10 @@ class SymfonyRouter implements RouterInterface, RequestMatcherInterface
         }
 
         return $parameters;
+    }
+
+    public function match(string $pathinfo): array
+    {
+        throw new \RuntimeException('Tulia CMS do not supports UrlMatcherInterface::match()');
     }
 }

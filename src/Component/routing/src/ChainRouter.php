@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace Tulia\Component\Routing;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\Routing\RequestContextAwareInterface;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -18,7 +15,6 @@ class ChainRouter implements ChainRouterInterface
 {
     private array $routers = [];
     private array $sortedRouters = [];
-    private ?RequestContext $context = null;
     private RouteCollection $routeCollection;
     protected ?LoggerInterface $logger = null;
 
@@ -42,14 +38,6 @@ class ChainRouter implements ChainRouterInterface
     {
         if (0 === count($this->sortedRouters)) {
             $this->sortedRouters = $this->sortRouters();
-
-            if (null !== $this->context) {
-                foreach ($this->sortedRouters as $router) {
-                    if ($router instanceof RequestContextAwareInterface) {
-                        $router->setContext($this->context);
-                    }
-                }
-            }
         }
 
         return $this->sortedRouters;

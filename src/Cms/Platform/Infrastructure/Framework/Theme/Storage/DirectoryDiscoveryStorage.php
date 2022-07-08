@@ -58,8 +58,12 @@ class DirectoryDiscoveryStorage implements StorageInterface
     /**
      * {@inheritdoc}
      */
-    public function has(string $name): bool
+    public function has(?string $name): bool
     {
+        if (!$name) {
+            return false;
+        }
+
         $this->resolveThemes();
 
         return isset($this->themes[$name]);

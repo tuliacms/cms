@@ -59,7 +59,7 @@ class RequestCsrfTokenExceptionListener
             return new RedirectResponse($referer, Response::HTTP_FOUND, $headers);
         }
 
-        if ($request->attributes->get('_is_backend')) {
+        if ($request->server->get('TULIA_WEBSITE_IS_BACKEND')) {
             $route = 'backend';
         } else {
             $route = 'homepage';

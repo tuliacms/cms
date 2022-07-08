@@ -4,18 +4,16 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Routing;
 
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class WebsitePrefixesResolver
 {
-    private CurrentWebsiteInterface $currentWebsite;
-
-    public function __construct(CurrentWebsiteInterface $currentWebsite)
-    {
-        $this->currentWebsite = $currentWebsite;
+    public function __construct(
+        private WebsiteInterface $website
+    ) {
     }
 
     public function appendWebsitePrefixes(string $name, string $uri, array $parameters = []): string
@@ -27,33 +25,31 @@ class WebsitePrefixesResolver
             $parts['path'] = '/';
         }
 
-        if (isset($parameters['_locale'])) {
-            $localePrefix = $this->currentWebsite->getLocaleByCode($parameters['_locale'])->getLocalePrefix();
-        } else {
-            $localePrefix = $this->currentWebsite->getLocalePrefix();
+        if (!isset($parameters['_locale'])) {
+            $parameters['_locale'] = $this->website->getLocale()->getCode();
         }
 
+        $localePrefix = $this->website->getLocaleByCode($parameters['_locale'])->getLocalePrefix();
+
         if (strncmp($name, 'backend.', 8) === 0) {
-            if ($localePrefix !== $this->currentWebsite->getDefaultLocale()->getPathPrefix()) {
+            if ($localePrefix !== $this->website->getDefaultLocale()->getPathPrefix()) {
                 $parts['path'] = str_replace(
-                    $this->currentWebsite->getBackendPrefix(),
-                    $this->currentWebsite->getBackendPrefix() . $localePrefix,
+                    $this->website->getBackendPrefix(),
+                    $this->website->getBackendPrefix() . $localePrefix,
                     $parts['path']
                 );
             }
 
-            $parts['path'] = $this->currentWebsite->getPathPrefix() . $parts['path'];
-        } elseif (strncmp($name, 'api.', 4) === 0) {
-            $parts['path'] = $this->currentWebsite->getPathPrefix() . $parts['path'];
+            $parts['path'] = $this->website->getLocale()->getPathPrefix() . $parts['path'];
         } else {
-            $parts['path'] = $this->currentWebsite->getPathPrefix() . $localePrefix . $parts['path'];
+            $parts['path'] = $this->website->getLocale()->getPathPrefix() . $localePrefix . $parts['path'];
         }
 
         return
-            (isset($parts['scheme']) ? $parts['scheme'] . '://' : '') .
-            ($parts['host'] ?? '') .
-            ($parts['path'] ?? '') .
-            (isset($parts['query']) ? '?' . $parts['query'] : '')
-            ;
+            (isset($parts['scheme']) ? $parts['scheme'] . '://' : '')
+            .($parts['host'] ?? '')
+            .($parts['path'] ?? '')
+            .(isset($parts['query']) ? '?' . $parts['query'] : '')
+        ;
     }
 }

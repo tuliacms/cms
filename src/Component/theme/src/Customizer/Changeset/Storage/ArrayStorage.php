@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tulia\Component\Theme\Customizer\Changeset\Storage;
 
 use Tulia\Component\Theme\Customizer\Changeset\ChangesetInterface;
-use Tulia\Component\Theme\Customizer\Changeset\Changeset;
 
 /**
  * @author Adam Banaszkiewicz
@@ -14,12 +13,12 @@ class ArrayStorage implements StorageInterface
 {
     protected $changesets = [];
 
-    public function has(string $id): bool
+    public function has(string $id, string $locale): bool
     {
         return isset($this->changesets[$id]);
     }
 
-    public function get(string $id): ChangesetInterface
+    public function get(string $id, string $locale): ChangesetInterface
     {
         return $this->changesets[$id];
     }
@@ -29,30 +28,12 @@ class ArrayStorage implements StorageInterface
        unset($this->changesets[$changeset->getId()]);
     }
 
-    public function save(ChangesetInterface $changeset): void
+    public function save(ChangesetInterface $changeset, string $locale): void
     {
         $this->changesets[$changeset->getId()] = $changeset;
     }
 
-    public function getThemeChangeset(string $theme): ChangesetInterface
-    {
-        return new Changeset($theme);
-    }
-
-    public function setThemeChangeset(string $theme, ChangesetInterface $changeset)
-    {
-
-    }
-
-    public function removeThemeChangeset(string $theme, ChangesetInterface $changeset)
-    {
-
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getActiveChangeset(string $theme): ?ChangesetInterface
+    public function getActiveChangeset(string $theme, string $locale): ?ChangesetInterface
     {
         return null;
     }

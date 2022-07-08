@@ -162,10 +162,10 @@ class DbalFinderQuery extends AbstractDbalQuery
             return $collection;
         }
 
-        $metadata = $this->attributesFinder->findAllAggregated('user', $scope, array_column($result, 'id'));
+        //$metadata = $this->attributesFinder->findAllAggregated('user', $scope, array_column($result, 'id'));
 
         foreach ($result as $row) {
-            $row['metadata'] = $metadata[$row['id']] ?? [];
+            //$row['metadata'] = $metadata[$row['id']] ?? [];
 
             $collection->append(User::buildFromArray($row));
         }

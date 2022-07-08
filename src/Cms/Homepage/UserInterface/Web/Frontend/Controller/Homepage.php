@@ -11,6 +11,7 @@ use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Enum\NodePurposeEnum;
 use Tulia\Cms\Node\UserInterface\Web\Frontend\Controller\Node;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
 
 /**
@@ -18,22 +19,20 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class Homepage extends AbstractController
 {
-    private NodeFinderInterface $nodeFinder;
-    private Node $nodeController;
-
-    public function __construct(NodeFinderInterface $nodeFinder, Node $nodeController)
-    {
-        $this->nodeFinder = $nodeFinder;
-        $this->nodeController = $nodeController;
+    public function __construct(
+        private NodeFinderInterface $nodeFinder,
+        private Node $nodeController
+    ) {
     }
 
     /**
      * @return Response|ViewInterface
      */
-    public function index(Request $request)
+    public function index(Request $request, WebsiteInterface $website)
     {
         $homepage = $this->nodeFinder->findOne([
             'purpose' => NodePurposeEnum::PAGE_HOMEPAGE,
+            'locale' => $website->getLocale()->getCode()
         ], NodeFinderScopeEnum::SINGLE);
 
         if ($homepage) {

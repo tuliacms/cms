@@ -27,9 +27,9 @@ class AttributesFinder
         $this->attributesValueRenderer = $attributesValueRenderer;
     }
 
-    public function findAllAggregated(string $type, string $scope, array $ownerIdList): array
+    public function findAllAggregated(string $type, string $scope, array $ownerIdList, string $locale): array
     {
-        $source = $this->finder->findAll($type, $ownerIdList);
+        $source = $this->finder->findAll($type, $ownerIdList, $locale);
         $result = [];
 
         foreach ($source as $ownerId => $attributes) {
@@ -44,8 +44,8 @@ class AttributesFinder
         return $result;
     }
 
-    public function findAll(string $type, string $scope, string $ownerId): array
+    public function findAll(string $type, string $scope, string $ownerId, string $locale): array
     {
-        return $this->findAllAggregated($type, $scope, [$ownerId])[$ownerId] ?? [];
+        return $this->findAllAggregated($type, $scope, [$ownerId], $locale)[$ownerId] ?? [];
     }
 }

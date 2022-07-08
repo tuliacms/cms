@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tulia\Cms\Theme\Infrastructure\Framework\Theme\Customizer\Changeset\Storage;
 
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Component\Theme\Customizer\Changeset\ChangesetInterface;
 use Tulia\Component\Theme\Customizer\Changeset\Factory\ChangesetFactoryInterface;
 use Tulia\Component\Theme\Customizer\Changeset\Storage\StorageInterface;
@@ -19,30 +18,27 @@ class DatabaseStorage implements StorageInterface
 {
     protected ConnectionInterface $connection;
     protected ChangesetFactoryInterface $changesetFactory;
-    protected CurrentWebsiteInterface $currentWebsite;
 
     public function __construct(
         ConnectionInterface $connection,
         ChangesetFactoryInterface $changesetFactory,
-        CurrentWebsiteInterface $currentWebsite
     ) {
         $this->connection = $connection;
         $this->changesetFactory = $changesetFactory;
-        $this->currentWebsite = $currentWebsite;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function has(string $id): bool
+    public function has(string $id, string $locale): bool
     {
-        return $this->getRow($id) !== [];
+        return $this->getRow($id, $locale) !== [];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getActiveChangeset(string $theme): ?ChangesetInterface
+    public function getActiveChangeset(string $theme, string $locale): ?ChangesetInterface
     {
         $result = $this->connection->fetchAllAssociative('SELECT *
             FROM #__customizer_changeset AS tm
@@ -52,7 +48,7 @@ class DatabaseStorage implements StorageInterface
             LIMIT 1', [
             'theme'  => $theme,
             'type'   => ChangesetTypeEnum::ACTIVE,
-            'locale' => $this->getLocale(),
+            'locale' => $locale,
         ]);
 
         if ($result === []) {
@@ -90,7 +86,7 @@ class DatabaseStorage implements StorageInterface
     /**
      * {@inheritdoc}
      */
-    public function get(string $id): ChangesetInterface
+    public function get(string $id, string $locale): ChangesetInterface
     {
         $result = $this->connection->fetchAllAssociative('SELECT *
             FROM #__customizer_changeset AS tm
@@ -99,7 +95,7 @@ class DatabaseStorage implements StorageInterface
             WHERE tm.id = :id  AND tl.locale = :locale
             LIMIT 1', [
             'id'     => $id,
-            'locale' => $this->getLocale(),
+            'locale' => $locale,
         ]);
 
         if ($result === []) {
@@ -112,7 +108,7 @@ class DatabaseStorage implements StorageInterface
     /**
      * {@inheritdoc}
      */
-    public function save(ChangesetInterface $changeset): void
+    public function save(ChangesetInterface $changeset, string $locale): void
     {
         if ($changeset->isEmpty()) {
             return;
@@ -125,7 +121,7 @@ class DatabaseStorage implements StorageInterface
          * 3. Current edited changeset will be left in Database for the next savings.
          */
         if ($changeset->getType() === ChangesetTypeEnum::ACTIVE) {
-            $oldActive = $this->getActiveChangeset($changeset->getTheme());
+            $oldActive = $this->getActiveChangeset($changeset->getTheme(), $locale);
 
             if ($oldActive && $oldActive->getId() !== $changeset->getId()) {
                 $this->remove($oldActive);
@@ -150,7 +146,7 @@ class DatabaseStorage implements StorageInterface
                 'customizer_changeset_id' => $newId,
             ]);
         } else {
-            $this->persist($changeset);
+            $this->persist($changeset, $locale);
         }
     }
 
@@ -166,12 +162,12 @@ class DatabaseStorage implements StorageInterface
     /**
      * @param ChangesetInterface $changeset
      */
-    private function persist(ChangesetInterface $changeset): void
+    private function persist(ChangesetInterface $changeset, string $locale): void
     {
         $payloadMain = json_encode($changeset->getAllNotMultilingual());
         $payloadLang = json_encode($changeset->getAllMultilingual());
 
-        if ($this->getRow($changeset->getId()) === []) {
+        if ($this->getRow($changeset->getId(), $locale) === []) {
             $this->connection->insert('#__customizer_changeset', [
                 'id'         => $changeset->getId(),
                 'type'       => $changeset->getType(),
@@ -179,15 +175,14 @@ class DatabaseStorage implements StorageInterface
                 'author_id'  => $changeset->getAuthorId(),
                 'created_at' => date('Y-m-d H:i:s'),
                 'payload'    => $payloadMain,
-                'website_id' => $this->currentWebsite->getId(),
             ]);
 
-            foreach ($this->getAvailableLocales() as $locale) {
+            foreach ($this->getAvailableLocales() as $loc) {
                 $this->connection->insert('#__customizer_changeset_lang', [
                     'customizer_changeset_id' => $changeset->getId(),
                     'payload_localized' => $payloadLang,
                     'autogenerated_locale' => 1,
-                    'locale' => $locale,
+                    'locale' => $loc,
                 ]);
             }
 
@@ -195,7 +190,7 @@ class DatabaseStorage implements StorageInterface
                 'autogenerated_locale' => 0,
             ], [
                 'customizer_changeset_id' => $changeset->getId(),
-                'locale' => $this->getLocale(),
+                'locale' => $locale,
             ]);
         } else {
             $this->connection->update('#__customizer_changeset', [
@@ -212,14 +207,14 @@ class DatabaseStorage implements StorageInterface
                 'autogenerated_locale' => 0,
             ], [
                 'customizer_changeset_id' => $changeset->getId(),
-                'locale' => $this->getLocale(),
+                'locale' => $locale,
             ]);
 
             /**
              * If updated locale is a default locale, we must update
              * all autogenerated locale rows for this chanegset.
              */
-            if ($this->getLocale() === $this->getDefaultLocale()) {
+            if ($locale === $this->getDefaultLocale()) {
                 $this->connection->update('#__customizer_changeset_lang', [
                     'payload_localized' => $payloadLang,
                 ], [
@@ -242,7 +237,6 @@ class DatabaseStorage implements StorageInterface
             FROM #__customizer_changeset
             WHERE id = :currentId
             LIMIT 1', [
-            'websiteId' => $this->currentWebsite->getId(),
             'currentId' => $currentId,
             'newId'     => $newId,
         ]);
@@ -280,12 +274,7 @@ class DatabaseStorage implements StorageInterface
         return $changeset;
     }
 
-    /**
-     * @param string $id
-     *
-     * @return array
-     */
-    private function getRow(string $id): array
+    private function getRow(string $id, string $locale): array
     {
         $result = $this->connection->fetchAllAssociative('SELECT id FROM #__customizer_changeset WHERE id = :id LIMIT 1', [
             'id' => $id
@@ -294,17 +283,6 @@ class DatabaseStorage implements StorageInterface
         return $result[0] ?? [];
     }
 
-    /**
-     * @return string
-     */
-    private function getLocale(): string
-    {
-        return $this->currentWebsite->getLocale()->getCode();
-    }
-
-    /**
-     * @return string
-     */
     private function getDefaultLocale(): string
     {
         return $this->currentWebsite->getDefaultLocale()->getCode();

@@ -15,7 +15,6 @@ use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\AbstractDbalQuery;
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -24,17 +23,14 @@ class DbalFinderQuery extends AbstractDbalQuery
 {
     private AttributesFinder $attributesFinder;
     protected array $joinedTables = [];
-    private CurrentWebsiteInterface $currentWebsite;
 
     public function __construct(
         QueryBuilder $queryBuilder,
-        AttributesFinder $attributesFinder,
-        CurrentWebsiteInterface $currentWebsite
+        AttributesFinder $attributesFinder
     ) {
         parent::__construct($queryBuilder);
 
         $this->attributesFinder = $attributesFinder;
-        $this->currentWebsite = $currentWebsite;
     }
 
     public function getBaseQueryArray(): array
@@ -162,12 +158,7 @@ class DbalFinderQuery extends AbstractDbalQuery
             /**
              * Locale of the node to fetch.
              */
-            'locale' => $this->currentWebsite->getLocale()->getCode(),
-            /**
-             * Search for rows in the website. Given null search in all websites.
-             * @param null|string
-             */
-            'website' => $this->currentWebsite->getId(),
+            'locale' => null,
             'limit' => null,
             /**
              * Posts with defined purpose or purposes.
@@ -201,10 +192,14 @@ class DbalFinderQuery extends AbstractDbalQuery
 
         $this->callPlugins($criteria);
 
-        return $this->createCollection($this->queryBuilder->execute()->fetchAllAssociative(), $scope);
+        return $this->createCollection(
+            $this->queryBuilder->execute()->fetchAllAssociative(),
+            $scope,
+            $criteria
+        );
     }
 
-    protected function createCollection(array $result, string $scope): Collection
+    protected function createCollection(array $result, string $scope, array $criteria): Collection
     {
         $collection = new Collection();
 
@@ -215,7 +210,7 @@ class DbalFinderQuery extends AbstractDbalQuery
         $terms = $this->fetchTerms(array_column($result, 'id'));
 
         try {
-            $result = $this->fetchAttributes($result, $scope);
+            $result = $this->fetchAttributes($result, $scope, $criteria['locale']);
 
             foreach ($result as $row) {
                 if (isset($terms[$row['id']][TermTypeEnum::MAIN][0])) {
@@ -233,7 +228,7 @@ class DbalFinderQuery extends AbstractDbalQuery
         return $collection;
     }
 
-    protected function fetchAttributes(array $nodes, string $scope): array
+    protected function fetchAttributes(array $nodes, string $scope, string $locale): array
     {
         $nodesByType = [];
 
@@ -246,7 +241,8 @@ class DbalFinderQuery extends AbstractDbalQuery
             $attributes = $this->attributesFinder->findAllAggregated(
                 'node',
                 $scope,
-                array_column($groupedNodes, 'id')
+                array_column($groupedNodes, 'id'),
+                $locale
             );
 
             foreach ($groupedNodes as &$node) {
@@ -293,6 +289,10 @@ class DbalFinderQuery extends AbstractDbalQuery
             ');
         }
 
+        if (!$criteria['locale']) {
+            throw new \InvalidArgumentException('Please provide locale in query parameters.');
+        }
+
         $this->queryBuilder
             ->from('#__node', 'tm')
             ->leftJoin('tm', '#__node_lang', 'tl', 'tm.id = tl.node_id AND tl.locale = :tl_locale')
@@ -300,11 +300,6 @@ class DbalFinderQuery extends AbstractDbalQuery
             ->leftJoin('tm', '#__node_has_purpose', 'tnhf', 'tm.id = tnhf.node_id')
             ->addGroupBy('tm.id')
         ;
-
-        if ($criteria['website']) {
-            $this->queryBuilder->andWhere('tm.website_id = :website_id')
-                ->setParameter('website_id', $criteria['website']);
-        }
     }
 
     protected function searchById(array $criteria): void

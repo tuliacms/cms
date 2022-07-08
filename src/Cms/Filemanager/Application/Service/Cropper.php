@@ -10,28 +10,17 @@ use Tulia\Cms\Filemanager\Domain\ReadModel\Model\File;
 use Tulia\Cms\Filemanager\Domain\WriteModel\FileTypeEnum;
 use Tulia\Component\Image\ImageInterface;
 use Tulia\Component\Image\ImageManagerInterface;
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class Cropper
 {
-    private ImageManagerInterface $imageManager;
-    private ImageSizeRegistryInterface $imageSize;
-    private CurrentWebsiteInterface $currentWebsite;
-    private string $filesDirectory;
-
     public function __construct(
-        ImageManagerInterface $imageManager,
-        ImageSizeRegistryInterface $imageSize,
-        CurrentWebsiteInterface $currentWebsite,
-        string $filesDirectory
+        private ImageManagerInterface $imageManager,
+        private ImageSizeRegistryInterface $imageSize,
+        private string $filesDirectory,
     ) {
-        $this->imageManager   = $imageManager;
-        $this->imageSize      = $imageSize;
-        $this->currentWebsite = $currentWebsite;
-        $this->filesDirectory = $filesDirectory;
     }
 
     public function crop(File $image, string $sizeName): string
@@ -52,7 +41,7 @@ class Cropper
         $name = pathinfo($image->getFilename(), PATHINFO_FILENAME);
 
         $source = $this->filesDirectory . '/' . $image->getPath() . '/' . $image->getFilename();
-        $output = '/uploads/thumbnails/' . $this->currentWebsite->getId() . '/' . $size->getCode() . '/' . $directory . '/' . $name . '.' . $image->getExtension();
+        $output = '/uploads/thumbnails/' . $size->getCode() . '/' . $directory . '/' . $name . '.' . $image->getExtension();
 
         // Return path, if file already exists.
         if (is_file($this->filesDirectory . $output)) {

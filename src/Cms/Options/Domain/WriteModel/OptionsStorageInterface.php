@@ -9,9 +9,9 @@ namespace Tulia\Cms\Options\Domain\WriteModel;
  */
 interface OptionsStorageInterface
 {
-    public function find(string $name, string $websiteId, string $locale): ?array;
+    public function find(string $name, string $locale): ?array;
 
-    public function findAllForWebsite(string $websiteId, string $locale): array;
+    public function findAllForWebsite(string $locale): array;
 
     public function insert(array $option, string $defaultLocale): void;
 

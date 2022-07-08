@@ -16,7 +16,6 @@ use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\AttributeInfo;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\TermId;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Service\TermWriteStorageInterface;
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -29,8 +28,6 @@ class TaxonomyRepository
 
     private TermWriteStorageInterface $storage;
 
-    private CurrentWebsiteInterface $currentWebsite;
-
     private AttributesRepositoryInterface $metadataRepository;
 
     private UuidGeneratorInterface $uuidGenerator;
@@ -41,7 +38,6 @@ class TaxonomyRepository
 
     public function __construct(
         TermWriteStorageInterface $storage,
-        CurrentWebsiteInterface $currentWebsite,
         AttributesRepositoryInterface $metadataRepository,
         UuidGeneratorInterface $uuidGenerator,
         EventBusInterface $eventBus,
@@ -49,7 +45,6 @@ class TaxonomyRepository
         ContentTypeRegistryInterface $contentTypeRegistry
     ) {
         $this->storage = $storage;
-        $this->currentWebsite = $currentWebsite;
         $this->metadataRepository = $metadataRepository;
         $this->uuidGenerator = $uuidGenerator;
         $this->eventBus = $eventBus;
@@ -207,7 +202,6 @@ class TaxonomyRepository
 
         return [
             'id'         => $term->getId()->getValue(),
-            'website_id' => $term->getTaxonomy()->getWebsiteId(),
             'type'       => $term->getTaxonomy()->getType(),
             'level'      => $term->getLevel(),
             'position'   => $term->getPosition(),

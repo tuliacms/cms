@@ -15,9 +15,9 @@ use Twig\Source;
  */
 class NamespaceLoader implements LoaderInterface
 {
-    private ?FilesystemLoader $loader = null;
     private ManagerInterface $manager;
     private AdvancedFilesystemLoader $filesystemLoader;
+    private ?FilesystemLoader $loader = null;
 
     public function __construct(
         ManagerInterface $manager,
@@ -70,5 +70,7 @@ class NamespaceLoader implements LoaderInterface
             $this->loader->addPath($theme->getViewsDirectory(), $theme->getName());
             $this->filesystemLoader->setPath('@'.$theme->getName(), $theme->getViewsDirectory());
         }
+
+        $this->loader->addPath($this->manager->getTheme()->getViewsDirectory(), 'theme');
     }
 }

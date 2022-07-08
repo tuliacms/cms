@@ -86,7 +86,7 @@ class SymfonyRouter implements RouterInterface, RequestMatcherInterface
 
     public function matchRequest(Request $request): array
     {
-        return $this->match($request->attributes->get('_content_path', $request->getPathInfo()));
+        return $this->match($request->getPathInfo());
     }
 
     /**

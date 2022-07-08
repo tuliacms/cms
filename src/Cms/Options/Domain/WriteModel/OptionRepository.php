@@ -7,7 +7,6 @@ namespace Tulia\Cms\Options\Domain\WriteModel;
 use Tulia\Cms\Options\Domain\WriteModel\Exception\OptionNotFoundException;
 use Tulia\Cms\Options\Domain\WriteModel\Model\Option;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -15,16 +14,13 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 class OptionRepository implements OptionsRepositoryInterface
 {
     private OptionsStorageInterface $storage;
-    private CurrentWebsiteInterface $currentWebsite;
     private UuidGeneratorInterface $uuidGenerator;
 
     public function __construct(
         OptionsStorageInterface $storage,
-        CurrentWebsiteInterface $currentWebsite,
         UuidGeneratorInterface $uuidGenerator
     ) {
         $this->storage = $storage;
-        $this->currentWebsite = $currentWebsite;
         $this->uuidGenerator = $uuidGenerator;
     }
 
@@ -35,8 +31,7 @@ class OptionRepository implements OptionsRepositoryInterface
     {
         $option = $this->storage->find(
             $name,
-            $this->currentWebsite->getId(),
-            $this->currentWebsite->getLocale()->getCode()
+            'en_US'//$this->currentWebsite->getLocale()->getCode()
         );
 
         if ($option === null) {
@@ -53,8 +48,7 @@ class OptionRepository implements OptionsRepositoryInterface
     {
         $options = [];
         $source = $this->storage->findAllForWebsite(
-            $this->currentWebsite->getId(),
-            $this->currentWebsite->getLocale()->getCode()
+            'en_US'//$this->currentWebsite->getLocale()->getCode()
         );
 
         foreach ($source as $row) {
@@ -80,7 +74,7 @@ class OptionRepository implements OptionsRepositoryInterface
         foreach ($options as $option) {
             $this->storage->insert(
                 $this->extractOption($option),
-                $this->currentWebsite->getDefaultLocale()->getCode()
+                'en_US'//$this->currentWebsite->getDefaultLocale()->getCode()
             );
         }
     }
@@ -101,7 +95,7 @@ class OptionRepository implements OptionsRepositoryInterface
         foreach ($options as $option) {
             $this->storage->update(
                 $this->extractOption($option),
-                $this->currentWebsite->getDefaultLocale()->getCode()
+                'en_US'//$this->currentWebsite->getDefaultLocale()->getCode()
             );
         }
     }
@@ -130,7 +124,6 @@ class OptionRepository implements OptionsRepositoryInterface
     private function createOption(array $row): Option
     {
         $option = new Option(
-            $row['website_id'],
             $row['name'],
             $row['value'],
             $row['locale'],
@@ -146,10 +139,9 @@ class OptionRepository implements OptionsRepositoryInterface
     {
         return [
             'id' => $option->getId() ?? $this->uuidGenerator->generate(),
-            'website_id' => $option->getWebsiteId() ?? $this->currentWebsite->getId(),
             'name' => $option->getName(),
             'value' => $option->getValue(),
-            'locale' => $option->getLocale() ?? $this->currentWebsite->getLocale()->getCode(),
+            'locale' => $option->getLocale() ?? 'en_US',//$this->currentWebsite->getLocale()->getCode(),
             'multilingual' => $option->isMultilingual(),
             'autoload' => $option->isAutoload(),
         ];

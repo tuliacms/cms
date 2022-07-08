@@ -6,7 +6,6 @@ namespace Tulia\Component\Datatable\Finder;
 
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -15,12 +14,9 @@ abstract class AbstractDatatableFinder implements FinderInterface
 {
     protected ConnectionInterface $connection;
 
-    protected CurrentWebsiteInterface $currentWebsite;
-
-    public function __construct(ConnectionInterface $connection, CurrentWebsiteInterface $currentWebsite)
+    public function __construct(ConnectionInterface $connection)
     {
         $this->connection = $connection;
-        $this->currentWebsite = $currentWebsite;
     }
 
     abstract public function getConfigurationKey(): string;

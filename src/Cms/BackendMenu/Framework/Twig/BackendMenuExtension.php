@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\BackendMenu\Framework\Twig;
 
+use Symfony\Component\HttpFoundation\RequestStack;
 use Tulia\Cms\BackendMenu\Builder\HtmlBuilderInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -13,16 +14,11 @@ use Twig\TwigFunction;
  */
 class BackendMenuExtension extends AbstractExtension
 {
-    protected HtmlBuilderInterface $builder;
-
-    public function __construct(HtmlBuilderInterface $builder)
-    {
-        $this->builder = $builder;
+    public function __construct(
+        private HtmlBuilderInterface $builder
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFunctions(): array
     {
         return [
@@ -31,7 +27,7 @@ class BackendMenuExtension extends AbstractExtension
                 $ids = $cookie ? explode('|', $cookie) : [];
 
                 return $this->builder->build([
-                    'opened' => $ids
+                    'opened' => $ids,
                 ]);
             }, [
                 'is_safe' => ['html'],

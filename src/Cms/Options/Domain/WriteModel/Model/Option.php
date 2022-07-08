@@ -11,8 +11,6 @@ class Option
 {
     private ?string $id = null;
 
-    private string $websiteId;
-
     private string $name;
 
     private ?string $locale;
@@ -24,14 +22,12 @@ class Option
     private bool $autoload;
 
     public function __construct(
-        string $websiteId,
         string $name,
         $value,
         ?string $locale = null,
         bool $multilingual = false,
         bool $autoload = false
     ) {
-        $this->websiteId = $websiteId;
         $this->name = $name;
         $this->value = $value;
         $this->locale = $locale;
@@ -47,16 +43,6 @@ class Option
     public function setId(?string $id): void
     {
         $this->id = $id;
-    }
-
-    public function getWebsiteId(): string
-    {
-        return $this->websiteId;
-    }
-
-    public function setWebsiteId(string $websiteId): void
-    {
-        $this->websiteId = $websiteId;
     }
 
     public function getName(): string

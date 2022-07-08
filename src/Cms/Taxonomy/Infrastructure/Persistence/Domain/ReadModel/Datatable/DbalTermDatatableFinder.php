@@ -11,7 +11,6 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Service\Datatable\TermDatatableFinderInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -24,10 +23,9 @@ class DbalTermDatatableFinder extends AbstractDatatableFinder implements TermDat
 
     public function __construct(
         ConnectionInterface $connection,
-        CurrentWebsiteInterface $currentWebsite,
         TranslatorInterface $translator
     ) {
-        parent::__construct($connection, $currentWebsite);
+        parent::__construct($connection);
 
         $this->translator = $translator;
     }

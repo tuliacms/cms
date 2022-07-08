@@ -19,17 +19,16 @@ class DbalOptionsFinder implements OptionsFinderInterface
         $this->connection = $connection;
     }
 
-    public function findByName(string $name, string $locale, string $website)
+    public function findByName(string $name, string $locale)
     {
         $result = $this->connection->fetchFirstColumn('SELECT COALESCE(tl.`value`, tm.`value`) AS `value`
             FROM #__option tm
             LEFT JOIN #__option_lang tl
                 ON tm.id = tl.option_id AND tl.locale = :locale
-            WHERE tm.`name` = :name AND tm.website_id = :websiteId
+            WHERE tm.`name` = :name
             LIMIT 1', [
             'name'      => $name,
             'locale'    => $locale,
-            'websiteId' => $website,
         ], [
             'name'      => \PDO::PARAM_STR,
             'locale'    => \PDO::PARAM_STR,
@@ -39,17 +38,16 @@ class DbalOptionsFinder implements OptionsFinderInterface
         return \is_bool($result) ? null : $result;
     }
 
-    public function findBulkByName(array $names, string $locale, string $website): array
+    public function findBulkByName(array $names, string $locale): array
     {
         $result = $this->connection->fetchAllAssociative('SELECT tm.name, COALESCE(tl.`value`, tm.`value`) AS `value`
             FROM #__option tm
             LEFT JOIN #__option_lang tl
                 ON tm.id = tl.option_id AND tl.locale = :locale
-            WHERE tm.`name` IN (:name) AND tm.website_id = :websiteId
+            WHERE tm.`name` IN (:name)
             LIMIT 1', [
             'name'      => $names,
             'locale'    => $locale,
-            'websiteId' => $website,
         ], [
             'name'      => ConnectionInterface::PARAM_ARRAY_STR,
             'locale'    => \PDO::PARAM_STR,
@@ -59,15 +57,14 @@ class DbalOptionsFinder implements OptionsFinderInterface
         return array_column($result, 'value', 'name');
     }
 
-    public function autoload(string $locale, string $website): array
+    public function autoload(string $locale): array
     {
         $result = $this->connection->fetchAllAssociative('SELECT tm.name, COALESCE(tl.`value`, tm.`value`) AS `value`
             FROM #__option tm
             LEFT JOIN #__option_lang tl
                 ON tm.id = tl.option_id AND tl.locale = :locale
-            WHERE tm.autoload = 1 AND tm.website_id = :websiteId', [
+            WHERE tm.autoload = 1', [
             'locale'    => $locale,
-            'websiteId' => $website,
         ], [
             'locale'    => \PDO::PARAM_STR,
             'websiteId' => \PDO::PARAM_STR,

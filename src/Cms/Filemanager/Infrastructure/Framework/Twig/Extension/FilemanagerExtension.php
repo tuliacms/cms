@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Filemanager\Infrastructure\Framework\Twig\Extension;
 
+use Symfony\Component\HttpFoundation\RequestStack;
 use Tulia\Cms\Filemanager\Application\Service\ImageUrlResolver;
 use Tulia\Cms\Filemanager\Domain\Generator\Html;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\FileFinderInterface;
@@ -18,18 +19,12 @@ use Twig\TwigFunction;
  */
 class FilemanagerExtension extends AbstractExtension
 {
-    private FileFinderInterface $finder;
-    private ImageUrlResolver $urlResolver;
-    private string $publicDir;
-
     public function __construct(
-        FileFinderInterface $finder,
-        ImageUrlResolver $urlResolver,
-        string $publicDir
+        private FileFinderInterface $finder,
+        private ImageUrlResolver $urlResolver,
+        private RequestStack $requestStack,
+        private string $publicDir,
     ) {
-        $this->finder = $finder;
-        $this->urlResolver = $urlResolver;
-        $this->publicDir = $publicDir;
     }
 
     /**
@@ -73,7 +68,8 @@ class FilemanagerExtension extends AbstractExtension
             $image,
             isset($params['size']) && empty($params['size']) === false
                 ? $params['size']
-                : 'original'
+                : 'original',
+            $this->requestStack->getCurrentRequest()->attributes->get('website')
         );
 
         if (isset($params['version']) && empty($params['version']) === false) {

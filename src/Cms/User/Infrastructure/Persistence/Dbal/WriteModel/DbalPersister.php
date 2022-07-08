@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tulia\Cms\User\Infrastructure\Persistence\Dbal\WriteModel;
 
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -13,14 +12,11 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 class DbalPersister
 {
     protected ConnectionInterface $connection;
-    protected CurrentWebsiteInterface $currentWebsite;
 
     public function __construct(
         ConnectionInterface $connection,
-        CurrentWebsiteInterface $currentWebsite
     ) {
         $this->connection     = $connection;
-        $this->currentWebsite = $currentWebsite;
     }
 
     /**

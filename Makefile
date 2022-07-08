@@ -15,4 +15,20 @@ behat:
 deptrac:
 	${PHPROOT} php deptrac.phar --fail-on-uncovered --report-uncovered
 
+.PHONY: console
+console:
+	cd ../ && make console "$(ARGS)"
+
+.PHONY: cc
+cc:
+	cd ../ && make cc
+
+.PHONY: up
+up:
+	cd ../ && make up
+
+.PHONY: down
+down:
+	cd ../ && make down
+
 .SILENT:

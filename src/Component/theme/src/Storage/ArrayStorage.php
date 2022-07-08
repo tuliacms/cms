@@ -52,7 +52,7 @@ class ArrayStorage implements StorageInterface
     /**
      * {@inheritdoc}
      */
-    public function has(string $name): bool
+    public function has(?string $name): bool
     {
         return isset($this->themes[$name]);
     }

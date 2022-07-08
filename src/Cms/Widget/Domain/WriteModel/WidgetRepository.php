@@ -13,7 +13,6 @@ use Tulia\Cms\Widget\Domain\WriteModel\Event\WidgetDeleted;
 use Tulia\Cms\Widget\Domain\WriteModel\Event\WidgetUpdated;
 use Tulia\Cms\Widget\Domain\WriteModel\Exception\WidgetNotFoundException;
 use Tulia\Cms\Widget\Domain\WriteModel\Model\Widget;
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -21,7 +20,6 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 class WidgetRepository
 {
     private WidgetWriteStorageInterface $storage;
-    private CurrentWebsiteInterface $currentWebsite;
     private WidgetRegistryInterface $widgetRegistry;
     private UuidGeneratorInterface $uuidGenerator;
     private AttributesRepositoryInterface $attributeRepository;
@@ -30,7 +28,6 @@ class WidgetRepository
 
     public function __construct(
         WidgetWriteStorageInterface $storage,
-        CurrentWebsiteInterface $currentWebsite,
         WidgetRegistryInterface $widgetRegistry,
         UuidGeneratorInterface $uuidGenerator,
         AttributesRepositoryInterface $attributeRepository,
@@ -38,7 +35,6 @@ class WidgetRepository
         ContentTypeRegistryInterface $contentTypeRegistry
     ) {
         $this->storage = $storage;
-        $this->currentWebsite = $currentWebsite;
         $this->widgetRegistry = $widgetRegistry;
         $this->uuidGenerator = $uuidGenerator;
         $this->attributeRepository = $attributeRepository;
@@ -51,7 +47,6 @@ class WidgetRepository
         return Widget::createNew(
             $this->uuidGenerator->generate(),
             $widgetType,
-            $this->currentWebsite->getId(),
             $this->currentWebsite->getLocale()->getCode()
         );
     }

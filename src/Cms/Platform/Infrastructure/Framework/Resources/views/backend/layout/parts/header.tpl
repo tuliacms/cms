@@ -15,24 +15,6 @@
                     <button type="button" class="btn btn-icon-only action-btn toggle-fullscreen"><i class="btn-icon fas fa-expand"></i></button>
                 </div>
                 {% set __currentWebsite = current_website() %}
-                {% if website_list()|length > 1 %}
-                    <div class="action-box language-selector noselect" data-toggle="tooltip" data-placement="left" title="{{ 'switchWebsite'|trans }}">
-                        <div class="dropdown">
-                            {% set __websiteId = __currentWebsite.id %}
-                            <button class="btn btn-icon-left action-btn" type="button" data-bs-toggle="dropdown">
-                                <i class="btn-icon fas fa-globe"></i>
-                                {{ __currentWebsite.name }}
-                            </button>
-                            <div class="dropdown-menu">
-                                {% for item in website_list() %}
-                                    <a class="dropdown-item{{ item.id == __websiteId ? ' active' : '' }}" href="{{ item.backendAddress }}" data-website-id="{{ item.id }}">
-                                        <span>{{ item.name }}</span>
-                                    </a>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
                 <div class="action-box language-selector noselect" data-toggle="tooltip" data-placement="left" title="{{ 'contentLocale'|trans }}">
                     <div class="dropdown">
                         {% set __locale = __currentWebsite.locale.code %}
@@ -55,7 +37,9 @@
                                     <img src="{{ asset('/assets/core/flag-icons/' ~ lang.language ~ '.svg') }}" alt="" />
                                     <span>
                                         {{ 'languageName'|trans({ code: lang.code }, 'languages') }}
-                                        {{ lang.isDefault ? ('<span style="font-size:10px;opacity:.4;">[' ~ 'default'|trans ~ ']</span>')|raw : '' }}
+                                        {% if lang.code == __currentWebsite.defaultLocale.code %}
+                                            {{ ('<span style="font-size:10px;opacity:.4;">[' ~ 'default'|trans ~ ']</span>')|raw }}
+                                        {% endif %}
                                     </span>
                                 </a>
                             {% endfor %}

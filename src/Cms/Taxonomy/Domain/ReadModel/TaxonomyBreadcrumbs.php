@@ -6,7 +6,6 @@ namespace Tulia\Cms\Taxonomy\Domain\ReadModel;
 
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Model\Term;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Service\TaxonomyBreadcrumbsReadStorageInterface;
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -15,12 +14,9 @@ class TaxonomyBreadcrumbs
 {
     private TaxonomyBreadcrumbsReadStorageInterface $storage;
 
-    private CurrentWebsiteInterface $currentWebsite;
-
-    public function __construct(TaxonomyBreadcrumbsReadStorageInterface $storage, CurrentWebsiteInterface $currentWebsite)
+    public function __construct(TaxonomyBreadcrumbsReadStorageInterface $storage)
     {
         $this->storage = $storage;
-        $this->currentWebsite = $currentWebsite;
     }
 
     /**
@@ -30,7 +26,6 @@ class TaxonomyBreadcrumbs
     {
         $source = $this->storage->find(
             $termId,
-            $this->currentWebsite->getId(),
             $this->currentWebsite->getLocale()->getCode(),
             $this->currentWebsite->getDefaultLocale()->getCode(),
         );

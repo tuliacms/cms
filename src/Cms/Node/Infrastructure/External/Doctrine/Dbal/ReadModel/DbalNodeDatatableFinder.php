@@ -13,7 +13,6 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderScopeEnum;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -26,11 +25,10 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
 
     public function __construct(
         ConnectionInterface $connection,
-        CurrentWebsiteInterface $currentWebsite,
         TermFinderInterface $termFinder,
         TranslatorInterface $translator
     ) {
-        parent::__construct($connection, $currentWebsite);
+        parent::__construct($connection);
         $this->termFinder = $termFinder;
         $this->translator = $translator;
     }
@@ -130,7 +128,6 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
             ->where('tm.type = :type AND tm.website_id = :website_id')
             ->setParameter('type', $this->contentType->getCode(), PDO::PARAM_STR)
             ->setParameter('locale', $this->currentWebsite->getLocale()->getCode(), PDO::PARAM_STR)
-            ->setParameter('website_id', $this->currentWebsite->getId(), PDO::PARAM_STR)
             ->addOrderBy('tm.level', 'ASC')
             ->addGroupBy('tm.id')
         ;

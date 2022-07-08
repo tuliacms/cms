@@ -11,9 +11,7 @@ use Tulia\Component\Theme\ThemeInterface;
  */
 class ResolverAggregate implements ResolverAggregateInterface
 {
-    /**
-     * @var ResolverInterface[]
-     */
+    /** @var ResolverInterface[] */
     protected iterable $resolvers;
 
     public function __construct(iterable $resolvers)

@@ -16,20 +16,11 @@ use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
  */
 class SimpleStrategy implements ContentTypeRoutingStrategyInterface
 {
-    private NodeFinderInterface $nodeFinder;
-
-    private ContentTypeRegistryInterface $contentTypeRegistry;
-
-    private Router $contentTypeRouter;
-
     public function __construct(
-        NodeFinderInterface $nodeFinder,
-        ContentTypeRegistryInterface $contentTypeRegistry,
-        Router $contentTypeRouter
+        private NodeFinderInterface $nodeFinder,
+        private ContentTypeRegistryInterface $contentTypeRegistry,
+        private Router $contentTypeRouter,
     ) {
-        $this->nodeFinder = $nodeFinder;
-        $this->contentTypeRegistry = $contentTypeRegistry;
-        $this->contentTypeRouter = $contentTypeRouter;
     }
 
     public function generate(string $id, array $parameters = []): string
@@ -49,7 +40,7 @@ class SimpleStrategy implements ContentTypeRoutingStrategyInterface
 
     public function match(string $pathinfo, array $parameters = []): array
     {
-        $node = $this->findNodeBySlug(substr($pathinfo, 1));
+        $node = $this->findNodeBySlug(substr($pathinfo, 1), $parameters['_locale']);
 
         if (! $node) {
             return [];
@@ -79,13 +70,14 @@ class SimpleStrategy implements ContentTypeRoutingStrategyInterface
         return 'simple';
     }
 
-    private function findNodeBySlug(?string $slug): ?Node
+    private function findNodeBySlug(?string $slug, string $locale): ?Node
     {
         return $this->nodeFinder->findOne([
             'slug'      => $slug,
             'per_page'  => 1,
             'order_by'  => null,
             'order_dir' => null,
+            'locale'    => $locale,
         ], NodeFinderScopeEnum::ROUTING_MATCHER);
     }
 

@@ -13,130 +13,76 @@ use Tulia\Component\Routing\Website\Locale\LocaleInterface;
  */
 class Website implements WebsiteInterface
 {
-    protected string $id;
-    protected string $name;
-    protected string $backendPrefix;
-    protected bool $active = true;
-    protected LocaleInterface $locale;
+    private string $backendPrefix;
+    /** @var LocaleInterface[] */
+    private array $locales = [];
+    private LocaleInterface $defaultLocale;
+    private LocaleInterface $activeLocale;
+    private bool $isBackend;
+    private string $basepath;
 
-    /**
-     * @var LocaleInterface[]
-     */
-    protected array $locales = [];
-
+    /** @param LocaleInterface[] $locales */
     public function __construct(
-        string $id,
+        string $backendPrefix,
+        bool $isBackend,
+        string $basepath,
         array $locales,
-        LocaleInterface $locale,
-        string $backendPrefix = '/administrator',
-        string $name = '',
-        bool $active = true
+        string $defaultLocale,
+        string $activeLocale
     ) {
-        $this->id = $id;
-        $this->locales = $locales;
-        $this->locale = $locale;
         $this->backendPrefix = $backendPrefix;
-        $this->name = $name;
-        $this->active = $active;
-    }
+        $this->isBackend = $isBackend;
+        $this->basepath = $basepath;
 
-    public function __clone()
-    {
-        $locales = [];
+        foreach ($locales as $locale) {
+            $this->locales[$locale->getCode()] = $locale;
 
-        foreach ($this->locales as $locale) {
-            $newLocale = clone $locale;
-            $locales[] = $newLocale;
-
-            if ($locale === $this->locale) {
-                $this->locale = $newLocale;
+            if ($locale->getCode() === $defaultLocale) {
+                $this->defaultLocale = $locale;
+            }
+            if ($locale->getCode() === $activeLocale) {
+                $this->activeLocale = $locale;
             }
         }
 
-        $this->locales = $locales;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function withNewLocale(WebsiteInterface $website, string $newLocale): WebsiteInterface
-    {
-        $cloned = clone $website;
-
-        foreach ($cloned->locales as $locale) {
-            if ($locale->getCode() === $newLocale) {
-                $cloned->locale = $locale;
-            }
+        if (!$this->defaultLocale) {
+            throw new LocaleNotExistsException('Default locale not exists for this website.');
         }
-
-        return $cloned;
+        if (!$this->activeLocale) {
+            throw new LocaleNotExistsException('Active locale not exists for this website.');
+        }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getId(): string
-    {
-        return $this->id;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getBackendPrefix(): string
     {
         return $this->backendPrefix;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isActive(): bool
-    {
-        return $this->active;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getLocales(): array
     {
         return $this->locales;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLocale(): LocaleInterface
     {
-        return $this->locale;
+        return $this->activeLocale;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDefaultLocale(): LocaleInterface
     {
-        foreach ($this->locales as $locale) {
-            if ($locale->isDefault()) {
-                return $locale;
-            }
-        }
-
-        throw new LocaleNotExistsException('Default locale not exists for this website.');
+        return $this->defaultLocale;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    public function isBackend(): bool
+    {
+        return $this->isBackend;
+    }
+
+    public function getBasepath(): string
+    {
+        return $this->basepath;
+    }
+
     public function getLocaleByCode(string $code): LocaleInterface
     {
         foreach ($this->locales as $locale) {
@@ -148,12 +94,9 @@ class Website implements WebsiteInterface
         throw new LocaleNotExistsException(sprintf('Locale "%s" not exists in this website.', $code));
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getAddress($locale = null): string
+    public function getAddress(?string $localeCode = null): string
     {
-        $locale = $this->resolveLocale($locale);
+        $locale = $this->resolveLocale($localeCode);
 
         if ($locale->getSslMode() === SslModeEnum::FORCE_SSL) {
             return 'https://' . $locale->getDomain() . $locale->getPathPrefix() . $locale->getLocalePrefix() . '/';
@@ -162,12 +105,9 @@ class Website implements WebsiteInterface
         return 'http://' . $locale->getDomain() . $locale->getPathPrefix() . $locale->getLocalePrefix() . '/';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getBackendAddress($locale = null): string
+    public function getBackendAddress(?string $localeCode = null): string
     {
-        $locale = $this->resolveLocale($locale);
+        $locale = $this->resolveLocale($localeCode);
 
         if ($locale->getSslMode() === SslModeEnum::FORCE_SSL) {
             return 'https://' . $locale->getDomain() . $locale->getPathPrefix() . $this->backendPrefix . $locale->getLocalePrefix() . '/';
@@ -177,11 +117,11 @@ class Website implements WebsiteInterface
     }
 
     /**
-     * @param string|LocaleInterface $locale
+     * @param string|null $locale
      * @return LocaleInterface
      * @throws LocaleNotExistsException
      */
-    private function resolveLocale($locale): LocaleInterface
+    private function resolveLocale(?string $locale): LocaleInterface
     {
         if ($locale === null) {
             return $this->getDefaultLocale();

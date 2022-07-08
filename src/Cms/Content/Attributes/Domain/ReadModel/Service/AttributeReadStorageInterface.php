@@ -9,5 +9,5 @@ namespace Tulia\Cms\Content\Attributes\Domain\ReadModel\Service;
  */
 interface AttributeReadStorageInterface
 {
-    public function findAll(string $type, array $ownerId): array;
+    public function findAll(string $type, array $ownerId, string $locale): array;
 }

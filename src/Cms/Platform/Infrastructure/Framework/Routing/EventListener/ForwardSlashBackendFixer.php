@@ -34,7 +34,7 @@ class ForwardSlashBackendFixer
     {
         $request = $event->getRequest();
 
-        if ($request->attributes->get('_is_backend') === false) {
+        if ($request->server->get('TULIA_WEBSITE_IS_BACKEND') === false) {
             return;
         }
 

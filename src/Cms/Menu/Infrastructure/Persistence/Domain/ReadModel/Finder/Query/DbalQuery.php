@@ -87,7 +87,12 @@ class DbalQuery extends AbstractDbalQuery
 
         if ($criteria['fetch_items']) {
             $items = $this->fetchMenuItems($criteria);
-            $metadata = $this->metadataFinder->findAllAggregated('menu_item', $scope, array_column($items, 'id'));
+            $metadata = $this->metadataFinder->findAllAggregated(
+                'menu_item',
+                $scope,
+                array_column($items, 'id'),
+                $criteria['locale']
+            );
         }
 
         try {

@@ -12,7 +12,6 @@ use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\Author;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodeRepositoryInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodeWriteStorageInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -20,20 +19,17 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 final class DbalNodeRepository implements NodeRepositoryInterface
 {
     private NodeWriteStorageInterface $storage;
-    private CurrentWebsiteInterface $currentWebsite;
     private AttributesRepositoryInterface $attributeRepository;
     private UuidGeneratorInterface $uuidGenerator;
     private ContentTypeRegistryInterface $contentTypeRegistry;
 
     public function __construct(
         NodeWriteStorageInterface $storage,
-        CurrentWebsiteInterface $currentWebsite,
         AttributesRepositoryInterface $attributeRepository,
         UuidGeneratorInterface $uuidGenerator,
         ContentTypeRegistryInterface $contentTypeRegistry
     ) {
         $this->storage = $storage;
-        $this->currentWebsite = $currentWebsite;
         $this->attributeRepository = $attributeRepository;
         $this->uuidGenerator = $uuidGenerator;
         $this->contentTypeRegistry = $contentTypeRegistry;

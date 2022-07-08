@@ -9,9 +9,9 @@ namespace Tulia\Cms\Options\Domain\ReadModel;
  */
 interface OptionsFinderInterface
 {
-    public function findByName(string $name, string $locale, string $website);
+    public function findByName(string $name, string $locale);
 
-    public function findBulkByName(array $names, string $locale, string $website): array;
+    public function findBulkByName(array $names, string $locale): array;
 
-    public function autoload(string $locale, string $website): array;
+    public function autoload(string $locale): array;
 }

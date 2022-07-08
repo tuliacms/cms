@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Routing\Website;
 
-use Tulia\Component\Routing\Website\Exception\LocaleNotExistsException;
 use Tulia\Component\Routing\Website\Locale\LocaleInterface;
 
 /**
@@ -12,46 +11,14 @@ use Tulia\Component\Routing\Website\Locale\LocaleInterface;
  */
 interface WebsiteInterface
 {
-    public static function withNewLocale(WebsiteInterface $website, string $newLocale): WebsiteInterface;
-
-    public function getId(): string;
-    public function getName(): string;
     public function getBackendPrefix(): string;
-    public function isActive(): bool;
-    public function getLocales(): iterable;
     public function getLocale(): LocaleInterface;
-
-    /**
-     * @return LocaleInterface
-     *
-     * @throws LocaleNotExistsException
-     */
+    /** @return LocaleInterface[] */
+    public function getLocales(): array;
     public function getDefaultLocale(): LocaleInterface;
-
-    /**
-     * @param string $code
-     *
-     * @return LocaleInterface
-     *
-     * @throws LocaleNotExistsException
-     */
     public function getLocaleByCode(string $code): LocaleInterface;
-
-    /**
-     * @param null|string|LocaleInterface $locale
-     *
-     * @return string
-     *
-     * @throws LocaleNotExistsException
-     */
-    public function getAddress($locale = null): string;
-
-    /**
-     * @param null|string|LocaleInterface $locale
-     *
-     * @return string
-     *
-     * @throws LocaleNotExistsException
-     */
-    public function getBackendAddress($locale = null): string;
+    public function getAddress(?string $localeCode = null): string;
+    public function getBackendAddress(?string $localeCode = null): string;
+    public function isBackend(): bool;
+    public function getBasepath(): string;
 }

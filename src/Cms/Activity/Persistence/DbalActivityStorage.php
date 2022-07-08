@@ -7,7 +7,6 @@ namespace Tulia\Cms\Activity\Persistence;
 use Tulia\Cms\Activity\Model\ActivityRow;
 use Tulia\Cms\Activity\Model\ActivityStorageInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -15,12 +14,10 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 class DbalActivityStorage implements ActivityStorageInterface
 {
     private ConnectionInterface $connection;
-    private CurrentWebsiteInterface $currentWebsite;
 
-    public function __construct(ConnectionInterface $connection, CurrentWebsiteInterface $currentWebsite)
+    public function __construct(ConnectionInterface $connection)
     {
         $this->connection = $connection;
-        $this->currentWebsite = $currentWebsite;
     }
 
     public function store(ActivityRow $activityRow): void
@@ -54,8 +51,7 @@ class DbalActivityStorage implements ActivityStorageInterface
     public function findCollection(int $start = 0, int $limit = 10): array
     {
         $source = $this->connection->fetchAllAssociative(
-            "SELECT * FROM #__activity WHERE website_id = :website_id ORDER BY created_at DESC LIMIT {$start}, {$limit}",
-            ['website_id' => $this->currentWebsite->getId()]
+            "SELECT * FROM #__activity ORDER BY created_at DESC LIMIT {$start}, {$limit}",
         );
 
         $result = [];

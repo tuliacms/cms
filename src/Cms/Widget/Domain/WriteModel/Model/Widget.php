@@ -21,7 +21,6 @@ final class Widget extends AbstractAggregateRoot implements AttributesAwareInter
     }
 
     protected WidgetId $id;
-    protected string $websiteId;
     protected string $widgetType;
     protected ?string $space = null;
     protected ?string $name = null;
@@ -35,17 +34,16 @@ final class Widget extends AbstractAggregateRoot implements AttributesAwareInter
     /** @var Attribute[] */
     protected array $attributes = [];
 
-    private function __construct(string $id, string $widgetType, string $websiteId, string $locale)
+    private function __construct(string $id, string $widgetType, string $locale)
     {
         $this->id = new WidgetId($id);
         $this->widgetType = $widgetType;
-        $this->websiteId = $websiteId;
         $this->locale = $locale;
     }
 
-    public static function createNew(string $id, string $widgetType, string $websiteId, string $locale): self
+    public static function createNew(string $id, string $widgetType, string $locale): self
     {
-        $self = new self($id, $widgetType, $websiteId,  $locale);
+        $self = new self($id, $widgetType,  $locale);
         $self->recordThat(Event\WidgetCreated::fromWidget($self));
 
         return $self;
@@ -56,7 +54,6 @@ final class Widget extends AbstractAggregateRoot implements AttributesAwareInter
         $self = new self(
             $data['id'],
             $data['widget_type'],
-            $data['website_id'],
             $data['locale']
         );
         $self->space = $data['space'] ?? null;
@@ -86,7 +83,6 @@ final class Widget extends AbstractAggregateRoot implements AttributesAwareInter
             'visibility' => $this->visibility,
             'attributes' => $this->attributes,
             'widget_type' => $this->widgetType,
-            'website_id' => $this->websiteId,
             'locale' => $this->locale,
         ];
     }
@@ -99,16 +95,6 @@ final class Widget extends AbstractAggregateRoot implements AttributesAwareInter
     public function setId(WidgetId $id): void
     {
         $this->id = $id;
-    }
-
-    public function getWebsiteId(): string
-    {
-        return $this->websiteId;
-    }
-
-    public function setWebsiteId(string $websiteId): void
-    {
-        $this->websiteId = $websiteId;
     }
 
     public function getWidgetType(): string

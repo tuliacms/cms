@@ -7,7 +7,6 @@ namespace Tulia\Cms\Content\Attributes\Infrastructure\Persistence\WriteModel;
 use Tulia\Cms\Content\Attributes\Domain\WriteModel\AttributesRepositoryInterface;
 use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -15,16 +14,13 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 class DbalAttributesRepository implements AttributesRepositoryInterface
 {
     private DbalWriteStorage $storage;
-    private CurrentWebsiteInterface $currentWebsite;
     private UuidGeneratorInterface $uuidGenerator;
 
     public function __construct(
         DbalWriteStorage $storage,
-        CurrentWebsiteInterface $currentWebsite,
         UuidGeneratorInterface $uuidGenerator
     ) {
         $this->storage = $storage;
-        $this->currentWebsite = $currentWebsite;
         $this->uuidGenerator = $uuidGenerator;
     }
 

@@ -21,7 +21,7 @@ class DefaultBodyClassCollector implements BodyClassCollectorInterface
 
     public function collect(Request $request, BodyClassCollection $collection): void
     {
-        if ($request->attributes->get('_content_path') === '/') {
+        if ($request->getPathInfo() === '/') {
             $collection->add('is-homepage');
         }
 

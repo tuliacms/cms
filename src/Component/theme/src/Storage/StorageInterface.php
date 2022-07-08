@@ -17,5 +17,5 @@ interface StorageInterface extends \IteratorAggregate
 
     public function get(string $name): ThemeInterface;
 
-    public function has(string $name): bool;
+    public function has(?string $name): bool;
 };

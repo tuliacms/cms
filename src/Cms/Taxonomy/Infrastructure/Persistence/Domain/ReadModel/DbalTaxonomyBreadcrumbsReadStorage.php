@@ -19,12 +19,11 @@ class DbalTaxonomyBreadcrumbsReadStorage implements TaxonomyBreadcrumbsReadStora
         $this->connection = $connection;
     }
 
-    public function find(string $termId, string $websiteId, string $locale, string $defaultLocale): array
+    public function find(string $termId, string $locale, string $defaultLocale): array
     {
         return $this->connection->fetchAllAssociative("
 WITH RECURSIVE tree_path (
     id,
-    website_id,
     type,
     is_root,
     parent_id,
@@ -39,7 +38,6 @@ WITH RECURSIVE tree_path (
 ) AS (
     SELECT
         id,
-        website_id,
         type,
         is_root,
         parent_id,
@@ -54,11 +52,9 @@ WITH RECURSIVE tree_path (
     FROM #__term
     WHERE
         id = :term_id
-        AND website_id = :websiteId
 UNION ALL
     SELECT
             tm.id,
-            tm.website_id,
             tm.type,
             tm.is_root,
             tm.parent_id,
@@ -75,12 +71,9 @@ UNION ALL
             ON tp.parent_id = tm.id
         LEFT JOIN #__term_lang AS tl
             ON tm.id = tl.term_id AND tl.locale = :locale
-        WHERE
-            tm.website_id = :websiteId
 )
 SELECT * FROM tree_path", [
             'term_id' => $termId,
-            'websiteId' => $websiteId,
             'locale' => $locale,
             'defaultLocale' => $defaultLocale,
         ]);

@@ -10,7 +10,6 @@ use Tulia\Cms\Menu\Domain\WriteModel\MenuRepositoryInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Menu;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -19,20 +18,17 @@ class DbalMenuRepository implements MenuRepositoryInterface
 {
     private DbalMenuStorage $storage;
     private UuidGeneratorInterface $uuidGenerator;
-    private CurrentWebsiteInterface $currentWebsite;
     private AttributesRepositoryInterface $attributesRepository;
     private MenuActionsChainInterface $actionsChain;
 
     public function __construct(
         DbalMenuStorage $storage,
         UuidGeneratorInterface $uuidGenerator,
-        CurrentWebsiteInterface $currentWebsite,
         AttributesRepositoryInterface $attributesRepository,
         MenuActionsChainInterface $actionsChain
     ) {
         $this->storage = $storage;
         $this->uuidGenerator = $uuidGenerator;
-        $this->currentWebsite = $currentWebsite;
         $this->attributesRepository = $attributesRepository;
         $this->actionsChain = $actionsChain;
     }

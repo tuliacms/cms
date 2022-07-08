@@ -11,7 +11,6 @@ use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -24,10 +23,9 @@ class DbalItemDatatableFinder extends AbstractDatatableFinder implements ItemDat
 
     public function __construct(
         ConnectionInterface $connection,
-        CurrentWebsiteInterface $currentWebsite,
         TranslatorInterface $translator
     ) {
-        parent::__construct($connection, $currentWebsite);
+        parent::__construct($connection);
 
         $this->translator = $translator;
     }
@@ -89,7 +87,6 @@ class DbalItemDatatableFinder extends AbstractDatatableFinder implements ItemDat
             ->where('tm.menu_id = :menu_id')
             ->andWhere('tm.is_root = 0')
             ->setParameter('menu_id', $this->menuId, PDO::PARAM_STR)
-            ->setParameter('locale', $this->currentWebsite->getLocale()->getCode(), PDO::PARAM_STR)
             ->addOrderBy('tm.level', 'ASC')
             ->addOrderBy('tm.position', 'ASC')
         ;

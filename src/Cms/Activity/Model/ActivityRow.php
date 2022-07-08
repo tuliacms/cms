@@ -12,22 +12,20 @@ use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 class ActivityRow
 {
     private string $id;
-    private string $websiteId;
     private string $message = '';
     private array $context = [];
     private string $translationDomain = 'messages';
     private ImmutableDateTime $createdAt;
 
-    private function __construct(string $id, string $websiteId)
+    private function __construct(string $id)
     {
         $this->id = $id;
-        $this->websiteId = $websiteId;
         $this->createdAt = new ImmutableDateTime();
     }
 
     public static function fromArray(array $data): ActivityRow
     {
-        $row = new self($data['id'], $data['website_id']);
+        $row = new self($data['id']);
 
         $row->setMessage($data['message'] ?? '');
         $row->setContext($data['context'] ?? []);
@@ -37,9 +35,9 @@ class ActivityRow
         return $row;
     }
 
-    public static function createNew(string $id, string $websiteId): ActivityRow
+    public static function createNew(string $id): ActivityRow
     {
-        return new self($id, $websiteId);
+        return new self($id);
     }
 
     public function getId(): string
@@ -50,16 +48,6 @@ class ActivityRow
     public function setId(string $id): void
     {
         $this->id = $id;
-    }
-
-    public function getWebsiteId(): string
-    {
-        return $this->websiteId;
-    }
-
-    public function setWebsiteId(string $websiteId): void
-    {
-        $this->websiteId = $websiteId;
     }
 
     public function getMessage(): string

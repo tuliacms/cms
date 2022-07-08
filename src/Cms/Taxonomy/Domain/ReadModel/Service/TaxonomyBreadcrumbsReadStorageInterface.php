@@ -9,5 +9,5 @@ namespace Tulia\Cms\Taxonomy\Domain\ReadModel\Service;
  */
 interface TaxonomyBreadcrumbsReadStorageInterface
 {
-    public function find(string $termId, string $websiteId, string $locale, string $defaultLocale): array;
+    public function find(string $termId, string $locale, string $defaultLocale): array;
 }
