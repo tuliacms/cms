@@ -12,18 +12,17 @@ use Tulia\Cms\Widget\Domain\Catalog\Storage\StorageInterface;
  */
 class DatabaseStorage implements StorageInterface
 {
-    private ConnectionInterface $connection;
     private static array $cache = [];
 
-    public function __construct(ConnectionInterface $connection)
-    {
-        $this->connection = $connection;
+    public function __construct(
+        private ConnectionInterface $connection,
+    ) {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function all(?string $space): array
+    public function all(?string $space, string $locale): array
     {
         if (isset(static::$cache['all'])) {
             return static::$cache['all'];
@@ -37,14 +36,14 @@ class DatabaseStorage implements StorageInterface
             FROM #__widget AS tm
             LEFT JOIN #__widget_lang AS tl
                 ON tl.widget_id = tm.id AND tl.locale = :locale', [
-            'locale'    => $this->getLocale(),
+            'locale' => $locale,
         ]);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function findById(string $id): ?array
+    public function findById(string $id, string $locale): ?array
     {
         if (isset(static::$cache[$id])) {
             return static::$cache[$id];
@@ -60,14 +59,14 @@ class DatabaseStorage implements StorageInterface
                 ON tl.widget_id = tm.id AND tl.locale = :locale
             WHERE tm.id = :id
             LIMIT 1', [
-            'locale'    => $this->getLocale(),
-            'id'        => $id,
+            'locale' => $locale,
+            'id' => $id,
         ]);
 
         return static::$cache[$id] = $result[0] ?? null;
     }
 
-    public function findBySpace(string $space): array
+    public function findBySpace(string $space, string $locale): array
     {
         if (isset(static::$cache[$space])) {
             return static::$cache[$space];
@@ -83,13 +82,8 @@ class DatabaseStorage implements StorageInterface
                 ON tl.widget_id = tm.id AND tl.locale = :locale
             WHERE tm.space = :space
         ', [
-            'locale'    => $this->getLocale(),
-            'space'     => $space,
+            'locale' => $locale,
+            'space' => $space,
         ]);
-    }
-
-    private function getLocale(): string
-    {
-        return $this->currentWebsite->getLocale()->getCode();
     }
 }

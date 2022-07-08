@@ -11,5 +11,5 @@ interface IdentityProviderInterface
 {
     public function supports(string $type): bool;
 
-    public function provide(string $type, string $identity): ?IdentityInterface;
+    public function provide(string $type, string $identity, string $locale): ?IdentityInterface;
 }

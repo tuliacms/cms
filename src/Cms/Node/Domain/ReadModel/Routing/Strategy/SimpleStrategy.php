@@ -29,7 +29,11 @@ class SimpleStrategy implements ContentTypeRoutingStrategyInterface
             return '/' . $parameters['_node_instance']->getSlug();
         }
 
-        $node = $this->findNodeById($id);
+        if (!$parameters['_locale']) {
+            throw new \InvalidArgumentException('Please provide locale.');
+        }
+
+        $node = $this->findNodeById($id, $parameters['_locale']);
 
         if ($node) {
             return '/' . $node->getSlug();
@@ -81,10 +85,11 @@ class SimpleStrategy implements ContentTypeRoutingStrategyInterface
         ], NodeFinderScopeEnum::ROUTING_MATCHER);
     }
 
-    private function findNodeById(?string $id): ?Node
+    private function findNodeById(?string $id, string $locale): ?Node
     {
         return $this->nodeFinder->findOne([
             'id' => $id,
+            'locale' => $locale,
         ], NodeFinderScopeEnum::ROUTING_MATCHER);
     }
 }

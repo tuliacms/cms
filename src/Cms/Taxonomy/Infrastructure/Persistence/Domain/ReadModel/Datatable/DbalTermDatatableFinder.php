@@ -11,6 +11,7 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Service\Datatable\TermDatatableFinderInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
+use Tulia\Component\Datatable\Finder\FinderContext;
 
 /**
  * @author Adam Banaszkiewicz
@@ -77,7 +78,7 @@ class DbalTermDatatableFinder extends AbstractDatatableFinder implements TermDat
     /**
      * {@inheritdoc}
      */
-    public function prepareQueryBuilder(QueryBuilder $queryBuilder): QueryBuilder
+    public function prepareQueryBuilder(QueryBuilder $queryBuilder, FinderContext $context): QueryBuilder
     {
         $queryBuilder
             ->from('#__term', 'tm')
@@ -86,12 +87,12 @@ class DbalTermDatatableFinder extends AbstractDatatableFinder implements TermDat
             ->where('tm.type = :type')
             ->andWhere('tm.is_root = 0')
             ->setParameter('type', $this->taxonomyType, PDO::PARAM_STR)
-            ->setParameter('locale', $this->currentWebsite->getLocale()->getCode(), PDO::PARAM_STR)
+            ->setParameter('locale', $context->locale, PDO::PARAM_STR)
             ->addOrderBy('tm.level', 'ASC')
             ->addOrderBy('tm.position', 'ASC')
         ;
 
-        if ($this->currentWebsite->getDefaultLocale()->getCode() !== $this->currentWebsite->getLocale()->getCode()) {
+        if (false === $context->isDefaultLocale()) {
             $queryBuilder->addSelect('IF(ISNULL(tl.title), 0, 1) AS translated');
         }
 

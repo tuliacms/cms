@@ -15,20 +15,11 @@ use Tulia\Component\Templating\EngineInterface;
  */
 class DatatableFactory
 {
-    private TranslatorInterface $translator;
-
-    private PluginsRegistry $pluginsRegistry;
-
-    private EngineInterface $engine;
-
     public function __construct(
-        TranslatorInterface $translator,
-        PluginsRegistry $pluginsRegistry,
-        EngineInterface $engine
+        private TranslatorInterface $translator,
+        private PluginsRegistry $pluginsRegistry,
+        private EngineInterface $engine,
     ) {
-        $this->translator = $translator;
-        $this->pluginsRegistry = $pluginsRegistry;
-        $this->engine = $engine;
     }
 
     public function create(FinderInterface $finder, Request $request): Datatable

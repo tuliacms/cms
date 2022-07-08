@@ -60,11 +60,9 @@ class DbalMenuStorage
     {
         $this->connection->insert('#__menu', [
             'id' => $menu['id'],
-            'website_id' => $menu['website_id'],
             'name' => $menu['name'],
         ], [
             'id' => PDO::PARAM_STR,
-            'website_id' => PDO::PARAM_STR,
             'name' => PDO::PARAM_STR,
         ]);
 

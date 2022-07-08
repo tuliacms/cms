@@ -11,6 +11,7 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder
 use Tulia\Component\Datatable\Filter\ComparisonOperatorsEnum;
 use Tulia\Component\Datatable\Filter\Filter;
 use Tulia\Component\Datatable\Filter\FilterCollectionBuilder;
+use Tulia\Component\Datatable\Finder\FinderContext;
 use Tulia\Component\Datatable\Finder\FinderInterface;
 use Tulia\Component\Datatable\Plugin\PluginInterface;
 use Tulia\Component\Templating\EngineInterface;
@@ -55,6 +56,8 @@ class Datatable
 
     public function generateFront(array $options): array
     {
+        $context = $this->createFinderContext();
+
         $front = [];
         $front['columns'] = $this->getColumns();
 
@@ -65,7 +68,7 @@ class Datatable
             ];
         }
 
-        foreach ($this->getFilters() as $name => $info) {
+        foreach ($this->getFilters($context) as $name => $info) {
             $front['filters'][$name] = [
                 'type'  => $info['type'] ?? 'text',
                 'label' => $this->translator->trans($info['label'] ?? $name, [], $info['translation_domain'] ?? null),
@@ -103,9 +106,11 @@ class Datatable
 
     public function generateResponse(): JsonResponse
     {
+        $context = $this->createFinderContext();
+
         $filters = (new FilterCollectionBuilder())->build(
             (array) $this->request->get('filter', []),
-            $this->getFilters(),
+            $this->getFilters($context),
             $this->getColumns()
         );
 
@@ -168,20 +173,11 @@ class Datatable
         return $columns;
     }
 
-    public function getFilters(): array
-    {
-        $filters[] = $this->finder->getFilters();
-
-        foreach ($this->plugins as $plugin) {
-            $filters[] = $plugin->getFilters();
-        }
-
-        return array_merge(...$filters);
-    }
-
     public function getAll(array $filters = [], ?string $orderBy = null, ?string $orderDir = null, ?int $limit = null, ?int $page = null): array
     {
-        $qb = $this->getQueryBuilder();
+        $context = $this->createFinderContext();
+
+        $qb = $this->getQueryBuilder($context);
 
         $this->applyOrderBy($qb, $orderBy, $orderDir);
         $this->applyPagination($qb, $limit, $page);
@@ -234,22 +230,41 @@ class Datatable
 
     public function countAll(array $filters = []): int
     {
-        $qb = $this->getQueryBuilder();
+        $qb = $this->getQueryBuilder($this->createFinderContext());
         $qb->select('COUNT(*) AS count');
         $this->applyFilters($qb, $filters);
 
-        $result = $qb->execute()->fetchAllAssociative();
+        $result = $qb->executeQuery()->fetchAllAssociative();
 
         return (int) ($result[0]['count'] ?? 0);
     }
 
-    private function getQueryBuilder(): QueryBuilder
+    private function getFilters(FinderContext $context): array
     {
-        $queryBuilder = $this->finder->getQueryBuilder();
-        $queryBuilder = $this->finder->prepareQueryBuilder($queryBuilder);
+        $filters[] = $this->finder->getFilters($context);
 
         foreach ($this->plugins as $plugin) {
-            $queryBuilder = $plugin->prepareQueryBuilder($queryBuilder);
+            $filters[] = $plugin->getFilters($context);
+        }
+
+        return array_merge(...$filters);
+    }
+
+    private function createFinderContext(): FinderContext
+    {
+        return new FinderContext(
+            $this->request->getLocale(),
+            $this->request->getDefaultLocale()
+        );
+    }
+
+    private function getQueryBuilder(FinderContext $context): QueryBuilder
+    {
+        $queryBuilder = $this->finder->getQueryBuilder();
+        $queryBuilder = $this->finder->prepareQueryBuilder($queryBuilder, $context);
+
+        foreach ($this->plugins as $plugin) {
+            $queryBuilder = $plugin->prepareQueryBuilder($queryBuilder, $context);
         }
 
         foreach ($this->getColumns() as $name => $info) {

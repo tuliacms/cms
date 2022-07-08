@@ -42,8 +42,6 @@ class TuliaFrameworkBundle extends FrameworkBundle
     {
         parent::build($container);
 
-        $this->ensureDynamicConfigFileExists($container, '/config/dynamic/theme.php');
-
         $container->addCompilerPass(new TemplatingPass());
         $container->addCompilerPass(new RoutingPass());
         $container->addCompilerPass(new SecurityPass());
@@ -51,23 +49,6 @@ class TuliaFrameworkBundle extends FrameworkBundle
         $container->addCompilerPass(new ThemePass());
         $container->addCompilerPass(new UsecasePass());
 
-        $container->addResource(new FileResource($container->getParameter('kernel.project_dir').'/config/dynamic/theme.php'));
-        $container->addResource(new FileResource($container->getParameter('kernel.project_dir').'/config/dynamic/website.php'));
-    }
-
-    private function ensureDynamicConfigFileExists(ContainerBuilder $container, string $path): void
-    {
-        $filepath = $container->getParameter('kernel.project_dir') . $path;
-        $directory = pathinfo($filepath, PATHINFO_DIRNAME);
-
-        if (is_dir($directory) === false) {
-            if (!mkdir($directory, 0777, true) && !is_dir($directory)) {
-                throw new \RuntimeException(sprintf('Directory "%s" was not created', $directory));
-            }
-        }
-
-        if (is_file($filepath) === false) {
-            file_put_contents($filepath, '<?php return [];');
-        }
+        $container->addResource(new FileResource($container->getParameter('kernel.project_dir').'/config/dynamic.php'));
     }
 }

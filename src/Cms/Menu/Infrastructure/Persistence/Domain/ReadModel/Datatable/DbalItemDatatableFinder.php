@@ -11,6 +11,7 @@ use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
+use Tulia\Component\Datatable\Finder\FinderContext;
 
 /**
  * @author Adam Banaszkiewicz
@@ -78,7 +79,7 @@ class DbalItemDatatableFinder extends AbstractDatatableFinder implements ItemDat
     /**
      * {@inheritdoc}
      */
-    public function prepareQueryBuilder(QueryBuilder $queryBuilder): QueryBuilder
+    public function prepareQueryBuilder(QueryBuilder $queryBuilder, FinderContext $context): QueryBuilder
     {
         $queryBuilder
             ->from('#__menu_item', 'tm')
@@ -91,7 +92,7 @@ class DbalItemDatatableFinder extends AbstractDatatableFinder implements ItemDat
             ->addOrderBy('tm.position', 'ASC')
         ;
 
-        if ($this->currentWebsite->getDefaultLocale()->getCode() !== $this->currentWebsite->getLocale()->getCode()) {
+        if (false === $context->isDefaultLocale()) {
             $queryBuilder->addSelect('IF(ISNULL(tl.name), 0, 1) AS translated');
         }
 

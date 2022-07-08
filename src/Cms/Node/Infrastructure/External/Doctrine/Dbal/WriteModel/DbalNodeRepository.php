@@ -56,7 +56,6 @@ final class DbalNodeRepository implements NodeRepositoryInterface
     {
         $node = $this->storage->find(
             $id,
-            $this->currentWebsite->getId(),
             $this->currentWebsite->getLocale()->getCode(),
             $this->currentWebsite->getDefaultLocale()->getCode()
         );

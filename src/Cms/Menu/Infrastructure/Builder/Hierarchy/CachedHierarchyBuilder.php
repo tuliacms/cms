@@ -23,13 +23,13 @@ class CachedHierarchyBuilder implements HierarchyBuilderInterface
         $this->menuCache = $menuCache;
     }
 
-    public function build(string $id, array $collection = []): HierarchyInterface
+    public function build(string $id, string $locale, array $collection = []): HierarchyInterface
     {
-        return $this->menuCache->get(sprintf('menu_hierarchy_%s', $id), function (ItemInterface $item) use ($id, $collection) {
+        return $this->menuCache->get(sprintf('menu_hierarchy_%s_%s', $locale, $id), function (ItemInterface $item) use ($id, $locale, $collection) {
             $item->tag('menu_hierarchy');
             $item->tag(sprintf('menu_%s', $id));
 
-            return $this->builder->build($id, $collection);
+            return $this->builder->build($id, $locale, $collection);
         });
     }
 }

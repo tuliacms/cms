@@ -10,7 +10,7 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterfac
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Cms\Widget\Domain\Catalog\Registry\WidgetRegistryInterface;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
+use Tulia\Component\Datatable\Finder\FinderContext;
 use Tulia\Component\Theme\ManagerInterface;
 
 /**
@@ -26,12 +26,11 @@ class DatatableFinder extends AbstractDatatableFinder
 
     public function __construct(
         ConnectionInterface $connection,
-        CurrentWebsiteInterface $currentWebsite,
         TranslatorInterface $translator,
         WidgetRegistryInterface $widgetRegistry,
         ManagerInterface $themeManager
     ) {
-        parent::__construct($connection, $currentWebsite);
+        parent::__construct($connection);
 
         $this->translator = $translator;
         $this->widgetRegistry = $widgetRegistry;
@@ -96,7 +95,7 @@ class DatatableFinder extends AbstractDatatableFinder
     /**
      * {@inheritdoc}
      */
-    public function getFilters(): array
+    public function getFilters(FinderContext $context): array
     {
         return [
             'name' => [
@@ -120,18 +119,16 @@ class DatatableFinder extends AbstractDatatableFinder
     /**
      * {@inheritdoc}
      */
-    public function prepareQueryBuilder(QueryBuilder $queryBuilder): QueryBuilder
+    public function prepareQueryBuilder(QueryBuilder $queryBuilder, FinderContext $context): QueryBuilder
     {
         $queryBuilder
             ->from('#__widget', 'tm')
             ->addSelect('tm.widget_type')
             ->leftJoin('tm', '#__widget_lang', 'tl', 'tm.id = tl.widget_id AND tl.locale = :locale')
-            ->where('tm.website_id = :website_id')
-            ->setParameter('website_id', $this->currentWebsite->getId(), PDO::PARAM_STR)
-            ->setParameter('locale', $this->currentWebsite->getLocale()->getCode(), PDO::PARAM_STR)
+            ->setParameter('locale', $context->locale, PDO::PARAM_STR)
         ;
 
-        if ($this->currentWebsite->getDefaultLocale()->getCode() !== $this->currentWebsite->getLocale()->getCode()) {
+        if (false === $context->isDefaultLocale()) {
             $queryBuilder->addSelect('IF(ISNULL(tl.title), 0, 1) AS translated');
         }
 

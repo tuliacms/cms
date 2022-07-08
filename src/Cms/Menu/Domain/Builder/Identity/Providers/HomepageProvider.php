@@ -35,8 +35,8 @@ class HomepageProvider implements IdentityProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provide(string $type, string $identity): ?IdentityInterface
+    public function provide(string $type, string $identity, string $locale): ?IdentityInterface
     {
-        return new Identity($this->router->generate($this->homepage));
+        return new Identity($this->router->generate($this->homepage, ['_locale' => $locale]));
     }
 }

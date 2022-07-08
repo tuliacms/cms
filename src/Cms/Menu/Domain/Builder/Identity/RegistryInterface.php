@@ -10,20 +10,11 @@ namespace Tulia\Cms\Menu\Domain\Builder\Identity;
 interface RegistryInterface
 {
     /**
-     * @return iterable
+     * @return IdentityProviderInterface[]
      */
     public function all(): iterable;
 
-    /**
-     * @param IdentityProviderInterface $provider
-     */
     public function add(IdentityProviderInterface $provider): void;
 
-    /**
-     * @param string $type
-     * @param string $identity
-     *
-     * @return IdentityInterface|null
-     */
-    public function provide(string $type, string $identity): ?IdentityInterface;
+    public function provide(string $type, string $identity, string $locale): ?IdentityInterface;
 }

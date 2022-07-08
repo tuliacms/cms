@@ -6,6 +6,7 @@ namespace Tulia\Cms\Widget\Infrastructure\Framework\Twig\Extension;
 
 use Tulia\Cms\Widget\Domain\Catalog\Storage\StorageInterface;
 use Tulia\Cms\Widget\Domain\Renderer\RendererInterface;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -14,13 +15,11 @@ use Twig\TwigFunction;
  */
 class WidgetExtension extends AbstractExtension
 {
-    private RendererInterface $renderer;
-    private StorageInterface $storage;
-
-    public function __construct(RendererInterface $renderer, StorageInterface $storage)
-    {
-        $this->renderer = $renderer;
-        $this->storage = $storage;
+    public function __construct(
+        private RendererInterface $renderer,
+        private StorageInterface $storage,
+        private WebsiteInterface $website
+    ) {
     }
 
     /**
@@ -30,17 +29,17 @@ class WidgetExtension extends AbstractExtension
     {
         return [
             new TwigFunction('widget', function (string $id) {
-                return $this->renderer->forId($id);
+                return $this->renderer->forId($id, $this->website->getLocale()->getCode());
             }, [
                 'is_safe' => [ 'html' ]
             ]),
             new TwigFunction('widgets_space', function (string $space) {
-                return $this->renderer->forSpace($space);
+                return $this->renderer->forSpace($space, $this->website->getLocale()->getCode());
             }, [
                 'is_safe' => [ 'html' ]
             ]),
             new TwigFunction('widgets_space_count', function (string $space) {
-                return count($this->storage->findBySpace($space));
+                return count($this->storage->findBySpace($space, $this->website->getLocale()->getCode()));
             }, [
                 'is_safe' => [ 'html' ]
             ]),

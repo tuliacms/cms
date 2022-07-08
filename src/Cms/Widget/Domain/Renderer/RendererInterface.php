@@ -9,7 +9,7 @@ namespace Tulia\Cms\Widget\Domain\Renderer;
  */
 interface RendererInterface
 {
-    public function forId(string $id): string;
+    public function forId(string $id, string $locale): string;
 
-    public function forSpace(string $space): string;
+    public function forSpace(string $space, string $locale): string;
 }

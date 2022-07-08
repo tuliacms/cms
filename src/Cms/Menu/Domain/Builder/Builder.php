@@ -26,16 +26,16 @@ class Builder implements BuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function buildHierarchy(string $id): HierarchyInterface
+    public function buildHierarchy(string $id, string $locale): HierarchyInterface
     {
-        return $this->hierarchyBuilder->build($id);
+        return $this->hierarchyBuilder->build($id, $locale);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function buildHtml(string $id): string
+    public function buildHtml(string $id, string $locale): string
     {
-        return $this->htmlBuilder->build($this->buildHierarchy($id));
+        return $this->htmlBuilder->build($this->buildHierarchy($id, $locale));
     }
 }

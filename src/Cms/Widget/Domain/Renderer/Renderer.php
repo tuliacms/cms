@@ -15,35 +15,26 @@ use Tulia\Component\Templating\EngineInterface;
  */
 class Renderer implements RendererInterface
 {
-    private StorageInterface $storage;
-    private WidgetRegistryInterface $registry;
-    private EngineInterface $engine;
-    private AttributesFinder $attributeFinder;
-
     public function __construct(
-        StorageInterface $storage,
-        WidgetRegistryInterface $registry,
-        EngineInterface $engine,
-        AttributesFinder $attributeFinder
+        private StorageInterface $storage,
+        private WidgetRegistryInterface $registry,
+        private EngineInterface $engine,
+        private AttributesFinder $attributeFinder,
     ) {
-        $this->storage = $storage;
-        $this->registry = $registry;
-        $this->engine = $engine;
-        $this->attributeFinder = $attributeFinder;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function forId(string $id): string
+    public function forId(string $id, string $locale): string
     {
-        $widget = $this->storage->findById($id);
+        $widget = $this->storage->findById($id, $locale);
 
         if ($widget === []) {
             return '';
         }
 
-        $widget = $this->prepareWidgetData($widget);
+        $widget = $this->prepareWidgetData($widget, $locale);
 
         if (! $widget['visibility']) {
             return '';
@@ -55,9 +46,9 @@ class Renderer implements RendererInterface
     /**
      * {@inheritdoc}
      */
-    public function forSpace(string $space): string
+    public function forSpace(string $space, string $locale): string
     {
-        $widgets = $this->storage->findBySpace($space);
+        $widgets = $this->storage->findBySpace($space, $locale);
 
         if ($widgets === []) {
             return '';
@@ -66,7 +57,7 @@ class Renderer implements RendererInterface
         $result = [];
 
         foreach ($widgets as $widget) {
-            $widget = $this->prepareWidgetData($widget);
+            $widget = $this->prepareWidgetData($widget, $locale);
 
             if (! $widget['visibility']) {
                 continue;
@@ -123,11 +114,11 @@ class Renderer implements RendererInterface
         return $this->engine->render($view);
     }
 
-    private function prepareWidgetData(array $widget): array
+    private function prepareWidgetData(array $widget, string $locale): array
     {
         $widget['visibility'] = (bool) $widget['visibility'];
         $widget['styles'] = (array) json_decode($widget['styles'], true);
-        $widget['attributes'] = $this->attributeFinder->findAll('widget', 'scope', $widget['id']);
+        $widget['attributes'] = $this->attributeFinder->findAll('widget', 'scope', $widget['id'], $locale);
 
         return $widget;
     }

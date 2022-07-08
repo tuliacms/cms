@@ -9,5 +9,5 @@ namespace Tulia\Cms\Menu\Domain\Builder\Hierarchy;
  */
 interface HierarchyBuilderInterface
 {
-    public function build(string $id, array $collection = []): HierarchyInterface;
+    public function build(string $id, string $locale, array $collection = []): HierarchyInterface;
 }

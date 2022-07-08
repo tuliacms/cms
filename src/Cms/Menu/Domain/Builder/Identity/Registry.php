@@ -41,11 +41,11 @@ class Registry implements RegistryInterface
     /**
      * {@inheritdoc}
      */
-    public function provide(string $type, string $identity): ?IdentityInterface
+    public function provide(string $type, string $identity, string $locale): ?IdentityInterface
     {
         foreach ($this->providers as $provider) {
             if ($provider->supports($type)) {
-                $id = $provider->provide($type, $identity);
+                $id = $provider->provide($type, $identity, $locale);
 
                 if ($id instanceof IdentityInterface) {
                     $id->setId($identity);

@@ -6,6 +6,7 @@ namespace Tulia\Cms\User\Infrastructure\Persistence\Dbal\ReadModel;
 
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
+use Tulia\Component\Datatable\Finder\FinderContext;
 
 /**
  * @author Adam Banaszkiewicz
@@ -56,7 +57,7 @@ class DbalDatatableFinder extends AbstractDatatableFinder
     /**
      * {@inheritdoc}
      */
-    public function getFilters(): array
+    public function getFilters(FinderContext $context): array
     {
         return [
             'email' => [
@@ -74,7 +75,7 @@ class DbalDatatableFinder extends AbstractDatatableFinder
     /**
      * {@inheritdoc}
      */
-    public function prepareQueryBuilder(QueryBuilder $queryBuilder): QueryBuilder
+    public function prepareQueryBuilder(QueryBuilder $queryBuilder, FinderContext $context): QueryBuilder
     {
         $queryBuilder
             ->select('tm.email, COALESCE(ua.value, ual.value, "") AS name')

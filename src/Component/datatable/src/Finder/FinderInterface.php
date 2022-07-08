@@ -15,13 +15,13 @@ interface FinderInterface
 
     public function getColumns(): array;
 
-    public function prepareQueryBuilder(QueryBuilder $queryBuilder): QueryBuilder;
+    public function getFilters(FinderContext $context): array;
+
+    public function prepareQueryBuilder(QueryBuilder $queryBuilder, FinderContext $context): QueryBuilder;
 
     public function getQueryBuilder(): QueryBuilder;
 
     public function buildActions(array $row): array;
-
-    public function getFilters(): array;
 
     public function prepareResult(array $result): array;
 

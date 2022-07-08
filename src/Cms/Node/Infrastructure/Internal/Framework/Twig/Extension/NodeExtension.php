@@ -9,6 +9,7 @@ use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum;
 use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
 use Tulia\Component\Routing\Exception\RoutingException;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -17,16 +18,11 @@ use Twig\TwigFunction;
  */
 class NodeExtension extends AbstractExtension
 {
-    private RouterInterface $router;
-
-    private NodeFinderInterface $nodeFinder;
-
     public function __construct(
-        RouterInterface $router,
-        NodeFinderInterface $nodeFinder
+        private RouterInterface $router,
+        private NodeFinderInterface $nodeFinder,
+        private WebsiteInterface $website
     ) {
-        $this->router = $router;
-        $this->nodeFinder = $nodeFinder;
     }
 
     /**
@@ -42,7 +38,8 @@ class NodeExtension extends AbstractExtension
             ]),
             new TwigFunction('node_path_from_id', function (string $nodeId, array $parameters = []) {
                 $node = $this->nodeFinder->findOne([
-                    'id' => $nodeId
+                    'id' => $nodeId,
+                    'locale' => $this->website->getLocale()->getCode(),
                 ], NodeFinderScopeEnum::ROUTING_GENERATOR);
 
                 return $this->generate($node, $parameters, RouterInterface::ABSOLUTE_PATH);
@@ -56,7 +53,8 @@ class NodeExtension extends AbstractExtension
             ]),
             new TwigFunction('node_url_from_id', function (string $nodeId, array $parameters = []) {
                 $node = $this->nodeFinder->findOne([
-                    'id' => $nodeId
+                    'id' => $nodeId,
+                    'locale' => $this->website->getLocale()->getCode(),
                 ], NodeFinderScopeEnum::ROUTING_GENERATOR);
 
                 return $this->generate($node, $parameters, RouterInterface::ABSOLUTE_PATH);

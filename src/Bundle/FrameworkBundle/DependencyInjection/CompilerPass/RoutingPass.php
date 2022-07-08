@@ -22,6 +22,6 @@ class RoutingPass implements CompilerPassInterface
             $chain->addMethodCall('add', [new Reference($id)]);
         }
 
-        $container->setParameter('website', include $container->getParameter('kernel.project_dir').'/config/dynamic/website.php');
+        //$container->setParameter('website', include $container->getParameter('kernel.project_dir').'/config/dynamic/website.php');
     }
 }

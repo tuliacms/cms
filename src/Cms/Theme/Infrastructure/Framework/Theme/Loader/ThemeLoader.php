@@ -24,13 +24,10 @@ class ThemeLoader implements ThemeLoaderInterface
 
     public function load(): ThemeInterface
     {
-        $themesByWebsite = include $this->configFilename;
+        $config = include $this->configFilename;
 
-        if (
-            isset($themesByWebsite['default'])
-            && $this->storage->has($themesByWebsite['default'])
-        ) {
-            return $this->storage->get($themesByWebsite['default']);
+        if (isset($config['cms.theme']) && $this->storage->has($config['cms.theme'])) {
+            return $this->storage->get($config['cms.theme']);
         }
 
         return new DefaultTheme();

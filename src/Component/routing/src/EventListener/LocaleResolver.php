@@ -15,7 +15,11 @@ class LocaleResolver implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            RequestEvent::class => ['handle', 9500],
+            RequestEvent::class => [
+                ['handle', 9500],
+                // Must be called after \Symfony\Component\HttpKernel\EventListener\LocaleListener::setDefaultLocale
+                ['setDefaultLocale', 99],
+            ],
         ];
     }
 
@@ -29,7 +33,13 @@ class LocaleResolver implements EventSubscriberInterface
 
         $request->attributes->add($parameters);
 
-        $request->setLocale($parameters['_locale'] ?? 'en_US');
+        $request->setLocale($parameters['_locale']);
+        $request->setDefaultLocale($request->server->get('TULIA_WEBSITE_LOCALE_DEFAULT'));
+    }
+
+    public function setDefaultLocale(RequestEvent $event)
+    {
+        $request = $event->getRequest();
         $request->setDefaultLocale($request->server->get('TULIA_WEBSITE_LOCALE_DEFAULT'));
     }
 }

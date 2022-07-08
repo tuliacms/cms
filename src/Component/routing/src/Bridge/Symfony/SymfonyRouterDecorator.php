@@ -55,9 +55,6 @@ class SymfonyRouterDecorator implements RouterInterface, RequestMatcherInterface
 
     public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string
     {
-        $originalParameters = $parameters;
-        unset($parameters['_locale']);
-
         foreach ($this->routers() as $router) {
             try {
                 $router->setContext($this->getContext());
@@ -67,7 +64,7 @@ class SymfonyRouterDecorator implements RouterInterface, RequestMatcherInterface
                     return $this->websitePrefixesResolver->appendWebsitePrefixes(
                         $name,
                         $path,
-                        $originalParameters
+                        $parameters
                     );
                 }
             } catch (RouteNotFoundException $e) {

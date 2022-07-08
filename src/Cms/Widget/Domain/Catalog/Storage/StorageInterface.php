@@ -9,9 +9,9 @@ namespace Tulia\Cms\Widget\Domain\Catalog\Storage;
  */
 interface StorageInterface
 {
-    public function all(?string $space): array;
+    public function all(?string $space, string $locale): array;
 
-    public function findById(string $id): ?array;
+    public function findById(string $id, string $locale): ?array;
 
-    public function findBySpace(string $space): array;
+    public function findBySpace(string $space, string $locale): array;
 }

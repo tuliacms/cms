@@ -13,14 +13,14 @@ use Tulia\Component\Routing\Website\Locale\LocaleInterface;
 final class WebsiteProvider
 {
     public static function provide(
-        string $websiteConfigFilename,
+        string $configFilename,
         string $host,
         string $path,
         bool $developmentEnvironment
     ): WebsiteInterface {
         /** @var array $websiteData */
-        $websiteData = include $websiteConfigFilename;
-        $websites = self::flattenWebsites($websiteData, $developmentEnvironment);
+        $websiteData = include $configFilename;
+        $websites = self::flattenWebsites($websiteData['cms.website'], $developmentEnvironment);
 
         $defaultWebsite = self::findDefaultWebsite($websites);
         $activeWebsite = WebsiteMatcher::matchAgainstRequest($websites, $host, $path,);

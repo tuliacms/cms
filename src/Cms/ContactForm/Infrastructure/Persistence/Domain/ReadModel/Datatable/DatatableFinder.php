@@ -7,6 +7,7 @@ namespace Tulia\Cms\ContactForm\Infrastructure\Persistence\Domain\ReadModel\Data
 use PDO;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
+use Tulia\Component\Datatable\Finder\FinderContext;
 
 /**
  * @author Adam Banaszkiewicz
@@ -44,7 +45,7 @@ class DatatableFinder extends AbstractDatatableFinder
     /**
      * {@inheritdoc}
      */
-    public function getFilters(): array
+    public function getFilters(FinderContext $context): array
     {
         $filters = [
             'name' => [
@@ -53,7 +54,7 @@ class DatatableFinder extends AbstractDatatableFinder
             ],
         ];
 
-        if ($this->currentWebsite->getDefaultLocale()->getCode() !== $this->currentWebsite->getLocale()->getCode()) {
+        if (false === $context->isDefaultLocale()) {
             $filters['translated'] = [
                 'label' => 'translated',
                 'type' => 'yes_no',
@@ -67,17 +68,15 @@ class DatatableFinder extends AbstractDatatableFinder
     /**
      * {@inheritdoc}
      */
-    public function prepareQueryBuilder(QueryBuilder $queryBuilder): QueryBuilder
+    public function prepareQueryBuilder(QueryBuilder $queryBuilder, FinderContext $context): QueryBuilder
     {
         $queryBuilder
             ->from('#__form', 'tm')
             ->leftJoin('tm', '#__form_lang', 'tl', 'tm.id = tl.form_id AND tl.locale = :locale')
-            ->where('tm.website_id = :website_id')
-            ->setParameter('website_id', $this->currentWebsite->getId(), PDO::PARAM_STR)
-            ->setParameter('locale', $this->currentWebsite->getLocale()->getCode(), PDO::PARAM_STR)
+            ->setParameter('locale', $context->locale, PDO::PARAM_STR)
         ;
 
-        if ($this->currentWebsite->getDefaultLocale()->getCode() !== $this->currentWebsite->getLocale()->getCode()) {
+        if (false === $context->isDefaultLocale()) {
             $queryBuilder->select('IF(ISNULL(tl.name), 0, 1) AS translated');
         }
 

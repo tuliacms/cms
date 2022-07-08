@@ -8,6 +8,7 @@ use PDO;
 use Tulia\Cms\Menu\Domain\ReadModel\Datatable\MenuDatatableFinderInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
+use Tulia\Component\Datatable\Finder\FinderContext;
 
 /**
  * @author Adam Banaszkiewicz
@@ -45,7 +46,7 @@ class DbalMenuDatatableFinder extends AbstractDatatableFinder implements MenuDat
     /**
      * {@inheritdoc}
      */
-    public function getFilters(): array
+    public function getFilters(FinderContext $context): array
     {
         return [
             'name' => [
@@ -58,12 +59,10 @@ class DbalMenuDatatableFinder extends AbstractDatatableFinder implements MenuDat
     /**
      * {@inheritdoc}
      */
-    public function prepareQueryBuilder(QueryBuilder $queryBuilder): QueryBuilder
+    public function prepareQueryBuilder(QueryBuilder $queryBuilder, FinderContext $context): QueryBuilder
     {
         $queryBuilder
             ->from('#__menu', 'tm')
-            ->where('tm.website_id = :website_id')
-            ->setParameter('website_id', $this->currentWebsite->getId(), PDO::PARAM_STR)
         ;
 
         return $queryBuilder;

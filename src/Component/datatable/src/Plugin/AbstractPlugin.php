@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Component\Datatable\Plugin;
 
 use Doctrine\DBAL\Query\QueryBuilder;
+use Tulia\Component\Datatable\Finder\FinderContext;
 
 /**
  * @author Adam Banaszkiewicz
@@ -13,7 +14,7 @@ abstract class AbstractPlugin implements PluginInterface
 {
     abstract public function supports(string $configurationKey): bool;
 
-    public function prepareQueryBuilder(QueryBuilder $queryBuilder): QueryBuilder
+    public function prepareQueryBuilder(QueryBuilder $queryBuilder, FinderContext $context): QueryBuilder
     {
         return $queryBuilder;
     }
@@ -23,7 +24,7 @@ abstract class AbstractPlugin implements PluginInterface
         return [];
     }
 
-    public function getFilters(): array
+    public function getFilters(FinderContext $context): array
     {
         return [];
     }

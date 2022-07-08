@@ -16,27 +16,15 @@ class Term implements AttributesAwareInterface
     use MagickAttributesTrait;
 
     protected string $id;
-
     protected string $type;
-
-    protected string $websiteId;
-
     protected ?string $parentId = null;
-
     protected int $level = 1;
-
     protected int $position = 1;
-
     protected int $count = 0;
-
     protected string $locale;
-
     protected ?string $title = null;
-
     protected ?string $slug = null;
-
     protected bool $isRoot = false;
-
     protected bool $visibility = true;
 
     public static function buildFromArray(array $data): self
@@ -45,10 +33,6 @@ class Term implements AttributesAwareInterface
 
         if (isset($data['id']) === false) {
             throw new InvalidArgumentException('Term ID must be provided.');
-        }
-
-        if (isset($data['website_id']) === false) {
-            throw new InvalidArgumentException('Term website_id must be provided.');
         }
 
         if (isset($data['type']) === false) {
@@ -61,7 +45,6 @@ class Term implements AttributesAwareInterface
 
         $term->setId($data['id']);
         $term->setType($data['type']);
-        $term->setWebsiteId($data['website_id']);
         $term->setParentId($data['parent_id'] ?? null);
         $term->setLevel((int) ($data['level'] ?? 0));
         $term->setPosition((int) ($data['position'] ?? 0));
@@ -93,16 +76,6 @@ class Term implements AttributesAwareInterface
     public function setType(string $type): void
     {
         $this->type = $type;
-    }
-
-    public function getWebsiteId(): string
-    {
-        return $this->websiteId;
-    }
-
-    public function setWebsiteId(string $websiteId): void
-    {
-        $this->websiteId = $websiteId;
     }
 
     public function getParentId(): ?string

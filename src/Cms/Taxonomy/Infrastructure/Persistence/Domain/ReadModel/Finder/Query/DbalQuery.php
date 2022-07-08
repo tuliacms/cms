@@ -108,12 +108,7 @@ class DbalQuery extends AbstractDbalQuery
             /**
              * Locale of the term to fetch.
              */
-            'locale' => 'en_US',
-            /**
-             * Search for rows in the website. Given null search in all websites.
-             * @param null|string
-             */
-            'website' => null,
+            'locale' => null,
             /**
              * Is fet to true, result will be sorted hierarchical after fetching.
              * It will works only for full, complete fetched tree.
@@ -135,12 +130,6 @@ class DbalQuery extends AbstractDbalQuery
         $this->buildVisibility($criteria);
         $this->buildOffset($criteria);
         $this->buildOrderBy($criteria);
-
-        if ($criteria['website']) {
-            $this->queryBuilder
-                ->andWhere('tm.website_id = :tm_website_id')
-                ->setParameter('tm_website_id', $criteria['website'], PDO::PARAM_STR);
-        }
 
         $this->callPlugins($criteria);
 
@@ -164,7 +153,7 @@ class DbalQuery extends AbstractDbalQuery
             $result = $this->sortHierarchical($result, WriteModelTerm::ROOT_LEVEL + 1);
         }
 
-        $metadata = $this->metadataFinder->findAllAggregated('term', $scope, array_column($result, 'id'));
+        $metadata = $this->metadataFinder->findAllAggregated('term', $scope, array_column($result, 'id'), $criteria['locale']);
 
         try {
             foreach ($result as $row) {

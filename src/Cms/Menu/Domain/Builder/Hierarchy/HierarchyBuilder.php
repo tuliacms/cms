@@ -16,19 +16,16 @@ use Tulia\Cms\Menu\Domain\ReadModel\Model\Item;
  */
 class HierarchyBuilder implements HierarchyBuilderInterface
 {
-    protected MenuFinderInterface $menuFinder;
-    protected RegistryInterface $registry;
-
-    public function __construct(MenuFinderInterface $menuFinder, RegistryInterface $registry)
-    {
-        $this->menuFinder = $menuFinder;
-        $this->registry = $registry;
+    public function __construct(
+        protected MenuFinderInterface $menuFinder,
+        protected RegistryInterface $registry,
+    ) {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function build(string $id, array $collection = []): HierarchyInterface
+    public function build(string $id, string $locale, array $collection = []): HierarchyInterface
     {
         $hierarchy = new Hierarchy($id);
 
@@ -36,7 +33,7 @@ class HierarchyBuilder implements HierarchyBuilderInterface
 
         foreach ($items as $item) {
             if ($item->getLevel() === 1) {
-                $hierarchy->append($this->buildFor($item, $items));
+                $hierarchy->append($this->buildFor($item, $items, $locale));
             }
         }
 
@@ -50,9 +47,9 @@ class HierarchyBuilder implements HierarchyBuilderInterface
         return $menu ? $menu->getItems() : [];
     }
 
-    private function buildFor(Item $sourceItem, array $collection): BuilderItem
+    private function buildFor(Item $sourceItem, array $collection, string $locale): BuilderItem
     {
-        $identity = $this->registry->provide($sourceItem->getType(), $sourceItem->getIdentity());
+        $identity = $this->registry->provide($sourceItem->getType(), $sourceItem->getIdentity(), $locale);
 
         $item = new BuilderItem();
         $item->setId($sourceItem->getId());
@@ -65,7 +62,7 @@ class HierarchyBuilder implements HierarchyBuilderInterface
         /** @var Item $cItem */
         foreach ($collection as $cItem) {
             if ($cItem->getParentId() === $sourceItem->getId()) {
-                $item->addChild($this->buildFor($cItem, $collection));
+                $item->addChild($this->buildFor($cItem, $collection, $locale));
             }
         }
 

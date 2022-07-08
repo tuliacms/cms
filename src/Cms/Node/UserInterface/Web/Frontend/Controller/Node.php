@@ -19,11 +19,9 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class Node extends AbstractController
 {
-    protected TermFinderInterface $termFinder;
-
-    public function __construct(TermFinderInterface $termFinder)
-    {
-        $this->termFinder = $termFinder;
+    public function __construct(
+        private TermFinderInterface $termFinder
+    ) {
     }
 
     /**
@@ -51,7 +49,7 @@ class Node extends AbstractController
     private function findCategory(Model $node): ?Term
     {
         if ($node->getCategory()) {
-            return $this->termFinder->findOne(['id' => $node->getCategory()], TermFinderScopeEnum::SINGLE);
+            return $this->termFinder->findOne(['id' => $node->getCategory(), 'locale' => $node->getLocale()], TermFinderScopeEnum::SINGLE);
         }
 
         return null;

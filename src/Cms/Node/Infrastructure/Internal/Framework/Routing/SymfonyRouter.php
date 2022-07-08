@@ -50,10 +50,6 @@ class SymfonyRouter implements RouterInterface, RequestMatcherInterface
 
         [, $type, $identity] = explode('.', $name);
 
-        $parameters = array_merge([
-            '_locale' => $parameters['_locale']
-        ], $parameters);
-
         $path = $this->contentTypeRouter->generate($type, $identity, $parameters);
 
         return $this->frontendRouteSuffixResolver->appendSuffix($path);

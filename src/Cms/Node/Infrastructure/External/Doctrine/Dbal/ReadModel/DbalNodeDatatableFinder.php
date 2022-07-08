@@ -13,6 +13,7 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderScopeEnum;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
+use Tulia\Component\Datatable\Finder\FinderContext;
 
 /**
  * @author Adam Banaszkiewicz
@@ -86,7 +87,7 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
         return $columns;
     }
 
-    public function getFilters(): array
+    public function getFilters(FinderContext $context): array
     {
         $filters = [];
 
@@ -118,21 +119,21 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
     /**
      * {@inheritdoc}
      */
-    public function prepareQueryBuilder(QueryBuilder $queryBuilder): QueryBuilder
+    public function prepareQueryBuilder(QueryBuilder $queryBuilder, FinderContext $context): QueryBuilder
     {
         $queryBuilder
             ->from('#__node', 'tm')
             ->addSelect('tm.type, tm.level, tm.parent_id, tm.slug, tm.status, GROUP_CONCAT(tnhf.purpose SEPARATOR \',\') AS purposes')
             ->leftJoin('tm', '#__node_lang', 'tl', 'tm.id = tl.node_id AND tl.locale = :locale')
             ->leftJoin('tm', '#__node_has_purpose', 'tnhf', 'tm.id = tnhf.node_id')
-            ->where('tm.type = :type AND tm.website_id = :website_id')
+            ->where('tm.type = :type')
             ->setParameter('type', $this->contentType->getCode(), PDO::PARAM_STR)
-            ->setParameter('locale', $this->currentWebsite->getLocale()->getCode(), PDO::PARAM_STR)
+            ->setParameter('locale', $context->locale, PDO::PARAM_STR)
             ->addOrderBy('tm.level', 'ASC')
             ->addGroupBy('tm.id')
         ;
 
-        if ($this->currentWebsite->getDefaultLocale()->getCode() !== $this->currentWebsite->getLocale()->getCode()) {
+        if (false === $context->isDefaultLocale()) {
             $queryBuilder->addSelect('IF(ISNULL(tl.title), 0, 1) AS translated');
         }
 

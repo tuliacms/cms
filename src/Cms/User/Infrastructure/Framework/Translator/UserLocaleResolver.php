@@ -35,15 +35,12 @@ class UserLocaleResolver implements EventSubscriberInterface
 
     public function handle(RequestEvent $event): void
     {
-        $request = $event->getRequest();
-
-        if (! $request->server->get('_TULIA_WEBSITE_IS_BACKEND')) {
+        if (! $event->getRequest()->server->get('TULIA_WEBSITE_IS_BACKEND')) {
             return;
         }
 
         $locale = $this->authenticatedUserProvider->getUser()->getLocale();
 
-        $request->setLocale($locale);
         $this->translator->setLocale($locale);
     }
 }
