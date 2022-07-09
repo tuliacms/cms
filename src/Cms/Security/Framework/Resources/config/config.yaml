@@ -1,8 +1,9 @@
-framework:
+cms:
     templating:
         paths:
             - { name: backend/security, path: '%cms.core_dir%/Cms/Security/Framework/Resources/views/backend' }
             - { name: cms/security, path: '%cms.core_dir%/Cms/Security/Framework/Resources/views/frontend' }
+#framework:
     #translation:
         #directory_list:
         #    - { path: '%cms.core_dir%/cms/src/Security/Framework/Resources/translations' }

@@ -8,11 +8,11 @@ services:
 
     Tulia\Component\Templating\Twig\Loader\AdvancedFilesystemLoader:
         bind:
-            $paths: '%framework.templating.paths%'
+            $paths: '%cms.templating.paths%'
 
     Tulia\Component\Templating\Twig\Loader\LazyArrayLoader:
         bind:
-            $templates: '%framework.twig.loader.array.templates%'
+            $templates: '%cms.twig.loader.array.templates%'
 
     Tulia\Component\Templating\ViewFilter\FilterInterface:
         class: Tulia\Component\Templating\ViewFilter\DelegatingFilter
@@ -22,6 +22,6 @@ services:
 
     Tulia\Component\Templating\Config:
         arguments:
-            - { namespace_overwrite: '%framework.templating.namespace_overwrite%' }
+            - { namespace_overwrite: '%cms.templating.namespace_overwrite%' }
 
     Twig\Extension\StringLoaderExtension: ~

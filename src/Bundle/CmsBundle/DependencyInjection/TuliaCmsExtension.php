@@ -7,6 +7,7 @@ namespace Tulia\Bundle\CmsBundle\DependencyInjection;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Tulia\Component\Templating\ViewFilter\FilterInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -16,11 +17,6 @@ class TuliaCmsExtension extends Extension
     public function getAlias(): string
     {
         return 'cms';
-    }
-
-    public function getConfiguration(array $config, ContainerBuilder $container): ?ConfigurationInterface
-    {
-        return new Configuration();
     }
 
     public function load(array $configs, ContainerBuilder $container): void
@@ -43,7 +39,34 @@ class TuliaCmsExtension extends Extension
         $container->setParameter('cms.attributes.finder.types', $config['attributes']['finder']['types'] ?? []);
         $container->setParameter('cms.widgets', $config['widgets'] ?? []);
         $container->setParameter('cms.filemanager.image_sizes', $config['filemanager']['image_sizes'] ?? []);
-        $container->setParameter('importer.objects', $config['importer']['objects'] ?? []);
+        $container->setParameter('cms.importer.objects', $config['importer']['objects'] ?? []);
+
+        $container->setParameter('cms.assetter.assets', $config['assetter']['assets'] ?? []);
+        $container->setParameter('cms.assets.public_paths', $config['public_paths'] ?? []);
+        $container->setParameter('cms.twig.loader.array.templates', $this->prepareTwigArrayLoaderTemplates($config['twig']['loader']['array']['templates'] ?? []));
+        $container->setParameter('cms.templating.paths', $this->prepareTemplatingPaths($config['templating']['paths'] ?? []));
+        $container->setParameter('cms.templating.namespace_overwrite', $config['templating']['namespace_overwrite'] ?? []);
+        $container->setParameter('cms.themes.configuration', $config['theme']['configuration'] ?? []);
+
+        $this->registerViewFilters($container);
+
+        // Finders
+        $container->registerForAutoconfiguration(
+            \Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\AbstractFinder::class)
+            ->addTag('finder');
+        $container->registerForAutoconfiguration(\Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Plugin\PluginInterface::class)
+            ->addTag('finder.plugin');
+        // Themes
+        $container->registerForAutoconfiguration(\Tulia\Component\Theme\Resolver\ResolverInterface::class)
+            ->addTag('theme.resolver');
+        $container->registerForAutoconfiguration(\Tulia\Component\Theme\Customizer\Builder\Rendering\Controls\ControlInterface::class)
+            ->addTag('theme.customizer.control');
+        // Import/Export
+        $container->registerForAutoconfiguration(\Tulia\Component\Importer\ObjectImporter\ObjectImporterInterface::class)
+            ->addTag('importer.object_importer');
+        // Usecases
+        $container->registerForAutoconfiguration(\Tulia\Cms\Shared\Application\UseCase\TransactionalUseCaseInterface::class)
+            ->addTag('usecase.transactional');
 
         // BodyClass
         $container->registerForAutoconfiguration(\Tulia\Cms\BodyClass\Collector\BodyClassCollectorInterface::class)
@@ -142,5 +165,40 @@ class TuliaCmsExtension extends Extension
         }
 
         return $definitions;
+    }
+
+    private function prepareTemplatingPaths(array $paths): array
+    {
+        $prepared = [];
+
+        foreach ($paths as $path) {
+            $prepared["@{$path['name']}"] = $path['path'];
+        }
+
+        return $prepared;
+    }
+
+    private function prepareTwigArrayLoaderTemplates(array $source): array
+    {
+        $output = [];
+
+        foreach ($source as $name => $data) {
+            $output[$name] = $data['template'];
+        }
+
+        return $output;
+    }
+
+    private function registerViewFilters(ContainerBuilder $container): void
+    {
+        if (! $container->has(FilterInterface::class)) {
+            return;
+        }
+
+        $chain = $container->findDefinition(FilterInterface::class);
+
+        foreach ($container->findTaggedServiceIds('templating.view_filter') as $id => $tags) {
+            $chain->addMethodCall('addFilter', [new Reference($id)]);
+        }
     }
 }

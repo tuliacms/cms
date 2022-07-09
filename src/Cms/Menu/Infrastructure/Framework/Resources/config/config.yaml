@@ -2,9 +2,6 @@ framework:
     translator:
         paths:
             - '%cms.core_dir%/Cms/Menu/Infrastructure/Framework/Resources/translations'
-    templating:
-        paths:
-            - { name: backend/menu, path: '%cms.core_dir%/Cms/Menu/Infrastructure/Framework/Resources/views/backend' }
     cache:
         pools:
             menu.cache:
@@ -13,6 +10,9 @@ framework:
                 default_lifetime: 86400
                 tags: true
 cms:
+    templating:
+        paths:
+            - { name: backend/menu, path: '%cms.core_dir%/Cms/Menu/Infrastructure/Framework/Resources/views/backend' }
     content_building:
         data_types:
             mapping:

@@ -1,7 +1,8 @@
-framework:
+cms:
     templating:
         paths:
             - { name: backend/import_export, path: '%cms.core_dir%/Cms/ImportExport/Infrastructure/Framework/Resources/views/backend' }
+framework:
     translator:
         paths:
             - '%cms.core_dir%/Cms/ImportExport/Infrastructure/Framework/Resources/translations'

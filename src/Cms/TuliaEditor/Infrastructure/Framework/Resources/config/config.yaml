@@ -1,9 +1,9 @@
 framework:
-    public_paths:
-        - { source: '%cms.core_dir%/Cms/TuliaEditor/Infrastructure/Framework/Resources/public/tulia-editor/dist', target: '/core/tulia-editor' }
     translator:
         paths:
             - '%cms.core_dir%/Cms/TuliaEditor/Infrastructure/Framework/Resources/translations'
+
+cms:
     templating:
         paths:
             - { name: backend/tulia-editor, path: '%cms.core_dir%/Cms/TuliaEditor/Infrastructure/Framework/Resources/views' }
@@ -17,7 +17,8 @@ framework:
                     - /assets/core/tulia-editor/main.css
                 require: [ lodash, vue, quill ]
                 collection: tulia_editor
-cms:
+    public_paths:
+        - { source: '%cms.core_dir%/Cms/TuliaEditor/Infrastructure/Framework/Resources/public/tulia-editor/dist', target: '/core/tulia-editor' }
     content_building:
         data_types:
             mapping:

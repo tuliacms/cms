@@ -1,4 +1,4 @@
-framework:
+cms:
     templating:
         paths:
             - { name: cms/homepage, path: '%cms.core_dir%/Cms/Homepage/Infrastructure/Framework/Resources/views/frontend' }

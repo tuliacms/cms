@@ -17,4 +17,4 @@ services:
     Tulia\Component\Importer\Schema\Schema:
         factory: [ 'Tulia\Component\Importer\Implementation\Symfony\SchemaFromContainerFactory', 'build' ]
         bind:
-            $objects: '%importer.objects%'
+            $objects: '%cms.importer.objects%'

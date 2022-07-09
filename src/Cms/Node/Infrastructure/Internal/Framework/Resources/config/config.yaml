@@ -2,12 +2,12 @@ framework:
     translator:
         paths:
             - '%cms.core_dir%/Cms/Node/Infrastructure/Internal/Framework/Resources/translations'
+
+cms:
     templating:
         paths:
             - { name: backend/node, path: '%cms.core_dir%/Cms/Node/Infrastructure/Internal/Framework/Resources/views/backend' }
             - { name: cms/node, path: '%cms.core_dir%/Cms/Node/Infrastructure/Internal/Framework/Resources/views/frontend' }
-
-cms:
     importer:
         objects:
             Node:

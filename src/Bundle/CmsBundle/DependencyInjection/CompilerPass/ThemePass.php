@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Bundle\FrameworkBundle\DependencyInjection\CompilerPass;
+namespace Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -29,7 +29,7 @@ class ThemePass implements CompilerPassInterface
         $structureRegistry = $container->getDefinition(StructureRegistry::class);
         $predefinedChangesetsRegistry = $container->getDefinition(PredefinedChangesetRegistry::class);
 
-        foreach ($container->getParameter('framework.themes.configuration') as $theme => $config) {
+        foreach ($container->getParameter('cms.themes.configuration') as $theme => $config) {
             if (isset($config['configuration']['base'])) {
                 $this->processThemeConfiguration($container, $configurationRegistry, 'base', $theme, $config['configuration']['base']);
             }

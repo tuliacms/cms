@@ -61,13 +61,13 @@ class FormHandler
         $formsAreValid = true;
 
         // Node type form
-        $request = Request::create('/', 'POST');
-        $request->request->set('content_type_form', $formData['type']);
+        $duplicatedRequest = $request->duplicate();
+        $duplicatedRequest->request->set('content_type_form', $formData['type']);
         $form = $this->formFactory->create(ContentTypeForm::class, null, [
             'fields' => $this->collectFieldsFromSections($formData['layout']),
             'edit_form' => $editForm,
         ]);
-        $form->handleRequest($request);
+        $form->handleRequest($duplicatedRequest);
         if ($form->isSubmitted() && $form->isValid()) {
             // Do nothing if valid
         } else {
@@ -77,10 +77,10 @@ class FormHandler
 
 
         // Layout sidebar section form
-        $request = Request::create('/', 'POST');
-        $request->request->set('layout_section', $formData['layout']['sidebar']);
+        $duplicatedRequest = $request->duplicate();
+        $duplicatedRequest->request->set('layout_section', $formData['layout']['sidebar']);
         $form = $this->formFactory->create(LayoutSectionType::class, [], ['max_depth_fields' => 5]);
-        $form->handleRequest($request);
+        $form->handleRequest($duplicatedRequest);
         if ($form->isSubmitted() && $form->isValid()) {
             // Do nothing if valid
         } else {
@@ -90,10 +90,10 @@ class FormHandler
 
 
         // Layout main section form
-        $request = Request::create('/', 'POST');
-        $request->request->set('layout_section', $formData['layout']['main']);
+        $duplicatedRequest = $request->duplicate();
+        $duplicatedRequest->request->set('layout_section', $formData['layout']['main']);
         $form = $this->formFactory->create(LayoutSectionType::class, [], ['max_depth_fields' => 5]);
-        $form->handleRequest($request);
+        $form->handleRequest($duplicatedRequest);
         if ($form->isSubmitted() && $form->isValid()) {
             // Do nothing if valid
         } else {

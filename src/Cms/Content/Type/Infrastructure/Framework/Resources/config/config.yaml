@@ -2,17 +2,6 @@ framework:
     translator:
         paths:
             - '%cms.core_dir%/Cms/Content/Type/Infrastructure/Framework/Resources/translations'
-    public_paths:
-        - { source: '%cms.core_dir%/Cms/Content/Type/Infrastructure/Framework/Resources/public/layout-builder/dist', target: '/core/content-builder-layout-builder' }
-    templating:
-        paths:
-            - { name: backend/content_builder, path: '%cms.core_dir%/Cms/Content/Type/Infrastructure/Framework/Resources/views/backend' }
-    assetter:
-        assets:
-            content_builder.layout_builder.routable_content_type:
-                scripts: [ '/assets/core/content-builder-layout-builder/build.js' ]
-                styles: [ '/assets/core/content-builder-layout-builder/styles.min.css' ]
-                require: [ vue, lodash ]
     cache:
         pools:
             content_builder.cache:
@@ -24,6 +13,17 @@ monolog:
     channels: ['contentBuilder']
 
 cms:
+    public_paths:
+        - { source: '%cms.core_dir%/Cms/Content/Type/Infrastructure/Framework/Resources/public/layout-builder/dist', target: '/core/content-builder-layout-builder' }
+    templating:
+        paths:
+            - { name: backend/content_builder, path: '%cms.core_dir%/Cms/Content/Type/Infrastructure/Framework/Resources/views/backend' }
+    assetter:
+        assets:
+            content_builder.layout_builder.routable_content_type:
+                scripts: [ '/assets/core/content-builder-layout-builder/build.js' ]
+                styles: [ '/assets/core/content-builder-layout-builder/styles.min.css' ]
+                require: [ vue, lodash ]
     importer:
         objects:
             ContentTypeEntry:

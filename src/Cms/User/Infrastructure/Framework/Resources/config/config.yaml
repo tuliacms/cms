@@ -2,16 +2,16 @@ framework:
     translator:
         paths:
             - '%cms.core_dir%/Cms/User/Infrastructure/Framework/Resources/translations'
-    templating:
-        paths:
-            - { name: cms/user, path: '%cms.core_dir%/Cms/User/Infrastructure/Framework/Resources/views/frontend' }
-            - { name: backend/user, path: '%cms.core_dir%/Cms/User/Infrastructure/Framework/Resources/views/backend' }
 
 twig:
     form_themes:
         - '@backend/user/form/user_form_layout.tpl'
 
 cms:
+    templating:
+        paths:
+            - { name: cms/user, path: '%cms.core_dir%/Cms/User/Infrastructure/Framework/Resources/views/frontend' }
+            - { name: backend/user, path: '%cms.core_dir%/Cms/User/Infrastructure/Framework/Resources/views/backend' }
     content_building:
         data_types:
             mapping:

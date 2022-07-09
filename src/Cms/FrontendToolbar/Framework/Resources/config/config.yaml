@@ -2,6 +2,7 @@ framework:
     translator:
         paths:
             - '%cms.core_dir%/Cms/FrontendToolbar/Framework/Resources/translations'
+cms:
     templating:
         paths:
             - { name: cms/frontend_toolbar, path: '%cms.core_dir%/Cms/FrontendToolbar/Framework/Resources/views/frontend' }

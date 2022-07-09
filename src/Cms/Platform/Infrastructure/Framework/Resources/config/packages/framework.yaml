@@ -15,6 +15,8 @@ framework:
         default_pdo_provider: 'doctrine.dbal.default_connection'
     translator:
         default_path: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/translations'
+
+cms:
     templating:
         namespace_overwrite:
             - { from: '@parent/', to: '@theme/' }

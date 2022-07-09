@@ -32,6 +32,21 @@ class Connection extends DoctrineConnection
         return str_replace('#__', $_ENV['DATABASE_PREFIX'], $query);
     }
 
+    public function update($table, array $data, array $criteria, array $types = [])
+    {
+        return parent::update($this->prepareTablePrefix($table), $data, $criteria, $types);
+    }
+
+    public function insert($table, array $data, array $types = [])
+    {
+        return parent::insert($this->prepareTablePrefix($table), $data, $types);
+    }
+
+    public function delete($table, array $criteria, array $types = [])
+    {
+        return parent::delete($this->prepareTablePrefix($table), $criteria, $types);
+    }
+
     public function getSchemaManager(): SchemaManager
     {
         return new SchemaManager($this, parent::getSchemaManager(), $this->getDatabasePlatform());

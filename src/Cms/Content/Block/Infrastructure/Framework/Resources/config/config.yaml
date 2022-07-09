@@ -2,6 +2,12 @@ framework:
     translator:
         paths:
             - '%cms.core_dir%/Cms/Content/Block/Infrastructure/Framework/Resources/translations'
+
+twig:
+    form_themes:
+        - '@backend/content_block/form_layout/content_block_builder_form_layout.tpl'
+
+cms:
     public_paths:
         - { source: '%cms.core_dir%/Cms/Content/Block/Infrastructure/Framework/Resources/public/content-blocks-builder/dist', target: '/core/content-block-builder' }
     templating:
@@ -14,12 +20,6 @@ framework:
                 scripts: [ '/assets/core/content-block-builder/js/build.js' ]
                 styles: [ '/assets/core/content-block-builder/css/styles.min.css' ]
                 require: [ vue, lodash ]
-
-twig:
-    form_themes:
-        - '@backend/content_block/form_layout/content_block_builder_form_layout.tpl'
-
-cms:
     content_building:
         content_type:
             content_block:

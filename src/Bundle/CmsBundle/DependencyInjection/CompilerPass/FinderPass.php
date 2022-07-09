@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Bundle\FrameworkBundle\DependencyInjection\CompilerPass;
+namespace Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

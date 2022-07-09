@@ -2,6 +2,7 @@ framework:
     translator:
         paths:
             - '%cms.core_dir%/Cms/Website/Infrastructure/Framework/Resources/translations'
+cms:
     templating:
         paths:
             - { name: backend/website, path: '%cms.core_dir%/Cms/Website/Infrastructure/Framework/Resources/views/backend' }

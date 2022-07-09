@@ -1,20 +1,20 @@
 framework:
-    public_paths:
-        - { source: '%cms.core_dir%/Cms/ContactForm/Infrastructure/Framework/Resources/public/dist', target: '/core/contact-forms' }
     translator:
         paths:
             - '%cms.core_dir%/Cms/ContactForm/Infrastructure/Framework/Resources/translations'
+
+cms:
     templating:
         paths:
             - { name: cms/forms, path: '%cms.core_dir%/Cms/ContactForm/Infrastructure/Framework/Resources/views/frontend' }
             - { name: backend/forms, path: '%cms.core_dir%/Cms/ContactForm/Infrastructure/Framework/Resources/views/backend' }
+    public_paths:
+        - { source: '%cms.core_dir%/Cms/ContactForm/Infrastructure/Framework/Resources/public/dist', target: '/core/contact-forms' }
     assetter:
         assets:
             tulia.contact_forms:
                 scripts:
                     - /assets/core/contact-forms/js/build.js
-
-cms:
     widgets:
         internal.contact_form:
             classname: 'Tulia\Cms\ContactForm\Infrastructure\Cms\Widget\Predefined\ContactFormWidget'

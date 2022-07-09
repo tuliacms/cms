@@ -1,18 +1,18 @@
 framework:
-    templating:
-        paths:
-            - { name: backend/widget, path: '%cms.core_dir%/Cms/Widget/Infrastructure/Framework/Resources/views/backend' }
-            - { name: widget-base, path: '%cms.core_dir%/Cms/Widget/Infrastructure/Framework/Resources/views/widget-base' }1
     translator:
         paths:
             - '%cms.core_dir%/Cms/Widget/Infrastructure/Framework/Resources/translations'
+cms:
     twig:
         loader:
             array:
                 templates:
                     widget:
                         template: "{% extends [ '@theme/widget.tpl', '@parent/widget.tpl', '@widget-base/widget.tpl' ] %}"
-cms:
+    templating:
+        paths:
+            - { name: backend/widget, path: '%cms.core_dir%/Cms/Widget/Infrastructure/Framework/Resources/views/backend' }
+            - { name: widget-base, path: '%cms.core_dir%/Cms/Widget/Infrastructure/Framework/Resources/views/widget-base' }
     widgets:
         internal.features:
             classname: 'Tulia\Cms\Widget\Infrastructure\Cms\Widget\Predefined\Features\FeaturesWidget'
