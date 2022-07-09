@@ -17,7 +17,7 @@ class DbalNodeByPurposeFinder implements NodeByPurposeFinderInterface
     ) {
     }
 
-    public function countOtherNodesWithPurpose(string $localNode, string $purpose, string $websiteId): int
+    public function countOtherNodesWithPurpose(string $localNode, string $purpose): int
     {
         return $this->connection->fetchOne('
             SELECT COUNT(tm.id) AS count
@@ -25,14 +25,12 @@ class DbalNodeByPurposeFinder implements NodeByPurposeFinderInterface
             INNER JOIN #__node_has_purpose AS tnhf
                 ON tm.id = tnhf.node_id AND tnhf.purpose = :purpose
             WHERE
-                tm.id != :nodeId AND tm.website_id = :websiteId', [
+                tm.id != :nodeId', [
             'purpose' => $purpose,
             'nodeId' => $localNode,
-            'websiteId' => $websiteId,
         ], [
             'flags' => ConnectionInterface::PARAM_ARRAY_STR,
             'nodeId' => ConnectionInterface::PARAM_STR,
-            'websiteId' => ConnectionInterface::PARAM_STR,
         ]);
     }
 }

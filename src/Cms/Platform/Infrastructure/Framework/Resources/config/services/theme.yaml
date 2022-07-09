@@ -24,3 +24,6 @@ services:
         class: Tulia\Component\Theme\Resolver\ResolverAggregate
         bind:
             $resolvers: !tagged_iterator theme.resolver
+
+    Tulia\Component\Theme\Activator\ActivatorInterface:
+        class: Tulia\Cms\Theme\Infrastructure\Framework\Theme\Activator\Activator

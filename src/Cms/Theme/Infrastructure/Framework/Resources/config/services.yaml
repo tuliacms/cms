@@ -13,11 +13,6 @@ services:
         bind:
             $configFilename: '%kernel.project_dir%/config/dynamic.php'
 
-    Tulia\Component\Theme\Activator\ActivatorInterface:
-        class: Tulia\Cms\Theme\Infrastructure\Framework\Theme\Activator\Activator
-        bind:
-            $configFilename: '%kernel.project_dir%/config/dynamic/theme.php'
-
     Tulia\Cms\Theme\Infrastructure\Filemanager\ImageSize\ThemeConfigurationImagesSizeProvider:
         tags: [ filemanager.image_size.provider ]
 

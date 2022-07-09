@@ -28,7 +28,6 @@ final class Node extends AbstractAggregateRoot
     protected string $id;
     protected string $type;
     protected string $status = 'draft';
-    protected string $websiteId;
     protected ImmutableDateTime $publishedAt;
     protected ?ImmutableDateTime $publishedTo = null;
     protected ImmutableDateTime $createdAt;
@@ -47,13 +46,11 @@ final class Node extends AbstractAggregateRoot
     private function __construct(
         string $id,
         string $type,
-        string $websiteId,
         string $locale,
         Author $author
     ) {
         $this->id = $id;
         $this->type = $type;
-        $this->websiteId = $websiteId;
         $this->locale = $locale;
         $this->author = $author;
         $this->createdAt = $this->updatedAt = new ImmutableDateTime();
@@ -64,12 +61,11 @@ final class Node extends AbstractAggregateRoot
     public static function createNew(
         string $id,
         string $type,
-        string $websiteId,
         string $locale,
         Author $author
     ): self {
-        $self = new self($id, $type, $websiteId, $locale, $author);
-        $self->recordThat(new Event\NodeCreated($id, $type, $websiteId, $locale, $type));
+        $self = new self($id, $type, $locale, $author);
+        $self->recordThat(new Event\NodeCreated($id, $type, $locale, $type));
 
         return $self;
     }
@@ -79,7 +75,6 @@ final class Node extends AbstractAggregateRoot
         $self = new self(
             $data['id'],
             $data['type'],
-            $data['website_id'],
             $data['locale'],
             new Author($data['author_id'])
         );
@@ -104,7 +99,6 @@ final class Node extends AbstractAggregateRoot
         return [
             'id'            => $this->id,
             'type'          => $this->type,
-            'website_id'    => $this->websiteId,
             'published_at'  => $this->publishedAt,
             'published_to'  => $this->publishedTo,
             'created_at'    => $this->createdAt,
@@ -130,7 +124,7 @@ final class Node extends AbstractAggregateRoot
             throw CannotDeleteNodeException::fromReason($reason, $this->id, $this->title);
         }
 
-        $this->recordThat(new NodeDeleted($this->id, $this->type, $this->websiteId, $this->locale));
+        $this->recordThat(new NodeDeleted($this->id, $this->type, $this->locale));
     }
 
     public function getId(): string
@@ -218,7 +212,7 @@ final class Node extends AbstractAggregateRoot
     public function rename(SlugGeneratorStrategyInterface $slugGenerator, string $title, ?string $slug): void
     {
         $this->title = $title;
-        $this->slug = $slugGenerator->generate($this->websiteId, $this->locale, (string) $slug, $title, $this->id);
+        $this->slug = $slugGenerator->generate($this->locale, (string) $slug, $title, $this->id);
 
         $this->markAsUpdated();
     }
@@ -226,11 +220,6 @@ final class Node extends AbstractAggregateRoot
     public function setStatus(string $status): void
     {
         $this->status = $status;
-    }
-
-    public function getWebsiteId(): string
-    {
-        return $this->websiteId;
     }
 
     public function getPublishedAt(): ImmutableDateTime
@@ -296,7 +285,7 @@ final class Node extends AbstractAggregateRoot
     public function persistPurposes(CanImposePurposeInterface $rules, string ...$purposes): void
     {
         foreach ($purposes as $purpose) {
-            $reason = $rules->decide($this->id, $purpose, $this->websiteId, $this->purposes);
+            $reason = $rules->decide($this->id, $purpose, $this->purposes);
 
             if (CanImposePurposeReasonEnum::OK !== $reason) {
                 throw CannotImposePurposeToNodeException::fromReason($reason, $purpose, $this->id);
@@ -307,7 +296,6 @@ final class Node extends AbstractAggregateRoot
         $this->recordThat(new PurposesUpdated(
             $this->id,
             $this->type,
-            $this->websiteId,
             $this->locale,
             $this->purposes
         ));
@@ -320,7 +308,7 @@ final class Node extends AbstractAggregateRoot
             return;
         }
 
-        $reason = $rules->decide($this->id, $purpose, $this->websiteId, $this->purposes);
+        $reason = $rules->decide($this->id, $purpose, $this->purposes);
 
         if (CanImposePurposeReasonEnum::OK !== $reason) {
             throw CannotImposePurposeToNodeException::fromReason($reason, $purpose, $this->id);
@@ -330,7 +318,6 @@ final class Node extends AbstractAggregateRoot
         $this->recordThat(new PurposesUpdated(
             $this->id,
             $this->type,
-            $this->websiteId,
             $this->locale,
             $this->purposes
         ));

@@ -18,32 +18,22 @@ use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
  */
 final class DbalNodeRepository implements NodeRepositoryInterface
 {
-    private NodeWriteStorageInterface $storage;
-    private AttributesRepositoryInterface $attributeRepository;
-    private UuidGeneratorInterface $uuidGenerator;
-    private ContentTypeRegistryInterface $contentTypeRegistry;
-
     public function __construct(
-        NodeWriteStorageInterface $storage,
-        AttributesRepositoryInterface $attributeRepository,
-        UuidGeneratorInterface $uuidGenerator,
-        ContentTypeRegistryInterface $contentTypeRegistry
+        private NodeWriteStorageInterface $storage,
+        private AttributesRepositoryInterface $attributeRepository,
+        private UuidGeneratorInterface $uuidGenerator,
+        private ContentTypeRegistryInterface $contentTypeRegistry,
     ) {
-        $this->storage = $storage;
-        $this->attributeRepository = $attributeRepository;
-        $this->uuidGenerator = $uuidGenerator;
-        $this->contentTypeRegistry = $contentTypeRegistry;
     }
 
-    public function createNew(string $nodeType, string $author): Node
+    public function createNew(string $nodeType, string $author, string $locale): Node
     {
         $this->contentTypeRegistry->get($nodeType);
 
         return Node::createNew(
             $this->uuidGenerator->generate(),
             $nodeType,
-            $this->currentWebsite->getId(),
-            $this->currentWebsite->getLocale()->getCode(),
+            $locale,
             new Author($author)
         );
     }
@@ -54,11 +44,7 @@ final class DbalNodeRepository implements NodeRepositoryInterface
      */
     public function find(string $id): ?Node
     {
-        $node = $this->storage->find(
-            $id,
-            $this->currentWebsite->getLocale()->getCode(),
-            $this->currentWebsite->getDefaultLocale()->getCode()
-        );
+        $node = $this->storage->find($id, $locale, $defaultLocale);
 
         if (empty($node)) {
             return null;

@@ -9,5 +9,5 @@ namespace Tulia\Cms\Node\Domain\WriteModel\Service;
  */
 interface NodeByPurposeFinderInterface
 {
-    public function countOtherNodesWithPurpose(string $localNode, string $purpose, string $websiteId): int;
+    public function countOtherNodesWithPurpose(string $localNode, string $purpose): int;
 }

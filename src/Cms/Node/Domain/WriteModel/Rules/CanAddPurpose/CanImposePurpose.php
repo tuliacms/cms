@@ -21,7 +21,6 @@ final class CanImposePurpose implements CanImposePurposeInterface
     public function decide(
         string $nodeId,
         string $purpose,
-        string $websiteId,
         array $purposes
     ): CanImposePurposeReasonEnum {
         if ($this->purposeIsAlreadyImposed($purpose, $purposes)) {
@@ -32,7 +31,7 @@ final class CanImposePurpose implements CanImposePurposeInterface
             return CanImposePurposeReasonEnum::PurposeDoesntExists;
         }
 
-        if ($this->singularPurposeIsAlreadyAddedToAnotherNode($purpose, $nodeId, $websiteId)) {
+        if ($this->singularPurposeIsAlreadyAddedToAnotherNode($purpose, $nodeId)) {
             return CanImposePurposeReasonEnum::ThisSingularPurposeIsImposedToAnotherNode;
         }
 
@@ -44,7 +43,7 @@ final class CanImposePurpose implements CanImposePurposeInterface
         return false === $this->nodePurposeRegistry->has($purpose);
     }
 
-    private function singularPurposeIsAlreadyAddedToAnotherNode(string $purpose, string $nodeId, string $websiteId): bool
+    private function singularPurposeIsAlreadyAddedToAnotherNode(string $purpose, string $nodeId): bool
     {
         if ($this->nodePurposeRegistry->isSingular($purpose) === false) {
             return false;
@@ -52,8 +51,7 @@ final class CanImposePurpose implements CanImposePurposeInterface
 
         return 0 !== $this->nodeByFlagFinder->countOtherNodesWithPurpose(
             $nodeId,
-            $purpose,
-            $websiteId
+            $purpose
         );
     }
 

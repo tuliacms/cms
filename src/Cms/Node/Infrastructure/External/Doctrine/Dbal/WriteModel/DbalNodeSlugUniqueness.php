@@ -17,7 +17,7 @@ final class DbalNodeSlugUniqueness implements NodeSlugUniquenessInterface
     ) {
     }
 
-    public function isUnique(string $website, string $locale, string $slug, ?string $notInThisNode = null): bool
+    public function isUnique(string $locale, string $slug, ?string $notInThisNode = null): bool
     {
         return ! (bool) $this->connection->fetchOne(<<<EOF
 SELECT COUNT(id) AS `count`
@@ -25,8 +25,7 @@ FROM #__node AS n
 LEFT JOIN #__node_lang AS nl
     ON nl.node_id = n.id
 WHERE
-    n.website_id = :website
-    AND (
+    (
         n.slug = :slug
         OR (
             nl.slug = :slug
@@ -36,13 +35,11 @@ WHERE
     AND n.id != :id
 EOF,
             [
-                'website' => $website,
                 'slug' => $slug,
                 'locale' => $locale,
                 'id' => $notInThisNode,
             ],
             [
-                'website' => \PDO::PARAM_STR,
                 'slug' => \PDO::PARAM_STR,
                 'locale' => \PDO::PARAM_STR,
                 'id' => \PDO::PARAM_STR,

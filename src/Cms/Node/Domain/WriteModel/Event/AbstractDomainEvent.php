@@ -14,7 +14,6 @@ abstract class AbstractDomainEvent extends PlatformDomainEvent
     public function __construct(
         public readonly string $nodeId,
         public readonly string $nodeType,
-        public readonly string $websiteId,
         public readonly string $locale
     ) {
     }

@@ -26,3 +26,8 @@ services:
             $extensionsDirectory: '%kernel.project_dir%/extension/theme'
 
     Tulia\Component\Theme\Storage\StorageInterface: '@Tulia\Cms\Platform\Infrastructure\Framework\Theme\Storage\DirectoryDiscoveryStorage'
+
+    Tulia\Cms\Platform\Domain\Service\DynamicConfigurationInterface:
+        class: Tulia\Cms\Platform\Infrastructure\Filesystem\FilesystemDynamicConfiguration
+        bind:
+            $configFilename: '%kernel.project_dir%/config/dynamic.php'

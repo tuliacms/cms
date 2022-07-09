@@ -13,18 +13,18 @@ final class NodeByPurposeFinderStub implements NodeByPurposeFinderInterface
 {
     private array $counts = [];
 
-    public function makeOtherNodeHasSpecificPurpose(string $purpose, string $websiteId): void
+    public function makeOtherNodeHasSpecificPurpose(string $purpose): void
     {
-        $this->counts[$websiteId][$purpose] = 1;
+        $this->counts[$purpose] = 1;
     }
 
-    public function makeOtherNodeHasntSpecificPurpose(string $purpose, string $websiteId): void
+    public function makeOtherNodeHasntSpecificPurpose(string $purpose): void
     {
-        unset($this->counts[$websiteId][$purpose]);
+        unset($this->counts[$purpose]);
     }
 
-    public function countOtherNodesWithPurpose(string $localNode, string $purpose, string $websiteId): int
+    public function countOtherNodesWithPurpose(string $localNode, string $purpose): int
     {
-        return $this->counts[$websiteId][$purpose] ?? 0;
+        return $this->counts[$purpose] ?? 0;
     }
 }

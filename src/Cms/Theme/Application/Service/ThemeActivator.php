@@ -16,18 +16,11 @@ use Tulia\Component\Theme\ManagerInterface;
  */
 class ThemeActivator
 {
-    private ManagerInterface $manager;
-    private ActivatorInterface $activator;
-    private EventBusInterface $eventBus;
-
     public function __construct(
-        ManagerInterface $manager,
-        ActivatorInterface $activator,
-        EventBusInterface $eventBus,
+        private ManagerInterface $manager,
+        private ActivatorInterface $activator,
+        private EventBusInterface $eventBus,
     ) {
-        $this->manager = $manager;
-        $this->activator = $activator;
-        $this->eventBus = $eventBus;
     }
 
     /**

@@ -12,7 +12,6 @@ interface CanImposePurposeInterface
     public function decide(
         string $nodeId,
         string $purpose,
-        string $websiteId,
         array $purposes
     ): CanImposePurposeReasonEnum;
 }

@@ -15,11 +15,9 @@ use Tulia\Cms\Platform\Infrastructure\DefaultTheme\DefaultTheme;
 class ThemeLoader implements ThemeLoaderInterface
 {
     public function __construct(
-        StorageInterface $storage,
-        string $configFilename
+        private StorageInterface $storage,
+        private string $configFilename
     ) {
-        $this->storage = $storage;
-        $this->configFilename = $configFilename;
     }
 
     public function load(): ThemeInterface
