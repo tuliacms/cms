@@ -13,9 +13,9 @@ interface ConfigurationInterface
      * Add new configuration $values, identified by $id to given $group. In example You can add
      * red color hash into theme-color group:
      * $this->add('color', 'red', [ 'hash' => '#ff0000' ]);
-     * $this->add('widgrt_space', 'mainmenu', 'Main menu');
+     * $this->add('widget_space', 'mainmenu', 'Main menu');
      */
-    public function add(string $group, string $code, $value = null);
+    public function add(string $group, string $code, mixed $value = null): void;
 
     /**
      * Return all values from given $group. The method returns all defined values from given $group.
@@ -27,7 +27,7 @@ interface ConfigurationInterface
      * Return values identified by $id from given $group. The method returns only one values array.
      * Always returns array, even if the values were not set.
      */
-    public function get(string $group, string $code, $default = null);
+    public function get(string $group, string $code, mixed $default = null): mixed;
 
     public function remove(string $group, ?string $code = null): void;
 

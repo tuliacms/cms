@@ -70,7 +70,7 @@ class Configuration implements ConfigurationInterface
         $this->configuration = array_merge_recursive($this->configuration, $configuration->all());
     }
 
-    public function add(string $group, string $code, $value = null): void
+    public function add(string $group, string $code, mixed $value = null): void
     {
         $this->configuration[$group][$code] = $value;
     }
@@ -84,7 +84,7 @@ class Configuration implements ConfigurationInterface
         return $this->configuration[$group] ?? [];
     }
 
-    public function get(string $group, string $code, $default = null)
+    public function get(string $group, string $code, mixed $default = null): mixed
     {
         return $this->configuration[$group][$code] ?? $default;
     }

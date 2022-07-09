@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Theme\Resolver;
 
-use Tulia\Component\Theme\Configuration\Configuration;
 use Tulia\Component\Theme\Configuration\ConfigurationInterface;
 use Tulia\Component\Theme\Configuration\ConfigurationRegistry;
 use Tulia\Component\Theme\Customizer\DetectorInterface;
@@ -16,31 +15,15 @@ use Tulia\Component\Theme\ThemeInterface;
  */
 class ConfigurationResolver implements ResolverInterface
 {
-    private ManagerInterface $manager;
-    private DetectorInterface $detector;
-    private ConfigurationRegistry $configurationRegistry;
-
     public function __construct(
-        ManagerInterface $manager,
-        DetectorInterface $detector,
-        ConfigurationRegistry $configurationRegistry
+        private ManagerInterface $manager,
+        private DetectorInterface $detector,
+        private ConfigurationRegistry $configurationRegistry,
     ) {
-        $this->manager = $manager;
-        $this->detector = $detector;
-        $this->configurationRegistry = $configurationRegistry;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function resolve(ThemeInterface $theme): void
+    public function resolve(ConfigurationInterface $configuration, ThemeInterface $theme): void
     {
-        if ($theme->hasConfig()) {
-            return;
-        }
-
-        $configuration = new Configuration();
-
         if ($theme->getParent()) {
             $parent = $this->manager->getStorage()->get($theme->getParent());
 
@@ -48,8 +31,6 @@ class ConfigurationResolver implements ResolverInterface
         }
 
         $this->configure($configuration, $theme);
-
-        $theme->setConfig($configuration);
     }
 
     private function configure(ConfigurationInterface $configuration, ThemeInterface $theme): void

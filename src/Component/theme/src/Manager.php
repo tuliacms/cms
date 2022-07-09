@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Theme;
 
+use Tulia\Component\Theme\Configuration\LazyConfiguration;
 use Tulia\Component\Theme\Storage\StorageInterface;
 use Tulia\Component\Theme\Resolver\ResolverAggregateInterface;
 use Tulia\Component\Theme\Loader\ThemeLoader\ThemeLoaderInterface;
@@ -13,19 +14,13 @@ use Tulia\Component\Theme\Loader\ThemeLoader\ThemeLoaderInterface;
  */
 class Manager implements ManagerInterface
 {
-    protected $theme;
-    protected $storage;
-    protected $resolver;
-    protected $loader;
+    protected ?ThemeInterface $theme = null;
 
     public function __construct(
-        StorageInterface $storage,
-        ResolverAggregateInterface $resolver,
-        ThemeLoaderInterface $loader
+        private StorageInterface $storage,
+        private ResolverAggregateInterface $resolver,
+        private ThemeLoaderInterface $loader
     ) {
-        $this->storage = $storage;
-        $this->resolver = $resolver;
-        $this->loader = $loader;
     }
 
     public function getTheme(): ThemeInterface
@@ -35,8 +30,7 @@ class Manager implements ManagerInterface
         }
 
         $this->theme = $this->loader->load();
-
-        $this->resolver->resolve($this->theme);
+        $this->theme->setConfig(new LazyConfiguration($this->resolver, $this->theme));
 
         return $this->theme;
     }
@@ -44,8 +38,7 @@ class Manager implements ManagerInterface
     public function setTheme(ThemeInterface $theme): void
     {
         $this->theme = $theme;
-
-        $this->resolver->resolve($this->theme);
+        $this->theme->setConfig(new LazyConfiguration($this->resolver, $this->theme));
     }
 
     public function getThemes(): iterable

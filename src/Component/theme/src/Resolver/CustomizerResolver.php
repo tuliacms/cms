@@ -16,27 +16,15 @@ use Tulia\Component\Theme\ThemeInterface;
  */
 class CustomizerResolver implements ResolverInterface
 {
-    private DefaultChangesetFactory $defaultChangesetFactory;
-    private StorageInterface $storage;
-    private DetectorInterface $detector;
-
     public function __construct(
-        DefaultChangesetFactory $defaultChangesetFactory,
-        StorageInterface $storage,
-        DetectorInterface $detector
+        private DefaultChangesetFactory $defaultChangesetFactory,
+        private StorageInterface $storage,
+        private DetectorInterface $detector,
     ) {
-        $this->defaultChangesetFactory = $defaultChangesetFactory;
-        $this->storage = $storage;
-        $this->detector = $detector;
     }
 
-    public function resolve(ThemeInterface $theme): void
+    public function resolve(ConfigurationInterface $configuration, ThemeInterface $theme): void
     {
-        if ($theme->hasConfig() === false) {
-            return;
-        }
-
-        $config    = $theme->getConfig();
         $changeset = $this->storage->getActiveChangeset($theme->getName(), 'en_US');
 
         if (! $changeset) {
@@ -45,15 +33,15 @@ class CustomizerResolver implements ResolverInterface
         }
 
         foreach ($changeset as $key => $val) {
-            $config->add('customizer', $key, $val);
+            $configuration->add('customizer', $key, $val);
         }
 
         if ($this->detector->isCustomizerMode()) {
-            $this->applyCustomizerAwareChangeset($config);
+            $this->applyCustomizerAwareChangeset($configuration);
         }
     }
 
-    private function applyCustomizerAwareChangeset(ConfigurationInterface $config): void
+    private function applyCustomizerAwareChangeset(ConfigurationInterface $configuration): void
     {
         $id = $this->detector->getChangesetId();
 
@@ -61,7 +49,7 @@ class CustomizerResolver implements ResolverInterface
             $changeset = $this->storage->get($id, 'en_US');
 
             foreach ($changeset as $key => $val) {
-                $config->add('customizer', $key, $val);
+                $configuration->add('customizer', $key, $val);
             }
         }
     }

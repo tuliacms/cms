@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Theme\Resolver;
 
+use Tulia\Component\Theme\Configuration\ConfigurationInterface;
 use Tulia\Component\Theme\ThemeInterface;
 
 /**
@@ -19,10 +20,10 @@ class ResolverAggregate implements ResolverAggregateInterface
         $this->resolvers = $resolvers;
     }
 
-    public function resolve(ThemeInterface $theme): void
+    public function resolve(ConfigurationInterface $configuration, ThemeInterface $theme): void
     {
         foreach ($this->resolvers as $resolver) {
-            $resolver->resolve($theme);
+            $resolver->resolve($configuration, $theme);
         }
     }
 }
