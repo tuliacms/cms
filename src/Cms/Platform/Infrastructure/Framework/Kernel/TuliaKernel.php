@@ -8,13 +8,29 @@ use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-abstract class AbstractKernel extends Kernel
+final class TuliaKernel extends Kernel
 {
     use MicroKernelTrait;
+
+    private WebsiteInterface $website;
+
+    public function __construct(string $environment, bool $debug, WebsiteInterface $website)
+    {
+        parent::__construct($environment, $debug);
+        $this->website = $website;
+    }
+
+    protected function initializeContainer(): void
+    {
+        parent::initializeContainer();
+
+        $this->container->set(WebsiteInterface::class, $this->website);
+    }
 
     public function getProjectDir(): string
     {

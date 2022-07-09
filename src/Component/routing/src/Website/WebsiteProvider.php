@@ -12,7 +12,7 @@ use Tulia\Component\Routing\Website\Locale\LocaleInterface;
  */
 final class WebsiteProvider
 {
-    public static function provide(
+    public static function provideByHostAndPath(
         string $configFilename,
         string $host,
         string $path,
@@ -23,12 +23,48 @@ final class WebsiteProvider
         $websites = self::flattenWebsites($websiteData['cms.website'], $developmentEnvironment);
 
         $defaultWebsite = self::findDefaultWebsite($websites);
-        $activeWebsite = WebsiteMatcher::matchAgainstRequest($websites, $host, $path,);
+        $activeWebsite = WebsiteMatcher::matchAgainstRequest($websites, $host, $path);
 
         return new Website(
             $activeWebsite['backend_prefix'],
             $activeWebsite['is_backend'],
             $activeWebsite['basepath'],
+            self::collectLocales($websites),
+            $defaultWebsite['locale_code'],
+            $activeWebsite['locale_code']
+        );
+    }
+
+    public static function provideDirectly(
+        string $configFilename,
+        ?string $locale,
+        bool $developmentEnvironment
+    ): WebsiteInterface {
+        /** @var array $websiteData */
+        $websiteData = include $configFilename;
+        $websites = self::flattenWebsites($websiteData['cms.website'], $developmentEnvironment);
+
+        $defaultWebsite = self::findDefaultWebsite($websites);
+        $activeWebsite = null;
+
+        if ($locale === null) {
+            $activeWebsite = $defaultWebsite;
+        } else {
+            foreach ($websites as $website) {
+                if ($website['locale_code'] === $locale) {
+                    $activeWebsite = $website;
+                }
+            }
+        }
+
+        if (!$activeWebsite) {
+            throw new \InvalidArgumentException(sprintf('Locale %s not defined in website.', $locale));
+        }
+
+        return new Website(
+            $activeWebsite['backend_prefix'],
+            false,
+            $activeWebsite['path_prefix'] . $activeWebsite['locale_prefix'],
             self::collectLocales($websites),
             $defaultWebsite['locale_code'],
             $activeWebsite['locale_code']
