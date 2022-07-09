@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Infrastructure\External\Doctrine\Dbal\ReadModel;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use PDO;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\Node\Domain\ReadModel\Datatable\NodeDatatableFinderInterface;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderScopeEnum;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
@@ -25,7 +25,7 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
     private TranslatorInterface $translator;
 
     public function __construct(
-        ConnectionInterface $connection,
+        Connection $connection,
         TermFinderInterface $termFinder,
         TranslatorInterface $translator
     ) {

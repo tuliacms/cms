@@ -4,19 +4,16 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Infrastructure\Persistence\Dbal\WriteModel;
 
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
+use Doctrine\DBAL\Connection;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DbalPersister
 {
-    protected ConnectionInterface $connection;
-
     public function __construct(
-        ConnectionInterface $connection,
+        private Connection $connection
     ) {
-        $this->connection     = $connection;
     }
 
     /**

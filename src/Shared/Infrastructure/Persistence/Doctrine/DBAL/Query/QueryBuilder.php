@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder as DoctrineQueryBuilder;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class QueryBuilder extends DoctrineQueryBuilder
 {
-    private ConnectionInterface $connection;
+    private Connection $connection;
 
-    public function __construct(ConnectionInterface $connection)
+    public function __construct(Connection $connection)
     {
         parent::__construct($connection);
 

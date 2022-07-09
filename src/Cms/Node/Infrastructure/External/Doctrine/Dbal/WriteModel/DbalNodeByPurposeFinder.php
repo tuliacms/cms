@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Infrastructure\External\Doctrine\Dbal\WriteModel;
 
+use Doctrine\DBAL\Connection;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodeByPurposeFinderInterface;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -13,7 +13,7 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterfac
 class DbalNodeByPurposeFinder implements NodeByPurposeFinderInterface
 {
     public function __construct(
-        private ConnectionInterface $connection
+        private Connection $connection
     ) {
     }
 
@@ -29,8 +29,8 @@ class DbalNodeByPurposeFinder implements NodeByPurposeFinderInterface
             'purpose' => $purpose,
             'nodeId' => $localNode,
         ], [
-            'flags' => ConnectionInterface::PARAM_ARRAY_STR,
-            'nodeId' => ConnectionInterface::PARAM_STR,
+            'flags' => Connection::PARAM_STR_ARRAY,
+            'nodeId' => \PDO::PARAM_STR,
         ]);
     }
 }

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Filemanager\Infrastructure\Persistence\Domain\ReadModel\Finder;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Exception;
 use PDO;
 use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\AttributesFinder;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Model\File;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\AbstractDbalQuery;
 
 /**
@@ -169,7 +169,7 @@ class DbalQuery extends AbstractDbalQuery
             if (\is_array($criteria['type'])) {
                 $this->queryBuilder
                     ->andWhere('tm.type IN (:tm_type)')
-                    ->setParameter('tm_type', $criteria['type'], ConnectionInterface::PARAM_ARRAY_STR);
+                    ->setParameter('tm_type', $criteria['type'], Connection::PARAM_STR_ARRAY);
             } else {
                 $this->queryBuilder
                     ->andWhere('tm.type = :tm_type')
@@ -184,7 +184,7 @@ class DbalQuery extends AbstractDbalQuery
             if (\is_array($criteria['directory'])) {
                 $this->queryBuilder
                     ->andWhere('tm.directory IN (:tm_directory)')
-                    ->setParameter('tm_directory', $criteria['directory'], ConnectionInterface::PARAM_ARRAY_STR);
+                    ->setParameter('tm_directory', $criteria['directory'], Connection::PARAM_STR_ARRAY);
             } else {
                 $this->queryBuilder
                     ->andWhere('tm.directory = :tm_directory')
@@ -211,7 +211,7 @@ class DbalQuery extends AbstractDbalQuery
 
             $this->queryBuilder
                 ->andWhere('tm.id NOT IN (:tm_id__not_in)')
-                ->setParameter('tm_id__not_in', $ids, ConnectionInterface::PARAM_ARRAY_STR);
+                ->setParameter('tm_id__not_in', $ids, Connection::PARAM_STR_ARRAY);
         }
 
         if ($criteria['id__in']) {
@@ -223,7 +223,7 @@ class DbalQuery extends AbstractDbalQuery
 
             $this->queryBuilder
                 ->andWhere('tm.id IN (:tm_id__in)')
-                ->setParameter('tm_id__in', $ids, ConnectionInterface::PARAM_ARRAY_STR);
+                ->setParameter('tm_id__in', $ids, Connection::PARAM_STR_ARRAY);
         }
     }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Security\Framework\Security\Core\User;
 
+use Doctrine\DBAL\Connection;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -11,18 +12,15 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Throwable;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
 {
-    private ConnectionInterface $connection;
-
-    public function __construct(ConnectionInterface $connection)
-    {
-        $this->connection = $connection;
+    public function __construct(
+        private Connection $connection
+    ) {
     }
 
     public function loadUserByIdentifier(string $identifier): UserInterface

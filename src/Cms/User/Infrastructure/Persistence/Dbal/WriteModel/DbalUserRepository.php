@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Infrastructure\Persistence\Dbal\WriteModel;
 
+use Doctrine\DBAL\Connection;
 use Tulia\Cms\Content\Attributes\Domain\WriteModel\AttributesRepositoryInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 use Tulia\Cms\User\Domain\WriteModel\Model\AggregateId;
 use Tulia\Cms\User\Domain\WriteModel\Model\User;
 use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
@@ -17,24 +17,13 @@ use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
  */
 class DbalUserRepository implements UserRepositoryInterface
 {
-    private ConnectionInterface $connection;
-    private DbalPersister $persister;
-    private AttributesRepositoryInterface $attributeRepository;
-    private UuidGeneratorInterface $uuidGenerator;
-    private ContentTypeRegistryInterface $contentTypeRegistry;
-
     public function __construct(
-        ConnectionInterface $connection,
-        DbalPersister $persister,
-        AttributesRepositoryInterface $attributeRepository,
-        UuidGeneratorInterface $uuidGenerator,
-        ContentTypeRegistryInterface $contentTypeRegistry
+        private Connection $connection,
+        private DbalPersister $persister,
+        private AttributesRepositoryInterface $attributeRepository,
+        private UuidGeneratorInterface $uuidGenerator,
+        private ContentTypeRegistryInterface $contentTypeRegistry,
     ) {
-        $this->connection = $connection;
-        $this->persister = $persister;
-        $this->attributeRepository = $attributeRepository;
-        $this->uuidGenerator = $uuidGenerator;
-        $this->contentTypeRegistry = $contentTypeRegistry;
     }
 
     public function generateNextId(): AggregateId

@@ -4,23 +4,18 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Content\Type\Infrastructure\Persistence\Domain;
 
+use Doctrine\DBAL\Connection;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DbalContentTypeStorage
 {
-    private ConnectionInterface $connection;
-    private UuidGeneratorInterface $uuidGenerator;
-
     public function __construct(
-        ConnectionInterface $connection,
-        UuidGeneratorInterface $uuidGenerator
+        private Connection $connection,
+        private UuidGeneratorInterface $uuidGenerator,
     ) {
-        $this->connection = $connection;
-        $this->uuidGenerator = $uuidGenerator;
     }
 
     public function find(string $code): ?array

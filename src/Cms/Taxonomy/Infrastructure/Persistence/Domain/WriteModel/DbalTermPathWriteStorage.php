@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Infrastructure\Persistence\Domain\WriteModel;
 
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
+use Doctrine\DBAL\Connection;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Service\TermPathWriteStorageInterface;
 
 /**
@@ -12,11 +12,9 @@ use Tulia\Cms\Taxonomy\Domain\WriteModel\Service\TermPathWriteStorageInterface;
  */
 class DbalTermPathWriteStorage implements TermPathWriteStorageInterface
 {
-    private ConnectionInterface $connection;
-
-    public function __construct(ConnectionInterface $connection)
-    {
-        $this->connection = $connection;
+    public function __construct(
+        private Connection $connection
+    ) {
     }
 
     /**

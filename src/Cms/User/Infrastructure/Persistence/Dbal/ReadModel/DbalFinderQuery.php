@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Infrastructure\Persistence\Dbal\ReadModel;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use PDO;
 use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\AttributesFinder;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Connection;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\AbstractDbalQuery;
 use Tulia\Cms\User\Domain\ReadModel\Model\User;
 

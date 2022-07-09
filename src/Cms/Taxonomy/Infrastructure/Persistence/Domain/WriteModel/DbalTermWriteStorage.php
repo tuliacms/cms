@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Infrastructure\Persistence\Domain\WriteModel;
 
+use Doctrine\DBAL\Connection;
 use Tulia\Cms\Platform\Infrastructure\Persistence\Domain\AbstractLocalizableStorage;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Service\TermPathWriteStorageInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Service\TermWriteStorageInterface;
 
@@ -14,14 +14,10 @@ use Tulia\Cms\Taxonomy\Domain\WriteModel\Service\TermWriteStorageInterface;
  */
 class DbalTermWriteStorage extends AbstractLocalizableStorage implements TermWriteStorageInterface
 {
-    private ConnectionInterface $connection;
-
-    private TermPathWriteStorageInterface $termPathStorage;
-
-    public function __construct(ConnectionInterface $connection, TermPathWriteStorageInterface $termPathStorage)
-    {
-        $this->connection = $connection;
-        $this->termPathStorage = $termPathStorage;
+    public function __construct(
+        private Connection $connection,
+        private TermPathWriteStorageInterface $termPathStorage
+    ) {
     }
 
     public function findByType(string $type, string $locale, string $defaultLocale): array
@@ -239,7 +235,7 @@ ORDER BY generated_path", $parameters);
             'ids' => array_column($result, 'id'),
         ], [
             'locale' => \PDO::PARAM_STR,
-            'ids' => ConnectionInterface::PARAM_ARRAY_STR,
+            'ids' => Connection::PARAM_STR_ARRAY,
         ]);
 
         foreach ($result as $id => $term) {

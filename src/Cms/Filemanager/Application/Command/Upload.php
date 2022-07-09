@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Filemanager\Application\Command;
 
+use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,7 +14,6 @@ use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\FileFinderScopeEnum;
 use Tulia\Cms\Filemanager\Domain\WriteModel\FileTypeEnum;
 use Tulia\Cms\Shared\Domain\WriteModel\Service\SluggerInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 use Tulia\Component\Image\ImageManagerInterface;
 
 /**
@@ -21,22 +21,16 @@ use Tulia\Component\Image\ImageManagerInterface;
  */
 class Upload implements CommandInterface
 {
-    protected ConnectionInterface $connection;
-
+    protected Connection $connection;
     protected SluggerInterface $slugger;
-
     protected UuidGeneratorInterface $uuidGenerator;
-
     protected FileFinderInterface $finder;
-
     protected ImageManagerInterface $imageManager;
-
     protected FileResponseFormatter $formatter;
-
     protected string $projectDir;
 
     public function __construct(
-        ConnectionInterface $connection,
+        Connection $connection,
         SluggerInterface $slugger,
         UuidGeneratorInterface $uuidGenerator,
         FileFinderInterface $finder,

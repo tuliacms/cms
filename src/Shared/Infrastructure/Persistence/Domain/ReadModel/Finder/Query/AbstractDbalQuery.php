@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use Exception;
 use Doctrine\DBAL\Driver\Exception as DoctrineException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * @author Adam Banaszkiewicz

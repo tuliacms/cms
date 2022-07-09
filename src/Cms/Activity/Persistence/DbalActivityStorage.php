@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Activity\Persistence;
 
+use Doctrine\DBAL\Connection;
 use Tulia\Cms\Activity\Model\ActivityRow;
 use Tulia\Cms\Activity\Model\ActivityStorageInterface;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DbalActivityStorage implements ActivityStorageInterface
 {
-    private ConnectionInterface $connection;
+    private Connection $connection;
 
-    public function __construct(ConnectionInterface $connection)
+    public function __construct(Connection $connection)
     {
         $this->connection = $connection;
     }
@@ -33,7 +33,6 @@ class DbalActivityStorage implements ActivityStorageInterface
         } else {
             $this->connection->insert('#__activity', [
                 'id'                 => $activityRow->getId(),
-                'website_id'         => $activityRow->getWebsiteId(),
                 'message'            => $activityRow->getMessage(),
                 'context'            => json_encode($activityRow->getContext()),
                 'translation_domain' => $activityRow->getTranslationDomain(),

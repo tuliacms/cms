@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Options\Infrastructure\Persistence\WriteModel;
 
+use Doctrine\DBAL\Connection;
 use Tulia\Cms\Options\Domain\WriteModel\OptionsStorageInterface;
 use Tulia\Cms\Platform\Infrastructure\Persistence\Domain\AbstractLocalizableStorage;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DbalOptionsStorage extends AbstractLocalizableStorage implements OptionsStorageInterface
 {
-    public function __construct(private ConnectionInterface $connection)
-    {
+    public function __construct(
+        private Connection $connection
+    ) {
     }
 
     public function find(string $name, string $locale): ?array

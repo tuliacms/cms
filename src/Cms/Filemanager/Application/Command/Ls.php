@@ -4,32 +4,23 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Filemanager\Application\Command;
 
+use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Filemanager\Application\Command\Helper\FileResponseFormatter;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\FileFinderInterface;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\FileFinderScopeEnum;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Model\File;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class Ls implements CommandInterface
 {
-    protected ConnectionInterface $connection;
-
-    protected FileFinderInterface $finder;
-
-    protected FileResponseFormatter $fileResponseFormatter;
-
     public function __construct(
-        ConnectionInterface $connection,
-        FileFinderInterface $finder,
-        FileResponseFormatter $fileResponseFormatter
+        protected Connection $connection,
+        protected FileFinderInterface $finder,
+        protected FileResponseFormatter $fileResponseFormatter,
     ) {
-        $this->connection = $connection;
-        $this->finder = $finder;
-        $this->fileResponseFormatter = $fileResponseFormatter;
     }
 
     /**

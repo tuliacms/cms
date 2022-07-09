@@ -9,7 +9,6 @@ use Exception;
 use PDO;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\AbstractDbalQuery;
 use Tulia\Cms\Widget\Domain\ReadModel\Model\Widget;
 
@@ -194,7 +193,7 @@ class DbalQuery extends AbstractDbalQuery
 
         $this->queryBuilder
             ->andWhere('tm.space IN(:tm_spaces)')
-            ->setParameter('tm_spaces', $criteria['space'], ConnectionInterface::PARAM_ARRAY_STR);
+            ->setParameter('tm_spaces', $criteria['space'], Connection::PARAM_STR_ARRAY);
     }
 
     protected function buildVisibility(array $criteria): void

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Infrastructure\Persistence\Domain\ReadModel\Datatable;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use PDO;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Service\Datatable\TermDatatableFinderInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
@@ -23,7 +23,7 @@ class DbalTermDatatableFinder extends AbstractDatatableFinder implements TermDat
     private ?string $taxonomyType = null;
 
     public function __construct(
-        ConnectionInterface $connection,
+        Connection $connection,
         TranslatorInterface $translator
     ) {
         parent::__construct($connection);

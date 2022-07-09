@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Widget\Infrastructure\Persistence\Domain\ReadModel\Datatable;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use PDO;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Cms\Widget\Domain\Catalog\Registry\WidgetRegistryInterface;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
 use Tulia\Component\Datatable\Finder\FinderContext;
@@ -19,13 +19,11 @@ use Tulia\Component\Theme\ManagerInterface;
 class DatatableFinder extends AbstractDatatableFinder
 {
     private TranslatorInterface $translator;
-
     private WidgetRegistryInterface $widgetRegistry;
-
     private ManagerInterface $themeManager;
 
     public function __construct(
-        ConnectionInterface $connection,
+        Connection $connection,
         TranslatorInterface $translator,
         WidgetRegistryInterface $widgetRegistry,
         ManagerInterface $themeManager

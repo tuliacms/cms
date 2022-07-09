@@ -9,7 +9,6 @@ use Exception;
 use PDO;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\AbstractDbalQuery;
 use Tulia\Cms\Website\Domain\ReadModel\Model\Locale;
 use Tulia\Cms\Website\Domain\ReadModel\Model\Website;
@@ -169,7 +168,7 @@ class DbalQuery extends AbstractDbalQuery
                 return $website->getId();
             }, $collection->all())
         ], [
-            'websiteIdList' => ConnectionInterface::PARAM_ARRAY_STR,
+            'websiteIdList' => Connection::PARAM_STR_ARRAY,
         ]);
 
         foreach ($locales as $locale) {

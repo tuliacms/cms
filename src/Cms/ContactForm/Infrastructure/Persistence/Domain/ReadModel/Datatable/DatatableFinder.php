@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContactForm\Infrastructure\Persistence\Domain\ReadModel\Datatable;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use PDO;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
 use Tulia\Component\Datatable\Finder\FinderContext;
 

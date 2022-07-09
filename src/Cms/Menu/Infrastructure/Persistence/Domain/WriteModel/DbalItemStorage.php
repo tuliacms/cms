@@ -4,19 +4,17 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\WriteModel;
 
+use Doctrine\DBAL\Connection;
 use Tulia\Cms\Platform\Infrastructure\Persistence\Domain\AbstractLocalizableStorage;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DbalItemStorage extends AbstractLocalizableStorage
 {
-    private ConnectionInterface $connection;
-
-    public function __construct(ConnectionInterface $connection)
-    {
-        $this->connection = $connection;
+    public function __construct(
+        private Connection $connection
+    ) {
     }
 
     public function findAll(string $menuId, string $defaultLocale, string $locale): array

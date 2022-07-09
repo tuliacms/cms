@@ -4,19 +4,17 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Options\Infrastructure\Persistence\ReadModel\Options;
 
+use Doctrine\DBAL\Connection;
 use Tulia\Cms\Options\Domain\ReadModel\OptionsFinderInterface;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DbalOptionsFinder implements OptionsFinderInterface
 {
-    private ConnectionInterface $connection;
-
-    public function __construct(ConnectionInterface $connection)
-    {
-        $this->connection = $connection;
+    public function __construct(
+        private Connection $connection
+    ) {
     }
 
     public function findByName(string $name, string $locale)
@@ -49,7 +47,7 @@ class DbalOptionsFinder implements OptionsFinderInterface
             'name'      => $names,
             'locale'    => $locale,
         ], [
-            'name'      => ConnectionInterface::PARAM_ARRAY_STR,
+            'name'      => Connection::PARAM_ARRAY_STR,
             'locale'    => \PDO::PARAM_STR,
             'websiteId' => \PDO::PARAM_STR,
         ]);

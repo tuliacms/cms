@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Filemanager\Application\Command;
 
+use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Platform\Shared\ArraySorter;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -15,11 +15,9 @@ class DirectoryTree implements CommandInterface
 {
     public const ROOT = '00000000-0000-0000-0000-000000000000';
 
-    protected ConnectionInterface $connection;
-
-    public function __construct(ConnectionInterface $connection)
-    {
-        $this->connection = $connection;
+    public function __construct(
+        private Connection $connection
+    ) {
     }
 
     /**

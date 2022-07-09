@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Content\Attributes\Infrastructure\Persistence\ReadModel;
 
+use Doctrine\DBAL\Connection;
 use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\AttributeReadStorageInterface;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DbalAttributeReadStorage implements AttributeReadStorageInterface
 {
-    protected ConnectionInterface $connection;
+    protected Connection $connection;
 
-    public function __construct(ConnectionInterface $connection)
+    public function __construct(Connection $connection)
     {
         $this->connection = $connection;
     }
@@ -40,7 +40,7 @@ class DbalAttributeReadStorage implements AttributeReadStorageInterface
             'locale' => $locale,
             'owner_id' => $ownerId,
         ], [
-            'owner_id' => ConnectionInterface::PARAM_ARRAY_STR,
+            'owner_id' => Connection::PARAM_STR_ARRAY,
         ]);
 
         $result = [];

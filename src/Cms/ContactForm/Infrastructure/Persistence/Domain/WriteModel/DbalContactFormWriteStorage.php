@@ -4,24 +4,20 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContactForm\Infrastructure\Persistence\Domain\WriteModel;
 
+use Doctrine\DBAL\Connection;
 use Tulia\Cms\ContactForm\Domain\WriteModel\ContactFormWriteStorageInterface;
 use Tulia\Cms\Platform\Infrastructure\Persistence\Domain\AbstractLocalizableStorage;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DbalContactFormWriteStorage extends AbstractLocalizableStorage implements ContactFormWriteStorageInterface
 {
-    private ConnectionInterface $connection;
-    private DbalFieldWriteStorage $fieldStorage;
 
     public function __construct(
-        ConnectionInterface $connection,
-        DbalFieldWriteStorage $fieldStorage
+        private Connection $connection,
+        private DbalFieldWriteStorage $fieldStorage,
     ) {
-        $this->connection = $connection;
-        $this->fieldStorage = $fieldStorage;
     }
 
     public function insert(array $data, string $defaultLocale): void

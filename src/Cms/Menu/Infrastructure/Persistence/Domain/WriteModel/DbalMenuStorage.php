@@ -4,23 +4,18 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\WriteModel;
 
+use Doctrine\DBAL\Connection;
 use PDO;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DbalMenuStorage
 {
-    private ConnectionInterface $connection;
-    private DbalItemStorage $itemStorage;
-
     public function __construct(
-        ConnectionInterface $connection,
-        DbalItemStorage $itemStorage
+        private Connection $connection,
+        private DbalItemStorage $itemStorage
     ) {
-        $this->connection = $connection;
-        $this->itemStorage = $itemStorage;
     }
 
     public function beginTransaction(): void

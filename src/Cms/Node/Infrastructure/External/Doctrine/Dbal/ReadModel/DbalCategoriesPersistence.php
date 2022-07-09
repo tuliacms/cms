@@ -4,19 +4,17 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Infrastructure\External\Doctrine\Dbal\ReadModel;
 
+use Doctrine\DBAL\Connection;
 use Tulia\Cms\Node\Domain\ReadModel\Persistence\CategoriesPersistenceInterface;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DbalCategoriesPersistence implements CategoriesPersistenceInterface
 {
-    private ConnectionInterface $connection;
-
-    public function __construct(ConnectionInterface $connection)
-    {
-        $this->connection = $connection;
+    public function __construct(
+        private Connection $connection
+    ) {
     }
 
     public function update(string $nodeId, string $taxonomy, array $categories): void

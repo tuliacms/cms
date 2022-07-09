@@ -4,19 +4,40 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Platform\Infrastructure\Framework\Kernel;
 
-use Tulia\Cms\Shared\Infrastructure\Framework\Kernel\Kernel;
+use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class TuliaKernel extends Kernel
+abstract class AbstractKernel extends Kernel
 {
+    use MicroKernelTrait;
+
+    public function getProjectDir(): string
+    {
+        return __TULIA_PROJECT_DIR;
+    }
+
     public function getPublicDir(): string
     {
         return $this->getProjectDir() . '/public';
     }
 
-    public function getConfigDirs(): array
+    public function registerBundles(): iterable
+    {
+        $contents = require dirname(__DIR__) . '/Resources/config/bundles.php';
+
+        foreach ($contents as $class => $envs) {
+            if ($envs[$this->environment] ?? $envs['all'] ?? false) {
+                yield new $class();
+            }
+        }
+    }
+
+    protected function getConfigDirs(): array
     {
         $base = \dirname(__DIR__, 4);
 
@@ -56,6 +77,41 @@ class TuliaKernel extends Kernel
         );
     }
 
+    protected function configureContainer(ContainerConfigurator $container): void
+    {
+        foreach ($this->getConfigDirs() as $root) {
+            if (is_file($root . '/config.yaml')) {
+                $container->import($root . '/config.yaml');
+            }
+
+            $container->import($root . '/{packages}/*.yaml');
+            $container->import($root . '/{packages}/' . $this->environment . '/*.yaml');
+
+            if (is_file($root . '/services.yaml')) {
+                $container->import($root . '/services.yaml');
+                $container->import($root . '/{services}_' . $this->environment . '.yaml');
+            } elseif (is_file($path = $root . '/services.php')) {
+                (require $path)($container->withPath($path), $this);
+            }
+        }
+
+        $container->parameters()->set('kernel.public_dir', $this->getPublicDir());
+    }
+
+    protected function configureRoutes(RoutingConfigurator $routes): void
+    {
+        foreach ($this->getConfigDirs() as $root) {
+            $routes->import($root . '/{routes}/' . $this->environment . '/*.yaml');
+            $routes->import($root . '/{routes}/*.yaml');
+
+            if (is_file($root . '/routes.yaml')) {
+                $routes->import($root . '/routes.yaml');
+            } elseif (is_file($path = $root . '/routes.php')) {
+                (require $path)($routes->withPath($path), $this);
+            }
+        }
+    }
+
     private function getExtensionConfigDirs(string $type): array
     {
         if (is_dir($this->getProjectDir().'/extension/'.$type) === false) {
@@ -83,16 +139,5 @@ class TuliaKernel extends Kernel
         }
 
         return $configDirs;
-    }
-
-    public function registerBundles(): iterable
-    {
-        $contents = require dirname(__DIR__) . '/Resources/config/bundles.php';
-
-        foreach ($contents as $class => $envs) {
-            if ($envs[$this->environment] ?? $envs['all'] ?? false) {
-                yield new $class();
-            }
-        }
     }
 }

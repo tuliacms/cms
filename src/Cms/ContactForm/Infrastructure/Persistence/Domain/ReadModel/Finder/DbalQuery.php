@@ -11,7 +11,6 @@ use Tulia\Cms\ContactForm\Domain\ReadModel\Model\Field;
 use Tulia\Cms\ContactForm\Domain\ReadModel\Model\Form;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\AbstractDbalQuery;
 
 /**
@@ -231,7 +230,7 @@ class DbalQuery extends AbstractDbalQuery
             'form_id' => $ids,
             'locale' => $criteria['locale'],
         ], [
-            'form_id' => ConnectionInterface::PARAM_ARRAY_STR
+            'form_id' => Connection::PARAM_STR_ARRAY
         ]);
 
         $result = [];

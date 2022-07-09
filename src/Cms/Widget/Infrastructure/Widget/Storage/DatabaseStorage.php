@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Widget\Infrastructure\Widget\Storage;
 
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
+use Doctrine\DBAL\Connection;
 use Tulia\Cms\Widget\Domain\Catalog\Storage\StorageInterface;
 
 /**
@@ -15,7 +15,7 @@ class DatabaseStorage implements StorageInterface
     private static array $cache = [];
 
     public function __construct(
-        private ConnectionInterface $connection,
+        private Connection $connection,
     ) {
     }
 

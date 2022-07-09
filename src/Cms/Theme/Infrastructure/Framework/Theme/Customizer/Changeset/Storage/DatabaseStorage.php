@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Theme\Infrastructure\Framework\Theme\Customizer\Changeset\Storage;
 
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
+use Doctrine\DBAL\Connection;
 use Tulia\Component\Theme\Customizer\Changeset\ChangesetInterface;
 use Tulia\Component\Theme\Customizer\Changeset\Factory\ChangesetFactoryInterface;
 use Tulia\Component\Theme\Customizer\Changeset\Storage\StorageInterface;
@@ -16,15 +16,10 @@ use Tulia\Component\Theme\Exception\ChangesetNotFoundException;
  */
 class DatabaseStorage implements StorageInterface
 {
-    protected ConnectionInterface $connection;
-    protected ChangesetFactoryInterface $changesetFactory;
-
     public function __construct(
-        ConnectionInterface $connection,
-        ChangesetFactoryInterface $changesetFactory,
+        protected Connection $connection,
+        protected ChangesetFactoryInterface $changesetFactory,
     ) {
-        $this->connection = $connection;
-        $this->changesetFactory = $changesetFactory;
     }
 
     /**

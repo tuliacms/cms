@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Infrastructure\External\Doctrine\Dbal\WriteModel;
 
+use Doctrine\DBAL\Connection;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodeWriteStorageInterface;
 use Tulia\Cms\Platform\Infrastructure\Persistence\Domain\AbstractLocalizableStorage;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -15,7 +15,7 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterfac
 class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWriteStorageInterface
 {
     public function __construct(
-        private ConnectionInterface $connection,
+        private Connection $connection,
     ) {
     }
 

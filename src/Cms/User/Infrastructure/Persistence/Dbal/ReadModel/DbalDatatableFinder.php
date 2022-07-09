@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Infrastructure\Persistence\Dbal\ReadModel;
 
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
 use Tulia\Component\Datatable\Finder\FinderContext;
 

@@ -4,19 +4,17 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Content\Attributes\Infrastructure\Persistence\WriteModel;
 
+use Doctrine\DBAL\Connection;
 use Tulia\Cms\Platform\Infrastructure\Persistence\Domain\AbstractLocalizableStorage;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DbalWriteStorage extends AbstractLocalizableStorage
 {
-    private ConnectionInterface $connection;
-
-    public function __construct(ConnectionInterface $connection)
-    {
-        $this->connection = $connection;
+    public function __construct(
+        private Connection $connection
+    ) {
     }
 
     public function find(string $type, array $ownerIdList, array $attributes, string $locale): array
@@ -40,8 +38,8 @@ class DbalWriteStorage extends AbstractLocalizableStorage
             'owner_id' => $ownerIdList,
             'names' => $attributes,
         ], [
-            'owner_id' => ConnectionInterface::PARAM_ARRAY_STR,
-            'names' => ConnectionInterface::PARAM_ARRAY_STR,
+            'owner_id' => Connection::PARAM_STR_ARRAY,
+            'names' => Connection::PARAM_STR_ARRAY,
         ]);
 
         $result = [];

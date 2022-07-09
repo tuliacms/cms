@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Infrastructure\External\Doctrine\Dbal\ReadModel;
 
+use Doctrine\DBAL\Connection;
 use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\AttributesFinder;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\AbstractFinder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\QueryInterface;
 
@@ -15,15 +15,10 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\Qu
  */
 class DbalFinder extends AbstractFinder implements NodeFinderInterface
 {
-    private ConnectionInterface $connection;
-    private AttributesFinder $metadataFinder;
-
     public function __construct(
-        ConnectionInterface $connection,
-        AttributesFinder $metadataFinder,
+        private Connection $connection,
+        private AttributesFinder $metadataFinder
     ) {
-        $this->connection = $connection;
-        $this->metadataFinder = $metadataFinder;
     }
 
     public function getAlias(): string

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Content\Type\Infrastructure\Persistence\ContentProvider;
 
+use Doctrine\DBAL\Connection;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\AbstractContentTypeProvider;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Service\Configuration;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -21,7 +21,7 @@ class ContentTypeDatabaseProvider extends AbstractContentTypeProvider
     private array $fieldConstraintsModificators = [];
 
     public function __construct(
-        private ConnectionInterface $connection,
+        private Connection $connection,
         private Configuration $config
     ) {
     }

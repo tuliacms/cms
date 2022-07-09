@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Infrastructure\External\Doctrine\Dbal\WriteModel;
 
+use Doctrine\DBAL\Connection;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodeChildrenDetectorInterface;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -13,7 +13,7 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterfac
 final class DbalNodeChildrenDetector implements NodeChildrenDetectorInterface
 {
     public function __construct(
-        private ConnectionInterface $connection
+        private Connection $connection
     ) {
     }
 

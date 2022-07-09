@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Datatable\Finder;
 
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * @author Adam Banaszkiewicz

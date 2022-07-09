@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\Infrastructure\Persistence\Domain\ReadModel\Finder\Query;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Exception;
 use PDO;
 use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\AttributesFinder;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\AbstractDbalQuery;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Model\Term;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term as WriteModelTerm;

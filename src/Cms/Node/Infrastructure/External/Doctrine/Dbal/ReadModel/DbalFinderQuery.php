@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\Infrastructure\External\Doctrine\Dbal\ReadModel;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Exception;
 use PDO;
 use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\AttributesFinder;
@@ -12,8 +13,6 @@ use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Enum\TermTypeEnum;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\AbstractDbalQuery;
 
 /**
@@ -262,7 +261,7 @@ class DbalFinderQuery extends AbstractDbalQuery
             WHERE node_id IN (:node_id)', [
             'node_id' => $nodeIdList,
         ], [
-            'node_id' => ConnectionInterface::PARAM_ARRAY_STR,
+            'node_id' => Connection::PARAM_STR_ARRAY,
         ]);
         $result = [];
 
@@ -373,7 +372,7 @@ class DbalFinderQuery extends AbstractDbalQuery
 
         $this->queryBuilder
             ->andWhere('ttr.term_id IN (:ttr_category)')
-            ->setParameter('ttr_category', $criteria['category'], ConnectionInterface::PARAM_ARRAY_STR);
+            ->setParameter('ttr_category', $criteria['category'], Connection::PARAM_STR_ARRAY);
     }
 
     protected function buildTaxonomy(array $criteria): void
