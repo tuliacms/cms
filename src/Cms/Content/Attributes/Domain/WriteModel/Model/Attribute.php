@@ -9,14 +9,14 @@ namespace Tulia\Cms\Content\Attributes\Domain\WriteModel\Model;
  */
 class Attribute implements \Stringable, \Traversable, \ArrayAccess, \IteratorAggregate
 {
-    private string $code;
-    private string $uri;
+    protected string $code;
+    protected string $uri;
     /** @var mixed */
-    private $value;
+    protected $value;
     /** @var mixed */
-    private $compiledValue;
-    private array $payload;
-    private array $flags;
+    protected $compiledValue;
+    protected array $payload;
+    protected array $flags;
 
     /**
      * @param mixed $value

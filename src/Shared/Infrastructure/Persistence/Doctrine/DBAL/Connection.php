@@ -32,17 +32,17 @@ class Connection extends DoctrineConnection
         return str_replace('#__', $_ENV['DATABASE_PREFIX'], $query);
     }
 
-    public function update($table, array $data, array $criteria, array $types = [])
+    public function update($table, array $data, array $criteria, array $types = []): int|string
     {
         return parent::update($this->prepareTablePrefix($table), $data, $criteria, $types);
     }
 
-    public function insert($table, array $data, array $types = [])
+    public function insert($table, array $data, array $types = []): int|string
     {
         return parent::insert($this->prepareTablePrefix($table), $data, $types);
     }
 
-    public function delete($table, array $criteria, array $types = [])
+    public function delete($table, array $criteria, array $types = []): int|string
     {
         return parent::delete($this->prepareTablePrefix($table), $criteria, $types);
     }

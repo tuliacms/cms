@@ -1,0 +1,28 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Tulia\Cms\Node\Domain\WriteModel\NewModel\TranslatedNode" table="#__node_new_trans">
+        <id name="id" type="uuid">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+
+        <indexes>
+            <index columns="slug"/>
+        </indexes>
+
+        <field name="locale" type="datetime_immutable"/>
+        <field name="title"/>
+        <field name="slug" nullable="true"/>
+
+        <many-to-one field="node" target-entity="Tulia\Cms\Node\Domain\WriteModel\NewModel\Node"/>
+        <one-to-many field="attributes" orphan-removal="true" target-entity="Tulia\Cms\Node\Domain\WriteModel\NewModel\TranslatedAttribute" mapped-by="node">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
+    </entity>
+</doctrine-mapping>

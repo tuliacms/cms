@@ -3,6 +3,16 @@ framework:
         paths:
             - '%cms.core_dir%/Cms/Node/Infrastructure/Internal/Framework/Resources/translations'
 
+doctrine:
+    orm:
+        mappings:
+            Tulia\Cms\Node\Domain\WriteModel\NewModel:
+                type: xml
+                dir: '%cms.core_dir%/Cms/Node/Infrastructure/Internal/Framework/Resources/config/orm/mapping'
+                is_bundle: false
+                prefix: Tulia\Cms\Node\Domain\WriteModel\NewModel
+                alias: CmsNode
+
 cms:
     templating:
         paths:

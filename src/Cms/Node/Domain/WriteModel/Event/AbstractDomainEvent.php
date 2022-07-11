@@ -12,9 +12,8 @@ use Tulia\Cms\Shared\Domain\WriteModel\Event\AbstractDomainEvent as PlatformDoma
 abstract class AbstractDomainEvent extends PlatformDomainEvent
 {
     public function __construct(
-        public readonly string $nodeId,
-        public readonly string $nodeType,
-        public readonly string $locale
+        public readonly string $id,
+        public readonly string $type
     ) {
     }
 }
