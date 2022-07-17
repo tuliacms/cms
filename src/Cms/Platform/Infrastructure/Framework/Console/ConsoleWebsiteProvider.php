@@ -15,7 +15,7 @@ final class ConsoleWebsiteProvider
     public static function provide(bool $developmentEnvironment): WebsiteInterface
     {
         $configFilename = __TULIA_PROJECT_DIR.'/config/dynamic.php';
-        assert(file_exists($configFilename), 'Tulia CMS seems to be not installed. Please call make setup do initialize system.');
+        \assert(file_exists($configFilename), 'Tulia CMS seems to be not installed. Please call make setup do initialize system.');
 
         $locale = null;
 
