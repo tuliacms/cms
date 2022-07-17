@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Shared\Infrastructure\Utils\Uuid;
 
-use Ramsey\Uuid\Uuid;
+use Symfony\Component\Uid\Uuid;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class RamseyUuidGenerator implements UuidGeneratorInterface
+class SymfonyUuidGenerator implements UuidGeneratorInterface
 {
     /**
      * {@inheritdoc}
      */
     public function generate(): string
     {
-        return (string) Uuid::uuid4();
+        return (string) Uuid::v4();
     }
 }

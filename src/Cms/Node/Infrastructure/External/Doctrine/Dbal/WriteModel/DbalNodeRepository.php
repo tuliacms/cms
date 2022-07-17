@@ -4,87 +4,61 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Infrastructure\External\Doctrine\Dbal\WriteModel;
 
-use Tulia\Cms\Content\Attributes\Domain\WriteModel\AttributesRepositoryInterface;
+use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
-use Tulia\Cms\Content\Type\Domain\WriteModel\Exception\ContentTypeNotExistsException;
-use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
-use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\Author;
+use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeDoesntExistsException;
+use Tulia\Cms\Node\Domain\WriteModel\NewModel\Node;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodeRepositoryInterface;
-use Tulia\Cms\Node\Domain\WriteModel\Service\NodeWriteStorageInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-final class DbalNodeRepository implements NodeRepositoryInterface
+final class DbalNodeRepository extends ServiceEntityRepository implements NodeRepositoryInterface
 {
     public function __construct(
-        private NodeWriteStorageInterface $storage,
-        private AttributesRepositoryInterface $attributeRepository,
+        ManagerRegistry $registry,
         private UuidGeneratorInterface $uuidGenerator,
         private ContentTypeRegistryInterface $contentTypeRegistry,
     ) {
+        parent::__construct($registry, Node::class);
     }
 
-    public function createNew(string $nodeType, string $author, string $locale): Node
+    public function create(string $nodeType, string $author): Node
     {
         $this->contentTypeRegistry->get($nodeType);
 
-        return Node::createNew(
-            $this->uuidGenerator->generate(),
-            $nodeType,
-            $locale,
-            new Author($author)
-        );
+        return Node::create($this->uuidGenerator->generate(), $nodeType, $author);
     }
 
-    /**
-     * @throws ContentTypeNotExistsException
-     * @throws \Exception
-     */
-    public function find(string $id): ?Node
+    public function referenceTo(string $id): Node
     {
-        $node = $this->storage->find($id, $locale, $defaultLocale);
+        return $this->_em->getReference(Node::class, $id);
+    }
 
-        if (empty($node)) {
-            return null;
+    public function get(string $id): Node
+    {
+        $node = $this->find($id);
+
+        if (!$node) {
+            throw NodeDoesntExistsException::fromId($id);
         }
-
-        $contentType = $this->contentTypeRegistry->get($node['type']);
-        $node['attributes'] = $this->attributeRepository->findAll('node', $id, $contentType->buildAttributesMapping());
-
-        $node = Node::fromArray($node);
 
         return $node;
     }
 
-    public function insert(Node $node): void
+    public function save(Node $node): void
     {
-        $data = $node->toArray();
-
-        $this->storage->insert($data, $this->currentWebsite->getDefaultLocale()->getCode());
-        $this->attributeRepository->persist(
-            'node',
-            $node->getId(),
-            $data['attributes']
-        );
-    }
-
-    public function update(Node $node): void
-    {
-        $data = $node->toArray();
-
-        $this->storage->update($data, $this->currentWebsite->getDefaultLocale()->getCode());
-        $this->attributeRepository->persist(
-            'node',
-            $node->getId(),
-            $data['attributes']
-        );
+        $this->_em->persist($node);
+        $this->_em->flush();
     }
 
     public function delete(Node $node): void
     {
-        $this->storage->delete($node->toArray());
-        $this->attributeRepository->delete('node', $node->getId());
+        $node->delete();
+
+        $this->_em->remove($node);
+        $this->_em->flush();
     }
 }

@@ -58,12 +58,12 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
 
         $columns = [
             'id' => [
-                'selector' => 'tm.id',
+                'selector' => 'BIN_TO_UUID(tm.id)',
                 'type' => 'uuid',
                 'label' => 'ID',
             ],
             'title' => [
-                'selector' => 'COALESCE(tl.title, tm.title)',
+                'selector' => 'tl.title',
                 'label' => 'title',
                 'html_attr' => ['class' => 'col-title'],
                 'view' => '@backend/node/parts/datatable/title.tpl',
@@ -123,8 +123,8 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
     {
         $queryBuilder
             ->from('#__node', 'tm')
-            ->addSelect('tm.type, tm.level, tm.parent_id, tm.slug, tm.status, GROUP_CONCAT(tnhf.purpose SEPARATOR \',\') AS purposes')
-            ->leftJoin('tm', '#__node_lang', 'tl', 'tm.id = tl.node_id AND tl.locale = :locale')
+            ->addSelect('tm.type, tm.level, tm.parent_id, tl.slug, tm.status, GROUP_CONCAT(tnhf.purpose SEPARATOR \',\') AS purposes')
+            ->leftJoin('tm', '#__node_translation', 'tl', 'tm.id = tl.node_id AND tl.locale = :locale')
             ->leftJoin('tm', '#__node_has_purpose', 'tnhf', 'tm.id = tnhf.node_id')
             ->where('tm.type = :type')
             ->setParameter('type', $this->contentType->getCode(), PDO::PARAM_STR)

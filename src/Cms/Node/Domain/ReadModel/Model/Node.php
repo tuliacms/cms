@@ -57,7 +57,7 @@ class Node implements AttributesAwareInterface
         $node->setPublishedTo($data['published_to']);
         $node->setCreatedAt($data['created_at']);
         $node->setUpdatedAt($data['updated_at']);
-        $node->setAuthorId($data['author_id'] ?? null);
+        $node->setAuthorId($data['author']);
         $node->setParentId($data['parent_id'] ?? null);
         $node->setLevel((int) ($data['level'] ?? 0));
         //$node->setCategory($data['category'] ?? null);
@@ -65,7 +65,6 @@ class Node implements AttributesAwareInterface
         $node->setTitle($data['title'] ?? '');
         $node->setSlug($data['slug'] ?? '');
         $node->setFlags($data['flags'] ?? []);
-        $node->attributes = $data['attributes'];
 
         return $node;
     }

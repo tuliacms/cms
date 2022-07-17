@@ -3,38 +3,31 @@
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="Tulia\Cms\Node\Domain\WriteModel\NewModel\Node" table="#__node_new">
+    <entity name="Tulia\Cms\Node\Domain\WriteModel\NewModel\Node" table="#__node">
         <id name="id" type="uuid">
             <generator strategy="NONE"/>
         </id>
 
-        <indexes>
-            <index columns="slug"/>
-        </indexes>
-
         <field name="publishedAt" type="datetime_immutable"/>
         <field name="type"/>
-        <field name="title"/>
-        <field name="slug" nullable="true"/>
         <field name="status"/>
         <field name="author" type="uuid"/>
         <field name="publishedTo" type="datetime_immutable" nullable="true"/>
         <field name="createdAt" type="datetime_immutable"/>
         <field name="updatedAt" type="datetime_immutable" nullable="true"/>
         <field name="level" type="smallint"/>
-        <field name="purposes" type="array"/>
 
         <one-to-one field="parentNode" target-entity="Tulia\Cms\Node\Domain\WriteModel\NewModel\Node">
             <join-column name="parent_id" referenced-column-name="id"/>
         </one-to-one>
 
-        <one-to-many field="translations" orphan-removal="true" target-entity="Tulia\Cms\Node\Domain\WriteModel\NewModel\TranslatedNode" mapped-by="node">
+        <one-to-many field="translations" orphan-removal="true" target-entity="Tulia\Cms\Node\Domain\WriteModel\NewModel\NodeTranslation" mapped-by="node">
             <cascade>
                 <cascade-persist/>
                 <cascade-remove/>
             </cascade>
         </one-to-many>
-        <one-to-many field="attributes" orphan-removal="true" target-entity="Tulia\Cms\Node\Domain\WriteModel\NewModel\Attribute" mapped-by="node">
+        <one-to-many field="purposes" orphan-removal="true" target-entity="Tulia\Cms\Node\Domain\WriteModel\NewModel\Purpose" mapped-by="node">
             <cascade>
                 <cascade-persist/>
                 <cascade-remove/>

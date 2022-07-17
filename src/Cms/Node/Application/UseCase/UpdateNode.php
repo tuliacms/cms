@@ -17,14 +17,12 @@ class UpdateNode extends AbstractNodeUseCase
      */
     protected function execute(RequestInterface $request): ?ResultInterface
     {
-        $node = $this->repository->find($request->id);
+        $node = $this->repository->get($request->id);
 
-        if (!$node) {
-            return null;
-        }
+        $this->updateModel($request, $node);
 
-        $this->updateModel($node, $request->details, $request->attributes);
-        $this->update($node);
+        $this->repository->save($node);
+        $this->eventBus->dispatchCollection($node->collectDomainEvents());
 
         return null;
     }

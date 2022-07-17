@@ -21,4 +21,5 @@ interface WebsiteInterface
     public function getBackendAddress(?string $localeCode = null): string;
     public function isBackend(): bool;
     public function getBasepath(): string;
+    public function isDefaultLocale(): bool;
 }

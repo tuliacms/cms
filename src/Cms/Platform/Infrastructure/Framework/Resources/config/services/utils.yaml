@@ -4,7 +4,7 @@ services:
         autoconfigure: true
 
     Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface:
-        class: Tulia\Cms\Shared\Infrastructure\Utils\Uuid\RamseyUuidGenerator
+        class: Tulia\Cms\Shared\Infrastructure\Utils\Uuid\SymfonyUuidGenerator
 
     Tulia\Cms\Shared\Infrastructure\Utils\Annotations\AnnotationsReaderInterface:
         class: Tulia\Cms\Shared\Infrastructure\Utils\Annotations\AnnotationsReader

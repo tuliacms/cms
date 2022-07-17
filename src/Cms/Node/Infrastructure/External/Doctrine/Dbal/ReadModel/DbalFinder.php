@@ -17,7 +17,7 @@ class DbalFinder extends AbstractFinder implements NodeFinderInterface
 {
     public function __construct(
         private Connection $connection,
-        private AttributesFinder $metadataFinder
+        private AttributesFinder $attributesFinder
     ) {
     }
 
@@ -30,7 +30,7 @@ class DbalFinder extends AbstractFinder implements NodeFinderInterface
     {
         return new DbalFinderQuery(
             $this->connection->createQueryBuilder(),
-            $this->metadataFinder
+            $this->attributesFinder
         );
     }
 }

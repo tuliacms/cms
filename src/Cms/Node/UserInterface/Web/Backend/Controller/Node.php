@@ -19,12 +19,14 @@ use Tulia\Cms\Node\Application\UseCase\UpdateNodeRequest;
 use Tulia\Cms\Node\Domain\ReadModel\Datatable\NodeDatatableFinderInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\CannotDeleteNodeException;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\CannotImposePurposeToNodeException;
+use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeDoesntExistsException;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodeRepositoryInterface;
 use Tulia\Cms\Node\UserInterface\Web\Backend\Form\NodeDetailsForm;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Exception\RequestCsrfTokenException;
+use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\Routing\Website\WebsiteInterface;
@@ -77,20 +79,21 @@ class Node extends AbstractController
     {
         $this->validateCsrfToken($request, $node_type);
 
-        $node = $this->repository->createNew($node_type, $this->authenticatedUserProvider->getUser()->getId(), $website->getLocale()->getCode());
-
         $nodeType = $this->typeRegistry->get($node_type);
 
         $nodeDetailsForm = $this->createForm(
             NodeDetailsForm::class,
-            $node->toArray(),
+            [
+                'author' => $this->authenticatedUserProvider->getUser()->getId(),
+                'published_at' => new ImmutableDateTime()
+            ],
             ['content_type' => $nodeType, 'csrf_protection' => false]
         );
         $nodeDetailsForm->handleRequest($request);
 
         $formDescriptor = $this->contentFormService->buildFormDescriptor(
-            $node->getType(),
-            $node->getAttributes(),
+            $nodeType->getCode(),
+            [],
             ['nodeDetailsForm' => $nodeDetailsForm]
         );
         $formDescriptor->handleRequest($request);
@@ -98,10 +101,17 @@ class Node extends AbstractController
 
         if ($formDescriptor->isFormValid()) {
             try {
-                $createNode(new CreateNodeRequest($node_type, $this->authenticatedUserProvider->getUser()->getId(), $nodeDetailsForm->getData(), $formDescriptor->getData(), $website->getLocale()->getCode()));
+                $result = $createNode(new CreateNodeRequest(
+                    $node_type,
+                    $this->authenticatedUserProvider->getUser()->getId(),
+                    $nodeDetailsForm->getData(),
+                    $formDescriptor->getData(),
+                    $website->getDefaultLocale()->getCode(),
+                    $website->getLocale()->getCode(),
+                ));
 
                 $this->setFlash('success', $this->trans('nodeSaved', [], 'node'));
-                return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getCode() ]);
+                return $this->redirectToRoute('backend.node.edit', [ 'id' => $result->id, 'node_type' => $nodeType->getCode() ]);
             }  catch (CannotImposePurposeToNodeException $e) {
                 $nodeDetailsForm->get('purposes')->addError(new FormError($this->trans($e->reason)));
             }
@@ -109,7 +119,6 @@ class Node extends AbstractController
 
         return $this->view('@backend/node/create.tpl', [
             'nodeType' => $nodeType,
-            'node'     => $node,
             'formDescriptor' => $formDescriptor,
         ]);
     }
@@ -118,35 +127,45 @@ class Node extends AbstractController
      * @return RedirectResponse|ViewInterface
      * @IgnoreCsrfToken()
      */
-    public function edit(string $id, string $node_type, Request $request, UpdateNode $updateNode)
+    public function edit(string $id, string $node_type, Request $request, UpdateNode $updateNode, WebsiteInterface $website)
     {
         $this->validateCsrfToken($request, $node_type);
 
-        $node = $this->repository->find($id);
-
-        if (!$node) {
+        try {
+            $node = $this->repository->get($id);
+        } catch (NodeDoesntExistsException $e) {
             $this->setFlash('warning', $this->trans('nodeNotFound'));
             return $this->redirectToRoute('backend.node.list');
         }
 
         $nodeType = $this->typeRegistry->get($node_type);
+        $nodeArray = $node->toArray(
+            $website->getLocale()->getCode(),
+            $website->getDefaultLocale()->getCode(),
+        );
 
         $nodeDetailsForm = $this->createForm(
             NodeDetailsForm::class,
-            $node->toArray(),
+            $nodeArray,
             ['content_type' => $nodeType, 'csrf_protection' => false]);
         $nodeDetailsForm->handleRequest($request);
 
         $formDescriptor = $this->contentFormService->buildFormDescriptor(
-            $node->getType(),
-            $node->getAttributes(),
+            $node_type,
+            $nodeArray['attributes'],
             ['nodeDetailsForm' => $nodeDetailsForm]
         );
         $formDescriptor->handleRequest($request);
 
         if ($formDescriptor->isFormValid()) {
             try {
-                $updateNode(new UpdateNodeRequest($node->getId(), $nodeDetailsForm->getData(), $formDescriptor->getData()));
+                $updateNode(new UpdateNodeRequest(
+                    $node->getId(),
+                    $nodeDetailsForm->getData(),
+                    $formDescriptor->getData(),
+                    $website->getDefaultLocale()->getCode(),
+                    $website->getLocale()->getCode(),
+                ));
                 $this->setFlash('success', $this->trans('nodeSaved', [], 'node'));
                 return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getCode() ]);
             } catch (CannotImposePurposeToNodeException $e) {
@@ -171,7 +190,7 @@ class Node extends AbstractController
         $payload = $request->request->all();
 
         foreach ($payload['ids'] ?? [] as $id) {
-            $node = $this->repository->find($id);
+            $node = $this->repository->get($id);
 
             if (!$node) {
                 continue;

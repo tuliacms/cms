@@ -8,6 +8,7 @@ use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\CachePass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\ContentBuilderPass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\DashboardPass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\DomainActionChainPass;
@@ -35,6 +36,7 @@ class TuliaCmsBundle extends Bundle
 
     public function build(ContainerBuilder $container): void
     {
+        $container->addCompilerPass(new CachePass());
         $container->addCompilerPass(new DomainActionChainPass());
         $container->addCompilerPass(new TaxonomyPass());
         $container->addCompilerPass(new MenuPass());

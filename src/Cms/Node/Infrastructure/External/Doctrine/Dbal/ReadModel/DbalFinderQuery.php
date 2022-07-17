@@ -8,6 +8,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Exception;
 use PDO;
+use Symfony\Component\Uid\Uuid;
 use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\AttributesFinder;
 use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Enum\TermTypeEnum;
@@ -82,7 +83,7 @@ class DbalFinderQuery extends AbstractDbalQuery
              *
              * @param null|string|array
              */
-            'node_status' => [],
+            'node_status' => ['published'],
             /**
              * If node_status is empty, and node_status__not is provided, query returns all
              * nodes that are not any of given statuses.
@@ -206,10 +207,10 @@ class DbalFinderQuery extends AbstractDbalQuery
             return $collection;
         }
 
-        $terms = $this->fetchTerms(array_column($result, 'id'));
+        $terms = [];//$this->fetchTerms(array_column($result, 'id'));
 
         try {
-            $result = $this->fetchAttributes($result, $scope, $criteria['locale']);
+            //$result = $this->fetchAttributes($result, $scope, $criteria['locale']);
 
             foreach ($result as $row) {
                 if (isset($terms[$row['id']][TermTypeEnum::MAIN][0])) {
@@ -281,8 +282,10 @@ class DbalFinderQuery extends AbstractDbalQuery
         } else {
             $this->queryBuilder->select('
                 tm.*,
-                COALESCE(tl.title, tm.title) AS title,
-                COALESCE(tl.slug, tm.slug) AS slug,
+                BIN_TO_UUID(tm.id) AS id,
+                BIN_TO_UUID(tm.author) AS author,
+                tl.title,
+                tl.slug,
                 COALESCE(tl.locale, :tl_locale) AS locale,
                 GROUP_CONCAT(tnhf.purpose SEPARATOR \',\') AS purposes
             ');
@@ -294,7 +297,7 @@ class DbalFinderQuery extends AbstractDbalQuery
 
         $this->queryBuilder
             ->from('#__node', 'tm')
-            ->leftJoin('tm', '#__node_lang', 'tl', 'tm.id = tl.node_id AND tl.locale = :tl_locale')
+            ->leftJoin('tm', '#__node_translation', 'tl', 'tm.id = tl.node_id AND tl.locale = :tl_locale')
             ->setParameter('tl_locale', $criteria['locale'], PDO::PARAM_STR)
             ->leftJoin('tm', '#__node_has_purpose', 'tnhf', 'tm.id = tnhf.node_id')
             ->addGroupBy('tm.id')
@@ -306,7 +309,7 @@ class DbalFinderQuery extends AbstractDbalQuery
         if ($criteria['id']) {
             $this->queryBuilder
                 ->andWhere('tm.id = :tm_id')
-                ->setParameter('tm_id', $criteria['id'], PDO::PARAM_STR)
+                ->setParameter('tm_id', Uuid::fromString($criteria['id'])->toBinary(), PDO::PARAM_STR)
                 ->setMaxResults(1);
         }
 
@@ -317,9 +320,11 @@ class DbalFinderQuery extends AbstractDbalQuery
                 $ids = $criteria['children_of'];
             }
 
+            $ids = array_map(static fn(string $v) => Uuid::fromString($criteria['id'])->toBinary(), $ids);
+
             $this->queryBuilder
                 ->andWhere('tm.parent_id IN (:tm_children_of)')
-                ->setParameter('tm_children_of', $ids, \Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Connection::PARAM_STR_ARRAY);
+                ->setParameter('tm_children_of', $ids, Connection::PARAM_STR_ARRAY);
         }
 
         if ($criteria['id__not_in']) {
@@ -328,6 +333,8 @@ class DbalFinderQuery extends AbstractDbalQuery
             } else {
                 $ids = $criteria['id__not_in'];
             }
+
+            $ids = array_map(static fn(string $v) => Uuid::fromString($criteria['id'])->toBinary(), $ids);
 
             $this->queryBuilder
                 ->andWhere('tm.id NOT IN (:tm_id__not_in)')
@@ -342,7 +349,7 @@ class DbalFinderQuery extends AbstractDbalQuery
         }
 
         $this->queryBuilder
-            ->andWhere('tm.slug = :tl_slug OR tl.slug = :tl_slug')
+            ->andWhere('tl.slug = :tl_slug')
             ->setParameter('tl_slug', $criteria['slug'], PDO::PARAM_STR)
             ->setMaxResults(1);
     }
@@ -354,7 +361,7 @@ class DbalFinderQuery extends AbstractDbalQuery
         }
 
         $this->queryBuilder
-            ->andWhere('tm.title LIKE :tl_title OR tl.title LIKE :tl_title')
+            ->andWhere('tl.title LIKE :tl_title')
             ->setParameter('tl_title', '%' . $criteria['search'] . '%', PDO::PARAM_STR);
     }
 

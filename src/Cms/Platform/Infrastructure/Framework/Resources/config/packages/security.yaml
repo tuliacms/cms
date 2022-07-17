@@ -51,7 +51,7 @@ security:
                 lifetime: 604800
 
     access_control:
-        - { path: ^/auth, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/auth, roles: PUBLIC_ACCESS }
         - { path: ^/profile, roles: ROLE_USER }
-        - { path: ^/administrator/auth, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/administrator/auth, roles: PUBLIC_ACCESS }
         - { path: ^/administrator, roles: ROLE_ADMIN }

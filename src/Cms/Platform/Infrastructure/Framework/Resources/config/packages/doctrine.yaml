@@ -1,16 +1,13 @@
 doctrine:
     dbal:
+        profiling_collect_backtrace: true
         override_url: true
         url: '%env(resolve:DATABASE_URL)%'
         wrapper_class: "Tulia\\Cms\\Shared\\Infrastructure\\Persistence\\Doctrine\\DBAL\\Connection"
+        types:
+            datetime_immutable: \Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Type\ImmutableDatetimeType
+            datetime: \Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Type\DatetimeType
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         auto_mapping: true
-        #mappings:
-        #    App:
-        #        is_bundle: false
-        #        type: annotation
-        #        dir: '%cms.core_dir%/Entity'
-        #        prefix: 'App\Entity'
-        #        alias: App

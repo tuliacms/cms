@@ -10,9 +10,9 @@ namespace Tulia\Cms\Node\Domain\WriteModel\Service\SlugGeneratorStrategy;
 interface SlugGeneratorStrategyInterface
 {
     public function generate(
-        string $locale,
+        string $nodeId,
         string $slug,
         string $title,
-        string $nodeId
+        ?string $locale = null
     ): string;
 }

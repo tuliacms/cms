@@ -11,11 +11,11 @@
                 </div>
             </div>
             <div class="actions-section">
-                <div class="action-box" data-toggle="tooltip" data-placement="left" title="{{ 'fullscreen'|trans }}">
+                <div class="action-box" data-bs-toggle="tooltip" data-bs-placement="left" title="{{ 'fullscreen'|trans }}">
                     <button type="button" class="btn btn-icon-only action-btn toggle-fullscreen"><i class="btn-icon fas fa-expand"></i></button>
                 </div>
                 {% set __currentWebsite = current_website() %}
-                <div class="action-box language-selector noselect" data-toggle="tooltip" data-placement="left" title="{{ 'contentLocale'|trans }}">
+                <div class="action-box language-selector noselect" data-bs-toggle="tooltip" data-bs-placement="left" title="{{ 'contentLocale'|trans }}">
                     <div class="dropdown">
                         {% set __locale = __currentWebsite.locale.code %}
                         <button class="btn btn-icon-left action-btn" type="button" data-bs-toggle="dropdown">
@@ -105,10 +105,16 @@
                         </div>
                     </div>
                 </div>#}
-                <div class="action-box" data-toggle="tooltip" data-placement="left" title="{{ 'pagePreview'|trans }}">
-                    <a href="{{ previewLink }}" target="_blank" class="btn btn-icon-only action-btn"><i class="btn-icon fas fa-eye"></i></a>
-                </div>
-                <div class="action-box" data-toggle="tooltip" data-placement="left" title="{{ 'myAccount'|trans }}">
+                {% if previewLink %}
+                    <div class="action-box" data-bs-toggle="tooltip" data-bs-placement="left" title="{{ 'pagePreview'|trans }}">
+                        <a href="{{ previewLink }}" target="_blank" class="btn btn-icon-only action-btn"><i class="btn-icon fas fa-eye"></i></a>
+                    </div>
+                {% else %}
+                    <div class="action-box" data-bs-toggle="tooltip" data-bs-placement="left" title="{{ 'pageNotPublished'|trans }}">
+                        <a href="#" disabled="disabled" class="btn btn-icon-only action-btn disabled"><i class="btn-icon fas fa-eye"></i></a>
+                    </div>
+                {% endif %}
+                <div class="action-box" data-bs-toggle="tooltip" data-bs-placement="left" title="{{ 'myAccount'|trans }}">
                     <div class="dropdown">
                         <button class="btn btn-icon-only action-btn" type="button" data-bs-toggle="dropdown">
                             <i class="btn-icon fas fa-user-tie"></i>

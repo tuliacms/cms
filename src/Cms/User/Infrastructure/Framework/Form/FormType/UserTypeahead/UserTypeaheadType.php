@@ -36,9 +36,9 @@ class UserTypeaheadType extends AbstractType
 
                 $username = $user->getEmail();
 
-                if ($user->attribute('name')) {
+                /*if ($user->attribute('name')) {
                     $username = $user->attribute('name') . " ({$username})";
-                }
+                }*/
 
                 return ['username' => $username];
             },

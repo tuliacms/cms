@@ -42,6 +42,10 @@ class NodeExtension extends AbstractExtension
                     'locale' => $this->website->getLocale()->getCode(),
                 ], NodeFinderScopeEnum::ROUTING_GENERATOR);
 
+                if (!$node) {
+                    return '';
+                }
+
                 return $this->generate($node, $parameters, RouterInterface::ABSOLUTE_PATH);
             }, [
                 'is_safe' => [ 'html' ]
@@ -56,6 +60,10 @@ class NodeExtension extends AbstractExtension
                     'id' => $nodeId,
                     'locale' => $this->website->getLocale()->getCode(),
                 ], NodeFinderScopeEnum::ROUTING_GENERATOR);
+
+                if (!$node) {
+                    return '';
+                }
 
                 return $this->generate($node, $parameters, RouterInterface::ABSOLUTE_PATH);
             }, [

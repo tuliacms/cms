@@ -25,7 +25,7 @@ final class DeleteNode
 
     public function __invoke(string $id): void
     {
-        $node = $this->repository->find($id);
+        $node = $this->repository->get($id);
 
         if (!$node) {
             return;

@@ -12,9 +12,8 @@ final class PurposesUpdated extends AbstractDomainEvent
     public function __construct(
         string $nodeId,
         string $nodeType,
-        string $locale,
         public readonly array $purposes
     ) {
-        parent::__construct($nodeId, $nodeType, $locale);
+        parent::__construct($nodeId, $nodeType);
     }
 }

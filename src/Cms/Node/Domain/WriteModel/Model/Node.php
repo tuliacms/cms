@@ -186,7 +186,7 @@ final class Node extends AbstractAggregateRoot
              */
             $this->recordUniqueThat(AttributeUpdated::fromNode($this, $uri, $value), function ($event) use ($uri) {
                 if ($event instanceof AttributeUpdated) {
-                    return $uri === $event->getAttribute();
+                    return $uri === $event->getUri();
                 }
             });
 

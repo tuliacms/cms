@@ -10,9 +10,6 @@ framework:
         use_cookies: true
     php_errors:
         log: true
-    cache:
-        directory: '%kernel.cache_dir%/pools'
-        default_pdo_provider: 'doctrine.dbal.default_connection'
     translator:
         default_path: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/translations'
 

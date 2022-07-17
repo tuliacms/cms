@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject;
 
-use Carbon\CarbonImmutable;
+use Carbon\Carbon;
 
 /**
  * @author Adam Banaszkiewicz
  */
-final class ImmutableDateTime extends CarbonImmutable
+final class DateTime extends Carbon
 {
     public function toStringWithPrecision(): string
     {

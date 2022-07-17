@@ -21,46 +21,6 @@ class QueryBuilder extends DoctrineQueryBuilder
         $this->connection = $connection;
     }
 
-    public function delete($delete = null, $alias = null): DoctrineQueryBuilder
-    {
-        return parent::delete($this->connection->prepareTablePrefix($delete), $alias);
-    }
-
-    public function update($update = null, $alias = null): DoctrineQueryBuilder
-    {
-        return parent::update($this->connection->prepareTablePrefix($update), $alias);
-    }
-
-    public function insert($insert = null): DoctrineQueryBuilder
-    {
-        return parent::insert($this->connection->prepareTablePrefix($insert));
-    }
-
-    public function from($from, $alias = null): DoctrineQueryBuilder
-    {
-        return parent::from($this->connection->prepareTablePrefix($from), $alias);
-    }
-
-    public function join($fromAlias, $join, $alias, $condition = null): DoctrineQueryBuilder
-    {
-        return parent::join($this->connection->prepareTablePrefix($fromAlias), $join, $alias, $condition);
-    }
-
-    public function innerJoin($fromAlias, $join, $alias, $condition = null): DoctrineQueryBuilder
-    {
-        return parent::innerJoin($this->connection->prepareTablePrefix($fromAlias), $join, $alias, $condition);
-    }
-
-    public function leftJoin($fromAlias, $join, $alias, $condition = null): DoctrineQueryBuilder
-    {
-        return parent::leftJoin($this->connection->prepareTablePrefix($fromAlias), $join, $alias, $condition);
-    }
-
-    public function rightJoin($fromAlias, $join, $alias, $condition = null): DoctrineQueryBuilder
-    {
-        return parent::rightJoin($this->connection->prepareTablePrefix($fromAlias), $join, $alias, $condition);
-    }
-
     public function compileSQL(): string
     {
         $sql = $this->getSQL();
@@ -75,6 +35,6 @@ class QueryBuilder extends DoctrineQueryBuilder
             }
         }
 
-        return $sql;
+        return $this->connection->prepareTablePrefix($sql);
     }
 }

@@ -116,6 +116,11 @@ class Website implements WebsiteInterface
         return 'http://' . $locale->getDomain() . $locale->getPathPrefix() . $this->backendPrefix . $locale->getLocalePrefix() . '/';
     }
 
+    public function isDefaultLocale(): bool
+    {
+        return $this->activeLocale->getCode() === $this->defaultLocale->getCode();
+    }
+
     /**
      * @param string|null $locale
      * @return LocaleInterface

@@ -3,20 +3,14 @@
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="Tulia\Cms\Node\Domain\WriteModel\NewModel\TranslatedAttribute" table="#__node_new_trans_attribute">
+    <entity name="Tulia\Cms\Node\Domain\WriteModel\NewModel\Purpose" table="#__node_has_purpose">
         <id name="id" type="uuid">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
 
-        <field name="locale" />
-        <field name="code" />
-        <field name="uri" />
-        <field name="value" />
-        <field name="compiledValue" />
-        <field name="payload" type="array" />
-        <field name="flags" type="array" />
+        <field name="purpose" />
 
-        <many-to-one field="node" target-entity="Tulia\Cms\Node\Domain\WriteModel\NewModel\Node"/>
+        <many-to-one field="node" target-entity="Tulia\Cms\Node\Domain\WriteModel\NewModel\Node"  inversed-by="purposes"/>
     </entity>
 </doctrine-mapping>

@@ -19,10 +19,10 @@ final class DefaultSlugGeneratorStrategy implements SlugGeneratorStrategyInterfa
     }
 
     public function generate(
-        string $locale,
+        string $nodeId,
         string $slug,
         string $title,
-        string $nodeId
+        ?string $locale = null
     ): string {
         if (! trim($slug) && ! trim($title)) {
             return uniqid('temporary-slug-', true);
@@ -31,13 +31,13 @@ final class DefaultSlugGeneratorStrategy implements SlugGeneratorStrategyInterfa
         // Fallback to Node's title, if no slug provided.
         $input = $slug ?: $title;
 
-        return $this->findUniqueSlug($locale, $input, $nodeId);
+        return $this->findUniqueSlug($nodeId, $input, $locale);
     }
 
     private function findUniqueSlug(
-        string $locale,
+        ?string $nodeId,
         string $slug,
-        ?string $nodeId
+        ?string $locale,
     ): string {
         $securityLoop  = 0;
         $slugGenerated = $this->slugger->url($slug);
@@ -51,7 +51,7 @@ final class DefaultSlugGeneratorStrategy implements SlugGeneratorStrategyInterfa
 
             $securityLoop++;
 
-            $isUnique = $this->nodeSlugUniqueness->isUnique($locale, $slugProposed, $nodeId);
+            $isUnique = $this->nodeSlugUniqueness->isUnique($slugProposed, $locale, $nodeId);
 
             if ($isUnique === true) {
                 return $slugProposed;

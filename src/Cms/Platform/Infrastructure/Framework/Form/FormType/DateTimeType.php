@@ -8,19 +8,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormBuilderInterface;
-use Tulia\Cms\Platform\Infrastructure\Framework\Form\DataTransformer\DateTimeFormatTransformer;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DateTimeType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        $builder->addModelTransformer(new DateTimeFormatTransformer($options['format']));
-    }
-
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
     }

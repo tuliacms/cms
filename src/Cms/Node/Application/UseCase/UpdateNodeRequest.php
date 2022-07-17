@@ -14,7 +14,14 @@ final class UpdateNodeRequest implements RequestInterface
     public function __construct(
         public readonly string $id,
         public readonly array $details,
-        public readonly array $attributes
+        public readonly array $attributes,
+        public readonly string $defaultLocale,
+        public readonly string $locale
     ) {
+    }
+
+    public function isDefaultLocale(): bool
+    {
+        return $this->locale === $this->defaultLocale;
     }
 }

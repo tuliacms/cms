@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\Infrastructure\External\Doctrine\Dbal\WriteModel;
 
 use Doctrine\DBAL\Connection;
+use Symfony\Component\Uid\Uuid;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodeWriteStorageInterface;
 use Tulia\Cms\Platform\Infrastructure\Persistence\Domain\AbstractLocalizableStorage;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
@@ -147,7 +148,7 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
     {
         $result = $this->connection->fetchAllAssociative(
             'SELECT node_id FROM #__node_lang WHERE node_id = :id AND locale = :locale LIMIT 1',
-            ['id' => $data['id'], 'locale' => $data['locale']]
+            ['id' => Uuid::fromString($data['id'])->toBinary(), 'locale' => $data['locale']]
         );
 
         return isset($result[0]['node_id']) && $result[0]['node_id'] === $data['id'];
@@ -182,7 +183,7 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
     {
         return $this->connection->fetchFirstColumn(
             'SELECT purpose FROM #__node_has_purpose WHERE node_id = :node_id',
-            ['node_id' => $nodeId]
+            ['node_id' => Uuid::fromString($nodeId)->toBinary()]
         );
     }
 

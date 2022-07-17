@@ -11,22 +11,16 @@ class Attribute implements \Stringable, \Traversable, \ArrayAccess, \IteratorAgg
 {
     protected string $code;
     protected string $uri;
-    /** @var mixed */
-    protected $value;
-    /** @var mixed */
-    protected $compiledValue;
+    protected mixed $value;
+    protected mixed $compiledValue;
     protected array $payload;
     protected array $flags;
 
-    /**
-     * @param mixed $value
-     * @param mixed $compiledValue
-     */
     public function __construct(
         string $code,
         string $uri,
-        $value,
-        $compiledValue,
+        mixed $value,
+        mixed $compiledValue,
         array $payload,
         array $flags
     ) {
@@ -62,10 +56,7 @@ class Attribute implements \Stringable, \Traversable, \ArrayAccess, \IteratorAgg
         ];
     }
 
-    /**
-     * @param mixed $value
-     */
-    public function withValue($value): self
+    public function withValue(mixed $value): self
     {
         $data = $this->toArray();
         $data['value'] = $value;
@@ -73,10 +64,7 @@ class Attribute implements \Stringable, \Traversable, \ArrayAccess, \IteratorAgg
         return self::fromArray($data);
     }
 
-    /**
-     * @param mixed $compiledValue
-     */
-    public function withCompiledValue($compiledValue): self
+    public function withCompiledValue(mixed $compiledValue): self
     {
         $data = $this->toArray();
         $data['compiled_value'] = $compiledValue;
@@ -84,9 +72,6 @@ class Attribute implements \Stringable, \Traversable, \ArrayAccess, \IteratorAgg
         return self::fromArray($data);
     }
 
-    /**
-     * @param array $payload
-     */
     public function withPayload(array $payload): self
     {
         $data = $this->toArray();
@@ -164,6 +149,11 @@ class Attribute implements \Stringable, \Traversable, \ArrayAccess, \IteratorAgg
     public function isNonscalarValue(): bool
     {
         return $this->is('nonscalar_value');
+    }
+
+    public function isEmpty(): bool
+    {
+        return empty($this->value) && empty($this->compiledValue) && empty($this->payload);
     }
 
     public function getIterator(): \Iterator

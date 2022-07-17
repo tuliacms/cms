@@ -837,6 +837,10 @@
                 <source>seeWhatsNewInThisVersion</source>
                 <target>See what's new in this version</target>
             </trans-unit>
+            <trans-unit id="tuliacms.messages.209">
+                <source>pageNotPublished</source>
+                <target>Page not published</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
