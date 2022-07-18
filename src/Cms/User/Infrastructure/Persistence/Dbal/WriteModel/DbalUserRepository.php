@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Tulia\Cms\User\Infrastructure\Persistence\Dbal\WriteModel;
 
 use Doctrine\DBAL\Connection;
+use Symfony\Component\Uid\Uuid;
 use Tulia\Cms\Content\Attributes\Domain\WriteModel\AttributesRepositoryInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
-use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
-use Tulia\Cms\User\Domain\WriteModel\Model\AggregateId;
+use Tulia\Cms\User\Domain\WriteModel\Exception\UserNotFoundException;
 use Tulia\Cms\User\Domain\WriteModel\Model\User;
 use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
 
@@ -21,17 +21,16 @@ class DbalUserRepository implements UserRepositoryInterface
         private Connection $connection,
         private DbalPersister $persister,
         private AttributesRepositoryInterface $attributeRepository,
-        private UuidGeneratorInterface $uuidGenerator,
         private ContentTypeRegistryInterface $contentTypeRegistry,
     ) {
     }
 
-    public function generateNextId(): AggregateId
+    public function generateNextId(): string
     {
-        return new AggregateId($this->uuidGenerator->generate());
+        return (string) Uuid::v4();
     }
 
-    public function find(string $id): ?User
+    public function get(string $id): User
     {
         $user = $this->connection->fetchAllAssociative('
             SELECT *
@@ -42,11 +41,11 @@ class DbalUserRepository implements UserRepositoryInterface
         ]);
 
         if (empty($user)) {
-            return null;
+            throw new UserNotFoundException(sprintf('User %s does not exists.', $id));
         }
 
         $contentType = $this->contentTypeRegistry->get('user');
-        $attributes = $this->attributeRepository->findAll('user', $id, $contentType->buildAttributesMapping());
+        $attributes = [];//$this->attributeRepository->findAll('user', $id, $contentType->buildAttributesMapping());
 
         $user = reset($user);
         $user['attributes'] =  $attributes;
@@ -59,25 +58,21 @@ class DbalUserRepository implements UserRepositoryInterface
     {
         $data = $user->toArray();
 
-        $this->connection->transactional(function () use ($data) {
-            if ($this->recordExists($data['id'])) {
-                $this->persister->update($data);
-            } else {
-                $this->persister->insert($data);
-            }
+        if ($this->recordExists($data['id'])) {
+            $this->persister->update($data);
+        } else {
+            $this->persister->insert($data);
+        }
 
-            $this->attributeRepository->persist('user', $data['id'], $data['attributes']);
-        });
+        //$this->attributeRepository->persist('user', $data['id'], $data['attributes']);
     }
 
     public function delete(User $user): void
     {
         $data = $user->toArray();
 
-        $this->connection->transactional(function () use ($data) {
-            $this->persister->delete($data);
-            $this->attributeRepository->delete('user', $data['id']);
-        });
+        $this->persister->delete($data);
+        //$this->attributeRepository->delete('user', $data['id']);
     }
 
     private function recordExists(string $id): bool

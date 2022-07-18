@@ -17,21 +17,12 @@ use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
  */
 final class DeleteUser
 {
-    private UploaderInterface $uploader;
-    private UserRepositoryInterface $repository;
-    private EventBusInterface $eventDispatcher;
-    private AggregateActionsChainInterface $actionsChain;
-
     public function __construct(
-        UploaderInterface $uploader,
-        UserRepositoryInterface $repository,
-        EventBusInterface $eventDispatcher,
-        AggregateActionsChainInterface $actionsChain
+        private UploaderInterface $uploader,
+        private UserRepositoryInterface $repository,
+        private EventBusInterface $eventDispatcher,
+        private AggregateActionsChainInterface $actionsChain,
     ) {
-        $this->uploader = $uploader;
-        $this->repository = $repository;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->actionsChain = $actionsChain;
     }
 
     /**

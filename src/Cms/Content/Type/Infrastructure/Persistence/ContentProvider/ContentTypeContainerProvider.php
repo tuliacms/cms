@@ -4,25 +4,23 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Content\Type\Infrastructure\Persistence\ContentProvider;
 
-use Tulia\Cms\Content\Type\Domain\ReadModel\Service\AbstractContentTypeProvider;
+use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
+use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeProviderInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class ContentTypeContainerProvider extends AbstractContentTypeProvider
+class ContentTypeContainerProvider implements ContentTypeProviderInterface
 {
     use SymfonyContainerStandarizableTrait;
 
-    private array $configuration;
-
-    public function __construct(array $configuration)
-    {
-        $this->configuration = $configuration;
+    public function __construct(
+        private array $configuration
+    ) {
     }
 
     public function provide(): array
     {
-        return [];
         $result = [];
 
         foreach ($this->configuration as $code => $type) {
@@ -30,7 +28,7 @@ class ContentTypeContainerProvider extends AbstractContentTypeProvider
             $type['internal'] = true;
             $type = $this->standarizeArray($type);
 
-            $result[] = $this->buildFromArray($type);
+            $result[] = ContentType::fromArray($type);
         }
 
         return $result;

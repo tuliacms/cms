@@ -18,21 +18,12 @@ use Tulia\Component\Templating\View;
  */
 class TwigRoutableContentTypeLayoutBuilder implements LayoutTypeBuilderInterface
 {
-    private FieldTypeMappingRegistry $fieldTypeMappingRegistry;
-    private ContentTypeRoutingStrategyRegistry $strategyRegistry;
-    private TranslatorInterface $translator;
-    private Configuration $configuration;
-
     public function __construct(
-        FieldTypeMappingRegistry $fieldTypeMappingRegistry,
-        ContentTypeRoutingStrategyRegistry $strategyRegistry,
-        TranslatorInterface $translator,
-        Configuration $configuration
+        private FieldTypeMappingRegistry $fieldTypeMappingRegistry,
+        private ContentTypeRoutingStrategyRegistry $strategyRegistry,
+        private TranslatorInterface $translator,
+        private Configuration $configuration,
     ) {
-        $this->fieldTypeMappingRegistry = $fieldTypeMappingRegistry;
-        $this->strategyRegistry = $strategyRegistry;
-        $this->translator = $translator;
-        $this->configuration = $configuration;
     }
 
     public function editorView(ContentType $contentType, FormView $formView, array $viewContext): View

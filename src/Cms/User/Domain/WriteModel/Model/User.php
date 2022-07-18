@@ -4,21 +4,20 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Domain\WriteModel\Model;
 
-use Tulia\Cms\Content\Attributes\Domain\WriteModel\MagickAttributesTrait;
 use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\Attribute;
-use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
+use Tulia\Cms\User\Application\Service\Avatar\UploaderInterface;
 use Tulia\Cms\User\Domain\WriteModel\Event;
 use Tulia\Cms\User\Domain\WriteModel\Event\AttributeUpdated;
+use Tulia\Cms\User\Domain\WriteModel\Exception\EmailEmptyException;
+use Tulia\Cms\User\Domain\WriteModel\Exception\EmailInvalidException;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class User extends AbstractAggregateRoot implements AttributesAwareInterface
+class User extends AbstractAggregateRoot
 {
-    use MagickAttributesTrait;
-
-    private AggregateId $id;
+    private string $id;
     protected ?string $password;
     protected string $email;
     protected string $locale = 'en_US';
@@ -27,8 +26,10 @@ class User extends AbstractAggregateRoot implements AttributesAwareInterface
     protected bool $credentialsExpired = false;
     protected bool $accountLocked = false;
     protected array $roles = [];
+    protected ?string $name = null;
+    protected ?string $avatar = null;
 
-    private function __construct(AggregateId $id, string $email, ?string $password, array $roles)
+    private function __construct(string $id, string $email, ?string $password, array $roles)
     {
         $this->id = $id;
         $this->email = $email;
@@ -37,28 +38,32 @@ class User extends AbstractAggregateRoot implements AttributesAwareInterface
     }
 
     public static function create(
-        AggregateId $id,
+        string $id,
         string $email,
         ?string $password,
         array $roles,
         bool $enabled = true,
         string $locale = 'en_US',
-        array $attributes = []
+        array $attributes = [],
+        ?string $name = null
     ): self {
         $self = new self($id, $email, $password, $roles);
         $self->enabled = $enabled;
         $self->locale = $locale;
         $self->attributes = $attributes;
-        $self->recordThat(new Event\UserCreated($id->getValue()));
+        $self->name = $name;
+        $self->recordThat(new Event\UserCreated($id));
 
         return $self;
     }
 
     public static function fromArray(array $data): self
     {
-        $self = new self(new AggregateId($data['id']), $data['email'], null, $data['roles']);
+        $self = new self($data['id'], $data['email'], null, $data['roles']);
         $self->enabled = $data['enabled'] ? true : false;
         $self->locale = $data['locale'];
+        $self->name = $data['name'];
+        $self->avatar = $data['avatar'];
         $self->attributes = $data['attributes'];
 
         return $self;
@@ -67,7 +72,7 @@ class User extends AbstractAggregateRoot implements AttributesAwareInterface
     public function toArray(): array
     {
         return [
-            'id' => $this->id->getValue(),
+            'id' => $this->id,
             'email' => $this->email,
             'locale' => $this->locale,
             'enabled' => $this->enabled,
@@ -77,35 +82,14 @@ class User extends AbstractAggregateRoot implements AttributesAwareInterface
             'roles' => $this->roles,
             'password' => $this->password,
             'attributes' => $this->attributes,
+            'name' => $this->name,
+            'avatar' => $this->avatar,
         ];
     }
 
-    public function getId(): AggregateId
+    public function getId(): string
     {
         return $this->id;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function getLocale(): string
-    {
-        return $this->locale;
-    }
-
-    public function isEnabled(): bool
-    {
-        return $this->enabled;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getRoles(): array
-    {
-        return $this->roles;
     }
 
     /**
@@ -133,7 +117,7 @@ class User extends AbstractAggregateRoot implements AttributesAwareInterface
         if (in_array($role, $this->roles) === false) {
             $this->roles[] = $role;
 
-            $this->recordThat(new Event\RoleWasGiven($this->id->getValue(), $role));
+            $this->recordThat(new Event\RoleWasGiven($this->id, $role));
         }
     }
 
@@ -147,7 +131,7 @@ class User extends AbstractAggregateRoot implements AttributesAwareInterface
         if ($key !== false) {
             unset($this->roles[$key]);
 
-            $this->recordThat(new Event\RoleWasTaken($this->id->getValue(), $role));
+            $this->recordThat(new Event\RoleWasTaken($this->id, $role));
         }
     }
 
@@ -181,30 +165,30 @@ class User extends AbstractAggregateRoot implements AttributesAwareInterface
         if ($this->password !== $password && empty($password) === false) {
             $this->password = $password;
 
-            $this->recordThat(new Event\PasswordChanged($this->id->getValue()));
+            $this->recordThat(new Event\PasswordChanged($this->id));
         }
     }
 
     /**
      * @param string $email
      *
-     * @throws \Tulia\Cms\User\Domain\WriteModel\Exception\EmailEmptyException
-     * @throws \Tulia\Cms\User\Domain\WriteModel\Exception\EmailInvalidException
+     * @throws EmailEmptyException
+     * @throws EmailInvalidException
      */
     public function changeEmail(string $email): void
     {
         if (empty($email)) {
-            throw new \Tulia\Cms\User\Domain\WriteModel\Exception\EmailEmptyException('Email address must be provided, cannot be empty.');
+            throw new EmailEmptyException('Email address must be provided, cannot be empty.');
         }
 
         if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-            throw new \Tulia\Cms\User\Domain\WriteModel\Exception\EmailInvalidException('Email address is invalid.');
+            throw new EmailInvalidException('Email address is invalid.');
         }
 
         if ($this->email !== $email) {
             $this->email = $email;
 
-            $this->recordThat(new Event\EmailChanged($this->id->getValue(), $email));
+            $this->recordThat(new Event\EmailChanged($this->id, $email));
         }
     }
 
@@ -216,7 +200,7 @@ class User extends AbstractAggregateRoot implements AttributesAwareInterface
         if ($this->locale !== $locale) {
             $this->locale = $locale;
 
-            $this->recordThat(new Event\LocaleChanged($this->id->getValue(), $locale));
+            $this->recordThat(new Event\LocaleChanged($this->id, $locale));
         }
     }
 
@@ -225,7 +209,7 @@ class User extends AbstractAggregateRoot implements AttributesAwareInterface
         if ($this->enabled) {
             $this->enabled = false;
 
-            $this->recordThat(new Event\AccountWasDisabled($this->id->getValue()));
+            $this->recordThat(new Event\AccountWasDisabled($this->id));
         }
     }
 
@@ -234,7 +218,25 @@ class User extends AbstractAggregateRoot implements AttributesAwareInterface
         if (!$this->enabled) {
             $this->enabled = true;
 
-            $this->recordThat(new Event\AccountWasEnabled($this->id->getValue()));
+            $this->recordThat(new Event\AccountWasEnabled($this->id));
+        }
+    }
+
+    public function changeAvatar(string $avatar): void
+    {
+        $this->avatar = $avatar;
+    }
+
+    public function changeName(?string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function removeAvatar(UploaderInterface $uploader): void
+    {
+        if ($this->avatar) {
+            $uploader->removeUploaded($this->avatar);
+            $this->avatar = null;
         }
     }
 }

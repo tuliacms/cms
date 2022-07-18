@@ -13,6 +13,6 @@ class UserUpdated extends AbstractDomainEvent
 {
     public static function fromModel(User $user): self
     {
-        return new self($user->getId()->getValue());
+        return new self($user->getId());
     }
 }

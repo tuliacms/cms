@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Domain\WriteModel\Event;
 
-use Tulia\Cms\User\Domain\WriteModel\Model\AggregateId;
-
 /**
  * @author Adam Banaszkiewicz
  */

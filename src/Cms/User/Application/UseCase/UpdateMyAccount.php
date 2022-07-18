@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\User\Application\UseCase;
 
 use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\Attribute;
+use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
+use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChainInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\User\Application\Service\Avatar\UploaderInterface;
@@ -32,7 +34,7 @@ final class UpdateMyAccount extends AbstractUserUseCase
     /**
      * @param Attribute[] $attributes
      */
-    public function __invoke(User $user, array $attributes): void
+    public function execute(RequestInterface $request): ?ResultInterface
     {
         $data = $this->flattenAttributes($attributes);
         $attributes = $this->removeModelsAttributes($attributes);

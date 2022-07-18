@@ -13,22 +13,16 @@ use Tulia\Cms\Content\Attributes\Domain\ReadModel\Model\AttributesAwareInterface
 class User
 {
     protected string $id;
-
     protected string $password;
-
     protected string $email;
-
     protected string $locale = 'en_US';
-
     protected bool $enabled = true;
-
     protected bool $accountExpired = false;
-
     protected bool $credentialsExpired = false;
-
     protected bool $accountLocked = false;
-
     protected array $roles = [];
+    protected ?string $name = null;
+    protected ?string $avatar = null;
 
     protected static array $fields = [
         'id'                  => 'id',
@@ -40,6 +34,8 @@ class User
         'account_expired'     => 'accountExpired',
         'credentials_expired' => 'credentialsExpired',
         'account_locked'      => 'accountLocked',
+        'name'                => 'name',
+        'avatar'              => 'avatar',
     ];
 
     public static function buildFromArray(array $data): self
@@ -69,6 +65,8 @@ class User
         $user->setAccountExpired((bool) ($data['account_expired'] ?? false));
         $user->setCredentialsExpired((bool) ($data['credentials_expired'] ?? false));
         $user->setAccountLocked((bool) ($data['account_locked'] ?? false));
+        $user->name = $data['name'] ?? null;
+        $user->avatar = $data['avatar'] ?? null;
 
         return $user;
     }
@@ -190,5 +188,15 @@ class User
     public function setRoles(array $roles): void
     {
         $this->roles = $roles;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
     }
 }

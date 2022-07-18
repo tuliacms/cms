@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Widget\Infrastructure\Persistence\ContainerProvider;
 
-use Tulia\Cms\Content\Type\Domain\ReadModel\Service\AbstractContentTypeProvider;
+use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeProviderInterface;
 use Tulia\Cms\Content\Type\Infrastructure\Persistence\ContentProvider\SymfonyContainerStandarizableTrait;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class WidgetTypeContainerProvider extends AbstractContentTypeProvider
+class WidgetTypeContainerProvider implements ContentTypeProviderInterface
 {
     use SymfonyContainerStandarizableTrait;
 

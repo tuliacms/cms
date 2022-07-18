@@ -56,7 +56,7 @@ class MyAccount extends AbstractController
      */
     public function edit(Request $request, UpdateMyAccount $updateMyAccount)
     {
-        $user = $this->userRepository->find($this->authenticatedUserProvider->getUser()->getId());
+        $user = $this->userRepository->get($this->authenticatedUserProvider->getUser()->getId());
 
         if (!$user) {
             return $this->redirectToRoute('backend.homepage');
@@ -86,7 +86,7 @@ class MyAccount extends AbstractController
      */
     public function password(Request $request, ChangePassword $changePassword)
     {
-        $user = $this->userRepository->find($this->authenticatedUserProvider->getUser()->getId());
+        $user = $this->userRepository->get($this->authenticatedUserProvider->getUser()->getId());
 
         if (!$user) {
             return $this->redirectToRoute('backend.homepage');

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Domain\WriteModel;
 
-use Tulia\Cms\User\Domain\WriteModel\Model\AggregateId;
 use Tulia\Cms\User\Domain\WriteModel\Model\User;
 
 /**
@@ -12,11 +11,11 @@ use Tulia\Cms\User\Domain\WriteModel\Model\User;
  */
 interface UserRepositoryInterface
 {
-    public function find(string $id): ?User;
+    public function get(string $id): User;
 
     public function save(User $user): void;
 
     public function delete(User $user): void;
 
-    public function generateNextId(): AggregateId;
+    public function generateNextId(): string;
 }

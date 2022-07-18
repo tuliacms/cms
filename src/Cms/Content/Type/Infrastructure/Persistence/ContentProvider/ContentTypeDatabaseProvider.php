@@ -6,13 +6,13 @@ namespace Tulia\Cms\Content\Type\Infrastructure\Persistence\ContentProvider;
 
 use Doctrine\DBAL\Connection;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
-use Tulia\Cms\Content\Type\Domain\ReadModel\Service\AbstractContentTypeProvider;
+use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeProviderInterface;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Service\Configuration;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class ContentTypeDatabaseProvider extends AbstractContentTypeProvider
+class ContentTypeDatabaseProvider implements ContentTypeProviderInterface
 {
     private array $fieldGroups = [];
     private array $fields = [];

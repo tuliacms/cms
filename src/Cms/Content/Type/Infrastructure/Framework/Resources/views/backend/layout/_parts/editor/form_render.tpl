@@ -1,7 +1,7 @@
 {% macro form_begin(form) %}
     {% assets ['tulia-dynamic-form'] %}
 
-    {{ form_start(form) }}
+    {{ form_start(form, { attr: { 'enctype': 'multipart/form-data' } }) }}
     {{ form_errors(form) }}
     {% if form._token is defined %}
         {{ form_row(form._token) }}

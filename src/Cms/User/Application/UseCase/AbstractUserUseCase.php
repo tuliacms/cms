@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\User\Application\UseCase;
 
 use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\Attribute;
+use Tulia\Cms\Shared\Application\UseCase\AbstractUseTransactionalCase;
 use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChainInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\User\Domain\WriteModel\Event\UserUpdated;
@@ -14,41 +15,30 @@ use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-abstract class AbstractUserUseCase
+abstract class AbstractUserUseCase extends AbstractUseTransactionalCase
 {
     public function __construct(
-        UserRepositoryInterface $repository,
-        EventBusInterface $eventDispatcher,
-        AggregateActionsChainInterface $actionsChain
+        protected UserRepositoryInterface $repository,
+        protected EventBusInterface $eventDispatcher,
+        protected AggregateActionsChainInterface $actionsChain
     ) {
-        $this->repository = $repository;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->actionsChain = $actionsChain;
     }
 
     protected function create(User $user): void
     {
         $this->actionsChain->execute('create', $user);
 
-        try {
-            $this->repository->save($user);
-            $this->eventDispatcher->dispatchCollection($user->collectDomainEvents());
-        } catch (\Throwable $e) {
-            throw $e;
-        }
+        $this->repository->save($user);
+        $this->eventDispatcher->dispatchCollection($user->collectDomainEvents());
     }
 
     protected function update(User $user): void
     {
         $this->actionsChain->execute('update', $user);
 
-        try {
-            $this->repository->save($user);
-            $this->eventDispatcher->dispatchCollection($user->collectDomainEvents());
-            $this->eventDispatcher->dispatch(UserUpdated::fromModel($user));
-        } catch (\Throwable $e) {
-            throw $e;
-        }
+        $this->repository->save($user);
+        $this->eventDispatcher->dispatchCollection($user->collectDomainEvents());
+        $this->eventDispatcher->dispatch(UserUpdated::fromModel($user));
     }
 
     /**

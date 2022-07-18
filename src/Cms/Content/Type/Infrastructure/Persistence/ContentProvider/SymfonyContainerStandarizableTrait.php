@@ -11,13 +11,30 @@ trait SymfonyContainerStandarizableTrait
 {
     protected function standarizeArray(array $data): array
     {
+        $result = [];
+
+        $result['code'] = $data['code'];
+        $result['type'] = $data['type'];
+        $result['name'] = $data['name'];
+        $result['icon'] = $data['icon'];
+        $result['controller'] = $data['controller'];
+        $result['is_routable'] = (bool) $data['is_routable'];
+        $result['is_hierarchical'] = (bool) $data['is_hierarchical'];
+        $result['routing_strategy'] = $data['routing_strategy'];
+        $result['fields_groups'] = [];
+
         foreach ($data['layout']['sections'] as $sectionCode => $section) {
             foreach ($section['groups'] as $groupCode => $group) {
-                $data['layout']['sections'][$sectionCode]['groups'][$groupCode]['fields'] = $this->standarizeFields($group['fields']);
+                $result['fields_groups'][] = [
+                    'code' => $groupCode,
+                    'section' => $sectionCode,
+                    'name' => $group['name'] ?? $groupCode,
+                    'fields' => $this->standarizeFields($group['fields'])
+                ];
             }
         }
 
-        return $data;
+        return $result;
     }
 
     protected function standarizeFields(array $fields, ?string $parent = null): array
@@ -39,7 +56,8 @@ trait SymfonyContainerStandarizableTrait
                     $modificators[$modificator['code']] = $modificator['value'];
                 }
 
-                $constraints[$constraint['code']] = [
+                $constraints[] = [
+                    'code' => $constraint['code'],
                     'modificators' => $modificators,
                 ];
             }
@@ -48,11 +66,12 @@ trait SymfonyContainerStandarizableTrait
                 $configuration[$config['code']] = $config['value'];
             }
 
+            $fields[$fieldCode]['code'] = $fieldCode;
             $fields[$fieldCode]['constraints'] = $constraints;
             $fields[$fieldCode]['configuration'] = $configuration;
             $fields[$fieldCode]['children'] = $this->standarizeFields($fields, $fieldCode);
 
-            $result[$fieldCode] = $fields[$fieldCode];
+            $result[] = $fields[$fieldCode];
         }
 
         return $result;

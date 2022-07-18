@@ -27,7 +27,7 @@ final class Field
 
         \assert(\is_string($this->options['code']), 'The "code" option must be a string.');
         \assert(\is_string($this->options['type']), 'The "type" option must be a string.');
-        \assert(\is_string($this->options['name']), 'The "name" option must be a string.');
+        \assert(\is_string($this->options['name']) || null === $this->options['name'], 'The "name" option must be a string or null.');
         \assert(\is_string($this->options['translation_domain']), 'The "translation_domain" option must be a string.');
         \assert(\is_array($this->options['flags']), 'The "flags" option must be an array.');
         \assert(\is_array($this->options['configuration']), 'The "configuration" option must be an array.');
@@ -88,7 +88,7 @@ final class Field
         return $this->is('nonscalar_value');
     }
 
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->options['name'];
     }

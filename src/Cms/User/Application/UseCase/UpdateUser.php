@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Tulia\Cms\User\Application\UseCase;
 
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Security\Framework\Security\Core\User\User as CoreUser;
+use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
+use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChainInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\User\Application\Service\Avatar\UploaderInterface;
-use Tulia\Cms\User\Domain\WriteModel\Model\User;
 use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
 
 /**
@@ -18,50 +18,50 @@ use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
  */
 final class UpdateUser extends AbstractUserUseCase
 {
-    private UserPasswordHasherInterface $passwordHasher;
-    private UploaderInterface $uploader;
-
     public function __construct(
         UserRepositoryInterface $repository,
         EventBusInterface $eventDispatcher,
         AggregateActionsChainInterface $actionsChain,
-        UserPasswordHasherInterface $passwordHasher,
-        UploaderInterface $uploader
+        private UserPasswordHasherInterface $passwordHasher,
+        private UploaderInterface $uploader,
     ) {
         parent::__construct($repository, $eventDispatcher, $actionsChain);
-
-        $this->passwordHasher = $passwordHasher;
-        $this->uploader = $uploader;
     }
 
     /**
-     * @param Attribute[] $attributes
+     * @param RequestInterface&UpdateUserRequest $request
      */
-    public function __invoke(User $user, array $attributes): void
+    public function execute(RequestInterface $request): ?ResultInterface
     {
-        $data = $this->flattenAttributes($attributes);
-        $attributes = $this->removeModelsAttributes($attributes);
+        $user = $this->repository->get($request->id);
 
-        if ($data['remove_avatar'] && $data['avatar']) {
-            $this->uploader->removeUploaded($data['avatar']);
-        }
+        $user->updateAttributes($request->attributes);
+        $user->persistRoles($request->roles);
+        $user->changeLocale($request->locale);
+        $user->changeName($request->name);
 
-        $user->updateAttributes($attributes);
-        $user->persistRoles($data['roles']);
-        $user->changeLocale($data['locale']);
-
-        if ($data['enabled']) {
+        if ($request->enabled) {
             $user->enableAccount();
         } else {
             $user->disableAccount();
         }
 
-        if (empty($data['password']) === false) {
-            $securityUser = new CoreUser($data['email'], null, $data['roles']);
-            $hashedPassword = $this->passwordHasher->hashPassword($securityUser, $data['password']);
+        if (false === empty($request->password)) {
+            $securityUser = new CoreUser($request->email, null, $request->roles);
+            $hashedPassword = $this->passwordHasher->hashPassword($securityUser, $request->password);
             $user->changePassword($hashedPassword);
         }
 
+        if ($request->removeAvatar) {
+            $user->removeAvatar($this->uploader);
+        }
+
+        if ($request->avatar) {
+            $user->changeAvatar($this->uploader->upload($request->avatar));
+        }
+
         $this->update($user);
+
+        return null;
     }
 }

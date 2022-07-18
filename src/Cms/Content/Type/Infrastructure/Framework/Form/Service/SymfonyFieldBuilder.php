@@ -17,15 +17,10 @@ use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\FormType\RepeatableGrou
  */
 class SymfonyFieldBuilder
 {
-    private FieldTypeMappingRegistry $mappingRegistry;
-    private ConstraintsBuilderInterface $constraintsBuilder;
-
     public function __construct(
-        FieldTypeMappingRegistry $mappingRegistry,
-        ConstraintsBuilderInterface $constraintsBuilder
+        private FieldTypeMappingRegistry $mappingRegistry,
+        private ConstraintsBuilderInterface $constraintsBuilder,
     ) {
-        $this->mappingRegistry = $mappingRegistry;
-        $this->constraintsBuilder = $constraintsBuilder;
     }
 
     public function buildFieldAndAddToBuilder(

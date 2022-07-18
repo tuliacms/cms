@@ -35,6 +35,7 @@ class DbalPersister
         $mainTable['credentials_expired'] = $user['credentialsExpired'] ? 1 : 0;
         $mainTable['account_locked'] = $user['accountLocked'] ? 1 : 0;
         $mainTable['roles'] = json_encode($user['roles']);
+        $mainTable['avatar'] = $user['avatar'];
 
         $this->connection->insert('#__user', $mainTable);
     }
@@ -57,6 +58,7 @@ class DbalPersister
         $mainTable['credentials_expired'] = $user['credentialsExpired'] ? 1 : 0;
         $mainTable['account_locked'] = $user['accountLocked'] ? 1 : 0;
         $mainTable['roles'] = json_encode($user['roles']);
+        $mainTable['avatar'] = $user['avatar'];
 
         // Update password only if exists. Empty password means user don't want to update
         // and user cannot have empty passwords.

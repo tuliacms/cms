@@ -15,11 +15,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class LocaleType extends AbstractType
 {
-    protected TranslatorInterface $translator;
-
-    public function __construct(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
+    public function __construct(
+        private TranslatorInterface $translator
+    ) {
     }
 
     public function configureOptions(OptionsResolver $resolver): void

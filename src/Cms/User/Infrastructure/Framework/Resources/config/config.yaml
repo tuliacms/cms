@@ -20,23 +20,23 @@ cms:
                     classname: 'Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserTypeahead\UserTypeaheadType'
                     builder: 'Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserTypeahead\UserTypeaheadTypeBuilder'
                     constraints: [ required ]
-                user_roles:
-                    label: User roles
-                    classname: 'Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserRoles\UserRolesType'
-                    constraints: [ required ]
-                    only_for_types: [ user ]
-                user_avatar:
-                    label: User avatar
-                    classname: 'Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserAvatar\UserAvatarType'
-                    builder: 'Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserAvatar\UserAvatarBuilder'
-                    handler: 'Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserAvatar\UserAvatarHandler'
-                    constraints: [ required ]
-                    only_for_types: [ user ]
-                user_remove_avatar:
-                    label: User remove avatar
-                    classname: 'Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\YesNoType'
-                    constraints: [ required ]
-                    only_for_types: [ user ]
+#                user_roles:
+#                    label: User roles
+#                    classname: 'Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserRoles\UserRolesType'
+#                    constraints: [ required ]
+#                    only_for_types: [ user ]
+#                user_avatar:
+#                    label: User avatar
+#                    classname: 'Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserAvatar\UserAvatarType'
+#                    builder: 'Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserAvatar\UserAvatarBuilder'
+#                    handler: 'Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserAvatar\UserAvatarHandler'
+#                    constraints: [ required ]
+#                    only_for_types: [ user ]
+#                user_remove_avatar:
+#                    label: User remove avatar
+#                    classname: 'Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\YesNoType'
+#                    constraints: [ required ]
+#                    only_for_types: [ user ]
         constraint_types:
             mapping:
                 user_email_unique:
@@ -65,64 +65,16 @@ cms:
                 routing_strategy: null
                 layout:
                     sections:
-                        lead:
-                            groups:
-                                email:
-                                    name: Email
-                                    fields:
-                                        email:
-                                            type: email
-                                            name: email
-                                            is_multilingual: false
-                                            constraints:
-                                                - code: required
-                                                - code: email
-                                                - code: user_email_unique
                         sidebar:
-                            groups:
-                                avatar:
-                                    name: Avatar
-                                    fields:
-                                        avatar:
-                                            type: user_avatar
-                                            name: null
-                                        remove_avatar:
-                                            type: user_remove_avatar
-                                            name: Remove avatar
-                        main:
                             groups:
                                 security:
                                     name: Security
                                     fields:
-                                        password:
-                                            type: password
-                                            name: Password
-                                            constraints:
-                                                - code: required
-                                                - code: password
-                                        password_repeat:
-                                            type: password_repeat
-                                            name: Repeat password
-                                            configuration:
-                                                - code: referenced_field
-                                                  value: password
-                                            constraints:
-                                                - code: required
-                                        enabled:
-                                            type: yes_no
-                                            name: Enabled
-                                        roles:
-                                            type: user_roles
-                                            name: Roles
-                                basics:
-                                    name: Basics
-                                    fields:
-                                        name:
+                                        my_test_field:
                                             type: text
-                                            name: Name
-                                        locale:
-                                            type: locale
-                                            name: Locale
+                                            name: My text field
+                                            #constraints:
+                                            #    - code: required
             my_account:
                 type: my_account
                 name: My account

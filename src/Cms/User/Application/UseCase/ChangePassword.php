@@ -6,6 +6,8 @@ namespace Tulia\Cms\User\Application\UseCase;
 
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Tulia\Cms\Security\Framework\Security\Core\User\User as CoreUser;
+use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
+use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChainInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\User\Domain\WriteModel\Model\User;
@@ -29,7 +31,7 @@ final class ChangePassword extends AbstractUserUseCase
         $this->passwordHasher = $passwordHasher;
     }
 
-    public function __invoke(User $user, string $newPassword): void
+    public function execute(RequestInterface $request): ?ResultInterface
     {
         $securityUser = new CoreUser($user->getEmail(), null, $user->getRoles());
         $hashedPassword = $this->passwordHasher->hashPassword($securityUser, $newPassword);

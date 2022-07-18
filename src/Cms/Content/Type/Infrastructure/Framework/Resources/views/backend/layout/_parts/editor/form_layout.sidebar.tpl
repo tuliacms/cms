@@ -85,6 +85,7 @@
         <div class="page-form-content">
             {% block page_header %}{% endblock %}
             <ul class="nav nav-tabs page-form-tabs" role="tablist">
+                {% block page_tabs %}{% endblock %}
                 {% set loopIndex = 0 %}
                 {% for group in contentType.fieldGroups %}
                     {% if group.section == 'main' %}
@@ -104,6 +105,7 @@
                 }, form) }}
             </ul>
             <div class="tab-content">
+                {% block page_tabs_content %}{% endblock %}
                 {% set loopIndex = 0 %}
                 {% for group in contentType.fieldGroups %}
                     {% if group.section == 'main' %}

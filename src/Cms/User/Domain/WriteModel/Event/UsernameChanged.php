@@ -4,23 +4,14 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Domain\WriteModel\Event;
 
-use Tulia\Cms\User\Domain\WriteModel\Model\AggregateId;
-
 /**
  * @author Adam Banaszkiewicz
  */
 class UsernameChanged extends AbstractDomainEvent
 {
-    /**
-     * @var string
-     */
-    private $username;
+    private string $username;
 
-    /**
-     * @param AggregateId $userId
-     * @param string $username
-     */
-    public function __construct(AggregateId $userId, string $username)
+    public function __construct(string $userId, string $username)
     {
         parent::__construct($userId);
 

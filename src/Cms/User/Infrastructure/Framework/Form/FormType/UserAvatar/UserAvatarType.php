@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserAvatar;
 
+use Symfony\Component\Asset\Packages;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 
@@ -12,6 +13,11 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
  */
 class UserAvatarType extends AbstractType
 {
+    public function __construct(
+        private Packages $packages
+    ) {
+    }
+
     public function getParent(): string
     {
         return FileType::class;

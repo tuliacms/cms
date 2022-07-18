@@ -13,12 +13,15 @@ use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Service\SymfonyFieldBui
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\User\Application\UseCase\CreateUser;
+use Tulia\Cms\User\Application\UseCase\CreateUserRequest;
 use Tulia\Cms\User\Application\UseCase\DeleteUser;
 use Tulia\Cms\User\Application\UseCase\UpdateUser;
+use Tulia\Cms\User\Application\UseCase\UpdateUserRequest;
 use Tulia\Cms\User\Domain\WriteModel\Exception\CannotDeleteYourselfException;
 use Tulia\Cms\User\Domain\WriteModel\Model\User as DomainModel;
 use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
 use Tulia\Cms\User\Infrastructure\Persistence\Dbal\ReadModel\DbalDatatableFinder;
+use Tulia\Cms\User\UserInterface\Web\Form\UserDetailsForm;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\Templating\ViewInterface;
 
@@ -27,18 +30,11 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class User extends AbstractController
 {
-    private ContentFormService $contentFormService;
-    private UserRepositoryInterface $repository;
-    private SymfonyFieldBuilder $fieldBuilder;
-
     public function __construct(
-        ContentFormService $contentFormService,
-        UserRepositoryInterface $repository,
-        SymfonyFieldBuilder $fieldBuilder
+        private ContentFormService $contentFormService,
+        private UserRepositoryInterface $repository,
+        private SymfonyFieldBuilder $fieldBuilder
     ) {
-        $this->contentFormService = $contentFormService;
-        $this->repository = $repository;
-        $this->fieldBuilder = $fieldBuilder;
     }
 
     public function index(): RedirectResponse
@@ -63,14 +59,19 @@ class User extends AbstractController
      */
     public function create(Request $request, CreateUser $createUser)
     {
-        $formDescriptor = $this->produceFormDescriptor();
+        $userDetailsForm = $this->createForm(UserDetailsForm::class, [], ['csrf_protection' => false]);
+        $userDetailsForm->handleRequest($request);
+
+        $formDescriptor = $this->contentFormService->buildFormDescriptor('user', [], ['userDetailsForm' => $userDetailsForm]);
         $formDescriptor->handleRequest($request);
 
-        if ($formDescriptor->isFormValid()) {
-            $userId = ($createUser)($formDescriptor->getData());
+        if ($formDescriptor->isFormValid() && $userDetailsForm->isSubmitted() && $userDetailsForm->isValid()) {
+            $result = ($createUser)(CreateUserRequest::fromArray(
+                $userDetailsForm->getData() + ['attributes' => $formDescriptor->getData()]
+            ));
 
             $this->setFlash('success', $this->trans('userSaved', [], 'users'));
-            return $this->redirectToRoute('backend.user.edit', [ 'id' => $userId ]);
+            return $this->redirectToRoute('backend.user.edit', [ 'id' => $result->id ]);
         }
 
         return $this->view('@backend/user/user/create.tpl', [
@@ -83,18 +84,29 @@ class User extends AbstractController
      */
     public function edit(Request $request, string $id, UpdateUser $updateUser)
     {
-        $user = $this->repository->find($id);
+        $user = $this->repository->get($id);
 
         if (! $user) {
             $this->setFlash('danger', $this->trans('userNotExists', [], 'users'));
             return $this->redirectToRoute('backend.user.list');
         }
 
-        $formDescriptor = $this->produceFormDescriptor($user);
+        $userData = $user->toArray();
+
+        $userDetailsForm = $this->createForm(
+            UserDetailsForm::class,
+            $userData,
+            ['csrf_protection' => false, 'edit_form' => true]
+        );
+        $userDetailsForm->handleRequest($request);
+
+        $formDescriptor = $this->contentFormService->buildFormDescriptor('user', $userData['attributes'], ['userDetailsForm' => $userDetailsForm]);
         $formDescriptor->handleRequest($request);
 
         if ($formDescriptor->isFormValid()) {
-            ($updateUser)($user, $formDescriptor->getData());
+            ($updateUser)(UpdateUserRequest::fromArray(
+                $userDetailsForm->getData() + ['attributes' => $formDescriptor->getData()]
+            ));
 
             $this->setFlash('success', $this->trans('userSaved', [], 'users'));
             return $this->redirectToRoute('backend.user.edit', [ 'id' => $id ]);
@@ -113,7 +125,7 @@ class User extends AbstractController
         $removedUsers = 0;
 
         foreach ($request->request->get('ids') as $id) {
-            $user = $this->repository->find($id);
+            $user = $this->repository->get($id);
 
             if ($user) {
                 try {
@@ -130,32 +142,5 @@ class User extends AbstractController
         }
 
         return $this->redirectToRoute('backend.user');
-    }
-
-    private function produceFormDescriptor(?DomainModel $user = null): ContentTypeFormDescriptor
-    {
-        $context = [
-            'user_email' => $user === null ? null : $user->getEmail(),
-            'user_avatar' => $user === null ? null : $user->avatar,
-        ];
-
-        $data = $user ? $user->toArray() : [];
-        $data['remove_avatar'] = '0';
-
-        $descriptor = $this->contentFormService->buildFormDescriptor('user', $data, $context);
-
-        if ($user) {
-            $passwordField = $descriptor->getContentType()->getField('password');
-            $passwordField->removeConstraint('required');
-            $passwordRepeatField = $descriptor->getContentType()->getField('password_repeat');
-            $passwordRepeatField->removeConstraint('required');
-
-            $descriptor->getFormBuilder()->remove('email');
-
-            $this->fieldBuilder->buildFieldAndAddToBuilder($passwordField, $descriptor->getFormBuilder(), $descriptor->getContentType());
-            $this->fieldBuilder->buildFieldAndAddToBuilder($passwordRepeatField, $descriptor->getFormBuilder(), $descriptor->getContentType());
-        }
-
-        return $descriptor;
     }
 }
