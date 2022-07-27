@@ -11,6 +11,7 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
 use Tulia\Cms\User\Application\UseCase\ChangePassword;
+use Tulia\Cms\User\Application\UseCase\ChangePasswordRequest;
 use Tulia\Cms\User\Application\UseCase\UpdateMyAccount;
 use Tulia\Cms\User\Application\UseCase\UpdateMyAccountRequest;
 use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
@@ -89,12 +90,6 @@ class MyAccount extends AbstractController
      */
     public function password(Request $request, ChangePassword $changePassword)
     {
-        $user = $this->userRepository->get($this->authenticatedUserProvider->getUser()->getId());
-
-        if (!$user) {
-            return $this->redirectToRoute('backend.homepage');
-        }
-
         $form = $this->createForm(PasswordForm::class);
         $form->handleRequest($request);
 
@@ -106,7 +101,7 @@ class MyAccount extends AbstractController
                 return $this->redirectToRoute('backend.me.password');
             }
 
-            ($changePassword)($user, $data['new_password']);
+            ($changePassword)(new ChangePasswordRequest($this->authenticatedUserProvider->getUser()->getId(), $data['new_password']));
 
             $this->setFlash('danger', $this->trans('passwordChangedSuccessfully', [], 'users'));
             return $this->redirectToRoute('backend.logout');

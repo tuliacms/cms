@@ -17,6 +17,7 @@ use Tulia\Cms\User\Domain\WriteModel\Exception\EmailEmptyException;
 use Tulia\Cms\User\Domain\WriteModel\Exception\EmailInvalidException;
 use Tulia\Cms\User\Domain\WriteModel\Rules\CanDeleteUser\CanDeleteUserInterface;
 use Tulia\Cms\User\Domain\WriteModel\Rules\CanDeleteUser\CanDeleteUserReasonEnum;
+use Tulia\Cms\User\Domain\WriteModel\Service\PasswordHasherInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -136,10 +137,7 @@ class User extends AbstractAggregateRoot
         }
     }
 
-    /**
-     * @param string $password
-     */
-    public function changePassword(string $password): void
+    public function changePassword(PasswordHasherInterface $passwordHasher, string $password): void
     {
         /**
          * Password cannot be empty. If empty password provided, user do
@@ -147,7 +145,7 @@ class User extends AbstractAggregateRoot
          * it's provided.
          */
         if ($this->password !== $password && empty($password) === false) {
-            $this->password = $password;
+            $this->password = $passwordHasher->hashPassword($this->email, $password);
 
             $this->recordThat(new Event\PasswordChanged($this->id));
         }
