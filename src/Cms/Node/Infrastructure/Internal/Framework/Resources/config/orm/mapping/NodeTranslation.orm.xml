@@ -3,7 +3,7 @@
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="Tulia\Cms\Node\Domain\WriteModel\NewModel\NodeTranslation" table="#__node_translation">
+    <entity name="Tulia\Cms\Node\Domain\WriteModel\Model\NodeTranslation" table="#__node_translation">
         <id name="id" type="uuid">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
@@ -17,8 +17,8 @@
         <field name="title"/>
         <field name="slug" nullable="true"/>
 
-        <many-to-one field="node" target-entity="Tulia\Cms\Node\Domain\WriteModel\NewModel\Node" inversed-by="translations"/>
-        <one-to-many field="attributes" orphan-removal="true" target-entity="Tulia\Cms\Node\Domain\WriteModel\NewModel\Attribute" mapped-by="node">
+        <many-to-one field="node" target-entity="Tulia\Cms\Node\Domain\WriteModel\Model\Node" inversed-by="translations"/>
+        <one-to-many field="attributes" orphan-removal="true" target-entity="Tulia\Cms\Node\Domain\WriteModel\Model\Attribute" mapped-by="nodeTranslation">
             <cascade>
                 <cascade-persist/>
                 <cascade-remove/>

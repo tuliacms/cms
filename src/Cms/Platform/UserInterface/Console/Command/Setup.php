@@ -9,12 +9,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Tulia\Cms\Platform\Domain\Service\DynamicConfigurationInterface;
-use Tulia\Cms\Security\Framework\Security\Core\User\User as CoreUser;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
-use Tulia\Cms\User\Domain\WriteModel\Model\User;
-use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
+use Tulia\Cms\User\Application\UseCase\CreateUser;
+use Tulia\Cms\User\Application\UseCase\CreateUserRequest;
 
 /**
  * @author Adam Banaszkiewicz
@@ -25,8 +23,7 @@ class Setup extends Command
         private string $rootDir,
         private UuidGeneratorInterface $uuidGenerator,
         private DynamicConfigurationInterface $configuration,
-        private UserRepositoryInterface $userRepository,
-        private UserPasswordHasherInterface $passwordHasher
+        private CreateUser $createUser
     ) {
         parent::__construct();
     }
@@ -67,6 +64,7 @@ EOF
             }
         });
         $password = $this->askFor('Admin password', $input, $output, default: 'root');
+        $sampleData = $this->askFor('I want to load sample website data', $input, $output, default: 'yes');
 
         $this->updateWebsite($websiteName, $websiteProductionDomain);
         $this->crreateAdminUser($username, $password);
@@ -141,16 +139,10 @@ EOF
 
     private function crreateAdminUser(string $username, string $password): void
     {
-        $securityUser = new CoreUser($username, null, ['ROLE_ADMIN']);
-        $hashedPassword = $this->passwordHasher->hashPassword($securityUser, $password);
-
-        $user = User::create(
-            $this->userRepository->generateNextId(),
+        ($this->createUser)(new CreateUserRequest(
             $username,
-            $hashedPassword,
+            $password,
             ['ROLE_ADMIN']
-        );
-
-        $this->userRepository->save($user);
+        ));
     }
 }

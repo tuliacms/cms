@@ -11,9 +11,10 @@
     <li class="breadcrumb-item active" aria-current="page">{{ 'editAccount'|trans({}, 'users') }}</li>
 {% endblock %}
 
+{% block page_buttons %}{{ form_row(formDescriptor.formView.save) }}{% endblock %}
+
 {% block mainContent %}
     <div class="form-controls-terminator">
         {{ render_content_builder_form_layout(formDescriptor) }}
-        {{ form_row(formDescriptor.formView.save) }}
     </div>
 {% endblock %}

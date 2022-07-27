@@ -1,5 +1,5 @@
 {# Store preview link, used in button in header. #}
-{% set previewLink = previewLink ?? path('homepage') %}
+{% set previewLink = previewLink ?? null %}
 
 <div class="layout-top">
     <header>
@@ -110,7 +110,7 @@
                         <a href="{{ previewLink }}" target="_blank" class="btn btn-icon-only action-btn"><i class="btn-icon fas fa-eye"></i></a>
                     </div>
                 {% else %}
-                    <div class="action-box" data-bs-toggle="tooltip" data-bs-placement="left" title="{{ 'pageNotPublished'|trans }}">
+                    <div class="action-box" data-bs-toggle="tooltip" data-bs-placement="left" title="{{ 'previewNotAvailable'|trans }}">
                         <a href="#" disabled="disabled" class="btn btn-icon-only action-btn disabled"><i class="btn-icon fas fa-eye"></i></a>
                     </div>
                 {% endif %}

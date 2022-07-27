@@ -39,7 +39,7 @@ final class CreateUser extends AbstractUserUseCase
         $hashedPassword = $this->passwordHasher->hashPassword($securityUser, $request->password);
 
         $user = User::create(
-            $this->repository->generateNextId(),
+            $this->repository->getNextId(),
             $request->email,
             $hashedPassword,
             $request->roles,

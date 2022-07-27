@@ -7,10 +7,6 @@ services:
         resource: '../../../../**'
         exclude: '../../../../{Infrastructure/Framework/Resources}'
 
-    Tulia\Cms\Options\UserInterface\Console\Command\OptionsRegister:
-        tags:
-            - { name: console.command, command: 'options:register' }
-
     Tulia\Cms\Options\Application\Service\RegisteredOptionsRegistry:
         bind:
             $definitions: '%cms.options.definitions%'

@@ -7,7 +7,7 @@ namespace Tulia\Cms\User\Domain\WriteModel\Event;
 /**
  * @author Adam Banaszkiewicz
  */
-class RoleWasTaken extends AbstractDomainEvent
+class RoleWasTaken extends AbstractUserDomainEvent
 {
     private string $role;
 

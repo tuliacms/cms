@@ -35,7 +35,7 @@ final class UpdateUser extends AbstractUserUseCase
     {
         $user = $this->repository->get($request->id);
 
-        $user->updateAttributes($request->attributes);
+        $user->persistAttributes(...$request->attributes);
         $user->persistRoles($request->roles);
         $user->changeLocale($request->locale);
         $user->changeName($request->name);

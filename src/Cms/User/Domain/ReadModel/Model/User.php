@@ -12,7 +12,7 @@ use Tulia\Cms\Content\Attributes\Domain\ReadModel\Model\AttributesAwareInterface
  */
 class User
 {
-    protected string $id;
+    protected ?string $id = null;
     protected string $password;
     protected string $email;
     protected string $locale = 'en_US';
@@ -90,7 +90,7 @@ class User
         return $result;
     }
 
-    public function getId(): string
+    public function getId(): ?string
     {
         return $this->id;
     }

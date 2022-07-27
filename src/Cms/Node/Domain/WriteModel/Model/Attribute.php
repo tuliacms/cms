@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Domain\WriteModel\NewModel;
+namespace Tulia\Cms\Node\Domain\WriteModel\Model;
 
 use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\Attribute as BaseAttribute;
 
@@ -14,9 +14,9 @@ class Attribute extends BaseAttribute
 {
     private string $id;
     private string $locale;
-    private ?NodeTranslation $node;
+    private ?NodeTranslation $nodeTranslation;
 
-    public static function fromCore(NodeTranslation $node, BaseAttribute $attribute, string $locale): self
+    public static function fromCore(NodeTranslation $nodeTranslation, BaseAttribute $attribute, string $locale): self
     {
         $self = new static(
             $attribute->code,
@@ -26,7 +26,7 @@ class Attribute extends BaseAttribute
             $attribute->payload,
             $attribute->flags
         );
-        $self->node = $node;
+        $self->nodeTranslation = $nodeTranslation;
         $self->locale = $locale;
 
         return $self;
@@ -34,6 +34,6 @@ class Attribute extends BaseAttribute
 
     public function detach(): void
     {
-        $this->node = null;
+        $this->nodeTranslation = null;
     }
 }

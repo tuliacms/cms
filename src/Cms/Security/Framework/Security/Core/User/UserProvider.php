@@ -70,7 +70,7 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
         }
 
         try {
-            $roles = json_decode($result[0]['roles']);
+            $roles = unserialize($result[0]['roles'], ['allowed_classes' => []]);
 
             if (! \is_array($roles)) {
                 $roles = [];

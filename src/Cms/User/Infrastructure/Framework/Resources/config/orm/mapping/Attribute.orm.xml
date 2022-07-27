@@ -1,0 +1,21 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Tulia\Cms\User\Domain\WriteModel\Model\Attribute" table="#__user_attribute">
+        <id name="id" type="uuid">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+
+        <field name="code" />
+        <field name="uri" />
+        <field name="value" nullable="true" />
+        <field name="compiledValue" nullable="true" />
+        <field name="payload" type="array" nullable="true" />
+        <field name="flags" type="array" nullable="true" />
+
+        <many-to-one field="user" target-entity="Tulia\Cms\User\Domain\WriteModel\Model\User" inversed-by="attributes"/>
+    </entity>
+</doctrine-mapping>

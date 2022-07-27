@@ -4,21 +4,29 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Domain\WriteModel\Model;
 
-use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\Attribute;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\Attribute as CoreAttribute;
+use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\AttributesAwareAggregateTrait;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
 use Tulia\Cms\User\Application\Service\Avatar\UploaderInterface;
 use Tulia\Cms\User\Domain\WriteModel\Event;
-use Tulia\Cms\User\Domain\WriteModel\Event\AttributeUpdated;
+use Tulia\Cms\User\Domain\WriteModel\Event\UserDeleted;
+use Tulia\Cms\User\Domain\WriteModel\Exception\CannotDeleteUserException;
 use Tulia\Cms\User\Domain\WriteModel\Exception\EmailEmptyException;
 use Tulia\Cms\User\Domain\WriteModel\Exception\EmailInvalidException;
+use Tulia\Cms\User\Domain\WriteModel\Rules\CanDeleteUser\CanDeleteUserInterface;
+use Tulia\Cms\User\Domain\WriteModel\Rules\CanDeleteUser\CanDeleteUserReasonEnum;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class User extends AbstractAggregateRoot
 {
+    use AttributesAwareAggregateTrait;
+
     private string $id;
-    protected ?string $password;
+    protected string $password;
     protected string $email;
     protected string $locale = 'en_US';
     protected bool $enabled = true;
@@ -28,19 +36,21 @@ class User extends AbstractAggregateRoot
     protected array $roles = [];
     protected ?string $name = null;
     protected ?string $avatar = null;
+    protected Collection $attributes;
 
-    private function __construct(string $id, string $email, ?string $password, array $roles)
+    private function __construct(string $id, string $email, string $password, array $roles)
     {
         $this->id = $id;
         $this->email = $email;
         $this->password = $password;
         $this->roles = $roles;
+        $this->attributes = new ArrayCollection();
     }
 
     public static function create(
         string $id,
         string $email,
-        ?string $password,
+        string $password,
         array $roles,
         bool $enabled = true,
         string $locale = 'en_US',
@@ -50,21 +60,12 @@ class User extends AbstractAggregateRoot
         $self = new self($id, $email, $password, $roles);
         $self->enabled = $enabled;
         $self->locale = $locale;
-        $self->attributes = $attributes;
+        $self->attributes = new ArrayCollection(array_map(
+            fn($v) => $self->factoryAttributeFromCore($v),
+            $attributes
+        ));
         $self->name = $name;
         $self->recordThat(new Event\UserCreated($id));
-
-        return $self;
-    }
-
-    public static function fromArray(array $data): self
-    {
-        $self = new self($data['id'], $data['email'], null, $data['roles']);
-        $self->enabled = $data['enabled'] ? true : false;
-        $self->locale = $data['locale'];
-        $self->name = $data['name'];
-        $self->avatar = $data['avatar'];
-        $self->attributes = $data['attributes'];
 
         return $self;
     }
@@ -81,7 +82,7 @@ class User extends AbstractAggregateRoot
             'accountLocked' => $this->accountLocked,
             'roles' => $this->roles,
             'password' => $this->password,
-            'attributes' => $this->attributes,
+            'attributes' => $this->attributesToArray(),
             'name' => $this->name,
             'avatar' => $this->avatar,
         ];
@@ -90,23 +91,6 @@ class User extends AbstractAggregateRoot
     public function getId(): string
     {
         return $this->id;
-    }
-
-    /**
-     * @param Attribute[] $attributes
-     */
-    public function updateAttributes(array $attributes): void
-    {
-        foreach ($attributes as $attribute) {
-            $name = $attribute->getCode();
-            $value = $attribute->getValue();
-
-            if (isset($this->attributes[$name]) === false || $this->attributes[$name]->getValue() !== $value) {
-                $this->attributes[$attribute->getUri()] = $attribute;
-
-                $this->recordThat(AttributeUpdated::fromModel($this, $name, $value));
-            }
-        }
     }
 
     /**
@@ -239,4 +223,30 @@ class User extends AbstractAggregateRoot
             $this->avatar = null;
         }
     }
+
+    public function delete(CanDeleteUserInterface $rules, UploaderInterface $uploader): void
+    {
+        $reason = $rules->decide($this->id);
+
+        if (CanDeleteUserReasonEnum::OK !== $reason) {
+            throw CannotDeleteUserException::fromReason($reason, $this->id);
+        }
+
+        if ($this->avatar) {
+            $uploader->removeUploaded($this->avatar);
+        }
+
+        $this->recordThat(new UserDeleted($this->id));
+    }
+
+    protected function factoryAttributeFromCore(CoreAttribute $attribute): Attribute
+    {
+        return Attribute::fromCore($this, $attribute);
+    }
+
+    protected function noticeThatAttributeHasBeenAdded(CoreAttribute $attribute): void {}
+
+    protected function noticeThatAttributeHasBeenRemoved(CoreAttribute $attribute): void {}
+
+    protected function noticeThatAttributeHasBeenUpdated(CoreAttribute $attribute): void {}
 }

@@ -12,7 +12,9 @@ use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
 use Tulia\Cms\User\Application\UseCase\ChangePassword;
 use Tulia\Cms\User\Application\UseCase\UpdateMyAccount;
+use Tulia\Cms\User\Application\UseCase\UpdateMyAccountRequest;
 use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
+use Tulia\Cms\User\UserInterface\Web\Form\MyAccountDetailsForm;
 use Tulia\Cms\User\UserInterface\Web\Form\PasswordForm;
 use Tulia\Component\Templating\ViewInterface;
 
@@ -21,18 +23,11 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class MyAccount extends AbstractController
 {
-    private AuthenticatedUserProviderInterface $authenticatedUserProvider;
-    private UserRepositoryInterface $userRepository;
-    private ContentFormService $contentFormService;
-
     public function __construct(
-        AuthenticatedUserProviderInterface $authenticatedUserProvider,
-        UserRepositoryInterface $userRepository,
-        ContentFormService $contentFormService
+        private AuthenticatedUserProviderInterface $authenticatedUserProvider,
+        private UserRepositoryInterface $userRepository,
+        private ContentFormService $contentFormService,
     ) {
-        $this->authenticatedUserProvider = $authenticatedUserProvider;
-        $this->userRepository = $userRepository;
-        $this->contentFormService = $contentFormService;
     }
 
     public function me(): ViewInterface
@@ -52,7 +47,7 @@ class MyAccount extends AbstractController
     /**
      * @param Request $request
      * @return RedirectResponse|ViewInterface
-     * @CsrfToken(id="content_builder_form_my_account")
+     * @CsrfToken(id="content_builder_form_user")
      */
     public function edit(Request $request, UpdateMyAccount $updateMyAccount)
     {
@@ -62,14 +57,22 @@ class MyAccount extends AbstractController
             return $this->redirectToRoute('backend.homepage');
         }
 
-        $data = $user->toArray();
-        $data['remove_avatar'] = '0';
+        $userData = $user->toArray();
 
-        $formDescriptor = $this->contentFormService->buildFormDescriptor('my_account', $data);
+        $userDetailsForm = $this->createForm(MyAccountDetailsForm::class, $userData, ['csrf_protection' => false]);
+        $userDetailsForm->handleRequest($request);
+
+        $formDescriptor = $this->contentFormService->buildFormDescriptor('user', $userData['attributes'], ['userDetailsForm' => $userDetailsForm]);
         $formDescriptor->handleRequest($request);
 
         if ($formDescriptor->isFormValid()) {
-            ($updateMyAccount)($user, $formDescriptor->getData());
+            ($updateMyAccount)(UpdateMyAccountRequest::fromArray(
+                array_merge(
+                    $userDetailsForm->getData(),
+                    ['attributes' => $formDescriptor->getData()],
+                    ['id' => $user->getId()],
+                )
+            ));
 
             $this->setFlash('success', $this->trans('userSaved', [], 'users'));
             return $this->redirectToRoute('backend.me.edit');

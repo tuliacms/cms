@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Infrastructure\External\Doctrine\Dbal\WriteModel;
 
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeDoesntExistsException;
-use Tulia\Cms\Node\Domain\WriteModel\NewModel\Node;
+use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodeRepositoryInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
 

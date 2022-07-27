@@ -187,7 +187,7 @@ class DbalFinderQuery extends AbstractDbalQuery
         } elseif ($query['count']) {
             $this->queryBuilder->select('COUNT(' . $query['count'] . ') AS count');
         } else {
-            $this->queryBuilder->select('tm.*');
+            $this->queryBuilder->select('tm.*, BIN_TO_UUID(tm.id) AS id');
         }
 
         $this->queryBuilder->from('#__user', 'tm');

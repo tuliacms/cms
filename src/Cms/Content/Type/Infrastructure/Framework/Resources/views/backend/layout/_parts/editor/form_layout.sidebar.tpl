@@ -85,12 +85,13 @@
         <div class="page-form-content">
             {% block page_header %}{% endblock %}
             <ul class="nav nav-tabs page-form-tabs" role="tablist">
-                {% block page_tabs %}{% endblock %}
+                {% set pageTabsBlock = block('page_tabs') ?? null %}
+                {{ pageTabsBlock|raw }}
                 {% set loopIndex = 0 %}
                 {% for group in contentType.fieldGroups %}
                     {% if group.section == 'main' %}
                         {{ _self.tab(group.code, {
-                            active: loopIndex == 0,
+                            active: pageTabsBlock is empty and loopIndex == 0,
                             name: group.name|trans,
                             fields: group.fields
                         }, form) }}
@@ -105,11 +106,18 @@
                 }, form) }}
             </ul>
             <div class="tab-content">
-                {% block page_tabs_content %}{% endblock %}
+                {% set pageTabsContentBlock = block('page_tabs_content') ?? null %}
+                {{ pageTabsContentBlock|raw }}
                 {% set loopIndex = 0 %}
                 {% for group in contentType.fieldGroups %}
                     {% if group.section == 'main' %}
-                        {{ _self.tab_content(group.code, loopIndex == 0, group, form, contentType) }}
+                        {{ _self.tab_content(
+                            group.code,
+                            pageTabsContentBlock is empty and loopIndex == 0,
+                            group,
+                            form,
+                            contentType
+                        ) }}
                         {% set loopIndex = loopIndex + 1 %}
                     {% endif %}
                 {% endfor %}

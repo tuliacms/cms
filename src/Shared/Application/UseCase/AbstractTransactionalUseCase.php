@@ -7,7 +7,7 @@ namespace Tulia\Cms\Shared\Application\UseCase;
 /**
  * @author Adam Banaszkiewicz
  */
-abstract class AbstractUseTransactionalCase implements TransactionalUseCaseInterface
+abstract class AbstractTransactionalUseCase implements TransactionalUseCaseInterface
 {
     private TransactionalSessionInterface $transactionalSession;
 

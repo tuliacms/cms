@@ -28,7 +28,7 @@ class DbalDatatableFinder extends AbstractDatatableFinder
     {
         return [
             'id' => [
-                'selector' => 'tm.id',
+                'selector' => 'BIN_TO_UUID(tm.id)',
                 'type' => 'uuid',
                 'label' => 'ID',
             ],
@@ -39,13 +39,18 @@ class DbalDatatableFinder extends AbstractDatatableFinder
                 'html_attr' => ['class' => 'col-title'],
                 'view' => '@backend/user/user/parts/datatable/name.tpl',
             ],
+            'name' => [
+                'selector' => 'tm.name',
+                'label' => 'name',
+                'sortable' => true,
+            ],
             'enabled' => [
                 'selector' => 'tm.enabled',
                 'label' => 'enabled',
                 'sortable' => true,
                 'value_translation' => [
-                    '1' => 'Enabled',
-                    '0' => 'Disabled',
+                    1 => 'Enabled',
+                    0 => 'Disabled',
                 ],
                 'value_class' => [
                     '1' => 'text-success',
@@ -65,6 +70,11 @@ class DbalDatatableFinder extends AbstractDatatableFinder
                 'type' => 'text',
                 'selector' => 'tm.email',
             ],
+            'name' => [
+                'label' => 'name',
+                'type' => 'text',
+                'selector' => 'tm.name',
+            ],
             'enabled' => [
                 'label' => 'enabled',
                 'type' => 'yes_no',
@@ -78,12 +88,8 @@ class DbalDatatableFinder extends AbstractDatatableFinder
     public function prepareQueryBuilder(QueryBuilder $queryBuilder, FinderContext $context): QueryBuilder
     {
         $queryBuilder
-            ->select('tm.email, COALESCE(ua.value, ual.value, "") AS name')
+            ->select('tm.email, tm.name')
             ->from('#__user', 'tm')
-            ->leftJoin('tm', '#__user_attribute', 'ua', "ua.owner_id = tm.id AND ua.name = 'name'")
-            ->leftJoin('ua', '#__user_attribute_lang', 'ual', 'ua.id = ual.attribute_id')
-            ->groupBy('tm.id')
-            ->addGroupBy('ual.value')
         ;
 
         return $queryBuilder;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\WriteModel\Service;
 
-use Tulia\Cms\Node\Domain\WriteModel\NewModel\Node;
+use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 
 /**
  * @author Adam Banaszkiewicz

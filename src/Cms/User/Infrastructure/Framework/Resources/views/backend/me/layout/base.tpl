@@ -13,6 +13,9 @@
 {% block content %}
     <div class="pane pane-lead">
         <div class="pane-header">
+            <div class="pane-buttons">
+                {% block page_buttons %}{% endblock %}
+            </div>
             <i class="pane-header-icon fas fa-user-tie"></i>
             <h1 class="pane-title">{{ block('title') }}</h1>
         </div>

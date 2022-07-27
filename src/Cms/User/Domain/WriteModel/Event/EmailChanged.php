@@ -7,7 +7,7 @@ namespace Tulia\Cms\User\Domain\WriteModel\Event;
 /**
  * @author Adam Banaszkiewicz
  */
-class EmailChanged extends AbstractDomainEvent
+class EmailChanged extends AbstractUserDomainEvent
 {
     private string $email;
 

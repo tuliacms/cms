@@ -26,7 +26,7 @@
         <label for="inputEmail">Email</label>
         <input type="text" value="{{ last_username }}" name="_username" id="inputEmail" class="form-control" required autofocus>
         <label for="inputPassword">Password</label>
-        <input type="password" name="_password" id="inputPassword" value="MyP4$$w0rdT04Dm!n" class="form-control" required>
+        <input type="password" name="_password" id="inputPassword" class="form-control" required>
 
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 

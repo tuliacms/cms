@@ -17,13 +17,10 @@ use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
  */
 class UserLocaleResolver implements EventSubscriberInterface
 {
-    private AuthenticatedUserProviderInterface $authenticatedUserProvider;
-    private Translator $translator;
-
-    public function __construct(AuthenticatedUserProviderInterface $authenticatedUserProvider, Translator $translator)
-    {
-        $this->authenticatedUserProvider = $authenticatedUserProvider;
-        $this->translator = $translator;
+    public function __construct(
+        private AuthenticatedUserProviderInterface $authenticatedUserProvider,
+        private Translator $translator,
+    ) {
     }
 
     public static function getSubscribedEvents(): array
@@ -35,11 +32,17 @@ class UserLocaleResolver implements EventSubscriberInterface
 
     public function handle(RequestEvent $event): void
     {
-        if (! $event->getRequest()->server->get('TULIA_WEBSITE_IS_BACKEND')) {
+        if (!$event->getRequest()->server->get('TULIA_WEBSITE_IS_BACKEND')) {
             return;
         }
 
-        $locale = $this->authenticatedUserProvider->getUser()->getLocale();
+        $user = $this->authenticatedUserProvider->getUser();
+
+        if (!$user->getId()) {
+            $locale = $event->getRequest()->server->get('TULIA_WEBSITE_LOCALE');
+        } else {
+            $locale = $this->authenticatedUserProvider->getUser()->getLocale();
+        }
 
         $this->translator->setLocale($locale);
     }

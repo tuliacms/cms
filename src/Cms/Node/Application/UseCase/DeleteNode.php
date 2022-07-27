@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Application\UseCase;
 
-use Tulia\Cms\Node\Domain\WriteModel\Event\NodeDeleted;
 use Tulia\Cms\Node\Domain\WriteModel\Rules\CanDeleteNode\CanDeleteNodeInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodeRepositoryInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChainInterface;
@@ -35,6 +34,6 @@ final class DeleteNode
         $node->delete($this->canDeleteNode);
 
         $this->repository->delete($node);
-        $this->eventBus->dispatch(NodeDeleted::fromNode($node));
+        $this->eventBus->dispatchCollection($node->collectDomainEvents());
     }
 }

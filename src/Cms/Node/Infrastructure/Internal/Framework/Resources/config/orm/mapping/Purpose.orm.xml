@@ -3,7 +3,7 @@
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="Tulia\Cms\Node\Domain\WriteModel\NewModel\Purpose" table="#__node_has_purpose">
+    <entity name="Tulia\Cms\Node\Domain\WriteModel\Model\Purpose" table="#__node_has_purpose">
         <id name="id" type="uuid">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
@@ -11,6 +11,6 @@
 
         <field name="purpose" />
 
-        <many-to-one field="node" target-entity="Tulia\Cms\Node\Domain\WriteModel\NewModel\Node"  inversed-by="purposes"/>
+        <many-to-one field="node" target-entity="Tulia\Cms\Node\Domain\WriteModel\Model\Node"  inversed-by="purposes"/>
     </entity>
 </doctrine-mapping>

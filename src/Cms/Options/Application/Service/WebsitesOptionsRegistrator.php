@@ -24,17 +24,14 @@ class WebsitesOptionsRegistrator
     /**
      * Creates all registered options for given website ID.
      * Website must exists to create options for this website.
-     *
-     * @param string $websiteId
      */
-    public function registerMissingOptionsForWebsite(string $websiteId): void
+    public function registerMissingOptions(): void
     {
         $source = $this->collector->collectRegisteredOptions();
         $options = [];
 
         foreach ($source as $name => $option) {
             $options[] = new Option(
-                $websiteId,
                 $name,
                 $option['value'],
                 null,
@@ -46,9 +43,9 @@ class WebsitesOptionsRegistrator
         $this->repository->saveBulk($options);
     }
 
-    public function removeOptionsForWebsite(string $websiteId): void
+    public function removeOptions(): void
     {
-        $options = $this->repository->findAllForWebsite($websiteId);
+        $options = $this->repository->findAllForWebsite();
         $this->repository->deleteBulk($options);
     }
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="auth+intl-icu.en.xlf">
+        <body>
+            <trans-unit id="tuliacms.auth.2">
+                <source>loginToAdminPanel</source>
+                <target>Zaloguj się do Panelu Administracyjnego.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

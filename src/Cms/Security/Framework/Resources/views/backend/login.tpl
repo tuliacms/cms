@@ -103,7 +103,7 @@
                         <div class="logo">
                             <img class="logo-image" src="{{ asset('/assets/core/backend/theme/images/logo-reverse.svg') }}" alt="Tulia CMS" />
                         </div>
-                        <p class="logo-slogan">Login to Your Administration Panel.</p>
+                        <p class="logo-slogan">{{ 'loginToAdminPanel'|trans({}, 'auth') }}</p>
                         {{ flashes() }}
                         {% if error %}
                             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'auth') }}</div>
@@ -125,7 +125,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-key"></i></span>
                                     </div>
-                                    <input type="password" class="form-control form-control-autofocus" id="password" name="_password" placeholder="{{ 'password'|trans }}" value="MyP4$$w0rdT04Dm!n" />
+                                    <input type="password" class="form-control form-control-autofocus" id="password" name="_password" placeholder="{{ 'password'|trans }}" />
                                 </div>
                             </fieldset>
                             <div class="form-check" style="margin-bottom:50px">

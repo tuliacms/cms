@@ -7,6 +7,6 @@ namespace Tulia\Cms\User\Domain\WriteModel\Event;
 /**
  * @author Adam Banaszkiewicz
  */
-class AccountWasDisabled extends AbstractDomainEvent
+class AccountWasDisabled extends AbstractUserDomainEvent
 {
 }

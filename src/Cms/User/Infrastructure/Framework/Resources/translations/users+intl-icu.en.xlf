@@ -154,6 +154,14 @@
                 <target>Please type a valid current password to do this operation.</target>
                 <note>Alert message</note>
             </trans-unit>
+            <trans-unit id="tuliacms.users.38">
+                <source>cannotDeleteUserBecause</source>
+                <target>User cannot be deleted, because: {reason}.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.39">
+                <source>yourAccount</source>
+                <target>Your account</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

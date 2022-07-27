@@ -11,6 +11,8 @@
     <li class="breadcrumb-item active" aria-current="page">{{ 'changePassword'|trans({}, 'users') }}</li>
 {% endblock %}
 
+{% block page_buttons %}{{ form_row(form.save) }}{% endblock %}
+
 {% block mainContent %}
     {{ form_start(form) }}
 
@@ -26,7 +28,6 @@
             {{ 'autoLogoutAfterPasswordChangeInfo'|trans({}, 'users') }}
         </div>
         {{ form_row(form.current_password) }}
-        {{ form_row(form.save) }}
     </div>
     {{ form_end(form) }}
 {% endblock %}

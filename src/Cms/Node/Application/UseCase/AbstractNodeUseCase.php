@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Application\UseCase;
 
-use Tulia\Cms\Node\Domain\WriteModel\NewModel\Node;
+use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Cms\Node\Domain\WriteModel\Rules\CanAddPurpose\CanImposePurposeInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodeRepositoryInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Service\ShortcodeProcessorInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Service\SlugGeneratorStrategy\SlugGeneratorStrategyInterface;
-use Tulia\Cms\Shared\Application\UseCase\AbstractUseTransactionalCase;
+use Tulia\Cms\Shared\Application\UseCase\AbstractTransactionalUseCase;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-abstract class AbstractNodeUseCase extends AbstractUseTransactionalCase
+abstract class AbstractNodeUseCase extends AbstractTransactionalUseCase
 {
     public function __construct(
         protected NodeRepositoryInterface $repository,

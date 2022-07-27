@@ -600,7 +600,7 @@ Tulia.DataTable.View.Datatable = class {
                 let type = columns[name].type ?? 'text';
                 let col = this.generateColumn(type);
 
-                if (row[name]) {
+                if (row[name] || row[name] === 0) {
                     let value = row[name];
 
                     this.applyValueClass(col, columns[name].value_class ?? {}, value);

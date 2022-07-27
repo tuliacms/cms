@@ -451,52 +451,6 @@ INSERT INTO `#__term_path` (`term_id`, `locale`, `path`) VALUES
 ('a94d7e88-001a-45c1-99eb-c9dff24620b2', 'en_US', '/level-1/level-2/level-3/level-4/level-5'),
 ('b89c2db5-2675-4268-8fef-aa30099ab871', 'en_US', '/kategoria/kolejna-kategoria');
 EOF);
-        $this->addSql(<<<EOF
-CREATE TABLE `#__user` (
-  `id` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `locale` varchar(8) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'en_US',
-  `enabled` int NOT NULL DEFAULT '1',
-  `account_expired` int NOT NULL DEFAULT '0',
-  `credentials_expired` int NOT NULL DEFAULT '0',
-  `account_locked` int NOT NULL DEFAULT '0',
-  `roles` json NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-
-INSERT INTO `#__user` (`id`, `password`, `email`, `locale`, `enabled`, `account_expired`, `credentials_expired`, `account_locked`, `roles`) VALUES
-('0167ee34-f63d-4252-b87b-66245aa45b7e', '\$2y$13$65Knmcr0nTy1kEbfCG50heKumo/WWLOG7E/UY2xxd0OwDu1xLkC3O', 'adam92banaszkiewicz@op.pl', 'pl_PL', 1, 0, 0, 0, '[\"ROLE_ADMIN\"]'),
-('0eca0681-5594-4c92-8d8a-afa758d84cc5', '\$argon2id\$v=19\$m=65536,t=4,p=1\$Re7l/X03Y45EbtzKt/UpOQ\$aY0QqiEBA3Arr4VLNGcFcKTlJOxmLm8PIf8GnlNoGhQ', 'user@asd.pl', 'pl_PL', 1, 0, 0, 0, '[\"ROLE_ADMIN\"]'),
-('bc8f0811-dbec-4178-a375-d447b4bc02c7', '\$argon2id\$v=19\$m=65536,t=4,p=1\$vdNMhGyZaDntc7QSXNsKyg\$XNHoKZUmNwk6Q75xPQQb2wSGSlkSGIXtAfODjRTbKj4', 'asd@op.pl', 'en_US', 0, 0, 0, 0, '[\"ROLE_USER\"]');
-EOF);
-        $this->addSql(<<<EOF
-CREATE TABLE `#__user_attribute` (
-  `id` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `owner_id` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `is_renderable` tinyint(1) NOT NULL DEFAULT '0',
-  `has_nonscalar_value` tinyint(1) NOT NULL DEFAULT '0',
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `uri` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `value` longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
-  `compiled_value` longtext COLLATE utf8_unicode_ci,
-  `payload` json DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-
-INSERT INTO `#__user_attribute` (`id`, `owner_id`, `is_renderable`, `has_nonscalar_value`, `name`, `uri`, `value`, `compiled_value`, `payload`) VALUES
-('411cd477-4c58-4233-9769-24ab9911fce3', '0eca0681-5594-4c92-8d8a-afa758d84cc5', 0, 0, 'name', 'name', NULL, NULL, NULL),
-('8ffd7124-f8cb-4f42-b9b3-25c2d7ea0bf8', '0eca0681-5594-4c92-8d8a-afa758d84cc5', 0, 0, 'avatar', 'avatar', NULL, NULL, NULL),
-('dead5454-4337-4fc2-813b-96c3784e1f89', '0167ee34-f63d-4252-b87b-66245aa45b7e', 0, 0, 'name', 'name', 'Adam Banaszkiewicz', NULL, NULL),
-('ea5341c9-8621-48c9-9f88-f4c3d29ecada', '0167ee34-f63d-4252-b87b-66245aa45b7e', 0, 0, 'avatar', 'avatar', '/uploads/user/avatars/2022/02/avatarwoman-62173167b46983.58401297.jpg', NULL, NULL);
-EOF);
-        $this->addSql(<<<EOF
-CREATE TABLE `#__user_attribute_lang` (
-  `attribute_id` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `value` longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
-  `compiled_value` longtext COLLATE utf8_unicode_ci,
-  `payload` json DEFAULT NULL,
-  `locale` varchar(11) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-EOF);
         /*$this->addSql(<<<EOF
 CREATE TABLE `#__website` (
   `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
@@ -698,23 +652,12 @@ ALTER TABLE `#__term_path`
   ADD PRIMARY KEY (`path`,`locale`) USING BTREE,
   ADD KEY `fk_term_path_term_id` (`term_id`);
 
-ALTER TABLE `#__user`
-  ADD UNIQUE KEY `id` (`id`) USING BTREE,
-  ADD UNIQUE KEY `email` (`email`);
-
-ALTER TABLE `#__user_attribute`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `IDX_E710524CA76ED395` (`owner_id`);
-
-ALTER TABLE `#__user_attribute_lang`
-  ADD KEY `IDX_9D324043DC9EE959` (`attribute_id`);
-
-ALTER TABLE `#__website`
-  ADD PRIMARY KEY (`id`);
-
-ALTER TABLE `#__website_locale`
-  ADD UNIQUE KEY `UNIQUE` (`website_id`,`code`,`domain`) USING BTREE,
-  ADD KEY `website_id` (`website_id`);
+-- ALTER TABLE `#__website`
+--   ADD PRIMARY KEY (`id`);
+-- 
+-- ALTER TABLE `#__website_locale`
+--   ADD UNIQUE KEY `UNIQUE` (`website_id`,`code`,`domain`) USING BTREE,
+--   ADD KEY `website_id` (`website_id`);
 
 ALTER TABLE `#__widget`
   ADD PRIMARY KEY (`id`),
@@ -795,17 +738,11 @@ ALTER TABLE `#__term_lang`
 ALTER TABLE `#__term_path`
   ADD CONSTRAINT `fk_term_path_term_id` FOREIGN KEY (`term_id`) REFERENCES `#__term` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE `#__user_attribute`
-  ADD CONSTRAINT `fk_user_attribute_user_id` FOREIGN KEY (`owner_id`) REFERENCES `#__user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `#__user_attribute_lang`
-  ADD CONSTRAINT `fk_user_attribute_lang_user_attribute_id` FOREIGN KEY (`attribute_id`) REFERENCES `#__user_attribute` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `#__website_locale`
-  ADD CONSTRAINT `fk_website_has_locale_website_id` FOREIGN KEY (`website_id`) REFERENCES `#__website` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `#__widget_attribute`
-  ADD CONSTRAINT `fk_widget_attribute_widget_id` FOREIGN KEY (`owner_id`) REFERENCES `#__widget` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+--- ALTER TABLE `#__website_locale`
+---   ADD CONSTRAINT `fk_website_has_locale_website_id` FOREIGN KEY (`website_id`) REFERENCES `#__website` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+--- 
+--- ALTER TABLE `#__widget_attribute`
+---   ADD CONSTRAINT `fk_widget_attribute_widget_id` FOREIGN KEY (`owner_id`) REFERENCES `#__widget` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `#__widget_attribute_lang`
   ADD CONSTRAINT `fk_widget_attribute_lang_widget_attribute_id` FOREIGN KEY (`attribute_id`) REFERENCES `#__widget_attribute` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;

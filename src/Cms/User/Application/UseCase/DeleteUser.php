@@ -4,40 +4,39 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Application\UseCase;
 
-use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChainInterface;
+use Tulia\Cms\Shared\Application\UseCase\AbstractTransactionalUseCase;
+use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
+use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\User\Application\Service\Avatar\UploaderInterface;
-use Tulia\Cms\User\Domain\WriteModel\Event\UserDeleted;
-use Tulia\Cms\User\Domain\WriteModel\Exception\CannotDeleteYourselfException;
-use Tulia\Cms\User\Domain\WriteModel\Model\User;
+use Tulia\Cms\User\Domain\WriteModel\Rules\CanDeleteUser\CanDeleteUserInterface;
 use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-final class DeleteUser
+final class DeleteUser extends AbstractTransactionalUseCase
 {
     public function __construct(
         private UploaderInterface $uploader,
         private UserRepositoryInterface $repository,
         private EventBusInterface $eventDispatcher,
-        private AggregateActionsChainInterface $actionsChain,
+        private CanDeleteUserInterface $canDeleteUser
     ) {
     }
 
     /**
-     * @throws CannotDeleteYourselfException
+     * @param RequestInterface&DeleteUserRequest $request
      */
-    public function __invoke(User $user): void
+    protected function execute(RequestInterface $request): ?ResultInterface
     {
-        $this->actionsChain->execute('delete', $user);
+        $user = $this->repository->get($request->id);
 
+        $user->delete($this->canDeleteUser, $this->uploader);
         $this->repository->delete($user);
 
-        if ($user->attribute('avatar')) {
-            $this->uploader->removeUploaded($user->attribute('avatar')->getValue());
-        }
+        $this->eventDispatcher->dispatchCollection($user->collectDomainEvents());
 
-        $this->eventDispatcher->dispatch(new UserDeleted($user->getId()->getValue()));
+        return null;
     }
 }

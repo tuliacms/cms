@@ -14,14 +14,13 @@ final class CannotDeleteNodeException extends AbstractDomainException
 {
     private function __construct(
         string $message,
-        public readonly string $reason,
-        public readonly string $title,
+        public readonly string $reason
     ) {
         parent::__construct($message);
     }
 
-    public static function fromReason(CanDeleteNodeReasonEnum $reason, string $nodeId, string $title): self
+    public static function fromReason(CanDeleteNodeReasonEnum $reason, string $nodeId): self
     {
-        return new self(sprintf('Cannot delete node "%s", because: %s', $nodeId, $reason->value), $reason->value, $title);
+        return new self(sprintf('Cannot delete node "%s", because: %s', $nodeId, $reason->value), $reason->value);
     }
 }

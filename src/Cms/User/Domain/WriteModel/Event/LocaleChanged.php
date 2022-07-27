@@ -7,7 +7,7 @@ namespace Tulia\Cms\User\Domain\WriteModel\Event;
 /**
  * @author Adam Banaszkiewicz
  */
-class LocaleChanged extends AbstractDomainEvent
+class LocaleChanged extends AbstractUserDomainEvent
 {
     private string $locale;
 

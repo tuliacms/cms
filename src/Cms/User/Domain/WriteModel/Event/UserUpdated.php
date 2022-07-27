@@ -9,7 +9,7 @@ use Tulia\Cms\User\Domain\WriteModel\Model\User;
 /**
  * @author Adam Banaszkiewicz
  */
-class UserUpdated extends AbstractDomainEvent
+class UserUpdated extends AbstractUserDomainEvent
 {
     public static function fromModel(User $user): self
     {

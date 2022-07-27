@@ -12,20 +12,21 @@ use Tulia\Cms\Options\Application\Service\WebsitesOptionsRegistrator;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Website\Domain\ReadModel\Finder\WebsiteFinderInterface;
 use Tulia\Cms\Website\Domain\ReadModel\Finder\WebsiteFinderScopeEnum;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class OptionsRegister extends Command
 {
-    private WebsiteFinderInterface $websiteFinder;
-    private WebsitesOptionsRegistrator $optionsRegistrator;
+    protected static $defaultName = 'options:register';
 
-    public function __construct(WebsiteFinderInterface $websiteFinder, WebsitesOptionsRegistrator $optionsRegistrator)
-    {
+    public function __construct(
+        private WebsiteFinderInterface $websiteFinder,
+        private WebsitesOptionsRegistrator $optionsRegistrator,
+        private WebsiteInterface $website
+    ) {
         parent::__construct();
-        $this->websiteFinder = $websiteFinder;
-        $this->optionsRegistrator = $optionsRegistrator;
     }
 
     protected function configure(): void
@@ -33,23 +34,12 @@ class OptionsRegister extends Command
         $this
             ->setName('options:register')
             ->setDescription('Register all available, not registered options in system, for given website.')
-            ->addOption(
-                'websites',
-                'w',
-                InputOption::VALUE_OPTIONAL,
-                'Website ID list (separated by comma) to which to save options. If empty - register for all available websites.'
-            )
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $websites = $this->fetchWebsites($input->getOption('websites'));
-
-        foreach ($websites as $website) {
-            $output->writeln(sprintf('Registering options for website %s...', $website->getId()));
-            $this->optionsRegistrator->registerMissingOptionsForWebsite($website->getId());
-        }
+        $this->optionsRegistrator->registerMissingOptions();
 
         $output->writeln('<info>Missing options successfully registered.</info>');
 

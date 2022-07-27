@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\Theme\Infrastructure\Framework\Theme\Customizer\Changeset\Changeset;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
 use Tulia\Component\Theme\Customizer\Builder\BuilderInterface;
 use Tulia\Component\Theme\Customizer\Changeset\PredefinedChangesetRegistry;
@@ -34,7 +35,7 @@ class Customizer extends AbstractController
         $this->customizerChangesetStorage = $storage;
     }
 
-    public function customizeRedirect(Request $request): RedirectResponse
+    public function customizeRedirect(Request $request, WebsiteInterface $website): RedirectResponse
     {
         $theme = $this->themeManager->getTheme();
 
@@ -42,7 +43,7 @@ class Customizer extends AbstractController
             return $this->redirectToRoute('backend.theme');
         }
 
-        $changeset = $this->customizerChangesetStorage->getTemporaryCopyOfActiveChangeset($theme->getName());
+        $changeset = $this->customizerChangesetStorage->getTemporaryCopyOfActiveChangeset($theme->getName(), $website->getLocale()->getCode());
 
         $parameters = [
             'theme'     => $theme->getName(),

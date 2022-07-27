@@ -3,7 +3,7 @@
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="Tulia\Cms\Node\Domain\WriteModel\NewModel\Attribute" table="#__node_attribute">
+    <entity name="Tulia\Cms\Node\Domain\WriteModel\Model\Attribute" table="#__node_attribute">
         <id name="id" type="uuid">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
@@ -17,6 +17,6 @@
         <field name="payload" type="array" nullable="true" />
         <field name="flags" type="array" nullable="true" />
 
-        <many-to-one field="node" target-entity="Tulia\Cms\Node\Domain\WriteModel\NewModel\NodeTranslation" inversed-by="attributes"/>
+        <many-to-one field="nodeTranslation" target-entity="Tulia\Cms\Node\Domain\WriteModel\Model\NodeTranslation" inversed-by="attributes"/>
     </entity>
 </doctrine-mapping>

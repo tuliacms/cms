@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Application\UseCase;
 
-use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
 use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChainInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\User\Application\Service\Avatar\UploaderInterface;
-use Tulia\Cms\User\Domain\WriteModel\Model\User;
 use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
 
 /**
@@ -18,34 +16,36 @@ use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
  */
 final class UpdateMyAccount extends AbstractUserUseCase
 {
-    private UploaderInterface $uploader;
-
     public function __construct(
         UserRepositoryInterface $repository,
         EventBusInterface $eventDispatcher,
         AggregateActionsChainInterface $actionsChain,
-        UploaderInterface $uploader
+        private UploaderInterface $uploader,
     ) {
         parent::__construct($repository, $eventDispatcher, $actionsChain);
-
-        $this->uploader = $uploader;
     }
 
     /**
-     * @param Attribute[] $attributes
+     * @param RequestInterface&UpdateMyAccountRequest $request
      */
     public function execute(RequestInterface $request): ?ResultInterface
     {
-        $data = $this->flattenAttributes($attributes);
-        $attributes = $this->removeModelsAttributes($attributes);
+        $user = $this->repository->get($request->id);
 
-        if ($data['remove_avatar'] && $data['avatar']) {
-            $this->uploader->removeUploaded($data['avatar']);
+        $user->persistAttributes(...$request->attributes);
+        $user->changeLocale($request->locale);
+        $user->changeName($request->name);
+
+        if ($request->removeAvatar) {
+            $user->removeAvatar($this->uploader);
         }
 
-        $user->updateAttributes($attributes);
-        $user->changeLocale($data['locale']);
+        if ($request->avatar) {
+            $user->changeAvatar($this->uploader->upload($request->avatar));
+        }
 
         $this->update($user);
+
+        return null;
     }
 }

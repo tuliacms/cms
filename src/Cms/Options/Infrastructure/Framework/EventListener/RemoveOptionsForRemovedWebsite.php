@@ -29,6 +29,6 @@ final class RemoveOptionsForRemovedWebsite implements EventSubscriberInterface
 
     public function handle(WebsiteDeleted $event): void
     {
-        $this->websitesOptionsRegistrator->removeOptionsForWebsite($event->getWebsiteId());
+        $this->websitesOptionsRegistrator->removeOptions($event->getWebsiteId());
     }
 }

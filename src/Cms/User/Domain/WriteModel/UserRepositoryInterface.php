@@ -17,5 +17,5 @@ interface UserRepositoryInterface
 
     public function delete(User $user): void;
 
-    public function generateNextId(): string;
+    public function getNextId(): string;
 }

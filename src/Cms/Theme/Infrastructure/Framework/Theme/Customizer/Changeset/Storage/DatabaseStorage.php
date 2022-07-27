@@ -56,9 +56,9 @@ class DatabaseStorage implements StorageInterface
     /**
      * {@inheritdoc}
      */
-    public function getTemporaryCopyOfActiveChangeset(string $theme): ChangesetInterface
+    public function getTemporaryCopyOfActiveChangeset(string $theme, string $locale): ChangesetInterface
     {
-        $active = $this->getActiveChangeset($theme);
+        $active = $this->getActiveChangeset($theme, $locale);
 
         if (!$active) {
             return $this->changesetFactory->factory();
@@ -75,7 +75,7 @@ class DatabaseStorage implements StorageInterface
             'id' => $newId,
         ]);
 
-        return $this->get($newId);
+        return $this->get($newId, $locale);
     }
 
     /**
