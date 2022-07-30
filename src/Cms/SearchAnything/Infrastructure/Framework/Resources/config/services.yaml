@@ -1,0 +1,22 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Cms\SearchAnything\:
+        resource: '../../../../**'
+        exclude:
+            - '../../../../Framework/Resources'
+            - '../../../../Model'
+
+    Tulia\Cms\SearchAnything\SearchEngine\SearchEngineInterface:
+        class: Tulia\Cms\SearchAnything\SearchEngine\SearchEngine
+        bind:
+            $providers: !tagged_iterator search.provider
+
+    Tulia\Cms\SearchAnything\Domain\WriteModel\Service\DocumentCollectorRegistry:
+        arguments:
+            $collectors: !tagged_iterator search_anything.document_collector
+
+    Tulia\Cms\SearchAnything\Domain\WriteModel\Service\DocumentCollectorRegistryInterface:
+        '@Tulia\Cms\SearchAnything\Domain\WriteModel\Service\DocumentCollectorRegistry'

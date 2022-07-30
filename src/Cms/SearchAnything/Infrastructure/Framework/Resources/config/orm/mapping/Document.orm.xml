@@ -1,0 +1,23 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Tulia\Cms\SearchAnything\Domain\WriteModel\Model\Document" table="#__search_anything_document">
+        <id name="id" type="uuid">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+
+        <field name="indexGroup" />
+        <field name="sourceId" />
+        <field name="locale" />
+        <field name="title" length="127" />
+        <field name="route" nullable="true" />
+        <field name="parameters" column="route_parameters" type="array" />
+        <field name="description" nullable="true" />
+        <field name="poster" nullable="true" />
+        <field name="createdAt" type="datetime_immutable" />
+        <field name="updatedAt" type="datetime_immutable" nullable="true" />
+    </entity>
+</doctrine-mapping>

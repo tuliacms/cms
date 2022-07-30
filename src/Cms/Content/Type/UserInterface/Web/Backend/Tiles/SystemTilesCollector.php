@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Content\Type\UserInterface\Web\Backend\Tiles;
 
-use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Homepage\UserInterface\Web\Backend\Tiles\DashboardTilesCollection;
 use Tulia\Cms\Homepage\UserInterface\Web\Backend\Tiles\DashboardTilesCollector;
@@ -14,13 +13,9 @@ use Tulia\Cms\Homepage\UserInterface\Web\Backend\Tiles\DashboardTilesCollector;
  */
 class SystemTilesCollector implements DashboardTilesCollector
 {
-    protected RouterInterface $router;
-    protected TranslatorInterface $translator;
-
-    public function __construct(RouterInterface $router, TranslatorInterface $translator)
-    {
-        $this->router = $router;
-        $this->translator = $translator;
+    public function __construct(
+        protected TranslatorInterface $translator
+    ) {
     }
 
     public function collect(DashboardTilesCollection $collection): void
@@ -28,7 +23,7 @@ class SystemTilesCollector implements DashboardTilesCollector
         $collection
             ->add('content_model', [
                 'name' => $this->translator->trans('contentTypes', [], 'content_builder'),
-                'link' => $this->router->generate('backend.content.type.homepage'),
+                'route' => 'backend.content.type.homepage',
                 'icon' => 'fas fa-box',
             ])
         ;

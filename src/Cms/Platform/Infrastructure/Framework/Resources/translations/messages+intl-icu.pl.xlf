@@ -136,7 +136,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.messages.34">
                 <source>users</source>
-                <target>Users</target>
+                <target>Użytkownicy</target>
             </trans-unit>
             <trans-unit id="tuliacms.messages.35">
                 <source>email</source>
@@ -600,7 +600,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.messages.150">
                 <source>websites</source>
-                <target>Websites</target>
+                <target>Strony</target>
             </trans-unit>
             <trans-unit id="tuliacms.messages.151">
                 <source>startTyping</source>

@@ -31,7 +31,7 @@ trait AggregateRootTrait
     protected function recordUniqueThat(AbstractDomainEvent $event, callable $isDuplicatedEvent): void
     {
         foreach ($this->domainEvents as $key => $item) {
-            if ($isDuplicatedEvent($item)) {
+            if (is_a($item, $event::class) && $isDuplicatedEvent($item)) {
                 unset($this->domainEvents[$key]);
             }
         }

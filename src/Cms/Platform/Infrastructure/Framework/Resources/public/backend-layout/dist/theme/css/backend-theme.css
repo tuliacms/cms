@@ -12453,6 +12453,19 @@ body .typeahead__list .typeahead__item > a {
   font-style: italic;
 }
 
+@media only screen and (max-width: 1280px) {
+  .dashboard-widgets .widget {
+    width: 50%;
+  }
+
+  .dashboard-widgets .widget--1by3 {
+    width: 50%;
+  }
+
+  .dashboard-widgets .widget--2by3 {
+    width: 50%;
+  }
+}
 .search-anything-container {
   display: none;
   position: fixed;

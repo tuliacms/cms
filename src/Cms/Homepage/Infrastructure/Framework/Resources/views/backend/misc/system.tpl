@@ -18,7 +18,7 @@
             <div class="row row-tiles">
                 {% for tile in tiles %}
                     <div class="col-2">
-                        <a href="{{ tile.link }}" class="tile">
+                        <a href="{{ path(tile.route) }}" class="tile">
                             <i class="tile-icon {{ tile.icon }}"></i>
                             <span class="tile-header">{{ tile.name }}</span>
                             <span class="tile-text">{{ tile.description }}</span>

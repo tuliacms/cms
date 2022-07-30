@@ -13,11 +13,9 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class Misc extends AbstractController
 {
-    private DashboardTilesRegistryInterface $tilesRegistry;
-
-    public function __construct(DashboardTilesRegistryInterface $tilesRegistry)
-    {
-        $this->tilesRegistry = $tilesRegistry;
+    public function __construct(
+        private DashboardTilesRegistryInterface $tilesRegistry
+    ) {
     }
 
     public function system(): ViewInterface

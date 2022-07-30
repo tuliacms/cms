@@ -148,6 +148,11 @@ class TuliaCmsExtension extends Extension
         $container->registerForAutoconfiguration(\Tulia\Cms\Filemanager\Domain\ImageSize\ImagesSizeProviderInterface::class)
             ->setLazy(true)
             ->addTag('filemanager.image_size.provider');
+
+        // Widgets
+        $container->registerForAutoconfiguration(\Tulia\Cms\SearchAnything\Domain\WriteModel\Service\DocumentCollectorInterface::class)
+            ->setLazy(true)
+            ->addTag('search_anything.document_collector');
     }
 
     protected function validateOptionsValues(array $definitions): array

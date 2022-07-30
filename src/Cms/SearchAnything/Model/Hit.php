@@ -10,13 +10,9 @@ namespace Tulia\Cms\SearchAnything\Model;
 class Hit
 {
     protected string $title;
-
     protected string $link;
-
     protected ?string $description = null;
-
     protected ?string $image = null;
-
     protected array $tags = [];
 
     public function __construct(string $title, string $link)

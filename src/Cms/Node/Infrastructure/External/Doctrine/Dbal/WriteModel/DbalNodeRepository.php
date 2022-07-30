@@ -56,8 +56,6 @@ final class DbalNodeRepository extends ServiceEntityRepository implements NodeRe
 
     public function delete(Node $node): void
     {
-        $node->delete();
-
         $this->_em->remove($node);
         $this->_em->flush();
     }

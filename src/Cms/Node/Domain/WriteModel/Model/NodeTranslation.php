@@ -45,6 +45,11 @@ final class NodeTranslation
         return $locale === $this->locale;
     }
 
+    public function getLocale(): string
+    {
+        return $this->locale;
+    }
+
     public function setUpdateCallback(\Closure $updateCallback): void
     {
         $this->updateCallback = $updateCallback;

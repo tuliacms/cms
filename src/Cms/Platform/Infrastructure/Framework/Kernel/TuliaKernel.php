@@ -73,7 +73,7 @@ final class TuliaKernel extends Kernel
                 $base . '/Menu/Infrastructure/Framework/Resources/config',
                 $base . '/Node/Infrastructure/Internal/Framework/Resources/config',
                 $base . '/Options/Infrastructure/Framework/Resources/config',
-                $base . '/SearchAnything/Framework/Resources/config',
+                $base . '/SearchAnything/Infrastructure/Framework/Resources/config',
                 $base . '/Security/Framework/Resources/config',
                 $base . '/Settings/Infrastructure/Framework/Resources/config',
                 $base . '/Taxonomy/Infrastructure/Framework/Resources/config',

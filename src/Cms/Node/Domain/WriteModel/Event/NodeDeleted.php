@@ -9,4 +9,11 @@ namespace Tulia\Cms\Node\Domain\WriteModel\Event;
  */
 class NodeDeleted extends AbstractDomainEvent
 {
+    public function __construct(
+        string $id,
+        string $type,
+        public readonly array $translatedTo
+    ) {
+        parent::__construct($id, $type);
+    }
 }

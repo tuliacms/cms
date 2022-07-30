@@ -6,13 +6,16 @@ namespace Tulia\Cms\Node\Application\UseCase;
 
 use Tulia\Cms\Node\Domain\WriteModel\Rules\CanDeleteNode\CanDeleteNodeInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodeRepositoryInterface;
+use Tulia\Cms\Shared\Application\UseCase\AbstractTransactionalUseCase;
+use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
+use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChainInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-final class DeleteNode
+final class DeleteNode extends AbstractTransactionalUseCase
 {
     public function __construct(
         private NodeRepositoryInterface $repository,
@@ -22,12 +25,12 @@ final class DeleteNode
     ) {
     }
 
-    public function __invoke(string $id): void
+    protected function execute(RequestInterface $request): ?ResultInterface
     {
-        $node = $this->repository->get($id);
+        $node = $this->repository->get($request->id);
 
         if (!$node) {
-            return;
+            return null;
         }
 
         $this->actionsChain->execute('delete', $node);
@@ -35,5 +38,7 @@ final class DeleteNode
 
         $this->repository->delete($node);
         $this->eventBus->dispatchCollection($node->collectDomainEvents());
+
+        return null;
     }
 }

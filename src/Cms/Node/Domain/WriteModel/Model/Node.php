@@ -7,6 +7,7 @@ namespace Tulia\Cms\Node\Domain\WriteModel\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Tulia\Cms\Node\Domain\WriteModel\Event;
+use Tulia\Cms\Node\Domain\WriteModel\Event\NodeUpdated;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\CannotDeleteNodeException;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\CannotImposePurposeToNodeException;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeTranslationDoesntExists;
@@ -300,11 +301,22 @@ class Node extends AbstractAggregateRoot
             throw CannotDeleteNodeException::fromReason($reason, $this->id);
         }
 
-        $this->recordThat(new Event\NodeDeleted($this->id, $this->type));
+        $this->recordThat(new Event\NodeDeleted($this->id, $this->type, $this->getTranslationsLocales()));
     }
 
     private function markAsUpdated(): void
     {
         $this->updatedAt = new ImmutableDateTime();
+        $this->recordUniqueThat(new NodeUpdated($this->id, $this->type), function (NodeUpdated $event) {
+            return $event->id === $this->id;
+        });
+    }
+
+    private function getTranslationsLocales(): array
+    {
+        return array_map(
+            static fn ($v) => $v->getLocale(),
+            $this->translations->toArray()
+        );
     }
 }

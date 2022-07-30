@@ -64,3 +64,9 @@
 .last-comments-widget .comment-item:last-child {padding-bottom:0;border-bottom:none;}
 .last-comments-widget .comment-item .comment-author {font-weight:bold;}
 .last-comments-widget .comment-item .comment-date {font-weight:bold;color:rgba(0,0,0,.3);font-style:italic;}
+
+@media only screen and (max-width: 1280px) {
+    .dashboard-widgets .widget {width:50%;}
+    .dashboard-widgets .widget--1by3 {width:50%;}
+    .dashboard-widgets .widget--2by3 {width:50%;}
+}

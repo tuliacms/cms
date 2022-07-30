@@ -26,6 +26,7 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Exception\RequestCsrfTokenException;
+use Tulia\Cms\Shared\Application\UseCase\IdRequest;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
 use Tulia\Component\Datatable\DatatableFactory;
@@ -202,7 +203,7 @@ class Node extends AbstractController
                 default         : return $this->redirectToRoute('backend.node', [ 'node_type' => $nodeType->getCode() ]);
             }
 
-            $this->repository->update($node);
+            $this->repository->save($node);
         }
 
         switch ($request->query->get('status')) {
@@ -227,7 +228,7 @@ class Node extends AbstractController
         foreach ($payload['ids'] ?? [] as $id) {
             try {
                 $pretenders++;
-                ($deleteNode)($id);
+                ($deleteNode)(new IdRequest($id));
                 $deleted++;
             } catch (CannotDeleteNodeException $e) {
                 $this->setFlash('danger', $this->trans(

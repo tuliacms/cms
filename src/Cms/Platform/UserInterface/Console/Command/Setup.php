@@ -63,7 +63,7 @@ EOF
                 throw new \RuntimeException('Please provide a valid e-mail address.');
             }
         });
-        $password = $this->askFor('Admin password', $input, $output, default: 'root');
+        $password = $this->askFor('Admin password', $input, $output, default: 'root', hidden: true);
         $sampleData = $this->askFor('I want to load sample website data', $input, $output, default: 'yes');
 
         $this->updateWebsite($websiteName, $websiteProductionDomain);
@@ -106,7 +106,8 @@ EOF
         OutputInterface $output,
         callable $validator = null,
         mixed $default = '',
-        bool $required = true
+        bool $required = true,
+        bool $hidden = false,
     ): string {
         if ($default) {
             $defaultValue = sprintf(' <fg=#eeeeee>(%s)</>', $default);
@@ -115,6 +116,7 @@ EOF
         }
 
         $question = new Question(sprintf('%s%s: ', $questionMessage, $defaultValue), $default);
+        $question->setHidden($hidden);
         $question->setValidator(function ($answer) use ($questionMessage, $required, $validator) {
             if ($required && empty($answer)) {
                 throw new \RuntimeException(sprintf('Please provide a %s.', strtolower($questionMessage)));
