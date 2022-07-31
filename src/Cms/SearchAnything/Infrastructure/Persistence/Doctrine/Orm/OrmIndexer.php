@@ -21,7 +21,7 @@ final class OrmIndexer implements IndexerInterface
     ) {
     }
 
-    public function index(string $index, string $locale): IndexInterface
+    public function index(string $index, string $locale = 'unilingual'): IndexInterface
     {
         if (!isset($this->indexes[$locale][$index])) {
             $this->indexes[$locale][$index] = new OrmIndex($this->repository, $this->connection, $index, $locale);

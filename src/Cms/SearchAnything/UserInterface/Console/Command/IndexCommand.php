@@ -31,20 +31,39 @@ final class IndexCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $defaultLocale = $this->translator->getLocale();
+
         foreach ($this->indexersRegistry->all() as $collector) {
-            foreach ($this->website->getLocales() as $locale) {
+            if ($collector->isMultilingual()) {
+                foreach ($this->website->getLocales() as $locale) {
+                    if ($this->translator instanceof LocaleAwareInterface) {
+                        $this->translator->setLocale($locale->getCode());
+                    }
+
+                    $index = $this->indexer->index($collector->getIndex(), $locale->getCode());
+                    $index->clear();
+                    $offset = 0;
+                    $limit = 100;
+
+                    do {
+                        $delta = $index->getDelta();
+                        $collector->collect($index, $locale->getCode(), $offset, $limit);
+                        $offset += $limit;
+                    } while ($delta !== $index->getDelta());
+                }
+            } else {
                 if ($this->translator instanceof LocaleAwareInterface) {
-                    $this->translator->setLocale($locale->getCode());
+                    $this->translator->setLocale($defaultLocale);
                 }
 
-                $index = $this->indexer->index($collector->getIndex(), $locale->getCode());
+                $index = $this->indexer->index($collector->getIndex(), 'unilingual');
                 $index->clear();
                 $offset = 0;
                 $limit = 100;
 
                 do {
                     $delta = $index->getDelta();
-                    $collector->collect($index, $locale->getCode(), $offset, $limit);
+                    $collector->collect($index, 'unilingual', $offset, $limit);
                     $offset += $limit;
                 } while ($delta !== $index->getDelta());
             }

@@ -19,4 +19,6 @@ interface DocumentCollectorInterface
     public function countDocuments(string $locale): int;
 
     public function getIndex(): string;
+
+    public function isMultilingual(): bool;
 }

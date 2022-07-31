@@ -25,8 +25,11 @@ final class DbalSearchEngine implements SearchEngineInterface
             'SELECT index_group, title, route, route_parameters, description, poster
             FROM #__search_anything_document
             WHERE
-                locale = :locale
-                AND MATCH (`title`,`description`) AGAINST(:query IN NATURAL LANGUAGE MODE)',
+                (
+                    locale = :locale
+                    OR locale = "unilingual"
+                )
+                AND MATCH (`title`,`description`) AGAINST (:query IN NATURAL LANGUAGE MODE)',
             [
                 'query' => $query,
                 'locale' => $locale,

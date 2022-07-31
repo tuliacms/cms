@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\Application\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Query\NodeSearchCollectorInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeCreated;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeDeleted;
@@ -19,8 +18,7 @@ final class UpdateSearchAnythingWhenNodeUpdates implements EventSubscriberInterf
 {
     public function __construct(
         private IndexerInterface $indexer,
-        private NodeSearchCollectorInterface $collector,
-        private UrlGeneratorInterface $generator
+        private NodeSearchCollectorInterface $collector
     ) {
     }
 

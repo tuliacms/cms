@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Domain\WriteModel\Event;
 
-use Tulia\Cms\User\Domain\WriteModel\Model\User;
+use Tulia\Cms\Shared\Domain\WriteModel\Event\AbstractDomainEvent;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class UserUpdated extends AbstractUserDomainEvent
+class UserUpdated extends AbstractDomainEvent
 {
-    public static function fromModel(User $user): self
-    {
-        return new self($user->getId());
+    public function __construct(
+        public readonly string $id,
+        public readonly string $email,
+        public readonly ?string $name,
+    ) {
     }
 }

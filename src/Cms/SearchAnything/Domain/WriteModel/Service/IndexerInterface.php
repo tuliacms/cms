@@ -9,5 +9,5 @@ namespace Tulia\Cms\SearchAnything\Domain\WriteModel\Service;
  */
 interface IndexerInterface
 {
-    public function index(string $index, string $locale): IndexInterface;
+    public function index(string $index, string $locale = 'unilingual'): IndexInterface;
 }

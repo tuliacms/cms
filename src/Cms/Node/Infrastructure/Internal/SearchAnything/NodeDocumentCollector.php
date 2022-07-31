@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\Infrastructure\Internal\SearchAnything;
 
 use Tulia\Cms\Node\Domain\ReadModel\Query\NodeSearchCollectorInterface;
-use Tulia\Cms\SearchAnything\Domain\WriteModel\Service\DocumentCollectorInterface;
+use Tulia\Cms\SearchAnything\Domain\WriteModel\Service\AbstractDocumentCollector;
 use Tulia\Cms\SearchAnything\Domain\WriteModel\Service\IndexInterface;
 
 /**
@@ -13,7 +13,7 @@ use Tulia\Cms\SearchAnything\Domain\WriteModel\Service\IndexInterface;
  * @final
  * @lazy
  */
-class NodeDocumentCollector implements DocumentCollectorInterface
+class NodeDocumentCollector extends AbstractDocumentCollector
 {
     public function __construct(
         private NodeSearchCollectorInterface $collector

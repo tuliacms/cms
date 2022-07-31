@@ -66,7 +66,7 @@ class User extends AbstractAggregateRoot
             $attributes
         ));
         $self->name = $name;
-        $self->recordThat(new Event\UserCreated($id));
+        $self->recordThat(new Event\UserCreated($id, $self->email, $self->name));
 
         return $self;
     }
@@ -103,6 +103,7 @@ class User extends AbstractAggregateRoot
             $this->roles[] = $role;
 
             $this->recordThat(new Event\RoleWasGiven($this->id, $role));
+            $this->userUpdated();
         }
     }
 
@@ -117,6 +118,7 @@ class User extends AbstractAggregateRoot
             unset($this->roles[$key]);
 
             $this->recordThat(new Event\RoleWasTaken($this->id, $role));
+            $this->userUpdated();
         }
     }
 
@@ -148,6 +150,7 @@ class User extends AbstractAggregateRoot
             $this->password = $passwordHasher->hashPassword($this->email, $password);
 
             $this->recordThat(new Event\PasswordChanged($this->id));
+            $this->userUpdated();
         }
     }
 
@@ -171,6 +174,7 @@ class User extends AbstractAggregateRoot
             $this->email = $email;
 
             $this->recordThat(new Event\EmailChanged($this->id, $email));
+            $this->userUpdated();
         }
     }
 
@@ -183,6 +187,7 @@ class User extends AbstractAggregateRoot
             $this->locale = $locale;
 
             $this->recordThat(new Event\LocaleChanged($this->id, $locale));
+            $this->userUpdated();
         }
     }
 
@@ -192,6 +197,7 @@ class User extends AbstractAggregateRoot
             $this->enabled = false;
 
             $this->recordThat(new Event\AccountWasDisabled($this->id));
+            $this->userUpdated();
         }
     }
 
@@ -201,17 +207,20 @@ class User extends AbstractAggregateRoot
             $this->enabled = true;
 
             $this->recordThat(new Event\AccountWasEnabled($this->id));
+            $this->userUpdated();
         }
     }
 
     public function changeAvatar(string $avatar): void
     {
         $this->avatar = $avatar;
+        $this->userUpdated();
     }
 
     public function changeName(?string $name): void
     {
         $this->name = $name;
+        $this->userUpdated();
     }
 
     public function removeAvatar(UploaderInterface $uploader): void
@@ -219,6 +228,7 @@ class User extends AbstractAggregateRoot
         if ($this->avatar) {
             $uploader->removeUploaded($this->avatar);
             $this->avatar = null;
+            $this->userUpdated();
         }
     }
 
@@ -242,9 +252,25 @@ class User extends AbstractAggregateRoot
         return Attribute::fromCore($this, $attribute);
     }
 
-    protected function noticeThatAttributeHasBeenAdded(CoreAttribute $attribute): void {}
+    protected function noticeThatAttributeHasBeenAdded(CoreAttribute $attribute): void
+    {
+        $this->userUpdated();
+    }
 
-    protected function noticeThatAttributeHasBeenRemoved(CoreAttribute $attribute): void {}
+    protected function noticeThatAttributeHasBeenRemoved(CoreAttribute $attribute): void
+    {
+        $this->userUpdated();
+    }
 
-    protected function noticeThatAttributeHasBeenUpdated(CoreAttribute $attribute): void {}
+    protected function noticeThatAttributeHasBeenUpdated(CoreAttribute $attribute): void
+    {
+        $this->userUpdated();
+    }
+
+    private function userUpdated(): void
+    {
+        $this->recordUniqueThat(new Event\UserUpdated($this->id, $this->email, $this->name), function (Event\UserUpdated $event) {
+            return $event->id === $this->id;
+        });
+    }
 }

@@ -9,7 +9,6 @@ use Tulia\Cms\Security\Framework\Security\Core\User\User as CoreUser;
 use Tulia\Cms\Shared\Application\UseCase\IdResult;
 use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
 use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
-use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChainInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\User\Application\Service\Avatar\UploaderInterface;
 use Tulia\Cms\User\Domain\WriteModel\Model\User;
@@ -23,11 +22,10 @@ final class CreateUser extends AbstractUserUseCase
     public function __construct(
         UserRepositoryInterface $repository,
         EventBusInterface $eventDispatcher,
-        AggregateActionsChainInterface $actionsChain,
         private UserPasswordHasherInterface $passwordHasher,
         private UploaderInterface $uploader,
     ) {
-        parent::__construct($repository, $eventDispatcher, $actionsChain);
+        parent::__construct($repository, $eventDispatcher);
     }
 
     /**

@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Homepage\Infrastructure\Cms\SearchAnything;
 
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Homepage\UserInterface\Web\Backend\Tiles\DashboardTilesRegistryInterface;
-use Tulia\Cms\SearchAnything\Domain\WriteModel\Service\DocumentCollectorInterface;
+use Tulia\Cms\SearchAnything\Domain\WriteModel\Service\AbstractDocumentCollector;
 use Tulia\Cms\SearchAnything\Domain\WriteModel\Service\IndexInterface;
 
 /**
@@ -13,16 +14,14 @@ use Tulia\Cms\SearchAnything\Domain\WriteModel\Service\IndexInterface;
  * @final
  * @lazy
  */
-class SystemToolsDocumentCollector implements DocumentCollectorInterface
+class SystemToolsDocumentCollector extends AbstractDocumentCollector
 {
     public function __construct(
         private DashboardTilesRegistryInterface $tilesRegistry,
+        private TranslatorInterface $translator
     ) {
     }
 
-    /**
-     * @inheritDoc
-     */
     public function collect(IndexInterface $index, string $locale, int $offset, int $limit): void
     {
         // No pagination in this collector. Next pages should be empty.
@@ -42,6 +41,8 @@ class SystemToolsDocumentCollector implements DocumentCollectorInterface
 
             $index->save($document);
         }
+
+        $this->addSpecialPages($index);
     }
 
     public function countDocuments(string $locale): int
@@ -55,5 +56,26 @@ class SystemToolsDocumentCollector implements DocumentCollectorInterface
     public function getIndex(): string
     {
         return 'tools';
+    }
+
+    private function addSpecialPages(IndexInterface $index): void
+    {
+        $document = $index->document('system_page_dashboard');
+        $document->setTitle($this->translator->trans('dashboard'));
+        $document->setLink('backend.homepage');
+
+        $index->save($document);
+
+        $document = $index->document('system_page_tools');
+        $document->setTitle($this->translator->trans('tools'));
+        $document->setLink('backend.tools');
+
+        $index->save($document);
+
+        $document = $index->document('system_page_system');
+        $document->setTitle($this->translator->trans('system'));
+        $document->setLink('backend.system');
+
+        $index->save($document);
     }
 }

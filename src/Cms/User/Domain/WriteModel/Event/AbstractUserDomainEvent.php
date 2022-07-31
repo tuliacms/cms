@@ -12,7 +12,7 @@ use Tulia\Cms\Shared\Domain\WriteModel\Event\AbstractDomainEvent as PlatformDoma
 abstract class AbstractUserDomainEvent extends PlatformDomainEvent
 {
     public function __construct(
-        public readonly  string $userId
+        public readonly string $id
     ) {
     }
 }
