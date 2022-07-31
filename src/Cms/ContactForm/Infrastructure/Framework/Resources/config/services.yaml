@@ -19,7 +19,3 @@ services:
         bind:
             $sourceTypes: !tagged_iterator cms.form.field_type
             $sourceParsers: !tagged_iterator cms.form.field_parser
-
-    Tulia\Cms\ContactForm\Domain\SearchAnything\SearchProvider:
-        tags:
-            - { name: search.provider, priority: 600 }

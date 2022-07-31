@@ -14,10 +14,6 @@ services:
     Tulia\Cms\Menu\Infrastructure\Framework\Twig\Extension\MenuExtension:
         tags: [ twig.extension ]
 
-    Tulia\Cms\Menu\Domain\SearchAnything\SearchProvider:
-        tags:
-            - { name: search.provider, priority: 500 }
-
     Tulia\Cms\Menu\UserInterface\Web\Shared\Form\FormType\MenuItemChoiceType:
         tags: [ form.type ]
 

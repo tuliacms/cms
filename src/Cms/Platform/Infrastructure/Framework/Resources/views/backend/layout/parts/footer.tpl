@@ -16,7 +16,7 @@
         </div>
     </div>
     <div class="search-body">
-        <div class="search-info">
+        <div class="search-info d-none">
             <div class="pane pane-lead">
                 <div class="pane-header">
                     <i class="pane-header-icon fas fa-search"></i>
@@ -51,6 +51,18 @@
                     <div class="search-loader">
                         {{ 'searchingInProgress'|trans({ query: '<b><span class="tsa-query-preview"></span></b>' })|raw }}
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="search-no-results-wrapper d-none">
+            <div class="pane pane-lead">
+                <div class="pane-header">
+                    <i class="pane-header-icon tsa-loading-show fas fa-circle-notch fa-spin d-none"></i>
+                    <i class="pane-header-icon tsa-loading-hide fas fa-search"></i>
+                    <h1 class="pane-title">{{ 'searchResultsForQuery'|trans({ query: '<span class="tsa-query-preview"></span>' })|raw }}</h1>
+                </div>
+                <div class="pane-body">
+                    No results. Try to find using whole words.
                 </div>
             </div>
         </div>

@@ -1,268 +1,16 @@
-let tuliaSearchData = {
-    'page': {
-        label: 'Strony',
-        icon: 'fas fa-file-powerpoint',
-        hits: [
-            {
-                image: 'https://picsum.photos/200/200?v=' + _.uniqueId(),
-                title: 'Nazwa witryny',
-                link: '#href',
-                description: 'In maximus vitae felis ut tincidunt. Maecenas mi ex, mattis sit amet turpis a, scelerisque scelerisque mi. Fusce tempor nisi augue, vel pretium ante rutrum eu.',
-                tags: [
-                    {
-                        tag: 'In maximus vitae',
-                        icon: 'fas fa-file-powerpoint'
-                    },
-                    {
-                        tag: 'Maecenas mi',
-                        icon: 'fas fa-folder-open'
-                    },
-                    {
-                        tag: 'Fusce tempor nisi augue, vel'
-                    },
-                    {
-                        tag: 'Praesent et felis aliquet',
-                        icon: 'fas fa-file-powerpoint'
-                    },
-                    {
-                        tag: 'Praesent et felis aliquet leo luctus',
-                        icon: 'fas fa-folder-open'
-                    },
-                    {
-                        tag: 'Donec euismod et'
-                    },
-                ]
-            },
-            {
-                title: 'Favikona',
-                link: '#href',
-                description: 'Praesent et felis aliquet leo luctus egestas id a eros. Donec ultrices luctus semper. Fusce varius felis nec dolor molestie aliquet.'
-            },
-            {
-                title: 'Treść wiadomości',
-                link: '#href',
-                description: 'Nam nec egestas ipsum, at consectetur dui. Donec euismod et velit finibus euismod. Praesent et felis aliquet leo luctus egestas id a eros.'
-            },
-            {
-                title: 'Nazwa witryny',
-                link: '#href',
-                description: 'Vestibulum facilisis fermentum lorem eleifend feugiat.'
-            },
-            {
-                title: 'Favikona',
-                link: '#href',
-                description: 'Suspendisse potenti. Quisque nibh neque, porttitor ut eros nec, vestibulum egestas lacus. Morbi fringilla, ante venenatis dapibus porttitor, ante nulla mollis erat, sit amet consectetur leo lacus sed massa.'
-            },
-            {
-                title: 'Treść wiadomości',
-                link: '#href',
-                description: 'Morbi fringilla, ante venenatis dapibus porttitor, ante nulla mollis erat.'
-            },
-        ]
-    },
-    'shop-products': {
-        label: 'Produkty',
-        icon: 'fas fa-shopping-cart',
-        hits: [
-            {
-                image: 'https://picsum.photos/200/200?v=' + _.uniqueId(),
-                title: 'Lasocki 4 Man RH5600 Czarne',
-                link: '#href',
-                tags: [
-                    {
-                        tag: '149.99 zł',
-                        icon: 'fas fa-money-bill-alt'
-                    },
-                    {
-                        tag: 'Dostępne 19 szt.',
-                        icon: 'fas fa-mountain'
-                    },
-                ],
-            },
-            {
-                image: 'https://picsum.photos/200/200?v=' + _.uniqueId(),
-                title: 'Lasocki Woman Black Widow',
-                link: '#href',
-                tags: [
-                    {
-                        tag: '99.99 zł',
-                        icon: 'fas fa-money-bill-alt'
-                    },
-                    {
-                        tag: 'Dostępne 1 szt.',
-                        icon: 'fas fa-mountain'
-                    },
-                ],
-            },
-        ]
-    },
-    'settings': {
-        label: 'Ustawienia',
-        icon: 'fas fa-cogs',
-        hits: [
-            {
-                title: 'Nazwa witryny',
-                link: '#href'
-            },
-            {
-                title: 'Favikona',
-                link: '#href'
-            },
-            {
-                title: 'Treść wiadomości',
-                link: '#href'
-            },
-        ]
-    },
-    'asd': {
-        label: 'Ustawienia',
-        icon: 'fas fa-tools',
-        hits: [
-            {
-                title: 'Nazwa witryny',
-                link: '#href'
-            },
-        ]
-    },
-    '123': {
-        label: 'Ustawienia',
-        icon: 'fas fa-dice-d6',
-        hits: [
-            {
-                title: 'Nazwa witryny',
-                link: '#href'
-            },
-            {
-                title: 'Favikona',
-                link: '#href'
-            },
-            {
-                title: 'Treść wiadomości',
-                link: '#href'
-            },
-        ]
-    },
-    'zxc': {
-        label: 'Ustawienia',
-        icon: 'fas fa-question-circle',
-        hits: [
-            {
-                title: 'Nazwa witryny',
-                link: '#href'
-            },
-            {
-                title: 'Favikona',
-                link: '#href'
-            },
-            {
-                title: 'Treść wiadomości',
-                link: '#href'
-            },
-            {
-                title: 'Favikona',
-                link: '#href'
-            },
-            {
-                title: 'Favikona',
-                link: '#href'
-            },
-            {
-                title: 'Treść wiadomości',
-                link: '#href'
-            },
-            {
-                title: 'Treść wiadomości',
-                link: '#href'
-            },
-        ]
-    },
-    'ty': {
-        label: 'Ustawienia',
-        icon: '',
-        hits: [
-            {
-                title: 'Nazwa witryny',
-                link: '#href'
-            },
-            {
-                title: 'Favikona',
-                link: '#href'
-            },
-            {
-                title: 'Treść wiadomości',
-                link: '#href'
-            },
-        ]
-    },
-    '234': {
-        label: 'Ustawienia',
-        icon: '',
-        hits: [
-            {
-                title: 'Nazwa witryny',
-                link: '#href'
-            },
-        ]
-    },
-    'sgsdfg': {
-        label: 'Ustawienia',
-        icon: '',
-        hits: [
-            {
-                title: 'Nazwa witryny',
-                link: '#href'
-            },
-            {
-                title: 'Favikona',
-                link: '#href'
-            },
-            {
-                title: 'Treść wiadomości',
-                link: '#href'
-            },
-            {
-                title: 'Favikona',
-                link: '#href'
-            },
-            {
-                title: 'Treść wiadomości',
-                link: '#href'
-            },
-        ]
-    },
-    '345': {
-        label: 'Ustawienia',
-        icon: '',
-        hits: [
-            {
-                title: 'Nazwa witryny',
-                link: '#href'
-            },
-            {
-                title: 'Favikona',
-                link: '#href'
-            },
-            {
-                title: 'Treść wiadomości',
-                link: '#href'
-            },
-        ]
-    }
-};
-
 Tulia.SearchAnything = function (selector, options) {
     this.selector  = selector;
     this.options   = options;
     this.container = null;
     this.template  = null;
     this.query     = null;
-    this.providers = [];
     this.loading   = false;
     this.results   = [];
     this.debounceSearch = null;
     this.elm = {
         query: null,
         intro: null,
+        noResults: null,
         results: null
     };
 
@@ -289,65 +37,45 @@ Tulia.SearchAnything = function (selector, options) {
 
     this.search = function () {
         let self = this;
-        let left = this.providers.length;
 
         this.results = [];
         this.elm.searchResults.empty();
+        self.hideIntro();
+        self.hideEmptyResults();
+        self.showLoader();
 
-        for (let i in this.providers) {
-            this.searchInProvider(this.providers[i], function (result) {
-                left--;
+        $.ajax({
+            url: this.options.endpoint,
+            data: {
+                q: this.query
+            },
+            dataType: 'json',
+            success: function (data) {
+                self.hideLoader();
 
-                if (left === 0) {
-                    self.loading = false;
+                if (!data || data.length === 0) {
+                    self.showEmptyResults();
+                    self.hideResults();
+                } else {
+                    self.showResults();
+                    self.render(data);
                 }
-
-                self.results.push(result);
-                self.refreshLoader();
-                self.appendResults(self.providers[i], result);
-            });
-        }
+            },
+            error: function () {
+                self.hideLoader();
+                self.showEmptyResults();
+            }
+        });
     };
 
-    this.searchInProvider = function (provider, callback) {
-        if (this.options.endpoint) {
-            $.ajax({
-                url: this.options.endpoint + '/search',
-                data: {
-                    p: provider,
-                    q: this.query
-                },
-                dataType: 'json',
-                success: function (data) {
-                    callback(data);
-                },
-                error: function () {
-                    callback({});
-                }
-            });
-        } else {
-            setTimeout(function () {
-                callback(tuliaSearchData[provider]);
-            }, this.randomInt(300, 1000));
-        }
-    };
-
-    this.randomInt = function (min, max) {
-        return min + Math.floor((max - min) * Math.random());
-    };
-
-    this.appendResults = function (provider, results) {
-        if (!results.hits || results.hits.length === 0) {
-            return;
-        }
-
-        let html = '<div class="search-result-group" style="order: ' + this.getProviderOrder(provider) + '">' +
-            '<i class="section-icon ' + results.icon + '"></i>' +
-            '   <div class="section-hl">' + results.label + '</div>' +
+    this.render = function (results) {
+        let html = '<div class="search-result-group">' +
+            '<i class="section-icon fas fa-search"></i>' +
+            '   <div class="section-hl">Search results</div>' +
             '   <div class="result-links">';
 
-        for (let i in results.hits) {
-            let hit = results.hits[i];
+        for (let i in results) {
+            let hit = results[i];
             let tags = '';
 
             if (hit.tags && hit.tags.length) {
@@ -376,63 +104,49 @@ Tulia.SearchAnything = function (selector, options) {
 
         html += '</div></div>';
 
-        this.elm.searchResults.append(html);
+        this.elm.searchResults.html(html);
     };
 
-    this.getProviderOrder = function (provider) {
-        for (let i in this.providers) {
-            if (this.providers[i] === provider) {
-                return i;
-            }
-        }
-
-        return 10000;
+    this.resetView = function () {
+        this.elm.intro.removeClass('d-none');
+        this.elm.results.addClass('d-none');
+        this.elm.noResults.addClass('d-none');
+        this.hideLoader();
     };
 
-    this.fetchProviders = function () {
-        let self = this;
-
-        if (this.options.endpoint) {
-            $.ajax({
-                url: this.options.endpoint + '/providers',
-                dataType: 'json',
-                success: function (data) {
-                    self.providers = data;
-                }
-            });
-        } else {
-            for (let i in tuliaSearchData) {
-                this.providers = ["shop-products", "page", "settings", "asd", "zxc", "ty", "123", "234", "345"];
-            }
-        }
+    this.hideIntro = function () {
+        this.elm.intro.addClass('d-none');
     };
 
-    this.refreshLoader = function () {
-        if (this.loading) {
-            this.container.find('.tsa-loading-show').removeClass('d-none');
-            this.container.find('.tsa-loading-hide').addClass('d-none');
-        } else {
-            this.container.find('.tsa-loading-show').addClass('d-none');
-            this.container.find('.tsa-loading-hide').removeClass('d-none');
-        }
-
-        if (this.results.length === 0) {
-            this.elm.searchResults.addClass('d-none');
-            this.elm.searchLoader.removeClass('d-none');
-        } else {
-            this.elm.searchResults.removeClass('d-none');
-            this.elm.searchLoader.addClass('d-none');
-        }
+    this.showLoader = function () {
+        this.showResults();
+        this.container.find('.tsa-loading-show').removeClass('d-none');
+        this.container.find('.tsa-loading-hide').addClass('d-none');
+        this.elm.searchResults.addClass('d-none');
+        this.elm.searchLoader.removeClass('d-none');
     };
 
-    this.refreshView = function () {
-        if (this.loading) {
-            this.elm.intro.addClass('d-none');
-            this.elm.results.removeClass('d-none');
-        } else {
-            this.elm.intro.removeClass('d-none');
-            this.elm.results.addClass('d-none');
-        }
+    this.hideLoader = function () {
+        this.container.find('.tsa-loading-show').addClass('d-none');
+        this.container.find('.tsa-loading-hide').removeClass('d-none');
+        this.elm.searchResults.removeClass('d-none');
+        this.elm.searchLoader.addClass('d-none');
+    };
+
+    this.showEmptyResults = function () {
+        this.elm.noResults.removeClass('d-none');
+    };
+
+    this.hideEmptyResults = function () {
+        this.elm.noResults.addClass('d-none');
+    };
+
+    this.showResults = function () {
+        this.elm.results.removeClass('d-none');
+    };
+
+    this.hideResults = function () {
+        this.elm.results.addClass('d-none');
     };
 
     this.createView = function () {
@@ -442,6 +156,7 @@ Tulia.SearchAnything = function (selector, options) {
         this.elm.queryPreview = this.container.find('.tsa-query-preview');
         this.elm.intro   = this.container.find('.search-info');
         this.elm.results = this.container.find('.search-results-wrapper');
+        this.elm.noResults = this.container.find('.search-no-results-wrapper');
         this.elm.searchResults = this.container.find('.search-results');
         this.elm.searchLoader  = this.container.find('.search-loader');
 
@@ -461,15 +176,14 @@ Tulia.SearchAnything = function (selector, options) {
             self.results = [];
 
             if (query) {
-                self.loading = true;
+                self.hideIntro();
+                self.hideEmptyResults();
+                self.showLoader();
                 self.debounceSearch();
             } else {
-                self.loading = false;
+                self.resetView();
                 self.debounceSearch.cancel();
             }
-
-            self.refreshLoader();
-            self.refreshView();
         });
     };
 
@@ -478,7 +192,7 @@ Tulia.SearchAnything = function (selector, options) {
     };
 
     this.open = function () {
-        this.fetchProviders();
+        this.resetView();
         $('body').addClass('prevent-scroll');
         this.container.addClass('opened');
         this.container.find('.query')

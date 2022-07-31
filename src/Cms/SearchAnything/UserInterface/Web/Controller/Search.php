@@ -6,51 +6,33 @@ namespace Tulia\Cms\SearchAnything\UserInterface\Web\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
-use Tulia\Cms\SearchAnything\SearchEngine\SearchEngineInterface;
+use Tulia\Cms\SearchAnything\Domain\ReadModel\Query\SearchEngineInterface;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class Search extends AbstractController
 {
-    private SearchEngineInterface $searchEngine;
-
-    public function __construct(SearchEngineInterface $searchEngine)
-    {
-        $this->searchEngine = $searchEngine;
+    public function __construct(
+        private SearchEngineInterface $searchEngine,
+        private UrlGeneratorInterface $urlGenerator
+    ) {
     }
 
-    public function providers(): JsonResponse
-    {
-        $providers = $this->searchEngine->getProviders();
-        $ids = [];
-
-        foreach ($providers as $provider) {
-            $ids[] = $provider->getId();
-        }
-
-        return new JsonResponse($ids);
-    }
-
-    public function search(Request $request): JsonResponse
+    public function search(Request $request, WebsiteInterface $website): JsonResponse
     {
         $query = $request->query->get('q');
-        $provider = $request->query->get('p');
 
-        if (empty($provider)) {
-            return new JsonResponse([]);
+        $result = $this->searchEngine->search($query, $website->getLocale()->getCode(), 0, 10);
+
+        foreach ($result as $key => $row) {
+            $result[$key]['link'] = $this->urlGenerator->generate($row['route'], $row['route_parameters']);
+            unset($result[$key]['route'], $result[$key]['route_parameters']);
         }
 
-        $result = $this->searchEngine->searchInProvider($provider, $query);
-        $flatResult = $result->toArray();
-        $flatResult['label'] = $this->trans(...$flatResult['label']);
-
-        return new JsonResponse($flatResult);
-    }
-
-    public function noop(): JsonResponse
-    {
-        return new JsonResponse([]);
+        return new JsonResponse($result);
     }
 }

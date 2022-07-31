@@ -1,11 +1,3 @@
-cms:
-    public_paths:
-        - { source: '%cms.core_dir%/Cms/SearchAnything/Framework/Resources/public/search-anything/dist', target: '/core/search-anything' }
-    assetter:
-        assets:
-            search_anything:
-                scripts:
-                    - /assets/core/search-anything/js/build.js
 doctrine:
     orm:
         mappings:

@@ -21,9 +21,5 @@ services:
     Tulia\Cms\Node\Infrastructure\ModuleIntegration\Settings\SettingsFactory:
         tags: [ settings.group_factory ]
 
-    Tulia\Cms\Node\Infrastructure\ModuleIntegration\SearchAnything\SearchProvider:
-        tags:
-            - { name: search.provider, priority: 1000 }
-
     Tulia\Cms\Node\Domain\WriteModel\Rules\CanAddPurpose\CanImposePurposeInterface:
         class: Tulia\Cms\Node\Domain\WriteModel\Rules\CanAddPurpose\CanImposePurpose

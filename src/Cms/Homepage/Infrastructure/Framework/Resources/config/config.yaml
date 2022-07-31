@@ -1,3 +1,7 @@
+framework:
+    translator:
+        paths:
+            - '%cms.core_dir%/Cms/Homepage/Infrastructure/Framework/Resources/translations'
 cms:
     templating:
         paths:

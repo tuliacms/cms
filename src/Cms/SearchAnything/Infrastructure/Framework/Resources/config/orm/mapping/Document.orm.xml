@@ -9,6 +9,10 @@
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
 
+        <indexes>
+            <index name="fulltext" columns="title,description" flags="fulltext"/>
+        </indexes>
+
         <field name="indexGroup" />
         <field name="sourceId" />
         <field name="locale" />
