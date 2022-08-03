@@ -83,7 +83,7 @@ final class NodeDetailsForm extends AbstractType
             'multiple' => true,
         ]);
 
-        if ($contentType->isHierarchical()) {
+        /*if ($contentType->isHierarchical()) {
             $builder->add('parent_id', NodeTypeaheadType::class, [
                 'translation_domain' => 'node',
                 'label' => 'parentNode',
@@ -101,7 +101,7 @@ final class NodeDetailsForm extends AbstractType
                     }),
                 ],
             ]);
-        }
+        }*/
 
         if ($contentType->isRoutable()) {
             $builder->add('slug', TextType::class, [

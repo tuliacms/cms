@@ -19,6 +19,7 @@ use Tulia\Cms\ContactForm\UserInterface\Web\Backend\Form\ModelTransformer\Domain
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Datatable\DatatableFactory;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
 
 /**
@@ -26,15 +27,10 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class Form extends AbstractController
 {
-    private FormRepositoryInterface $repository;
-    private FieldsTypeRegistryInterface $typesRegistry;
-
     public function __construct(
-        FormRepositoryInterface $repository,
-        FieldsTypeRegistryInterface $typesRegistry
+        private FormRepositoryInterface $repository,
+        private FieldsTypeRegistryInterface $typesRegistry,
     ) {
-        $this->repository = $repository;
-        $this->typesRegistry = $typesRegistry;
     }
 
     public function index(): RedirectResponse
@@ -57,9 +53,9 @@ class Form extends AbstractController
     /**
      * @CsrfToken(id="form")
      */
-    public function create(Request $request, DomainModelTransformer $transformer)
+    public function create(Request $request, DomainModelTransformer $transformer, WebsiteInterface $website)
     {
-        $model = $this->repository->createNew();
+        $model = $this->repository->createNew($website->getLocale()->getCode());
 
         $form = $this->createForm(FormType::class, $transformer->transform($model));
         $form->handleRequest($request);
@@ -90,9 +86,9 @@ class Form extends AbstractController
     /**
      * @CsrfToken(id="form")
      */
-    public function edit(Request $request, DomainModelTransformer $transformer, string $id)
+    public function edit(Request $request, DomainModelTransformer $transformer, WebsiteInterface $website, string $id)
     {
-        $model = $this->repository->find($id);
+        $model = $this->repository->find($id, $website->getLocale()->getCode());
 
         $form = $this->createForm(FormType::class, $transformer->transform($model));
         $form->handleRequest($request);

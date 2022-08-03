@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Domain\ReadModel\Model;
 
-use Tulia\Cms\Content\Attributes\Domain\ReadModel\MagickAttributesTrait;
+use Tulia\Cms\Content\Attributes\Domain\ReadModel\LazyMagickAttributesTrait;
 use Tulia\Cms\Content\Attributes\Domain\ReadModel\Model\AttributesAwareInterface;
 
 /**

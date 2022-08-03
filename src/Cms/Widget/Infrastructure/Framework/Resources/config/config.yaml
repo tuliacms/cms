@@ -78,7 +78,7 @@ cms:
                     sections:
                         lead:
                             groups:
-                                basisc:
+                                basics:
                                     name: Basics
                                     fields:
                                         name:

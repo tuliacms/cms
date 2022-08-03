@@ -16,6 +16,7 @@ use Tulia\Cms\Menu\Domain\WriteModel\MenuRepositoryInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Datatable\DatatableFactory;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
 
 /**
@@ -54,9 +55,9 @@ class Menu extends AbstractController
      * @return RedirectResponse
      * @CsrfToken(id="menu.create")
      */
-    public function create(Request $request, CreateMenu $createMenu): RedirectResponse
+    public function create(Request $request, CreateMenu $createMenu, WebsiteInterface $website): RedirectResponse
     {
-        $menu = $this->repository->createNewMenu();
+        $menu = $this->repository->createNewMenu($website->getLocale()->getCode());
         $menu->rename($request->request->get('name'));
 
         ($createMenu)($menu);

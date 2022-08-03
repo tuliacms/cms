@@ -166,7 +166,7 @@
             </div>
         </div>
         <div class="credit-links">
-            <a href="#">Created with &#10084; by Adam Banaszkiewicz</a>
+            <a href="#">Created with &#10084; by Codevia Studio</a>
         </div>
     </div>
 </div>

@@ -35,56 +35,59 @@
                 </div>
             </template>
         </draggable>
-        <div class="tued-structure-new-element ml-0" @click="structureManipulator.newSection()">
-            {{ translator.trans('newSection') }}
+        <div class="tued-structure-new-element ml-0" @click="blockPicker.new()">
+            {{ translator.trans('newBlock') }}
         </div>
     </div>
 </template>
 
-<script>
+<script setup>
 const draggable = require('vuedraggable');
 const Rows = require('components/Admin/Sidebar/Rows.vue').default;
 const DraggableDeltaTranslator = require('shared/Structure/DraggableDeltaTranslator.js').default;
+const { inject, defineProps, onMounted } = require('vue');
 
-export default {
-    props: ['structure'],
-    inject: [
-        'messenger',
-        'selection',
-        'structureDragOptions',
-        'structureManipulator',
-        'translator'
-    ],
-    components: {
-        draggable,
-        Rows
-    },
-    data () {
-        return {
-            draggableDeltaTranslator: null
-        }
-    },
-    methods: {
-        handleStart: function (event) {
-            this.draggableDeltaTranslator = new DraggableDeltaTranslator(event);
+const props = defineProps(['structure']);
+const blockPicker = inject('blocks.picker');
+const messenger = inject('messenger');
+const selection = inject('selection');
+const structureDragOptions = inject('structureDragOptions');
+const structureManipulator = inject('structureManipulator');
+const translator = inject('translator');
+const blocksPicker = inject('blocks.picker');
+let draggableDeltaTranslator = null;
 
-            this.selection.resetHovered();
-            this.selection.disableHovering();
-        },
-        handleChange: function (change) {
-            this.draggableDeltaTranslator.handle(change);
-        },
-        sendDelta: function (event) {
-            this.selection.enableHovering();
+const handleStart = (event) => {
+    draggableDeltaTranslator = new DraggableDeltaTranslator(event);
 
-            let delta = this.draggableDeltaTranslator.stop(event);
-
-            if (!delta) {
-                return;
-            }
-
-            this.messenger.notify('structure.move-element', delta);
-        }
-    }
+    selection.resetHovered();
+    selection.disableHovering();
 };
+const handleChange = (change) => {
+    draggableDeltaTranslator.handle(change);
+};
+const sendDelta = (event) => {
+    selection.enableHovering();
+
+    let delta = draggableDeltaTranslator.stop(event);
+
+    if (!delta) {
+        return;
+    }
+
+    messenger.notify('structure.move-element', delta);
+};
+
+onMounted(() => {
+    messenger.operation('structure.create.block', (data, success, fail) => {
+        if (data && data.columnId) {
+            blocksPicker.newAt(data.columnId);
+        } else {
+            blocksPicker.new();
+        }
+
+        success();
+    });
+});
 </script>
+

@@ -95,26 +95,43 @@ export default class StructureManipulator {
         return null;
     }
 
-    newSection () {
-        this.messenger.execute('structure.element.create-section', { section: this.fixer.fixSection({}) });
+    newSection (callback) {
+        this.messenger.execute('structure.element.create-section', { section: this.fixer.fixSection({}) }).then((section) => {
+            this.messenger.notify('structure.element.created', 'section', section.id);
+            callback && callback(section);
+        });
     }
 
     _listenToNewSection () {
         this.messenger.operation('structure.element.create-section', (data, success, fail) => {
             this.structure.sections.push(data.section);
-            success();
+            success(data.section);
         });
     }
 
     newBlock (type, parent, defaults) {
-        let block = this.fixer.fixBlock({
-            code: type,
-            data: defaults,
-        });
+        let createBlock = (parent) => {
+            let block = this.fixer.fixBlock({
+                code: type,
+                data: defaults,
+            });
 
-        this.messenger.execute('structure.element.create-block', {block, parent}).then(() => {
-            this.messenger.notify('structure.element.created', 'block', block.id);
-        });
+            this.messenger.execute('structure.element.create-block', {block, parent}).then(() => {
+                this.messenger.notify('structure.element.created', 'block', block.id);
+            });
+        };
+
+        if (!parent) {
+            let column = this.fixer.fixColumn({});
+            let row = this.fixer.fixRow({columns:[column]});
+            let section = this.fixer.fixSection({rows:[row]});
+
+            this.messenger.execute('structure.element.create-section', { section: section }).then((section) => {
+                createBlock(column.id);
+            });
+        } else {
+            createBlock(parent);
+        }
     }
 
     _listenToNewBlock () {

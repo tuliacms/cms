@@ -109,7 +109,8 @@ export default class Editor {
 
     bindEvents () {
         this.root.find('.tued-preview')[0].onload = () => {
-            this.container.messenger.addWindow(this.root.find('.tued-preview')[0].contentWindow);
+            // Add preview window in canvas and editor Messangers
+            //this.container.messenger.addWindow(this.root.find('.tued-preview')[0].contentWindow);
             this.container.messenger.notify('editor.segment.ready', 'preview');
         }
     }

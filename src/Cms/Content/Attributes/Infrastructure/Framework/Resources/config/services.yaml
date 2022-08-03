@@ -16,7 +16,3 @@ services:
     Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\ValueRendering\ValueRendererInterface:
         class: Tulia\Cms\Content\Attributes\Infrastructure\Framework\Twig\TwigValueRenderer
         lazy: true
-
-    Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\ValueRendering\AttributesValueRenderer:
-        bind:
-            $scopes: '%cms.attributes.finder.types%'

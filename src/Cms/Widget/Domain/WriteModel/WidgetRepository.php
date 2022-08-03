@@ -47,7 +47,7 @@ class WidgetRepository
         return Widget::createNew(
             $this->uuidGenerator->generate(),
             $widgetType,
-            $this->currentWebsite->getLocale()->getCode()
+            'en_US'
         );
     }
 
@@ -58,8 +58,8 @@ class WidgetRepository
     {
         $data = $this->storage->find(
             $id,
-            $this->currentWebsite->getLocale()->getCode(),
-            $this->currentWebsite->getDefaultLocale()->getCode()
+            'en_US',
+            'en_US',
         );
 
         if ($data === []) {

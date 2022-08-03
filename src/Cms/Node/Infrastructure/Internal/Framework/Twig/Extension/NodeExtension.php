@@ -70,6 +70,9 @@ class NodeExtension extends AbstractExtension
                 'is_safe' => [ 'html' ]
             ]),
             new TwigFunction('find_nodes', function (array $parameters) {
+                if (!isset($parameters['locale'])) {
+                    $parameters['locale'] = $this->website->getLocale()->getCode();
+                }
                 return $this->nodeFinder->find($parameters, NodeFinderScopeEnum::LISTING);
             }, [
                 'is_safe' => [ 'html' ]

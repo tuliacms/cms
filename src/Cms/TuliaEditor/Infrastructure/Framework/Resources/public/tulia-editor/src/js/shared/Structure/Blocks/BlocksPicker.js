@@ -11,6 +11,10 @@ export default class BlocksPicker {
         this.modals = modals;
     }
 
+    new () {
+        this.modals.open('tued-block-picker-modal');
+    }
+
     newAt (columnId) {
         this.config.columnId = columnId;
         this.modals.open('tued-block-picker-modal');

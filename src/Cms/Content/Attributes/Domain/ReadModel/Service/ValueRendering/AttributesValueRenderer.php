@@ -10,27 +10,20 @@ namespace Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\ValueRendering;
 class AttributesValueRenderer
 {
     private ValueRendererInterface $valueRenderer;
-    /** @var string[] */
-    private array $scopesByType;
 
-    public function __construct(ValueRendererInterface $valueRenderer, array $scopes)
+    public function __construct(ValueRendererInterface $valueRenderer)
     {
         $this->valueRenderer = $valueRenderer;
-        $this->scopesByType = $scopes;
     }
 
-    public function renderValues(array $attributes, string $type, string $scope): array
+    public function renderValues(array $attributes): array
     {
         if ($attributes === []) {
             return $attributes;
         }
 
-        if (\in_array($scope, $this->scopesByType[$type]['scopes'] ?? [], true) === false) {
-            return $this->extractValue($attributes);
-        }
-
         foreach ($attributes as $key => $attribute) {
-            if ($attribute['is_renderable']) {
+            if (in_array('renderable', $attribute['flags'], true)) {
                 $attributes[$key]['value'] = $this->valueRenderer->render($attribute['compiled_value'], [
                     'attribute' => $key
                 ]);

@@ -8,9 +8,10 @@ use Tulia\Cms\Content\Attributes\Domain\ReadModel\Model\AttributeValue;
 
 /**
  * @property array $attributes
+ * @method array loadAttributes()
  * @author Adam Banaszkiewicz
  */
-trait MagickAttributesTrait
+trait LazyMagickAttributesTrait
 {
     protected array $attributes = [];
 
@@ -20,6 +21,8 @@ trait MagickAttributesTrait
      */
     public function __get(string $name)
     {
+        $this->loadAttributes();
+
         return $this->{"$name:compiled"} ?? $this->{$name} ?? $this->attributes[$name] ?? null;
     }
 
@@ -29,6 +32,8 @@ trait MagickAttributesTrait
      */
     public function __set(string $name, $value): void
     {
+        $this->loadAttributes();
+
         if (method_exists($this, $name)) {
             $this->{$name} = $value;
         } else {
@@ -38,6 +43,8 @@ trait MagickAttributesTrait
 
     public function __call(string $name , array $arguments)
     {
+        $this->loadAttributes();
+
         if (method_exists($this, $name)) {
             return $this->{$name}(...$arguments);
         }
@@ -47,11 +54,15 @@ trait MagickAttributesTrait
 
     public function __isset(string $name): bool
     {
+        $this->loadAttributes();
+
         return method_exists($this, $name) || isset($this->attributes[$name]) || isset($this->attributes["$name:compiled"]);
     }
 
     public function attribute(string $name, $default = null)
     {
+        $this->loadAttributes();
+
         return $this->attributes["$name:compiled"] ?? $this->attributes[$name] ?? $default;
     }
 
@@ -60,6 +71,8 @@ trait MagickAttributesTrait
      */
     public function getAttributes(): array
     {
+        $this->loadAttributes();
+
         return $this->attributes;
     }
 
@@ -68,6 +81,8 @@ trait MagickAttributesTrait
      */
     public function replaceAttributes(array $attributes): void
     {
+        $this->loadAttributes();
+
         $this->attributes = $attributes;
     }
 
@@ -76,21 +91,29 @@ trait MagickAttributesTrait
      */
     public function mergeAttributes(array $attributes): void
     {
+        $this->loadAttributes();
+
         $this->attributes += $attributes;
     }
 
     public function offsetExists($offset): bool
     {
+        $this->loadAttributes();
+
         return array_key_exists($offset, $this->attributes) || array_key_exists("$offset:compiled", $this->attributes);
     }
 
     public function offsetGet($offset): ?AttributeValue
     {
+        $this->loadAttributes();
+
         return $this->attributes["$offset:compiled"] ?? $this->attributes[$offset] ?? null;
     }
 
     public function offsetSet($offset, $value): void
     {
+        $this->loadAttributes();
+
         if (isset($this->attributes["$offset:compiled"])) {
             $this->attributes["$offset:compiled"] = $value;
         } else {
@@ -100,6 +123,8 @@ trait MagickAttributesTrait
 
     public function offsetUnset($offset): void
     {
+        $this->loadAttributes();
+
         unset($this->attributes[$offset], $this->attributes["$offset:compiled"]);
     }
 }

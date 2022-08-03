@@ -16,30 +16,17 @@ use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
  */
 class DbalMenuRepository implements MenuRepositoryInterface
 {
-    private DbalMenuStorage $storage;
-    private UuidGeneratorInterface $uuidGenerator;
-    private AttributesRepositoryInterface $attributesRepository;
-    private MenuActionsChainInterface $actionsChain;
-
     public function __construct(
-        DbalMenuStorage $storage,
-        UuidGeneratorInterface $uuidGenerator,
-        AttributesRepositoryInterface $attributesRepository,
-        MenuActionsChainInterface $actionsChain
+        private DbalMenuStorage $storage,
+        private UuidGeneratorInterface $uuidGenerator,
+        private AttributesRepositoryInterface $attributesRepository,
+        private MenuActionsChainInterface $actionsChain,
     ) {
-        $this->storage = $storage;
-        $this->uuidGenerator = $uuidGenerator;
-        $this->attributesRepository = $attributesRepository;
-        $this->actionsChain = $actionsChain;
     }
 
-    public function createNewMenu(): Menu
+    public function createNewMenu(string $locale): Menu
     {
-        return Menu::create(
-            $this->uuidGenerator->generate(),
-            $this->currentWebsite->getId(),
-            $this->currentWebsite->getLocale()->getCode()
-        );
+        return Menu::create($this->uuidGenerator->generate(), $locale);
     }
 
     public function createNewItem(Menu $menu): Item

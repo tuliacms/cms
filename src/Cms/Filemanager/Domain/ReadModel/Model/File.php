@@ -8,7 +8,7 @@ use DateTime;
 use DateTimeImmutable;
 use Exception;
 use InvalidArgumentException;
-use Tulia\Cms\Content\Attributes\Domain\ReadModel\MagickAttributesTrait;
+use Tulia\Cms\Content\Attributes\Domain\ReadModel\LazyMagickAttributesTrait;
 use Tulia\Cms\Content\Attributes\Domain\ReadModel\Model\AttributesAwareInterface;
 
 /**
@@ -16,7 +16,7 @@ use Tulia\Cms\Content\Attributes\Domain\ReadModel\Model\AttributesAwareInterface
  */
 class File implements AttributesAwareInterface
 {
-    use MagickAttributesTrait;
+    use LazyMagickAttributesTrait;
 
     protected string $id;
 

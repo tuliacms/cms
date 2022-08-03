@@ -16,7 +16,6 @@ class WidgetCreated extends AbstractDomainEvent
         return new self(
             $widget->getId()->getValue(),
             $widget->getWidgetType(),
-            $widget->getWebsiteId(),
             $widget->getLocale()
         );
     }

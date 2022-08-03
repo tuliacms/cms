@@ -18,39 +18,27 @@ use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
  */
 class DbalFormRepository implements FormRepositoryInterface
 {
-    private UuidGeneratorInterface $uuidGenerator;
-    private ContactFormWriteStorageInterface $storage;
-    private EventBusInterface $eventBus;
-
     public function __construct(
-        UuidGeneratorInterface $uuidGenerator,
-        ContactFormWriteStorageInterface $storage,
-        EventBusInterface $eventBus
+        private UuidGeneratorInterface $uuidGenerator,
+        private ContactFormWriteStorageInterface $storage,
+        private EventBusInterface $eventBus,
     ) {
-        $this->uuidGenerator = $uuidGenerator;
-        $this->storage = $storage;
-        $this->eventBus = $eventBus;
     }
 
-    public function createNew(): Form
+    public function createNew(string $locale): Form
     {
         return Form::createNew(
             $this->uuidGenerator->generate(),
-            $this->currentWebsite->getId(),
-            $this->currentWebsite->getLocale()->getCode(),
+            $locale,
         );
     }
 
     /**
      * @throws FormNotFoundException
      */
-    public function find(string $id): Form
+    public function find(string $id, string $locale): Form
     {
-        $form = $this->storage->find(
-            $id,
-            $this->currentWebsite->getLocale()->getCode(),
-            $this->currentWebsite->getDefaultLocale()->getCode()
-        );
+        $form = $this->storage->find($id, $locale);
 
         if ($form === []) {
             throw new FormNotFoundException(sprintf('Form %s not found.', $id));

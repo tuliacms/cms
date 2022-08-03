@@ -43,7 +43,7 @@
                     {{ form_row(nodeDetailsForm.status) }}
                     {{ form_row(nodeDetailsForm.author_id) }}
                     {{ form_row(nodeDetailsForm.purposes) }}
-                    {{ form_row(nodeDetailsForm.parent_id) }}
+                    {#{{ form_row(nodeDetailsForm.parent_id) }}#}
                 </div>
             </div>
         </div>

@@ -18,56 +18,40 @@ use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
 final class Form extends AbstractAggregateRoot
 {
     private FormId $id;
-
-    private string $websiteId;
-
     private string $locale;
-
     private array $receivers = [];
-
     private string $senderName = '';
-
     private string $senderEmail = '';
-
     private string $replyTo = '';
-
     private string $name = '';
-
     private string $subject = '';
-
     private ?string $fieldsTemplate = null;
-
     private ?string $fieldsView = null;
-
     private array $fields = [];
-
     private ?string $messageTemplate = null;
-
     private bool $translated = true;
-
     private EntitiesChangelog $fieldsChangeLog;
 
-    private function __construct(string $id, string $websiteId, string $locale)
+    private function __construct(string $id, string $locale)
     {
         $this->id = new FormId($id);
-        $this->websiteId = $websiteId;
         $this->locale = $locale;
 
         $this->fieldsChangeLog = new EntitiesChangelog();
     }
 
-    public static function createNew(string $id, string $websiteId, string $locale): self
+    public static function createNew(string $id, string $locale): self
     {
-        $self = new self($id, $websiteId, $locale);
+        $self = new self($id, $locale);
         $self->setMessageTemplate('{{ contact_form_fields() }}');
-        $self->recordThat(new Event\FormCreated($id, $websiteId, $locale));
+        $self->recordThat(new Event\FormCreated($id, $locale));
 
         return $self;
     }
 
     public static function buildFromArray(array $data): self
     {
-        $self = new self($data['id'], $data['website_id'], $data['locale']);
+        $self = new self($data['id'], $data['locale']);
         $self->setReceivers($data['receivers'] ?? []);
         $self->setSenderName($data['sender_name'] ?? '');
         $self->setSenderEmail($data['sender_email'] ?? '');
@@ -93,16 +77,6 @@ final class Form extends AbstractAggregateRoot
     public function setId(FormId $id): void
     {
         $this->id = $id;
-    }
-
-    public function getWebsiteId(): string
-    {
-        return $this->websiteId;
-    }
-
-    public function setWebsiteId(string $websiteId): void
-    {
-        $this->websiteId = $websiteId;
     }
 
     public function getLocale(): string

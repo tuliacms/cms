@@ -12,31 +12,17 @@ use InvalidArgumentException;
 class Form
 {
     private string $id;
-
-    private string $websiteId;
-
     private array $receivers = [];
-
     private string $senderEmail;
-
     private ?string $senderName = null;
-
     private ?string $replyTo = null;
-
     private string $locale;
-
     private string $name;
-
     private string $subject;
-
     private ?string $messageTemplate = null;
-
     private ?string $fieldsTemplate = null;
-
     private ?string $fieldsView = null;
-
     private array $fields = [];
-
     private bool $translated = false;
 
     public static function buildFromArray(array $data): self
@@ -47,16 +33,11 @@ class Form
             throw new InvalidArgumentException('Form ID must be provided.');
         }
 
-        if (isset($data['website_id']) === false) {
-            throw new InvalidArgumentException('Form website_id must be provided.');
-        }
-
         if (isset($data['locale']) === false) {
             $data['locale'] = 'en_US';
         }
 
         $form->setId($data['id']);
-        $form->setWebsiteId($data['website_id']);
         $form->setLocale($data['locale']);
         $form->setTranslated((bool) ($data['translated'] ?? false));
         $form->setReceivers($data['receivers'] ?? []);
@@ -81,16 +62,6 @@ class Form
     public function setId(string $id): void
     {
         $this->id = $id;
-    }
-
-    public function getWebsiteId(): string
-    {
-        return $this->websiteId;
-    }
-
-    public function setWebsiteId(string $websiteId): void
-    {
-        $this->websiteId = $websiteId;
     }
 
     public function getReceivers(): array

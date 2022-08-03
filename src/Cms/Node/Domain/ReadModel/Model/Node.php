@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\Domain\ReadModel\Model;
 
 use InvalidArgumentException;
-use Tulia\Cms\Content\Attributes\Domain\ReadModel\MagickAttributesTrait;
+use Tulia\Cms\Content\Attributes\Domain\ReadModel\LazyMagickAttributesTrait;
 use Tulia\Cms\Content\Attributes\Domain\ReadModel\Model\AttributesAwareInterface;
+use Tulia\Cms\Node\Domain\ReadModel\Query\LazyNodeAttributesFinder;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 
 /**
@@ -14,7 +15,7 @@ use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
  */
 class Node implements AttributesAwareInterface
 {
-    use MagickAttributesTrait;
+    use LazyMagickAttributesTrait;
 
     protected string $id;
     protected string $type;
@@ -32,6 +33,7 @@ class Node implements AttributesAwareInterface
     protected ?string $slug;
     protected bool $visibility;
     protected array $flags = [];
+    protected ?LazyNodeAttributesFinder $attributesLazyStorage = null;
 
     public static function buildFromArray(array $data): self
     {
@@ -66,6 +68,10 @@ class Node implements AttributesAwareInterface
         $node->setSlug($data['slug'] ?? '');
         $node->setFlags($data['flags'] ?? []);
 
+        if (isset($data['lazy_attributes'])) {
+            $node->attributesLazyStorage = $data['lazy_attributes'];
+        }
+
         return $node;
     }
 
@@ -80,6 +86,13 @@ class Node implements AttributesAwareInterface
         }
 
         return $data;
+    }
+
+    public function loadAttributes(): void
+    {
+        if ($this->attributes === []) {
+            $this->attributes = $this->attributesLazyStorage->find();
+        }
     }
 
     public function getId(): string

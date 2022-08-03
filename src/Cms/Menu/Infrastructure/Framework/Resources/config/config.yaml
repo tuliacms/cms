@@ -9,6 +9,15 @@ framework:
                 provider: '%tulia.cache.provider%'
                 default_lifetime: 86400
                 tags: true
+doctrine:
+    orm:
+        mappings:
+            Tulia\Cms\Menu\Domain\WriteModel\MewModel:
+                type: xml
+                dir: '%cms.core_dir%/Cms/Menu/Infrastructure/Framework/Resources/config/orm/mapping'
+                is_bundle: false
+                prefix: Tulia\Cms\Menu\Domain\WriteModel\MewModel
+                alias: CmsMenu
 cms:
     templating:
         paths:

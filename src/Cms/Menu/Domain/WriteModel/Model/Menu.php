@@ -13,27 +13,26 @@ use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
 
 /**
  * @author Adam Banaszkiewicz
+ * @final
  */
-final class Menu extends AbstractAggregateRoot
+class Menu extends AbstractAggregateRoot
 {
     protected string $id;
-    protected string $websiteId;
     protected string $locale;
     protected ?string $name = null;
     protected array $itemsChanges = [];
     /** @var Item[] */
     protected array $items = [];
 
-    private function __construct(string $id, string $websiteId, string $locale)
+    private function __construct(string $id, string $locale)
     {
         $this->id = $id;
-        $this->websiteId = $websiteId;
         $this->locale = $locale;
     }
 
-    public static function create(string $id, string $websiteId, string $locale): self
+    public static function create(string $id, string $locale): self
     {
-        $menu = new self($id, $websiteId, $locale);
+        $menu = new self($id, $locale);
         $root = Item::createRoot($locale, $menu);
         $menu->items[$root->getId()] = $root;
         $menu->recordItemChange('add', $root);
@@ -43,7 +42,7 @@ final class Menu extends AbstractAggregateRoot
 
     public static function buildFromArray(array $data): self
     {
-        $menu = new self($data['id'], $data['website_id'], $data['locale']);
+        $menu = new self($data['id'], $data['locale']);
         $menu->name = $data['name'] ?? null;
 
         foreach ($data['items'] as $item) {
@@ -59,7 +58,6 @@ final class Menu extends AbstractAggregateRoot
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'website_id' => $this->websiteId,
             'locale' => $this->locale,
             'items' => $this->itemsToArray(),
         ];

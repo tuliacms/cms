@@ -11,6 +11,7 @@ use PDO;
 use Symfony\Component\Uid\Uuid;
 use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\AttributesFinder;
 use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
+use Tulia\Cms\Node\Domain\ReadModel\Query\LazyNodeAttributesFinder;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Enum\TermTypeEnum;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
@@ -21,16 +22,13 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\Ab
  */
 class DbalFinderQuery extends AbstractDbalQuery
 {
-    private AttributesFinder $attributesFinder;
     protected array $joinedTables = [];
 
     public function __construct(
         QueryBuilder $queryBuilder,
-        AttributesFinder $attributesFinder
+        private DbalNodeAttributesFinder $attributesFinder
     ) {
         parent::__construct($queryBuilder);
-
-        $this->attributesFinder = $attributesFinder;
     }
 
     public function getBaseQueryArray(): array
@@ -210,7 +208,7 @@ class DbalFinderQuery extends AbstractDbalQuery
         $terms = [];//$this->fetchTerms(array_column($result, 'id'));
 
         try {
-            //$result = $this->fetchAttributes($result, $scope, $criteria['locale']);
+            $result = $this->fetchAttributes($result);
 
             foreach ($result as $row) {
                 if (isset($terms[$row['id']][TermTypeEnum::MAIN][0])) {
@@ -228,27 +226,10 @@ class DbalFinderQuery extends AbstractDbalQuery
         return $collection;
     }
 
-    protected function fetchAttributes(array $nodes, string $scope, string $locale): array
+    protected function fetchAttributes(array $nodes): array
     {
-        $nodesByType = [];
-
-        foreach ($nodes as &$node) {
-            $nodesByType[$node['type']][$node['id']] = &$node;
-        }
-        unset($node);
-
-        foreach ($nodesByType as $groupedNodes) {
-            $attributes = $this->attributesFinder->findAllAggregated(
-                'node',
-                $scope,
-                array_column($groupedNodes, 'id'),
-                $locale
-            );
-
-            foreach ($groupedNodes as &$node) {
-                $node['attributes'] = $attributes[$node['id']] ?? [];
-            }
-            unset($node);
+        foreach ($nodes as $key => $node) {
+            $nodes[$key]['lazy_attributes'] = new LazyNodeAttributesFinder($node['id'], $node['locale'], $this->attributesFinder);
         }
 
         return $nodes;

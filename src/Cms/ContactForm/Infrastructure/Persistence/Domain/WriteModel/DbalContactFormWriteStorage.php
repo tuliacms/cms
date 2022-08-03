@@ -34,7 +34,7 @@ class DbalContactFormWriteStorage extends AbstractLocalizableStorage implements 
         $this->storeFields($data['fields'], $defaultLocale);
     }
 
-    public function find(string $id, string $locale, string $defaultLocale): array
+    public function find(string $id, string $locale): array
     {
         if ($defaultLocale !== $locale) {
             $translationColumn = 'IF(ISNULL(tl.name), 0, 1) AS translated';

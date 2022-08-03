@@ -247,15 +247,6 @@ INSERT INTO `#__form_lang` (`form_id`, `locale`, `name`, `subject`, `message_tem
 ('b8c00685-9e62-4b60-9368-e8bfbc82220a', 'pl_PL', 'Formularz kontaktowy', 'Tytuł testowego formularza', '{{ contact_form_fields() }}', '<div class=\"asdasd\">[text name=\"name\" type_alias=\"text\" label=\"Imię\" constraints=\"required\" alias=\"text\"]</div>\n<p>Zostaw nam wiadomość:</p>\n<div><p id=\"asd\">[textarea name=\"message\" type_alias=\"textarea\" label=\"Treść wiadomości\" constraints=\"required\" alias=\"textarea\"]</p>[submit name=\"submit\" type_alias=\"submit\" label=\"Wyślij\" alias=\"submit\"]</div>', '<div class=\"asdasd\">[name]</div>\r\n<p>Zostaw nam wiadomość:</p>\r\n<div><p id=\"asd\">[message]</p>[submit]</div>');
 EOF);
         $this->addSql(<<<EOF
-CREATE TABLE `#__menu` (
-  `id` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-
-INSERT INTO `#__menu` (`id`, `name`) VALUES
-('1ef517a0-cff7-41c9-a867-4a51b956f659', 'Główne menu');
-EOF);
-        $this->addSql(<<<EOF
 CREATE TABLE `#__menu_item` (
   `id` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `parent_id` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -270,13 +261,6 @@ CREATE TABLE `#__menu_item` (
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `visibility` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-
-INSERT INTO `#__menu_item` (`id`, `parent_id`, `menu_id`, `position`, `level`, `is_root`, `type`, `identity`, `hash`, `target`, `name`, `visibility`) VALUES
-('00000000-0000-0000-0000-000000000000', NULL, '1ef517a0-cff7-41c9-a867-4a51b956f659', 0, 0, 1, NULL, NULL, NULL, NULL, 'root', 1),
-('18841137-5eb9-43dc-85cb-f93ccfcfab6c', '00000000-0000-0000-0000-000000000000', '1ef517a0-cff7-41c9-a867-4a51b956f659', 1, 1, 0, 'simple:homepage', NULL, NULL, '', 'Home', 1),
-('3c82025f-cebd-42c8-9a6a-02c482c377f1', '00000000-0000-0000-0000-000000000000', '1ef517a0-cff7-41c9-a867-4a51b956f659', 3, 1, 0, 'node:page', '1de8280a-2363-4c09-bb4f-94e6b0ea2ef0', NULL, '', 'Kontakt', 1),
-('563ab929-0ef3-4221-90ea-f0c179487e8c', '00000000-0000-0000-0000-000000000000', '1ef517a0-cff7-41c9-a867-4a51b956f659', 2, 1, 0, 'node:page', '04f47ff0-c066-4712-8e28-df676695924c', 'werwf', '', 'O firmie', 1),
-('cdb0537c-c28b-4579-96ad-6da504ad9dc8', '563ab929-0ef3-4221-90ea-f0c179487e8c', '1ef517a0-cff7-41c9-a867-4a51b956f659', 1, 2, 0, 'simple:homepage', NULL, NULL, '', 'Some name', 1);
 EOF);
         $this->addSql(<<<EOF
 CREATE TABLE `#__menu_item_attribute` (
@@ -596,9 +580,6 @@ ALTER TABLE `#__form_field_lang`
 ALTER TABLE `#__form_lang`
   ADD KEY `form_lang_form_id` (`form_id`);
 
-ALTER TABLE `#__menu`
-  ADD PRIMARY KEY (`id`);
-
 ALTER TABLE `#__menu_item`
   ADD KEY `IDX_B3378EA2727ACA70` (`parent_id`),
   ADD KEY `IDX_B3378EA2CCD7E912` (`menu_id`),
@@ -702,10 +683,6 @@ ALTER TABLE `#__form_field_lang`
 
 ALTER TABLE `#__form_lang`
   ADD CONSTRAINT `form_lang_form_id` FOREIGN KEY (`form_id`) REFERENCES `#__form` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `#__menu_item`
-  ADD CONSTRAINT `menu_item_menu_id` FOREIGN KEY (`menu_id`) REFERENCES `#__menu` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `menu_item_parent_id` FOREIGN KEY (`parent_id`) REFERENCES `#__menu_item` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `#__menu_item_attribute`
   ADD CONSTRAINT `fk_menu_item_attribute_menu_item_id` FOREIGN KEY (`owner_id`) REFERENCES `#__menu_item` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;

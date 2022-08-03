@@ -12,8 +12,8 @@
             @selection-leave="(type, id) => selectionLeave(type, id)"
         ></Section>
 
-        <div class="tued-structure-new-element" @click="structureManipulator.newSection()">
-            {{ translator.trans('newSection') }}
+        <div class="tued-structure-new-element" @click="newBlock()">
+            {{ translator.trans('newBlock') }}
         </div>
 
         <div
@@ -177,6 +177,9 @@ export default {
         },
         getElement: function (type, id) {
             return this.$refs['structure'].querySelector(`#tued-structure-${type}-${id}`);
+        },
+        newBlock: function () {
+            this.messenger.execute('structure.create.block');
         }
     },
     mounted () {

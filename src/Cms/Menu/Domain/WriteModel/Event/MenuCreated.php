@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Domain\WriteModel\Event;
 
-use Tulia\Cms\Menu\Domain\WriteModel\Model\Menu;
+use Tulia\Cms\Shared\Domain\WriteModel\Event\AbstractDomainEvent as BaseAbstractDomainEvent;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class MenuCreated extends AbstractDomainEvent
+class MenuCreated extends BaseAbstractDomainEvent
 {
-    public static function fromModel(Menu $menu): self
-    {
-        return new self($menu->getId());
+    public function __construct(
+        public readonly string $id
+    ) {
     }
 }

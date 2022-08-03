@@ -11,8 +11,8 @@ use Tulia\Cms\ContactForm\Domain\WriteModel\Model\Form;
  */
 interface FormRepositoryInterface
 {
-    public function createNew(): Form;
-    public function find(string $id): Form;
+    public function createNew(string $locale): Form;
+    public function find(string $id, string $locale): Form;
     public function insert(Form $form): void;
     public function update(Form $form): void;
     public function delete(Form $form): void;

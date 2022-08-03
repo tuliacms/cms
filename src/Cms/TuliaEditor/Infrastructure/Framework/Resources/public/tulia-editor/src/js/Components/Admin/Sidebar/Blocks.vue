@@ -46,9 +46,4 @@ const translator = inject('translator');
 const messenger = inject('messenger');
 const blocksRegistry = inject('blocks.registry');
 const blocksPicker = inject('blocks.picker');
-
-messenger.operation('structure.create.block', (data, success, fail) => {
-    blocksPicker.newAt(data.columnId);
-    success();
-});
 </script>

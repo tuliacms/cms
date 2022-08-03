@@ -9,7 +9,7 @@ namespace Tulia\Cms\ContactForm\Domain\WriteModel;
  */
 interface ContactFormWriteStorageInterface
 {
-    public function find(string $id, string $locale, string $defaultLocale): array;
+    public function find(string $id, string $locale): array;
 
     public function insert(array $form, string $defaultLocale): void;
 

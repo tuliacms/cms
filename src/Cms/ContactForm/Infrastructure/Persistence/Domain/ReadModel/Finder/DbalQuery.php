@@ -88,12 +88,6 @@ class DbalQuery extends AbstractDbalQuery
         $this->buildOffset($criteria);
         $this->buildOrderBy($criteria);
 
-        if ($criteria['website']) {
-            $this->queryBuilder
-                ->andWhere('tm.website_id = :tm_website_id')
-                ->setParameter('tm_website_id', $criteria['website'], PDO::PARAM_STR);
-        }
-
         if ($criteria['limit']) {
             $this->queryBuilder->setMaxResults($criteria['limit']);
         }

@@ -12,7 +12,7 @@ use Tulia\Cms\Menu\Domain\WriteModel\Model\Menu;
  */
 interface MenuRepositoryInterface
 {
-    public function createNewMenu(): Menu;
+    public function createNewMenu(string $locale): Menu;
 
     public function createNewItem(Menu $menu): Item;
 

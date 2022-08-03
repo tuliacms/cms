@@ -7,6 +7,7 @@ namespace Tulia\Cms\Content\Type\Infrastructure\Persistence\ContentProvider;
 use Doctrine\DBAL\Connection;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeProviderInterface;
+use Tulia\Cms\Content\Type\Domain\ReadModel\Service\FieldTypeMappingRegistry;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Service\Configuration;
 
 /**
@@ -22,7 +23,8 @@ class ContentTypeDatabaseProvider implements ContentTypeProviderInterface
 
     public function __construct(
         private Connection $connection,
-        private Configuration $config
+        private Configuration $config,
+        private FieldTypeMappingRegistry $fieldTypeMappingRegistry
     ) {
     }
 
@@ -89,6 +91,7 @@ class ContentTypeDatabaseProvider implements ContentTypeProviderInterface
                     'parent' => $field['parent'],
                     'configuration' => $this->getConfiguration($field['id']),
                     'constraints' => $this->getConstraints($field['id']),
+                    'flags' => $this->fieldTypeMappingRegistry->getTypeFlags($field['type']),
                 ];
             }
         }

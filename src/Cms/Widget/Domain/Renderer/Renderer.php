@@ -78,7 +78,7 @@ class Renderer implements RendererInterface
         $config = new ArrayConfiguration($data['space']);
         $widget = $this->registry->get($data['widget_type'])->getInstance();
         $widget->configure($config);
-        $config->merge($data['attributes']);
+        //$config->merge($data['attributes']);
 
         $view = $widget->render($config);
 
@@ -118,7 +118,7 @@ class Renderer implements RendererInterface
     {
         $widget['visibility'] = (bool) $widget['visibility'];
         $widget['styles'] = (array) json_decode($widget['styles'], true);
-        $widget['attributes'] = $this->attributeFinder->findAll('widget', 'scope', $widget['id'], $locale);
+        //$widget['attributes'] = $this->attributeFinder->findAll('widget', 'scope', $widget['id'], $locale);
 
         return $widget;
     }

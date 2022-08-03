@@ -44,14 +44,14 @@
                                         </div>
                                     </div>
                                     <i class="pane-header-icon fas fa-chart-line"></i>
-                                    <div class="pane-title">Statystyki odwiedzin</div>
+                                    <div class="pane-title">Analytics</div>
                                 </div>
                                 <div class="pane-body p-0">
                                     <div class="statistics-widget">
                                         <div class="statistics-canvas-container">
                                             <div id="timeline-chart"></div>
                                             <div class="ct-chart ct-perfect-fourth"></div>
-                                            <!-- <canvas id="myChart" width="400" height="120"></canvas> -->
+                                            <canvas id="myChart" width="400" height="120"></canvas>
                                         </div>
                                     </div>
                                 </div>
@@ -81,7 +81,7 @@
                                         </div>
                                     </div>
                                     <i class="pane-header-icon fas fa-archive"></i>
-                                    <div class="pane-title">Kopia zapasowa</div>
+                                    <div class="pane-title">Backup</div>
                                 </div>
                                 <div class="pane-body">
                                     <div class="backup-widget">
@@ -108,7 +108,7 @@
                                         </div>
                                     </div>
                                     <i class="pane-header-icon fas fa-newspaper"></i>
-                                    <div class="pane-title">Aktualności</div>
+                                    <div class="pane-title">Tulia CMS Newsroom</div>
                                 </div>
                                 <div class="pane-body">
                                     <div class="tulia-news-widget">
@@ -155,7 +155,7 @@
                                         </div>
                                     </div>
                                     <i class="pane-header-icon fas fa-comments"></i>
-                                    <div class="pane-title">Ostatnie komentarze</div>
+                                    <div class="pane-title">Latest comments</div>
                                 </div>
                                 <div class="pane-body p-0">
                                     <div class="last-comments-widget">

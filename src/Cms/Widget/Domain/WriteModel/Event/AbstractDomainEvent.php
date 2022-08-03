@@ -13,14 +13,12 @@ abstract class AbstractDomainEvent extends PlatformDomainEvent
 {
     private string $widgetId;
     private string $widgetType;
-    private string $websiteId;
     private string $locale;
 
-    public function __construct(string $widgetId, string $widgetType, string $websiteId, string $locale)
+    public function __construct(string $widgetId, string $widgetType, string $locale)
     {
         $this->widgetId = $widgetId;
         $this->widgetType = $widgetType;
-        $this->websiteId = $websiteId;
         $this->locale = $locale;
     }
 
@@ -32,11 +30,6 @@ abstract class AbstractDomainEvent extends PlatformDomainEvent
     public function getWidgetType(): string
     {
         return $this->widgetType;
-    }
-
-    public function getWebsiteId(): string
-    {
-        return $this->websiteId;
     }
 
     public function getLocale(): string

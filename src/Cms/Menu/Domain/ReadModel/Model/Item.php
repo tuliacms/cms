@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Menu\Domain\ReadModel\Model;
 
 use InvalidArgumentException;
-use Tulia\Cms\Content\Attributes\Domain\ReadModel\MagickAttributesTrait;
+use Tulia\Cms\Content\Attributes\Domain\ReadModel\LazyMagickAttributesTrait;
 use Tulia\Cms\Content\Attributes\Domain\ReadModel\Model\AttributesAwareInterface;
 
 /**
@@ -13,7 +13,7 @@ use Tulia\Cms\Content\Attributes\Domain\ReadModel\Model\AttributesAwareInterface
  */
 class Item implements AttributesAwareInterface
 {
-    use MagickAttributesTrait;
+    use LazyMagickAttributesTrait;
 
     protected $id;
     protected $menuId;

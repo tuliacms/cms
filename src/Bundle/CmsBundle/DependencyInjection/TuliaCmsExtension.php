@@ -36,7 +36,6 @@ class TuliaCmsExtension extends Extension
         $container->setParameter('cms.content_builder.data_types.mapping', $config['content_building']['data_types']['mapping']);
         $container->setParameter('cms.content_builder.constraint_types.mapping', $config['content_building']['constraint_types']['mapping']);
         $container->setParameter('cms.options.definitions', $this->validateOptionsValues($config['options']['definitions'] ?? []));
-        $container->setParameter('cms.attributes.finder.types', $config['attributes']['finder']['types'] ?? []);
         $container->setParameter('cms.widgets', $config['widgets'] ?? []);
         $container->setParameter('cms.filemanager.image_sizes', $config['filemanager']['image_sizes'] ?? []);
         $container->setParameter('cms.importer.objects', $config['importer']['objects'] ?? []);

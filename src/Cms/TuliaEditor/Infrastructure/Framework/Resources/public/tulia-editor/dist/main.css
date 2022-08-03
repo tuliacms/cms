@@ -476,16 +476,13 @@
 
 .tued-main-window {
   display: block;
-  margin-bottom: 30px;
+  margin-bottom: 15px;
   margin-right: -13px;
-  margin-left: -13px;
-  margin-top: -16px; }
+  margin-left: -13px; }
   .tued-main-window .tued-header {
-    background-color: #f7f7f7;
-    border: 1px solid #d6dce4;
     border-left: none;
     border-right: none;
-    padding: 10px;
+    padding: 0 10px 10px 10px;
     display: flex;
     align-items: center;
     justify-content: space-between; }
