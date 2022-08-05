@@ -44,11 +44,11 @@ abstract class AbstractNodeUseCase extends AbstractTransactionalUseCase
         $node->persistPurposes($this->canImposePurpose, ...$details['purposes']);
         $node->publishNodeAt(new ImmutableDateTime($details['published_at']));
 
-        if ($details['parent_id']) {
+        /*if ($details['parent_id']) {
             $node->moveAsChildOf($this->repository->referenceTo($details['parent_id']));
-        } else {
+        } else {*/
             $node->moveAsRootNode();
-        }
+        //}
 
         if ($details['published_to']) {
             $node->publishNodeTo(new ImmutableDateTime($details['published_to']));

@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\TypeaheadFormTypeSearch;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderScopeEnum;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -21,7 +22,7 @@ class TypeaheadSearch extends TypeaheadFormTypeSearch
         $this->termFinder = $termFinder;
     }
 
-    protected function findCollection(Request $request): array
+    protected function findCollection(Request $request, WebsiteInterface $website): array
     {
         $terms = $this->termFinder->find([
             'search'        => $request->query->get('q'),

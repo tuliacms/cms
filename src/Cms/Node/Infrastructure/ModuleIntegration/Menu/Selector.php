@@ -16,20 +16,11 @@ use Tulia\Component\Templating\View;
  */
 class Selector implements SelectorInterface
 {
-    protected ContentTypeRegistryInterface $contentTypeRegistry;
-
-    protected EngineInterface $engine;
-
-    protected FormFactoryInterface $formFactory;
-
     public function __construct(
-        ContentTypeRegistryInterface $contentTypeRegistry,
-        EngineInterface $engine,
-        FormFactoryInterface $formFactory
+        protected ContentTypeRegistryInterface $contentTypeRegistry,
+        protected EngineInterface $engine,
+        protected FormFactoryInterface $formFactory,
     ) {
-        $this->contentTypeRegistry = $contentTypeRegistry;
-        $this->engine = $engine;
-        $this->formFactory = $formFactory;
     }
 
     /**

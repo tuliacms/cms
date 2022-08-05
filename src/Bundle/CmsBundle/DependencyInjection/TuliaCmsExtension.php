@@ -92,8 +92,6 @@ class TuliaCmsExtension extends Extension
             ->addTag('frontend_toolbar.links.provider');
 
         // Menus
-        $container->registerForAutoconfiguration(\Tulia\Cms\Menu\Domain\WriteModel\ActionsChain\MenuActionInterface::class)
-            ->addTag('menu.action_chain');
         $container->registerForAutoconfiguration(\Tulia\Cms\Menu\Domain\Builder\Type\RegistratorInterface::class)
             ->addTag('menu.builder.type_registrator');
 

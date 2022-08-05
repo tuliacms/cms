@@ -4,40 +4,33 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Application\UseCase;
 
-use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuDeleted;
 use Tulia\Cms\Menu\Domain\WriteModel\MenuRepositoryInterface;
-use Tulia\Cms\Menu\Domain\WriteModel\Model\Menu;
-use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChainInterface;
+use Tulia\Cms\Shared\Application\UseCase\AbstractTransactionalUseCase;
+use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
+use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-final class DeleteMenu
+final class DeleteMenu extends AbstractTransactionalUseCase
 {
-    private MenuRepositoryInterface $repository;
-    private EventBusInterface $eventDispatcher;
-    private AggregateActionsChainInterface $actionsChain;
-
     public function __construct(
-        MenuRepositoryInterface $repository,
-        EventBusInterface $eventDispatcher,
-        AggregateActionsChainInterface $actionsChain
+        private MenuRepositoryInterface $repository,
+        private EventBusInterface $eventBus
     ) {
-        $this->repository = $repository;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->actionsChain = $actionsChain;
     }
 
-    public function __invoke(Menu $menu): void
+    /**
+     * @param RequestInterface&DeleteMenuRequest $request
+     */
+    protected function execute(RequestInterface $request): ?ResultInterface
     {
-        $this->actionsChain->execute('delete', $menu);
+        $menu = $this->repository->get($request->id);
 
-        try {
-            $this->repository->delete($menu);
-            $this->eventDispatcher->dispatch(MenuDeleted::fromModel($menu));
-        } catch (\Throwable $e) {
-            throw $e;
-        }
+        $this->repository->delete($menu);
+        $this->eventBus->dispatchCollection($menu->collectDomainEvents());
+
+        return null;
     }
 }

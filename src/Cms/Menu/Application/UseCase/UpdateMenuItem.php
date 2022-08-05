@@ -4,25 +4,49 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Application\UseCase;
 
-use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\Attribute;
-use Tulia\Cms\Menu\Domain\WriteModel\Model\Menu;
+use Tulia\Cms\Menu\Domain\WriteModel\MenuRepositoryInterface;
+use Tulia\Cms\Shared\Application\UseCase\AbstractTransactionalUseCase;
+use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
+use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
+use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-final class UpdateMenuItem extends AbstractMenuUseCase
+final class UpdateMenuItem extends AbstractTransactionalUseCase
 {
+    public function __construct(
+        private MenuRepositoryInterface $repository,
+        private EventBusInterface $eventBus
+    ) {
+    }
+
     /**
-     * @param Attribute[] $attributes
+     * @param RequestInterface&UpdateMenuItemRequest $request
      */
-    public function __invoke(Menu $menu, string $itemId, array $attributes): void
+    protected function execute(RequestInterface $request): ?ResultInterface
     {
-        $menu->updateItemUsingAttributes(
-            $itemId,
-            $this->flattenAttributes($attributes),
-            $this->removeMenuItemAttributes($attributes)
+        $menu = $this->repository->get($request->menuId);
+
+        $item = $menu->getItem($request->itemId);
+        $item->linksTo(
+            (string) $request->details['type'],
+            (string) $request->details['identity'],
+            (string) $request->details['hash']
         );
 
-        $this->update($menu);
+        if ($request->details['target'] === '_blank') {
+            $item->openInNewTab();
+        } else {
+            $item->openInSelfTab();
+        }
+
+        $translation = $item->translate($request->locale);
+        $translation->renameTo($request->details['name']);
+
+        $this->repository->save($menu);
+        $this->eventBus->dispatchCollection($menu->collectDomainEvents());
+
+        return null;
     }
 }

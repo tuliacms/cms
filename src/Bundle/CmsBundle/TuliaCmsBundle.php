@@ -13,7 +13,6 @@ use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\ContentBuilderPass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\DashboardPass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\DomainActionChainPass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\FinderPass;
-use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\MenuPass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\RoutingPass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\TaxonomyPass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\TemplatingPass;
@@ -39,7 +38,6 @@ class TuliaCmsBundle extends Bundle
         $container->addCompilerPass(new CachePass());
         $container->addCompilerPass(new DomainActionChainPass());
         $container->addCompilerPass(new TaxonomyPass());
-        $container->addCompilerPass(new MenuPass());
         $container->addCompilerPass(new DashboardPass());
         $container->addCompilerPass(new WidgetPass());
         $container->addCompilerPass(new ContentBuilderPass());

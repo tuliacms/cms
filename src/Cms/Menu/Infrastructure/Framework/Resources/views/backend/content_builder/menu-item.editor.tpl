@@ -2,6 +2,7 @@
 {% trans_default_domain 'menu' %}
 
 {{ form_render.form_begin(form) }}
+{% set itemDetailsForm = context.itemDetailsForm %}
 
 <div class="row">
     <div class="col">
@@ -10,10 +11,15 @@
                 <i class="fas fa-asterisk"></i> {{ 'basics'|trans }}
             </div>
             <div class="card-body">
-                {% for id, group in layout.section('basics').fieldsGroups %}
-                    {% for field in group.fields %}
-                        {{ form_render.form_row(form, field, contentType) }}
-                    {% endfor %}
+                {{ form_row(itemDetailsForm.name) }}
+                {{ form_row(itemDetailsForm.visibility) }}
+                {{ form_row(itemDetailsForm.type) }}
+                {% for group in contentType.fieldGroups %}
+                    {% if group.section == 'basics' %}
+                        {% for field in group.fields %}
+                            {{ form_render.form_row(form, field.code, contentType) }}
+                        {% endfor %}
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>
@@ -28,9 +34,15 @@
                 {% include relative(_self, '../item/parts/type-homepage.tpl') %}
                 {% include relative(_self, '../item/parts/type-url.tpl') %}
                 {% for type in context.types %}
-                    <div class="menu-item-type{{ item.type == type.type.type ? '' : ' d-none' }}" data-type="{{ type.type.type }}">
-                        {{ type.selector.render(type.type, item.identity)|raw }}
-                    </div>
+                    {% if item.type == type.type.type %}
+                        <div class="menu-item-type" data-type="{{ type.type.type }}">
+                            {{ type.selector.render(type.type, item.identity)|raw }}
+                        </div>
+                    {% else %}
+                        <div class="menu-item-type d-none" data-type="{{ type.type.type }}">
+                            {{ type.selector.render(type.type, null)|raw }}
+                        </div>
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>
@@ -41,10 +53,15 @@
                 <i class="fas fa-border-style"></i> {{ 'options'|trans }}
             </div>
             <div class="card-body">
-                {% for id, group in layout.section('options').fieldsGroups %}
-                    {% for field in group.fields %}
-                        {{ form_render.form_row(form, field, contentType) }}
-                    {% endfor %}
+                {{ form_row(itemDetailsForm.hash) }}
+                {{ form_row(itemDetailsForm.identity) }}
+                {{ form_row(itemDetailsForm.target) }}
+                {% for group in contentType.fieldGroups %}
+                    {% if group.section == 'options' %}
+                        {% for field in group.fields %}
+                            {{ form_render.form_row(form, field.code, contentType) }}
+                        {% endfor %}
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>
@@ -53,7 +70,7 @@
 
 <script nonce="{{ csp_nonce() }}">
     $(function () {
-        $('#content_builder_form_menu_item_type').change(function () {
+        $('#menu_item_details_form_type').change(function () {
             let container = $('.menu-item-type')
                 .addClass('d-none')
                 .filter('[data-type="' + $(this).val() + '"]')
@@ -79,13 +96,13 @@
     });
 
     let updateIdentityField = function (type, identity) {
-        let currentType = $('#content_builder_form_menu_item_type').val();
+        let currentType = $('#menu_item_details_form_type').val();
 
         if (currentType !== type) {
             return;
         }
 
-        $('#content_builder_form_menu_item_identity').val(identity);
+        $('#menu_item_details_form_identity').val(identity);
     };
 </script>
 

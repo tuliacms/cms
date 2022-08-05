@@ -246,52 +246,6 @@ CREATE TABLE `#__form_lang` (
 INSERT INTO `#__form_lang` (`form_id`, `locale`, `name`, `subject`, `message_template`, `fields_view`, `fields_template`) VALUES
 ('b8c00685-9e62-4b60-9368-e8bfbc82220a', 'pl_PL', 'Formularz kontaktowy', 'Tytuł testowego formularza', '{{ contact_form_fields() }}', '<div class=\"asdasd\">[text name=\"name\" type_alias=\"text\" label=\"Imię\" constraints=\"required\" alias=\"text\"]</div>\n<p>Zostaw nam wiadomość:</p>\n<div><p id=\"asd\">[textarea name=\"message\" type_alias=\"textarea\" label=\"Treść wiadomości\" constraints=\"required\" alias=\"textarea\"]</p>[submit name=\"submit\" type_alias=\"submit\" label=\"Wyślij\" alias=\"submit\"]</div>', '<div class=\"asdasd\">[name]</div>\r\n<p>Zostaw nam wiadomość:</p>\r\n<div><p id=\"asd\">[message]</p>[submit]</div>');
 EOF);
-        $this->addSql(<<<EOF
-CREATE TABLE `#__menu_item` (
-  `id` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `parent_id` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `menu_id` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `position` int UNSIGNED DEFAULT '0',
-  `level` smallint NOT NULL DEFAULT '0',
-  `is_root` tinyint(1) NOT NULL DEFAULT '0',
-  `type` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `identity` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `hash` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `target` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `visibility` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-EOF);
-        $this->addSql(<<<EOF
-CREATE TABLE `#__menu_item_attribute` (
-  `id` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `owner_id` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `is_renderable` tinyint(1) NOT NULL DEFAULT '0',
-  `has_nonscalar_value` tinyint(1) NOT NULL DEFAULT '0',
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `uri` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `value` longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
-  `compiled_value` longtext COLLATE utf8_unicode_ci,
-  `payload` json DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-EOF);
-        $this->addSql(<<<EOF
-CREATE TABLE `#__menu_item_attribute_lang` (
-  `attribute_id` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `value` longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
-  `compiled_value` longtext COLLATE utf8_unicode_ci,
-  `payload` json DEFAULT NULL,
-  `locale` varchar(11) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'en_US'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-EOF);
-        $this->addSql(<<<EOF
-CREATE TABLE `#__menu_item_lang` (
-  `menu_item_id` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `locale` varchar(11) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'en_US',
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `visibility` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-EOF);
        /* $this->addSql(<<<EOF
 CREATE TABLE `#__model_change_history` (
   `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
@@ -580,21 +534,6 @@ ALTER TABLE `#__form_field_lang`
 ALTER TABLE `#__form_lang`
   ADD KEY `form_lang_form_id` (`form_id`);
 
-ALTER TABLE `#__menu_item`
-  ADD KEY `IDX_B3378EA2727ACA70` (`parent_id`),
-  ADD KEY `IDX_B3378EA2CCD7E912` (`menu_id`),
-  ADD KEY `id` (`id`) USING BTREE;
-
-ALTER TABLE `#__menu_item_attribute`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `IDX_1CADB6F19AB44FE0` (`owner_id`);
-
-ALTER TABLE `#__menu_item_attribute_lang`
-  ADD KEY `IDX_16B60FBCDC9EE959` (`attribute_id`);
-
-ALTER TABLE `#__menu_item_lang`
-  ADD KEY `menu_item_id` (`menu_item_id`);
-
 ALTER TABLE `#__model_change_history`
   ADD PRIMARY KEY (`id`);
 
@@ -683,15 +622,6 @@ ALTER TABLE `#__form_field_lang`
 
 ALTER TABLE `#__form_lang`
   ADD CONSTRAINT `form_lang_form_id` FOREIGN KEY (`form_id`) REFERENCES `#__form` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `#__menu_item_attribute`
-  ADD CONSTRAINT `fk_menu_item_attribute_menu_item_id` FOREIGN KEY (`owner_id`) REFERENCES `#__menu_item` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
-
-ALTER TABLE `#__menu_item_attribute_lang`
-  ADD CONSTRAINT `fk_menu_item_attribute_lang_menu_item_attribute_id` FOREIGN KEY (`attribute_id`) REFERENCES `#__menu_item_attribute` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT;
-
-ALTER TABLE `#__menu_item_lang`
-  ADD CONSTRAINT `menu_item_lang_menu_item_id` FOREIGN KEY (`menu_item_id`) REFERENCES `#__menu_item` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `#__node_term_relationship`
   ADD CONSTRAINT `fk_node_term_relationship_node_id` FOREIGN KEY (`node_id`) REFERENCES `#__node` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,

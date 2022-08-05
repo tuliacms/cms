@@ -10,14 +10,20 @@ use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\ContentTypeFormDescriptor;
 use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Service\ContentFormService;
 use Tulia\Cms\Menu\Application\UseCase\CreateMenuItem;
+use Tulia\Cms\Menu\Application\UseCase\CreateMenuItemRequest;
 use Tulia\Cms\Menu\Application\UseCase\UpdateMenu;
 use Tulia\Cms\Menu\Application\UseCase\UpdateMenuItem;
+use Tulia\Cms\Menu\Application\UseCase\UpdateMenuItemRequest;
 use Tulia\Cms\Menu\Domain\Builder\Type\RegistryInterface;
 use Tulia\Cms\Menu\Domain\ReadModel\Datatable\ItemDatatableFinderInterface;
+use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuItemDoesntExistsException;
+use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotExistsException;
 use Tulia\Cms\Menu\Domain\WriteModel\MenuRepositoryInterface;
+use Tulia\Cms\Menu\UserInterface\Web\Backend\Form\MenuItemDetailsForm;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Datatable\DatatableFactory;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
 
 /**
@@ -25,24 +31,13 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class MenuItem extends AbstractController
 {
-    private MenuRepositoryInterface $repository;
-    private RegistryInterface $menuTypeRegistry;
-    private DatatableFactory $factory;
-    private ItemDatatableFinderInterface $finder;
-    private ContentFormService $contentFormService;
-
     public function __construct(
-        MenuRepositoryInterface $repository,
-        RegistryInterface $menuTypeRegistry,
-        DatatableFactory $factory,
-        ItemDatatableFinderInterface $finder,
-        ContentFormService $contentFormService
+        private MenuRepositoryInterface $repository,
+        private RegistryInterface $menuTypeRegistry,
+        private DatatableFactory $factory,
+        private ItemDatatableFinderInterface $finder,
+        private ContentFormService $contentFormService,
     ) {
-        $this->repository = $repository;
-        $this->menuTypeRegistry = $menuTypeRegistry;
-        $this->factory = $factory;
-        $this->finder = $finder;
-        $this->contentFormService = $contentFormService;
     }
 
     public function index(string $menuId): RedirectResponse
@@ -79,22 +74,40 @@ class MenuItem extends AbstractController
      * @return RedirectResponse|ViewInterface
      * @CsrfToken(id="content_builder_form_menu_item")
      */
-    public function create(Request $request, CreateMenuItem $createMenuItem, string $menuId)
-    {
-        $menu = $this->repository->find($menuId);
-
-        if (!$menu) {
+    public function create(
+        Request $request,
+        CreateMenuItem $createMenuItem,
+        WebsiteInterface $website,
+        string $menuId,
+    ) {
+        try {
+            $menu = $this->repository->get($menuId);
+        } catch (MenuNotExistsException $e) {
             $this->setFlash('danger', $this->trans('menuNotFound', [], 'menu'));
             return $this->redirectToRoute('backend.menu');
         }
 
-        $item = $this->getEmptyItem();
+        $itemDetailsForm = $this->createForm(MenuItemDetailsForm::class, [], ['csrf_protection' => false]);
+        $itemDetailsForm->handleRequest($request);
 
-        $formDescriptor = $this->produceFormDescriptor($item);
+        $formDescriptor = $this->contentFormService->buildFormDescriptor(
+            'menu_item',
+            [],
+            [
+                'itemDetailsForm' => $itemDetailsForm->createView(),
+                'item' => $this->getEmptyItem(),
+                'types' => $this->collectMenuTypes()
+            ]
+        );
         $formDescriptor->handleRequest($request);
 
         if ($formDescriptor->isFormValid()) {
-            ($createMenuItem)($menu, $formDescriptor->getData());
+            ($createMenuItem)(new CreateMenuItemRequest(
+                $menuId,
+                $website->getLocale()->getCode(),
+                $itemDetailsForm->getData(),
+                $formDescriptor->getData()
+            ));
 
             $this->setFlash('success', $this->trans('itemSaved', [], 'menu'));
             return $this->redirectToRoute('backend.menu.item', [ 'menuId' => $menu->getId() ]);
@@ -102,7 +115,6 @@ class MenuItem extends AbstractController
 
         return $this->view('@backend/menu/item/create.tpl', [
             'menu'  => $menu,
-            'item'  => $this->getEmptyItem(),
             'formDescriptor' => $formDescriptor,
         ]);
     }
@@ -111,27 +123,51 @@ class MenuItem extends AbstractController
      * @return RedirectResponse|ViewInterface
      * @CsrfToken(id="content_builder_form_menu_item")
      */
-    public function edit(Request $request, UpdateMenuItem $updateMenuItem, string $menuId, string $id)
-    {
-        $menu = $this->repository->find($menuId);
-
-        if (!$menu) {
+    public function edit(
+        Request $request,
+        UpdateMenuItem $updateMenuItem,
+        WebsiteInterface $website,
+        string $menuId,
+        string $id
+    ) {
+        try {
+            $menu = $this->repository->get($menuId);
+            $item = $menu->getItem($id);
+        } catch (MenuNotExistsException $e) {
             $this->setFlash('danger', $this->trans('menuNotFound', [], 'menu'));
             return $this->redirectToRoute('backend.menu');
-        }
-
-        if ($menu->hasItem($id) === false) {
+        } catch (MenuItemDoesntExistsException $e) {
             $this->setFlash('danger', $this->trans('menuItemNotFound', [], 'menu'));
             return $this->redirectToRoute('backend.menu.item', ['menuId' => $menuId]);
         }
 
-        $item = $menu->itemToArray($id);
+        $item = $item->toArray(
+            $website->getLocale()->getCode(),
+            $website->getDefaultLocale()->getCode(),
+        );
 
-        $formDescriptor = $this->produceFormDescriptor($item);
+        $itemDetailsForm = $this->createForm(MenuItemDetailsForm::class, $item, ['csrf_protection' => false]);
+        $itemDetailsForm->handleRequest($request);
+
+        $formDescriptor = $this->contentFormService->buildFormDescriptor(
+            'menu_item',
+            $item,
+            [
+                'itemDetailsForm' => $itemDetailsForm->createView(),
+                'item' => $item,
+                'types' => $this->collectMenuTypes()
+            ]
+        );
         $formDescriptor->handleRequest($request);
 
         if ($formDescriptor->isFormValid()) {
-            ($updateMenuItem)($menu, $id, $formDescriptor->getData());
+            ($updateMenuItem)(new UpdateMenuItemRequest(
+                $menuId,
+                $id,
+                $website->getLocale()->getCode(),
+                $itemDetailsForm->getData(),
+                $formDescriptor->getData()
+            ));
 
             $this->setFlash('success', $this->trans('itemSaved', [], 'menu'));
             return $this->redirectToRoute('backend.menu.item', [ 'menuId' => $menu->getId() ]);
@@ -167,14 +203,6 @@ class MenuItem extends AbstractController
 
         $this->setFlash('success', $this->trans('selectedItemsWereDeleted', [], 'menu'));
         return $this->redirectToRoute('backend.menu.item.list', [ 'menuId' => $menuId ]);
-    }
-
-    private function produceFormDescriptor(array $item): ContentTypeFormDescriptor
-    {
-        return $this->contentFormService->buildFormDescriptor('menu_item', $item, [
-            'item' => $item,
-            'types' => $this->collectMenuTypes(),
-        ]);
     }
 
     private function collectMenuTypes(): array

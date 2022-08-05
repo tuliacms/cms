@@ -35,15 +35,15 @@ cms:
                     classname: 'Symfony\Component\Form\Extension\Core\Type\ChoiceType'
                     builder: 'Tulia\Cms\Menu\Infrastructure\Framework\Form\FormType\MenuLayoutTypeBuilder'
                     constraints: [ required ]
-                menu_item_type:
-                    label: Menu item type
-                    classname: 'Symfony\Component\Form\Extension\Core\Type\ChoiceType'
-                    builder: 'Tulia\Cms\Menu\Infrastructure\Framework\Form\FormType\MenuItemTypeBuilder'
-                    constraints: [ required ]
-                menu_item_target:
-                    label: Menu item target
-                    classname: 'Symfony\Component\Form\Extension\Core\Type\ChoiceType'
-                    builder: 'Tulia\Cms\Menu\Infrastructure\Framework\Form\FormType\MenuItemTargetBuilder'
+#                menu_item_type:
+#                    label: Menu item type
+#                    classname: 'Symfony\Component\Form\Extension\Core\Type\ChoiceType'
+#                    builder: 'Tulia\Cms\Menu\Infrastructure\Framework\Form\FormType\MenuItemTypeBuilder'
+#                    constraints: [ required ]
+#                menu_item_target:
+#                    label: Menu item target
+#                    classname: 'Symfony\Component\Form\Extension\Core\Type\ChoiceType'
+#                    builder: 'Tulia\Cms\Menu\Infrastructure\Framework\Form\FormType\MenuItemTargetBuilder'
         content_type:
             menu_item:
                 layout_builder: 'Tulia\Cms\Menu\Infrastructure\Presentation\TwigMenuItemContentTypeLayoutBuilder'
@@ -58,45 +58,8 @@ cms:
                 is_routable: false
                 is_hierarchical: false
                 routing_strategy: null
-                layout:
-                    sections:
-                        basics:
-                            groups:
-                                main:
-                                    name: Basics
-                                    fields:
-                                        name:
-                                            type: text
-                                            name: name
-                                            is_multilingual: true
-                                            translation_domain: messages
-                                        type:
-                                            type: menu_item_type
-                                            name: itemType
-                                            translation_domain: menu
-                                        visibility:
-                                            type: yes_no
-                                            name: visibility
-                                            is_multilingual: true
-                                            translation_domain: messages
-                                        identity:
-                                            type: hidden
-                                            name: identity
-                                            is_multilingual: false
-                                            translation_domain: menu
-                        options:
-                            groups:
-                                main:
-                                    name: Options
-                                    fields:
-                                        hash:
-                                            type: text
-                                            name: itemHash
-                                            translation_domain: menu
-                                        target:
-                                            type: menu_item_target
-                                            name: itemTarget
-                                            translation_domain: menu
+                layout: ~
+
     widgets:
         internal.menu:
             classname: 'Tulia\Cms\Menu\Infrastructure\Cms\Widget\Menu\MenuWidget'

@@ -18,7 +18,6 @@ class TwigMenuItemContentTypeLayoutBuilder implements LayoutTypeBuilderInterface
     {
         return new View('@backend/menu/content_builder/menu-item.editor.tpl', [
             'contentType' => $contentType,
-            'layout' => $contentType->getLayout(),
             'form' => $formView,
             'context' => $viewContext,
         ]);

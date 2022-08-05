@@ -21,17 +21,13 @@ use Tulia\Component\Datatable\Finder\FinderContext;
 class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDatatableFinderInterface
 {
     private ContentType $contentType;
-    private TermFinderInterface $termFinder;
-    private TranslatorInterface $translator;
 
     public function __construct(
         Connection $connection,
-        TermFinderInterface $termFinder,
-        TranslatorInterface $translator
+        private TermFinderInterface $termFinder,
+        private TranslatorInterface $translator,
     ) {
         parent::__construct($connection);
-        $this->termFinder = $termFinder;
-        $this->translator = $translator;
     }
 
     public function setContentType(ContentType $contentType): void

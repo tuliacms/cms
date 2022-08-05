@@ -8,25 +8,25 @@ use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\TypeaheadFormTypeSearch;
 use Symfony\Component\HttpFoundation\Request;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class TypeaheadSearch extends TypeaheadFormTypeSearch
 {
-    private NodeFinderInterface $nodeFinder;
-
-    public function __construct(NodeFinderInterface $nodeFinder)
-    {
-        $this->nodeFinder = $nodeFinder;
+    public function __construct(
+        private NodeFinderInterface $nodeFinder
+    ) {
     }
 
-    protected function findCollection(Request $request): array
+    protected function findCollection(Request $request, WebsiteInterface $website): array
     {
         $nodes = $this->nodeFinder->find([
             'search' => $request->query->get('q'),
             'node_type' => $request->query->get('node_type'),
             'per_page' => 10,
+            'locale' => $website->getLocale()->getCode(),
         ], NodeFinderScopeEnum::INTERNAL);
 
         $result = [];

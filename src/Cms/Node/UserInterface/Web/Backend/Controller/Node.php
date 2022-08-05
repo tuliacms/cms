@@ -76,8 +76,12 @@ class Node extends AbstractController
      * @return RedirectResponse|ViewInterface
      * @IgnoreCsrfToken()
      */
-    public function create(Request $request, CreateNode $createNode, string $node_type, WebsiteInterface $website)
-    {
+    public function create(
+        Request $request,
+        CreateNode $createNode,
+        string $node_type,
+        WebsiteInterface $website
+    ) {
         $this->validateCsrfToken($request, $node_type);
 
         $nodeType = $this->typeRegistry->get($node_type);
@@ -107,7 +111,6 @@ class Node extends AbstractController
                     $this->authenticatedUserProvider->getUser()->getId(),
                     $nodeDetailsForm->getData(),
                     $formDescriptor->getData(),
-                    $website->getDefaultLocale()->getCode(),
                     $website->getLocale()->getCode(),
                 ));
 

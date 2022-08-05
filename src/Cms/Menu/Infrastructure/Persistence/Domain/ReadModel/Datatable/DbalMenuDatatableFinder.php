@@ -30,7 +30,7 @@ class DbalMenuDatatableFinder extends AbstractDatatableFinder implements MenuDat
     {
         return [
             'id' => [
-                'selector' => 'tm.id',
+                'selector' => 'BIN_TO_UUID(tm.id)',
                 'type' => 'uuid',
                 'label' => 'ID',
             ],

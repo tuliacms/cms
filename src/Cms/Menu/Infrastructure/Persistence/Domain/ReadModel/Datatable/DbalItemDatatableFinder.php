@@ -7,6 +7,7 @@ namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\Datatable;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use PDO;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Menu\Domain\ReadModel\Datatable\ItemDatatableFinderInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
@@ -51,17 +52,17 @@ class DbalItemDatatableFinder extends AbstractDatatableFinder implements ItemDat
     {
         return [
             'id' => [
-                'selector' => 'tm.id',
+                'selector' => 'BIN_TO_UUID(tm.id)',
                 'type' => 'uuid',
                 'label' => 'ID',
             ],
             'name' => [
-                'selector' => 'COALESCE(tl.name, tm.name)',
+                'selector' => 'tl.name',
                 'label' => 'name',
                 'view' => '@backend/menu/item/parts/datatable/name.tpl',
             ],
             'visibility' => [
-                'selector' => 'COALESCE(tl.visibility, tm.visibility)',
+                'selector' => 'tl.visibility',
                 'label' => 'visibility',
                 'html_attr' => ['class' => 'text-center'],
                 'value_translation' => [
@@ -83,17 +84,17 @@ class DbalItemDatatableFinder extends AbstractDatatableFinder implements ItemDat
     {
         $queryBuilder
             ->from('#__menu_item', 'tm')
-            ->addSelect('tm.menu_id, tm.level, tm.parent_id')
-            ->leftJoin('tm', '#__menu_item_lang', 'tl', 'tm.id = tl.menu_item_id AND tl.locale = :locale')
+            ->leftJoin('tm', '#__menu_item_translation', 'tl', 'tm.id = tl.item_id AND tl.locale = :locale')
+            ->addSelect('BIN_TO_UUID(tm.menu_id) AS menu_id, tm.level, BIN_TO_UUID(tm.parent_id) AS parent_id, tm.is_root')
             ->where('tm.menu_id = :menu_id')
-            ->andWhere('tm.is_root = 0')
-            ->setParameter('menu_id', $this->menuId, PDO::PARAM_STR)
+            ->setParameter('menu_id', Uuid::fromString($this->menuId)->toBinary(), PDO::PARAM_STR)
+            ->setParameter('locale', $context->locale, PDO::PARAM_STR)
             ->addOrderBy('tm.level', 'ASC')
             ->addOrderBy('tm.position', 'ASC')
         ;
 
         if (false === $context->isDefaultLocale()) {
-            $queryBuilder->addSelect('IF(ISNULL(tl.name), 0, 1) AS translated');
+            $queryBuilder->addSelect('IF(ISNULL(tl.title), 0, 1) AS translated');
         }
 
         return $queryBuilder;
@@ -104,7 +105,15 @@ class DbalItemDatatableFinder extends AbstractDatatableFinder implements ItemDat
      */
     public function prepareResult(array $result): array
     {
-        return $this->sort($result);
+        $root = null;
+
+        foreach ($result as $row) {
+            if ($row['is_root']) {
+                $root = $row['id'];
+            }
+        }
+
+        return $this->sort($result, parent: $root);
     }
 
     /**

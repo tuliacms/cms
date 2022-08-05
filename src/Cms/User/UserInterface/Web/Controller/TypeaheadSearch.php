@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\TypeaheadFormTypeSearch;
 use Tulia\Cms\User\Domain\ReadModel\Finder\UserFinderInterface;
 use Tulia\Cms\User\Domain\ReadModel\Finder\UserFinderScopeEnum;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -21,7 +22,7 @@ class TypeaheadSearch extends TypeaheadFormTypeSearch
         $this->userFinder = $userFinder;
     }
 
-    protected function findCollection(Request $request): array
+    protected function findCollection(Request $request, WebsiteInterface $website): array
     {
         $users = $this->userFinder->find([
             'search'   => $request->query->get('q'),

@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Domain\WriteModel\Event;
 
-use Tulia\Cms\Menu\Domain\WriteModel\Model\Menu;
-
 /**
  * @author Adam Banaszkiewicz
  */
-class MenuDeleted extends AbstractDomainEvent
+class MenuDeleted extends \Tulia\Cms\Shared\Domain\WriteModel\Event\AbstractDomainEvent
 {
-    public static function fromModel(Menu $menu): self
-    {
-        return new self($menu->getId());
+    public function __construct(
+        public readonly string $id
+    ) {
     }
 }

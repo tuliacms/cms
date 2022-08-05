@@ -9,14 +9,16 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Cms\Menu\Application\UseCase\CreateMenu;
+use Tulia\Cms\Menu\Application\UseCase\CreateMenuRequest;
 use Tulia\Cms\Menu\Application\UseCase\DeleteMenu;
+use Tulia\Cms\Menu\Application\UseCase\DeleteMenuRequest;
 use Tulia\Cms\Menu\Application\UseCase\UpdateMenu;
+use Tulia\Cms\Menu\Application\UseCase\UpdateMenuRequest;
 use Tulia\Cms\Menu\Domain\ReadModel\Datatable\MenuDatatableFinderInterface;
-use Tulia\Cms\Menu\Domain\WriteModel\MenuRepositoryInterface;
+use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotExistsException;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Datatable\DatatableFactory;
-use Tulia\Component\Routing\Website\WebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
 
 /**
@@ -24,18 +26,10 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class Menu extends AbstractController
 {
-    private MenuRepositoryInterface $repository;
-    private DatatableFactory $factory;
-    private MenuDatatableFinderInterface $finder;
-
     public function __construct(
-        MenuRepositoryInterface $repository,
-        DatatableFactory $factory,
-        MenuDatatableFinderInterface $finder
+        private DatatableFactory $factory,
+        private MenuDatatableFinderInterface $finder
     ) {
-        $this->repository = $repository;
-        $this->factory = $factory;
-        $this->finder = $finder;
     }
 
     public function list(Request $request): ViewInterface
@@ -51,56 +45,49 @@ class Menu extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @return RedirectResponse
      * @CsrfToken(id="menu.create")
      */
-    public function create(Request $request, CreateMenu $createMenu, WebsiteInterface $website): RedirectResponse
-    {
-        $menu = $this->repository->createNewMenu($website->getLocale()->getCode());
-        $menu->rename($request->request->get('name'));
-
-        ($createMenu)($menu);
+    public function create(
+        Request $request,
+        CreateMenu $createMenu
+    ): RedirectResponse {
+        ($createMenu)(new CreateMenuRequest($request->request->get('name')));
 
         $this->setFlash('success', $this->trans('menuCreated', [], 'menu'));
         return $this->redirectToRoute('backend.menu');
     }
 
     /**
-     * @param Request $request
-     * @return RedirectResponse
      * @throws NotFoundHttpException
      * @CsrfToken(id="menu.edit")
      */
     public function edit(Request $request, UpdateMenu $updateMenu): RedirectResponse
     {
-        $menu = $this->repository->find($request->request->get('id'));
-
-        if (!$menu) {
+        try {
+            ($updateMenu)(new UpdateMenuRequest(
+                $request->request->get('id'),
+                $request->request->get('name')
+            ));
+        } catch (MenuNotExistsException $e) {
             $this->setFlash('success', $this->trans('menuNotFound', [], 'menu'));
             return $this->redirectToRoute('backend.menu');
         }
-
-        $menu->rename($request->request->get('name'));
-
-        ($updateMenu)($menu);
 
         $this->setFlash('success', $this->trans('menuUpdated', [], 'menu'));
         return $this->redirectToRoute('backend.menu');
     }
 
     /**
-     * @param Request $request
-     * @return RedirectResponse
      * @CsrfToken(id="menu.delete")
      */
     public function delete(Request $request, DeleteMenu $deleteMenu): RedirectResponse
     {
-        foreach ($request->request->get('ids', []) as $id) {
-            $menu = $this->repository->find($id);
-
-            if ($menu) {
-                ($deleteMenu)($menu);
+        foreach ($request->request->all('ids') as $id) {
+            try {
+                ($deleteMenu)(new DeleteMenuRequest($id));
+            } catch (MenuNotExistsException $e) {
+                // Cannot delete not existent menu :)
+                continue;
             }
         }
 

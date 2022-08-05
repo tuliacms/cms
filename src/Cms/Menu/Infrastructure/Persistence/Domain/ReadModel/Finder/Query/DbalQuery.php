@@ -82,7 +82,7 @@ class DbalQuery extends AbstractDbalQuery
             return $collection;
         }
 
-        $items = [];
+        /*$items = [];
         $metadata = [];
 
         if ($criteria['fetch_items']) {
@@ -93,18 +93,18 @@ class DbalQuery extends AbstractDbalQuery
                 array_column($items, 'id'),
                 $criteria['locale']
             );
-        }
+        }*/
 
         try {
             foreach ($result as $row) {
                 $row['items'] = [];
 
-                foreach ($items as $item) {
+                /*foreach ($items as $item) {
                     if ($item['menu_id'] === $row['id'] && ! $item['is_root']) {
                         $item['metadata'] = $metadata[$item['id']] ?? [];
                         $row['items'][] = $item;
                     }
-                }
+                }*/
 
                 $collection->append(Menu::buildFromArray($row));
             }
@@ -118,7 +118,7 @@ class DbalQuery extends AbstractDbalQuery
     protected function setDefaults(array $criteria): void
     {
         $qb = $this->queryBuilder
-            ->select('tm.*')
+            ->select('tm.*, BIN_TO_UUID(tm.id) AS id')
             ->from('#__menu', 'tm');
 
         if ($criteria['id']) {

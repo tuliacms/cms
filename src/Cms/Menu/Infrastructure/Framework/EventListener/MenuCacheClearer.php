@@ -6,7 +6,6 @@ namespace Tulia\Cms\Menu\Infrastructure\Framework\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
-use Tulia\Cms\Menu\Domain\WriteModel\Event\AbstractDomainEvent;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuCreated;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuDeleted;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuUpdated;
@@ -32,8 +31,8 @@ class MenuCacheClearer implements EventSubscriberInterface
         ];
     }
 
-    public function clearMenuCache(AbstractDomainEvent $event): void
+    public function clearMenuCache(MenuCreated|MenuUpdated|MenuDeleted $event): void
     {
-        $this->menuCache->invalidateTags([sprintf('menu_%s', $event->getMenuId())]);
+        $this->menuCache->invalidateTags([sprintf('menu_%s', $event->id)]);
     }
 }

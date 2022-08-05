@@ -1,0 +1,42 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+    xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+        https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Tulia\Cms\Menu\Domain\WriteModel\MewModel\Item" table="#__menu_item">
+        <id name="id" type="uuid">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+
+        <field name="position" type="integer" />
+        <field name="level" type="integer" />
+        <field name="identity" nullable="true" />
+        <field name="hash" nullable="true" />
+        <field name="target" nullable="true" />
+        <field name="type" />
+        <field name="isRoot" type="boolean" />
+
+        <one-to-many field="items" target-entity="Tulia\Cms\Menu\Domain\WriteModel\MewModel\Item" mapped-by="parent">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
+        <many-to-one field="parent" target-entity="Tulia\Cms\Menu\Domain\WriteModel\MewModel\Item" inversed-by="items">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </many-to-one>
+
+        <one-to-many field="translations" orphan-removal="true" target-entity="Tulia\Cms\Menu\Domain\WriteModel\MewModel\ItemTranslation" mapped-by="item">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
+
+        <many-to-one field="menu" target-entity="Tulia\Cms\Menu\Domain\WriteModel\MewModel\Menu" inversed-by="items"/>
+    </entity>
+</doctrine-mapping>

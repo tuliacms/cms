@@ -257,4 +257,24 @@ class Item implements AttributesAwareInterface
             }
         }
     }
+
+    public function addAttribute(Attribute $attribute): void
+    {
+        // TODO: Implement addAttribute() method.
+    }
+
+    public function hasAttribute(string $uri): bool
+    {
+        // TODO: Implement hasAttribute() method.
+    }
+
+    public function removeAttribute(string $uri): void
+    {
+        // TODO: Implement removeAttribute() method.
+    }
+
+    public function getAttribute(string $uri, $default = null)
+    {
+        // TODO: Implement getAttribute() method.
+    }
 }

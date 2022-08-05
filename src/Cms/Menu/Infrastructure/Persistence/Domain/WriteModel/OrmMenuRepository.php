@@ -7,7 +7,6 @@ namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\WriteModel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
-use Tulia\Cms\Content\Attributes\Domain\WriteModel\AttributesRepositoryInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotExistsException;
 use Tulia\Cms\Menu\Domain\WriteModel\MenuRepositoryInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\MewModel\Menu as NewMenu;
@@ -17,12 +16,10 @@ use Tulia\Cms\Menu\Domain\WriteModel\Model\Menu;
 /**
  * @author Adam Banaszkiewicz
  */
-class DbalMenuRepository extends ServiceEntityRepository implements MenuRepositoryInterface
+class OrmMenuRepository extends ServiceEntityRepository implements MenuRepositoryInterface
 {
     public function __construct(
-        ManagerRegistry $registry,
-        private DbalMenuStorage $storage,
-        private AttributesRepositoryInterface $attributesRepository,
+        ManagerRegistry $registry
     ) {
         parent::__construct($registry, NewMenu::class);
     }

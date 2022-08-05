@@ -9,5 +9,12 @@
         </id>
 
         <field name="name"/>
+
+        <one-to-many field="items" orphan-removal="true" target-entity="Tulia\Cms\Menu\Domain\WriteModel\MewModel\Item" mapped-by="menu">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
     </entity>
 </doctrine-mapping>
