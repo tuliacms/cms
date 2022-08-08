@@ -36,6 +36,23 @@ class UserExtension extends AbstractExtension
             }, [
                 'is_safe' => [ 'html' ]
             ]),
+            new TwigFunction('user_initials', function () {
+                $user = $this->authenticatedUserProvider->getUser();
+
+                if ($user->getName()) {
+                    $parts = explode(' ', $user->getName());
+                } else {
+                    [$username, ] = explode('@', $user->getEmail());
+                    $parts = explode('.', $username);
+                }
+
+                return strtoupper(substr(implode(array_map(
+                    static fn($v) => $v[0],
+                    $parts
+                )), 0, 2));
+            }, [
+                'is_safe' => [ 'html' ]
+            ]),
         ];
     }
 }

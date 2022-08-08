@@ -20,8 +20,13 @@
     <div class="pane pane-lead">
         <div class="pane-header">
             <div class="pane-buttons">
-                {{ form_row(formDescriptor.formView.cancel) }}
-                {{ form_row(formDescriptor.formView.save) }}
+                <div class="d-none">
+                    {{ form_row(formDescriptor.formView.cancel) }}
+                    {{ form_row(formDescriptor.formView.save) }}
+                </div>
+                {% set detailsForm = formDescriptor.viewContext.nodeDetailsForm.createView %}
+                {{ form_row(detailsForm.cancel) }}
+                {{ form_row(detailsForm.save) }}
             </div>
             <i class="pane-header-icon {{ nodeType.icon }}"></i>
             <h1 class="pane-title">{{ block('title') }}</h1>

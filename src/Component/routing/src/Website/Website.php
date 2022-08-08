@@ -6,6 +6,7 @@ namespace Tulia\Component\Routing\Website;
 
 use Tulia\Component\Routing\Enum\SslModeEnum;
 use Tulia\Component\Routing\Website\Exception\LocaleNotExistsException;
+use Tulia\Component\Routing\Website\Locale\Locale;
 use Tulia\Component\Routing\Website\Locale\LocaleInterface;
 
 /**
@@ -119,6 +120,14 @@ class Website implements WebsiteInterface
     public function isDefaultLocale(): bool
     {
         return $this->activeLocale->getCode() === $this->defaultLocale->getCode();
+    }
+
+    public function getLocaleCodes(): array
+    {
+        return array_map(
+            static fn(Locale $v) => $v->getCode(),
+            $this->locales
+        );
     }
 
     /**

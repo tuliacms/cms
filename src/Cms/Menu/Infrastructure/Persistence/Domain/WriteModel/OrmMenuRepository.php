@@ -9,9 +9,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotExistsException;
 use Tulia\Cms\Menu\Domain\WriteModel\MenuRepositoryInterface;
-use Tulia\Cms\Menu\Domain\WriteModel\MewModel\Menu as NewMenu;
-use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
-use Tulia\Cms\Menu\Domain\WriteModel\Model\Menu;
+use Tulia\Cms\Menu\Domain\WriteModel\MewModel\Menu;
 
 /**
  * @author Adam Banaszkiewicz
@@ -21,7 +19,7 @@ class OrmMenuRepository extends ServiceEntityRepository implements MenuRepositor
     public function __construct(
         ManagerRegistry $registry
     ) {
-        parent::__construct($registry, NewMenu::class);
+        parent::__construct($registry, Menu::class);
     }
 
     public function getNextId(): string
@@ -29,17 +27,12 @@ class OrmMenuRepository extends ServiceEntityRepository implements MenuRepositor
         return (string) Uuid::v4();
     }
 
-    public function createNewMenu(string $name): NewMenu
+    public function createNewMenu(string $name): Menu
     {
-        return NewMenu::create($this->getNextId(), $name);
+        return Menu::create($this->getNextId(), $name);
     }
 
-    public function createNewItem(Menu $menu): Item
-    {
-        return $menu->createNewItem();
-    }
-
-    public function get(string $id): NewMenu
+    public function get(string $id): Menu
     {
         $menu = $this->find($id);
 
@@ -50,13 +43,13 @@ class OrmMenuRepository extends ServiceEntityRepository implements MenuRepositor
         return $menu;
     }
 
-    public function save(NewMenu $menu): void
+    public function save(Menu $menu): void
     {
         $this->_em->persist($menu);
         $this->_em->flush();
     }
 
-    public function delete(NewMenu $menu): void
+    public function delete(Menu $menu): void
     {
         $menu->delete();
         $this->_em->remove($menu);

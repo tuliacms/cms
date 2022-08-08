@@ -17,7 +17,7 @@
         <field name="type" />
         <field name="isRoot" type="boolean" />
 
-        <one-to-many field="items" target-entity="Tulia\Cms\Menu\Domain\WriteModel\MewModel\Item" mapped-by="parent">
+        <one-to-many field="items" orphan-removal="true" target-entity="Tulia\Cms\Menu\Domain\WriteModel\MewModel\Item" mapped-by="parent">
             <cascade>
                 <cascade-persist/>
                 <cascade-remove/>

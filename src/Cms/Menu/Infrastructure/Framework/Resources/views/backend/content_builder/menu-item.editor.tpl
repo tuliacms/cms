@@ -14,6 +14,7 @@
                 {{ form_row(itemDetailsForm.name) }}
                 {{ form_row(itemDetailsForm.visibility) }}
                 {{ form_row(itemDetailsForm.type) }}
+                {{ form_row(itemDetailsForm.parent) }}
                 {% for group in contentType.fieldGroups %}
                     {% if group.section == 'basics' %}
                         {% for field in group.fields %}

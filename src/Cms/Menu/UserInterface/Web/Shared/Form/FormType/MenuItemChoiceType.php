@@ -18,15 +18,11 @@ use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
  */
 class MenuItemChoiceType extends ChoiceType
 {
-    protected MenuFinderInterface $menuFinder;
-    protected TranslatorInterface $translator;
-
-    public function __construct(MenuFinderInterface $menuFinder, TranslatorInterface $translator)
-    {
+    public function __construct(
+        protected MenuFinderInterface $menuFinder,
+        protected TranslatorInterface $translator
+    ) {
         parent::__construct();
-
-        $this->menuFinder = $menuFinder;
-        $this->translator = $translator;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)

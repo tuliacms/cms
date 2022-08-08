@@ -11,13 +11,26 @@ namespace Tulia\Cms\Menu\Domain\WriteModel\MewModel;
 class ItemTranslation
 {
     private string $id;
-    private bool $visibility = true;
-    private string $name = '';
+    public bool $visibility = true;
+    public string $name = '';
 
     public function __construct(
         private Item $item,
-        private string $locale
+        private string $locale,
+        public bool $translated,
+        string $name,
+        string $creatingLocale,
     ) {
+        $this->name = $name;
+
+        if ($this->locale === $creatingLocale) {
+            $this->translated = true;
+        }
+    }
+
+    public static function cloneToLocale(ItemTranslation $trans, string $locale): self
+    {
+        return new self($trans->item, $locale, false, $trans->name, $locale);
     }
 
     public function isFor(string $locale): bool
@@ -25,9 +38,9 @@ class ItemTranslation
         return $this->locale === $locale;
     }
 
-    public function renameTo(string $name): void
+    public function isTranslated(): bool
     {
-        $this->name = $name;
+        return $this->translated;
     }
 
     public function toArray(): array

@@ -4,22 +4,18 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Domain\WriteModel;
 
-use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
-use Tulia\Cms\Menu\Domain\WriteModel\Model\Menu;
-use Tulia\Cms\Menu\Domain\WriteModel\MewModel\Menu as NewMenu;
+use Tulia\Cms\Menu\Domain\WriteModel\MewModel\Menu;
 
 /**
  * @author Adam Banaszkiewicz
  */
 interface MenuRepositoryInterface
 {
-    public function createNewMenu(string $name): NewMenu;
+    public function createNewMenu(string $name): Menu;
 
-    public function createNewItem(Menu $menu): Item;
+    public function get(string $id): Menu;
 
-    public function get(string $id): NewMenu;
+    public function save(Menu $menu): void;
 
-    public function save(NewMenu $menu): void;
-
-    public function delete(NewMenu $menu): void;
+    public function delete(Menu $menu): void;
 }

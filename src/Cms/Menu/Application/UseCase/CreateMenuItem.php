@@ -28,7 +28,7 @@ class CreateMenuItem extends AbstractTransactionalUseCase
     {
         $menu = $this->repository->get($request->menuId);
 
-        $item = $menu->createItem();
+        $item = $menu->createItem($request->availableLocales, $request->locale, $request->details['name']);
         $item->linksTo(
             (string) $request->details['type'],
             (string) $request->details['identity'],
@@ -40,9 +40,6 @@ class CreateMenuItem extends AbstractTransactionalUseCase
         } else {
             $item->openInSelfTab();
         }
-
-        $translation = $item->translate($request->locale);
-        $translation->renameTo($request->details['name']);
 
         $this->repository->save($menu);
         $this->eventBus->dispatchCollection($menu->collectDomainEvents());

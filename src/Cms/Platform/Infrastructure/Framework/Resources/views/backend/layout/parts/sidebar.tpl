@@ -9,11 +9,15 @@
                 <a href="{{ path('backend.me') }}" class="user-avatar" title="{{ 'myAccountUsername'|trans({ username: user.name }) }}">
                     {% if user.avatar is defined and user.avatar %}
                         <img src="{{ asset(user.avatar) }}" />
+                    {% else %}
+                        <span class="text-avatar">{{ user_initials() }}</span>
                     {% endif %}
                     <div class="user-details">
-                        <div class="user-name">{{ user.name }}</div>
-                        {% if user.email is defined and user.email %}
+                        {% if user.name is defined and user.name %}
+                            <div class="user-name">{{ user.name }}</div>
                             <div class="user-email">{{ user.email }}</div>
+                        {% else %}
+                            <div class="user-name">{{ user.email }}</div>
                         {% endif %}
                     </div>
                 </a>

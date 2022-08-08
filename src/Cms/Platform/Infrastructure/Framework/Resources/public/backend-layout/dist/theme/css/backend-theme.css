@@ -13605,7 +13605,9 @@ aside .user-area .user-email {
 }
 
 aside .user-area .user-avatar {
-  display: block;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
   position: relative;
   background-color: #1450a3;
   padding-left: 66px;
@@ -13650,6 +13652,27 @@ aside .user-area .user-avatar:hover .user-email {
 
 aside .user-area .user-avatar:hover img {
   border-color: #1860c3;
+}
+
+aside .user-area .user-avatar .text-avatar {
+  text-align: center;
+  line-height: 52px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+  position: absolute;
+  left: 1px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  display: block;
+  margin: 0 auto;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 4px solid #1450a3;
+  transition: 0.12s all;
 }
 
 aside a:hover {

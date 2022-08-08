@@ -90,7 +90,8 @@ class Node extends AbstractController
             NodeDetailsForm::class,
             [
                 'author' => $this->authenticatedUserProvider->getUser()->getId(),
-                'published_at' => new ImmutableDateTime()
+                'published_at' => new ImmutableDateTime(),
+                'status' => 'published',
             ],
             ['content_type' => $nodeType, 'csrf_protection' => false]
         );
@@ -151,7 +152,8 @@ class Node extends AbstractController
         $nodeDetailsForm = $this->createForm(
             NodeDetailsForm::class,
             $nodeArray,
-            ['content_type' => $nodeType, 'csrf_protection' => false]);
+            ['content_type' => $nodeType, 'csrf_protection' => false]
+        );
         $nodeDetailsForm->handleRequest($request);
 
         $formDescriptor = $this->contentFormService->buildFormDescriptor(

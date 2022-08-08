@@ -11,6 +11,8 @@ use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\ContentTypeFormDescript
 use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Service\ContentFormService;
 use Tulia\Cms\Menu\Application\UseCase\CreateMenuItem;
 use Tulia\Cms\Menu\Application\UseCase\CreateMenuItemRequest;
+use Tulia\Cms\Menu\Application\UseCase\DeleteMenuItem;
+use Tulia\Cms\Menu\Application\UseCase\DeleteMenuItemRequest;
 use Tulia\Cms\Menu\Application\UseCase\UpdateMenu;
 use Tulia\Cms\Menu\Application\UseCase\UpdateMenuItem;
 use Tulia\Cms\Menu\Application\UseCase\UpdateMenuItemRequest;
@@ -87,7 +89,7 @@ class MenuItem extends AbstractController
             return $this->redirectToRoute('backend.menu');
         }
 
-        $itemDetailsForm = $this->createForm(MenuItemDetailsForm::class, [], ['csrf_protection' => false]);
+        $itemDetailsForm = $this->createForm(MenuItemDetailsForm::class, [], ['csrf_protection' => false, 'menu_id' => $menuId]);
         $itemDetailsForm->handleRequest($request);
 
         $formDescriptor = $this->contentFormService->buildFormDescriptor(
@@ -104,9 +106,11 @@ class MenuItem extends AbstractController
         if ($formDescriptor->isFormValid()) {
             ($createMenuItem)(new CreateMenuItemRequest(
                 $menuId,
-                $website->getLocale()->getCode(),
                 $itemDetailsForm->getData(),
-                $formDescriptor->getData()
+                $formDescriptor->getData(),
+                $website->getLocale()->getCode(),
+                $website->getDefaultLocale()->getCode(),
+                $website->getLocaleCodes(),
             ));
 
             $this->setFlash('success', $this->trans('itemSaved', [], 'menu'));
@@ -146,7 +150,7 @@ class MenuItem extends AbstractController
             $website->getDefaultLocale()->getCode(),
         );
 
-        $itemDetailsForm = $this->createForm(MenuItemDetailsForm::class, $item, ['csrf_protection' => false]);
+        $itemDetailsForm = $this->createForm(MenuItemDetailsForm::class, $item, ['csrf_protection' => false, 'menu_id' => $menuId]);
         $itemDetailsForm->handleRequest($request);
 
         $formDescriptor = $this->contentFormService->buildFormDescriptor(
@@ -164,9 +168,11 @@ class MenuItem extends AbstractController
             ($updateMenuItem)(new UpdateMenuItemRequest(
                 $menuId,
                 $id,
-                $website->getLocale()->getCode(),
                 $itemDetailsForm->getData(),
-                $formDescriptor->getData()
+                $formDescriptor->getData(),
+                $website->getLocale()->getCode(),
+                $website->getDefaultLocale()->getCode(),
+                $website->getLocaleCodes()
             ));
 
             $this->setFlash('success', $this->trans('itemSaved', [], 'menu'));
@@ -181,25 +187,18 @@ class MenuItem extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param string $menuId
-     * @return RedirectResponse
      * @CsrfToken(id="menu.item.delete")
      */
-    public function delete(Request $request, UpdateMenu $updateMenu, string $menuId): RedirectResponse
+    public function delete(Request $request, DeleteMenuItem $deleteMenuItem, string $menuId): RedirectResponse
     {
-        $menu = $this->repository->find($menuId);
-
-        if (!$menu) {
-            $this->setFlash('danger', $this->trans('menuNotFound', [], 'menu'));
-            return $this->redirectToRoute('backend.menu');
+        foreach ($request->request->all('ids') as $id) {
+            try {
+                ($deleteMenuItem)(new DeleteMenuItemRequest($menuId, $id));
+            } catch (MenuNotExistsException $e) {
+                $this->setFlash('danger', $this->trans('menuNotFound', [], 'menu'));
+                return $this->redirectToRoute('backend.menu');
+            }
         }
-
-        foreach ($request->request->get('ids', []) as $id) {
-            $menu->removeItem($id);
-        }
-
-        ($updateMenu)($menu);
 
         $this->setFlash('success', $this->trans('selectedItemsWereDeleted', [], 'menu'));
         return $this->redirectToRoute('backend.menu.item.list', [ 'menuId' => $menuId ]);

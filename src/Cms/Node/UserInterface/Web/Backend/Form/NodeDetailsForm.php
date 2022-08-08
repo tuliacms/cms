@@ -16,7 +16,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodePurpose\NodePurposeRegistryInterface;
 use Tulia\Cms\Node\UserInterface\Web\Shared\Form\FormType\NodeTypeaheadType;
+use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\CancelType;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\DateTimeType;
+use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\SubmitType;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
 use Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserTypeahead\UserTypeaheadType;
 
@@ -110,6 +112,15 @@ final class NodeDetailsForm extends AbstractType
                 ]
             ]);
         }
+
+        $builder
+            ->add('cancel', CancelType::class, [
+                'route' => 'backend.node.list',
+                'route_params' => [
+                    'node_type' => $contentType->getCode(),
+                ],
+            ])
+            ->add('save', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

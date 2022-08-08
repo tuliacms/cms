@@ -242,12 +242,13 @@ aside .user-area .user-name,
 aside .user-area .user-email {color:#fff;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;}
 aside .user-area .user-name {font-size:14px;}
 aside .user-area .user-email {font-size:11px;color:rgba(255,255,255,.4);}
-aside .user-area .user-avatar {display:block;position:relative;background-color:map-get($colors-darken, 'primary');padding-left:66px;transition:.12s all;}
+aside .user-area .user-avatar {min-height:60px;display:flex;align-items:center;position:relative;background-color:map-get($colors-darken, 'primary');padding-left:66px;transition:.12s all;}
 aside .user-area .user-avatar:before {display:block;content:"";position:absolute;left:0;top:0;bottom:0;width:29px;/*background-color:#2b2b3c*/;z-index:5;}
 aside .user-area .user-avatar img {position:absolute;left:1px;top:50%;transform:translateY(-50%);z-index:10;display:block;margin:0 auto;width:60px;height:60px;border-radius:50%;border:4px solid map-get($colors-darken, 'primary');transition:.12s all;}
 aside .user-area .user-avatar:hover {cursor:pointer;background-color:$color-primary;}
 aside .user-area .user-avatar:hover .user-email {color:rgba(255,255,255,.7);}
 aside .user-area .user-avatar:hover img {border-color:$color-primary;}
+aside .user-area .user-avatar .text-avatar {text-align:center;line-height:52px;font-size:18px;font-weight:bold;color:#fff;position:absolute;left:1px;top:50%;transform:translateY(-50%);z-index:10;display:block;margin:0 auto;width:60px;height:60px;border-radius:50%;background-color:rgba(255,255,255,.1);border:4px solid map-get($colors-darken, 'primary');transition:.12s all;}
 aside a:hover {text-decoration:none}
 
 aside .lead-menu {margin-bottom:30px;}

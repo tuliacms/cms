@@ -14,6 +14,7 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Schema\SchemaManag
 
 /**
  * @author Adam Banaszkiewicz
+ * @deprecated Please use Doctrine
  */
 class Connection extends DoctrineConnection
 {

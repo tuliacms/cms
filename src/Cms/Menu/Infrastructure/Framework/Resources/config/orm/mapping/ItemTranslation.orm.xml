@@ -12,6 +12,7 @@
         <field name="name" />
         <field name="locale" />
         <field name="visibility" type="boolean" />
+        <field name="translated" type="boolean" />
 
         <many-to-one field="item" target-entity="Tulia\Cms\Menu\Domain\WriteModel\MewModel\Item"  inversed-by="translations"/>
     </entity>

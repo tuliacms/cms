@@ -9,11 +9,13 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Menu\Domain\Builder\Type\RegistryInterface;
 use Tulia\Cms\Menu\Domain\Builder\Type\TypeInterface;
+use Tulia\Cms\Menu\UserInterface\Web\Shared\Form\FormType\MenuItemChoiceType;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\YesNoType;
 
 /**
@@ -57,6 +59,16 @@ final class MenuItemDetailsForm extends AbstractType
                 new Choice([ 'choices' => $itemTargets ])
             ],
         ]);
+        $builder->add('parent', MenuItemChoiceType::class, [
+            'menu_id' => $options['menu_id']
+        ]);
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefault('menu_id', null);
+        $resolver->isRequired('menu_id');
+        $resolver->setAllowedTypes('menu_id', 'string');
     }
 
     private function buildItemTypesChoices(): array

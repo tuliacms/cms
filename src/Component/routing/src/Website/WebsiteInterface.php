@@ -22,4 +22,5 @@ interface WebsiteInterface
     public function isBackend(): bool;
     public function getBasepath(): string;
     public function isDefaultLocale(): bool;
+    public function getLocaleCodes(): array;
 }
