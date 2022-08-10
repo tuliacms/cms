@@ -16,7 +16,6 @@ final class CreateMenuItemRequest implements RequestInterface
         public readonly array $details,
         public readonly array $attributes,
         public readonly string $locale,
-        public readonly string $defaultLocale,
         public readonly array $availableLocales,
     ) {
     }

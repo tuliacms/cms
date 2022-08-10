@@ -9,7 +9,7 @@ use Tulia\Cms\Shared\Domain\WriteModel\Event\AbstractDomainEvent as PlatformDoma
 /**
  * @author Adam Banaszkiewicz
  */
-abstract class AbstractDomainEvent extends PlatformDomainEvent
+abstract class AbstractNodeDomainEvent extends PlatformDomainEvent
 {
     public function __construct(
         public readonly string $id,

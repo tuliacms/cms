@@ -109,7 +109,6 @@ class MenuItem extends AbstractController
                 $itemDetailsForm->getData(),
                 $formDescriptor->getData(),
                 $website->getLocale()->getCode(),
-                $website->getDefaultLocale()->getCode(),
                 $website->getLocaleCodes(),
             ));
 

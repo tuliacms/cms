@@ -7,6 +7,6 @@ namespace Tulia\Cms\Node\Domain\WriteModel\Event;
 /**
  * @author Adam Banaszkiewicz
  */
-class NodeCreated extends AbstractDomainEvent
+class NodeCreated extends AbstractNodeDomainEvent
 {
 }

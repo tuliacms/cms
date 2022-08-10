@@ -9,7 +9,7 @@ use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 /**
  * @author Adam Banaszkiewicz
  */
-final class NodePublished extends AbstractDomainEvent
+final class NodePublished extends AbstractNodeDomainEvent
 {
     public readonly ImmutableDateTime $publishedAt;
 

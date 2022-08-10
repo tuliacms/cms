@@ -10,32 +10,20 @@ namespace Tulia\Cms\Widget\Domain\ReadModel\Model;
 class Widget
 {
     protected string $id;
-
     protected string $websiteId;
-
     protected string $widgetType;
-
     protected string $space;
-
     protected string $name;
-
     protected ?string $htmlClass = null;
-
     protected ?string $htmlId = null;
-
     protected array $styles = [];
-
     protected array $payload = [];
-
     protected array $payloadLocalized = [];
-
     protected string $locale;
-
     protected string $title;
-
     protected bool $visibility = true;
-
     protected bool $translated = true;
+    protected array $attributes = [];
 
     public static function buildFromArray(array $data): self
     {
@@ -67,6 +55,7 @@ class Widget
         $widget->setVisibility((bool) ($data['visibility'] ?? true));
         $widget->setPayloadLocalized($data['payload_localized'] ?? []);
         $widget->setTranslated((bool) ($data['translated'] ?? false));
+        $widget->attributes = $data['attributes'];
 
         return $widget;
     }

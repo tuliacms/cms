@@ -7,6 +7,7 @@ namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\Finder\Quer
 use Doctrine\DBAL\Query\QueryBuilder;
 use Exception;
 use PDO;
+use Symfony\Component\Uid\Uuid;
 use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\AttributesFinder;
 use Tulia\Cms\Menu\Domain\ReadModel\Model\Menu;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
@@ -82,22 +83,22 @@ class DbalQuery extends AbstractDbalQuery
             return $collection;
         }
 
-        /*$items = [];
+        $items = [];
         $metadata = [];
 
         if ($criteria['fetch_items']) {
             $items = $this->fetchMenuItems($criteria);
-            $metadata = $this->metadataFinder->findAllAggregated(
+            /*$metadata = $this->metadataFinder->findAllAggregated(
                 'menu_item',
                 $scope,
                 array_column($items, 'id'),
                 $criteria['locale']
-            );
-        }*/
+            );*/
+        }
 
         try {
             foreach ($result as $row) {
-                $row['items'] = [];
+                $row['items'] = $items;
 
                 /*foreach ($items as $item) {
                     if ($item['menu_id'] === $row['id'] && ! $item['is_root']) {
@@ -123,7 +124,7 @@ class DbalQuery extends AbstractDbalQuery
 
         if ($criteria['id']) {
             $qb->andWhere('tm.id = :tm_id')
-                ->setParameter('tm_id', $criteria['id'], PDO::PARAM_STR)
+                ->setParameter('tm_id', Uuid::fromString($criteria['id'])->toBinary(), PDO::PARAM_STR)
                 ->setMaxResults(1);
         }
 
@@ -140,12 +141,12 @@ class DbalQuery extends AbstractDbalQuery
     {
         $where = ['1 = 1'];
         $parameters = [
-            'menu_id' => $criteria['id'],
+            'menu_id' => $criteria['id'] ? Uuid::fromString($criteria['id'])->toBinary() : $criteria['id'],
             'locale'  => $criteria['locale'],
         ];
 
         if ($criteria['visibility']) {
-            $where[] = 'COALESCE(tl.visibility, tm.visibility, 0) = :tl_visibility';
+            $where[] = 'tl.visibility = :tl_visibility';
             $parameters['tl_visibility'] = $criteria['visibility'];
         }
 
@@ -164,8 +165,7 @@ WITH RECURSIVE tree_path (
     hash,
     target,
     name,
-    visibility,
-    path
+    visibility
 ) AS (
         SELECT
             id,
@@ -178,9 +178,8 @@ WITH RECURSIVE tree_path (
             identity,
             hash,
             target,
-            name,
-            visibility,
-            CONCAT(name, '/') as path
+            CAST('root' AS CHAR(255)) AS name,
+            1 AS visibility
         FROM #__menu_item
         WHERE
             is_root = 1
@@ -197,18 +196,22 @@ WITH RECURSIVE tree_path (
             tm.identity,
             tm.hash,
             tm.target,
-            COALESCE(tl.name, tm.name) AS name,
-            COALESCE(tl.visibility, tm.visibility) AS visibility,
-            CONCAT(tp.path, tm.name, '/') AS path
+            tl.name,
+            tl.visibility
         FROM tree_path AS tp
         INNER JOIN #__menu_item AS tm
             ON tp.id = tm.parent_id
-        LEFT JOIN #__menu_item_lang AS tl
-            ON tm.id = tl.menu_item_id AND tl.locale = :locale
+        INNER JOIN #__menu_item_translation AS tl
+            ON tm.id = tl.item_id AND tl.locale = :locale
         WHERE
             {$where}
 )
-SELECT * FROM tree_path
-ORDER BY position, path", $parameters);
+SELECT
+    *,
+    BIN_TO_UUID(id) AS id,
+    BIN_TO_UUID(menu_id) AS menu_id,
+    BIN_TO_UUID(parent_id) AS parent_id
+FROM tree_path
+ORDER BY position", $parameters);
     }
 }

@@ -421,62 +421,6 @@ INSERT INTO `#__website_locale` (`website_id`, `code`, `domain`, `domain_develop
 ('f5a4d537-17c5-4663-b521-c73a11554d8f', 'pl_PL', 'tulia.loc', 'tulia.loc', '/tulia', 'ALLOWED_BOTH', NULL, 1);
 EOF);*/
         $this->addSql(<<<EOF
-CREATE TABLE `#__widget` (
-  `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `space` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `widget_type` varchar(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `content_type` varchar(127) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `visibility` tinyint(1) NOT NULL DEFAULT '0',
-  `html_class` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `html_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `styles` json DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-
-INSERT INTO `#__widget` (`id`, `space`, `widget_type`, `content_type`, `name`, `title`, `visibility`, `html_class`, `html_id`, `styles`) VALUES
-('2b1f29ba-c643-4a3c-876b-e13d768f0f97', 'mainmenu', 'internal.menu', 'widget_internal_menu', 'Nowe menu', NULL, 1, NULL, NULL, '[]'),
-('6ebf9a65-2530-46e4-9b0d-9984adc41811', 'footer_quick_links', 'internal.menu', 'widget_internal_menu', 'Menu w stopce', 'Quick Links', 1, NULL, NULL, '[]'),
-('828387e3-059b-4190-8dca-5fcd276c17ed', 'footer_info', 'internal.text', 'widget_internal_text', 'Tekst w stopce', 'Event Agency', 1, NULL, NULL, '[]');
-EOF);
-        $this->addSql(<<<EOF
-CREATE TABLE `#__widget_attribute` (
-  `id` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `owner_id` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `is_renderable` tinyint(1) NOT NULL DEFAULT '0',
-  `has_nonscalar_value` tinyint(1) NOT NULL DEFAULT '0',
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `uri` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `value` longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
-  `compiled_value` longtext COLLATE utf8_unicode_ci,
-  `payload` json DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-
-INSERT INTO `#__widget_attribute` (`id`, `owner_id`, `is_renderable`, `has_nonscalar_value`, `name`, `uri`, `value`, `compiled_value`, `payload`) VALUES
-('0b788faa-8bfc-472e-9ece-9d8e90dac986', '6ebf9a65-2530-46e4-9b0d-9984adc41811', 0, 0, 'menu_id', 'menu_id', '1ef517a0-cff7-41c9-a867-4a51b956f659', NULL, NULL),
-('6d876fa9-e710-4f54-8686-90093bcb6863', '828387e3-059b-4190-8dca-5fcd276c17ed', 0, 0, 'content', 'content', '<p>Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula. Ut molestie a, ultricies porta urna.</p>', NULL, NULL),
-('7068dafd-ff3a-48a5-b025-963b70e2092a', '2b1f29ba-c643-4a3c-876b-e13d768f0f97', 0, 0, 'layout', 'layout', '1', NULL, NULL),
-('c2660883-1fa6-4115-abf3-556f9b8180dd', '2b1f29ba-c643-4a3c-876b-e13d768f0f97', 0, 0, 'menu_id', 'menu_id', '1ef517a0-cff7-41c9-a867-4a51b956f659', NULL, NULL),
-('dd00e85d-8f75-4f52-a655-ecd6b3aeff3d', '6ebf9a65-2530-46e4-9b0d-9984adc41811', 0, 0, 'layout', 'layout', '1', NULL, NULL);
-EOF);
-        $this->addSql(<<<EOF
-CREATE TABLE `#__widget_attribute_lang` (
-  `attribute_id` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `value` longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
-  `compiled_value` longtext COLLATE utf8_unicode_ci,
-  `payload` json DEFAULT NULL,
-  `locale` varchar(8) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'en_US'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-EOF);
-        $this->addSql(<<<EOF
-CREATE TABLE `#__widget_lang` (
-  `widget_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `locale` varchar(11) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `visibility` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-EOF);
-        $this->addSql(<<<EOF
 ALTER TABLE `#__activity`
   ADD PRIMARY KEY (`id`);
 
@@ -579,23 +523,6 @@ ALTER TABLE `#__term_path`
 --   ADD UNIQUE KEY `UNIQUE` (`website_id`,`code`,`domain`) USING BTREE,
 --   ADD KEY `website_id` (`website_id`);
 
-ALTER TABLE `#__widget`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `space` (`space`),
-  ADD KEY `fk_widget_website_id` (`widget_type`);
-
-ALTER TABLE `#__widget_attribute`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `owner_id` (`owner_id`) USING BTREE;
-
-ALTER TABLE `#__widget_attribute_lang`
-  ADD KEY `metadata_id` (`attribute_id`) USING BTREE;
-
-ALTER TABLE `#__widget_lang`
-  ADD UNIQUE KEY `widget_id` (`widget_id`,`locale`),
-  ADD KEY `locale` (`locale`);
-
-
 ALTER TABLE `#__content_type_field`
   ADD CONSTRAINT `fk_content_type_field_content_type_code` FOREIGN KEY (`content_type_code`) REFERENCES `#__content_type` (`code`) ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -647,15 +574,7 @@ ALTER TABLE `#__term_path`
 
 --- ALTER TABLE `#__website_locale`
 ---   ADD CONSTRAINT `fk_website_has_locale_website_id` FOREIGN KEY (`website_id`) REFERENCES `#__website` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
---- 
---- ALTER TABLE `#__widget_attribute`
----   ADD CONSTRAINT `fk_widget_attribute_widget_id` FOREIGN KEY (`owner_id`) REFERENCES `#__widget` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `#__widget_attribute_lang`
-  ADD CONSTRAINT `fk_widget_attribute_lang_widget_attribute_id` FOREIGN KEY (`attribute_id`) REFERENCES `#__widget_attribute` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `#__widget_lang`
-  ADD CONSTRAINT `#__widget_lang_ibfk_1` FOREIGN KEY (`widget_id`) REFERENCES `#__widget` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+---
 EOF
 );
     }

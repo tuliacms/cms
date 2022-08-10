@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Widget\Infrastructure\Persistence\Domain\ReadModel\Finder;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Exception;
 use PDO;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
@@ -17,6 +18,13 @@ use Tulia\Cms\Widget\Domain\ReadModel\Model\Widget;
  */
 class DbalQuery extends AbstractDbalQuery
 {
+    public function __construct(
+        QueryBuilder $queryBuilder,
+        private readonly DbalWidgetAttributesFinder $attributesFinder
+    ) {
+        parent::__construct($queryBuilder);
+    }
+
     public function getBaseQueryArray(): array
     {
         return [
@@ -112,6 +120,7 @@ class DbalQuery extends AbstractDbalQuery
                 $row['styles'] = json_decode($row['styles'], true);
                 $row['payload'] = json_decode($row['payload'], true);
                 $row['payload_localized'] = json_decode($row['payload_localized'], true);
+                $row['attributes'] = $this->attributesFinder->find($row['id'], $row['locale']);
 
                 $collection->append(Widget::buildFromArray($row));
             }
@@ -131,18 +140,17 @@ class DbalQuery extends AbstractDbalQuery
         } else {
             $this->queryBuilder->select('
                 tm.*,
+                tm.type,
                 tl.locale,
-                tm.widget_type,
-                IF(ISNULL(tl.title), 0, 1) AS translated,
-                COALESCE(tl.title, tm.title) AS title,
-                COALESCE(tl.visibility, tm.visibility) AS visibility,
-                COALESCE(tl.payload_localized, tm.payload_localized) AS payload_localized
+                tl.translated,
+                tl.title,
+                tl.visibility
             ');
         }
 
         $this->queryBuilder
             ->from('#__widget', 'tm')
-            ->leftJoin('tm', '#__widget_lang', 'tl', 'tm.id = tl.widget_id AND tl.locale = :tl_locale')
+            ->leftJoin('tm', '#__widget_translation', 'tl', 'tm.id = tl.widget_id AND tl.locale = :tl_locale')
             ->andWhere('tm.website_id = :tm_website_id')
             ->setParameter('tm_website_id', $criteria['website'], PDO::PARAM_STR)
             ->setParameter('tl_locale', $criteria['locale'], PDO::PARAM_STR);

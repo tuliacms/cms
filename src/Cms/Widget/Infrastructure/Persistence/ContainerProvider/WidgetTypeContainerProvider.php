@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Widget\Infrastructure\Persistence\ContainerProvider;
 
+use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeProviderInterface;
 use Tulia\Cms\Content\Type\Infrastructure\Persistence\ContentProvider\SymfonyContainerStandarizableTrait;
 
@@ -14,18 +15,16 @@ class WidgetTypeContainerProvider implements ContentTypeProviderInterface
 {
     use SymfonyContainerStandarizableTrait;
 
-    private array $widgets;
-    private array $configuration;
-
-    public function __construct(array $widgets, array $configuration)
-    {
+    public function __construct(
+        private array $widgets,
+        private array $configuration
+    ) {
         $this->widgets = $widgets;
         $this->configuration = $configuration;
     }
 
     public function provide(): array
     {
-        return [];
         $result = [];
 
         foreach ($this->widgets as $code => $widget) {
@@ -35,7 +34,7 @@ class WidgetTypeContainerProvider implements ContentTypeProviderInterface
             $type['internal'] = true;
             $type = $this->standarizeArray($type);
 
-            $result[] = $this->buildFromArray($type);
+            $result[] = ContentType::fromArray($type);
         }
 
         return $result;

@@ -4,101 +4,97 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Domain\WriteModel\Model;
 
-use Tulia\Cms\Content\Attributes\Domain\WriteModel\MagickAttributesTrait;
-use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\Attribute;
-use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
-use Tulia\Cms\Menu\Domain\WriteModel\Event\AttributeUpdated;
-
-use function is_string;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Tulia\Cms\Menu\Domain\WriteModel\Exception\ItemTranslationDoesntExistsException;
 
 /**
  * @author Adam Banaszkiewicz
+ * @final
  */
-class Item implements AttributesAwareInterface
+class Item
 {
-    use MagickAttributesTrait;
+    private string $id;
+    private int $position = 99999;
+    private ?string $identity = null;
+    private ?string $hash = null;
+    private ?string $target = null;
+    /** @var ArrayCollection<int, ItemTranslation> */
+    private Collection $translations;
+    /** @var ArrayCollection<int, Item> */
+    private Collection $items;
 
-    public const ROOT_ID = '00000000-0000-0000-0000-000000000000';
-    public const ROOT_LEVEL = 0;
+    private function __construct(
+        private Menu $menu,
+        string $creatingLocale,
+        string $name,
+        private string $type = 'simple:homepage',
+        private bool $isRoot = false,
+        private ?Item $parent = null,
+        private int $level = 0,
+        array $locales = [],
+    ) {
+        $translations = [];
 
-    protected string $id;
-    protected Menu $menu;
-    protected ?string $parentId = null;
-    protected int $position = 0;
-    protected int $level = 0;
-    protected bool $isRoot = false;
-    protected ?string $type = null;
-    protected ?string $identity = null;
-    protected ?string $hash = null;
-    protected ?string $target = null;
-    protected string $locale = 'en_US';
-    protected bool $translated = false;
-    protected ?string $name = null;
-    protected bool $visibility = true;
+        foreach ($locales as $locale) {
+            $translations[] = new ItemTranslation($this, $locale, false, $name, $creatingLocale);
+        }
 
-    private function __construct(string $id, string $locale, Menu $menu, bool $isRoot = false)
-    {
-        $this->id = $id;
-        $this->locale = $locale;
-        $this->isRoot = $isRoot;
-        $this->menu = $menu;
+        $this->items = new ArrayCollection();
+        $this->translations = new ArrayCollection($translations);
     }
 
-    public static function create(string $id, string $locale, Menu $menu, bool $isRoot = false): self
+    public static function createRoot(Menu $menu): self
     {
-        return new self($id, $locale, $menu, $isRoot);
+        $root = new self($menu, '', '', 'root', true);
+        $root->position = 0;
+
+        return $root;
     }
 
-    public static function buildFromArray(array $data): self
-    {
-        $item = new self($data['id'], $data['locale'], $data['menu'], (bool) $data['is_root']);
-        $item->name = $data['name'] ?? null;
-        $item->setParentId($data['parent_id'] ?? Item::ROOT_ID);
-        $item->position = (int) ($data['position'] ?? 0);
-        $item->level = (int) ($data['level'] ?? 0);
-        $item->type = $data['type'] ?? null;
-        $item->identity = $data['identity'] ?? null;
-        $item->hash = $data['hash'] ?? null;
-        $item->target = $data['target'] ?? null;
-        $item->locale = $data['locale'];
-        $item->translated = (bool) ($data['translated'] ?? false);
-        $item->visibility = (bool) ($data['visibility'] ?? 1);
-        $item->attributes = $data['metadata'] ?? [];
-
-        return $item;
+    public static function create(
+        Menu $menu,
+        Item $parent,
+        array $locales,
+        string $creatingLocale,
+        string $name
+    ): self {
+        return new self(
+            $menu,
+            creatingLocale: $creatingLocale,
+            name: $name,
+            parent: $parent,
+            level: $parent->level + 1,
+            locales: $locales,
+        );
     }
 
-    public static function createRoot(string $locale, Menu $menu): self
+    public function toArray(string $locale, string $defaultLocale): array
     {
-        $item = new self(self::ROOT_ID, $locale, $menu, true);
-        $item->name = 'root';
-        $item->parentId = null;
-        $item->position = 0;
-        $item->level = 0;
-        $item->locale = $locale;
-        $item->translated = false;
-        $item->visibility = true;
+        $translation = [];
+        $isTranslated = false;
 
-        return $item;
-    }
+        if ($this->isTranslatedTo($locale)) {
+            $translation = $this->trans($locale)->toArray();
+            $isTranslated = true;
+        } elseif ($this->isTranslatedTo($defaultLocale)) {
+            $translation = $this->trans($defaultLocale)->toArray();
+        }
 
-    public function toArray(): array
-    {
         return [
             'id' => $this->id,
-            'parent_id' => $this->parentId,
             'position' => $this->position,
-            'level' => $this->level,
-            'is_root' => $this->isRoot,
-            'type' => $this->type,
             'identity' => $this->identity,
             'hash' => $this->hash,
             'target' => $this->target,
-            'locale' => $this->locale,
-            'name' => $this->name,
-            'visibility' => $this->visibility,
-            'translated' => $this->translated,
-            'attributes' => $this->attributes,
+            'type' => $this->type,
+            'parent_id' => $this->parent?->id,
+            'level' => $this->level,
+            'name' => $translation['name'] ?? '',
+            'locale' => $translation['locale'] ?? $locale,
+            'visibility' => $translation['visibility'] ?? false,
+            'is_root' => $this->isRoot,
+            'translated' => $isTranslated,
         ];
     }
 
@@ -107,33 +103,14 @@ class Item implements AttributesAwareInterface
         return $this->id;
     }
 
-    public function getParentId(): ?string
+    public function isRoot(): bool
     {
-        return $this->parentId;
+        return $this->isRoot;
     }
 
-    public function setParentId(?string $parentId): void
+    public function isChildOf(self $parent): bool
     {
-        if ($this->isRoot()) {
-            $this->parentId = null;
-            return;
-        }
-
-        if ($parentId === '') {
-            $parentId = null;
-        }
-
-        if (is_string($parentId) && $parentId !== self::ROOT_ID) {
-            if (! preg_match(
-                '/[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-(8|9|a|b)[a-f0-9]{3}-[a-f0-9]{12}/',
-                $parentId,
-                $m
-            )) {
-                throw new \InvalidArgumentException(sprintf('ParentID must be an UUID4 format, given "%s" (%s).', $parentId, gettype($parentId)));
-            }
-        }
-
-        $this->parentId = $parentId;
+        return $this->parent?->id === $parent->id;
     }
 
     public function getPosition(): int
@@ -141,140 +118,177 @@ class Item implements AttributesAwareInterface
         return $this->position;
     }
 
-    public function setPosition(int $position): void
+    public function moveToPosition(int $position): void
     {
         $this->position = $position;
     }
 
-    public function getLevel(): int
+    public function addChild(Item $child): void
     {
-        return $this->level;
+        $this->items->add($child);
+        $child->parent = $this;
+        $child->moveToPosition(9999);
+        $child->level = $this->level + 1;
+        $this->sortItems();
     }
 
-    public function setLevel(int $level): void
-    {
-        $this->level = $level;
-    }
-
-    public function isRoot(): bool
-    {
-        return $this->isRoot;
-    }
-
-    public function getType(): ?string
-    {
-        return $this->type;
-    }
-
-    public function setType(?string $type): void
+    public function linksTo(string $type, string $identity, string $hash): void
     {
         $this->type = $type;
-    }
-
-    public function getIdentity(): ?string
-    {
-        return $this->identity;
-    }
-
-    public function setIdentity(?string $identity): void
-    {
         $this->identity = $identity;
-    }
-
-    public function getHash(): ?string
-    {
-        return $this->hash;
-    }
-
-    public function setHash(?string $hash): void
-    {
         $this->hash = $hash;
     }
 
-    public function getTarget(): ?string
+    public function openInNewTab(): void
     {
-        return $this->target;
+        $this->target = '_blank';
     }
 
-    public function setTarget(?string $target): void
+    public function openInSelfTab(): void
     {
-        $this->target = $target;
+        $this->target = '_self';
     }
 
-    public function getLocale(): string
+    public function findItem(string $id): ?Item
     {
-        return $this->locale;
+        foreach ($this->items as $item) {
+            if ($item->id === $id) {
+                return $item;
+            }
+
+            if ($child = $item->findItem($id)) {
+                return $child;
+            }
+        }
+
+        return null;
     }
 
-    public function setLocale(string $locale): void
+    public function getParent(): Item
     {
-        $this->locale = $locale;
+        return $this->parent;
     }
 
-    public function isTranslated(): bool
+    public function removeItem(Item $item): void
     {
-        return $this->translated;
-    }
-
-    public function setTranslated(bool $translated): void
-    {
-        $this->translated = $translated;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(?string $name): void
-    {
-        $this->name = $name;
-    }
-
-    public function getVisibility(): bool
-    {
-        return $this->visibility;
-    }
-
-    public function setVisibility(bool $visibility): void
-    {
-        $this->visibility = $visibility;
-    }
-
-    /**
-     * @param Attribute[] $attributes
-     */
-    public function updateAttributes(array $attributes): void
-    {
-        foreach ($attributes as $attribute) {
-            $name = $attribute->getCode();
-            $value = $attribute->getValue();
-
-            if (isset($this->attributes[$name]) === false || $this->attributes[$name]->getValue() !== $value) {
-                $this->attributes[$attribute->getUri()] = $attribute;
-
-                $this->recordThat(AttributeUpdated::fromModel($this, $name, $value));
+        foreach ($this->items as $pretendent) {
+            if ($item === $pretendent) {
+                $this->items->removeElement($pretendent);
+                $pretendent->parent = null;
             }
         }
     }
 
-    public function addAttribute(Attribute $attribute): void
-    {
-        // TODO: Implement addAttribute() method.
+    public function renameTo(
+        string $locale,
+        string $defaultLocale,
+        string $name
+    ): void {
+        $trans = $this->translation($locale, $defaultLocale);
+        $trans->translated = true;
+        $trans->name = $name;
+
+        if ($locale === $defaultLocale) {
+            foreach ($this->translations as $translation) {
+                if (false === $translation->isTranslated()) {
+                    $translation->name = $name;
+                }
+            }
+        }
     }
 
-    public function hasAttribute(string $uri): bool
+    public function turnVisibilityOn(string $locale, string $defaultLocale): void
     {
-        // TODO: Implement hasAttribute() method.
+        $trans = $this->translation($locale, $defaultLocale);
+        $trans->visibility = true;
+
+        if ($locale === $defaultLocale) {
+            foreach ($this->translations as $translation) {
+                if (false === $translation->isTranslated()) {
+                    $translation->visibility = true;
+                }
+            }
+        }
     }
 
-    public function removeAttribute(string $uri): void
+    public function turnVisibilityOff(string $locale, string $defaultLocale): void
     {
-        // TODO: Implement removeAttribute() method.
+        $trans = $this->translation($locale, $defaultLocale);
+        $trans->visibility = false;
+
+        if ($locale === $defaultLocale) {
+            foreach ($this->translations as $translation) {
+                if (false === $translation->isTranslated()) {
+                    $translation->visibility = false;
+                }
+            }
+        }
     }
 
-    public function getAttribute(string $uri, $default = null)
+    private function translation(string $locale, string $defaultLocale): ItemTranslation
     {
-        // TODO: Implement getAttribute() method.
+        if ($this->isTranslatedTo($locale)) {
+            $translation = $this->trans($locale);
+        } else {
+            $translation = ItemTranslation::cloneToLocale(
+                $this->trans($defaultLocale),
+                $locale
+            );
+
+            $this->translations->add($translation);
+        }
+
+        /*$translation->setUpdateCallback(function () {
+            $this->markAsUpdated();
+        });*/
+
+        return $translation;
+    }
+
+    private function trans(string $locale): ItemTranslation
+    {
+        foreach ($this->translations as $translation) {
+            if ($translation->isFor($locale)) {
+                /*$translation->setUpdateCallback(function () {
+                    $this->markAsUpdated();
+                });*/
+                return $translation;
+            }
+        }
+
+        throw ItemTranslationDoesntExistsException::fromLocale($this->id, $locale);
+    }
+
+    private function sortItems(): void
+    {
+        $items = $this->items->toArray();
+
+        usort($items, static function (Item $a, Item $b) {
+            return $a->getPosition() <=> $b->getPosition();
+        });
+
+        /**
+         * @var Item $item
+         */
+        foreach ($items as $position => $item) {
+            $item->moveToPosition($position + 1);
+        }
+    }
+
+    private function isTranslatedTo(string $locale): bool
+    {
+        foreach ($this->translations as $translation) {
+            if ($translation->isFor($locale)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function detachFromParent(): void
+    {
+        $this->parent->items->removeElement($this);
+        $this->parent = null;
     }
 }

@@ -43,8 +43,8 @@
                 <target>Status</target>
             </trans-unit>
             <trans-unit id="tuliacms.widgets.11">
-                <source>look</source>
-                <target>Look</target>
+                <source>widgetDetails</source>
+                <target>Widget details</target>
             </trans-unit>
             <trans-unit id="tuliacms.widgets.12">
                 <source>styles</source>

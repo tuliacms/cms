@@ -3,7 +3,7 @@
     xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
         https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="Tulia\Cms\Menu\Domain\WriteModel\MewModel\Item" table="#__menu_item">
+    <entity name="Tulia\Cms\Menu\Domain\WriteModel\Model\Item" table="#__menu_item">
         <id name="id" type="uuid">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
@@ -17,26 +17,26 @@
         <field name="type" />
         <field name="isRoot" type="boolean" />
 
-        <one-to-many field="items" orphan-removal="true" target-entity="Tulia\Cms\Menu\Domain\WriteModel\MewModel\Item" mapped-by="parent">
+        <one-to-many field="items" orphan-removal="true" target-entity="Tulia\Cms\Menu\Domain\WriteModel\Model\Item" mapped-by="parent">
             <cascade>
                 <cascade-persist/>
                 <cascade-remove/>
             </cascade>
         </one-to-many>
-        <many-to-one field="parent" target-entity="Tulia\Cms\Menu\Domain\WriteModel\MewModel\Item" inversed-by="items">
+        <many-to-one field="parent" target-entity="Tulia\Cms\Menu\Domain\WriteModel\Model\Item" inversed-by="items">
             <cascade>
                 <cascade-persist/>
                 <cascade-remove/>
             </cascade>
         </many-to-one>
 
-        <one-to-many field="translations" orphan-removal="true" target-entity="Tulia\Cms\Menu\Domain\WriteModel\MewModel\ItemTranslation" mapped-by="item">
+        <one-to-many field="translations" orphan-removal="true" target-entity="Tulia\Cms\Menu\Domain\WriteModel\Model\ItemTranslation" mapped-by="item">
             <cascade>
                 <cascade-persist/>
                 <cascade-remove/>
             </cascade>
         </one-to-many>
 
-        <many-to-one field="menu" target-entity="Tulia\Cms\Menu\Domain\WriteModel\MewModel\Menu" inversed-by="items"/>
+        <many-to-one field="menu" target-entity="Tulia\Cms\Menu\Domain\WriteModel\Model\Menu" inversed-by="items"/>
     </entity>
 </doctrine-mapping>

@@ -14,13 +14,10 @@ use Tulia\Cms\Menu\Domain\Builder\HtmlBuilder\HtmlBuilderInterface;
  */
 class CachedHtmlBuilder implements HtmlBuilderInterface
 {
-    private HtmlBuilderInterface $builder;
-    private TagAwareCacheInterface $menuCache;
-
-    public function __construct(HtmlBuilderInterface $builder, TagAwareCacheInterface $menuCache)
-    {
-        $this->builder = $builder;
-        $this->menuCache = $menuCache;
+    public function __construct(
+        private HtmlBuilderInterface $builder,
+        private TagAwareCacheInterface $menuCache
+    ) {
     }
 
     public function build(HierarchyInterface $hierarchy): string

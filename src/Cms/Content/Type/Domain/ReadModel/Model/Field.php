@@ -25,6 +25,10 @@ final class Field
     public function __construct(array $options) {
         $this->options = array_merge(static::$defaults, $options);
 
+        foreach ($this->options['children'] as $key =>  $child) {
+            $this->options['children'][$key] = new self($child);
+        }
+
         \assert(\is_string($this->options['code']), 'The "code" option must be a string.');
         \assert(\is_string($this->options['type']), 'The "type" option must be a string.');
         \assert(\is_string($this->options['name']) || null === $this->options['name'], 'The "name" option must be a string or null.');

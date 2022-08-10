@@ -15,7 +15,8 @@ use Tulia\Cms\Widget\Domain\ReadModel\Finder\WidgetFinderInterface;
 class DbalFinder extends AbstractFinder implements WidgetFinderInterface
 {
     public function __construct(
-        private Connection $connection
+        private readonly Connection $connection,
+        private readonly DbalWidgetAttributesFinder $attributesFinder
     ) {
     }
 
@@ -26,6 +27,6 @@ class DbalFinder extends AbstractFinder implements WidgetFinderInterface
 
     public function createQuery(): QueryInterface
     {
-        return new DbalQuery($this->connection->createQueryBuilder());
+        return new DbalQuery($this->connection->createQueryBuilder(), $this->attributesFinder);
     }
 }

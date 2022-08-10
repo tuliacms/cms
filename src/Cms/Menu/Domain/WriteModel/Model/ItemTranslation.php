@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Menu\Domain\WriteModel\MewModel;
+namespace Tulia\Cms\Menu\Domain\WriteModel\Model;
 
 /**
  * @author Adam Banaszkiewicz

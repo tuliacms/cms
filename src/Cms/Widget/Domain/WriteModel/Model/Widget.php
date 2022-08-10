@@ -4,137 +4,123 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Widget\Domain\WriteModel\Model;
 
-use Tulia\Cms\Content\Attributes\Domain\WriteModel\AttributesAwareTrait;
-use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\Attribute;
-use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
 use Tulia\Cms\Widget\Domain\WriteModel\Event;
-use Tulia\Cms\Widget\Domain\WriteModel\Model\ValueObject\WidgetId;
+use Tulia\Cms\Widget\Domain\WriteModel\Exception\WidgetTranslationDoesntExistsException;
 
 /**
  * @author Adam Banaszkiewicz
+ * @final
  */
-final class Widget extends AbstractAggregateRoot implements AttributesAwareInterface
+class Widget extends AbstractAggregateRoot
 {
-    use AttributesAwareTrait {
-        AttributesAwareTrait::updateAttributes as baseUpdateAttributes;
+    private ?string $htmlClass = null;
+    private ?string $htmlId = null;
+    private array $styles = [];
+    /** @var WidgetTranslation[]|ArrayCollection<int, WidgetTranslation> */
+    private Collection $translations;
+
+    private function __construct(
+        private string $id,
+        private string $type,
+        private string $space,
+        private string $name,
+        string $creatingLocale,
+        array $localeCodes,
+    ) {
+        $translations = [];
+
+        foreach ($localeCodes as $locale) {
+            $translations[] = new WidgetTranslation($this, $locale, $creatingLocale);
+        }
+
+        $this->translations = new ArrayCollection($translations);
     }
 
-    protected WidgetId $id;
-    protected string $widgetType;
-    protected ?string $space = null;
-    protected ?string $name = null;
-    protected ?string $htmlClass = null;
-    protected ?string $htmlId = null;
-    protected array $styles = [];
-    protected string $locale = 'en_US';
-    protected ?string $title = null;
-    protected bool $visibility = true;
-    protected bool $translated = true;
-    /** @var Attribute[] */
-    protected array $attributes = [];
-
-    private function __construct(string $id, string $widgetType, string $locale)
-    {
-        $this->id = new WidgetId($id);
-        $this->widgetType = $widgetType;
-        $this->locale = $locale;
-    }
-
-    public static function createNew(string $id, string $widgetType, string $locale): self
-    {
-        $self = new self($id, $widgetType,  $locale);
-        $self->recordThat(Event\WidgetCreated::fromWidget($self));
+    public static function create(
+        string $id,
+        string $type,
+        string $space,
+        string $name,
+        string $creatingLocale,
+        array $localeCodes,
+    ): self {
+        $self = new self($id, $type, $space, $name, $creatingLocale, $localeCodes);
+        $self->recordThat(new Event\WidgetCreated($self->id, $self->type));
 
         return $self;
     }
 
-    public static function buildFromArray(array $data): self
+    public function getType(): string
     {
-        $self = new self(
-            $data['id'],
-            $data['widget_type'],
-            $data['locale']
-        );
-        $self->space = $data['space'] ?? null;
-        $self->name = $data['name'] ?? null;
-        $self->htmlClass = $data['html_class'] ?? null;
-        $self->htmlId = $data['html_id'] ?? null;
-        $self->styles = $data['styles'] ?? [];
-        $self->title = $data['title'] ?? null;
-        $self->visibility = (bool) ($data['visibility'] ?? true);
-        $self->translated = (bool) ($data['translated'] ?? false);
-        $self->attributes = $data['attributes'];
-
-        return $self;
+        return $this->type;
     }
 
-    public function toArray(): array
+    public function toArray(string $locale, string $defaultLocale): array
     {
+        $translation = $this->translation($locale, $defaultLocale)->toArray();
+
         return [
-            'id' => $this->getId()->getValue(),
-            'content_type' => 'widget_' . str_replace('.', '_', $this->widgetType),
+            'htmlClass' => $this->htmlClass,
+            'htmlId' => $this->htmlId,
+            'styles' => $this->styles,
+            'id' => $this->id,
+            'type' => $this->type,
             'space' => $this->space,
             'name' => $this->name,
-            'html_class' => $this->htmlClass,
-            'html_id' => $this->htmlId,
-            'styles' => $this->styles,
-            'title' => $this->title,
-            'visibility' => $this->visibility,
-            'attributes' => $this->attributes,
-            'widget_type' => $this->widgetType,
-            'locale' => $this->locale,
+            'title' => $translation['title'],
+            'visibility' => $translation['visibility'],
+            'attributes' => $translation['attributes'],
         ];
     }
 
-    public function getId(): WidgetId
+    public function isTranslatedTo(string $locale): bool
     {
-        return $this->id;
+        foreach ($this->translations as $translation) {
+            if ($translation->isFor($locale) && $translation->isTranslated()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    public function setId(WidgetId $id): void
+    public function turnVisibilityOn(string $locale, string $defaultLocale): void
     {
-        $this->id = $id;
+        $trans = $this->translation($locale, $defaultLocale);
+        $trans->visibility = true;
+
+        if ($locale === $defaultLocale) {
+            foreach ($this->translations as $translation) {
+                if (false === $translation->isTranslated()) {
+                    $translation->visibility = true;
+                }
+            }
+        } else {
+            $trans->translated = true;
+        }
     }
 
-    public function getWidgetType(): string
+    public function turnVisibilityOff(string $locale, string $defaultLocale): void
     {
-        return $this->widgetType;
+        $trans = $this->translation($locale, $defaultLocale);
+        $trans->visibility = false;
+        $trans->translated = true;
+
+        if ($locale === $defaultLocale) {
+            foreach ($this->translations as $translation) {
+                if (false === $translation->isTranslated()) {
+                    $translation->visibility = false;
+                }
+            }
+        }
     }
 
-    public function getSpace(): ?string
-    {
-        return $this->space;
-    }
-
-    public function setSpace(?string $space): void
-    {
-        $this->space = $space;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(?string $name): void
+    public function rename(string $name): void
     {
         $this->name = $name;
-    }
-
-    public function getHtmlClass(): ?string
-    {
-        return $this->htmlClass;
-    }
-
-    public function setHtmlClass(?string $htmlClass): void
-    {
-        $this->htmlClass = $htmlClass;
-    }
-
-    public function getHtmlId(): ?string
-    {
-        return $this->htmlId;
     }
 
     public function setHtmlId(?string $htmlId): void
@@ -142,48 +128,97 @@ final class Widget extends AbstractAggregateRoot implements AttributesAwareInter
         $this->htmlId = $htmlId;
     }
 
-    public function getStyles(): array
+    public function setHtmlClass(?string $htmlClass): void
     {
-        return $this->styles;
+        $this->htmlClass = $htmlClass;
     }
 
-    public function setStyles(array $styles): void
+    public function updateStyles(array $styles): void
     {
         $this->styles = $styles;
     }
 
-    public function getLocale(): string
+    public function changeTitle(string $locale, string $defaultLocale, ?string $title): void
     {
-        return $this->locale;
+        $trans = $this->translation($locale, $defaultLocale);
+
+        if ($title === $trans->title) {
+            return;
+        }
+
+        $trans->title = $title;
+        $trans->translated = true;
+
+        if ($locale === $defaultLocale) {
+            foreach ($this->translations as $translation) {
+                if (false === $translation->isTranslated()) {
+                    $translation->title = $title;
+                }
+            }
+        }
     }
 
-    public function setLocale(string $locale): void
+    public function delete(): void
     {
-        $this->locale = $locale;
     }
 
-    public function getTitle(): ?string
+    public function persistAttributes(string $locale, string $defaultLocale, array $attributes): void
     {
-        return $this->title;
+        $trans = $this->translation($locale, $defaultLocale);
+        $trans->persistAttributes(...$attributes);
+        $trans->translated = true;
+
+        if ($locale === $defaultLocale) {
+            foreach ($this->translations as $translation) {
+                if (false === $translation->isTranslated()) {
+                    $translation->persistAttributes(...$attributes);
+                }
+            }
+        }
     }
 
-    public function setTitle(?string $title): void
+    private function translation(string $locale, string $defaultLocale): WidgetTranslation
     {
-        $this->title = $title;
+        if ($this->hasTranslation($locale)) {
+            $translation = $this->trans($locale);
+        } else {
+            $translation = WidgetTranslation::cloneToLocale(
+                $this->trans($defaultLocale),
+                $locale
+            );
+
+            $this->translations->add($translation);
+        }
+
+        /*$translation->setUpdateCallback(function () {
+            $this->markAsUpdated();
+        });*/
+
+        return $translation;
     }
 
-    public function getVisibility(): bool
+    private function trans(string $locale): WidgetTranslation
     {
-        return $this->visibility;
+        foreach ($this->translations as $translation) {
+            if ($translation->isFor($locale)) {
+                /*$translation->setUpdateCallback(function () {
+                    $this->markAsUpdated();
+                });*/
+                return $translation;
+            }
+        }
+
+        throw WidgetTranslationDoesntExistsException::fromLocale($this->id, $locale);
     }
 
-    public function setVisibility(bool $visibility): void
+    private function hasTranslation(string $locale): bool
     {
-        $this->visibility = $visibility;
-    }
+        foreach ($this->translations as $translation) {
+            if ($translation->isFor($locale)) {
+                return true;
+            }
+        }
 
-    public function isTranslated(): bool
-    {
-        return $this->translated;
+        return false;
     }
 }

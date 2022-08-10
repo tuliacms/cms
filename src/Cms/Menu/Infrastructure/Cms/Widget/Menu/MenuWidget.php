@@ -7,7 +7,6 @@ namespace Tulia\Cms\Menu\Infrastructure\Cms\Widget\Menu;
 use Tulia\Cms\Menu\Domain\Builder\BuilderInterface;
 use Tulia\Cms\Widget\Domain\Catalog\AbstractWidget;
 use Tulia\Cms\Widget\Domain\Catalog\Configuration\ConfigurationInterface;
-use Tulia\Component\Routing\Website\WebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
 
 /**
@@ -16,8 +15,7 @@ use Tulia\Component\Templating\ViewInterface;
 class MenuWidget extends AbstractWidget
 {
     public function __construct(
-        private BuilderInterface $builder,
-        private WebsiteInterface $website
+        private BuilderInterface $builder
     ) {
     }
 
@@ -30,7 +28,10 @@ class MenuWidget extends AbstractWidget
     public function render(ConfigurationInterface $config): ?ViewInterface
     {
         return $this->view('@widget/internal/menu/frontend.tpl', [
-            'menu' => $this->builder->buildHtml((string) $config->get('menu_id'), $this->website->getLocale()->getCode()),
+            'menu' => $this->builder->buildHtml(
+                (string) $config->get('menu_id'),
+                $config->get('locale')
+            ),
         ]);
     }
 

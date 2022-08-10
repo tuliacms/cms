@@ -50,12 +50,24 @@ trait AttributesAwareAggregateTrait
 
     public function hasAttribute(string $uri): bool
     {
-        return isset($this->attributes[$uri]);
+        foreach ($this->attributes as $attribute) {
+            if ($attribute->getUri() === $uri) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function getAttribute(string $uri): Attribute
     {
-        return $this->attributes[$uri];
+        foreach ($this->attributes as $attribute) {
+            if ($attribute->getUri() === $uri) {
+                return $attribute;
+            }
+        }
+
+        throw new \DomainException(sprintf('Attribute %s not found.', $uri));
     }
 
     public function addAttribute(Attribute $attribute): void

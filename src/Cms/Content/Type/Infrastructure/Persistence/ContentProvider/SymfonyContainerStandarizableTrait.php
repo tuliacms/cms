@@ -71,7 +71,7 @@ trait SymfonyContainerStandarizableTrait
             $fields[$fieldCode]['configuration'] = $configuration;
             $fields[$fieldCode]['children'] = $this->standarizeFields($fields, $fieldCode);
 
-            $result[] = $fields[$fieldCode];
+            $result[$fieldCode] = $fields[$fieldCode];
         }
 
         return $result;

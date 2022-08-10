@@ -3,14 +3,14 @@
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="Tulia\Cms\Menu\Domain\WriteModel\MewModel\Menu" table="#__menu">
+    <entity name="Tulia\Cms\Menu\Domain\WriteModel\Model\Menu" table="#__menu">
         <id name="id" type="uuid">
             <generator strategy="NONE"/>
         </id>
 
         <field name="name"/>
 
-        <one-to-many field="items" orphan-removal="true" target-entity="Tulia\Cms\Menu\Domain\WriteModel\MewModel\Item" mapped-by="menu">
+        <one-to-many field="items" orphan-removal="true" target-entity="Tulia\Cms\Menu\Domain\WriteModel\Model\Item" mapped-by="menu">
             <cascade>
                 <cascade-persist/>
                 <cascade-remove/>

@@ -14,13 +14,10 @@ use Tulia\Cms\Menu\Domain\Builder\Hierarchy\HierarchyInterface;
  */
 class CachedHierarchyBuilder implements HierarchyBuilderInterface
 {
-    private HierarchyBuilderInterface $builder;
-    private TagAwareCacheInterface $menuCache;
-
-    public function __construct(HierarchyBuilderInterface $builder, TagAwareCacheInterface $menuCache)
-    {
-        $this->builder = $builder;
-        $this->menuCache = $menuCache;
+    public function __construct(
+        private HierarchyBuilderInterface $builder,
+        private TagAwareCacheInterface $menuCache
+    ) {
     }
 
     public function build(string $id, string $locale, array $collection = []): HierarchyInterface

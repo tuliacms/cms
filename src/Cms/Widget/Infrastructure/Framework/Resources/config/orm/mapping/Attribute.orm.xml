@@ -1,0 +1,22 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Tulia\Cms\Widget\Domain\WriteModel\Model\Attribute" table="#__widget_attribute">
+        <id name="id" type="uuid">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+
+        <field name="locale" length="12" />
+        <field name="code" />
+        <field name="uri" />
+        <field name="value" nullable="true" type="text" />
+        <field name="compiledValue" nullable="true" type="text" />
+        <field name="payload" type="array" nullable="true" />
+        <field name="flags" type="array" nullable="true" />
+
+        <many-to-one field="widgetTranslation" target-entity="Tulia\Cms\Widget\Domain\WriteModel\Model\WidgetTranslation" inversed-by="attributes"/>
+    </entity>
+</doctrine-mapping>

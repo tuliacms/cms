@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Domain\WriteModel;
 
-use Tulia\Cms\Menu\Domain\WriteModel\MewModel\Menu;
+use Tulia\Cms\Menu\Domain\WriteModel\Model\Menu;
 
 /**
  * @author Adam Banaszkiewicz

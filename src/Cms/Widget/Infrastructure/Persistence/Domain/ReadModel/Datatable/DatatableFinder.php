@@ -18,21 +18,13 @@ use Tulia\Component\Theme\ManagerInterface;
  */
 class DatatableFinder extends AbstractDatatableFinder
 {
-    private TranslatorInterface $translator;
-    private WidgetRegistryInterface $widgetRegistry;
-    private ManagerInterface $themeManager;
-
     public function __construct(
         Connection $connection,
-        TranslatorInterface $translator,
-        WidgetRegistryInterface $widgetRegistry,
-        ManagerInterface $themeManager
+        private TranslatorInterface $translator,
+        private WidgetRegistryInterface $widgetRegistry,
+        private ManagerInterface $themeManager,
     ) {
         parent::__construct($connection);
-
-        $this->translator = $translator;
-        $this->widgetRegistry = $widgetRegistry;
-        $this->themeManager = $themeManager;
     }
 
     /**
@@ -54,7 +46,7 @@ class DatatableFinder extends AbstractDatatableFinder
 
         return [
             'id' => [
-                'selector' => 'tm.id',
+                'selector' => 'BIN_TO_UUID(tm.id)',
                 'type' => 'uuid',
                 'label' => 'ID',
             ],
@@ -74,10 +66,9 @@ class DatatableFinder extends AbstractDatatableFinder
                 'value_translation' => $this->collectSpacesList(),
             ],
             'visibility' => [
-                'selector' => 'COALESCE(tl.visibility, tm.visibility)',
+                'selector' => 'tl.visibility',
                 'label' => 'visibility',
                 'sortable' => true,
-                'html_attr' => ['class' => 'text-center'],
                 'value_translation' => [
                     '1' => $this->translator->trans('visible'),
                     '0' => $this->translator->trans('invisible'),
@@ -121,8 +112,8 @@ class DatatableFinder extends AbstractDatatableFinder
     {
         $queryBuilder
             ->from('#__widget', 'tm')
-            ->addSelect('tm.widget_type')
-            ->leftJoin('tm', '#__widget_lang', 'tl', 'tm.id = tl.widget_id AND tl.locale = :locale')
+            ->addSelect('tm.type')
+            ->leftJoin('tm', '#__widget_translation', 'tl', 'tm.id = tl.widget_id AND tl.locale = :locale')
             ->setParameter('locale', $context->locale, PDO::PARAM_STR)
         ;
 

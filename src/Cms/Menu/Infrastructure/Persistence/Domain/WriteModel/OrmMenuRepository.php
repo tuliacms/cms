@@ -9,7 +9,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotExistsException;
 use Tulia\Cms\Menu\Domain\WriteModel\MenuRepositoryInterface;
-use Tulia\Cms\Menu\Domain\WriteModel\MewModel\Menu;
+use Tulia\Cms\Menu\Domain\WriteModel\Model\Menu;
 
 /**
  * @author Adam Banaszkiewicz

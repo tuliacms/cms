@@ -7,7 +7,7 @@ namespace Tulia\Cms\Node\Domain\WriteModel\Event;
 /**
  * @author Adam Banaszkiewicz
  */
-class NodeDeleted extends AbstractDomainEvent
+class NodeDeleted extends AbstractNodeDomainEvent
 {
     public function __construct(
         string $id,

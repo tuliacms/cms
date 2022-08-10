@@ -11,7 +11,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Menu\Domain\ReadModel\Finder\MenuFinderInterface;
 use Tulia\Cms\Menu\Domain\ReadModel\Finder\MenuFinderScopeEnum;
-use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
 
 /**
  * @author Adam Banaszkiewicz
@@ -105,7 +104,7 @@ class MenuItemChoiceType extends ChoiceType
         return $choices;
     }
 
-    private function sort(array $items, int $level = 1, string $parent = Item::ROOT_ID): array
+    private function sort(array $items, int $level = 1, string $parent = ''): array
     {
         $result = [];
 

@@ -22,7 +22,7 @@
             <h1 class="pane-title">{{ block('title') }}</h1>
         </div>
         <div class="pane-body p-0">
-            {{ alerts.translation_missing_info(widget.translated) }}
+            {{ alerts.translation_missing_info(widgetTranslated) }}
             {{ render_content_builder_form_layout(formDescriptor) }}
         </div>
     </div>

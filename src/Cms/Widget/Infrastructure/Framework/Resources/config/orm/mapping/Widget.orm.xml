@@ -1,0 +1,25 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Tulia\Cms\Widget\Domain\WriteModel\Model\Widget" table="#__widget">
+        <id name="id" type="uuid">
+            <generator strategy="NONE"/>
+        </id>
+
+        <field name="type"/>
+        <field name="space"/>
+        <field name="name"/>
+        <field name="htmlClass" nullable="true"/>
+        <field name="htmlId" nullable="true"/>
+        <field name="styles" type="array"/>
+
+        <one-to-many field="translations" orphan-removal="true" target-entity="Tulia\Cms\Widget\Domain\WriteModel\Model\WidgetTranslation" mapped-by="widget">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
+    </entity>
+</doctrine-mapping>
