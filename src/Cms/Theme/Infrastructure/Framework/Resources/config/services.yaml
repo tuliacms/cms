@@ -2,6 +2,10 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+        bind:
+            $filesTemplates: '%cms.core_dir%/Cms/Theme/Infrastructure/Framework/Resources/maker/file-templates'
+            $fontsPath: '%cms.core_dir%/Cms/Theme/Infrastructure/Framework/Resources/fonts'
+            $projectDir: '%kernel.project_dir%'
 
     Tulia\Cms\Theme\:
         resource: '../../../../**'

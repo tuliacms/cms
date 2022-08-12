@@ -75,6 +75,7 @@
                             </div>
                         </div>
                     </div>
+                    <div class="alert alert-info mb-0" v-html="translations.themeRequiresContentFieldToBeExistence.replace('{name}', options.themeNodeContentFieldName)"></div>
                     <div class="tab-content ctb-section-main-tabs-contents">
                         <SectionsList
                             :sections="model.layout.main.sections"

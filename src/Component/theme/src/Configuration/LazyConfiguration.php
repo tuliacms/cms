@@ -32,7 +32,7 @@ final class LazyConfiguration implements ConfigurationInterface
         return $this->config->all($group);
     }
 
-    public function get(string $group, string $code, mixed $default = null): mixed
+    public function get(string $group, string $code = '', mixed $default = null): mixed
     {
         $this->resolve();
         return $this->config->get($group, $code, $default);

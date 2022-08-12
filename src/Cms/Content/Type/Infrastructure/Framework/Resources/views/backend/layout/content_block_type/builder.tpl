@@ -48,6 +48,7 @@
             fieldHasErrors: '{{ 'fieldHasErrors'|trans }}',
             routingStrategy: '{{ 'routingStrategy'|trans }}',
             routingStrategyHelp: '{{ 'routingStrategyHelp'|trans }}',
+            themeRequiresContentFieldToBeExistence: '{{ 'themeRequiresContentFieldToBeExistence'|trans|raw }}',
         },
         fieldTypes: {{ fieldTypes|json_encode|raw }},
         routingStrategies: {{ routingStrategies|json_encode|raw }},
@@ -57,5 +58,6 @@
         creationMode: {{ creationMode ? 'true' : 'false' }},
         listingUrl: '{{ path('backend.content.type.homepage') }}',
         csrfToken: '{{ csrf_token('create-content-type') }}',
+        themeNodeContentFieldName: '{{ theme.config.get('node_content_field') }}'
     };
 </script>

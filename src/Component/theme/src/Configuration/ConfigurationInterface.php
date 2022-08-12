@@ -27,7 +27,7 @@ interface ConfigurationInterface
      * Return values identified by $id from given $group. The method returns only one values array.
      * Always returns array, even if the values were not set.
      */
-    public function get(string $group, string $code, mixed $default = null): mixed;
+    public function get(string $group, string $code = '', mixed $default = null): mixed;
 
     public function remove(string $group, ?string $code = null): void;
 

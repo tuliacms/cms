@@ -14,6 +14,8 @@ use Tulia\Cms\Platform\Application\Service\AssetsPublisher;
  */
 class AssetsPublish extends Command
 {
+    protected static $defaultName = 'assets:publish';
+
     private AssetsPublisher $assetsPublisher;
     private array $assetsPublicPaths;
     private string $rootDir;

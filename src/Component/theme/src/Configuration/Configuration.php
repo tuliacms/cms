@@ -84,7 +84,7 @@ class Configuration implements ConfigurationInterface
         return $this->configuration[$group] ?? [];
     }
 
-    public function get(string $group, string $code, mixed $default = null): mixed
+    public function get(string $group, string $code = '', mixed $default = null): mixed
     {
         return $this->configuration[$group][$code] ?? $default;
     }

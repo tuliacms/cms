@@ -30,6 +30,39 @@
                 <source>youUseDefaultThemeInfo</source>
                 <target>You use Default Theme now, which is not customizable. Select one of the available themes to configure Your website for Your needs. You may also install new themes using installator or extensions directory. Make You website Beautiful!</target>
             </trans-unit>
+            <trans-unit id="tuliacms.themes.8">
+                <source>installTheme</source>
+                <target>Install theme</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.9">
+                <source>installThemeShortInfo</source>
+                <target>Select Theme file to install. This must be a .zip file.</target>
+                <note>Info showed around input field in installation section.</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.10">
+                <source>themePackage</source>
+                <target>Theme package</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.11">
+                <source>install</source>
+                <target>Install</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.12">
+                <source>themeHasBeenInstalled</source>
+                <target>Theme has been installed</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.13">
+                <source>uninstallTheme</source>
+                <target>Uninstall theme</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.14">
+                <source>doYouWantToUninstallThisTheme</source>
+                <target>Do You want to uninstall this theme?</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.15">
+                <source>themeHasBeenUninstalled</source>
+                <target>Theme has been uninstalled.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

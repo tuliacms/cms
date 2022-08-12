@@ -9,7 +9,6 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use Exception;
 use PDO;
 use Symfony\Component\Uid\Uuid;
-use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\AttributesFinder;
 use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
 use Tulia\Cms\Node\Domain\ReadModel\Query\LazyNodeAttributesFinder;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Enum\TermTypeEnum;

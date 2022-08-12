@@ -30,7 +30,7 @@ class Node extends AbstractController
     public function show(Model $node, Request $request)
     {
         if (
-            $node->hasFlag(NodePurposeEnum::PAGE_HOMEPAGE)
+            $node->hasPurpose(NodePurposeEnum::PAGE_HOMEPAGE)
             && $this->isHomepage($request) === false
         ) {
             return $this->redirectToRoute('homepage');

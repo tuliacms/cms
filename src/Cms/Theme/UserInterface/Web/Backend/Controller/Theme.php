@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Theme\UserInterface\Web\Controller\Backend;
+namespace Tulia\Cms\Theme\UserInterface\Web\Backend\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,6 +11,7 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\Theme\Application\Exception\ThemeNotFoundException;
 use Tulia\Cms\Theme\Application\Service\ThemeActivator;
+use Tulia\Cms\Theme\UserInterface\Web\Backend\Form\ThemeInstallatorForm;
 use Tulia\Component\Templating\ViewInterface;
 use Tulia\Component\Theme\Activator\ActivatorInterface;
 use Tulia\Component\Theme\ManagerInterface;
@@ -20,13 +21,10 @@ use Tulia\Component\Theme\ManagerInterface;
  */
 class Theme extends AbstractController
 {
-    protected ManagerInterface $manager;
-    protected ThemeActivator $themeActivator;
-
-    public function __construct(ManagerInterface $manager, ThemeActivator $themeActivator)
-    {
-        $this->manager = $manager;
-        $this->themeActivator = $themeActivator;
+    public function __construct(
+        private readonly ManagerInterface $manager,
+        private readonly ThemeActivator $themeActivator
+    ) {
     }
 
     public function index(): ViewInterface
@@ -39,10 +37,15 @@ class Theme extends AbstractController
             $themes = array_merge([ $theme ], $themes);
         }
 
+        $form = $this->createForm(ThemeInstallatorForm::class, [], [
+            'action' => $this->generateUrl('backend.theme.installator.install')
+        ]);
+
         return $this->view('@backend/theme/theme/index.tpl', [
             'themes' => $themes,
             'theme'  => $theme,
-            'usesDefaultTheme' => $theme instanceof DefaultTheme
+            'usesDefaultTheme' => $theme instanceof DefaultTheme,
+            'installatorForm' => $form->createView(),
         ]);
     }
 

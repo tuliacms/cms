@@ -80,6 +80,10 @@ class ThemePass implements CompilerPassInterface
             }
         }
 
+        if (isset($config['node_content_field'])) {
+            $service->addMethodCall('add', ['node_content_field', '', $config['node_content_field']]);
+        }
+
         $serviceName = sprintf('theme.configuration.%s.%s', $theme, $group);
 
         $container->setDefinition($serviceName, $service);

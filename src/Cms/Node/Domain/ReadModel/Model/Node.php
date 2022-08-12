@@ -32,7 +32,7 @@ class Node implements AttributesAwareInterface
     protected ?string $title;
     protected ?string $slug;
     protected bool $visibility;
-    protected array $flags = [];
+    protected array $purposes = [];
     protected ?LazyNodeAttributesFinder $attributesLazyStorage = null;
 
     public static function buildFromArray(array $data): self
@@ -66,7 +66,7 @@ class Node implements AttributesAwareInterface
         $node->setLocale($data['locale']);
         $node->setTitle($data['title'] ?? '');
         $node->setSlug($data['slug'] ?? '');
-        $node->setFlags($data['flags'] ?? []);
+        $node->setPurposes($data['purposes'] ?? []);
 
         if (isset($data['lazy_attributes'])) {
             $node->attributesLazyStorage = $data['lazy_attributes'];
@@ -225,18 +225,18 @@ class Node implements AttributesAwareInterface
         $this->slug = $slug;
     }
 
-    public function hasFlag(string $flag): bool
+    public function hasPurpose(string $purpose): bool
     {
-        return in_array($flag, $this->flags);
+        return in_array($purpose, $this->purposes);
     }
 
-    public function getFlags(): array
+    public function getPurposes(): array
     {
-        return $this->flags;
+        return $this->purposes;
     }
 
-    public function setFlags(array $flags): void
+    public function setPurposes(array $purposes): void
     {
-        $this->flags = $flags;
+        $this->purposes = $purposes;
     }
 }

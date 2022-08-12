@@ -16,30 +16,21 @@ use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormHandler;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Templating\ViewInterface;
+use Tulia\Component\Theme\ManagerInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class ContentModel extends AbstractController
 {
-    private ArrayToWriteModelTransformer $arrayToModelTransformer;
-    private ContentTypeRepositoryInterface $contentTypeRepository;
-    private ContentTypeRegistryInterface $contentTypeRegistry;
-    private Configuration $configuration;
-    private LayoutTypeBuilderRegistry $layoutTypeBuilderRegistry;
-
     public function __construct(
-        ArrayToWriteModelTransformer $arrayToModelTransformer,
-        ContentTypeRepositoryInterface $contentTypeRepository,
-        ContentTypeRegistryInterface $contentTypeRegistry,
-        Configuration $configuration,
-        LayoutTypeBuilderRegistry $layoutTypeBuilderRegistry
+        private readonly ArrayToWriteModelTransformer $arrayToModelTransformer,
+        private readonly ContentTypeRepositoryInterface $contentTypeRepository,
+        private readonly ContentTypeRegistryInterface $contentTypeRegistry,
+        private readonly Configuration $configuration,
+        private readonly LayoutTypeBuilderRegistry $layoutTypeBuilderRegistry,
+        private readonly ManagerInterface $themeManager
     ) {
-        $this->arrayToModelTransformer = $arrayToModelTransformer;
-        $this->contentTypeRepository = $contentTypeRepository;
-        $this->contentTypeRegistry = $contentTypeRegistry;
-        $this->configuration = $configuration;
-        $this->layoutTypeBuilderRegistry = $layoutTypeBuilderRegistry;
     }
 
     public function index(): ViewInterface
@@ -123,9 +114,12 @@ class ContentModel extends AbstractController
 
         $layoutBuilder = $this->layoutTypeBuilderRegistry->get($this->configuration->getLayoutBuilder($contentType));
 
+        $builderView = $layoutBuilder->builderView($contentType, $data, $contentTypeFormHandler->getErrors(), false);
+        $builderView->addData(['theme' => $this->themeManager->getTheme()]);
+
         return $this->view('@backend/content_builder/content_type/edit.tpl', [
             'type' => $contentType,
-            'builderView' => $layoutBuilder->builderView($contentType, $data, $contentTypeFormHandler->getErrors(), false),
+            'builderView' => $builderView,
             'cleaningResult' => $contentTypeFormHandler->getCleaningResult(),
         ]);
     }

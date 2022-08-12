@@ -18664,6 +18664,33 @@ class Fixer {
 
 /***/ }),
 
+/***/ "./src/js/shared/Structure/Selection/Boundaries/ElementOffset.js":
+/*!***********************************************************************!*\
+  !*** ./src/js/shared/Structure/Selection/Boundaries/ElementOffset.js ***!
+  \***********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ElementOffset)
+/* harmony export */ });
+class ElementOffset {
+    static get(el) {
+        const rect = el.getBoundingClientRect(),
+            scrollLeft = document.documentElement.scrollLeft,
+            scrollTop = document.documentElement.scrollTop;
+
+        return {
+            top: rect.top + scrollTop,
+            left: rect.left + scrollLeft
+        };
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/js/shared/Structure/Selection/Boundaries/Hovered.js":
 /*!*****************************************************************!*\
   !*** ./src/js/shared/Structure/Selection/Boundaries/Hovered.js ***!
@@ -18675,6 +18702,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Hovered)
 /* harmony export */ });
+const ElementOffset = (__webpack_require__(/*! shared/Structure/Selection/Boundaries/ElementOffset.js */ "./src/js/shared/Structure/Selection/Boundaries/ElementOffset.js")["default"]);
+
 class Hovered {
     hoveredElement;
     viewUpdater;
@@ -18735,9 +18764,11 @@ class Hovered {
             return;
         }
 
+        let offset = ElementOffset.get(this.hoveredElement.element);
+
         this.viewUpdater({
-            top: this.hoveredElement.element.offsetTop,
-            left: this.hoveredElement.element.offsetLeft,
+            top: offset.top,
+            left: offset.left,
             width: this.hoveredElement.element.offsetWidth,
             height: this.hoveredElement.element.offsetHeight,
         });
@@ -18767,6 +18798,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Selected)
 /* harmony export */ });
+const ElementOffset = (__webpack_require__(/*! shared/Structure/Selection/Boundaries/ElementOffset.js */ "./src/js/shared/Structure/Selection/Boundaries/ElementOffset.js")["default"]);
+
 class Selected {
     selectedElement;
     positionUpdateAnimationFrameHandle;
@@ -18823,9 +18856,11 @@ class Selected {
 
         let doc = this.selectedElement.ownerDocument;
 
+        let offset = ElementOffset.get(this.selectedElement);
+
         this.viewUpdater({
-            top: this.selectedElement.offsetTop,
-            left: this.selectedElement.offsetLeft,
+            top: offset.top,
+            left: offset.left,
             width: this.selectedElement.offsetWidth,
             height: this.selectedElement.offsetHeight,
             tagName: this.selectedElement.dataset.tagname ?? this.selectedElement.tagName,

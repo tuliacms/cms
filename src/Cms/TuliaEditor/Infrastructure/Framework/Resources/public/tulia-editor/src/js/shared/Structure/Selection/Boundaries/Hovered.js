@@ -1,3 +1,5 @@
+const ElementOffset = require('shared/Structure/Selection/Boundaries/ElementOffset.js').default;
+
 export default class Hovered {
     hoveredElement;
     viewUpdater;
@@ -58,9 +60,11 @@ export default class Hovered {
             return;
         }
 
+        let offset = ElementOffset.get(this.hoveredElement.element);
+
         this.viewUpdater({
-            top: this.hoveredElement.element.offsetTop,
-            left: this.hoveredElement.element.offsetLeft,
+            top: offset.top,
+            left: offset.left,
             width: this.hoveredElement.element.offsetWidth,
             height: this.hoveredElement.element.offsetHeight,
         });

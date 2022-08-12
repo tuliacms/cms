@@ -1,3 +1,5 @@
+const ElementOffset = require('shared/Structure/Selection/Boundaries/ElementOffset.js').default;
+
 export default class Selected {
     selectedElement;
     positionUpdateAnimationFrameHandle;
@@ -54,9 +56,11 @@ export default class Selected {
 
         let doc = this.selectedElement.ownerDocument;
 
+        let offset = ElementOffset.get(this.selectedElement);
+
         this.viewUpdater({
-            top: this.selectedElement.offsetTop,
-            left: this.selectedElement.offsetLeft,
+            top: offset.top,
+            left: offset.left,
             width: this.selectedElement.offsetWidth,
             height: this.selectedElement.offsetHeight,
             tagName: this.selectedElement.dataset.tagname ?? this.selectedElement.tagName,

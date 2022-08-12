@@ -19,6 +19,8 @@ use Tulia\Cms\User\Application\UseCase\CreateUserRequest;
  */
 class Setup extends Command
 {
+    protected static $defaultName = 'setup';
+
     public function __construct(
         private string $rootDir,
         private UuidGeneratorInterface $uuidGenerator,

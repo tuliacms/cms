@@ -249,6 +249,10 @@
                 <target>Move down</target>
                 <note>Button tooltip</note>
             </trans-unit>
+            <trans-unit id="tuliacms.content_builder.67">
+                <source>themeRequiresContentFieldToBeExistence</source>
+                <target><![CDATA[The theme expects a field called "<b>{name}</b>" that stores the main content of the Content Type Node. Remember to create such a field if you want to display content from the Tulia Visual Editor.]]></target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

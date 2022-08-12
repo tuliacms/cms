@@ -5268,9 +5268,10 @@ const _hoisted_32 = {
   key: 0,
   class: "invalid-feedback"
 }
-const _hoisted_33 = { class: "tab-content ctb-section-main-tabs-contents" }
-const _hoisted_34 = { class: "ctb-sections-container" }
-const _hoisted_35 = { class: "ctb-section-fields-container" }
+const _hoisted_33 = ["innerHTML"]
+const _hoisted_34 = { class: "tab-content ctb-section-main-tabs-contents" }
+const _hoisted_35 = { class: "ctb-sections-container" }
+const _hoisted_36 = { class: "ctb-section-fields-container" }
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [
@@ -5344,9 +5345,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               ])
             ])
           ]),
-          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_33, [
-            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_34, [
-              (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_35, [
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+            class: "alert alert-info mb-0",
+            innerHTML: $setup.translations.themeRequiresContentFieldToBeExistence.replace('{name}', $setup.options.themeNodeContentFieldName)
+          }, null, 8 /* PROPS */, _hoisted_33),
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_34, [
+            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_35, [
+              (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_36, [
                 (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Fields"], {
                   translations: $setup.translations,
                   fields: $setup.model.layout.main.sections[0].fields,
@@ -5483,7 +5488,8 @@ const _hoisted_49 = {
 }
 const _hoisted_50 = ["id", "value"]
 const _hoisted_51 = { class: "form-text" }
-const _hoisted_52 = { class: "tab-content ctb-section-main-tabs-contents" }
+const _hoisted_52 = ["innerHTML"]
+const _hoisted_53 = { class: "tab-content ctb-section-main-tabs-contents" }
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [
@@ -5630,7 +5636,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               ])
             ])
           ]),
-          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_52, [
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+            class: "alert alert-info mb-0",
+            innerHTML: $setup.translations.themeRequiresContentFieldToBeExistence.replace('{name}', $setup.options.themeNodeContentFieldName)
+          }, null, 8 /* PROPS */, _hoisted_52),
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_53, [
             (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["SectionsList"], {
               sections: $setup.model.layout.main.sections,
               errors: $setup.ObjectUtils.get($setup.view.errors, 'layout.main.sections', [])

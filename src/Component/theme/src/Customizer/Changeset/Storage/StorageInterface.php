@@ -19,7 +19,7 @@ interface StorageInterface
      */
     public function get(string $id, string $locale): ChangesetInterface;
 
-    public function save(ChangesetInterface $changeset, string $locale): void;
+    public function save(ChangesetInterface $changeset, string $locale, string $defaultLocale, array $availableLocales): void;
 
     public function getActiveChangeset(string $theme, string $locale): ?ChangesetInterface;
 }

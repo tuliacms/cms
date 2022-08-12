@@ -28,7 +28,7 @@ class ArrayStorage implements StorageInterface
        unset($this->changesets[$changeset->getId()]);
     }
 
-    public function save(ChangesetInterface $changeset, string $locale): void
+    public function save(ChangesetInterface $changeset, string $locale, string $defaultLocale, array $availableLocales): void
     {
         $this->changesets[$changeset->getId()] = $changeset;
     }

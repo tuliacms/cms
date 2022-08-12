@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Theme\UserInterface\Web\Controller\Backend;
+namespace Tulia\Cms\Theme\UserInterface\Web\Backend\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -124,7 +124,7 @@ class Customizer extends AbstractController
      * @throws ChangesetNotFoundException
      * @CsrfToken(id="theme.customizer.save")
      */
-    public function save(Request $request, string $theme, string $changeset)
+    public function save(Request $request, string $theme, string $changeset, WebsiteInterface $website)
     {
         $storage = $this->themeManager->getStorage();
 
@@ -148,14 +148,14 @@ class Customizer extends AbstractController
         $changesetEntity->setType(ChangesetTypeEnum::TEMPORARY);
 
         if ($changesetEntity->isEmpty()) {
-            $themeChangeset = $this->customizerChangesetStorage->getActiveChangeset($themeObject->getName());
+            $themeChangeset = $this->customizerChangesetStorage->getActiveChangeset($themeObject->getName(), $website->getLocale()->getCode());
 
             if ($themeChangeset && $changesetEntity->getId() !== $themeChangeset->getId()) {
                 $changesetEntity->merge($themeChangeset);
             }
         }
 
-        $data = $request->request->get('data');
+        $data = $request->request->all('data');
 
         if (\is_array($data) === false) {
             $data = [];
@@ -165,12 +165,12 @@ class Customizer extends AbstractController
         //changesetEntity->setAuthorId($this->getUser()->getId());
 
         if ($request->request->get('mode') === 'temporary') {
-            $this->customizerChangesetStorage->save($changesetEntity, $request->getLocale());
+            $this->customizerChangesetStorage->save($changesetEntity, $request->getLocale(), $website->getDefaultLocale()->getCode(), $website->getLocaleCodes());
         }
 
         if ($request->request->get('mode') === 'theme') {
             $changesetEntity->setType(ChangesetTypeEnum::ACTIVE);
-            $this->customizerChangesetStorage->save($changesetEntity, $request->getLocale());
+            $this->customizerChangesetStorage->save($changesetEntity, $request->getLocale(), $website->getDefaultLocale()->getCode(), $website->getLocaleCodes());
         }
 
         return $this->responseJson([
@@ -209,7 +209,7 @@ class Customizer extends AbstractController
      * @return RedirectResponse
      * @CsrfToken(id="theme.customizer.copy_changeset_from_parent")
      */
-    public function copyChangesetFromParent(Request $request, string $theme): RedirectResponse
+    public function copyChangesetFromParent(Request $request, string $theme, WebsiteInterface $website): RedirectResponse
     {
         $themeInstance = $this->themeManager->getStorage()->get($theme);
 
@@ -223,20 +223,20 @@ class Customizer extends AbstractController
 
         $parent  = $this->themeManager->getStorage()->get($themeInstance->getParent());
 
-        $changeset = $this->customizerChangesetStorage->getActiveChangeset($parent->getName());
+        $changeset = $this->customizerChangesetStorage->getActiveChangeset($parent->getName(), $website->getLocale()->getCode());
 
         if (!$changeset) {
             return $this->redirectToRoute('backend.theme.customize.current');
         }
 
-        $themeChangeset = $this->customizerChangesetStorage->getActiveChangeset($parent->getName());
+        $themeChangeset = $this->customizerChangesetStorage->getActiveChangeset($parent->getName(), $website->getLocale()->getCode());
 
         if ($themeChangeset && $changeset->getId() !== $themeChangeset->getId()) {
             $changeset->merge($themeChangeset);
         }
 
         $changeset->setTheme($themeInstance->getName());
-        $this->customizerChangesetStorage->save($changeset, $request->getLocale());
+        $this->customizerChangesetStorage->save($changeset, $request->getLocale(), $website->getDefaultLocale()->getCode(), $website->getLocaleCodes());
 
         return $this->redirectToRoute('backend.theme.customize.current');
     }
@@ -246,7 +246,7 @@ class Customizer extends AbstractController
      * @return RedirectResponse
      * @CsrfToken(id="theme.customizer.reset")
      */
-    public function reset(string $theme): RedirectResponse
+    public function reset(string $theme, WebsiteInterface $website): RedirectResponse
     {
         $themeInstance = $this->themeManager->getStorage()->get($theme);
 
@@ -254,7 +254,7 @@ class Customizer extends AbstractController
             return $this->redirectToRoute('backend.theme.customize.current');
         }
 
-        $changeset = $this->customizerChangesetStorage->getActiveChangeset($themeInstance->getName());
+        $changeset = $this->customizerChangesetStorage->getActiveChangeset($themeInstance->getName(), $website->getLocale()->getCode());
 
         if ($changeset) {
             $this->customizerChangesetStorage->remove($changeset);
