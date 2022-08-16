@@ -19,6 +19,26 @@ doctrine:
                 prefix: Tulia\Cms\Menu\Domain\WriteModel\Model
                 alias: CmsMenu
 cms:
+    importer:
+        objects:
+            Menu:
+                importer: 'Tulia\Cms\Menu\Infrastructure\Cms\Importer\MenuImporter'
+                mapping:
+                    name:
+                        required: true
+                        type: string
+                    items:
+                        collection_of: MenuItem
+            MenuItem:
+                mapping:
+                    link_type:
+                        required: true
+                    link_identity: ~
+                    name:
+                        required: true
+                    hash: ~
+                    position:
+                        type: integer
     templating:
         paths:
             - { name: backend/menu, path: '%cms.core_dir%/Cms/Menu/Infrastructure/Framework/Resources/views/backend' }

@@ -14,23 +14,18 @@ use Tulia\Component\Importer\Validation\SchemaValidatorInterface;
  */
 class Importer implements ImporterInterface
 {
-    private FileReaderRegistryInterface $fileReaderRegistry;
-    private SchemaValidatorInterface $schemaValidator;
-    private ObjectImporterRegistry $importerRegistry;
-
     public function __construct(
-        FileReaderRegistryInterface $fileReaderRegistry,
-        SchemaValidatorInterface $schemaValidator,
-        ObjectImporterRegistry $importerRegistry
+        private FileReaderRegistryInterface $fileReaderRegistry,
+        private SchemaValidatorInterface $schemaValidator,
+        private ObjectImporterRegistry $importerRegistry,
     ) {
-        $this->fileReaderRegistry = $fileReaderRegistry;
-        $this->schemaValidator = $schemaValidator;
-        $this->importerRegistry = $importerRegistry;
     }
 
     public function importFromFile(string $filepath, ?string $realFilename = null): void
     {
-        $data = $this->fileReaderRegistry->getSupportingReader($realFilename ?? $filepath)->read($filepath);
+        $data = $this->fileReaderRegistry
+            ->getSupportingReader($realFilename ?? $filepath)
+            ->read($filepath);
 
         $this->import($data);
     }

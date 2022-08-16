@@ -7,9 +7,10 @@ namespace Tulia\Cms\ImportExport\UserInterface\Web\Controller\Backend;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Tulia\Cms\ImportExport\Application\UseCase\ImportFile;
+use Tulia\Cms\ImportExport\Application\UseCase\ImportFileRequest;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
-use Tulia\Component\Importer\ImporterInterface;
 use Tulia\Component\Templating\ViewInterface;
 
 /**
@@ -17,13 +18,6 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class ImportController extends AbstractController
 {
-    private ImporterInterface $importer;
-
-    public function __construct(ImporterInterface $importer)
-    {
-        $this->importer = $importer;
-    }
-
     public function homepage(): ViewInterface
     {
         return $this->view('@backend/import_export/importer.tpl');
@@ -32,12 +26,12 @@ class ImportController extends AbstractController
     /**
      * @CsrfToken(id="import-export-import-file")
      */
-    public function importFile(Request $request): Response
+    public function importFile(Request $request, ImportFile $importFile): Response
     {
-        $this->importer->importFromFile(
+        ($importFile)(new ImportFileRequest(
             $request->files->get('file')->getPathname(),
             $request->files->get('file')->getClientOriginalName()
-        );
+        ));
 
         if ($request->query->has('return')) {
             $redirectUrl = $request->getUriForPath($request->query->get('return'));

@@ -13,7 +13,7 @@ use Tulia\Component\Importer\Schema\Schema;
  */
 class SchemaFromContainerFactory
 {
-    public function build(array $objects): Schema
+    public static function build(array $objects): Schema
     {
         $schema = new Schema();
 

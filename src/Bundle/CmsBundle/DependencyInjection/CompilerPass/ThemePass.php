@@ -9,6 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Tulia\Cms\Theme\Domain\ThemeImportCollectionRegistry;
 use Tulia\Component\Theme\Configuration\Configuration;
 use Tulia\Component\Theme\Configuration\ConfigurationRegistry;
 use Tulia\Component\Theme\Customizer\Builder\Structure\StructureRegistry;
@@ -28,6 +29,7 @@ class ThemePass implements CompilerPassInterface
         $configurationRegistry = $container->getDefinition(ConfigurationRegistry::class);
         $structureRegistry = $container->getDefinition(StructureRegistry::class);
         $predefinedChangesetsRegistry = $container->getDefinition(PredefinedChangesetRegistry::class);
+        $themeImportCollectionRegistry = $container->getDefinition(ThemeImportCollectionRegistry::class);
 
         foreach ($container->getParameter('cms.themes.configuration') as $theme => $config) {
             if (isset($config['configuration']['base'])) {
@@ -35,6 +37,9 @@ class ThemePass implements CompilerPassInterface
             }
             if (isset($config['configuration']['customizer'])) {
                 $this->processThemeConfiguration($container, $configurationRegistry, 'customizer', $theme, $config['configuration']['customizer']);
+            }
+            if (isset($config['imports']['collections'])) {
+                $this->processThemeImports($container, $themeImportCollectionRegistry, $theme, $config['imports']['collections']);
             }
             if (isset($config['customizer']['builder'])) {
                 $structureRegistry->addMethodCall('addForTheme', [$theme, $this->resolveCustomizerStructure($config['customizer']['builder'], $config['translation_domain'])]);
@@ -114,5 +119,12 @@ class ThemePass implements CompilerPassInterface
         }
 
         return $structure;
+    }
+
+    private function processThemeImports(ContainerBuilder $container, Definition $registry, string $theme, array $imports): void
+    {
+        foreach ($imports as $code => $info) {
+            $registry->addMethodCall('addCollection', [$theme, $code, $info]);
+        }
     }
 }

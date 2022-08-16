@@ -14,7 +14,7 @@
                     :key="element.code"
                     :section="element"
                     errors="ObjectUtils.get(errors, id, {})"
-                    @section:remove="removeSection()"
+                    @section:remove="(code) => removeSection(code)"
                 ></Section>
             </template>
         </draggable>

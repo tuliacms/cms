@@ -29,11 +29,15 @@ class SchemaValidator implements SchemaValidatorInterface
 
     public function validate(array $data): array
     {
-        foreach ($data['objects'] ?? [] as $key => $object) {
+        if (!isset($data['objects'])) {
+            $data['objects'] = [];
+        }
+
+        foreach ($data['objects'] as $key => $object) {
             $data['objects'][$key] = $this->validateObject($object, 'objects.'.$key);
         }
 
-        array_filter($data['objects']);
+        $data['objects'] = array_filter($data['objects']);
 
         return $data;
     }
@@ -104,6 +108,11 @@ class SchemaValidator implements SchemaValidatorInterface
         }
 
         switch ($field->getType()) {
+            case 'array':
+                if (is_array($data) === false) {
+                    throw InvalidFieldDataTypeException::fromField($object, $field, $data, $path);
+                }
+                break;
             case 'boolean':
                 if (is_bool($data) === false) {
                     throw InvalidFieldDataTypeException::fromField($object, $field, $data, $path);

@@ -26,15 +26,12 @@ class AssetsPublish extends Command
         $this->assetsPublicPaths = $assetsPublicPaths;
         $this->rootDir = $rootDir;
 
-        parent::__construct();
+        parent::__construct(self::$defaultName);
     }
 
     protected function configure()
     {
-        $this
-            ->setName('assets:publish')
-            ->setDescription('Publish assets to /public directory.')
-        ;
+        $this->setDescription('Publish assets to /public directory.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

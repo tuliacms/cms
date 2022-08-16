@@ -7,7 +7,9 @@ namespace Tulia\Cms\Node\Infrastructure\Internal\Importer;
 use Tulia\Cms\Content\Attributes\Infrastructure\Importer\ObjectDataToAttributesTransformer;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Node\Application\UseCase\CreateNode;
+use Tulia\Cms\Node\Application\UseCase\CreateNodeRequest;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodeRepositoryInterface;
+use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
 use Tulia\Component\Importer\ObjectImporter\ObjectImporterInterface;
 use Tulia\Component\Importer\Structure\ObjectData;
@@ -17,26 +19,31 @@ use Tulia\Component\Importer\Structure\ObjectData;
  */
 class NodeEntryImporter implements ObjectImporterInterface
 {
-    private NodeRepositoryInterface $repository;
-    private CreateNode $createNode;
-    private ContentTypeRegistryInterface $contentTypeRegistry;
-    private AuthenticatedUserProviderInterface $authenticatedUserProvider;
-
     public function __construct(
-        NodeRepositoryInterface $repository,
-        CreateNode $createNode,
-        ContentTypeRegistryInterface $contentTypeRegistry,
-        AuthenticatedUserProviderInterface $authenticatedUserProvider
+        private readonly NodeRepositoryInterface $repository,
+        private readonly CreateNode $createNode,
+        private readonly ContentTypeRegistryInterface $contentTypeRegistry,
+        private readonly AuthenticatedUserProviderInterface $authenticatedUserProvider,
     ) {
-        $this->repository = $repository;
-        $this->createNode = $createNode;
-        $this->contentTypeRegistry = $contentTypeRegistry;
-        $this->authenticatedUserProvider = $authenticatedUserProvider;
     }
 
     public function import(ObjectData $objectData): ?array
     {
-        ($this->createNode)($objectData['type'], $this->transformObjectDataToAttributes($objectData));
+        $details = [
+            'title' => $objectData['title'],
+            'slug' => $objectData['slug'] ?? $objectData['title'] ?? null,
+            'status' => $objectData['status'] ?? 'published',
+            'purposes' => $objectData['purposes'] ?? [],
+            'published_at' => $objectData['published_at'] ?? ImmutableDateTime::now(),
+            'published_to' => $objectData['published_to'] ?? null,
+        ];
+        ($this->createNode)(new CreateNodeRequest(
+            $objectData['type'],
+            $this->authenticatedUserProvider->getUser()->getId(),
+            $details,
+            $this->transformObjectDataToAttributes($objectData),
+            'en_US'
+        ));
 
         return null;
     }
@@ -46,12 +53,7 @@ class NodeEntryImporter implements ObjectImporterInterface
         $transformer = new ObjectDataToAttributesTransformer(
             $this->contentTypeRegistry->get($objectData['type'])
         );
-        $transformer->useObjectData($objectData->toArray()['attributes']);
-        $transformer->useAdditionalData([
-            'title' => $objectData['title'],
-            'author_id' => $this->authenticatedUserProvider->getUser()->getId(),
-        ]);
 
-        return $transformer->transform();
+        return $transformer->transform($objectData->toArray()['attributes']);
     }
 }

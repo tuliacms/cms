@@ -63,6 +63,34 @@
                 <source>themeHasBeenUninstalled</source>
                 <target>Theme has been uninstalled.</target>
             </trans-unit>
+            <trans-unit id="tuliacms.themes.16">
+                <source>themeImports</source>
+                <target>Theme imports</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.17">
+                <source>importWebsiteContentForThisTheme</source>
+                <target>Import website content for theme</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.18">
+                <source>importSampleContentOrSkipToCreateContentYourself</source>
+                <target>This theme has defined some sample website content collections, ready to import right now. Import one from listed below or skip to create the content yourself.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.19">
+                <source>themeHasntGotAnyCollectionsToImport</source>
+                <target>This theme hasn't got any collections to import.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.20">
+                <source>collectionHasBeenImported</source>
+                <target>Collection has been imported.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.21">
+                <source>doImport</source>
+                <target>Import</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.22">
+                <source>finish</source>
+                <target>Finish</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

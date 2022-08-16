@@ -11,14 +11,10 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class AssetsPublisher
 {
-    private string $publicDir;
-
-    private array $assetsPublicPaths;
-
-    public function __construct(string $publicDir, array $assetsPublicPaths = [])
-    {
-        $this->publicDir = $publicDir;
-        $this->assetsPublicPaths = $assetsPublicPaths;
+    public function __construct(
+        private string $publicDir,
+        private array $assetsPublicPaths = []
+    ) {
     }
 
     public function publishRegisteredAssets(): void
@@ -30,14 +26,14 @@ class AssetsPublisher
 
     public function publish(string $source, string $targetname): bool
     {
-        $fs = new Filesystem();
-        $target = $this->publicDir . '/assets';
+        $target = $this->publicDir.'/assets'.$targetname;
 
         if (file_exists($source) === false) {
             return false;
         }
 
-        $fs->mirror($source, $target . $targetname, null, [
+        $fs = new Filesystem();
+        $fs->mirror($source, $target, null, [
             'override' => true,
             'delete' => true,
         ]);

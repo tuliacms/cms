@@ -13,7 +13,7 @@ interface ImporterInterface
      * @throws Exception\InvalidFieldDataTypeException
      * @throws Exception\FileNotSupportedException
      */
-    public function importFromFile(string $filepath): void;
+    public function importFromFile(string $filepath, ?string $realFilename = null): void;
 
     /**
      * @throws Exception\InvalidFieldDataTypeException

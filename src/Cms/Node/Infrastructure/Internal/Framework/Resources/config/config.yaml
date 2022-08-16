@@ -25,25 +25,23 @@ cms:
                 mapping:
                     parent_id:
                         type: uuid
-                        required: false
-                    type: ~
+                    type:
+                        required: true
                     status:
                         default_value: published
                     published_at:
                         type: datetime
-                        required: false
                     published_to:
                         type: datetime
-                        required: false
                     created_at:
                         type: datetime
-                        required: false
                     updated_at:
                         type: datetime
-                        required: false
-                    title: ~
-                    slug:
-                        required: false
+                    title:
+                        required: true
+                    slug: ~
+                    purposes:
+                        type: array
                     attributes:
                         collection_of: Attribute
     filemanager:

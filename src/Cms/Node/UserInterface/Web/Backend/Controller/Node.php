@@ -105,7 +105,7 @@ class Node extends AbstractController
         $formDescriptor->handleRequest($request);
         $nodeType = $formDescriptor->getContentType();
 
-        if ($formDescriptor->isFormValid()) {
+        if ($formDescriptor->isFormValid() && $nodeDetailsForm->isSubmitted() && $nodeDetailsForm->isValid()) {
             try {
                 $result = $createNode(new CreateNodeRequest(
                     $node_type,
@@ -163,7 +163,7 @@ class Node extends AbstractController
         );
         $formDescriptor->handleRequest($request);
 
-        if ($formDescriptor->isFormValid()) {
+        if ($formDescriptor->isFormValid() && $nodeDetailsForm->isSubmitted() && $nodeDetailsForm->isValid()) {
             try {
                 $updateNode(new UpdateNodeRequest(
                     $node->getId(),

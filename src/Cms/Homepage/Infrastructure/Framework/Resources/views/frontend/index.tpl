@@ -1,5 +1,11 @@
 {% extends 'theme' %}
 
 {% block content %}
-    <h1>Homepage</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1 class="my-5">Welcome in Tulia CMS Homepage</h1>
+            </div>
+        </div>
+    </div>
 {% endblock %}

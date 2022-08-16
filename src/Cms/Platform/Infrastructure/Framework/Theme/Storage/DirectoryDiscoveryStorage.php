@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Platform\Infrastructure\Framework\Theme\Storage;
 
+use Psr\Log\LoggerInterface;
 use Tulia\Component\Theme\Exception\MissingThemeException;
 use Tulia\Component\Theme\Storage\StorageInterface;
 use Tulia\Component\Theme\ThemeInterface;
@@ -14,11 +15,11 @@ use Tulia\Component\Theme\ThemeInterface;
 class DirectoryDiscoveryStorage implements StorageInterface
 {
     private array $themes = [];
-    private string $extensionsDirectory;
 
-    public function __construct(string $extensionsDirectory)
-    {
-        $this->extensionsDirectory = $extensionsDirectory;
+    public function __construct(
+        private readonly string $extensionsDirectory,
+        private readonly LoggerInterface $appLogger
+    ) {
     }
 
     /**
@@ -92,6 +93,7 @@ class DirectoryDiscoveryStorage implements StorageInterface
                 }
 
                 $themeClassname = 'Tulia\\Theme\\' . $namespace->getFilename() . '\\' .  $theme->getFilename() . '\\Theme';
+
                 /** @var ThemeInterface $themeObject */
                 $themeObject = new $themeClassname();
 

@@ -6452,7 +6452,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           key: element.code,
           section: element,
           errors: "ObjectUtils.get(errors, id, {})",
-          "onSection:remove": _cache[0] || (_cache[0] = $event => ($options.removeSection()))
+          "onSection:remove": _cache[0] || (_cache[0] = (code) => $options.removeSection(code))
         }, null, 8 /* PROPS */, ["section"]))
       ]),
       _: 1 /* STABLE */

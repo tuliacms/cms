@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Theme\Application\UseCase;
 
 use Symfony\Component\Filesystem\Filesystem;
+use Tulia\Cms\Platform\Application\Service\FrameworkCacheService;
 use Tulia\Cms\Shared\Application\UseCase\AbstractTransactionalUseCase;
 use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
 use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
@@ -15,7 +16,8 @@ use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
 final class UninstallTheme extends AbstractTransactionalUseCase
 {
     public function __construct(
-        private readonly string $projectDir
+        private readonly string $projectDir,
+        private readonly FrameworkCacheService $frameworkCacheService
     ) {
     }
 
@@ -32,6 +34,8 @@ final class UninstallTheme extends AbstractTransactionalUseCase
 
         $filesystem = new Filesystem();
         $filesystem->remove($themeDirectory);
+
+        $this->frameworkCacheService->clear();
 
         return null;
     }

@@ -11,9 +11,6 @@ use Tulia\Cms\Content\Type\Domain\WriteModel\Exception\EmptyRoutingStrategyForRo
  */
 final class ContentType
 {
-    protected string $type;
-    protected string $code;
-    protected string $name;
     protected ?string $icon = null;
     protected bool $isRoutable = false;
     protected bool $isHierarchical = false;
@@ -27,13 +24,10 @@ final class ContentType
     protected array $fieldGroups = [];
 
     public function __construct(
-        string $type,
-        string $code,
-        string $name
+        protected string $type,
+        protected string $code,
+        protected string $name,
     ) {
-        $this->type = $type;
-        $this->code = $code;
-        $this->name = $name;
     }
 
     public static function fromArray(array $data): self
@@ -70,9 +64,19 @@ final class ContentType
         return $this->icon;
     }
 
-    public function addField(Field $field): void
+    /*public function addField(Field $field): void
     {
         //throw new \Exception('Please implements this method.');
+    }*/
+
+    public function getField(string $code): Field
+    {
+        return $this->getFields()[$code];
+    }
+
+    public function hasField(string $code): bool
+    {
+        return \array_key_exists($code, $this->getFields());
     }
 
     /**

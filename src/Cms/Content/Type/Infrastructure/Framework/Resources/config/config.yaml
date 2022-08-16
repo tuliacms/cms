@@ -29,23 +29,21 @@ cms:
             ContentTypeEntry:
                 importer: 'Tulia\Cms\Content\Type\Infrastructure\Importer\ContentTypeEntryImporter'
                 mapping:
-                    code: ~
-                    type: ~
-                    name: ~
-                    icon:
-                        required: false
-                    controller:
-                        required: false
+                    code:
+                        required: true
+                    type:
+                        required: true
+                    name:
+                        required: true
+                    icon: ~
+                    controller: ~
                     is_routable:
                         type: boolean
-                        required: false
                         default_value: false
                     is_hierarchical:
                         type: boolean
-                        required: false
                         default_value: false
-                    routing_strategy:
-                        required: false
+                    routing_strategy: ~
                     field_groups:
                         collection_of: ContentTypeEntryFieldGroup
             ContentTypeEntryFieldGroup:

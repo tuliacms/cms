@@ -12,6 +12,19 @@ backend.theme.installator.install:
     controller: Tulia\Cms\Theme\UserInterface\Web\Backend\Controller\Installator::install
     methods: POST
 
+backend.theme.installator.publish_assets:
+    path: /administrator/theme/installator/publish-assets
+    controller: Tulia\Cms\Theme\UserInterface\Web\Backend\Controller\Installator::publishAssetsAfterInstallation
+
+backend.theme.installator.importer:
+    path: /administrator/theme/installator/importer
+    controller: Tulia\Cms\Theme\UserInterface\Web\Backend\Controller\Installator::importer
+
+backend.theme.installator.importer.import:
+    path: /administrator/theme/installator/importer/import
+    controller: Tulia\Cms\Theme\UserInterface\Web\Backend\Controller\Installator::import
+    methods: POST
+
 backend.theme.installator.uninstall:
     path: /administrator/theme/installator/uninstall
     controller: Tulia\Cms\Theme\UserInterface\Web\Backend\Controller\Installator::uninstall

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Platform\Infrastructure\Framework\Kernel;
 
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
@@ -111,7 +112,12 @@ final class TuliaKernel extends Kernel
             }
         }
 
+        $class = $this->getContainerClass();
+        $buildDir = $this->getBuildDir();
+        $cache = new ConfigCache($buildDir.'/'.$class.'.php', $this->debug);
+
         $container->parameters()->set('kernel.public_dir', $this->getPublicDir());
+        $container->parameters()->set('kernel.cache_file', $cache->getPath());
     }
 
     protected function configureRoutes(RoutingConfigurator $routes): void
