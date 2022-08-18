@@ -26,9 +26,13 @@ class ImporterPass implements CompilerPassInterface
 
         $registry = $container->findDefinition(ObjectImporterRegistry::class);
         $taggedServices = $container->findTaggedServiceIds('importer.object_importer');
-
         foreach ($taggedServices as $id => $tags) {
             $registry->addMethodCall('addObjectImporter', [new Reference($id)]);
+        }
+
+        $taggedServices = $container->findTaggedServiceIds('importer.object_importer.decorator');
+        foreach ($taggedServices as $id => $tags) {
+            $registry->addMethodCall('addImporterDecorator', [new Reference($id)]);
         }
     }
 }

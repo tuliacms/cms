@@ -20,26 +20,18 @@ use function is_string;
  */
 class SchemaValidator implements SchemaValidatorInterface
 {
-    private Schema $schema;
-
-    public function __construct(Schema $schema)
-    {
-        $this->schema = $schema;
+    public function __construct(
+        private Schema $schema
+    ) {
     }
 
-    public function validate(array $data): array
+    public function validate(array $objects): array
     {
-        if (!isset($data['objects'])) {
-            $data['objects'] = [];
+        foreach ($objects as $key => $object) {
+            $objects[$key] = $this->validateObject($object, 'objects.'.$key);
         }
 
-        foreach ($data['objects'] as $key => $object) {
-            $data['objects'][$key] = $this->validateObject($object, 'objects.'.$key);
-        }
-
-        $data['objects'] = array_filter($data['objects']);
-
-        return $data;
+        return array_filter($objects);
     }
 
     /**
@@ -91,12 +83,10 @@ class SchemaValidator implements SchemaValidatorInterface
     }
 
     /**
-     * @param mixed $data
-     * @return mixed
      * @throws InvalidFieldDataTypeException
      * @throws EmptyValueOfRequiredFieldException
      */
-    private function validateField(ObjectDefinition $object, Field $field, $data, string $path)
+    private function validateField(ObjectDefinition $object, Field $field, mixed $data, string $path): mixed
     {
         if ($this->isEmpty($data)) {
             if ($field->isRequired()) {
@@ -108,18 +98,13 @@ class SchemaValidator implements SchemaValidatorInterface
         }
 
         switch ($field->getType()) {
-            case 'array':
-                if (is_array($data) === false) {
+            case 'string':
+                if (is_string($data) === false) {
                     throw InvalidFieldDataTypeException::fromField($object, $field, $data, $path);
                 }
                 break;
             case 'boolean':
                 if (is_bool($data) === false) {
-                    throw InvalidFieldDataTypeException::fromField($object, $field, $data, $path);
-                }
-                break;
-            case 'string':
-                if (is_string($data) === false) {
                     throw InvalidFieldDataTypeException::fromField($object, $field, $data, $path);
                 }
                 break;
@@ -135,6 +120,11 @@ class SchemaValidator implements SchemaValidatorInterface
                 break;
             case 'number':
                 if (is_numeric($data) === false) {
+                    throw InvalidFieldDataTypeException::fromField($object, $field, $data, $path);
+                }
+                break;
+            case 'array':
+                if (is_array($data) === false) {
                     throw InvalidFieldDataTypeException::fromField($object, $field, $data, $path);
                 }
                 break;
@@ -174,10 +164,7 @@ class SchemaValidator implements SchemaValidatorInterface
         return $data;
     }
 
-    /**
-     * @param mixed $data
-     */
-    private function isEmpty($data): bool
+    private function isEmpty(mixed $data): bool
     {
         return $data === null || $data === '';
     }

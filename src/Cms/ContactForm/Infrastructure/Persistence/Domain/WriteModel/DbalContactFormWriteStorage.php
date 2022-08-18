@@ -13,7 +13,6 @@ use Tulia\Cms\Platform\Infrastructure\Persistence\Domain\AbstractLocalizableStor
  */
 class DbalContactFormWriteStorage extends AbstractLocalizableStorage implements ContactFormWriteStorageInterface
 {
-
     public function __construct(
         private Connection $connection,
         private DbalFieldWriteStorage $fieldStorage,

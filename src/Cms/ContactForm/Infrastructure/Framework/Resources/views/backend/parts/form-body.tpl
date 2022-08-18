@@ -8,7 +8,7 @@
         {%- else -%}
             {%- set tooltip = ('required'|trans) ~ ': ' -%}
         {%- endif -%}
-        &nbsp;<span data-toggle="tooltip" title="{{ tooltip }}{{ attr.name }}">{{ name }}=""</span>
+        &nbsp;<span data-bs-toggle="tooltip" title="{{ tooltip }}{{ attr.name }}">{{ name }}=""</span>
         {%- if not (attr.required is defined and attr.required) -%}
             </span>
         {%- endif -%}
@@ -25,19 +25,21 @@
 <div class="page-form">
     <div class="page-form-sidebar">
         <div class="accordion">
-            <div class="accordion-section">
-                <div class="accordion-section-button" data-toggle="collapse" data-target="#form-collapse-receivers">
-                    {{ 'shortcode'|trans }}
-                </div>
-                <div class="collapse show">
-                    <div class="accordion-section-body">
-                        <p>{{ 'shortcodeToInsertOnPage'|trans }}</p>
-                        <textarea class="form-control">[contact_form id="{{ form.id.vars.value }}"]</textarea>
+            {% if form.id.vars.value %}
+                <div class="accordion-section">
+                    <div class="accordion-section-button" data-bs-toggle="collapse" data-bs-target="#form-collapse-receivers">
+                        {{ 'shortcode'|trans }}
+                    </div>
+                    <div class="collapse show">
+                        <div class="accordion-section-body">
+                            <p>{{ 'shortcodeToInsertOnPage'|trans }}</p>
+                            <textarea class="form-control">[contact_form id="{{ form.id.vars.value }}"]</textarea>
+                        </div>
                     </div>
                 </div>
-            </div>
+            {% endif %}
             <div class="accordion-section">
-                <div class="accordion-section-button" data-toggle="collapse" data-target="#form-collapse-receivers">
+                <div class="accordion-section-button" data-bs-toggle="collapse" data-bs-target="#form-collapse-receivers">
                     {{ 'receivers'|trans({}, 'contact-form') }}
                     {{ badge.errors_count(form, [ 'receivers' ]) }}
                 </div>
@@ -48,7 +50,7 @@
                 </div>
             </div>
             <div class="accordion-section">
-                <div class="accordion-section-button" data-toggle="collapse" data-target="#form-collapse-sender">
+                <div class="accordion-section-button" data-bs-toggle="collapse" data-bs-target="#form-collapse-sender">
                     {{ 'sender'|trans({}, 'contact-form') }}
                     {{ badge.errors_count(form, [ 'sender_name', 'sender_email', 'reply_to' ]) }}
                 </div>
@@ -77,13 +79,13 @@
         </div>
         <ul class="nav nav-tabs page-form-tabs" role="tablist">
             <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab" href="#tab-fields">
+                <a class="nav-link active" data-bs-toggle="tab" href="#tab-fields">
                     {{ 'fieldsBuilder'|trans({}, 'contact-form') }}
                     {{ badge.errors_count(form, [ 'fields_template' ]) }}
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#tab-message">
+                <a class="nav-link" data-bs-toggle="tab" href="#tab-message">
                     {{ 'messageTemplate'|trans({}, 'contact-form') }}
                     {{ badge.errors_count(form, [ 'message_template' ]) }}
                 </a>
@@ -159,7 +161,7 @@
                         margin-top: 20px;
                     }
                 </style>
-                <script none="{{ csp_nonce() }}">
+                <script nonce="{{ csp_nonce() }}">
                     window.ContactFormBuilder = {
                         fields: {{ fields|json_encode|raw }},
                         availableFields: {{ availableFields|json_encode|raw }},

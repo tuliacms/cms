@@ -11,13 +11,10 @@ use Tulia\Component\Importer\Schema\ObjectDefinition;
  */
 class ObjectData implements \ArrayAccess
 {
-    private array $objectData;
-    private ObjectDefinition $definition;
-
-    public function __construct(array $objectData, ObjectDefinition $definition)
-    {
-        $this->objectData = $objectData;
-        $this->definition = $definition;
+    public function __construct(
+        private array $objectData,
+        private ObjectDefinition $definition
+    ) {
     }
 
     public function toArray(): array
@@ -46,30 +43,32 @@ class ObjectData implements \ArrayAccess
         return $this->objectData['@type'];
     }
 
+    public function getObjectId(): string
+    {
+        return $this->objectData['@id'] ?? '';
+    }
+
     public function getDefinition(): ObjectDefinition
     {
         return $this->definition;
     }
 
-    public function offsetExists($offset): bool
+    public function offsetExists(mixed $offset): bool
     {
         return isset($this->objectData[$offset]);
     }
 
-    /**
-     * @return mixed
-     */
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset): mixed
     {
         return $this->objectData[$offset] ?? $this->definition->getField($offset)->getDefaultValue();
     }
 
-    public function offsetSet($offset, $value): void
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         $this->objectData[$offset] = $value;
     }
 
-    public function offsetUnset($offset): void
+    public function offsetUnset(mixed $offset): void
     {
         unset($this->objectData[$offset]);
     }

@@ -21,6 +21,7 @@ class SubmitType extends AbstractType
             'label' => 'save',
             'icon'  => 'fas fa-save',
             'mapped' => false,
+            'translation_domain' => 'messages',
         ]);
     }
 

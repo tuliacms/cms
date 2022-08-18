@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Widget\Application\UseCase;
 
 use Tulia\Cms\Shared\Application\UseCase\AbstractTransactionalUseCase;
+use Tulia\Cms\Shared\Application\UseCase\IdResult;
 use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
 use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
@@ -47,6 +48,6 @@ final class CreateWidget extends AbstractTransactionalUseCase
         $this->repository->save($widget);
         $this->eventBus->dispatchCollection($widget->collectDomainEvents());
 
-        return null;
+        return new IdResult($widget->getId());
     }
 }

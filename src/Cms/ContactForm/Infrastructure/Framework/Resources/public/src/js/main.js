@@ -1,5 +1,7 @@
-import App from './App.vue'
+const App = require('./App.vue').default;
+const Vue = require('vue');
 
-new Vue({
-    render: h => h(App)
-}).$mount("#contact-form-builder");
+vue = Vue.createApp(App);
+vue.config.devtools = true;
+vue.config.performance = true;
+vue.mount('#contact-form-builder');

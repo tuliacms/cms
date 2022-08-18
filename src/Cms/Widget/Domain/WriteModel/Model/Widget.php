@@ -53,6 +53,11 @@ class Widget extends AbstractAggregateRoot
         return $self;
     }
 
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
     public function getType(): string
     {
         return $this->type;

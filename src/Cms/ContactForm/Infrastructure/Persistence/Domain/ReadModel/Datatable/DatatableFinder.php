@@ -29,12 +29,12 @@ class DatatableFinder extends AbstractDatatableFinder
     {
         return [
             'id' => [
-                'selector' => 'tm.id',
+                'selector' => 'BIN_TO_UUID(tm.id)',
                 'type' => 'uuid',
                 'label' => 'ID',
             ],
             'name' => [
-                'selector' => 'COALESCE(tl.name, tm.name)',
+                'selector' => 'tm.name',
                 'label' => 'name',
                 'sortable' => true,
                 'view' => '@backend/forms/parts/datatable/name.tpl',
@@ -54,14 +54,6 @@ class DatatableFinder extends AbstractDatatableFinder
             ],
         ];
 
-        if (false === $context->isDefaultLocale()) {
-            $filters['translated'] = [
-                'label' => 'translated',
-                'type' => 'yes_no',
-                'selector' => 'IF(ISNULL(tl.name), 0, 1)'
-            ];
-        }
-
         return $filters;
     }
 
@@ -72,13 +64,8 @@ class DatatableFinder extends AbstractDatatableFinder
     {
         $queryBuilder
             ->from('#__form', 'tm')
-            ->leftJoin('tm', '#__form_lang', 'tl', 'tm.id = tl.form_id AND tl.locale = :locale')
             ->setParameter('locale', $context->locale, PDO::PARAM_STR)
         ;
-
-        if (false === $context->isDefaultLocale()) {
-            $queryBuilder->select('IF(ISNULL(tl.name), 0, 1) AS translated');
-        }
 
         return $queryBuilder;
     }

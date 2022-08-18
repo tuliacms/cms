@@ -1,0 +1,27 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Tulia\Cms\ContactForm\Domain\WriteModel\NewModel\FormTranslation" table="#__form_translation">
+        <id name="id" type="uuid">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+
+        <field name="locale"/>
+        <field name="subject"/>
+        <field name="messageTemplate" nullable="true"/>
+        <field name="fieldsView" nullable="true"/>
+        <field name="fieldsTemplate" nullable="true"/>
+
+        <many-to-one field="form" target-entity="Tulia\Cms\ContactForm\Domain\WriteModel\NewModel\Form" inversed-by="translations"/>
+
+        <one-to-many field="fields" orphan-removal="true" target-entity="Tulia\Cms\ContactForm\Domain\WriteModel\NewModel\Field" mapped-by="translation">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
+    </entity>
+</doctrine-mapping>

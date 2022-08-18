@@ -16,5 +16,5 @@ interface SchemaValidatorInterface
      * @throws InvalidFieldDataTypeException
      * @throws EmptyValueOfRequiredFieldException
      */
-    public function validate(array $data): array;
+    public function validate(array $objects): array;
 }

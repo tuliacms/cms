@@ -12,7 +12,7 @@ use Tulia\Component\Importer\Structure\ObjectData;
 interface ObjectImporterInterface
 {
     /**
-     * @return ObjectData[]|null
+     * Imports object, and returns it's ID.
      */
-    public function import(ObjectData $objectData): ?array;
+    public function import(ObjectData $objectData): ?string;
 }

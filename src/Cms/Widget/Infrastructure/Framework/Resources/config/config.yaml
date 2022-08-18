@@ -12,6 +12,25 @@ doctrine:
                 prefix: Tulia\Cms\Widget\Domain\WriteModel\Model
                 alias: CmsWidget
 cms:
+    importer:
+        objects:
+            Widget:
+                importer: 'Tulia\Cms\Widget\Infrastructure\Cms\Importer\WidgetImporter'
+                mapping:
+                    type: ~
+                    space: ~
+                    name: ~
+                    html_class:
+                        required: false
+                    html_id:
+                        required: false
+                    styles:
+                        type: array
+                        required: false
+                    title:
+                        required: false
+                    attributes:
+                        collection_of: Attribute
     twig:
         loader:
             array:

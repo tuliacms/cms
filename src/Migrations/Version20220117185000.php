@@ -186,66 +186,6 @@ CREATE TABLE `#__filemanager_image_thumbnail` (
   `filename` varchar(127) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
 EOF);
-        $this->addSql(<<<EOF
-CREATE TABLE `#__form` (
-  `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `subject` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `receivers` json NOT NULL,
-  `sender_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `sender_email` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `reply_to` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `message_template` text CHARACTER SET utf8 COLLATE utf8_unicode_ci,
-  `fields_view` text CHARACTER SET utf8 COLLATE utf8_unicode_ci,
-  `fields_template` text CHARACTER SET utf8 COLLATE utf8_unicode_ci
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-
-INSERT INTO `#__form` (`id`, `name`, `subject`, `receivers`, `sender_name`, `sender_email`, `reply_to`, `message_template`, `fields_view`, `fields_template`) VALUES
-('b8c00685-9e62-4b60-9368-e8bfbc82220a', 'Contact form', 'My test form subject', '[\"adam92banaszkiewicz@op.pl\"]', 'Sender name', 'adam92banaszkiewicz@op.pl', 'adam92banaszkiewicz@op.pl', 'This is a Contact Form message details:\r\n{{ contact_form_fields() }}', '<div class=\"form-row\">\n  <div class=\"col\">{{ form_row(form.name) }}</div>\n  <div class=\"col\">{{ form_row(form.email) }}</div>\n</div>\n<div class=\"form-row\">\n  <div class=\"col\">{{ form_row(form.message) }}</div>\n</div>\n{{ form_row(form.radio) }}\n{{ form_row(form.rodo) }}\n{{ form_row(form.submit) }}', '<div class=\"form-row\">\r\n  <div class=\"col\">[name]</div>\r\n  <div class=\"col\">[email]</div>\r\n</div>\r\n<div class=\"form-row\">\r\n  <div class=\"col\">[message]</div>\r\n</div>\r\n[radio]\r\n[rodo]\r\n[submit]');
-EOF);
-        $this->addSql(<<<EOF
-CREATE TABLE `#__form_field` (
-  `form_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `type` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `type_alias` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `options` json NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-
-INSERT INTO `#__form_field` (`form_id`, `name`, `type`, `type_alias`, `options`) VALUES
-('b8c00685-9e62-4b60-9368-e8bfbc82220a', 'email', 'Tulia\\Cms\\ContactForm\\Domain\\FieldType\\Core\\EmailType', 'email', '{\"help\": null, \"label\": \"Email\", \"sender\": null, \"constraints\": [{\"name\": \"Symfony\\\\Component\\\\Validator\\\\Constraints\\\\NotBlank\"}], \"constraints_raw\": \"required\"}'),
-('b8c00685-9e62-4b60-9368-e8bfbc82220a', 'message', 'Tulia\\Cms\\ContactForm\\Domain\\FieldType\\Core\\TextareaType', 'textarea', '{\"help\": null, \"label\": \"Message\", \"constraints\": [{\"name\": \"Symfony\\\\Component\\\\Validator\\\\Constraints\\\\NotBlank\"}], \"constraints_raw\": \"required\"}'),
-('b8c00685-9e62-4b60-9368-e8bfbc82220a', 'name', 'Tulia\\Cms\\ContactForm\\Domain\\FieldType\\Core\\TextType', 'text', '{\"help\": null, \"label\": \"Name\", \"constraints\": [{\"name\": \"Symfony\\\\Component\\\\Validator\\\\Constraints\\\\NotBlank\"}], \"constraints_raw\": \"required\"}'),
-('b8c00685-9e62-4b60-9368-e8bfbc82220a', 'radio', 'Tulia\\Cms\\ContactForm\\Domain\\FieldType\\Core\\RadioType', 'radio', '{\"data\": null, \"label\": \"Some radio\", \"choices\": {\"one, two, three\": 0}, \"expanded\": true, \"constraints\": [], \"constraints_raw\": \"Required\"}'),
-('b8c00685-9e62-4b60-9368-e8bfbc82220a', 'rodo', 'Tulia\\Cms\\ContactForm\\Domain\\FieldType\\Core\\ConsentType', 'consent', '{\"label\": \"I agree with Rodo...\", \"constraints\": [{\"name\": \"Symfony\\\\Component\\\\Validator\\\\Constraints\\\\NotBlank\"}], \"constraints_raw\": \"required\"}'),
-('b8c00685-9e62-4b60-9368-e8bfbc82220a', 'submit', 'Tulia\\Cms\\ContactForm\\Domain\\FieldType\\Core\\SubmitType', 'submit', '{\"label\": \"Submit\"}');
-EOF);
-        $this->addSql(<<<EOF
-CREATE TABLE `#__form_field_lang` (
-  `form_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `locale` varchar(11) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `options` json NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-
-INSERT INTO `#__form_field_lang` (`form_id`, `name`, `locale`, `options`) VALUES
-('b8c00685-9e62-4b60-9368-e8bfbc82220a', 'message', 'pl_PL', '{\"help\": null, \"label\": \"Treść wiadomości\", \"constraints\": \"required\", \"constraints_raw\": [{\"name\": \"Symfony\\\\Component\\\\Validator\\\\Constraints\\\\NotBlank\"}]}'),
-('b8c00685-9e62-4b60-9368-e8bfbc82220a', 'name', 'pl_PL', '{\"help\": null, \"label\": \"Imię\", \"constraints\": \"required\", \"constraints_raw\": [{\"name\": \"Symfony\\\\Component\\\\Validator\\\\Constraints\\\\NotBlank\"}]}');
-EOF);
-        $this->addSql(<<<EOF
-CREATE TABLE `#__form_lang` (
-  `form_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `locale` varchar(11) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'en_US',
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `subject` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `message_template` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `fields_view` text CHARACTER SET utf8 COLLATE utf8_unicode_ci,
-  `fields_template` text CHARACTER SET utf8 COLLATE utf8_unicode_ci
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-
-INSERT INTO `#__form_lang` (`form_id`, `locale`, `name`, `subject`, `message_template`, `fields_view`, `fields_template`) VALUES
-('b8c00685-9e62-4b60-9368-e8bfbc82220a', 'pl_PL', 'Formularz kontaktowy', 'Tytuł testowego formularza', '{{ contact_form_fields() }}', '<div class=\"asdasd\">[text name=\"name\" type_alias=\"text\" label=\"Imię\" constraints=\"required\" alias=\"text\"]</div>\n<p>Zostaw nam wiadomość:</p>\n<div><p id=\"asd\">[textarea name=\"message\" type_alias=\"textarea\" label=\"Treść wiadomości\" constraints=\"required\" alias=\"textarea\"]</p>[submit name=\"submit\" type_alias=\"submit\" label=\"Wyślij\" alias=\"submit\"]</div>', '<div class=\"asdasd\">[name]</div>\r\n<p>Zostaw nam wiadomość:</p>\r\n<div><p id=\"asd\">[message]</p>[submit]</div>');
-EOF);
        /* $this->addSql(<<<EOF
 CREATE TABLE `#__model_change_history` (
   `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
@@ -466,18 +406,6 @@ ALTER TABLE `#__filemanager_image_thumbnail`
   ADD PRIMARY KEY (`id`),
   ADD KEY `file_id` (`file_id`,`size`);
 
-ALTER TABLE `#__form`
-  ADD PRIMARY KEY (`id`);
-
-ALTER TABLE `#__form_field`
-  ADD PRIMARY KEY (`form_id`,`name`);
-
-ALTER TABLE `#__form_field_lang`
-  ADD PRIMARY KEY (`form_id`,`name`,`locale`);
-
-ALTER TABLE `#__form_lang`
-  ADD KEY `form_lang_form_id` (`form_id`);
-
 ALTER TABLE `#__model_change_history`
   ADD PRIMARY KEY (`id`);
 
@@ -540,15 +468,6 @@ ALTER TABLE `#__content_type_field_group`
 
 ALTER TABLE `#__customizer_changeset_lang`
   ADD CONSTRAINT `customizer_changeset_lang_ibfk_1` FOREIGN KEY (`customizer_changeset_id`) REFERENCES `#__customizer_changeset` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `#__form_field`
-  ADD CONSTRAINT `fk_form_field_form_id` FOREIGN KEY (`form_id`) REFERENCES `#__form` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `#__form_field_lang`
-  ADD CONSTRAINT `fk_form_field_lang_form_id` FOREIGN KEY (`form_id`) REFERENCES `#__form` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `#__form_lang`
-  ADD CONSTRAINT `form_lang_form_id` FOREIGN KEY (`form_id`) REFERENCES `#__form` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `#__node_term_relationship`
   ADD CONSTRAINT `fk_node_term_relationship_node_id` FOREIGN KEY (`node_id`) REFERENCES `#__node` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,

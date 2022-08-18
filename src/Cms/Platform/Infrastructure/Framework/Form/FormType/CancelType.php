@@ -25,6 +25,7 @@ class CancelType extends AbstractType
             'mapped' => false,
             'route' => null,
             'route_params' => [],
+            'translation_domain' => 'messages',
         ]);
 
         $resolver->addAllowedTypes('route', ['null', 'string']);

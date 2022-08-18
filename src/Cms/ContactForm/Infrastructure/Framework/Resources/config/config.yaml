@@ -3,6 +3,16 @@ framework:
         paths:
             - '%cms.core_dir%/Cms/ContactForm/Infrastructure/Framework/Resources/translations'
 
+doctrine:
+    orm:
+        mappings:
+            Tulia\Cms\ContactForm\Domain\WriteModel\NewModel:
+                type: xml
+                dir: '%cms.core_dir%/Cms/ContactForm/Infrastructure/Framework/Resources/config/orm/mapping'
+                is_bundle: false
+                prefix: Tulia\Cms\ContactForm\Domain\WriteModel\NewModel
+                alias: CmsForm
+
 cms:
     templating:
         paths:

@@ -36,7 +36,6 @@ class FormExtension extends AbstractExtension
     {
         return [
             new TwigFunction('contact_form', function (Environment $env, $context, string $formId) {
-                return 'Verify ContactForm module...';
                 $model = $this->finder->findOne(['id' => $formId, 'fetch_fields' => true], ContactFormFinderScopeEnum::SINGLE);
 
                 if ($model === null) {
@@ -57,7 +56,6 @@ class FormExtension extends AbstractExtension
                 'needs_context' => true,
             ]),
             new TwigFunction('get_contact_form', function ($context, string $formId) {
-                return 'Verify ContactForm module...';
                 $model = $this->finderFactory->find($formId, ContactFormFinderScopeEnum::SINGLE);
 
                 if ($model === null) {
@@ -73,7 +71,6 @@ class FormExtension extends AbstractExtension
              * Return string of generated form fields with labels and submitted values.
              */
             new TwigFunction('contact_form_fields', function ($context) {
-                return 'Verify ContactForm module...';
                 return $context['__contact_form_fields'] ?? '';
             }, [
                 'is_safe' => [ 'html' ],
@@ -83,7 +80,6 @@ class FormExtension extends AbstractExtension
              * Return only one submitted value, by given name.
              */
             new TwigFunction('contact_form_field', function ($context, string $field) {
-                return 'Verify ContactForm module...';
                 return $context['__contact_form_data'][$field] ?? '';
             }, [
                 'is_safe' => [ 'html' ],

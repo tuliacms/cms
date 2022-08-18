@@ -9,8 +9,6 @@ use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
-use Tulia\Cms\ContactForm\UserInterface\Web\Backend\Form\ModelTransformer\FormIdTransformer;
-use Tulia\Cms\ContactForm\UserInterface\Web\Backend\Form\ModelTransformer\ReceiversTransformer;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 
 /**
@@ -80,9 +78,6 @@ class Form extends AbstractType
             ])
             ->add('save', FormType\SubmitType::class)
         ;
-
-        $builder->get('receivers')->addModelTransformer(new ReceiversTransformer());
-        $builder->get('id')->addModelTransformer(new FormIdTransformer());
     }
 
     /**

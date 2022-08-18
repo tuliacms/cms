@@ -8,6 +8,8 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Tulia\Cms\ContactForm\Application\UseCase\CreateForm;
+use Tulia\Cms\ContactForm\Application\UseCase\CreateFormRequest;
 use Tulia\Cms\ContactForm\Domain\Exception\FormNotFoundException;
 use Tulia\Cms\ContactForm\Domain\FieldsParser\Exception\InvalidFieldNameException;
 use Tulia\Cms\ContactForm\Domain\FieldsParser\Exception\MultipleFieldsInTemplateException;
@@ -53,18 +55,16 @@ class Form extends AbstractController
     /**
      * @CsrfToken(id="form")
      */
-    public function create(Request $request, DomainModelTransformer $transformer, WebsiteInterface $website)
+    public function create(Request $request, CreateForm $createForm, WebsiteInterface $website)
     {
-        $model = $this->repository->createNew($website->getLocale()->getCode());
-
-        $form = $this->createForm(FormType::class, $transformer->transform($model));
+        $form = $this->createForm(FormType::class, $this->getDefaultFormData());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                $transformer->reverseTransform($form->getData(), $model);
+                ($createForm)(new CreateFormRequest(
 
-                $this->repository->insert($model);
+                ));
 
                 $this->setFlash('success', $this->trans('formSaved', [], 'contact-form'));
                 return $this->redirectToRoute('backend.contact_form.edit', [ 'id' => $model->getId() ]);
@@ -75,7 +75,6 @@ class Form extends AbstractController
         }
 
         return $this->view('@backend/forms/create.tpl', [
-            'model' => $model,
             'form' => $form->createView(),
             'fieldTypes' => $this->typesRegistry->all(),
             'fields' => $this->collectFieldsFromRequest($request, $form),
@@ -198,7 +197,13 @@ class Form extends AbstractController
 
         $fields = [];
 
-        foreach ($request->request->get('form')['fields'] ?? [] as $key => $options) {
+        if ($request->isMethod('POST')) {
+            $sourceFields = $request->request->get('form');
+        } else {
+            $sourceFields = $form->getData();
+        }
+
+        foreach ($sourceFields['fields'] ?? [] as $key => $options) {
             $alias = $options['alias'];
             unset($options['alias']);
 
@@ -255,5 +260,40 @@ class Form extends AbstractController
         }
 
         return $fields;
+    }
+
+    private function getDefaultFormData(): array
+    {
+        return [
+            'message_template' => '{{ contact_form_fields() }}',
+            'fields_template' => '<div class="mb-3">
+    [name]
+</div>
+<div class="mb-3">
+    [message]
+</div>
+[submit]',
+            'fields' => [
+                [
+                    'alias' => 'text',
+                    'name' => 'name',
+                    'label' => 'Name',
+                    'help' => '',
+                    'constraints' => 'required',
+                ],
+                [
+                    'alias' => 'textarea',
+                    'name' => 'message',
+                    'label' => 'Message',
+                    'help' => '',
+                    'constraints' => 'required',
+                ],
+                [
+                    'alias' => 'submit',
+                    'name' => 'submit',
+                    'label' => 'Submit',
+                ],
+            ],
+        ];
     }
 }

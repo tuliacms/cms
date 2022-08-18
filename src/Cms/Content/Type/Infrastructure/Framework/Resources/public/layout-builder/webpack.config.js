@@ -5,7 +5,6 @@ const { VueLoaderPlugin } = require('vue-loader');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const FileManagerPlugin = require('filemanager-webpack-plugin');
 const path = require('path');
-const fs = require('fs');
 
 module.exports = {
   entry: './src/js/main.js',

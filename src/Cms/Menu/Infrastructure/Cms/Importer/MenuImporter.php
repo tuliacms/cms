@@ -10,20 +10,24 @@ use Tulia\Cms\Menu\Application\UseCase\CreateMenuItemRequest;
 use Tulia\Cms\Menu\Application\UseCase\CreateMenuRequest;
 use Tulia\Cms\Shared\Application\UseCase\IdResult;
 use Tulia\Component\Importer\ObjectImporter\ObjectImporterInterface;
+use Tulia\Component\Importer\ObjectImporter\Traits\WebsiteAwareTrait;
+use Tulia\Component\Importer\ObjectImporter\WebsiteAwareObjectImporterInterface;
 use Tulia\Component\Importer\Structure\ObjectData;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class MenuImporter implements ObjectImporterInterface
+class MenuImporter implements ObjectImporterInterface, WebsiteAwareObjectImporterInterface
 {
+    use WebsiteAwareTrait;
+
     public function __construct(
         private readonly CreateMenu $createMenu,
         private readonly CreateMenuItem $createMenuItem,
     ) {
     }
 
-    public function import(ObjectData $objectData): ?array
+    public function import(ObjectData $objectData): ?string
     {
         /** @var IdResult $id */
         $id = ($this->createMenu)(new CreateMenuRequest(
@@ -43,11 +47,11 @@ class MenuImporter implements ObjectImporterInterface
                 $id->id,
                 $details,
                 [],
-                'en_US',
-                ['en_US', 'pl_PL']
+                $this->getWebsite()->getLocale()->getCode(),
+                $this->getWebsite()->getLocaleCodes()
             ));
         }
 
-        return null;
+        return $id->id;
     }
 }

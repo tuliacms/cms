@@ -8,17 +8,15 @@ use Tulia\Cms\ContactForm\Domain\Event;
 use Tulia\Cms\ContactForm\Domain\FieldsParser\Exception\InvalidFieldNameException;
 use Tulia\Cms\ContactForm\Domain\FieldsParser\Exception\MultipleFieldsInTemplateException;
 use Tulia\Cms\ContactForm\Domain\FieldsParser\FieldsParserInterface;
-use Tulia\Cms\ContactForm\Domain\WriteModel\Model\ValueObject\FormId;
 use Tulia\Cms\Shared\Domain\WriteModel\EntitiesChangelog;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
 
 /**
  * @author Adam Banaszkiewicz
+ * @final
  */
-final class Form extends AbstractAggregateRoot
+class Form extends AbstractAggregateRoot
 {
-    private FormId $id;
-    private string $locale;
     private array $receivers = [];
     private string $senderName = '';
     private string $senderEmail = '';
@@ -32,11 +30,10 @@ final class Form extends AbstractAggregateRoot
     private bool $translated = true;
     private EntitiesChangelog $fieldsChangeLog;
 
-    private function __construct(string $id, string $locale)
-    {
-        $this->id = new FormId($id);
-        $this->locale = $locale;
-
+    private function __construct(
+        private string $id,
+        private string $locale
+    ) {
         $this->fieldsChangeLog = new EntitiesChangelog();
     }
 
