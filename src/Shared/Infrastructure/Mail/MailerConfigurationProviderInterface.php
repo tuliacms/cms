@@ -9,11 +9,11 @@ namespace Tulia\Cms\Shared\Infrastructure\Mail;
  */
 interface MailerConfigurationProviderInterface
 {
-    public function getFromEmail(): string;
-    public function getFromName(): string;
-    public function getHost(): string;
-    public function getPort(): string;
-    public function getEncryption(): string;
-    public function getUsername(): string;
-    public function getPassword(): string;
+    public function getFromEmail(): ?string;
+    public function getFromName(): ?string;
+    public function getHost(): ?string;
+    public function getPort(): ?string;
+    public function getEncryption(): ?string;
+    public function getUsername(): ?string;
+    public function getPassword(): ?string;
 }

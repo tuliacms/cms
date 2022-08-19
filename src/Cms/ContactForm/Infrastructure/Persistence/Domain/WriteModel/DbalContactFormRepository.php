@@ -7,7 +7,7 @@ namespace Tulia\Cms\ContactForm\Infrastructure\Persistence\Domain\WriteModel;
 use Tulia\Cms\ContactForm\Domain\Event\FormDeleted;
 use Tulia\Cms\ContactForm\Domain\Exception\FormNotFoundException;
 use Tulia\Cms\ContactForm\Domain\WriteModel\ContactFormWriteStorageInterface;
-use Tulia\Cms\ContactForm\Domain\WriteModel\FormRepositoryInterface;
+use Tulia\Cms\ContactForm\Domain\WriteModel\ContactFormRepositoryInterface;
 use Tulia\Cms\ContactForm\Domain\WriteModel\Model\Field;
 use Tulia\Cms\ContactForm\Domain\WriteModel\Model\Form;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
@@ -16,7 +16,7 @@ use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-class DbalFormRepository implements FormRepositoryInterface
+class DbalContactFormRepository /*implements ContactFormRepositoryInterface*/
 {
     public function __construct(
         private UuidGeneratorInterface $uuidGenerator,

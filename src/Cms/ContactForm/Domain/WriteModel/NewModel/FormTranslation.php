@@ -6,7 +6,6 @@ namespace Tulia\Cms\ContactForm\Domain\WriteModel\NewModel;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Tulia\Cms\ContactForm\Domain\WriteModel\Model\Form;
 
 /**
  * @author Adam Banaszkiewicz
@@ -15,17 +14,34 @@ use Tulia\Cms\ContactForm\Domain\WriteModel\Model\Form;
 class FormTranslation
 {
     private string $id;
-    private string $subject;
-    private string $messageTemplate;
-    private string $fieldsView;
-    private string $fieldsTemplate;
-    /** @var ArrayCollection<int, Field> */
-    private Collection $fields;
+    public string $subject;
+    public string $messageTemplate;
+    public string $fieldsView;
+    public string $fieldsTemplate;
+    /** @var ArrayCollection<int, Field> $fields */
+    public Collection $fields;
+    public bool $translated = false;
 
     public function __construct(
         private Form $form,
-        private string $locale
+        public string $locale
     ) {
         $this->fields = new ArrayCollection();
+    }
+
+    public function fieldsToArray(): array
+    {
+        $result = [];
+
+        /** @var Field $field */
+        foreach ($this->fields->toArray() as $field) {
+            $result[] = [
+                'name' => $field->name,
+                'type' => $field->type,
+                'locale' => $field->locale,
+            ] + $field->options;
+        }
+
+        return $result;
     }
 }

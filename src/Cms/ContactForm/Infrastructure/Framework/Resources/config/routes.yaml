@@ -25,6 +25,10 @@ backend.contact_form.delete:
     controller: Tulia\Cms\ContactForm\UserInterface\Web\Backend\Controller\Form::delete
     methods: POST
 
+backend.contact_form.list_forms:
+    path: /administrator/contact-form/list-forms
+    controller: Tulia\Cms\ContactForm\UserInterface\Web\Backend\Controller\Form::listForms
+
 form.submit:
     path: /form/submit/{id}
     controller: Tulia\Cms\ContactForm\UserInterface\Web\Frontend\Controller\Form::submit

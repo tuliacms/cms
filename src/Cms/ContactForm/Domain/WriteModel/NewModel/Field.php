@@ -14,9 +14,30 @@ class Field
 
     public function __construct(
         private FormTranslation $translation,
-        private string $name,
-        private string $type,
-        private string $typeAlias
+        public string $name,
+        public string $type,
+        public string $locale,
+        public array $options,
     ) {
+    }
+
+    /**
+     * @return Field[]
+     */
+    public static function createCollection(FormTranslation $translation, array $source, string $locale): array
+    {
+        $fields = [];
+
+        foreach ($source as $field) {
+            $fields[] = new self(
+                $translation,
+                $field['name'],
+                $field['type_alias'],
+                $locale,
+                $field['options']
+            );
+        }
+
+        return $fields;
     }
 }

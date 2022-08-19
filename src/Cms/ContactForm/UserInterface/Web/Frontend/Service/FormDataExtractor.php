@@ -31,7 +31,7 @@ class FormDataExtractor
                     continue;
                 }
 
-                $data[$name] = $this->fieldsTypes->get($field->getTypeAlias())->prepareValueFromRequest(
+                $data[$name] = $this->fieldsTypes->get($field->getType())->prepareValueFromRequest(
                     $value,
                     $form->get($name)->getConfig()->getOptions()
                 );

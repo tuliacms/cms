@@ -13,7 +13,7 @@
         <field name="name"/>
         <field name="htmlClass" nullable="true"/>
         <field name="htmlId" nullable="true"/>
-        <field name="styles" type="array"/>
+        <field name="styles" type="json"/>
 
         <one-to-many field="translations" orphan-removal="true" target-entity="Tulia\Cms\Widget\Domain\WriteModel\Model\WidgetTranslation" mapped-by="widget">
             <cascade>

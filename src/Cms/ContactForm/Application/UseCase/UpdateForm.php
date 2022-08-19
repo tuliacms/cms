@@ -8,7 +8,6 @@ use Tulia\Cms\ContactForm\Domain\FieldsParser\FieldsParserInterface;
 use Tulia\Cms\ContactForm\Domain\WriteModel\ContactFormRepositoryInterface;
 use Tulia\Cms\ContactForm\Domain\WriteModel\NewModel\Form;
 use Tulia\Cms\Shared\Application\UseCase\AbstractTransactionalUseCase;
-use Tulia\Cms\Shared\Application\UseCase\IdResult;
 use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
 use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
@@ -16,7 +15,7 @@ use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-final class CreateForm extends AbstractTransactionalUseCase
+final class UpdateForm extends AbstractTransactionalUseCase
 {
     public function __construct(
         private readonly ContactFormRepositoryInterface $repository,
@@ -26,31 +25,29 @@ final class CreateForm extends AbstractTransactionalUseCase
     }
 
     /**
-     * @param RequestInterface&CreateFormRequest $request
+     * @param RequestInterface&UpdateFormRequest $request
      */
     protected function execute(RequestInterface $request): ?ResultInterface
     {
-        $form = Form::create(
-            $this->repository->generateNextId(),
-            $request->name,
-            $request->subject,
-            $request->senderEmail,
-            $request->senderName,
-            $request->receivers,
-            $request->replyTo,
+        $form = $this->repository->get($request->id);
+        $form->name($request->name);
+        $form->subject($request->subject, $request->locale, $request->defaultLocale);
+        $form->sender($request->senderEmail, $request->senderName);
+        $form->replyTo($request->replyTo);
+        $form->receivers($request->receivers);
+        $form->fields(
             $this->fieldsParser,
             $this->collectFields($request->fields),
             $request->fieldsTemplate,
             $request->messageTemplate,
             $request->locale,
-            $request->defaultLocale,
-            $request->localeCodes,
+            $request->defaultLocale
         );
 
         $this->repository->save($form);
         $this->eventBus->dispatchCollection($form->collectDomainEvents());
 
-        return new IdResult($form->getId());
+        return null;
     }
 
     private function collectFields(array $source): array

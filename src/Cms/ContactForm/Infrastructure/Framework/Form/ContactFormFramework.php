@@ -9,24 +9,24 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Tulia\Cms\ContactForm\Domain\FieldType\FieldsTypeRegistryInterface;
 use Tulia\Cms\ContactForm\Domain\ReadModel\Model\Field;
+use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ConstraintsResolverInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class ContactFormFramework extends AbstractType
 {
-    private FieldsTypeRegistryInterface $typesRegistry;
-
-    public function __construct(FieldsTypeRegistryInterface $typesRegistry)
-    {
-        $this->typesRegistry = $typesRegistry;
+    public function __construct(
+        private readonly FieldsTypeRegistryInterface $typesRegistry,
+        private readonly ConstraintsResolverInterface $constraintsResolver
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var Field $field */
         foreach ($options['fields'] as $field) {
-            $type = $this->typesRegistry->get($field->getTypeAlias());
+            $type = $this->typesRegistry->get($field->getType());
             $options = $this->buildOptions($field->getOptions());
 
             $builder->add(
@@ -53,15 +53,16 @@ class ContactFormFramework extends AbstractType
         if (isset($options['constraints'])) {
             $constraints = [];
 
+            $options['constraints'] = explode(',', $options['constraints']);
+            $options['constraints'] = array_map('trim', $options['constraints']);
+            $options = $this->constraintsResolver->resolve($options);
+
             foreach ($options['constraints'] as $constraint) {
-                $constraint['arguments'] = $constraint['arguments'] ?? [];
-                $constraints[] = new $constraint['name'](...$constraint['arguments']);
+                $constraints[] = new $constraint['classname'](...$constraint['modificators']);
             }
 
             $options['constraints'] = $constraints;
         }
-
-        unset($options['constraints_raw']);
 
         return $options;
     }

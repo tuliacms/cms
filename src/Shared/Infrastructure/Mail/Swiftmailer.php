@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Shared\Infrastructure\Mail;
 
+use Tulia\Cms\Shared\Infrastructure\Mail\Exception\MailerConfigurationEmptyException;
+
 /**
  * @author Adam Banaszkiewicz
  */
@@ -51,6 +53,14 @@ class Swiftmailer implements MailerInterface
 
     private function createTransport(): \Swift_SmtpTransport
     {
+        if (
+            null === $this->config->getHost()
+            || null === $this->config->getPort()
+            || null === $this->config->getEncryption()
+        ) {
+            throw new MailerConfigurationEmptyException('Host, port or encryption configs are empty. Cannot create mailer transport.');
+        }
+
         $transport = new \Swift_SmtpTransport(
             $this->config->getHost(),
             $this->config->getPort(),

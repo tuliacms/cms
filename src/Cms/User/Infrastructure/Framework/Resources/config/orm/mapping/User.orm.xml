@@ -15,7 +15,7 @@
         <field name="accountExpired" type="boolean"/>
         <field name="credentialsExpired" type="boolean"/>
         <field name="accountLocked" type="boolean"/>
-        <field name="roles" type="array"/>
+        <field name="roles" type="json"/>
         <field name="name" nullable="true"/>
         <field name="avatar" nullable="true"/>
 

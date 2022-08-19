@@ -11,17 +11,13 @@ use Tulia\Cms\Options\Domain\WriteModel\OptionsRepositoryInterface;
  */
 class Options
 {
-    private OptionsFinderInterface $finder;
-    private OptionsRepositoryInterface $repository;
     private array $cache = [];
     private array $autoloaded = [];
 
     public function __construct(
-        OptionsFinderInterface $finder,
-        OptionsRepositoryInterface $repository,
+        private OptionsFinderInterface $finder,
+        private OptionsRepositoryInterface $repository,
     ) {
-        $this->finder = $finder;
-        $this->repository = $repository;
     }
 
     public function get(string $name, mixed $default = null, ?string $locale = null): mixed

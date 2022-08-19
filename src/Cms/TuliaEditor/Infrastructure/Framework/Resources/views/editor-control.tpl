@@ -72,7 +72,12 @@
                 endpoint: '{{ path('backend.filemanager.endpoint') }}',
             },
             //start_point: 'editor',
-            locale: '{{ user().locale }}'
+            locale: '{{ user().locale }}',
+            cms_integration: {
+                endpoints: {
+                    form_list: '{{ path('backend.contact_form.list_forms') }}'
+                }
+            }
         });
     });
 </script>

@@ -30,6 +30,7 @@ class SubmitParser extends AbstractFieldParser
             'type' => SubmitType::class,
             'options' => [
                 'label' => $shortcode->getParameter('label'),
+                'htmlclass' => $shortcode->getParameter('htmlclass'),
             ],
         ];
     }
@@ -52,6 +53,10 @@ class SubmitParser extends AbstractFieldParser
                     'type' => 'text',
                     'required' => true,
                     'multilingual' => true,
+                ],
+                'htmlclass' => [
+                    'name' => 'HTML class to modify button view',
+                    'type' => 'text',
                 ],
             ],
         ];

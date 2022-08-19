@@ -32,7 +32,7 @@ class DynamicShortcode implements ShortcodeCompilerInterface
         $fieldData['type_alias'] = $this->fieldParser->getAlias();
 
         if (isset($fieldData['options']['constraints'])) {
-            $fieldData['options']['constraints_raw'] = $shortcode->getParameter('constraints');
+            $fieldData['options']['constraints'] = $shortcode->getParameter('constraints');
         }
 
         $this->fieldsStream->addField($fieldData['name'], $fieldData);

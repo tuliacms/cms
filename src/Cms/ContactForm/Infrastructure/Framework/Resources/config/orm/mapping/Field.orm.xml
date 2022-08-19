@@ -11,8 +11,9 @@
 
         <field name="name"/>
         <field name="type"/>
-        <field name="typeAlias"/>
+        <field name="locale" length="12"/>
+        <field name="options" type="json"/>
 
-        <many-to-one field="translation" target-entity="Tulia\Cms\ContactForm\Domain\WriteModel\NewModel\Field" inversed-by="fields"/>
+        <many-to-one field="translation" target-entity="Tulia\Cms\ContactForm\Domain\WriteModel\NewModel\FormTranslation" inversed-by="fields"/>
     </entity>
 </doctrine-mapping>

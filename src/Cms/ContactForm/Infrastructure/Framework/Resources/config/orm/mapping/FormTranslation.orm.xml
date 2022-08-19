@@ -9,14 +9,14 @@
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
 
-        <field name="locale"/>
+        <field name="locale" length="12"/>
         <field name="subject"/>
-        <field name="messageTemplate" nullable="true"/>
-        <field name="fieldsView" nullable="true"/>
-        <field name="fieldsTemplate" nullable="true"/>
+        <field name="messageTemplate" nullable="true" type="text"/>
+        <field name="fieldsView" nullable="true" type="text"/>
+        <field name="fieldsTemplate" nullable="true" type="text"/>
+        <field name="translated" type="boolean"/>
 
         <many-to-one field="form" target-entity="Tulia\Cms\ContactForm\Domain\WriteModel\NewModel\Form" inversed-by="translations"/>
-
         <one-to-many field="fields" orphan-removal="true" target-entity="Tulia\Cms\ContactForm\Domain\WriteModel\NewModel\Field" mapped-by="translation">
             <cascade>
                 <cascade-persist/>

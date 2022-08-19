@@ -64,7 +64,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-    name: "App",
+    name: 'App',
     data() {
         let availableFields = window.ContactFormBuilder.availableFields;
 
@@ -74,8 +74,26 @@ __webpack_require__.r(__webpack_exports__);
             }
         }
 
+        let fields = window.ContactFormBuilder.fields;
+
+        for (let fieldType in availableFields) {
+            for (let fi in fields) {
+                if (fields[fi].alias === fieldType) {
+                    for (let oi in availableFields[fieldType].options) {
+                        if (!fields[fi]['options'][oi]) {
+                            fields[fi]['options'][oi] = {
+                                name: null,
+                                error: null,
+                                value: null,
+                            };
+                        }
+                    }
+                }
+            }
+        }
+
         return {
-            fields: window.ContactFormBuilder.fields,
+            fields: fields,
             availableFields: availableFields,
             translations: window.ContactFormBuilder.translations,
             fieldsTemplate: window.ContactFormBuilder.fieldsTemplate,
@@ -111,6 +129,18 @@ __webpack_require__.r(__webpack_exports__);
             this.availableFields[alias].options[option].focused = false;
         },
         addFieldToTemplate: function (key) {
+            if (!this.fields[key].options.name.value) {
+                Tulia.Confirmation.warning({
+                    title: 'Empty field name',
+                    text: 'Fill in field name to add to Fields template.',
+                    showCancelButton: false,
+                    confirmButtonText: 'Ok',
+                    customClass: {
+                        confirmButton: 'btn btn-primary',
+                    }
+                });
+            }
+
             let textarea = $('#form_form_template');
             let cursorPos = textarea.prop('selectionStart');
             let v = textarea.val();
@@ -259,7 +289,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         }, [
           (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
             type: "hidden",
-            name: 'form[fields][' + key + '][alias]',
+            name: 'contact_form_form[fields][' + key + '][alias]',
             "onUpdate:modelValue": $event => ((field.alias) = $event),
             autocomplete: "off"
           }, null, 8 /* PROPS */, _hoisted_8), [
@@ -291,7 +321,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                   "data-option-name": name,
                   "data-option-key": key,
                   class: "form-control",
-                  name: 'form[fields][' + key + '][' + name + ']',
+                  name: 'contact_form_form[fields][' + key + '][' + name + ']',
                   "onUpdate:modelValue": $event => (($data.fields[key]['options'][name].value) = $event),
                   onChange: _cache[0] || (_cache[0] = (...args) => ($options.resizeInput && $options.resizeInput(...args))),
                   onInput: _cache[1] || (_cache[1] = (...args) => ($options.resizeInput && $options.resizeInput(...args))),
@@ -390,8 +420,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true),
           (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("textarea", {
             id: "form_form_template",
-            name: "form[fields_template]",
-            class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([{ 'is-invalid': $data.fieldsTemplate.error !== null }, "form-control"]),
+            name: "contact_form_form[fields_template]",
+            class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([{ 'is-invalid': $data.fieldsTemplate.error !== null }, "form-control mb-4"]),
             style: {"height":"150px","font-family":"monospace","font-size":"15px"},
             autocomplete: "off",
             "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => (($data.fieldsTemplate.value) = $event))

@@ -9,7 +9,7 @@
         </id>
 
         <field name="name"/>
-        <field name="receivers" type="array"/>
+        <field name="receivers" type="simple_array"/>
         <field name="replyTo" nullable="true"/>
 
         <embedded name="sender" class="Tulia\Cms\ContactForm\Domain\WriteModel\NewModel\Sender" />

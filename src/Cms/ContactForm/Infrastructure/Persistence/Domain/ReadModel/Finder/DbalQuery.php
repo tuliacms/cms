@@ -7,6 +7,7 @@ namespace Tulia\Cms\ContactForm\Infrastructure\Persistence\Domain\ReadModel\Find
 use Doctrine\DBAL\Connection;
 use Exception;
 use PDO;
+use Symfony\Component\Uid\Uuid;
 use Tulia\Cms\ContactForm\Domain\ReadModel\Model\Field;
 use Tulia\Cms\ContactForm\Domain\ReadModel\Model\Form;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
@@ -139,19 +140,20 @@ class DbalQuery extends AbstractDbalQuery
         } else {
             $this->queryBuilder->select([
                 'tm.*',
+                'BIN_TO_UUID(tm.id) AS id',
+                'tm.name',
                 'tl.locale',
-                'IF(ISNULL(tl.name), 0, 1) AS translated',
-                'COALESCE(tl.name, tm.name) AS name',
-                'COALESCE(tl.subject, tm.subject) AS subject',
-                'COALESCE(tl.message_template, tm.message_template) AS message_template',
-                'COALESCE(tl.fields_view, tm.fields_view) AS fields_view',
-                'COALESCE(tl.fields_template, tm.fields_template) AS fields_template',
+                'tl.translated',
+                'tl.subject',
+                'tl.message_template',
+                'tl.fields_view',
+                'tl.fields_template',
             ]);
         }
 
         $this->queryBuilder
             ->from('#__form', 'tm')
-            ->leftJoin('tm', '#__form_lang', 'tl', 'tm.id = tl.form_id AND tl.locale = :tl_locale')
+            ->leftJoin('tm', '#__form_translation', 'tl', 'tm.id = tl.form_id AND tl.locale = :tl_locale')
             ->setParameter('tl_locale', $criteria['locale'], PDO::PARAM_STR)
         ;
     }
@@ -161,7 +163,7 @@ class DbalQuery extends AbstractDbalQuery
         if ($criteria['id'] !== null) {
             $this->queryBuilder
                 ->andWhere('tm.id = :tm_id')
-                ->setParameter('tm_id', $criteria['id'], PDO::PARAM_STR)
+                ->setParameter('tm_id', Uuid::fromString($criteria['id'])->toBinary(), PDO::PARAM_STR)
                 ->setMaxResults(1);
         }
 
@@ -171,6 +173,8 @@ class DbalQuery extends AbstractDbalQuery
             } else {
                 $ids = $criteria['id__not_in'];
             }
+
+            $ids = array_map(static fn($v) => Uuid::fromString($v)->toBinary(), $ids);
 
             $this->queryBuilder
                 ->andWhere('tm.id NOT IN (:tm_id__not_in)')
@@ -209,18 +213,18 @@ class DbalQuery extends AbstractDbalQuery
 
     protected function fetchFields(array $ids, array $criteria): array
     {
+        $ids = array_map(static fn($v) => Uuid::fromString($v)->toBinary(), $ids);
+
         $fields = $this->queryBuilder->getConnection()->fetchAllAssociative("
             SELECT
                 tm.name,
                 tm.type,
-                tm.type_alias,
-                tm.form_id,
-                COALESCE(tl.locale, :locale) AS locale,
-                COALESCE(tl.options, tm.options) AS options
-            FROM #__form_field AS tm
-            LEFT JOIN #__form_field_lang AS tl
-                ON tl.form_id = :form_id AND tl.name = tm.name AND tl.locale = :locale
-            WHERE tm.form_id = :form_id", [
+                tm.locale,
+                tm.options,
+                BIN_TO_UUID(ft.form_id) AS form_id
+            FROM #__form_field_translation AS tm
+            INNER JOIN #__form_translation AS ft
+                ON ft.form_id IN (:form_id) AND ft.id = tm.translation_id", [
             'form_id' => $ids,
             'locale' => $criteria['locale'],
         ], [

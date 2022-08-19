@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Tulia\Cms\Options\Application\Service\WebsitesOptionsRegistrator;
 use Tulia\Cms\Platform\Domain\Service\DynamicConfigurationInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
 use Tulia\Cms\User\Application\UseCase\CreateUser;
@@ -25,7 +26,8 @@ class Setup extends Command
         private string $rootDir,
         private UuidGeneratorInterface $uuidGenerator,
         private DynamicConfigurationInterface $configuration,
-        private CreateUser $createUser
+        private CreateUser $createUser,
+        private WebsitesOptionsRegistrator $optionsRegistrator,
     ) {
         parent::__construct();
     }
@@ -70,6 +72,7 @@ EOF
 
         $this->updateWebsite($websiteName, $websiteProductionDomain);
         $this->crreateAdminUser($username, $password);
+        $this->optionsRegistrator->registerMissingOptions();
 
         if (!($_ENV['APP_SECRET'] ?? null)) {
             $secret = $this->uuidGenerator->generate();

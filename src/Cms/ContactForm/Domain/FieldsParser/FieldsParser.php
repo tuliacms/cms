@@ -87,7 +87,11 @@ class FieldsParser implements FieldsParserInterface
         }
 
         $fieldsContent .= self::REST_FIELDS_SEPARATOR . $restFields;
-        $fieldsContent = str_replace(array_keys($replacements), array_values($replacements), $fieldsContent);
+        $fieldsContent = str_replace(
+            array_keys($replacements),
+            array_values($replacements),
+            $fieldsContent
+        );
 
         return $fieldsContent;
     }
@@ -97,7 +101,7 @@ class FieldsParser implements FieldsParserInterface
         $shortcode = sprintf('[%s name="%s"', $field['type'], $field['name']);
 
         foreach ($field['options'] as $option => $value) {
-            if ($value === null || $option === 'constraints_raw') {
+            if ($value === null) {
                 continue;
             }
 

@@ -14,27 +14,19 @@ use Tulia\Cms\ContactForm\Infrastructure\FormBuilder\ContactFormBuilderInterface
 use Tulia\Cms\ContactForm\UserInterface\Web\Frontend\Service\FormDataExtractor;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
+use Tulia\Cms\Shared\Infrastructure\Mail\Exception\MailerConfigurationEmptyException;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class Form extends AbstractController
 {
-    private ContactFormBuilderInterface $builder;
-    private ContactFormFinderInterface $finder;
-    private SenderInterface $sender;
-    private FormDataExtractor $dataExtractor;
-
     public function __construct(
-        ContactFormBuilderInterface $builder,
-        ContactFormFinderInterface $finder,
-        SenderInterface $sender,
-        FormDataExtractor $dataExtractor
+        private ContactFormBuilderInterface $builder,
+        private ContactFormFinderInterface $finder,
+        private SenderInterface $sender,
+        private FormDataExtractor $dataExtractor,
     ) {
-        $this->builder = $builder;
-        $this->finder = $finder;
-        $this->sender = $sender;
-        $this->dataExtractor = $dataExtractor;
     }
 
     /**
@@ -42,7 +34,7 @@ class Form extends AbstractController
      */
     public function submit(Request $request, string $id): RedirectResponse
     {
-        if ($this->isCsrfTokenValid('contact_form_' . $id, $request->request->get('contact_form_' . $id)['_token'] ?? '') === false) {
+        if ($this->isCsrfTokenValid('contact_form_' . $id, $request->request->all('contact_form_' . $id)['_token'] ?? '') === false) {
             throw $this->createAccessDeniedException('CSRF token is not valid.');
         }
 
@@ -58,12 +50,19 @@ class Form extends AbstractController
         if ($form->isValid()) {
             $data = $this->dataExtractor->extract($model, $form);
 
-            if ($this->sender->send($model, $data)) {
-                $this->setFlash(
-                    'cms.form.submit_success',
-                    $this->trans('formHasBeenSentThankYou', [], 'contact-form')
-                );
-            } else {
+            try {
+                if ($this->sender->send($model, $data)) {
+                    $this->setFlash(
+                        'cms.form.submit_success',
+                        $this->trans('formHasBeenSentThankYou', [], 'contact-form')
+                    );
+                } else {
+                    $this->setFlash(
+                        'cms.form.submit_failed',
+                        $this->trans('formNotHasBeenSentTryAgain', [], 'contact-form')
+                    );
+                }
+            } catch (MailerConfigurationEmptyException $e) {
                 $this->setFlash(
                     'cms.form.submit_failed',
                     $this->trans('formNotHasBeenSentTryAgain', [], 'contact-form')

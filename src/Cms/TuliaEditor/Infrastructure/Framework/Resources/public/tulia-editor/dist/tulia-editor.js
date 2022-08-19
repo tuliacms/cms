@@ -6200,20 +6200,27 @@ __webpack_require__.r(__webpack_exports__);
 const props = __props
 
 const Select = (__webpack_require__(/*! controls/Select.vue */ "./src/js/Controls/Select.vue")["default"]);
-const { defineProps, defineEmits, computed } = __webpack_require__(/*! vue */ "vue");
+const { defineProps, defineEmits, computed, inject, onMounted, reactive } = __webpack_require__(/*! vue */ "vue");
 
 
-
+const options = inject('options');
 const model = computed({
     get: () => props.modelValue,
     set: (value) => emit('update:modelValue', value)
 });
+const forms = reactive({list: {}});
 
-const forms = {
-    'b8c00685-9e62-4b60-9368-e8bfbc82220a': 'Contact form',
-};
+onMounted(() => {
+    $.ajax({
+        url: options.cms_integration.endpoints.form_list,
+        method: 'GET',
+        success: function(data) {
+            forms.list = data;
+        }
+    });
+});
 
-const __returned__ = { Select, defineProps, defineEmits, computed, emit, props, model, forms }
+const __returned__ = { Select, defineProps, defineEmits, computed, inject, onMounted, reactive, emit, props, options, model, forms }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -10342,13 +10349,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 
 
+const _hoisted_1 = { key: 0 }
+const _hoisted_2 = { key: 1 }
+const _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", { class: "fas fa-spinner fa-spin" }, null, -1 /* HOISTED */)
+const _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Loading forms... ")
+const _hoisted_5 = [
+  _hoisted_3,
+  _hoisted_4
+]
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)($setup["Select"], {
-    choices: $setup.forms,
-    label: $setup.props.label,
-    modelValue: $setup.model,
-    "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => (($setup.model) = $event))
-  }, null, 8 /* PROPS */, ["label", "modelValue"]))
+  return ($setup.forms.list)
+    ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [
+        (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Select"], {
+          choices: $setup.forms.list,
+          label: $setup.props.label,
+          modelValue: $setup.model,
+          "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => (($setup.model) = $event))
+        }, null, 8 /* PROPS */, ["choices", "label", "modelValue"])
+      ]))
+    : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_2, _hoisted_5))
 }
 
 /***/ }),

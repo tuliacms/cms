@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContactForm\UserInterface\Web\Backend\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -14,7 +15,7 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 /**
  * @author Adam Banaszkiewicz
  */
-class Form extends AbstractType
+class ContactFormForm extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -44,7 +45,6 @@ class Form extends AbstractType
             ->add('reply_to', Type\TextType::class, [
                 'constraints' => [
                     new Assert\Email(),
-                    new Assert\NotBlank(),
                 ],
             ])
             ->add('name', Type\TextType::class, [
@@ -78,6 +78,11 @@ class Form extends AbstractType
             ])
             ->add('save', FormType\SubmitType::class)
         ;
+
+        $builder->get('receivers')->addModelTransformer(new CallbackTransformer(
+            static fn($v) => implode(',', $v),
+            static fn($v) => explode(',', $v),
+        ));
     }
 
     /**

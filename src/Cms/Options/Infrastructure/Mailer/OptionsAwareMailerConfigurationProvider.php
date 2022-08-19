@@ -19,43 +19,43 @@ final class OptionsAwareMailerConfigurationProvider implements MailerConfigurati
     ) {
     }
 
-    public function getFromEmail(): string
+    public function getFromEmail(): ?string
     {
         $this->preload();
         return $this->options->get('mail.from_email');
     }
 
-    public function getFromName(): string
+    public function getFromName(): ?string
     {
         $this->preload();
         return $this->options->get('mail.from_name');
     }
 
-    public function getHost(): string
+    public function getHost(): ?string
     {
         $this->preload();
         return $this->options->get('mail.host');
     }
 
-    public function getPort(): string
+    public function getPort(): ?string
     {
         $this->preload();
         return $this->options->get('mail.port');
     }
 
-    public function getEncryption(): string
+    public function getEncryption(): ?string
     {
         $this->preload();
         return $this->options->get('mail.encryption');
     }
 
-    public function getUsername(): string
+    public function getUsername(): ?string
     {
         $this->preload();
         return $this->options->get('mail.username');
     }
 
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         $this->preload();
         return $this->options->get('mail.password');

@@ -9,9 +9,10 @@ use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-final class CreateFormRequest implements RequestInterface
+final class UpdateFormRequest implements RequestInterface
 {
     public function __construct(
+        public readonly string $id,
         public readonly string $name,
         public readonly string $subject,
         public readonly array $receivers,
@@ -23,7 +24,6 @@ final class CreateFormRequest implements RequestInterface
         public readonly ?string $messageTemplate,
         public readonly string $locale,
         public readonly string $defaultLocale,
-        public readonly array $localeCodes,
     ) {
     }
 }

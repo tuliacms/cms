@@ -19,7 +19,7 @@
             >
                 <input
                     type="hidden"
-                    :name="'form[fields][' + key + '][alias]'"
+                    :name="'contact_form_form[fields][' + key + '][alias]'"
                     v-model="field.alias"
                     autocomplete="off"
                 />
@@ -42,7 +42,7 @@
                         :data-option-name="name"
                         :data-option-key="key"
                         class="form-control"
-                        :name="'form[fields][' + key + '][' + name + ']'"
+                        :name="'contact_form_form[fields][' + key + '][' + name + ']'"
                         v-model="fields[key]['options'][name].value"
                         @change="resizeInput"
                         @input="resizeInput"
@@ -108,10 +108,10 @@
             </span>
             <textarea
                 id="form_form_template"
-                name="form[fields_template]"
+                name="contact_form_form[fields_template]"
                 v-bind:class="{ 'is-invalid': fieldsTemplate.error !== null }"
                 style="height: 150px; font-family: monospace; font-size: 15px;"
-                class="form-control"
+                class="form-control mb-4"
                 autocomplete="off"
                 v-model="fieldsTemplate.value"
             ></textarea>
@@ -121,7 +121,7 @@
 
 <script>
 export default {
-    name: "App",
+    name: 'App',
     data() {
         let availableFields = window.ContactFormBuilder.availableFields;
 
@@ -131,8 +131,26 @@ export default {
             }
         }
 
+        let fields = window.ContactFormBuilder.fields;
+
+        for (let fieldType in availableFields) {
+            for (let fi in fields) {
+                if (fields[fi].alias === fieldType) {
+                    for (let oi in availableFields[fieldType].options) {
+                        if (!fields[fi]['options'][oi]) {
+                            fields[fi]['options'][oi] = {
+                                name: null,
+                                error: null,
+                                value: null,
+                            };
+                        }
+                    }
+                }
+            }
+        }
+
         return {
-            fields: window.ContactFormBuilder.fields,
+            fields: fields,
             availableFields: availableFields,
             translations: window.ContactFormBuilder.translations,
             fieldsTemplate: window.ContactFormBuilder.fieldsTemplate,
@@ -168,6 +186,18 @@ export default {
             this.availableFields[alias].options[option].focused = false;
         },
         addFieldToTemplate: function (key) {
+            if (!this.fields[key].options.name.value) {
+                Tulia.Confirmation.warning({
+                    title: 'Empty field name',
+                    text: 'Fill in field name to add to Fields template.',
+                    showCancelButton: false,
+                    confirmButtonText: 'Ok',
+                    customClass: {
+                        confirmButton: 'btn btn-primary',
+                    }
+                });
+            }
+
             let textarea = $('#form_form_template');
             let cursorPos = textarea.prop('selectionStart');
             let v = textarea.val();

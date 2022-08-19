@@ -9,7 +9,7 @@ use Tulia\Cms\Shared\Domain\WriteModel\Event\AbstractDomainEvent;
 /**
  * @author Adam Banaszkiewicz
  */
-final class FormHasBeenCreated extends AbstractDomainEvent
+final class ContactFormCreated extends AbstractDomainEvent
 {
     public function __construct(
         public readonly string $id,

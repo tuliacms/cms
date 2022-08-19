@@ -22,6 +22,17 @@ class SubmitType extends AbstractFieldType
     /**
      * {@inheritdoc}
      */
+    public function buildOptions(array $options): array
+    {
+        $options['attr']['class'] = $options['htmlclass'];
+        unset($options['htmlclass']);
+
+        return $options;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getFormType(): string
     {
         return \Symfony\Component\Form\Extension\Core\Type\SubmitType::class;

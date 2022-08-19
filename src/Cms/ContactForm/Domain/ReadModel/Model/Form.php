@@ -164,6 +164,9 @@ class Form
         $this->fieldsView = $fieldsView;
     }
 
+    /**
+     * @return Field[]
+     */
     public function getFields(): array
     {
         return $this->fields;

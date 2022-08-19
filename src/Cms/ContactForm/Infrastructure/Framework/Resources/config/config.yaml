@@ -14,6 +14,28 @@ doctrine:
                 alias: CmsForm
 
 cms:
+    importer:
+        objects:
+            ContactForm:
+                importer: 'Tulia\Cms\ContactForm\Infrastructure\Cms\Importer\ContactFormImporter'
+                mapping:
+                    name: ~
+                    receivers:
+                        type: array
+                    sender_name:
+                        required: false
+                    sender_email: ~
+                    subject: ~
+                    message_template: ~
+                    fields_template: ~
+                    fields:
+                        collection_of: ContactFormField
+            ContactFormField:
+                mapping:
+                    type: ~
+                    name: ~
+                    options:
+                        type: array
     templating:
         paths:
             - { name: cms/forms, path: '%cms.core_dir%/Cms/ContactForm/Infrastructure/Framework/Resources/views/frontend' }

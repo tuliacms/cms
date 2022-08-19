@@ -20,13 +20,10 @@ use Twig\TwigFunction;
  */
 class FormExtension extends AbstractExtension
 {
-    private ContactFormBuilderInterface $builder;
-    private ContactFormFinderInterface $finder;
-
-    public function __construct(ContactFormBuilderInterface $builder, ContactFormFinderInterface $finder)
-    {
-        $this->builder = $builder;
-        $this->finder = $finder;
+    public function __construct(
+        private readonly ContactFormBuilderInterface $builder,
+        private readonly ContactFormFinderInterface $finder,
+    ) {
     }
 
     /**

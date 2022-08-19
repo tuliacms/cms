@@ -13,8 +13,6 @@ class Field
 
     private string $type;
 
-    private string $typeAlias;
-
     private array $options = [];
 
     public static function buildFromArray(array $data): self
@@ -22,7 +20,6 @@ class Field
         $self = new self();
         $self->name = $data['name'] ?? '';
         $self->type = $data['type'] ?? '';
-        $self->typeAlias = $data['type_alias'] ?? '';
         $self->options = $data['options'] ?? [];
 
         return $self;
@@ -46,16 +43,6 @@ class Field
     public function setType(string $type): void
     {
         $this->type = $type;
-    }
-
-    public function getTypeAlias(): string
-    {
-        return $this->typeAlias;
-    }
-
-    public function setTypeAlias(string $typeAlias): void
-    {
-        $this->typeAlias = $typeAlias;
     }
 
     public function getOptions(): array

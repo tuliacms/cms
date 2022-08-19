@@ -19,7 +19,7 @@ final class StructureSorter
 
         foreach ($objects as $key => $object) {
             $dependencies[$key]['id'] = $key;
-            $dependencies[$key]['deps'] = $this->findDependencies($object, $objects);
+            $dependencies[$key]['deps'] = $this->findDependencies($object);
         }
 
         $dependencies = $this->sortDependencies($dependencies);
@@ -34,10 +34,9 @@ final class StructureSorter
     }
 
     /**
-     * @param ObjectData[] $objects
      * @return ObjectData[]
      */
-    private function findDependencies(ObjectData $object, array $objects): array
+    private function findDependencies(ObjectData $object): array
     {
         $dependencies = [];
 
@@ -45,10 +44,11 @@ final class StructureSorter
             $dependencies[] = $dependency['@id'];
         }
 
-        return $dependencies;
+        return array_unique($dependencies);
     }
 
-    private function sortDependencies(array $items): array {
+    private function sortDependencies(array $items): array
+    {
         $res = [];
         $doneList = [];
 

@@ -24,10 +24,14 @@ final class ConstraintsResolver implements ConstraintsResolverInterface
             $constraints[$constraint] = $this->constraintTypeMappingRegistry->get($constraint);
         }
 
-        $field['constraints'] = array_merge(
-            $constraints,
-            $field['custom_constraints']
-        );
+        if (isset($field['custom_constraints'])) {
+            $field['constraints'] = array_merge(
+                $constraints,
+                $field['custom_constraints']
+            );
+        } else {
+            $field['constraints'] = $constraints;
+        }
 
         // Remove custom constraints as those were merged with named constraints
         unset($field['custom_constraints']);
