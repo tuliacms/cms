@@ -34,7 +34,7 @@ class Settings extends AbstractController
      * @return RedirectResponse|ViewInterface
      * @CsrfToken(id="settings_form")
      */
-    public function show(Request $request, ?string $group = null)
+    public function show(Request $request, WebsiteInterface $website, ?string $group = null)
     {
         if (! $group) {
             return $this->redirectToRoute('backend.settings', ['group' => 'cms']);
@@ -46,7 +46,8 @@ class Settings extends AbstractController
 
         $groupObj = $this->settings->getGroup($group);
         $groupObj->setFormFactory($this->formFactory);
-        $groupObj->setOptions($this->optionsRepository);
+        $groupObj->setOptionsRepository($this->optionsRepository);
+        $groupObj->setWebsite($website);
         $form = $groupObj->buildForm();
         $form->handleRequest($request);
 

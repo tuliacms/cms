@@ -10,7 +10,7 @@
         </id>
 
         <field name="name" />
-        <field name="locale" />
+        <field name="locale" length="12"/>
         <field name="visibility" type="boolean" />
         <field name="translated" type="boolean" />
 

@@ -12,6 +12,14 @@
             <span>{{ collector.id }}</span>
         </div>
         <div class="sf-toolbar-info-piece">
+            <b>Website name</b>
+            <span>{{ collector.websiteName }}</span>
+        </div>
+        <div class="sf-toolbar-info-piece">
+            <b>Active</b>
+            <span>{{ collector.active ? 'Yes' : '<span class="sf-toolbar-status sf-toolbar-status-red">No</span>' }}</span>
+        </div>
+        <div class="sf-toolbar-info-piece">
             <b>Backend prefix</b>
             <span><a href="{{ path('backend.homepage') }}">{{ collector.backendPrefix }}</a></span>
         </div>

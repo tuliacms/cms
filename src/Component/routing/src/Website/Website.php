@@ -15,6 +15,7 @@ use Tulia\Component\Routing\Website\Locale\LocaleInterface;
 class Website implements WebsiteInterface
 {
     private string $id;
+    private string $name;
     private string $backendPrefix;
     /** @var LocaleInterface[] */
     private array $locales = [];
@@ -22,21 +23,26 @@ class Website implements WebsiteInterface
     private LocaleInterface $activeLocale;
     private bool $isBackend;
     private string $basepath;
+    private bool $active;
 
     /** @param LocaleInterface[] $locales */
     public function __construct(
         string $id,
+        string $name,
         string $backendPrefix,
         bool $isBackend,
         string $basepath,
         array $locales,
         string $defaultLocale,
-        string $activeLocale
+        string $activeLocale,
+        bool $active
     ) {
         $this->id = $id;
+        $this->name = $name;
         $this->backendPrefix = $backendPrefix;
         $this->isBackend = $isBackend;
         $this->basepath = $basepath;
+        $this->active = $active;
 
         foreach ($locales as $locale) {
             $this->locales[$locale->getCode()] = $locale;
@@ -60,6 +66,11 @@ class Website implements WebsiteInterface
     public function getId(): string
     {
         return $this->id;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
     }
 
     public function getBackendPrefix(): string
@@ -128,6 +139,11 @@ class Website implements WebsiteInterface
     public function isDefaultLocale(): bool
     {
         return $this->activeLocale->getCode() === $this->defaultLocale->getCode();
+    }
+
+    public function isActive(): bool
+    {
+        return $this->active;
     }
 
     public function getLocaleCodes(): array

@@ -16,7 +16,8 @@ final class CreateNodeRequest implements RequestInterface
         public readonly string $author,
         public readonly array $details,
         public readonly array $attributes,
-        public readonly string $locale
+        public readonly string $locale,
+        public readonly string $websiteId
     ) {
     }
 }

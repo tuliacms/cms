@@ -15,7 +15,7 @@
 
         <field name="indexGroup" />
         <field name="sourceId" />
-        <field name="locale" />
+        <field name="locale" length="12"/>
         <field name="title" length="127" />
         <field name="route" nullable="true" />
         <field name="parameters" column="route_parameters" type="json" />

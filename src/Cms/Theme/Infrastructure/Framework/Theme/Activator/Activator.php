@@ -20,14 +20,18 @@ class Activator implements ActivatorInterface
     ) {
     }
 
-    public function activate(string $name): void
+    public function activate(string $name, string $websiteId): void
     {
         if ($this->storage->has($name) === false) {
             throw new MissingThemeException(sprintf('Theme %s not found in storage.', $name));
         }
 
         $this->configuration->open();
-        $this->configuration->set('cms.theme', $name);
+
+        $themes = $this->configuration->get('cms.theme');
+        $themes[$websiteId] = $name;
+
+        $this->configuration->set('cms.theme', $themes);
         $this->configuration->write();
     }
 }

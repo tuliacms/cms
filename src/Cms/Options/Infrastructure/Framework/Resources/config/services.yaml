@@ -7,7 +7,7 @@ services:
         resource: '../../../../**'
         exclude: '../../../../{Infrastructure/Framework/Resources}'
 
-    Tulia\Cms\Options\Application\Service\RegisteredOptionsRegistry:
+    Tulia\Cms\Options\Infrastructure\Framework\Config\YamlRegisteredOptionsRegistry:
         bind:
             $definitions: '%cms.options.definitions%'
 

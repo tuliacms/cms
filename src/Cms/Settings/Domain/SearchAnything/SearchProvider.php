@@ -49,7 +49,7 @@ class SearchProvider extends AbstractProvider
 
         foreach ($this->settings->all() as $group => $groupObj) {
             $groupObj->setFormFactory($this->formFactory);
-            $groupObj->setOptions($this->options);
+            $groupObj->setOptionsRepository($this->options);
 
             try {
                 $form = $groupObj->buildForm();

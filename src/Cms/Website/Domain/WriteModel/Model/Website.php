@@ -8,9 +8,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
 use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteCreated;
+use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteDeleted;
 use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteUpdated;
 use Tulia\Cms\Website\Domain\WriteModel\Exception;
+use Tulia\Cms\Website\Domain\WriteModel\Exception\CannotDeleteWebsiteException;
 use Tulia\Cms\Website\Domain\WriteModel\Exception\CannotTurnOffWebsiteException;
+use Tulia\Cms\Website\Domain\WriteModel\Rules\CanDeleteWebsite\CanDeleteWebsiteInterface;
+use Tulia\Cms\Website\Domain\WriteModel\Rules\CanDeleteWebsite\CanDeleteWebsiteReasonEnum;
 use Tulia\Cms\Website\Domain\WriteModel\Rules\CanTurnOffWebsite\CanTurnOffWebsiteInterface;
 use Tulia\Cms\Website\Domain\WriteModel\Rules\CanTurnOffWebsite\CanTurnOffWebsiteReasonEnum;
 use Tulia\Component\Routing\Enum\SslModeEnum;
@@ -207,5 +211,14 @@ class Website extends AbstractAggregateRoot
 
         $this->recordThat(new WebsiteUpdated($this->id));
         $this->changedInThisSession = true;
+    }
+
+    public function delete(CanDeleteWebsiteInterface $rules): void
+    {
+        if (CanDeleteWebsiteReasonEnum::OK !== ($reason = $rules->decide($this->id))) {
+            throw CannotDeleteWebsiteException::fromReason($reason, $this->id);
+        }
+
+        $this->recordThat(new WebsiteDeleted($this->id));
     }
 }

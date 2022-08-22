@@ -30,6 +30,7 @@ class LocaleResolver implements EventSubscriberInterface
         $parameters = $request->attributes->all();
         $parameters['_locale'] = $request->server->get('TULIA_WEBSITE_LOCALE');
         $parameters['_content_locale'] = $request->server->get('TULIA_WEBSITE_LOCALE');
+        $parameters['_website_id'] = $request->server->get('TULIA_WEBSITE_ID');
 
         $request->attributes->add($parameters);
 

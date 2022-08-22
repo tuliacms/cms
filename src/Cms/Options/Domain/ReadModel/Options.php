@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Options\Domain\ReadModel;
 
 use Tulia\Cms\Options\Domain\WriteModel\OptionsRepositoryInterface;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -15,65 +16,73 @@ class Options
     private array $autoloaded = [];
 
     public function __construct(
-        private OptionsFinderInterface $finder,
-        private OptionsRepositoryInterface $repository,
+        private readonly OptionsFinderInterface $finder,
+        private readonly OptionsRepositoryInterface $repository,
+        private readonly WebsiteInterface $website,
     ) {
     }
 
-    public function get(string $name, mixed $default = null, ?string $locale = null): mixed
-    {
+    public function get(
+        string $name,
+        mixed $default = null,
+        ?string $websiteId = null,
+        ?string $locale = null,
+    ): mixed {
+        $websiteId = $this->resolveWebsite($websiteId);
         $locale = $this->resolveLocale($locale);
 
-        $this->autoload($locale);
+        $this->autoload($websiteId, $locale);
 
-        if ($this->existsInCache($locale, $name)) {
-            return $this->cache[$locale][$name];
+        if ($this->existsInCache($websiteId, $locale, $name)) {
+            return $this->cache[$websiteId][$locale][$name];
         }
 
-        $value = $this->finder->findByName($name, $locale);
+        $value = $this->finder->findByName($name, $websiteId, $locale);
 
         if (empty($value)) {
             $value = $default;
         }
 
-        return $this->cache[$locale][$name] = $value;
+        return $this->cache[$websiteId][$locale][$name] = $value;
     }
 
-    public function preload(array $names, ?string $locale = null): void
+    public function preload(array $names, ?string $websiteId = null, ?string $locale = null): void
     {
+        $websiteId = $this->resolveWebsite($websiteId);
         $locale = $this->resolveLocale($locale);
 
-        $values = $this->finder->findBulkByName(
-            $names,
-            $locale
-        );
+        $values = $this->finder->findBulkByName($names, $websiteId, $locale);
 
         foreach ($values as $name => $value) {
-            $this->cache[$locale][$name] = $value;
+            $this->cache[$websiteId][$locale][$name] = $value;
         }
     }
 
-    private function resolveLocale(?string $locale = null): string
+    private function autoload(?string $websiteId = null, ?string $locale = null): void
     {
-        if (! $locale) {
-            return 'en_US';//$this->currentWebsite->getLocale()->getCode();
-        }
+        $websiteId = $this->resolveWebsite($websiteId);
+        $locale = $this->resolveLocale($locale);
 
-        return $locale;
-    }
-
-    private function autoload(string $locale): void
-    {
-        if (isset($this->autoloaded[$locale])) {
+        if (isset($this->autoloaded[$websiteId][$locale])) {
             return;
         }
 
-        $this->cache[$locale] = $this->finder->autoload($locale);
-        $this->autoloaded[$locale] = true;
+        $this->cache[$websiteId][$locale] = $this->finder->autoload($websiteId, $locale);
+        $this->autoloaded[$websiteId][$locale] = true;
     }
 
-    private function existsInCache(string $locale, string $name): bool
+    private function existsInCache(string $websiteId, string $locale, string $name): bool
     {
-        return isset($this->cache[$locale]) && \array_key_exists($name, $this->cache[$locale]);
+        return isset($this->cache[$websiteId][$locale]) && \array_key_exists($name, $this->cache[$websiteId][$locale]);
+    }
+
+    private function resolveLocale(?string $locale): string
+    {
+        return $locale ?? $this->website->getLocale()->getCode();
+    }
+
+    private function resolveWebsite(?string $websiteId): string
+    {
+        return $websiteId ?? $this->website->getId();
     }
 }

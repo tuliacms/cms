@@ -38,7 +38,7 @@ class DatabaseStorage implements StorageInterface
                 tl.locale,
                 tl.visibility
             FROM #__widget AS tm
-            LEFT JOIN #__widget_translation AS tl
+            INNER JOIN #__widget_translation AS tl
                 ON tl.widget_id = tm.id AND tl.locale = :locale', [
             'locale' => $locale,
         ]);
@@ -65,7 +65,7 @@ class DatabaseStorage implements StorageInterface
                 tl.locale,
                 tl.visibility
             FROM #__widget AS tm
-            LEFT JOIN #__widget_translation AS tl
+            INNER JOIN #__widget_translation AS tl
                 ON tl.widget_id = tm.id AND tl.locale = :locale
             WHERE tm.id = :id
             LIMIT 1', [
@@ -96,7 +96,7 @@ class DatabaseStorage implements StorageInterface
                 tl.locale,
                 tl.visibility
             FROM #__widget AS tm
-            LEFT JOIN #__widget_translation AS tl
+            INNER JOIN #__widget_translation AS tl
                 ON tl.widget_id = tm.id AND tl.locale = :locale
             WHERE tm.space = :space
         ', [

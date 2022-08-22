@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Website\Infrastructure\Persistence\Domain\WriteModel;
+namespace Tulia\Cms\Website\Infrastructure\Persistence\Doctrine\Dbal;
 
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Uid\Uuid;

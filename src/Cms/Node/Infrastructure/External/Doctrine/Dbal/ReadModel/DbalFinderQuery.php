@@ -156,6 +156,7 @@ class DbalFinderQuery extends AbstractDbalQuery
              * Locale of the node to fetch.
              */
             'locale' => null,
+            'website_id' => null,
             'limit' => null,
             /**
              * Posts with defined purpose or purposes.
@@ -272,13 +273,17 @@ class DbalFinderQuery extends AbstractDbalQuery
         }
 
         if (!$criteria['locale']) {
-            throw new \InvalidArgumentException('Please provide locale in query parameters.');
+            throw new \InvalidArgumentException('Please provide "locale" in query parameters.');
+        }
+        if (!$criteria['website_id']) {
+            throw new \InvalidArgumentException('Please provide "website_id" in query parameters.');
         }
 
         $this->queryBuilder
             ->from('#__node', 'tm')
-            ->leftJoin('tm', '#__node_translation', 'tl', 'tm.id = tl.node_id AND tl.locale = :tl_locale')
+            ->leftJoin('tm', '#__node_translation', 'tl', 'tm.id = tl.node_id AND tm.website_id = :tl_website_id AND tl.locale = :tl_locale')
             ->setParameter('tl_locale', $criteria['locale'], PDO::PARAM_STR)
+            ->setParameter('tl_website_id', Uuid::fromString($criteria['website_id']), PDO::PARAM_STR)
             ->leftJoin('tm', '#__node_has_purpose', 'tnhf', 'tm.id = tnhf.node_id')
             ->addGroupBy('tm.id')
         ;

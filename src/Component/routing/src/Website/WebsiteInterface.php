@@ -12,6 +12,7 @@ use Tulia\Component\Routing\Website\Locale\LocaleInterface;
 interface WebsiteInterface
 {
     public function getId(): string;
+    public function getName(): string;
     public function getBackendPrefix(): string;
     public function getLocale(): LocaleInterface;
     /** @return LocaleInterface[] */
@@ -23,5 +24,6 @@ interface WebsiteInterface
     public function isBackend(): bool;
     public function getBasepath(): string;
     public function isDefaultLocale(): bool;
+    public function isActive(): bool;
     public function getLocaleCodes(): array;
 }

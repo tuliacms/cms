@@ -11,4 +11,8 @@ use Tulia\Cms\Shared\Domain\WriteModel\Exception\AbstractDomainException;
  */
 class OptionNotFoundException extends AbstractDomainException
 {
+    public static function fromName(string $name): self
+    {
+        return new self(sprintf('Option "%s" not found.', $name));
+    }
 }

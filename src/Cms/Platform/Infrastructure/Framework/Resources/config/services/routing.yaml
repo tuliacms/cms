@@ -2,6 +2,8 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+        bind:
+            $environment: '%kernel.environment%'
 
     Tulia\Component\Routing\:
         resource: '../../../../../../../Component/routing/src/*'

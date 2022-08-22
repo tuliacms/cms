@@ -9,11 +9,9 @@ cms:
             - { name: backend/settings, path: '%cms.core_dir%/Cms/Settings/Infrastructure/Framework/Resources/views/backend' }
     options:
         definitions:
-            website_name:
-                multilingual: true
-                autoload: true
             website_favicon:
             administrator_email:
+                value: admin@domain.com
             maintenance_mode:
                 autoload: true
             maintenance_message:
@@ -26,10 +24,15 @@ cms:
             wysiwyg_editor:
                 autoload: true
             mail.transport:
+                value: smtp
             mail.from_email:
+                value: admin@domain.com
             mail.from_name:
+                value: Website administrator
             mail.host:
+                value: tuliacms_tulia_mailhog_1 # Mailhog Docker's container name
             mail.port:
+                value: 1025
             mail.username:
             mail.password:
             mail.encryption:

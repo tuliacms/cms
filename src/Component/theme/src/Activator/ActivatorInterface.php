@@ -12,9 +12,7 @@ use Tulia\Component\Theme\Exception\MissingThemeException;
 interface ActivatorInterface
 {
     /**
-     * @param string $name
-     *
      * @throws MissingThemeException
      */
-    public function activate(string $name): void;
+    public function activate(string $name, string $websiteId): void;
 }

@@ -27,6 +27,6 @@ final class CreateOptionsForNewWebsite implements EventSubscriberInterface
 
     public function handle(WebsiteCreated $event): void
     {
-        $this->websitesOptionsRegistrator->registerMissingOptions();
+        $this->websitesOptionsRegistrator->registerMissingOptions($event->id);
     }
 }

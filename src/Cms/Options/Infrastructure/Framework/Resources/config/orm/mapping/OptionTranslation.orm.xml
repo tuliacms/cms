@@ -1,0 +1,17 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Tulia\Cms\Options\Domain\WriteModel\Model\OptionTranslation" table="#__option_translation">
+        <id name="id" type="uuid">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+
+        <field name="locale" length="12"/>
+        <field name="value" nullable="true"/>
+
+        <many-to-one field="option" target-entity="Tulia\Cms\Options\Domain\WriteModel\Model\Option" inversed-by="translations"/>
+    </entity>
+</doctrine-mapping>

@@ -136,7 +136,8 @@
                 e.preventDefault();
                 let id = $(this).attr('data-id');
                 $('#website-delete-form input[name=id]').val(id);
-                $('#website-delete-modal').modal();
+                const modal = new bootstrap.Modal('#website-delete-modal');
+                modal.show();
             });
 
             $('#website-delete-submit-form').on('click', function () {
@@ -147,6 +148,8 @@
                     }
                 });
             });
+
+            const addressModal = new bootstrap.Modal('#website-locale-addresses-modal');
 
             $('.website-locale-addresses-trigger').on('click', function (e) {
                 e.preventDefault();
@@ -170,7 +173,7 @@
                     ));
                 });
 
-                $('#website-locale-addresses-modal').modal();
+                addressModal.show();
             });
         });
     </script>

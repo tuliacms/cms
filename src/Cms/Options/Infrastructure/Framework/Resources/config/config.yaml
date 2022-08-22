@@ -1,0 +1,9 @@
+doctrine:
+    orm:
+        mappings:
+            Tulia\Cms\Options\Domain\WriteModel\Model:
+                type: xml
+                dir: '%cms.core_dir%/Cms/Options/Infrastructure/Framework/Resources/config/orm/mapping'
+                is_bundle: false
+                prefix: Tulia\Cms\Options\Domain\WriteModel\Model
+                alias: CmsNode

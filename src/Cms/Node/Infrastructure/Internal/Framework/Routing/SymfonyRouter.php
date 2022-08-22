@@ -62,6 +62,7 @@ class SymfonyRouter implements RouterInterface, RequestMatcherInterface
 
         $parameters = $this->contentTypeRouter->match($pathinfo, [
             '_locale' => $request->attributes->get('_content_locale'),
+            '_website_id' => $request->attributes->get('_website_id'),
         ]);
 
         if ($parameters === []) {

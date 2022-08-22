@@ -28,7 +28,8 @@ final class LocalWebsiteFixture extends Fixture implements FixtureGroupInterface
             $this->repository->getNextId(),
             'Default website',
             'en_US',
-            'localhost'
+            'localhost',
+            domainDevelopment: 'tulia.loc',
         );
 
         $manager->persist($website);

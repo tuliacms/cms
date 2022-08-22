@@ -7,6 +7,7 @@ namespace Tulia\Cms\Theme\Application\Service;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Theme\Application\Exception\ThemeNotFoundException;
 use Tulia\Cms\Theme\Domain\Event\ThemeActivated;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 use Tulia\Component\Theme\Activator\ActivatorInterface;
 use Tulia\Component\Theme\Exception\MissingThemeException;
 use Tulia\Component\Theme\ManagerInterface;
@@ -24,10 +25,9 @@ class ThemeActivator
     }
 
     /**
-     * @param string $name
      * @throws ThemeNotFoundException|MissingThemeException
      */
-    public function activateTheme(string $name): void
+    public function activateTheme(string $name, string $websiteId): void
     {
         $theme = $this->manager->getStorage()->get($name);
 
@@ -35,7 +35,7 @@ class ThemeActivator
             throw ThemeNotFoundException::withName($name);
         }
 
-        $this->activator->activate($theme->getName());
+        $this->activator->activate($theme->getName(), $websiteId);
 
         $this->eventBus->dispatch(new ThemeActivated($name));
     }

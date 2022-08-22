@@ -11,7 +11,7 @@ use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
  */
 interface NodeRepositoryInterface
 {
-    public function create(string $nodeType, string $author): Node;
+    public function create(string $nodeType, string $author, string $websiteId): Node;
 
     public function referenceTo(string $id): Node;
 

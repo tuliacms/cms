@@ -15,7 +15,7 @@ final class OptionsAwareMailerConfigurationProvider implements MailerConfigurati
     private bool $preloaded = false;
 
     public function __construct(
-        private Options $options
+        private readonly Options $options
     ) {
     }
 

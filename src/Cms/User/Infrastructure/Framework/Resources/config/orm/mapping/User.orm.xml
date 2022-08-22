@@ -10,7 +10,7 @@
 
         <field name="password"/>
         <field name="email"/>
-        <field name="locale"/>
+        <field name="locale" length="12"/>
         <field name="enabled" type="boolean"/>
         <field name="accountExpired" type="boolean"/>
         <field name="credentialsExpired" type="boolean"/>

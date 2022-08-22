@@ -25,6 +25,8 @@ final class WebsiteCollector extends AbstractDataCollector
 
         $this->data = [
             'id' => $website->getId(),
+            'name' => $website->getName(),
+            'active' => $website->isActive(),
             'backendPrefix' => $website->getBackendPrefix(),
             'isBackend' => $website->isBackend(),
             'basepath' => $website->getBasepath(),
@@ -58,6 +60,16 @@ final class WebsiteCollector extends AbstractDataCollector
     public function getId(): string
     {
         return $this->data['id'];
+    }
+
+    public function isActive(): bool
+    {
+        return $this->data['active'];
+    }
+
+    public function getWebsiteName(): string
+    {
+        return $this->data['name'];
     }
 
     public function getBackendPrefix(): string

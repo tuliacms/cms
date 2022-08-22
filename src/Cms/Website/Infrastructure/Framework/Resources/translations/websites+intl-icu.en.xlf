@@ -199,8 +199,12 @@
                 <target>This website is inactive, only admins have access to frontend.</target>
             </trans-unit>
             <trans-unit id="tuliacms.websites.50">
-                <source>cannotTurnOffWebsite</source>
+                <source>cannotTurnOffWebsiteBecause</source>
                 <target>Cannot turn off website, because {reason}.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.websites.51">
+                <source>cannotDeleteWebsiteBecause</source>
+                <target>Cannot delete this website, because {reason}.</target>
             </trans-unit>
         </body>
     </file>

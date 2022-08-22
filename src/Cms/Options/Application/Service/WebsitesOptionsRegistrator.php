@@ -4,48 +4,39 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Options\Application\Service;
 
-use Tulia\Cms\Options\Domain\WriteModel\Model\Option;
 use Tulia\Cms\Options\Domain\WriteModel\OptionsRepositoryInterface;
+use Tulia\Cms\Options\Domain\WriteModel\Service\MissingOptionsService;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class WebsitesOptionsRegistrator
 {
-    private RegisteredOptionsRegistry $collector;
-    private OptionsRepositoryInterface $repository;
-
-    public function __construct(RegisteredOptionsRegistry $collector, OptionsRepositoryInterface $repository)
-    {
-        $this->collector = $collector;
-        $this->repository = $repository;
+    public function __construct(
+        private readonly OptionsRepositoryInterface $repository,
+        private readonly MissingOptionsService $missingOptionsService,
+    ) {
     }
 
     /**
      * Creates all registered options for given website ID.
      * Website must exists to create options for this website.
      */
-    public function registerMissingOptions(): void
+    public function registerMissingOptions(string $websiteId): void
     {
-        $source = $this->collector->collectRegisteredOptions();
-        $options = [];
+        $options = $this->missingOptionsService->collectMissingOptionsForWebsite($websiteId);
 
-        foreach ($source as $name => $option) {
-            $options[] = new Option(
-                $name,
-                $option['value'],
-                null,
-                $option['multilingual'],
-                $option['autoload']
-            );
+        foreach ($options as $option) {
+            $this->repository->save($option);
         }
-
-        $this->repository->saveBulk($options);
     }
 
-    public function removeOptions(): void
+    public function removeOptions(string $websiteId): void
     {
-        $options = $this->repository->findAllForWebsite();
-        $this->repository->deleteBulk($options);
+        $options = $this->repository->getAllForWebsite($websiteId);
+
+        foreach ($options as $option) {
+            $this->repository->delete($option);
+        }
     }
 }

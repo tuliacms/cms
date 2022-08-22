@@ -8,6 +8,7 @@
             <generator strategy="NONE"/>
         </id>
 
+        <field name="websiteId" type="uuid"/>
         <field name="publishedAt" type="datetime_immutable"/>
         <field name="type"/>
         <field name="status"/>

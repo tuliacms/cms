@@ -1,0 +1,25 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Tulia\Cms\Options\Domain\WriteModel\Model\Option" table="#__option">
+        <id name="id" type="uuid">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+
+        <field name="websiteId" type="uuid"/>
+        <field name="name"/>
+        <field name="value" nullable="true"/>
+        <field name="multilingual" type="boolean"/>
+        <field name="autoload" type="boolean"/>
+
+        <one-to-many field="translations" orphan-removal="true" target-entity="Tulia\Cms\Options\Domain\WriteModel\Model\OptionTranslation" mapped-by="option">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
+    </entity>
+</doctrine-mapping>

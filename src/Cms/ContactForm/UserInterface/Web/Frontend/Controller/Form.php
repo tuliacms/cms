@@ -63,10 +63,13 @@ class Form extends AbstractController
                     );
                 }
             } catch (MailerConfigurationEmptyException $e) {
+                dump($e);exit;
                 $this->setFlash(
                     'cms.form.submit_failed',
                     $this->trans('formNotHasBeenSentTryAgain', [], 'contact-form')
                 );
+            } catch (\Throwable $e) {
+                dump($e);exit;
             }
         } else {
             $this->setFlash('cms.form.last_errors', json_encode($this->getErrorMessages($form)));

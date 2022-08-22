@@ -48,7 +48,8 @@ class NodeEntryImporter implements ObjectImporterInterface, WebsiteAwareObjectIm
             $this->authenticatedUserProvider->getUser()->getId(),
             $details,
             $this->transformObjectDataToAttributes($objectData),
-            $this->getWebsite()->getLocale()->getCode()
+            $this->getWebsite()->getLocale()->getCode(),
+            $this->getWebsite()->getId(),
         ));
 
         return $result->id;

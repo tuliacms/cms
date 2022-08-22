@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Settings\Domain\Group;
 
 use Symfony\Component\Form\FormInterface;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz

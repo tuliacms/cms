@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Website\Infrastructure\Persistence\Domain\WriteModel;
+namespace Tulia\Cms\Website\Infrastructure\Persistence\Doctrine\Orm;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;

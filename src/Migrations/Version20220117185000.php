@@ -217,22 +217,6 @@ INSERT INTO `#__node_term_relationship` (`node_id`, `term_id`, `type`, `taxonomy
 ('6e5445fa-4a40-46fa-89f8-72c572af9bb0', '2e2f328e-72ff-48d2-b423-4936890f7d33', 'MAIN', 'category');
 EOF);
         $this->addSql(<<<EOF
-CREATE TABLE `#__option` (
-  `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `name` varchar(127) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `value` longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
-  `multilingual` tinyint(1) NOT NULL DEFAULT '0',
-  `autoload` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-EOF);
-        $this->addSql(<<<EOF
-CREATE TABLE `#__option_lang` (
-  `option_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `locale` varchar(11) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `value` longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-EOF);
-        $this->addSql(<<<EOF
 CREATE TABLE `#__parameter` (
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `value` text CHARACTER SET utf8 COLLATE utf8_unicode_ci,
@@ -325,37 +309,6 @@ INSERT INTO `#__term_path` (`term_id`, `locale`, `path`) VALUES
 ('a94d7e88-001a-45c1-99eb-c9dff24620b2', 'en_US', '/level-1/level-2/level-3/level-4/level-5'),
 ('b89c2db5-2675-4268-8fef-aa30099ab871', 'en_US', '/kategoria/kolejna-kategoria');
 EOF);
-        /*$this->addSql(<<<EOF
-CREATE TABLE `#__website` (
-  `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `backend_prefix` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '/administrator',
-  `active` tinyint UNSIGNED NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-
-INSERT INTO `#__website` (`id`, `name`, `backend_prefix`, `active`) VALUES
-('dd8a1b64-fefb-4089-bea4-13260a4d127e', 'Inactive website', '/administrator', 0),
-('f19b16b2-f52b-442a-aee2-8e0f4fed31b7', 'Default website', '/administrator', 1),
-('f5a4d537-17c5-4663-b521-c73a11554d8f', 'Tulia CMS', '/administrator', 1);
-EOF);*/
-        /*$this->addSql(<<<EOF
-CREATE TABLE `#__website_locale` (
-  `website_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `code` varchar(11) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `domain` varchar(127) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `domain_development` varchar(127) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `path_prefix` varchar(127) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `ssl_mode` enum('FORCE_SSL','FORCE_NON_SSL','ALLOWED_BOTH') CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `locale_prefix` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `is_default` tinyint(1) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-
-INSERT INTO `#__website_locale` (`website_id`, `code`, `domain`, `domain_development`, `path_prefix`, `ssl_mode`, `locale_prefix`, `is_default`) VALUES
-('dd8a1b64-fefb-4089-bea4-13260a4d127e', 'pl_PL', 'tulia.loc', 'tulia.loc', '/inactive', 'ALLOWED_BOTH', NULL, 1),
-('f19b16b2-f52b-442a-aee2-8e0f4fed31b7', 'en_US', 'tulia.loc', 'tulia.loc', NULL, 'ALLOWED_BOTH', NULL, 1),
-('f19b16b2-f52b-442a-aee2-8e0f4fed31b7', 'pl_PL', 'tulia.loc', 'tulia.loc', NULL, 'ALLOWED_BOTH', '/pl', 0),
-('f5a4d537-17c5-4663-b521-c73a11554d8f', 'pl_PL', 'tulia.loc', 'tulia.loc', '/tulia', 'ALLOWED_BOTH', NULL, 1);
-EOF);*/
         $this->addSql(<<<EOF
 ALTER TABLE `#__activity`
   ADD PRIMARY KEY (`id`);
@@ -410,13 +363,6 @@ ALTER TABLE `#__node_term_relationship`
   ADD KEY `node_id` (`node_id`) USING BTREE,
   ADD KEY `term_id` (`term_id`) USING BTREE;
 
-ALTER TABLE `#__option`
-  ADD PRIMARY KEY (`name`),
-  ADD UNIQUE KEY `UNIQUE` (`id`);
-
-ALTER TABLE `#__option_lang`
-  ADD UNIQUE KEY `option_id` (`option_id`);
-
 ALTER TABLE `#__parameter`
   ADD PRIMARY KEY (`name`);
 
@@ -440,13 +386,6 @@ ALTER TABLE `#__term_path`
   ADD PRIMARY KEY (`path`,`locale`) USING BTREE,
   ADD KEY `fk_term_path_term_id` (`term_id`);
 
--- ALTER TABLE `#__website`
---   ADD PRIMARY KEY (`id`);
--- 
--- ALTER TABLE `#__website_locale`
---   ADD UNIQUE KEY `UNIQUE` (`website_id`,`code`,`domain`) USING BTREE,
---   ADD KEY `website_id` (`website_id`);
-
 ALTER TABLE `#__content_type_field`
   ADD CONSTRAINT `fk_content_type_field_content_type_code` FOREIGN KEY (`content_type_code`) REFERENCES `#__content_type` (`code`) ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -469,9 +408,6 @@ ALTER TABLE `#__node_term_relationship`
   ADD CONSTRAINT `fk_node_term_relationship_node_id` FOREIGN KEY (`node_id`) REFERENCES `#__node` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_node_term_relationship_term_id` FOREIGN KEY (`term_id`) REFERENCES `#__term` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE `#__option_lang`
-  ADD CONSTRAINT `fk_option_id` FOREIGN KEY (`option_id`) REFERENCES `#__option` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
 ALTER TABLE `#__term`
   ADD CONSTRAINT `fk_term_parent_id` FOREIGN KEY (`parent_id`) REFERENCES `#__term` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -486,10 +422,6 @@ ALTER TABLE `#__term_lang`
 
 ALTER TABLE `#__term_path`
   ADD CONSTRAINT `fk_term_path_term_id` FOREIGN KEY (`term_id`) REFERENCES `#__term` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---- ALTER TABLE `#__website_locale`
----   ADD CONSTRAINT `fk_website_has_locale_website_id` FOREIGN KEY (`website_id`) REFERENCES `#__website` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
----
 EOF
 );
     }

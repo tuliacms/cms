@@ -18,6 +18,7 @@ final class ConsoleWebsiteProvider
         assert(file_exists($configFilename), 'Tulia CMS seems to be not installed. Please call make setup do initialize system.');
 
         $locale = null;
+        $website = null;
 
         foreach ($_SERVER['argv'] as $key => $arg) {
             if (strncmp($arg, '--locale=', 9) === 0) {
@@ -25,10 +26,15 @@ final class ConsoleWebsiteProvider
 
                 unset($_SERVER['argv'][$key]);
             }
+            if (strncmp($arg, '--website=', 10) === 0) {
+                [, $website] = explode('=', $arg);
+
+                unset($_SERVER['argv'][$key]);
+            }
         }
 
         $_SERVER['argc'] = count($_SERVER['argv']);
 
-        return WebsiteProvider::provideDirectly($configFilename, $locale, $developmentEnvironment);
+        return WebsiteProvider::provideDirectly($configFilename, $website, $locale, $developmentEnvironment);
     }
 }

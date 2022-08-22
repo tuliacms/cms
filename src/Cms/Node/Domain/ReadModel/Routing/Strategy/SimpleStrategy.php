@@ -44,7 +44,11 @@ class SimpleStrategy implements ContentTypeRoutingStrategyInterface
 
     public function match(string $pathinfo, array $parameters = []): array
     {
-        $node = $this->findNodeBySlug(substr($pathinfo, 1), $parameters['_locale']);
+        $node = $this->findNodeBySlug(
+            substr($pathinfo, 1),
+            $parameters['_website_id'],
+            $parameters['_locale']
+        );
 
         if (! $node) {
             return [];
@@ -74,7 +78,7 @@ class SimpleStrategy implements ContentTypeRoutingStrategyInterface
         return 'simple';
     }
 
-    private function findNodeBySlug(?string $slug, string $locale): ?Node
+    private function findNodeBySlug(?string $slug, string $websiteId, string $locale): ?Node
     {
         return $this->nodeFinder->findOne([
             'slug'      => $slug,
@@ -82,6 +86,7 @@ class SimpleStrategy implements ContentTypeRoutingStrategyInterface
             'order_by'  => null,
             'order_dir' => null,
             'locale'    => $locale,
+            'website_id'=> $websiteId,
         ], NodeFinderScopeEnum::ROUTING_MATCHER);
     }
 

@@ -32,7 +32,8 @@ class Homepage extends AbstractController
     {
         $homepage = $this->nodeFinder->findOne([
             'purpose' => NodePurposeEnum::PAGE_HOMEPAGE,
-            'locale' => $website->getLocale()->getCode()
+            'locale' => $website->getLocale()->getCode(),
+            'website_id' => $website->getId(),
         ], NodeFinderScopeEnum::SINGLE);
 
         if ($homepage) {

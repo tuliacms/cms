@@ -7,6 +7,7 @@ namespace Tulia\Cms\Settings\Domain\Group;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Tulia\Cms\Options\Domain\WriteModel\OptionsRepositoryInterface;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -14,8 +15,8 @@ use Tulia\Cms\Options\Domain\WriteModel\OptionsRepositoryInterface;
 abstract class AbstractSettingsGroup implements SettingsGroupInterface
 {
     protected FormFactoryInterface $formFactory;
-
     protected OptionsRepositoryInterface $options;
+    protected WebsiteInterface $website;
 
     /**
      * {@inheritdoc}
@@ -82,9 +83,9 @@ abstract class AbstractSettingsGroup implements SettingsGroupInterface
      */
     public function setOption(string $name, $value): void
     {
-        $option = $this->options->find($name);
-        $option->setValue($value);
-        $this->options->update($option);
+        $option = $this->options->get($name, $this->website->getId());
+        $option->setValue($value, $this->website->getLocale()->getCode(), $this->website->getDefaultLocale()->getCode());
+        $this->options->save($option);
     }
 
     /**
@@ -92,7 +93,7 @@ abstract class AbstractSettingsGroup implements SettingsGroupInterface
      */
     public function getOption(string $name, $default = null)
     {
-        return $this->options->find($name)->getValue() ?? $default;
+        return $this->options->get($name, $this->website->getId())->getValue($this->website->getLocale()->getCode()) ?? $default;
     }
 
     public function setFormFactory(FormFactoryInterface $formFactory): void
@@ -100,8 +101,13 @@ abstract class AbstractSettingsGroup implements SettingsGroupInterface
         $this->formFactory = $formFactory;
     }
 
-    public function setOptions(OptionsRepositoryInterface $options): void
+    public function setOptionsRepository(OptionsRepositoryInterface $options): void
     {
         $this->options = $options;
+    }
+
+    public function setWebsite(WebsiteInterface $website): void
+    {
+        $this->website = $website;
     }
 }

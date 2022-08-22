@@ -35,7 +35,6 @@ class CmsSettingsGroup extends AbstractSettingsGroup
     public function buildForm(): FormInterface
     {
         $data = [
-            'website_name'        => $this->getOption('website_name'),
             'website_favicon'     => $this->getOption('website_favicon'),
             'administrator_email' => $this->getOption('administrator_email'),
             'maintenance_mode'    => $this->getOption('maintenance_mode'),
@@ -71,7 +70,6 @@ class CmsSettingsGroup extends AbstractSettingsGroup
      */
     public function saveAction(array $data): bool
     {
-        $this->setOption('website_name', $data['website_name']);
         $this->setOption('website_favicon', $data['website_favicon']);
         $this->setOption('administrator_email', $data['administrator_email']);
         $this->setOption('maintenance_mode', $data['maintenance_mode']);

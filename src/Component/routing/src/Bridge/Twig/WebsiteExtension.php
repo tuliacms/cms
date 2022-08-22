@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Component\Routing\Bridge\Twig;
 
 use Symfony\Component\HttpFoundation\RequestStack;
+use Tulia\Component\Routing\Website\WebsiteRegistryInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -14,7 +15,8 @@ use Twig\TwigFunction;
 class WebsiteExtension extends AbstractExtension
 {
     public function __construct(
-        protected RequestStack $requestStack
+        private readonly RequestStack $requestStack,
+        private readonly WebsiteRegistryInterface $websiteRegistry,
     ) {
     }
 
@@ -35,6 +37,11 @@ class WebsiteExtension extends AbstractExtension
                 return $this->requestStack->getCurrentRequest()->attributes->get('website');
             }, [
                  'is_safe' => [ 'html' ]
+            ]),
+            new TwigFunction('website_list', function () {
+                return $this->websiteRegistry->all();
+            }, [
+                'is_safe' => [ 'html' ]
             ]),
         ];
     }

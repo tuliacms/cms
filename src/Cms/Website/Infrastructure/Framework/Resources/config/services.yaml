@@ -6,3 +6,6 @@ services:
     Tulia\Cms\Website\:
         resource: '../../../../**'
         exclude: '../../../../{Infrastructure/Framework/Resources}'
+
+    Tulia\Component\Routing\Website\WebsiteRegistryInterface:
+        '@Tulia\Cms\Website\Infrastructure\Persistence\Doctrine\Dbal\DbalWebsiteRegistry'

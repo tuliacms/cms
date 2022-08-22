@@ -6,17 +6,19 @@ namespace Tulia\Cms\Website\UserInterface\Web\Controller\Backend;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\Website\Application\UseCase\CreateWebsite;
 use Tulia\Cms\Website\Application\UseCase\CreateWebsiteRequest;
+use Tulia\Cms\Website\Application\UseCase\DeleteWebsite;
+use Tulia\Cms\Website\Application\UseCase\DeleteWebsiteRequest;
 use Tulia\Cms\Website\Application\UseCase\UpdateWebsite;
 use Tulia\Cms\Website\Application\UseCase\UpdateWebsiteRequest;
 use Tulia\Cms\Website\Domain\ReadModel\Finder\WebsiteFinderScopeEnum;
+use Tulia\Cms\Website\Domain\WriteModel\Exception\CannotDeleteWebsiteException;
 use Tulia\Cms\Website\Domain\WriteModel\Exception\CannotTurnOffWebsiteException;
 use Tulia\Cms\Website\Domain\WriteModel\WebsiteRepositoryInterface;
-use Tulia\Cms\Website\Infrastructure\Persistence\Domain\ReadModel\Finder\DbalFinder;
+use Tulia\Cms\Website\Infrastructure\Persistence\Doctrine\Dbal\Finder\DbalFinder;
 use Tulia\Cms\Website\UserInterface\Web\Form\WebsiteForm;
 use Tulia\Cms\Website\UserInterface\Web\Service\WebsiteRequestExtractor;
 use Tulia\Component\Templating\ViewInterface;
@@ -80,7 +82,7 @@ class Website extends AbstractController
                     )
                 );
             } catch (CannotTurnOffWebsiteException $e) {
-                $this->cannotDoThisBecause('cannotTurnOffWebsite', $e->reason);
+                $this->cannotDoThisBecause('cannotTurnOffWebsiteBecause', $e->reason);
                 return $this->redirectToRoute('backend.website.edit', ['id' => $id]);
             }
 
@@ -120,7 +122,7 @@ class Website extends AbstractController
                     )
                 );
             } catch (CannotTurnOffWebsiteException $e) {
-                $this->cannotDoThisBecause('cannotTurnOffWebsite', $e->reason);
+                $this->cannotDoThisBecause('cannotTurnOffWebsiteBecause', $e->reason);
                 return $this->redirectToRoute('backend.website.edit', ['id' => $id]);
             }
 
@@ -139,19 +141,15 @@ class Website extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @return RedirectResponse
      * @CsrfToken(id="website.delete")
      */
-    public function delete(Request $request): RedirectResponse
+    public function delete(Request $request, DeleteWebsite $deleteWebsite): RedirectResponse
     {
-        $website = $this->repository->find($request->request->get('id'));
-
         try {
-            $this->repository->delete($website->getId()->getValue());
+            ($deleteWebsite)(new DeleteWebsiteRequest($request->request->get('id')));
             $this->setFlash('success', $this->trans('selectedWebsitesWereDeleted', [], 'websites'));
-        } catch (TranslatableWebsiteException $e) {
-            $this->setFlash('warning', $this->transObject($e));
+        } catch (CannotDeleteWebsiteException $e) {
+            $this->cannotDoThisBecause('cannotDeleteWebsiteBecause', $e->reason);
         }
 
         return $this->redirectToRoute('backend.website');

@@ -4,94 +4,64 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Options\Domain\WriteModel\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
+
 /**
  * @author Adam Banaszkiewicz
+ * @final
  */
-class Option
+class Option extends AbstractAggregateRoot
 {
-    private ?string $id = null;
-
-    private string $name;
-
-    private ?string $locale;
-
-    private $value;
-
-    private bool $multilingual;
-
-    private bool $autoload;
+    private string $id;
+    /** @var ArrayCollection<int, OptionTranslation> */
+    private Collection $translations;
 
     public function __construct(
-        string $name,
-        $value,
-        ?string $locale = null,
-        bool $multilingual = false,
-        bool $autoload = false
+        private string $name,
+        private mixed $value,
+        private string $websiteId,
+        private bool $multilingual = false,
+        private bool $autoload = false
     ) {
-        $this->name = $name;
-        $this->value = $value;
-        $this->locale = $locale;
-        $this->multilingual = $multilingual;
-        $this->autoload = $autoload;
+        $this->translations = new ArrayCollection();
     }
 
-    public function getId(): ?string
+    public function getValue(string $locale): mixed
     {
-        return $this->id;
-    }
+        foreach ($this->translations as $pretendent) {
+            if ($pretendent->locale === $locale) {
+                return $pretendent->value;
+            }
+        }
 
-    public function setId(?string $id): void
-    {
-        $this->id = $id;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): void
-    {
-        $this->name = $name;
-    }
-
-    public function getLocale(): ?string
-    {
-        return $this->locale;
-    }
-
-    public function setLocale(?string $locale): void
-    {
-        $this->locale = $locale;
-    }
-
-    public function getValue()
-    {
         return $this->value;
     }
 
-    public function setValue($value): void
+    public function setValue(mixed $value, string $locale, string $defaultLocale): void
     {
-        $this->value = $value;
-    }
+        if ($this->multilingual) {
+            if ($locale === $defaultLocale) {
+                $this->value = $value;
+            }
 
-    public function isMultilingual(): bool
-    {
-        return $this->multilingual;
-    }
+            $translation = null;
 
-    public function setMultilingual(bool $multilingual): void
-    {
-        $this->multilingual = $multilingual;
-    }
+            foreach ($this->translations as $pretendent) {
+                if ($pretendent->locale === $locale) {
+                    $translation = $pretendent;
+                }
+            }
 
-    public function isAutoload(): bool
-    {
-        return $this->autoload;
-    }
+            if (!$translation) {
+                $translation = new OptionTranslation($this, $locale, $value);
+                $this->translations->add($translation);
+            }
 
-    public function setAutoload(bool $autoload): void
-    {
-        $this->autoload = $autoload;
+            $translation->value = $value;
+        } else {
+            $this->value = $value;
+        }
     }
 }

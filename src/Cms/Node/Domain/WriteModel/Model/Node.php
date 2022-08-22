@@ -39,6 +39,7 @@ class Node extends AbstractAggregateRoot
     private function __construct(
         private string $id,
         private string $type,
+        private string $websiteId,
         private string $author
     ) {
     }
@@ -46,9 +47,10 @@ class Node extends AbstractAggregateRoot
     public static function create(
         string $id,
         string $type,
+        string $websiteId,
         string $author
     ): self {
-        $self = new self($id, $type, $author);
+        $self = new self($id, $type, $websiteId, $author);
         $self->createdAt = new ImmutableDateTime();
         $self->translations = new ArrayCollection();
         $self->purposes = new ArrayCollection();
@@ -62,6 +64,7 @@ class Node extends AbstractAggregateRoot
         $self = new self(
             $data['id'],
             $data['type'],
+            $data['website_id'],
             $data['author_id']
         );
         $self->status = $data['status'] ?? 'published';
@@ -106,6 +109,7 @@ class Node extends AbstractAggregateRoot
         return [
             'id'            => $this->id,
             'type'          => $this->type,
+            'website_id'    => $this->websiteId,
             'published_at'  => $this->publishedAt->toStringWithPrecision(),
             'published_to'  => $this->publishedTo?->toStringWithPrecision(),
             'created_at'    => $this->createdAt->toStringWithPrecision(),

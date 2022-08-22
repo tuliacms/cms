@@ -40,6 +40,7 @@ class NodeExtension extends AbstractExtension
                 $node = $this->nodeFinder->findOne([
                     'id' => $nodeId,
                     'locale' => $this->website->getLocale()->getCode(),
+                    'website_id' => $this->website->getId(),
                 ], NodeFinderScopeEnum::ROUTING_GENERATOR);
 
                 if (!$node) {
@@ -59,6 +60,7 @@ class NodeExtension extends AbstractExtension
                 $node = $this->nodeFinder->findOne([
                     'id' => $nodeId,
                     'locale' => $this->website->getLocale()->getCode(),
+                    'website_id' => $this->website->getId(),
                 ], NodeFinderScopeEnum::ROUTING_GENERATOR);
 
                 if (!$node) {

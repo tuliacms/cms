@@ -87,13 +87,6 @@ class SettingsForm extends AbstractType
                 'choice_translation_domain' => false,
                 'translation_domain' => 'settings',
             ])
-            ->add('website_name', Type\TextType::class, [
-                'label' => 'websiteName',
-                'constraints' => [
-                    new Assert\NotBlank(),
-                ],
-                'translation_domain' => 'settings',
-            ])
             ->add('website_favicon', FilepickerType::class, [
                 'label' => 'websiteFavicon',
                 'translation_domain' => 'settings',

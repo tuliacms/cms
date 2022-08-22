@@ -13,11 +13,9 @@ use Twig\TwigFunction;
  */
 class OptionsExtension extends AbstractExtension
 {
-    protected Options $options;
-
-    public function __construct(Options $options)
-    {
-        $this->options = $options;
+    public function __construct(
+        private readonly Options $options,
+    ) {
     }
 
     /**
@@ -27,7 +25,7 @@ class OptionsExtension extends AbstractExtension
     {
         return [
             new TwigFunction('option', function (string $name, $default = null) {
-                return $this->options->get($name, $default);
+                return $this->options->get($name, default: $default);
             }, [
                 'is_safe' => [ 'html' ]
             ]),

@@ -31,6 +31,7 @@ final class RequestFactory
             $server['REQUEST_URI'] = str_replace($website->getBasepath(), '', $server['REQUEST_URI']);
         }
 
+        $server['TULIA_WEBSITE_ID'] = $website->getId();
         $server['TULIA_WEBSITE_IS_BACKEND'] = $website->isBackend();
         $server['TULIA_WEBSITE_BASEPATH'] = $website->getBasepath();
         $server['TULIA_WEBSITE_BACKEND_PREFIX'] = $website->getBackendPrefix();

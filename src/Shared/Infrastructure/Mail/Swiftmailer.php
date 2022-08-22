@@ -56,9 +56,8 @@ class Swiftmailer implements MailerInterface
         if (
             null === $this->config->getHost()
             || null === $this->config->getPort()
-            || null === $this->config->getEncryption()
         ) {
-            throw new MailerConfigurationEmptyException('Host, port or encryption configs are empty. Cannot create mailer transport.');
+            throw new MailerConfigurationEmptyException('Host or port configs are empty. Cannot create mailer transport.');
         }
 
         $transport = new \Swift_SmtpTransport(

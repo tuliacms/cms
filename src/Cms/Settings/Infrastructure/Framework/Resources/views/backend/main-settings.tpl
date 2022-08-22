@@ -4,7 +4,7 @@
     <li class="nav-item">
         <a class="nav-link active" data-bs-toggle="tab" href="#settings-main-tab">
             {{ 'settings'|trans }}
-            {{ badge.errors_count(form, [ 'website_name', 'website_favicon', 'administrator_email', 'date_format', 'theme' ]) }}
+            {{ badge.errors_count(form, [ 'website_favicon', 'administrator_email', 'date_format', 'theme' ]) }}
         </a>
     </li>
     <li class="nav-item">
@@ -35,7 +35,6 @@
 <div class="tab-content">
     <div class="tab-pane fade show active" id="settings-main-tab">
         <div class="form-controls-terminator">
-            {{ form_row(form.website_name) }}
             {{ form_row(form.website_favicon) }}
             {{ form_row(form.administrator_email) }}
             {{ form_row(form.date_format) }}
@@ -112,6 +111,8 @@
 </div>
 <script nonce="{{ csp_nonce() }}">
     $(function () {
+        const modal = new bootstrap.Modal('#modal-test-message-status');
+
         $('#settings_cms_form_mail_transport').change(function () {
             if ($(this).val() == 'smtp') {
                 $('.settings-mail-group-smtp').removeClass('d-none');
@@ -128,8 +129,9 @@
         $('#modal-test-message-status').appendTo('body');
 
         $('.submit-test-text-message').click(function () {
+            modal.show();
+
             $('#modal-test-message-status')
-                .modal()
                 .find('.modal-body')
                 .html('<p class="lead text-center my-4"><i class="fa fa-circle-notch fa-w-16 fa-spin fa-lg" style="line-height:1;display:inline-block;vertical-align:middle;"></i><span style="display:inline-block;vertical-align:middle;"> &nbsp; {{ 'loadingTestMailResult'|trans({}, 'settings') }}</span></p>');
 

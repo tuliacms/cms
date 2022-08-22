@@ -113,6 +113,7 @@ class Node extends AbstractController
                     $nodeDetailsForm->getData(),
                     $formDescriptor->getData(),
                     $website->getLocale()->getCode(),
+                    $website->getId(),
                 ));
 
                 $this->setFlash('success', $this->trans('nodeSaved', [], 'node'));
