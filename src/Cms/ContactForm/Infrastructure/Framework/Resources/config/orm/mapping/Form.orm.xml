@@ -3,7 +3,7 @@
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="Tulia\Cms\ContactForm\Domain\WriteModel\NewModel\Form" table="#__form">
+    <entity name="Tulia\Cms\ContactForm\Domain\WriteModel\Model\Form" table="#__form">
         <id name="id" type="uuid">
             <generator strategy="NONE"/>
         </id>
@@ -12,9 +12,9 @@
         <field name="receivers" type="simple_array"/>
         <field name="replyTo" nullable="true"/>
 
-        <embedded name="sender" class="Tulia\Cms\ContactForm\Domain\WriteModel\NewModel\Sender" />
+        <embedded name="sender" class="Tulia\Cms\ContactForm\Domain\WriteModel\Model\Sender" />
 
-        <one-to-many field="translations" orphan-removal="true" target-entity="Tulia\Cms\ContactForm\Domain\WriteModel\NewModel\FormTranslation" mapped-by="form">
+        <one-to-many field="translations" orphan-removal="true" target-entity="Tulia\Cms\ContactForm\Domain\WriteModel\Model\FormTranslation" mapped-by="form">
             <cascade>
                 <cascade-persist/>
                 <cascade-remove/>

@@ -138,10 +138,12 @@ EOF
 
     private function updateWebsite(string $websiteName, string $websiteProductionDomain): void
     {
+        // @todo Website
+        throw new \Exception('Default website data from setup must be set to existing website in the file.');
         $this->configuration->open();
-        $website = $this->configuration->get('cms.website');
+        $website = $this->configuration->get('cms.websites');
         $website['locales'][0]['domain'] = $websiteProductionDomain;
-        $this->configuration->set('cms.website', $website);
+        $this->configuration->set('cms.websites', $website);
     }
 
     private function crreateAdminUser(string $username, string $password): void

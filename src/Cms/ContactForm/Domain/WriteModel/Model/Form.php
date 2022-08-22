@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContactForm\Domain\WriteModel\Model;
 
-use Tulia\Cms\ContactForm\Domain\Event;
-use Tulia\Cms\ContactForm\Domain\FieldsParser\Exception\InvalidFieldNameException;
-use Tulia\Cms\ContactForm\Domain\FieldsParser\Exception\MultipleFieldsInTemplateException;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use SebastianBergmann\Comparator\RuntimeException;
 use Tulia\Cms\ContactForm\Domain\FieldsParser\FieldsParserInterface;
-use Tulia\Cms\Shared\Domain\WriteModel\EntitiesChangelog;
+use Tulia\Cms\ContactForm\Domain\WriteModel\Event\ContactFormCreated;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
 
 /**
@@ -17,250 +17,200 @@ use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
  */
 class Form extends AbstractAggregateRoot
 {
-    private array $receivers = [];
-    private string $senderName = '';
-    private string $senderEmail = '';
-    private string $replyTo = '';
-    private string $name = '';
-    private string $subject = '';
-    private ?string $fieldsTemplate = null;
-    private ?string $fieldsView = null;
-    private array $fields = [];
-    private ?string $messageTemplate = null;
-    private bool $translated = true;
-    private EntitiesChangelog $fieldsChangeLog;
+    /** @var ArrayCollection<int, FormTranslation> */
+    private Collection $translations;
 
     private function __construct(
         private string $id,
-        private string $locale
+        private string $name,
+        private Sender $sender,
+        /** @var string[] $receivers */
+        private array $receivers,
+        private ?string $replyTo = null,
     ) {
-        $this->fieldsChangeLog = new EntitiesChangelog();
+        $this->translations = new ArrayCollection();
     }
 
-    public static function createNew(string $id, string $locale): self
-    {
-        $self = new self($id, $locale);
-        $self->setMessageTemplate('{{ contact_form_fields() }}');
-        $self->recordThat(new Event\FormCreated($id, $locale));
+    public static function create(
+        string $id,
+        string $name,
+        string $subject,
+        string $senderEmail,
+        string $senderName,
+        array $receivers,
+        ?string $replyTo,
+        FieldsParserInterface $fieldsParser,
+        array $fields,
+        ?string $fieldsTemplate,
+        ?string $messageTemplate,
+        string $locale,
+        string $defaultLocale,
+        array $localeCodes,
+    ): self {
+        $self = new self(
+            $id,
+            $name,
+            new Sender($senderEmail, $senderName),
+            $receivers,
+            $replyTo
+        );
+        $self->createTranslationsOfNewForm(
+            $fieldsParser,
+            $fieldsTemplate,
+            $fields,
+            $messageTemplate,
+            $subject,
+            $locale,
+            $defaultLocale,
+            $localeCodes
+        );
+        $self->recordThat(new ContactFormCreated($self->id));
 
         return $self;
     }
 
-    public static function buildFromArray(array $data): self
-    {
-        $self = new self($data['id'], $data['locale']);
-        $self->setReceivers($data['receivers'] ?? []);
-        $self->setSenderName($data['sender_name'] ?? '');
-        $self->setSenderEmail($data['sender_email'] ?? '');
-        $self->setReplyTo($data['reply_to'] ?? '');
-        $self->setName($data['name'] ?? '');
-        $self->subject = $data['subject'] ?? '';
-        $self->translated = (bool) ($data['translated'] ?? true);
-        $self->messageTemplate = $data['message_template'] ?? '';
-        $self->fieldsTemplate = $data['fields_template'] ?? '';
+    private function createTranslationsOfNewForm(
+        FieldsParserInterface $fieldsParser,
+        ?string $fieldsTemplate,
+        array $fields,
+        ?string $messageTemplate,
+        string $subject,
+        string $locale,
+        string $defaultLocale,
+        array $localeCodes
+    ): void {
+        $stream = $fieldsParser->parse($fieldsTemplate, $fields);
 
-        foreach ($data['fields'] ?? [] as $field) {
-            $self->fields[$field['name']] = Field::buildFromArray($field);
+        foreach ($localeCodes as $code) {
+            $translation = new FormTranslation($this, $code);
+            $translation->fields = new ArrayCollection(Field::createCollection($translation, $stream->allFields(), $code));
+            $translation->messageTemplate = $messageTemplate;
+            $translation->fieldsTemplate = $fieldsTemplate;
+            $translation->fieldsView = $stream->getResult();
+            $translation->subject = $subject;
+
+            if ($code === $locale || $code === $defaultLocale) {
+                $translation->translated = true;
+            }
+
+            $this->translations->add($translation);
         }
-
-        return $self;
     }
 
-    public function getId(): FormId
+    public function getId(): string
     {
         return $this->id;
     }
 
-    public function setId(FormId $id): void
+    public function toArray(string $locale, string $defaultLocale): array
     {
-        $this->id = $id;
-    }
-
-    public function getLocale(): string
-    {
-        return $this->locale;
-    }
-
-    public function setLocale(string $locale): void
-    {
-        $this->locale = $locale;
-    }
-
-    public function getReceivers(): array
-    {
-        return $this->receivers;
-    }
-
-    public function setReceivers(array $receivers): void
-    {
-        if (empty($receivers)) {
-            $this->receivers = [];
-            return;
+        if ($this->isTranslatedTo($locale)) {
+            $translation = $this->translation($locale);
+        } else {
+            $translation = $this->translation($defaultLocale);
         }
 
-        $receivers = array_map('trim', $receivers);
-        $receivers = array_filter($receivers, function ($val) {
-            return filter_var($val, FILTER_VALIDATE_EMAIL) ? $val : null;
-        });
-
-        $this->receivers = $receivers;
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'sender_name' => $this->sender->name,
+            'sender_email' => $this->sender->email,
+            'receivers' => $this->receivers,
+            'replyTo' => $this->replyTo,
+            'subject' => $translation->subject,
+            'message_template' => $translation->messageTemplate,
+            'fields_view' => $translation->fieldsView,
+            'fields_template' => $translation->fieldsTemplate,
+            'translated' => $translation->translated,
+            'fields' => $translation->fieldsToArray(),
+        ];
     }
 
-    public function getSenderName(): string
+    private function isTranslatedTo(string $locale): bool
     {
-        return $this->senderName;
+        foreach ($this->translations->toArray() as $translation) {
+            if ($translation->locale === $locale) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    public function setSenderName(string $senderName): void
+    private function translation(string $locale): FormTranslation
     {
-        $this->senderName = $senderName;
+        foreach ($this->translations->toArray() as $translation) {
+            if ($translation->locale === $locale) {
+                return $translation;
+            }
+        }
+
+        throw new \DomainException(sprintf('Cannot find translation for ContactForm for locale %s', $locale));
     }
 
-    public function getSenderEmail(): string
-    {
-        return $this->senderEmail;
-    }
-
-    public function setSenderEmail(string $senderEmail): void
-    {
-        $this->senderEmail = $senderEmail;
-    }
-
-    public function getReplyTo(): string
-    {
-        return $this->replyTo;
-    }
-
-    public function setReplyTo(string $replyTo): void
-    {
-        $this->replyTo = $replyTo;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): void
+    public function name(string $name): void
     {
         $this->name = $name;
     }
 
-    public function getSubject(): string
+    public function subject(string $subject, string $locale, string $defaultLocale): void
     {
-        return $this->subject;
+        $trans = $this->translation($locale);
+        $trans->subject = $subject;
+
+        if ($locale === $defaultLocale) {
+            foreach ($this->translations as $translation) {
+                if (false === $translation->translated) {
+                    $translation->subject = $subject;
+                }
+            }
+        }
     }
 
-    public function setSubject(string $subject): void
+    public function sender(string $senderEmail, string $senderName): void
     {
-        $this->subject = $subject;
+        $this->sender = new Sender($senderEmail, $senderName);
     }
 
-    /**
-     * @throws InvalidFieldNameException
-     * @throws MultipleFieldsInTemplateException
-     */
-    public function setFieldsTemplate(
+    public function replyTo(?string $replyTo): void
+    {
+        $this->replyTo = $replyTo;
+    }
+
+    public function receivers(array $receivers): void
+    {
+        $this->receivers = $receivers;
+    }
+
+    public function fields(
+        FieldsParserInterface $fieldsParser,
         array $fields,
         ?string $fieldsTemplate,
-        FieldsParserInterface $fieldsParser
+        ?string $messageTemplate,
+        string $locale,
+        string $defaultLocale
     ): void {
-        $fields = $this->validateFieldsNames($fields);
+        $translation = $this->translation($locale);
+        $stream = $fieldsParser->parse($fieldsTemplate, $fields);
+        $update = function ($translation) use ($messageTemplate, $fieldsTemplate, $stream, $locale) {
+            $translation->messageTemplate = $messageTemplate;
+            $translation->fieldsTemplate = $fieldsTemplate;
+            $translation->fieldsView = $stream->getResult();
+            $translation->fields->clear();
 
-        $stream = $fieldsParser->parse((string) $fieldsTemplate, $fields);
-        $newFields = $stream->allFields();
+            foreach (Field::createCollection($translation, $stream->allFields(), $locale) as $field) {
+                $translation->fields->add($field);
+            }
+        };
 
-        $changelog = $this->calculateFieldsChangelog(
-            array_keys($newFields),
-            array_keys($this->fields)
-        );
+        $update($translation);
 
-        $this->fieldsTemplate = $fieldsTemplate;
-        $this->fieldsView = $stream->getResult();
-
-        foreach ($changelog['removed'] as $name) {
-            $this->fieldsChangeLog->recordEntityChange('remove', $this->fields[$name]);
-            unset($this->fields[$name]);
+        if ($locale === $defaultLocale) {
+            foreach ($this->translations as $translation) {
+                if (false === $translation->translated) {
+                    $update($translation);
+                }
+            }
         }
-
-        foreach ($changelog['added'] as $name) {
-            $this->fields[$name] = Field::buildFromArray($newFields[$name]);
-            $this->fieldsChangeLog->recordEntityChange('add', $this->fields[$name]);
-        }
-
-        foreach ($changelog['updated'] as $name) {
-            $this->fields[$name] = Field::buildFromArray($newFields[$name]);
-            $this->fieldsChangeLog->recordEntityChange('update', $this->fields[$name]);
-        }
-    }
-
-    public function getFieldsTemplate(): ?string
-    {
-        return $this->fieldsTemplate;
-    }
-
-    public function getFieldsView(): ?string
-    {
-        return $this->fieldsView;
-    }
-
-    public function getMessageTemplate(): ?string
-    {
-        return $this->messageTemplate;
-    }
-
-    public function setMessageTemplate(?string $messageTemplate): void
-    {
-        $this->messageTemplate = $messageTemplate;
-    }
-
-    /**
-     * @return Field[]
-     */
-    public function fields(): iterable
-    {
-        foreach ($this->fields as $field) {
-            yield $field;
-        }
-    }
-
-    public function getFieldsChanges(): array
-    {
-        return $this->fieldsChangeLog->collectEntitiesChanges();
-    }
-
-    public function isTranslated(): bool
-    {
-        return $this->translated;
-    }
-
-    public function setTranslated(bool $translated): void
-    {
-        $this->translated = $translated;
-    }
-
-    private function calculateFieldsChangelog(array $newFields, array $oldFields): array
-    {
-        $toUpdate = array_intersect($newFields, $oldFields);
-        $toAdd    = array_diff($newFields, $toUpdate);
-        $toRemove = array_diff($oldFields, $toUpdate);
-
-        $log['added'] = $toAdd;
-        $log['removed'] = $toRemove;
-        $log['updated'] = $toUpdate;
-
-        return $log;
-    }
-
-    private function validateFieldsNames(array $fields): array
-    {
-        foreach ($fields as $key => $field) {
-            $name = strtolower($field['name']);
-            $name = preg_replace('/[^a-z0-9_]+/i', '_', $name);
-
-            $fields[$key]['name'] = substr($name, 0, 32);
-        }
-
-        return $fields;
     }
 }

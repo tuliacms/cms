@@ -7,6 +7,7 @@ namespace Tulia\Cms\Website\Infrastructure\Persistence\Domain\ReadModel\Finder;
 use Doctrine\DBAL\Connection;
 use Exception;
 use PDO;
+use Symfony\Component\Uid\Uuid;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\AbstractDbalQuery;
@@ -100,7 +101,7 @@ class DbalQuery extends AbstractDbalQuery
         } elseif ($criteria['count']) {
             $this->queryBuilder->select('COUNT(' . $criteria['count'] . ') AS count');
         } else {
-            $this->queryBuilder->select('tm.*');
+            $this->queryBuilder->select('tm.*, BIN_TO_UUID(tm.id) AS id');
         }
 
         $this->queryBuilder->from('#__website', 'tm');
@@ -111,7 +112,7 @@ class DbalQuery extends AbstractDbalQuery
         if ($criteria['id']) {
             $this->queryBuilder
                 ->andWhere('tm.id = :tm_id')
-                ->setParameter('tm_id', $criteria['id'], PDO::PARAM_STR)
+                ->setParameter('tm_id', Uuid::fromString($criteria['id'])->toBinary(), PDO::PARAM_STR)
                 ->setMaxResults(1);
         }
 
@@ -121,6 +122,8 @@ class DbalQuery extends AbstractDbalQuery
             } else {
                 $ids = $criteria['id__not_in'];
             }
+
+            $ids = array_map(static fn($v) => Uuid::fromString($v)->toBinary(), $ids);
 
             $this->queryBuilder
                 ->andWhere('tm.id NOT IN (:tm_id__not_in)')
@@ -133,6 +136,8 @@ class DbalQuery extends AbstractDbalQuery
             } else {
                 $ids = $criteria['id__in'];
             }
+
+            $ids = array_map(static fn($v) => Uuid::fromString($v)->toBinary(), $ids);
 
             $this->queryBuilder
                 ->andWhere('tm.id IN (:tm_id__in)')
@@ -161,12 +166,12 @@ class DbalQuery extends AbstractDbalQuery
     protected function fillWebsitesWithLocales(Collection $collection): void
     {
         $locales = $this->queryBuilder->getConnection()->fetchAllAssociative(
-            'SELECT * FROM #__website_locale whl
+            'SELECT *, BIN_TO_UUID(website_id) AS website_id FROM #__website_locale whl
             WHERE whl.website_id IN (:websiteIdList)
             ORDER BY `is_default` DESC', [
             'websiteIdList' => array_map(function ($website) {
-                return $website->getId();
-            }, $collection->all())
+                return Uuid::fromString($website->getId())->toBinary();
+            }, $collection->toArray())
         ], [
             'websiteIdList' => Connection::PARAM_STR_ARRAY,
         ]);
@@ -178,16 +183,13 @@ class DbalQuery extends AbstractDbalQuery
                     $localeObject = new Locale(
                         $locale['code'],
                         $locale['domain'],
+                        $locale['domain_development'],
                         $locale['locale_prefix'],
                         $locale['path_prefix'],
                         $locale['ssl_mode'],
                         (bool) $locale['is_default']
                     );
                     $website->addLocale($localeObject);
-
-                    /*if ($locale['is_default']) {
-                        $website->setDefaultLocale($localeObject);
-                    }*/
                 }
             }
         }

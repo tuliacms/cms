@@ -25,7 +25,7 @@ final class WebsiteMatcher
 
         $prepared = [];
 
-        foreach ($websites as $website) {
+        foreach ($websites as $id => $website) {
             $prepared[] = array_merge($website, [
                 'basepath' => $website['path_prefix'] . $website['locale_prefix'],
                 'is_backend' => false,

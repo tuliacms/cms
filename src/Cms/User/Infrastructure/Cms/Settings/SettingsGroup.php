@@ -58,13 +58,6 @@ class SettingsGroup extends AbstractSettingsGroup
             'username_min_length'        => $this->getOption('users.username.min_length', 4),
         ];
 
-        /*$this->options->create('users.password.min_length', '4', false, false);
-        $this->options->create('users.password.min_digits', '1', false, false);
-        $this->options->create('users.password.min_special_chars', '1', false, false);
-        $this->options->create('users.password.min_big_letters', '1', false, false);
-        $this->options->create('users.password.min_small_letters', '1', false, false);
-        $this->options->create('users.username.min_length', '4', false, false);*/
-
         return $this->createForm(SettingsForm::class, $data);
     }
 

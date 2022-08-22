@@ -13,11 +13,9 @@ use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteCreated;
  */
 final class CreateOptionsForNewWebsite implements EventSubscriberInterface
 {
-    private WebsitesOptionsRegistrator $websitesOptionsRegistrator;
-
-    public function __construct(WebsitesOptionsRegistrator $websitesOptionsRegistrator)
-    {
-        $this->websitesOptionsRegistrator = $websitesOptionsRegistrator;
+    public function __construct(
+        private readonly WebsitesOptionsRegistrator $websitesOptionsRegistrator
+    ) {
     }
 
     public static function getSubscribedEvents(): array
@@ -29,6 +27,6 @@ final class CreateOptionsForNewWebsite implements EventSubscriberInterface
 
     public function handle(WebsiteCreated $event): void
     {
-        $this->websitesOptionsRegistrator->registerMissingOptions($event->getWebsiteId());
+        $this->websitesOptionsRegistrator->registerMissingOptions();
     }
 }

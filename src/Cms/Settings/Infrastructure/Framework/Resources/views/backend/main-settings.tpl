@@ -2,31 +2,31 @@
 
 <ul class="nav nav-tabs">
     <li class="nav-item">
-        <a class="nav-link active" data-toggle="tab" href="#settings-main-tab">
+        <a class="nav-link active" data-bs-toggle="tab" href="#settings-main-tab">
             {{ 'settings'|trans }}
             {{ badge.errors_count(form, [ 'website_name', 'website_favicon', 'administrator_email', 'date_format', 'theme' ]) }}
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#settings-maintenance-tab">
+        <a class="nav-link" data-bs-toggle="tab" href="#settings-maintenance-tab">
             {{ 'maintenance'|trans }}
             {{ badge.errors_count(form, [ 'maintenance_mode', 'maintenance_message' ]) }}
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#settings-content-tab">
+        <a class="nav-link" data-bs-toggle="tab" href="#settings-content-tab">
             {{ 'content'|trans }}
             {{ badge.errors_count(form, [ 'wysiwyg_editor' ]) }}
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#settings-content-routing">
+        <a class="nav-link" data-bs-toggle="tab" href="#settings-content-routing">
             {{ 'frontendRouting'|trans({}, 'settings') }}
             {{ badge.errors_count(form, [ 'url_suffix' ]) }}
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#settings-email-tab">
+        <a class="nav-link" data-bs-toggle="tab" href="#settings-email-tab">
             {{ 'email'|trans }}
             {{ badge.errors_count(form, [ 'mail_from_email', 'mail_from_name', 'mail_transport', 'mail_host', 'mail_port', 'mail_username', 'mail_password', 'mail_encryption', 'mail_sendmailpath' ]) }}
         </a>

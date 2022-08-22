@@ -231,10 +231,6 @@ CREATE TABLE `#__option_lang` (
   `locale` varchar(11) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `value` longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-
-INSERT INTO `#__option_lang` (`option_id`, `locale`, `value`) VALUES
-('052f1830-0e93-4dc3-a787-e5e5c621688e', 'pl_PL', 'Website name'),
-('aafa0c3f-0ab9-4d6d-9ba9-d7750d700748', 'pl_PL', 'Page is under maintenance mode. Please come back later.dfghdfgh');
 EOF);
         $this->addSql(<<<EOF
 CREATE TABLE `#__parameter` (

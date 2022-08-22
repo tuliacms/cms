@@ -50,7 +50,6 @@ class LocaleForm extends AbstractType
                 'translation_domain' => 'websites',
                 'required' => true,
                 'constraints' => [
-                    new Assert\NotBlank(),
                     new Assert\Callback(function ($object, ExecutionContextInterface $context) {
                         if ($object && filter_var($object, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME) === false) {
                             $context->buildViolation('domainIsInvalid')
@@ -84,11 +83,10 @@ class LocaleForm extends AbstractType
                 ],
             ])
             ->add('ssl_mode', Type\ChoiceType::class, [
-                'property_path' => 'sslMode',
                 'label' => 'sslMode',
                 'help' => 'sslModeHelp',
                 'constraints' => [
-                    new Assert\Choice([ 'choices' =>[
+                    new Assert\Choice(['choices' =>[
                         'ALLOWED_BOTH'  => SslModeEnum::ALLOWED_BOTH,
                         'FORCE_NON_SSL' => SslModeEnum::FORCE_NON_SSL,
                         'FORCE_SSL'     => SslModeEnum::FORCE_SSL,
@@ -134,10 +132,10 @@ class LocaleForm extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver): void
+    /*public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Locale::class,
         ]);
-    }
+    }*/
 }

@@ -15,13 +15,10 @@ use Tulia\Component\Routing\Website\Locale\Storage\StorageInterface;
  */
 class LocaleChoiceType extends AbstractType
 {
-    protected StorageInterface $storage;
-    protected TranslatorInterface $translator;
-
-    public function __construct(StorageInterface $storage, TranslatorInterface $translator)
-    {
-        $this->storage    = $storage;
-        $this->translator = $translator;
+    public function __construct(
+        protected StorageInterface $storage,
+        protected TranslatorInterface $translator
+    ) {
     }
 
     /**

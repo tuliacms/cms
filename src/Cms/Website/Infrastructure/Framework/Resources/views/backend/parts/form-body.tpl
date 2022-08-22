@@ -10,7 +10,7 @@
     <div class="page-form-sidebar">
         <div class="accordion">
             <div class="accordion-section">
-                <div class="accordion-section-button" data-toggle="collapse" data-target="#form-collapse-basics">
+                <div class="accordion-section-button" data-bs-toggle="collapse" data-bs-target="#form-collapse-basics">
                     {{ 'description'|trans }}
                 </div>
                 <div id="form-collapse-basics" class="collapse show">
@@ -36,7 +36,7 @@
         </div>
         <ul class="nav nav-tabs page-form-tabs" role="tablist">
             <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab" href="#tab-basics">
+                <a class="nav-link active" data-bs-toggle="tab" href="#tab-basics">
                     {{ 'languages'|trans }}
                 </a>
             </li>

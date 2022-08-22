@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Routing\Website;
 
+use Tulia\Component\Routing\Enum\SslModeEnum;
 use Tulia\Component\Routing\Website\Locale\Locale;
 use Tulia\Component\Routing\Website\Locale\LocaleInterface;
 
@@ -20,12 +21,13 @@ final class WebsiteProvider
     ): WebsiteInterface {
         /** @var array $websiteData */
         $websiteData = include $configFilename;
-        $websites = self::flattenWebsites($websiteData['cms.website'], $developmentEnvironment);
+        $websites = self::flattenWebsites($websiteData['cms.websites'], $developmentEnvironment);
 
         $defaultWebsite = self::findDefaultWebsite($websites);
         $activeWebsite = WebsiteMatcher::matchAgainstRequest($websites, $host, $path);
 
         return new Website(
+            $activeWebsite['id'],
             $activeWebsite['backend_prefix'],
             $activeWebsite['is_backend'],
             $activeWebsite['basepath'],
@@ -42,7 +44,7 @@ final class WebsiteProvider
     ): WebsiteInterface {
         /** @var array $websiteData */
         $websiteData = include $configFilename;
-        $websites = self::flattenWebsites($websiteData['cms.website'], $developmentEnvironment);
+        $websites = self::flattenWebsites($websiteData['cms.websites'], $developmentEnvironment);
 
         $defaultWebsite = self::findDefaultWebsite($websites);
         $activeWebsite = null;
@@ -62,6 +64,7 @@ final class WebsiteProvider
         }
 
         return new Website(
+            $activeWebsite['id'],
             $activeWebsite['backend_prefix'],
             false,
             $activeWebsite['path_prefix'] . $activeWebsite['locale_prefix'],
@@ -82,25 +85,32 @@ final class WebsiteProvider
                 $locale['domain'],
                 $locale['locale_prefix'],
                 $locale['path_prefix'],
-                $locale['ssl_mode']
+                SslModeEnum::from($locale['ssl_mode'])
             );
         }, $locales);
     }
 
-    private static function flattenWebsites(array $website, bool $developmentEnvironment): array
+    private static function flattenWebsites(array $websites, bool $developmentEnvironment): array
     {
         $result = [];
 
-        foreach ($website['locales'] as $locale) {
-            $result[] = [
-                'backend_prefix' => $website['backend_prefix'],
-                'domain' => (string) ($developmentEnvironment ? $locale['domain_development'] : $locale['domain']),
-                'path_prefix' => (string) $locale['path_prefix'],
-                'locale_prefix' => (string) $locale['locale_prefix'],
-                'locale_code' => (string) $locale['locale_code'],
-                'default' => (bool) $locale['default'],
-                'ssl_mode' => (string) $locale['ssl_mode'],
-            ];
+        foreach ($websites as $website) {
+            foreach ($website['locales'] as $locale) {
+                $result[] = [
+                    'id' => $website['id'],
+                    'backend_prefix' => $website['backend_prefix'],
+                    'domain' => (string) (
+                        $developmentEnvironment && $locale['domain_development']
+                            ? $locale['domain_development']
+                            : $locale['domain']
+                    ),
+                    'path_prefix' => (string) $locale['path_prefix'],
+                    'locale_prefix' => (string) $locale['locale_prefix'],
+                    'locale_code' => (string) $locale['locale_code'],
+                    'default' => (bool) $locale['default'],
+                    'ssl_mode' => (string) $locale['ssl_mode'],
+                ];
+            }
         }
 
         return $result;

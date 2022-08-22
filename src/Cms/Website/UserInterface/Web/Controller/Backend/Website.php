@@ -9,7 +9,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
+use Tulia\Cms\Website\Application\UseCase\CreateWebsite;
+use Tulia\Cms\Website\Application\UseCase\CreateWebsiteRequest;
+use Tulia\Cms\Website\Application\UseCase\UpdateWebsite;
+use Tulia\Cms\Website\Application\UseCase\UpdateWebsiteRequest;
 use Tulia\Cms\Website\Domain\ReadModel\Finder\WebsiteFinderScopeEnum;
+use Tulia\Cms\Website\Domain\WriteModel\Exception\CannotTurnOffWebsiteException;
 use Tulia\Cms\Website\Domain\WriteModel\WebsiteRepositoryInterface;
 use Tulia\Cms\Website\Infrastructure\Persistence\Domain\ReadModel\Finder\DbalFinder;
 use Tulia\Cms\Website\UserInterface\Web\Form\WebsiteForm;
@@ -21,15 +26,11 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class Website extends AbstractController
 {
-    private DbalFinder $finder;
-    private WebsiteRepositoryInterface $repository;
-    private WebsiteRequestExtractor $requestExtractor;
-
-    public function __construct(DbalFinder $finder, WebsiteRepositoryInterface $repository, WebsiteRequestExtractor $requestExtractor)
-    {
-        $this->finder = $finder;
-        $this->repository = $repository;
-        $this->requestExtractor = $requestExtractor;
+    public function __construct(
+        private DbalFinder $finder,
+        private WebsiteRepositoryInterface $repository,
+        private WebsiteRequestExtractor $requestExtractor
+    ) {
     }
 
     public function index(): RedirectResponse
@@ -50,27 +51,44 @@ class Website extends AbstractController
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse|ViewInterface
      * @CsrfToken(id="website_form")
      */
-    public function create(Request $request)
+    public function create(Request $request, CreateWebsite $createWebsite)
     {
-        $website = $this->repository->createNew(
-            $this->requestExtractor->extractFromRequest($request)
-        );
-        $form = $this->createForm(WebsiteForm::class, $website);
+        $form = $this->createForm(WebsiteForm::class, [
+            'id' => $this->repository->getNextId(),
+            'locales' => [
+                [
+                    'domain' => $request->getHttpHost(),
+                    'code' => $request->getPreferredLanguage(),
+                    'is_default' => true,
+                ]
+            ]
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->repository->create($form->getData());
+            try {
+                $data = $form->getData();
+
+                ($createWebsite)(
+                    new CreateWebsiteRequest(
+                        $data['name'],
+                        (bool)$data['active'],
+                        $data['locales'],
+                    )
+                );
+            } catch (CannotTurnOffWebsiteException $e) {
+                $this->cannotDoThisBecause('cannotTurnOffWebsite', $e->reason);
+                return $this->redirectToRoute('backend.website.edit', ['id' => $id]);
+            }
 
             $this->setFlash('success', $this->trans('websiteSaved', [], 'websites'));
             return $this->redirectToRoute('backend.website');
         }
 
         return $this->view('@backend/website/create.tpl', [
-            'website' => $website,
             'form'    => $form->createView(),
             'locale_defaults' => [
                 'domain' => $request->getHttpHost(),
@@ -80,20 +98,31 @@ class Website extends AbstractController
     }
 
     /**
-     * @param string $id
-     * @param Request $request
      * @return RedirectResponse|ViewInterface
-     * @throws NotFoundHttpException
      * @CsrfToken(id="website_form")
      */
-    public function edit(string $id, Request $request)
+    public function edit(string $id, Request $request, UpdateWebsite $updateWebsite)
     {
-        $website = $this->repository->find($id);
-        $form = $this->createForm(WebsiteForm::class, $website);
+        $website = $this->repository->get($id);
+        $form = $this->createForm(WebsiteForm::class, $website->toArray());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->repository->update($form->getData());
+            $data = $form->getData();
+
+            try {
+                ($updateWebsite)(
+                    new UpdateWebsiteRequest(
+                        $id,
+                        $data['name'],
+                        (bool)$data['active'],
+                        $data['locales'],
+                    )
+                );
+            } catch (CannotTurnOffWebsiteException $e) {
+                $this->cannotDoThisBecause('cannotTurnOffWebsite', $e->reason);
+                return $this->redirectToRoute('backend.website.edit', ['id' => $id]);
+            }
 
             $this->setFlash('success', $this->trans('websiteSaved', [], 'websites'));
             return $this->redirectToRoute('backend.website');
@@ -126,5 +155,10 @@ class Website extends AbstractController
         }
 
         return $this->redirectToRoute('backend.website');
+    }
+
+    private function cannotDoThisBecause(string $message, string $reason): void
+    {
+        $this->setFlash('warning', $this->trans($message, ['reason' => $this->trans($reason, [], 'websites')], 'websites'));
     }
 }

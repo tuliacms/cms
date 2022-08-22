@@ -9,7 +9,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 use Tulia\Cms\ContactForm\Domain\Exception\FormNotFoundException;
 use Tulia\Cms\ContactForm\Domain\WriteModel\ContactFormRepositoryInterface;
-use Tulia\Cms\ContactForm\Domain\WriteModel\NewModel\Form;
+use Tulia\Cms\ContactForm\Domain\WriteModel\Model\Form;
 
 /**
  * @author Adam Banaszkiewicz

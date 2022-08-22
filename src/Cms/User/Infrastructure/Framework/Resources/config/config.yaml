@@ -18,6 +18,20 @@ doctrine:
                 alias: CmsUser
 
 cms:
+    options:
+        definitions:
+            users.password.min_length:
+                value: 4
+            users.password.min_digits:
+                value: 1
+            users.password.min_special_chars:
+                value: 1
+            users.password.min_big_letters:
+                value: 1
+            users.password.min_small_letters:
+                value: 1
+            users.username.min_length:
+                value: 4
     templating:
         paths:
             - { name: cms/user, path: '%cms.core_dir%/Cms/User/Infrastructure/Framework/Resources/views/frontend' }

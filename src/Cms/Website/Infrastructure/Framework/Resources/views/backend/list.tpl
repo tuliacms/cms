@@ -27,7 +27,7 @@
                             <div class="card-body">
                                 {% if not website.active %}
                                     <span
-                                        data-toggle="tooltip"
+                                        data-bs-toggle="tooltip"
                                         title="{{ 'websiteInactiveHint'|trans({}, 'websites') }}"
                                         class="badge badge-secondary"
                                     >{{ 'websiteInactive'|trans({}, 'websites') }}</span>
@@ -44,7 +44,7 @@
                                         data-name="{{ 'languageName'|trans({ code: locale.code }, 'languages') }}"
                                         data-frontend="{{ website.address(locale) }}"
                                         data-backend="{{ website.backendAddress(locale) }}"
-                                        data-toggle="tooltip"
+                                        data-bs-toggle="tooltip"
                                         title="{{ 'localeCode'|trans({ code: locale.code }, 'websites') }}"
                                     >
                                         <img src="{{ asset('/assets/core/flag-icons/' ~ locale.language ~ '.svg') }}" alt="" class="website-locale-flag-icon" />

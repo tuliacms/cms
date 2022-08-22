@@ -6,11 +6,11 @@ framework:
 doctrine:
     orm:
         mappings:
-            Tulia\Cms\ContactForm\Domain\WriteModel\NewModel:
+            Tulia\Cms\ContactForm\Domain\WriteModel\Model:
                 type: xml
                 dir: '%cms.core_dir%/Cms/ContactForm/Infrastructure/Framework/Resources/config/orm/mapping'
                 is_bundle: false
-                prefix: Tulia\Cms\ContactForm\Domain\WriteModel\NewModel
+                prefix: Tulia\Cms\ContactForm\Domain\WriteModel\Model
                 alias: CmsForm
 
 cms:

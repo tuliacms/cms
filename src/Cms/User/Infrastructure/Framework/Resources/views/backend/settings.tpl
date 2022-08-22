@@ -2,13 +2,13 @@
 
 <ul class="nav nav-tabs">
     <li class="nav-item">
-        <a class="nav-link active" data-toggle="tab" href="#settings-username-tab">
+        <a class="nav-link active" data-bs-toggle="tab" href="#settings-username-tab">
             {{ 'username'|trans }}
             {{ badge.errors_count(form, [ 'username_min_length' ]) }}
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#settings-password-tab">
+        <a class="nav-link" data-bs-toggle="tab" href="#settings-password-tab">
             {{ 'password'|trans }}
             {{ badge.errors_count(form, [ 'password_min_length', 'password_min_digits', 'password_min_special_chars', 'password_min_big_letters', 'password_min_small_letters' ]) }}
         </a>

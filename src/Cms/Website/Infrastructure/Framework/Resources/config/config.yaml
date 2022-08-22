@@ -2,6 +2,18 @@ framework:
     translator:
         paths:
             - '%cms.core_dir%/Cms/Website/Infrastructure/Framework/Resources/translations'
+twig:
+    paths:
+        '%cms.core_dir%/Cms/Website/Infrastructure/Framework/Resources/views': 'website'
+doctrine:
+    orm:
+        mappings:
+            Tulia\Cms\Website\Domain\WriteModel\Model:
+                type: xml
+                dir: '%cms.core_dir%/Cms/Website/Infrastructure/Framework/Resources/config/orm/mapping'
+                is_bundle: false
+                prefix: Tulia\Cms\Website\Domain\WriteModel\Model
+                alias: CmsWebsite
 cms:
     templating:
         paths:

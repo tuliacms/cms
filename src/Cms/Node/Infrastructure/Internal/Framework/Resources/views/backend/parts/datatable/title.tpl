@@ -1,7 +1,7 @@
 <a href="{{ path('backend.node.edit', { node_type: row.type, id: row.id }) }}" class="link-title" title="{{ row.title }}">
     <span class="boxur-depth boxur-depth-{{ row.level }}">
         {% if row.translated is defined and row.translated != '1' %}
-            <span class="badge badge-info" data-toggle="tooltip" title="{{ 'missingTranslationInThisLocale'|trans }}"><i class="dropdown-icon fas fa-language"></i></span>
+            <span class="badge badge-info" data-bs-toggle="tooltip" title="{{ 'missingTranslationInThisLocale'|trans }}"><i class="dropdown-icon fas fa-language"></i></span>
         {% endif %}
         {% if row.status == 'draft' %}
             <span class="badge badge-secondary"><i class="dropdown-icon fas fa-pen-alt"></i> &nbsp;{{ 'draft'|trans }}</span>

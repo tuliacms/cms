@@ -23,14 +23,14 @@ class Locale implements LocaleInterface
 
     protected ?string $pathPrefix = null;
 
-    protected string $sslMode;
+    protected SslModeEnum $sslMode;
 
     public function __construct(
         string $code,
         string $domain,
         string $localePrefix = null,
         string $pathPrefix = null,
-        string $sslMode = SslModeEnum::ALLOWED_BOTH
+        SslModeEnum $sslMode = SslModeEnum::ALLOWED_BOTH
     ) {
         $this->code = $code;
         $this->domain = $domain;
@@ -72,7 +72,7 @@ class Locale implements LocaleInterface
 
     public function getSslMode(): string
     {
-        return $this->sslMode;
+        return $this->sslMode->value;
     }
 
     public function getPathPrefix(): ?string

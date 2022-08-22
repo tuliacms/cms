@@ -7,9 +7,9 @@ namespace Tulia\Component\Routing\Enum;
 /**
  * @author Adam Banaszkiewicz
  */
-class SslModeEnum
+enum SslModeEnum: string
 {
-    public const ALLOWED_BOTH  = 'ALLOWED_BOTH';
-    public const FORCE_SSL     = 'FORCE_SSL';
-    public const FORCE_NON_SSL = 'FORCE_NON_SSL';
+    case ALLOWED_BOTH  = 'ALLOWED_BOTH';
+    case FORCE_SSL     = 'FORCE_SSL';
+    case FORCE_NON_SSL = 'FORCE_NON_SSL';
 }

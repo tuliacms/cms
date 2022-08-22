@@ -13,6 +13,7 @@ class Locale
 {
     protected string $code;
     protected string $domain;
+    protected ?string $developmentDomain = null;
     protected ?string $localePrefix = null;
     protected ?string $pathPrefix = null;
     protected string $sslMode;
@@ -21,13 +22,15 @@ class Locale
     public function __construct(
         string $code,
         string $domain,
-        string $localePrefix = null,
-        string $pathPrefix = null,
-        string $sslMode = SslModeEnum::ALLOWED_BOTH,
+        ?string $developmentDomain = null,
+        ?string $localePrefix = null,
+        ?string $pathPrefix = null,
+        string $sslMode = 'ALLOWED_BOTH',
         bool $isDefault = false
     ) {
         $this->code = $code;
         $this->domain = $domain;
+        $this->developmentDomain = $developmentDomain;
         $this->localePrefix = $localePrefix;
         $this->pathPrefix = $pathPrefix;
         $this->sslMode = $sslMode;
@@ -72,5 +75,10 @@ class Locale
     public function isDefault(): bool
     {
         return $this->isDefault;
+    }
+
+    public function getDevelopmentDomain(): ?string
+    {
+        return $this->developmentDomain;
     }
 }

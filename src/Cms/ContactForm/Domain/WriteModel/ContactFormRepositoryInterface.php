@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContactForm\Domain\WriteModel;
 
-use Tulia\Cms\ContactForm\Domain\WriteModel\NewModel\Form;
+use Tulia\Cms\ContactForm\Domain\WriteModel\Model\Form;
 
 /**
  * @author Adam Banaszkiewicz

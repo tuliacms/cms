@@ -12,8 +12,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
-use Tulia\Cms\Website\Domain\WriteModel\Model\Locale;
-use Tulia\Cms\Website\UserInterface\Web\Form\Transformer\WebsiteIdModelTransformer;
 
 /**
  * @author Adam Banaszkiewicz
@@ -69,8 +67,6 @@ class WebsiteForm extends AbstractType
                 ->add('save', FormType\SubmitType::class)
             ;
         }
-
-        $builder->get('id')->addModelTransformer(new WebsiteIdModelTransformer());
     }
 
     /**
@@ -87,9 +83,8 @@ class WebsiteForm extends AbstractType
     {
         $countDefaults = 0;
 
-        /** @var Locale $locale */
         foreach ($locales as $locale) {
-            if ($locale->isDefault()) {
+            if ($locale['is_default']) {
                 $countDefaults++;
             }
         }
@@ -109,15 +104,14 @@ class WebsiteForm extends AbstractType
     {
         $codes = [];
 
-        /** @var Locale $locale */
         foreach ($locales as $locale) {
-            if (\in_array($locale->getCode(), $codes, true)) {
-                $context->buildViolation('websites.detectedDoubledLocale', ['code' => $locale->getCode()])
+            if (\in_array($locale['code'], $codes, true)) {
+                $context->buildViolation('websites.detectedDoubledLocale', ['code' => $locale['code']])
                     ->setTranslationDomain('validators')
                     ->addViolation();
             }
 
-            $codes[] = $locale->getCode();
+            $codes[] = $locale['code'];
         }
     }
 }

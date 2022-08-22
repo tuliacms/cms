@@ -11,6 +11,7 @@ use Tulia\Component\Routing\Website\Locale\LocaleInterface;
  */
 interface WebsiteInterface
 {
+    public function getId(): string;
     public function getBackendPrefix(): string;
     public function getLocale(): LocaleInterface;
     /** @return LocaleInterface[] */

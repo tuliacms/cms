@@ -1,6 +1,6 @@
 <ul class="nav nav-tabs">
     <li class="nav-item">
-        <a class="nav-link active" data-toggle="tab" href="#settings-general-tab">{{ 'settings'|trans }}</a>
+        <a class="nav-link active" data-bs-toggle="tab" href="#settings-general-tab">{{ 'settings'|trans }}</a>
     </li>
 </ul>
 <div class="tab-content">

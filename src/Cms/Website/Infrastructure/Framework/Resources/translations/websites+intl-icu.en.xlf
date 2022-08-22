@@ -198,6 +198,10 @@
                 <source>websiteInactiveHint</source>
                 <target>This website is inactive, only admins have access to frontend.</target>
             </trans-unit>
+            <trans-unit id="tuliacms.websites.50">
+                <source>cannotTurnOffWebsite</source>
+                <target>Cannot turn off website, because {reason}.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

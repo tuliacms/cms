@@ -18,8 +18,5 @@ services:
     Tulia\Cms\Node\Infrastructure\ModuleIntegration\Menu\IdentityProvider:
         tags: [ menu.identity_provider ]
 
-    Tulia\Cms\Node\Infrastructure\ModuleIntegration\Settings\SettingsFactory:
-        tags: [ settings.group_factory ]
-
     Tulia\Cms\Node\Domain\WriteModel\Rules\CanAddPurpose\CanImposePurposeInterface:
         class: Tulia\Cms\Node\Domain\WriteModel\Rules\CanAddPurpose\CanImposePurpose

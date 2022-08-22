@@ -19,7 +19,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate
         $this->totalFoundCallback = $totalFoundCallback ?? function () {return 0;};
     }
 
-    public function all(): array
+    public function toArray(): array
     {
         return $this->elements;
     }

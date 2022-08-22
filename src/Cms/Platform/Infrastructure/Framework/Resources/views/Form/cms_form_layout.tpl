@@ -140,7 +140,7 @@
                     <input class="js-typeahead form-control {{ typeahead_attr.class|default('') }}" id="typeahead-entity-{{ fieldId }}" name="q" autocomplete="off" value="{{ display_value }}" />
                     {% if not multiple %}
                         <div class="input-group-append{{ value ? '' : ' d-none' }} js_typeahead__remove_value">
-                            <button type="button" class="btn btn-default btn-icon-only" data-toggle="tooltip" title="{{ 'delete'|trans }}"><i class="btn-icon fas fa-times"></i></button>
+                            <button type="button" class="btn btn-default btn-icon-only" data-bs-toggle="tooltip" title="{{ 'delete'|trans }}"><i class="btn-icon fas fa-times"></i></button>
                         </div>
                     {% endif %}
                 </div>

@@ -12,18 +12,8 @@ use Tulia\Cms\Website\Domain\WriteModel\Model\Website;
  */
 interface WebsiteRepositoryInterface
 {
-    public function createNew(array $data = []): Website;
-
-    /**
-     * @param string $id
-     * @return Website
-     * @throws WebsiteNotFoundException
-     */
-    public function find(string $id): Website;
-
-    public function create(Website $website): void;
-
-    public function update(Website $website): void;
-
-    public function delete(string $id): void;
+    public function getNextId(): string;
+    public function get(string $id): Website;
+    public function save(Website $website): void;
+    public function delete(Website $website): void;
 }

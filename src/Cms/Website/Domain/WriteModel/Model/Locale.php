@@ -8,38 +8,40 @@ use Tulia\Component\Routing\Enum\SslModeEnum;
 
 /**
  * @author Adam Banaszkiewicz
+ * @final
  */
 class Locale
 {
-    protected string $code;
-    protected string $domain;
-    protected ?string $domainDevelopment = null;
-    protected ?string $localePrefix = null;
-    protected ?string $pathPrefix = null;
-    protected string $sslMode;
-    protected bool $isDefault = false;
+    private string $id;
 
     public function __construct(
-        string $code,
-        string $domain,
-        string $domainDevelopment = null,
-        string $localePrefix = null,
-        string $pathPrefix = null,
-        string $sslMode = SslModeEnum::ALLOWED_BOTH,
-        bool $isDefault = false
+        private Website $website,
+        private string $code,
+        private string $domain,
+        private ?string $domainDevelopment = null,
+        private ?string $localePrefix = null,
+        private ?string $pathPrefix = null,
+        private SslModeEnum $sslMode = SslModeEnum::ALLOWED_BOTH,
+        private bool $isDefault = false,
     ) {
-        $this->code = $code;
-        $this->domainDevelopment = $domainDevelopment;
-        $this->domain = $domain;
-        $this->localePrefix = $localePrefix;
-        $this->pathPrefix = $pathPrefix;
-        $this->sslMode = $sslMode;
-        $this->isDefault = $isDefault;
     }
 
     public function __toString(): string
     {
         return $this->code;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'code' => $this->code,
+            'domain' => $this->domain,
+            'domain_development' => $this->domainDevelopment,
+            'locale_prefix' => $this->localePrefix,
+            'path_prefix' => $this->pathPrefix,
+            'ssl_mode' => $this->sslMode->value,
+            'is_default' => $this->isDefault,
+        ];
     }
 
     public function getCode(): string
@@ -92,12 +94,12 @@ class Locale
         $this->pathPrefix = $pathPrefix;
     }
 
-    public function getSslMode(): string
+    public function getSslMode(): SslModeEnum
     {
         return $this->sslMode;
     }
 
-    public function setSslMode(string $sslMode): void
+    public function setSslMode(SslModeEnum $sslMode): void
     {
         $this->sslMode = $sslMode;
     }

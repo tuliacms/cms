@@ -6,7 +6,7 @@ namespace Tulia\Cms\ContactForm\Application\UseCase;
 
 use Tulia\Cms\ContactForm\Domain\FieldsParser\FieldsParserInterface;
 use Tulia\Cms\ContactForm\Domain\WriteModel\ContactFormRepositoryInterface;
-use Tulia\Cms\ContactForm\Domain\WriteModel\NewModel\Form;
+use Tulia\Cms\ContactForm\Domain\WriteModel\Model\Form;
 use Tulia\Cms\Shared\Application\UseCase\AbstractTransactionalUseCase;
 use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
 use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
