@@ -5,7 +5,9 @@ services:
         bind:
             $publicDir: '%kernel.public_dir%'
             $rootDir: '%kernel.project_dir%'
+            $cmsCoreDir: '%cms.core_dir%'
             $assetsPublicPaths: '%cms.assets.public_paths%'
+            $environment: '%kernel.environment%'
 
     Tulia\Cms\Platform\:
         resource: '../../../../../**'

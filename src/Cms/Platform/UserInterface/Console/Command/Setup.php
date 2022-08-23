@@ -4,40 +4,47 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Platform\UserInterface\Console\Command;
 
+use Doctrine\DBAL\Connection;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Tulia\Cms\Options\Application\Service\WebsitesOptionsRegistrator;
-use Tulia\Cms\Platform\Domain\Service\DynamicConfigurationInterface;
+use Tulia\Cms\Options\Domain\WriteModel\OptionsRepositoryInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
+use Tulia\Cms\Theme\Application\Service\ThemeActivator;
 use Tulia\Cms\User\Application\UseCase\CreateUser;
 use Tulia\Cms\User\Application\UseCase\CreateUserRequest;
+use Tulia\Cms\Website\Application\UseCase\UpdateWebsite;
+use Tulia\Cms\Website\Application\UseCase\UpdateWebsiteRequest;
+use Tulia\Component\Importer\ImporterInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class Setup extends Command
 {
-    protected static $defaultName = 'setup';
+    protected static $defaultName = 'cms:setup';
 
     public function __construct(
-        private string $rootDir,
-        private UuidGeneratorInterface $uuidGenerator,
-        private DynamicConfigurationInterface $configuration,
-        private CreateUser $createUser,
-        private WebsitesOptionsRegistrator $optionsRegistrator,
+        private readonly string $rootDir,
+        private readonly string $cmsCoreDir,
+        private readonly UuidGeneratorInterface $uuidGenerator,
+        private readonly CreateUser $createUser,
+        private readonly WebsitesOptionsRegistrator $optionsRegistrator,
+        private readonly OptionsRepositoryInterface $optionsRepository,
+        private readonly UpdateWebsite $updateWebsite,
+        private readonly Connection $connection,
+        private readonly ThemeActivator $themeActivator,
+        private readonly ImporterInterface $importer,
     ) {
         parent::__construct();
     }
 
     protected function configure()
     {
-        $this
-            ->setName('setup')
-            ->setDescription('Setups the new project.')
-        ;
+        $this->setDescription('Setups the new project.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -61,7 +68,9 @@ EOF
         $io->writeln('<comment>Now, answer some questions to initialize Your Tulia CMS installation.</comment>');
 
         $websiteName = $this->askFor('Website name', $input, $output);
+        $websiteLocale = $this->askFor('Website locale', $input, $output, default: 'en_US');
         $websiteProductionDomain = $this->askFor('Website production domain', $input, $output, default: 'localhost');
+
         $username = $this->askFor('Admin email', $input, $output, validator: static function ($answer) {
             if (!filter_var($answer, FILTER_VALIDATE_EMAIL)) {
                 throw new \RuntimeException('Please provide a valid e-mail address.');
@@ -70,9 +79,16 @@ EOF
         $password = $this->askFor('Admin password', $input, $output, default: 'root', hidden: true);
         $sampleData = $this->askFor('I want to load sample website data', $input, $output, default: 'yes');
 
-        $this->updateWebsite($websiteName, $websiteProductionDomain);
-        $this->crreateAdminUser($username, $password);
-        $this->optionsRegistrator->registerMissingOptions();
+        $websiteId = $this->getWebsiteId();
+        $this->updateOptions($websiteId, $websiteLocale, $username);
+        $this->updateWebsite($websiteId, $websiteName, $websiteLocale, $websiteProductionDomain);
+        $this->updateTheme($websiteId);
+        //$this->createAdminUser($username, $password);
+
+        if ($sampleData) {
+            $this->authenticateUser($username, $password);
+            $this->importSampleData();
+        }
 
         if (!($_ENV['APP_SECRET'] ?? null)) {
             $secret = $this->uuidGenerator->generate();
@@ -136,22 +152,54 @@ EOF
         return $this->getHelper('question')->ask($input, $output, $question);
     }
 
-    private function updateWebsite(string $websiteName, string $websiteProductionDomain): void
+    private function updateWebsite(string $websiteId, string $name, string $locale, string $domain): void
     {
-        // @todo Website
-        throw new \Exception('Default website data from setup must be set to existing website in the file.');
-        $this->configuration->open();
-        $website = $this->configuration->get('cms.websites');
-        $website['locales'][0]['domain'] = $websiteProductionDomain;
-        $this->configuration->set('cms.websites', $website);
+        ($this->updateWebsite)(new UpdateWebsiteRequest(
+            $websiteId,
+            $name,
+            true,
+            [[
+                'code' => $locale,
+                'domain' => $domain,
+                'domain_development' => $domain,
+            ]]
+        ));
     }
 
-    private function crreateAdminUser(string $username, string $password): void
+    private function createAdminUser(string $username, string $password): void
     {
         ($this->createUser)(new CreateUserRequest(
             $username,
             $password,
             ['ROLE_ADMIN']
         ));
+    }
+
+    private function updateOptions(string $websiteId, string $locale, string $username): void
+    {
+        $this->optionsRegistrator->registerMissingOptions($websiteId);
+
+        $option = $this->optionsRepository->get('administrator_email', $websiteId);
+        $option->setValue($username, $locale, $locale);
+        $this->optionsRepository->save($option);
+    }
+
+    private function getWebsiteId(): string
+    {
+        return $this->connection->fetchOne('SELECT id from #__website');
+    }
+
+    private function updateTheme(string $websiteId): void
+    {
+        $this->themeActivator->activateTheme('Tulia/Lisa', $websiteId);
+    }
+
+    private function importSampleData(): void
+    {
+        $this->importer->importFromFile($this->cmsCoreDir.'/Cms/Platform/Infrastructure/Framework/Resources/imports/sample-website-data.json');
+    }
+
+    private function authenticateUser(string $username, string $password): void
+    {
     }
 }

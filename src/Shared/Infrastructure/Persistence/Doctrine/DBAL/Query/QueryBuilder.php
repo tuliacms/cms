@@ -28,6 +28,9 @@ class QueryBuilder extends DoctrineQueryBuilder
         foreach ($this->getParameters() as $parameter => $value) {
             if (is_numeric($value)) {
                 $sql = str_replace(":$parameter", $value, $sql);
+            } if (is_array($value)) {
+                $values = implode("', '", array_map(fn($v) => $this->connection->quote($v), $value));
+                $sql = str_replace(":$parameter", $values, $sql);
             } elseif ($value === null) {
                 $sql = str_replace(":$parameter", 'NULL', $sql);
             } else{

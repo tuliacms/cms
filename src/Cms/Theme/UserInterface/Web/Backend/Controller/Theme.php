@@ -55,6 +55,8 @@ class Theme extends AbstractController
      */
     public function activate(Request $request, WebsiteInterface $website): RedirectResponse
     {
+        $this->denyIfNotDevelopmentEnvironment();
+
         try {
             $this->themeActivator->activateTheme($request->request->get('theme'), $website->getId());
         } catch (ThemeNotFoundException $e) {

@@ -33,7 +33,7 @@ class SimpleStrategy implements ContentTypeRoutingStrategyInterface
             throw new \InvalidArgumentException('Please provide locale.');
         }
 
-        $node = $this->findNodeById($id, $parameters['_locale']);
+        $node = $this->findNodeById($id, $parameters['_website_id'], $parameters['_locale']);
 
         if ($node) {
             return '/' . $node->getSlug();
@@ -90,11 +90,12 @@ class SimpleStrategy implements ContentTypeRoutingStrategyInterface
         ], NodeFinderScopeEnum::ROUTING_MATCHER);
     }
 
-    private function findNodeById(?string $id, string $locale): ?Node
+    private function findNodeById(?string $id, string $websiteId, string $locale): ?Node
     {
         return $this->nodeFinder->findOne([
             'id' => $id,
             'locale' => $locale,
+            'website_id'=> $websiteId,
         ], NodeFinderScopeEnum::ROUTING_MATCHER);
     }
 }

@@ -28,6 +28,8 @@ final class ImportThemeCollection extends AbstractTransactionalUseCase
      */
     protected function execute(RequestInterface $request): ?ResultInterface
     {
+        $this->denyIfNotDevelopmentEnvironment();
+
         $collections = $this->registry->getFor($request->theme);
 
         if (!isset($collections[$request->collection]['filepath'])) {

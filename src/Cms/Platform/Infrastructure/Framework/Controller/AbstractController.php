@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Exception\NotDevelopmentEnvironmentAccessDeniedException;
 use Tulia\Cms\Platform\Shared\Document\DocumentInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
 use Tulia\Component\Templating\View;
@@ -89,5 +90,15 @@ abstract class AbstractController extends SymfonyController
     public function isHomepage(Request $request): bool
     {
         return $request->getPathInfo() === '/';
+    }
+
+    /**
+     * @throws NotDevelopmentEnvironmentAccessDeniedException
+     */
+    public function denyIfNotDevelopmentEnvironment(): void
+    {
+        if ($this->getParameter('kernel.environment') !== 'dev') {
+            throw new NotDevelopmentEnvironmentAccessDeniedException('Access denied. Cannot do that in not development environment.');
+        }
     }
 }

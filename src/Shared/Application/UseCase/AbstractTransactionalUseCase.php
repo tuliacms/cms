@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Shared\Application\UseCase;
 
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+
 /**
  * @author Adam Banaszkiewicz
  */
 abstract class AbstractTransactionalUseCase implements TransactionalUseCaseInterface
 {
+    private string $environment;
     private TransactionalSessionInterface $transactionalSession;
 
     public function __invoke(RequestInterface $request): ?ResultInterface
@@ -24,4 +27,19 @@ abstract class AbstractTransactionalUseCase implements TransactionalUseCaseInter
     }
 
     abstract protected function execute(RequestInterface $request): ?ResultInterface;
+
+    public function setEnvironment(string $environment): void
+    {
+        $this->environment = $environment;
+    }
+
+    /**
+     * @throws AccessDeniedHttpException
+     */
+    protected function denyIfNotDevelopmentEnvironment(): void
+    {
+        if ($this->environment !== 'dev') {
+            throw new AccessDeniedHttpException('Cannot execute this operation in not "dev" environment.');
+        }
+    }
 }

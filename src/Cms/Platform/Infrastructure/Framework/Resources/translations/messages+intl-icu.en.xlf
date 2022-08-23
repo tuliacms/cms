@@ -841,6 +841,10 @@
                 <source>previewNotAvailable</source>
                 <target>Preview not available</target>
             </trans-unit>
+            <trans-unit id="tuliacms.messages.210">
+                <source>cannotDoThisOperationOnNotDevEnvironment</source>
+                <target>Cannot do this operation when is not development mode. You can do this only on local development computer.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

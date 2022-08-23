@@ -9,7 +9,6 @@ use Tulia\Cms\Node\Domain\WriteModel\Service\NodeRepositoryInterface;
 use Tulia\Cms\Shared\Application\UseCase\AbstractTransactionalUseCase;
 use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
 use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
-use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChainInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 
 /**
@@ -20,7 +19,6 @@ final class DeleteNode extends AbstractTransactionalUseCase
     public function __construct(
         private NodeRepositoryInterface $repository,
         private EventBusInterface $eventBus,
-        private AggregateActionsChainInterface $actionsChain,
         private CanDeleteNodeInterface $canDeleteNode
     ) {
     }
@@ -33,7 +31,6 @@ final class DeleteNode extends AbstractTransactionalUseCase
             return null;
         }
 
-        $this->actionsChain->execute('delete', $node);
         $node->delete($this->canDeleteNode);
 
         $this->repository->delete($node);

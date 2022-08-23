@@ -132,7 +132,7 @@ class Item
         $this->sortItems();
     }
 
-    public function linksTo(string $type, string $identity, string $hash): void
+    public function linksTo(string $type, string $identity = '', string $hash = ''): void
     {
         $this->type = $type;
         $this->identity = $identity;

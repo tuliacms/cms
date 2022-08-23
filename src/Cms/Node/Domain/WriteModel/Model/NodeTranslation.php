@@ -65,7 +65,7 @@ final class NodeTranslation
         return $this->node->getNodeType();
     }
 
-    public function rename(SlugGeneratorStrategyInterface $slugGenerator, string $title, ?string $slug): void
+    public function rename(SlugGeneratorStrategyInterface $slugGenerator, string $title, ?string $slug = null): void
     {
         $this->title = $title;
         $this->slug = $slugGenerator->generate($this->getId(), (string) $slug, $title, $this->locale);

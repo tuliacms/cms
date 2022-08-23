@@ -13,9 +13,11 @@
 {% block content %}
     <div class="pane pane-lead">
         <div class="pane-header">
-            <div class="pane-buttons">
-                <a href="{{ path('backend.website.create') }}" class="btn btn-success btn-icon-left"><i class="btn-icon fas fa-plus"></i> {{ 'create'|trans }}</a>
-            </div>
+            {% if is_dev_env() %}
+                <div class="pane-buttons">
+                    <a href="{{ path('backend.website.create') }}" class="btn btn-success btn-icon-left"><i class="btn-icon fas fa-plus"></i> {{ 'create'|trans }}</a>
+                </div>
+            {% endif %}
             <i class="pane-header-icon fas fa-globe"></i>
             <h1 class="pane-title">{{ block('title') }}</h1>
         </div>
@@ -63,8 +65,10 @@
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <a href="#" class="dropdown-item dropdown-item-with-icon website-locale-addresses-trigger" title="{{ 'showAddresses'|trans({}, 'websites') }}"><i class="dropdown-icon fas fa-link"></i>{{ 'showAddresses'|trans({}, 'websites') }}</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="#" class="dropdown-item dropdown-item-danger dropdown-item-with-icon website-delete-trigger" title="{{ 'delete'|trans }}" data-id="{{ website.id }}"><i class="dropdown-icon fas fa-times"></i>{{ 'delete'|trans }}</a>
+                                        {% if is_dev_env() %}
+                                            <div class="dropdown-divider"></div>
+                                            <a href="#" class="dropdown-item dropdown-item-danger dropdown-item-with-icon website-delete-trigger" title="{{ 'delete'|trans }}" data-id="{{ website.id }}"><i class="dropdown-icon fas fa-times"></i>{{ 'delete'|trans }}</a>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>

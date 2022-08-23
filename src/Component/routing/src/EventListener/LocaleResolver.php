@@ -6,12 +6,18 @@ namespace Tulia\Component\Routing\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\Routing\RequestContextAwareInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class LocaleResolver implements EventSubscriberInterface
 {
+    public function __construct(
+        private readonly RequestContextAwareInterface $router
+    ) {
+    }
+
     public static function getSubscribedEvents(): array
     {
         return [
@@ -42,5 +48,7 @@ class LocaleResolver implements EventSubscriberInterface
     {
         $request = $event->getRequest();
         $request->setDefaultLocale($request->server->get('TULIA_WEBSITE_LOCALE_DEFAULT'));
+        $this->router?->getContext()->setParameter('_locale', $request->server->get('TULIA_WEBSITE_LOCALE_DEFAULT'));
+        $this->router?->getContext()->setParameter('_website_id', $request->server->get('TULIA_WEBSITE_ID'));
     }
 }

@@ -29,6 +29,8 @@ final class CreateWebsite extends AbstractTransactionalUseCase
      */
     protected function execute(RequestInterface $request): ?ResultInterface
     {
+        $this->denyIfNotDevelopmentEnvironment();
+
         $locale = $request->locales[0];
 
         $website = Website::create(

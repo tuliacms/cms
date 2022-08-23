@@ -24,7 +24,7 @@ class DbalOptionsFinder implements OptionsFinderInterface
             FROM #__option tm
             LEFT JOIN #__option_translation tl
                 ON tm.id = tl.option_id AND tl.locale = :locale
-            WHERE tm.`name` = :name AND tm.website_id = :website_id
+            WHERE tm.`name` = :name AND tm.website_id = :websiteId
             LIMIT 1', [
             'name'      => $name,
             'locale'    => $locale,
@@ -44,7 +44,7 @@ class DbalOptionsFinder implements OptionsFinderInterface
             FROM #__option tm
             LEFT JOIN #__option_translation tl
                 ON tm.id = tl.option_id AND tl.locale = :locale
-            WHERE tm.`name` IN (:name) AND tm.website_id = :website_id
+            WHERE tm.`name` IN (:name) AND tm.website_id = :websiteId
             LIMIT 1', [
             'name'      => $names,
             'locale'    => $locale,
@@ -64,9 +64,9 @@ class DbalOptionsFinder implements OptionsFinderInterface
             FROM #__option tm
             LEFT JOIN #__option_translation tl
                 ON tm.id = tl.option_id AND tl.locale = :locale
-            WHERE tm.website_id = :website_id AND tm.autoload = 1', [
+            WHERE tm.website_id = :websiteId AND tm.autoload = 1', [
             'locale'    => $locale,
-            'website_id' => Uuid::fromString($websiteId)->toBinary(),
+            'websiteId' => Uuid::fromString($websiteId)->toBinary(),
         ], [
             'locale'    => \PDO::PARAM_STR,
             'websiteId' => \PDO::PARAM_STR,

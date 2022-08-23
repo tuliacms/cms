@@ -28,6 +28,8 @@ final class UpdateWebsite extends AbstractTransactionalUseCase
      */
     protected function execute(RequestInterface $request): ?ResultInterface
     {
+        $this->denyIfNotDevelopmentEnvironment();
+
         $website = $this->repository->get($request->id);
         $website->rename($request->name);
 

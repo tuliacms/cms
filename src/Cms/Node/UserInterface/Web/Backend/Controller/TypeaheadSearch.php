@@ -27,6 +27,7 @@ class TypeaheadSearch extends TypeaheadFormTypeSearch
             'node_type' => $request->query->get('node_type'),
             'per_page' => 10,
             'locale' => $website->getLocale()->getCode(),
+            'website_id' => $website->getId(),
         ], NodeFinderScopeEnum::INTERNAL);
 
         $result = [];

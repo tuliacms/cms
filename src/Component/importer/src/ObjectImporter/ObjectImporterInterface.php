@@ -15,4 +15,6 @@ interface ObjectImporterInterface
      * Imports object, and returns it's ID.
      */
     public function import(ObjectData $objectData): ?string;
+
+    public function getAuthorId(): string;
 }

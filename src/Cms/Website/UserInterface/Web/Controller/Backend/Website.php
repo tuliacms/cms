@@ -58,6 +58,8 @@ class Website extends AbstractController
      */
     public function create(Request $request, CreateWebsite $createWebsite)
     {
+        $this->denyIfNotDevelopmentEnvironment();
+
         $form = $this->createForm(WebsiteForm::class, [
             'id' => $this->repository->getNextId(),
             'locales' => [
@@ -105,6 +107,8 @@ class Website extends AbstractController
      */
     public function edit(string $id, Request $request, UpdateWebsite $updateWebsite)
     {
+        $this->denyIfNotDevelopmentEnvironment();
+
         $website = $this->repository->get($id);
         $form = $this->createForm(WebsiteForm::class, $website->toArray());
         $form->handleRequest($request);
@@ -145,6 +149,8 @@ class Website extends AbstractController
      */
     public function delete(Request $request, DeleteWebsite $deleteWebsite): RedirectResponse
     {
+        $this->denyIfNotDevelopmentEnvironment();
+
         try {
             ($deleteWebsite)(new DeleteWebsiteRequest($request->request->get('id')));
             $this->setFlash('success', $this->trans('selectedWebsitesWereDeleted', [], 'websites'));

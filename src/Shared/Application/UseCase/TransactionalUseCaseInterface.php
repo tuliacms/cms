@@ -11,4 +11,5 @@ interface TransactionalUseCaseInterface
 {
     public function __invoke(RequestInterface $request): ?ResultInterface;
     public function setTransactionalSession(TransactionalSessionInterface $transactionalSession): void;
+    public function setEnvironment(string $environment): void;
 }

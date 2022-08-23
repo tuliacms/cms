@@ -30,6 +30,8 @@ final class InstallTheme extends AbstractTransactionalUseCase
      */
     protected function execute(RequestInterface $request): ?ResultInterface
     {
+        $this->denyIfNotDevelopmentEnvironment();
+
         $destination = $this->projectDir . '/var/theme-installator/theme-' . date('YmdHisu');
 
         try {

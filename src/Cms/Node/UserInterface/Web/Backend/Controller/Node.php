@@ -140,7 +140,7 @@ class Node extends AbstractController
         try {
             $node = $this->repository->get($id);
         } catch (NodeDoesntExistsException $e) {
-            $this->setFlash('warning', $this->trans('nodeNotFound'));
+            $this->setFlash('warning', $this->trans('nodeNotFound', [], 'node'));
             return $this->redirectToRoute('backend.node.list');
         }
 

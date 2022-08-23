@@ -26,6 +26,8 @@ final class UninstallTheme extends AbstractTransactionalUseCase
      */
     protected function execute(RequestInterface $request): ?ResultInterface
     {
+        $this->denyIfNotDevelopmentEnvironment();
+
         $themeDirectory = $this->projectDir.'/extension/theme/'.$request->theme;
 
         if (!is_dir($themeDirectory)) {

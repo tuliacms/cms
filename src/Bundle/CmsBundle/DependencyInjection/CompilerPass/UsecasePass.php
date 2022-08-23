@@ -17,7 +17,10 @@ final class UsecasePass implements CompilerPassInterface
     public function process(ContainerBuilder $container): void
     {
         foreach ($container->findTaggedServiceIds('usecase.transactional') as $id => $tags) {
-            $container->getDefinition($id)->addMethodCall('setTransactionalSession', [new Reference(TransactionalSessionInterface::class)]);
+            $container->getDefinition($id)
+                ->addMethodCall('setTransactionalSession', [new Reference(TransactionalSessionInterface::class)])
+                ->addMethodCall('setEnvironment', ['%kernel.environment%'])
+            ;
         }
     }
 }

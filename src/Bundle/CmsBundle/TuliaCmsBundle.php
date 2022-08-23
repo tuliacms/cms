@@ -11,7 +11,6 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\CachePass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\ContentBuilderPass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\DashboardPass;
-use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\DomainActionChainPass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\FinderPass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\RoutingPass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\TaxonomyPass;
@@ -36,7 +35,6 @@ class TuliaCmsBundle extends Bundle
     public function build(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new CachePass());
-        $container->addCompilerPass(new DomainActionChainPass());
         $container->addCompilerPass(new TaxonomyPass());
         $container->addCompilerPass(new DashboardPass());
         $container->addCompilerPass(new WidgetPass());

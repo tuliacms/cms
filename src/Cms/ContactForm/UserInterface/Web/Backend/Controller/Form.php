@@ -314,13 +314,13 @@ class Form extends AbstractController
                     'type' => 'text',
                     'name' => 'name',
                     'label' => 'Name',
-                    'constraints' => 'required,asdasd',
+                    'constraints' => 'required',
                 ],
                 [
                     'type' => 'textarea',
                     'name' => 'message',
                     'label' => 'Message',
-                    'constraints' => 'required,asdasd',
+                    'constraints' => 'required',
                 ],
                 [
                     'type' => 'submit',

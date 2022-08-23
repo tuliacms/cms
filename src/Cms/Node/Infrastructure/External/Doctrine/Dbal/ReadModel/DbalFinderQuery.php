@@ -281,9 +281,9 @@ class DbalFinderQuery extends AbstractDbalQuery
 
         $this->queryBuilder
             ->from('#__node', 'tm')
-            ->leftJoin('tm', '#__node_translation', 'tl', 'tm.id = tl.node_id AND tm.website_id = :tl_website_id AND tl.locale = :tl_locale')
+            ->innerJoin('tm', '#__node_translation', 'tl', 'tm.id = tl.node_id AND tm.website_id = :tl_website_id AND tl.locale = :tl_locale')
             ->setParameter('tl_locale', $criteria['locale'], PDO::PARAM_STR)
-            ->setParameter('tl_website_id', Uuid::fromString($criteria['website_id']), PDO::PARAM_STR)
+            ->setParameter('tl_website_id', Uuid::fromString($criteria['website_id'])->toBinary(), PDO::PARAM_STR)
             ->leftJoin('tm', '#__node_has_purpose', 'tnhf', 'tm.id = tnhf.node_id')
             ->addGroupBy('tm.id')
         ;

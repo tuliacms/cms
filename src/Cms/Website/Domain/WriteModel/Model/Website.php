@@ -133,17 +133,21 @@ class Website extends AbstractAggregateRoot
         $this->locales->clear();
 
         foreach ($locales as $locale) {
+            if (!isset($locale['ssl_mode'])) {
+                $locale['ssl_mode'] = SslModeEnum::ALLOWED_BOTH;
+            } elseif (!$locale['ssl_mode'] instanceof SslModeEnum) {
+                $locale['ssl_mode'] = SslModeEnum::from($locale['ssl_mode']);
+            }
+
             $this->addLocale(new Locale(
                 $this,
                 $locale['code'],
                 $locale['domain'],
                 $locale['domain_development'],
-                $locale['locale_prefix'],
-                $locale['path_prefix'],
-                $locale['ssl_mode'] instanceof SslModeEnum
-                    ? $locale['ssl_mode']
-                    : SslModeEnum::from($locale['ssl_mode']),
-                (bool) $locale['is_default'],
+                $locale['locale_prefix'] ?? null,
+                $locale['path_prefix'] ?? null,
+                $locale['ssl_mode'],
+                (bool) ($locale['is_default'] ?? 1),
             ));
         }
     }

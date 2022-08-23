@@ -180,6 +180,7 @@ class Node extends AbstractAggregateRoot
     public function publish(ImmutableDateTime $publishedAt): void
     {
         $this->publishedAt = $publishedAt;
+        $this->status = 'published';
 
         $this->recordThat(new Event\NodePublished($this->id, $this->type, $this->publishedAt));
     }

@@ -134,10 +134,6 @@ class TuliaCmsExtension extends Extension
         $container->registerForAutoconfiguration(\Tulia\Component\Shortcode\Compiler\ShortcodeCompilerInterface::class)
             ->addTag('shortcode.compiler');
 
-        // Common
-        $container->registerForAutoconfiguration(\Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionInterface::class)
-            ->addTag('cms.domain.action_chain');
-
         // Widgets
         $container->registerForAutoconfiguration(\Tulia\Cms\Widget\Domain\Catalog\WidgetInterface::class)
             ->setLazy(true)

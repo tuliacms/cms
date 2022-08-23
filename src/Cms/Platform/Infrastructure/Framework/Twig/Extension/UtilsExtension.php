@@ -6,15 +6,18 @@ namespace Tulia\Cms\Platform\Infrastructure\Framework\Twig\Extension;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class UtilsExtension extends AbstractExtension
 {
-    /**
-     * {@inheritdoc}
-     */
+    public function __construct(
+        private readonly string $environment,
+    ) {
+    }
+
     public function getFilters(): array
     {
         return [
@@ -32,6 +35,17 @@ class UtilsExtension extends AbstractExtension
             ]),
             new TwigFilter('uniqid', function (string $prefix = null) {
                 return uniqid($prefix, true);
+            }, [
+                'is_safe' => [ 'html' ]
+            ]),
+        ];
+    }
+
+    public function getFunctions(): array
+    {
+        return [
+            new TwigFunction('is_dev_env', function () {
+                return $this->environment === 'dev';
             }, [
                 'is_safe' => [ 'html' ]
             ]),

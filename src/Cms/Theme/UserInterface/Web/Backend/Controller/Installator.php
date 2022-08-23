@@ -38,6 +38,8 @@ final class Installator extends AbstractController
      */
     public function install(Request $request, InstallTheme $installTheme): RedirectResponse
     {
+        $this->denyIfNotDevelopmentEnvironment();
+
         $form = $this->createForm(ThemeInstallatorForm::class);
         $form->handleRequest($request);
 
@@ -59,6 +61,8 @@ final class Installator extends AbstractController
         AssetsPublisher $assetsPublisher,
         ThemeImportCollectionRegistry $registry
     ): RedirectResponse {
+        $this->denyIfNotDevelopmentEnvironment();
+
         $assetsPublisher->publishRegisteredAssets();
 
         if ($registry->hasAny($request->query->get('theme'))) {
@@ -75,6 +79,8 @@ final class Installator extends AbstractController
      */
     public function importer(Request $request, ThemeImportCollectionRegistry $registry)
     {
+        $this->denyIfNotDevelopmentEnvironment();
+
         $theme = $request->query->get('theme');
 
         if (false === $registry->hasAny($theme)) {
@@ -93,6 +99,8 @@ final class Installator extends AbstractController
      */
     public function import(Request $request, ImportThemeCollection $importThemeCollection): RedirectResponse
     {
+        $this->denyIfNotDevelopmentEnvironment();
+
         ($importThemeCollection)(new ImportThemeCollectionRequest(
             $request->request->get('theme'),
             $request->request->get('collection')
@@ -109,6 +117,8 @@ final class Installator extends AbstractController
      */
     public function uninstall(Request $request, UninstallTheme $uninstallTheme): RedirectResponse
     {
+        $this->denyIfNotDevelopmentEnvironment();
+
         ($uninstallTheme)(new UninstallThemeRequest($request->request->get('theme')));
 
         $this->addFlash('success', $this->trans('themeHasBeenUninstalled', [], 'themes'));
