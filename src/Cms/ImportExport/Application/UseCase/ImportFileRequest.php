@@ -13,7 +13,9 @@ final class ImportFileRequest implements RequestInterface
 {
     public function __construct(
         public readonly string $filepath,
-        public readonly ?string $originalName = null
+        public readonly ?string $originalName = null,
+        public readonly string $websiteId,
+        public readonly string $authorId,
     ) {
     }
 }

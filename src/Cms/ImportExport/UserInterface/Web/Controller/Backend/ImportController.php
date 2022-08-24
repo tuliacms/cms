@@ -11,6 +11,8 @@ use Tulia\Cms\ImportExport\Application\UseCase\ImportFile;
 use Tulia\Cms\ImportExport\Application\UseCase\ImportFileRequest;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
+use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
 
 /**
@@ -18,6 +20,11 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class ImportController extends AbstractController
 {
+    public function __construct(
+        private readonly AuthenticatedUserProviderInterface $authenticatedUserProvider,
+    ) {
+    }
+
     public function homepage(): ViewInterface
     {
         return $this->view('@backend/import_export/importer.tpl');
@@ -26,11 +33,13 @@ class ImportController extends AbstractController
     /**
      * @CsrfToken(id="import-export-import-file")
      */
-    public function importFile(Request $request, ImportFile $importFile): Response
+    public function importFile(Request $request, ImportFile $importFile, WebsiteInterface $website): Response
     {
         ($importFile)(new ImportFileRequest(
             $request->files->get('file')->getPathname(),
-            $request->files->get('file')->getClientOriginalName()
+            $request->files->get('file')->getClientOriginalName(),
+            $website->getId(),
+            $this->authenticatedUserProvider->getUser()->getId()
         ));
 
         if ($request->query->has('return')) {

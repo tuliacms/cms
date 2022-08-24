@@ -26,15 +26,15 @@ class ObjectImporterRegistry
         $this->importers[get_class($importer)] = $importer;
     }
 
-    public function getImporter(string $classname): ObjectImporterInterface
+    public function getImporter(string $classname, array $parameters): ObjectImporterInterface
     {
-        return $this->decorate($this->importers[$classname]);
+        return $this->decorate($this->importers[$classname], $parameters);
     }
 
-    private function decorate(ObjectImporterInterface $importer): ObjectImporterInterface
+    private function decorate(ObjectImporterInterface $importer, array $parameters): ObjectImporterInterface
     {
         foreach ($this->decorators as $decorator) {
-            $importer = $decorator->decorate($importer);
+            $importer = $decorator->decorate($importer, $parameters);
         }
 
         return $importer;

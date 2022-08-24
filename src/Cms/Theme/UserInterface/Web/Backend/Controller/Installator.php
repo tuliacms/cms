@@ -19,7 +19,9 @@ use Tulia\Cms\Theme\Application\UseCase\UninstallTheme;
 use Tulia\Cms\Theme\Application\UseCase\UninstallThemeRequest;
 use Tulia\Cms\Theme\Domain\ThemeImportCollectionRegistry;
 use Tulia\Cms\Theme\UserInterface\Web\Backend\Form\ThemeInstallatorForm;
+use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
 use Tulia\Component\Importer\ImporterInterface;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
 use Tulia\Component\Theme\ManagerInterface;
 
@@ -29,7 +31,8 @@ use Tulia\Component\Theme\ManagerInterface;
 final class Installator extends AbstractController
 {
     public function __construct(
-        private readonly ManagerInterface $themesManager
+        private readonly ManagerInterface $themesManager,
+        private readonly AuthenticatedUserProviderInterface $authenticatedUserProvider,
     ) {
     }
 
@@ -97,13 +100,18 @@ final class Installator extends AbstractController
     /**
      * @CsrfToken(id="theme.importer.import")
      */
-    public function import(Request $request, ImportThemeCollection $importThemeCollection): RedirectResponse
-    {
+    public function import(
+        Request $request,
+        ImportThemeCollection $importThemeCollection,
+        WebsiteInterface $website
+    ): RedirectResponse {
         $this->denyIfNotDevelopmentEnvironment();
 
         ($importThemeCollection)(new ImportThemeCollectionRequest(
             $request->request->get('theme'),
-            $request->request->get('collection')
+            $request->request->get('collection'),
+            $website->getId(),
+            $this->authenticatedUserProvider->getUser()->getId()
         ));
 
         $this->addFlash('success', $this->trans('collectionHasBeenImported', [], 'themes'));

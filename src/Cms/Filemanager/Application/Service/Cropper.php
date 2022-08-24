@@ -7,7 +7,7 @@ namespace Tulia\Cms\Filemanager\Application\Service;
 use Tulia\Cms\Filemanager\Domain\ImageSize\ImageSize;
 use Tulia\Cms\Filemanager\Domain\ImageSize\ImageSizeRegistryInterface;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Model\File;
-use Tulia\Cms\Filemanager\Domain\WriteModel\FileTypeEnum;
+use Tulia\Cms\Filemanager\Domain\WriteModel\Model\FileTypeEnum;
 use Tulia\Component\Image\ImageInterface;
 use Tulia\Component\Image\ImageManagerInterface;
 

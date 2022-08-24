@@ -18,3 +18,12 @@ services:
         factory: [ 'Tulia\Component\Importer\Implementation\Symfony\SchemaFromContainerFactory', 'build' ]
         bind:
             $objects: '%cms.importer.objects%'
+            
+    Tulia\Component\Importer\Parameters\ParametersProviderInterface:
+        '@Tulia\Component\Importer\Parameters\ArrayParametersProvider'
+    
+    Tulia\Component\Importer\Parameters\ArrayParametersProvider:
+        bind:
+            $parameters:
+                cms.core_dir: '%cms.core_dir%'
+                kernel.project_dir: '%kernel.project_dir%'

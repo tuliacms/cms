@@ -32,6 +32,7 @@ class ObjectDataToAttributesTransformer
             $field->isMultilingual() ? $flags[] = 'multilingual' : null;
             $field->isNonscalarValue() ? $flags[] = 'nonscalar_value' : null;
 
+
             if (isset($attribute['payload'])) {
                 $attribute['payload'] = unserialize($attribute['payload'], ['allowed_classes' => []]);
             } else {
@@ -42,7 +43,7 @@ class ObjectDataToAttributesTransformer
                 $attribute['code'],
                 $attribute['uri'],
                 $attribute['value'],
-                $attribute['compiled_value'] ?? null,
+                null,
                 $attribute['payload'],
                 $flags
             );

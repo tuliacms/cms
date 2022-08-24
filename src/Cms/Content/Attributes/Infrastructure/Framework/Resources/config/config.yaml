@@ -3,9 +3,6 @@ cms:
         objects:
             Attribute:
                 mapping:
-                    compiled_value:
-                        required: false
-                        type: string
                     payload:
                         required: false
                         type: string

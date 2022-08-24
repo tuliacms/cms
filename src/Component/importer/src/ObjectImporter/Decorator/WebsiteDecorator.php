@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Component\Importer\ObjectImporter\Decorator;
 
 use Tulia\Component\Importer\ObjectImporter\ObjectImporterInterface;
-use Tulia\Component\Importer\ObjectImporter\WebsiteAwareObjectImporterInterface;
 use Tulia\Component\Routing\Website\WebsiteInterface;
+use Tulia\Component\Importer\ObjectImporter\Traits\WebsiteAwareTrait;
 
 /**
  * @author Adam Banaszkiewicz
@@ -18,10 +18,10 @@ final class WebsiteDecorator implements ObjectImporterDecoratorInterface
     ) {
     }
 
-    public function decorate(ObjectImporterInterface $importer): ObjectImporterInterface
+    public function decorate(ObjectImporterInterface $importer, array $parameters): ObjectImporterInterface
     {
-        if ($importer instanceof WebsiteAwareObjectImporterInterface) {
-            $importer->setWebsite($this->website);
+        if (\in_array(WebsiteAwareTrait::class, class_uses($importer), true)) {
+            $importer->setWebsite($parameters['website'] ?? $this->website);
         }
 
         return $importer;

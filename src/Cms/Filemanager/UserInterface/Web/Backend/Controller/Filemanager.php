@@ -25,6 +25,11 @@ class Filemanager extends AbstractController
 
     public function endpoint(Request $request): JsonResponse
     {
-        return $this->responseJson($this->commandPropagator->handle((string) $request->query->get('cmd', ''), $request));
+        return $this->responseJson(
+            $this->commandPropagator->handle(
+                (string) $request->query->get('cmd', ''),
+                $request
+            )
+        );
     }
 }

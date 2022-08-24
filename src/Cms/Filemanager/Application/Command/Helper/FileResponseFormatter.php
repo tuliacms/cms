@@ -6,7 +6,7 @@ namespace Tulia\Cms\Filemanager\Application\Command\Helper;
 
 use Tulia\Cms\Filemanager\Application\Service\ImageUrlResolver;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Model\File;
-use Tulia\Cms\Filemanager\Domain\WriteModel\FileTypeEnum;
+use Tulia\Cms\Filemanager\Domain\WriteModel\Model\FileTypeEnum;
 use Tulia\Cms\Platform\Shared\Unit;
 
 /**

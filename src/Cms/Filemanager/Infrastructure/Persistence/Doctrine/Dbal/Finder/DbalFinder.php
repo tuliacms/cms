@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Filemanager\Infrastructure\Persistence\Domain\ReadModel\Finder;
+namespace Tulia\Cms\Filemanager\Infrastructure\Persistence\Doctrine\Dbal\Finder;
 
 use Doctrine\DBAL\Connection;
 use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\AttributesFinder;

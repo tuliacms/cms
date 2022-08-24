@@ -11,13 +11,12 @@ use Tulia\Cms\Menu\Application\UseCase\CreateMenuRequest;
 use Tulia\Cms\Shared\Application\UseCase\IdResult;
 use Tulia\Component\Importer\ObjectImporter\ObjectImporterInterface;
 use Tulia\Component\Importer\ObjectImporter\Traits\WebsiteAwareTrait;
-use Tulia\Component\Importer\ObjectImporter\WebsiteAwareObjectImporterInterface;
 use Tulia\Component\Importer\Structure\ObjectData;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class MenuImporter implements ObjectImporterInterface, WebsiteAwareObjectImporterInterface
+class MenuImporter implements ObjectImporterInterface
 {
     use WebsiteAwareTrait;
 
@@ -38,7 +37,7 @@ class MenuImporter implements ObjectImporterInterface, WebsiteAwareObjectImporte
             $details = [
                 'name' => $item['name'],
                 'type' => $item['link_type'],
-                'identity' => $item['type_identity'] ?? '',
+                'identity' => $item['link_identity'] ?? null,
                 'hash' => $item['hash'] ?? '',
                 'target' => $item['target'] ?? '_self',
             ];

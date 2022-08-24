@@ -1,4 +1,19 @@
+doctrine:
+    orm:
+        mappings:
+            Tulia\Cms\Filemanager\Domain\WriteModel\Model:
+                type: xml
+                dir: '%cms.core_dir%/Cms/Filemanager/Infrastructure/Framework/Resources/config/orm/mapping'
+                is_bundle: false
+                prefix: Tulia\Cms\Filemanager\Domain\WriteModel\Model
+                alias: CmsFilemanager
 cms:
+    importer:
+        objects:
+            File:
+                importer: 'Tulia\Cms\Filemanager\Infrastructure\Cms\Importer\FileImporter'
+                mapping:
+                    filepath: ~
     templating:
         paths:
             - { name: backend/filemanager, path: '%cms.core_dir%/Cms/Filemanager/Infrastructure/Framework/Resources/views/backend' }

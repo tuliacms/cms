@@ -43,6 +43,7 @@ final class CreateWidget extends AbstractTransactionalUseCase
             $widget->turnVisibilityOff($request->locale, $request->defaultLocale);
         }
 
+        $widget->changeTitle($request->locale, $request->defaultLocale, $request->details['title']);
         $widget->persistAttributes($request->locale, $request->defaultLocale, $request->attributes);
 
         $this->repository->save($widget);

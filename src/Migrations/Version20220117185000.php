@@ -22,11 +22,6 @@ CREATE TABLE `#__activity` (
   `context` json NOT NULL,
   `created_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-
-INSERT INTO `#__activity` (`id`, `message`, `translation_domain`, `context`, `created_at`) VALUES
-('b2e0caa5-f533-49e3-83de-b5fd575090a2', 'activityUserCreatedNewNode', 'node', '{\"link\": \"/administrator/node/faq/edit/bf668e12-be10-4dd8-a397-f9368c312fcf\", \"username\": \"<a href=\\\"/administrator/user/edit/0167ee34-f63d-4252-b87b-66245aa45b7e\\\">Adam Banaszkiewicz</a>\"}', '2021-04-28 06:07:43'),
-('b7a81af9-4252-4545-9a9e-79664d23d0bf', 'activityUserCreatedNewNode', 'node', '{\"link\": \"/administrator/node/page/edit/5b2f11c8-0a5a-4038-8f86-d9705733ffbe\", \"username\": \"<a href=\\\"/administrator/user/edit/0167ee34-f63d-4252-b87b-66245aa45b7e\\\">Adam Banaszkiewicz</a>\"}', '2021-05-02 13:17:02'),
-('eb3d1f56-569e-44b4-b356-38d76f3d845a', 'activityUserCreatedNewNode', 'node', '{\"link\": \"/administrator/node/page/edit/d1b6fd2d-a8f2-4b59-8f72-94637697c121\", \"username\": \"<a href=\\\"/administrator/user/edit/0167ee34-f63d-4252-b87b-66245aa45b7e\\\">Adam Banaszkiewicz</a>\"}', '2021-04-26 06:03:12');
 EOF);
         $this->addSql(<<<EOF
 CREATE TABLE `#__content_type` (
@@ -59,13 +54,7 @@ CREATE TABLE `#__content_type_field` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `#__content_type_field` (`id`, `code`, `content_type_code`, `group_code`, `type`, `name`, `is_multilingual`, `has_nonscalar_value`, `position`, `parent`, `taxonomy`) VALUES
-('3af23162-4a76-41f5-961a-59a981d0bd44', 'category', 'page', 'section_1653933292398_398_4', 'taxonomy', 'Category', 0, 0, 1, NULL, NULL),
-('51e6057c-6fb7-4e23-bde1-2edc9114a9fb', 'text_3', 'page', 'section_1654934770009_9_6', 'text', 'text 3', 0, 0, 1, NULL, NULL),
-('54221c16-7312-47f8-a8e1-700b696453d8', 'select', 'page', 'section_1653933292398_398_4', 'select', 'Select', 0, 0, 3, NULL, NULL),
-('c83714dd-c0a3-4219-8c3c-ee204582044a', 'text_2', 'page', 'section_1654934769147_147_4', 'text', 'text 2', 0, 0, 1, NULL, NULL),
-('c8777809-dd08-4c34-85f9-5f28a3377d6e', 'content', 'page', 'section_1653933292398_398_4', 'tulia_editor', 'Content', 1, 0, 4, NULL, NULL),
-('d6a896ca-f805-4d97-9905-ea7f4f708a2c', 'textline', 'page', 'section_1653933292398_398_4', 'text', 'Textline', 1, 0, 2, NULL, NULL),
-('e44e5139-19f8-44a8-aeeb-cccc7734dee7', 'text_1', 'page', 'section_1654934769577_577_5', 'text', 'text 1', 0, 0, 1, NULL, NULL);
+('90125db0-0c18-48a4-bfd4-c76d6c303c8f', 'content', 'page', 'section_1653933292398_398_4', 'tulia_editor', 'Content', 1, 0, 1, NULL, NULL);
 EOF);
         $this->addSql(<<<EOF
 CREATE TABLE `#__content_type_field_configuration` (
@@ -73,12 +62,6 @@ CREATE TABLE `#__content_type_field_configuration` (
   `code` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `value` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-
-INSERT INTO `#__content_type_field_configuration` (`field_id`, `code`, `value`) VALUES
-('3af23162-4a76-41f5-961a-59a981d0bd44', 'taxonomy', 'category'),
-('54221c16-7312-47f8-a8e1-700b696453d8', 'choices', 'asdas'),
-('54221c16-7312-47f8-a8e1-700b696453d8', 'multiple', '1'),
-('54221c16-7312-47f8-a8e1-700b696453d8', 'placeholder', 'asdasd');
 EOF);
         $this->addSql(<<<EOF
 CREATE TABLE `#__content_type_field_constraint` (
@@ -114,25 +97,19 @@ CREATE TABLE `#__content_type_field_group` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `#__content_type_field_group` (`content_type_code`, `code`, `name`, `section`, `interior`, `active`, `position`) VALUES
-('page', 'section_1654934769577_577_5', 'New section... 2', 'sidebar', NULL, 0, 1),
-('page', 'section_1654934769147_147_4', 'New section... 1', 'sidebar', NULL, 0, 2),
-('page', 'section_1654934770009_9_6', 'New section... 3', 'sidebar', NULL, 0, 3),
-('page', 'section_1653933292398_398_4', 'New section...', 'main', NULL, 0, 4);
+('page', 'section_1653933292398_398_4', 'New section...', 'main', NULL, 0, 1);
 EOF);
         $this->addSql(<<<EOF
 CREATE TABLE `#__customizer_changeset` (
   `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `theme` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `type` varchar(16) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `website_id` binary(16) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime DEFAULT NULL,
   `author_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `payload` json DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-
-INSERT INTO `#__customizer_changeset` (`id`, `theme`, `type`, `created_at`, `updated_at`, `author_id`, `payload`) VALUES
-('2c0bc11b-9733-4877-a50d-4413f4de33e6', 'Tulia/Lisa', 'temporary', '2022-02-28 18:21:59', '2022-02-28 18:23:59', NULL, '{\"hero.static.link\": \"\", \"hero.static.headline\": \"\", \"hero.static.background\": \"\", \"hero.static.button.show\": \"0\", \"hero.static.description\": \"\", \"lisa.layout.breadcrumbs\": \"show\", \"hero.static.button.label\": \"\", \"lisa.footer.contact.type\": \"0\", \"lisa.footer.contact.email\": \"\", \"lisa.footer.contact.phone\": \"\", \"lisa.footer.contact.address\": \"\", \"lisa.footer.socials.twitter\": \"\", \"lisa.footer.socials.youtube\": \"\", \"lisa.footer.socials.facebook\": \"\", \"lisa.footer.contact.copyrights\": \"Tulia CMS\"}'),
-('e890167e-fb55-4508-8486-3eaf54a164b9', 'Tulia/Lisa', 'active', '2022-03-04 07:10:19', NULL, '', '{\"hero.static.link\": \"#read-more\", \"hero.static.headline\": \"Lisa Theme\", \"lisa.header.logo.text\": \"Event Agency\", \"hero.static.background\": \"\", \"hero.static.button.show\": \"0\", \"hero.static.description\": \"Free, clean and customizable theme for Tulia CMS\", \"lisa.layout.breadcrumbs\": \"show\", \"hero.static.button.label\": \"Read more\", \"lisa.footer.contact.type\": \"0\", \"lisa.footer.contact.email\": \"contact@event-agency.com\", \"lisa.footer.contact.phone\": \"+48 768 564 175\", \"lisa.footer.contact.address\": \"Event Agency,\\r\\nSt. Peter 1656,\\r\\nAlbuquerque\\r\\n\", \"lisa.footer.socials.twitter\": \"#twitter\", \"lisa.footer.socials.youtube\": \"#youtube\", \"lisa.footer.socials.facebook\": \"#facebook\", \"hero.static.background_mobile\": \"\", \"lisa.footer.contact.copyrights\": \"Tulia CMS\"}');
 EOF);
         $this->addSql(<<<EOF
 CREATE TABLE `#__customizer_changeset_lang` (
@@ -141,14 +118,8 @@ CREATE TABLE `#__customizer_changeset_lang` (
   `autogenerated_locale` tinyint UNSIGNED NOT NULL DEFAULT '1',
   `payload_localized` json DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-
-INSERT INTO `#__customizer_changeset_lang` (`customizer_changeset_id`, `locale`, `autogenerated_locale`, `payload_localized`) VALUES
-('2c0bc11b-9733-4877-a50d-4413f4de33e6', 'en_US', 0, '[]'),
-('2c0bc11b-9733-4877-a50d-4413f4de33e6', 'pl_PL', 1, '[]'),
-('e890167e-fb55-4508-8486-3eaf54a164b9', 'en_US', 0, '[]'),
-('e890167e-fb55-4508-8486-3eaf54a164b9', 'pl_PL', 0, '[]');
 EOF);
-        $this->addSql(<<<EOF
+        /*$this->addSql(<<<EOF
 CREATE TABLE `#__filemanager_directory` (
   `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `parent_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '00000000-0000-0000-0000-000000000000',
@@ -177,7 +148,7 @@ INSERT INTO `#__filemanager_file` (`id`, `directory`, `filename`, `extension`, `
 ('db387e74-eeab-4d6c-b711-8c57ec02646a', '00000000-0000-0000-0000-000000000000', '91374.png', 'png', 'image', '', 259664, 'uploads/2021/06', '2021-06-18 06:04:48', NULL),
 ('e57f834a-17d6-4a42-8331-22a5cc508c8e', '00000000-0000-0000-0000-000000000000', 'alexandru-zdrobau-4bmtmxguvqo-unsplash.jpg', 'jpg', 'image', '', 1551268, 'uploads/2021/06', '2021-06-18 06:09:11', NULL),
 ('f59bb5de-23e4-4994-99e8-b21d8ca53349', '00000000-0000-0000-0000-000000000000', 'artem-kovalev-fk3xucftavk-unsplash.jpg', 'jpg', 'image', '', 664395, 'uploads/2021/06', '2021-06-18 06:24:23', NULL);
-EOF);
+EOF);*/
         $this->addSql(<<<EOF
 CREATE TABLE `#__filemanager_image_thumbnail` (
   `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,

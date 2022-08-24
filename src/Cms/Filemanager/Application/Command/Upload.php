@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Filemanager\Application\Command\Helper\FileResponseFormatter;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\FileFinderInterface;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\FileFinderScopeEnum;
-use Tulia\Cms\Filemanager\Domain\WriteModel\FileTypeEnum;
+use Tulia\Cms\Filemanager\Domain\WriteModel\Model\FileTypeEnum;
 use Tulia\Cms\Shared\Domain\WriteModel\Service\SluggerInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
 use Tulia\Component\Image\ImageManagerInterface;
@@ -60,7 +60,7 @@ class Upload implements CommandInterface
      */
     public function handle(Request $request): array
     {
-        $directory = $this->connection->fetchAllAssociative('SELECT * FROM #__filemanager_directory WHERE id = :id', [
+        $directory = $this->connection->fetchAllAssociative('SELECT *, BIN_TO_UUID(id) AS id FROM #__filemanager_directory WHERE id = :id', [
             'id' => $request->get('directory', DirectoryTree::ROOT),
         ]);
 

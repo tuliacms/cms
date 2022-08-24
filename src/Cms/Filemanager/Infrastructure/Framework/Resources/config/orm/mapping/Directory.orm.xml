@@ -1,0 +1,25 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Tulia\Cms\Filemanager\Domain\WriteModel\Model\Directory" table="#__filemanager_directory">
+        <id name="id" type="uuid">
+            <generator strategy="NONE"/>
+        </id>
+
+        <field name="name"/>
+        <field name="level" type="integer"/>
+
+        <one-to-one field="parent" target-entity="Tulia\Cms\Filemanager\Domain\WriteModel\Model\Directory">
+            <join-column name="parent_id" referenced-column-name="id"/>
+        </one-to-one>
+
+        <one-to-many field="files" orphan-removal="true" target-entity="Tulia\Cms\Filemanager\Domain\WriteModel\Model\File" mapped-by="directory">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
+    </entity>
+</doctrine-mapping>

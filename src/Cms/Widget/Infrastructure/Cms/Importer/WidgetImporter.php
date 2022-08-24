@@ -11,13 +11,12 @@ use Tulia\Cms\Widget\Application\UseCase\CreateWidget;
 use Tulia\Cms\Widget\Application\UseCase\CreateWidgetRequest;
 use Tulia\Component\Importer\ObjectImporter\ObjectImporterInterface;
 use Tulia\Component\Importer\ObjectImporter\Traits\WebsiteAwareTrait;
-use Tulia\Component\Importer\ObjectImporter\WebsiteAwareObjectImporterInterface;
 use Tulia\Component\Importer\Structure\ObjectData;
 
 /**
  * @author Adam Banaszkiewicz
  */
-final class WidgetImporter implements ObjectImporterInterface, WebsiteAwareObjectImporterInterface
+final class WidgetImporter implements ObjectImporterInterface
 {
     use WebsiteAwareTrait;
 

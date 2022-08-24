@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Filemanager\Infrastructure\Persistence\Domain\ReadModel\Finder;
+namespace Tulia\Cms\Filemanager\Infrastructure\Persistence\Doctrine\Dbal\Finder;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Exception;
 use PDO;
+use Symfony\Component\Uid\Uuid;
 use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\AttributesFinder;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Model\File;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
@@ -19,15 +20,13 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\Ab
  */
 class DbalQuery extends AbstractDbalQuery
 {
-    private AttributesFinder $metadataFinder;
-
     protected array $joinedTables = [];
 
-    public function __construct(QueryBuilder $criteriaBuilder, AttributesFinder $metadataFinder)
-    {
+    public function __construct(
+        QueryBuilder $criteriaBuilder,
+        private readonly AttributesFinder $metadataFinder
+    ) {
         parent::__construct($criteriaBuilder);
-
-        $this->metadataFinder = $metadataFinder;
     }
 
     public function getBaseQueryArray(): array
@@ -157,7 +156,7 @@ class DbalQuery extends AbstractDbalQuery
         } elseif ($criteria['count']) {
             $this->queryBuilder->select('COUNT(' . $criteria['count'] . ') AS count');
         } else {
-            $this->queryBuilder->select('tm.*');
+            $this->queryBuilder->select('tm.*, BIN_TO_UUID(id) AS id');
         }
 
         $this->queryBuilder->from('#__filemanager_file', 'tm');
@@ -183,12 +182,12 @@ class DbalQuery extends AbstractDbalQuery
         if ($criteria['directory']) {
             if (\is_array($criteria['directory'])) {
                 $this->queryBuilder
-                    ->andWhere('tm.directory IN (:tm_directory)')
+                    ->andWhere('tm.directory_id IN (:tm_directory)')
                     ->setParameter('tm_directory', $criteria['directory'], Connection::PARAM_STR_ARRAY);
             } else {
                 $this->queryBuilder
-                    ->andWhere('tm.directory = :tm_directory')
-                    ->setParameter('tm_directory', $criteria['directory']);
+                    ->andWhere('tm.directory_id = :tm_directory')
+                    ->setParameter('tm_directory', Uuid::fromString($criteria['directory'])->toBinary());
             }
         }
     }
@@ -198,7 +197,7 @@ class DbalQuery extends AbstractDbalQuery
         if ($criteria['id']) {
             $this->queryBuilder
                 ->andWhere('tm.id = :tm_id')
-                ->setParameter('tm_id', $criteria['id'], PDO::PARAM_STR)
+                ->setParameter('tm_id', Uuid::fromString($criteria['id'])->toBinary(), PDO::PARAM_STR)
                 ->setMaxResults(1);
         }
 
@@ -208,6 +207,8 @@ class DbalQuery extends AbstractDbalQuery
             } else {
                 $ids = $criteria['id__not_in'];
             }
+
+            $ids = array_map(static fn($v) => Uuid::fromString($v)->toBinary(), $ids);
 
             $this->queryBuilder
                 ->andWhere('tm.id NOT IN (:tm_id__not_in)')
@@ -220,6 +221,8 @@ class DbalQuery extends AbstractDbalQuery
             } else {
                 $ids = $criteria['id__in'];
             }
+
+            $ids = array_map(static fn($v) => Uuid::fromString($v)->toBinary(), $ids);
 
             $this->queryBuilder
                 ->andWhere('tm.id IN (:tm_id__in)')

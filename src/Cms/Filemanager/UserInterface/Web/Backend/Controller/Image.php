@@ -11,7 +11,7 @@ use Tulia\Cms\Filemanager\Application\Service\Cropper;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\FileFinderInterface;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\FileFinderScopeEnum;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Model\File;
-use Tulia\Cms\Filemanager\Domain\WriteModel\FileTypeEnum;
+use Tulia\Cms\Filemanager\Domain\WriteModel\Model\FileTypeEnum;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 
 /**
@@ -19,14 +19,10 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
  */
 class Image extends AbstractController
 {
-    protected FileFinderInterface $finder;
-
-    protected Cropper $cropper;
-
-    public function __construct(FileFinderInterface $finder, Cropper $cropper)
-    {
-        $this->finder = $finder;
-        $this->cropper = $cropper;
+    public function __construct(
+        private readonly FileFinderInterface $finder,
+        private readonly Cropper $cropper,
+    ) {
     }
 
     public function size(Request $request, string $size, string $id): RedirectResponse

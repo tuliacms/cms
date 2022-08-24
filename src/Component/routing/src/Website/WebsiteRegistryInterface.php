@@ -13,4 +13,6 @@ interface WebsiteRegistryInterface
      * @return WebsiteInterface[]
      */
     public function all(): array;
+
+    public function get(string $id): WebsiteInterface;
 }

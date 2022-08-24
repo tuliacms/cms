@@ -6,6 +6,8 @@ namespace Tulia\Cms\Filemanager\Application\Command;
 
 use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Uid\Uuid;
+use Tulia\Cms\Filemanager\Domain\WriteModel\Model\Directory;
 use Tulia\Cms\Platform\Shared\ArraySorter;
 
 /**
@@ -35,7 +37,9 @@ class DirectoryTree implements CommandInterface
     {
         $open = $request->get('open', self::ROOT);
 
-        $source = $this->connection->fetchAllAssociative('SELECT * FROM #__filemanager_directory ORDER BY `name`');
+        $source = $this->connection->fetchAllAssociative('SELECT *, BIN_TO_UUID(id) AS id FROM #__filemanager_directory WHERE id != :root ORDER BY `name`', [
+            'root' => Uuid::fromString(Directory::ROOT)->toBinary()
+        ]);
         $result = [];
 
         foreach ($source as $dir) {

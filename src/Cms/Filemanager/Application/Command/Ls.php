@@ -36,7 +36,7 @@ class Ls implements CommandInterface
      */
     public function handle(Request $request): array
     {
-        $directory = $request->get('directory', DirectoryTree::ROOT);
+        $directory = $request->get('directory', null);
         $filter    = $request->get('filter', []);
 
         switch ($request->get('orderBy', 'created_at')) {
@@ -62,7 +62,7 @@ class Ls implements CommandInterface
 
         $files = $this->finder->find($criteria, FileFinderScopeEnum::FILEMANAGER);
 
-        $directories = $this->connection->fetchAllAssociative("SELECT * FROM #__filemanager_directory WHERE parent_id = :parent_id ORDER BY `name` ASC", [
+        $directories = $this->connection->fetchAllAssociative("SELECT *, BIN_TO_UUID(id) AS id FROM #__filemanager_directory WHERE parent_id = :parent_id ORDER BY `name` ASC", [
             'parent_id' => $directory
         ]);
 

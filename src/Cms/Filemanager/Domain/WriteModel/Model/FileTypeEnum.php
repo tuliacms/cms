@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Filemanager\Domain\WriteModel;
+namespace Tulia\Cms\Filemanager\Domain\WriteModel\Model;
 
 /**
  * @author Adam Banaszkiewicz

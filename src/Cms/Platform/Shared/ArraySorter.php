@@ -15,9 +15,7 @@ namespace Tulia\Cms\Platform\Shared;
 class ArraySorter
 {
     protected array $source = [];
-
     protected array $options = [];
-
     protected array $result = [];
 
     public function __construct(array $source = [], array $options = [])

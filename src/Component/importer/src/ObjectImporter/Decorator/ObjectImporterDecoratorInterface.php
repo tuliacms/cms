@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Importer\ObjectImporter\Decorator;
 
+use Tulia\Component\Importer\Exception\MissingParameterException;
 use Tulia\Component\Importer\ObjectImporter\ObjectImporterInterface;
 
 /**
@@ -11,5 +12,8 @@ use Tulia\Component\Importer\ObjectImporter\ObjectImporterInterface;
  */
 interface ObjectImporterDecoratorInterface
 {
-    public function decorate(ObjectImporterInterface $importer): ObjectImporterInterface;
+    /**
+     * @throws MissingParameterException
+     */
+    public function decorate(ObjectImporterInterface $importer, array $parameters): ObjectImporterInterface;
 }

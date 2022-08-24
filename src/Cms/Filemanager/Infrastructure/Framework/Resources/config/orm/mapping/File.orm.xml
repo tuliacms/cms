@@ -1,0 +1,21 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Tulia\Cms\Filemanager\Domain\WriteModel\Model\File" table="#__filemanager_file">
+        <id name="id" type="uuid">
+            <generator strategy="NONE"/>
+        </id>
+
+        <field name="filename"/>
+        <field name="extension"/>
+        <field name="type"/>
+        <field name="size" type="integer"/>
+        <field name="path"/>
+        <field name="createdAt" type="datetime_immutable"/>
+        <field name="updatedAt" type="datetime_immutable"/>
+
+        <many-to-one field="directory" target-entity="Tulia\Cms\Filemanager\Domain\WriteModel\Model\Directory" inversed-by="files"/>
+    </entity>
+</doctrine-mapping>

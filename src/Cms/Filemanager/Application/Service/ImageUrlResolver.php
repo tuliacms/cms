@@ -7,7 +7,6 @@ namespace Tulia\Cms\Filemanager\Application\Service;
 use Tulia\Cms\Filemanager\Domain\ImageSize\ImageSizeRegistryInterface;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Model\File;
 use Symfony\Component\Routing\RouterInterface;
-use Tulia\Component\Routing\Website\WebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -23,7 +22,7 @@ class ImageUrlResolver
         $this->imageSize = $imageSize;
     }
 
-    public function size(File $image, string $sizeName, WebsiteInterface $website): string
+    public function size(File $image, string $sizeName): string
     {
         $size = $this->imageSize->get($sizeName);
 
@@ -31,11 +30,10 @@ class ImageUrlResolver
             'size' => $size->getCode(),
             'id'   => $image->getId(),
             'filename' => $image->getFilename(),
-            'website' => $website,
         ]);
     }
 
-    public function thumbnail(File $image, WebsiteInterface $website): string
+    public function thumbnail(File $image): string
     {
         $size = $this->imageSize->get('thumbnail');
 
@@ -43,7 +41,6 @@ class ImageUrlResolver
             'size' => $size->getCode(),
             'id'   => $image->getId(),
             'filename' => $image->getFilename(),
-            'website' => $website,
         ]);
     }
 }

@@ -14,9 +14,4 @@ interface ImporterInterface
      * @throws Exception\FileNotSupportedException
      */
     public function importFromFile(string $filepath, ?string $realFilename = null): void;
-
-    /**
-     * @throws Exception\InvalidFieldDataTypeException
-     */
-    public function import(array $data): void;
 }

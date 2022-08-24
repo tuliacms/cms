@@ -5,6 +5,7 @@ services:
         bind:
             $imageSizes: '%cms.filemanager.image_sizes%'
             $publicDirectory: '%kernel.public_dir%'
+            $projectDirectory: '%kernel.project_dir%'
     _instanceof:
         Tulia\Cms\Filemanager\Application\Command\CommandInterface:
             tags: [ filemanager.command ]

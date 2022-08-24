@@ -9,13 +9,12 @@ use Tulia\Cms\ContactForm\Application\UseCase\CreateFormRequest;
 use Tulia\Cms\Shared\Application\UseCase\IdResult;
 use Tulia\Component\Importer\ObjectImporter\ObjectImporterInterface;
 use Tulia\Component\Importer\ObjectImporter\Traits\WebsiteAwareTrait;
-use Tulia\Component\Importer\ObjectImporter\WebsiteAwareObjectImporterInterface;
 use Tulia\Component\Importer\Structure\ObjectData;
 
 /**
  * @author Adam Banaszkiewicz
  */
-final class ContactFormImporter implements ObjectImporterInterface, WebsiteAwareObjectImporterInterface
+final class ContactFormImporter implements ObjectImporterInterface
 {
     use WebsiteAwareTrait;
 

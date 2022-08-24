@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Filemanager\Infrastructure\Persistence\Domain\ImageSize;
+namespace Tulia\Cms\Filemanager\Infrastructure\Persistence\Config\ImageSize;
 
 use Tulia\Cms\Filemanager\Domain\ImageSize\ImagesSizeProviderInterface;
 

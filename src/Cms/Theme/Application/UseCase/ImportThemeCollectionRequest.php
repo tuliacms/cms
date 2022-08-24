@@ -14,6 +14,8 @@ final class ImportThemeCollectionRequest implements RequestInterface
     public function __construct(
         public readonly string $theme,
         public readonly string $collection,
+        public readonly string $websiteId,
+        public readonly string $authorId,
     ) {
     }
 }

@@ -19,23 +19,14 @@ class File implements AttributesAwareInterface
     use LazyMagickAttributesTrait;
 
     protected string $id;
-
     protected string $directory;
-
     protected string $filename;
-
     protected string $extension;
-
     protected string $type;
-
     protected ?string $mimetype = null;
-
     protected ?int $size = null;
-
     protected string $path;
-
     protected DateTimeImmutable $createdAt;
-
     protected ?DateTimeImmutable $updatedAt = null;
 
     public static function buildFromArray(array $data): self
@@ -59,7 +50,7 @@ class File implements AttributesAwareInterface
         $file->setPath($data['path'] ?? '');
         $file->setCreatedAt($data['created_at']);
         $file->setUpdatedAt($data['updated_at']);
-        $file->replaceAttributes($data['metadata'] ?? []);
+        //$file->replaceAttributes($data['metadata'] ?? []);
 
         return $file;
     }
