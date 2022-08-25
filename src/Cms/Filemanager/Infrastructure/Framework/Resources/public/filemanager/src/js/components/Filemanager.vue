@@ -96,10 +96,14 @@ onMounted(() => {
     commandBus.command('open', open);
     commandBus.command('status', (status) => view.status = status);
 
-    let id = document.querySelector(props.options.targetInput).value;
+    if (props.options.targetInput) {
+        let input = document.querySelector(props.options.targetInput);
 
-    if (id) {
-        props.services.selection.select(id);
+        if (input) {
+            if (input.value) {
+                props.services.selection.select(input.value);
+            }
+        }
     }
 
     if (props.options.showOnInit) {
@@ -113,16 +117,7 @@ onMounted(() => {
 /*************
  * Selection
  ************/
-const select = function () {
-    const selected = selection.getSelected();
-    const input = document.querySelector(props.options.targetInput);
-
-    if (selected[0]) {
-        input.value = selected[0];
-    } else {
-        input.value = null;
-    }
-
+const closeOnSelection = function () {
     if (props.options.closeOnSelect) {
         close();
     }
@@ -134,8 +129,8 @@ const updateSelectVisibility = () => {
 };
 
 onMounted(() => {
-    commandBus.command('select', select);
     eventDispatcher.on('selection.change', updateSelectVisibility);
+    eventDispatcher.on('files.selected', closeOnSelection);
     eventDispatcher.on('files.list.new', (id) => selection.select(id));
 });
 

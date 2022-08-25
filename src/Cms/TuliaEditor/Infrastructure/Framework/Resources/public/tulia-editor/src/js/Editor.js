@@ -103,13 +103,13 @@ export default class Editor {
 
     awaitSegmentsReady () {
         this.container.messenger.on('editor.segment.ready', (segment) => {
-            console.log(segment);
+            //console.log(segment);
         });
     }
 
     bindEvents () {
         this.root.find('.tued-preview')[0].onload = () => {
-            // Add preview window in canvas and editor Messangers
+            // Add preview window in canvas and editor Messengers
             //this.container.messenger.addWindow(this.root.find('.tued-preview')[0].contentWindow);
             this.container.messenger.notify('editor.segment.ready', 'preview');
         }
@@ -228,8 +228,14 @@ export default class Editor {
         this.loadExtensions(this.vue);
         this.loadBlocks(this.vue);
 
-        this.vue.config.devtools = true;
-        this.vue.config.performance = true;
+        // DEV
+        //this.vue.config.devtools = true;
+        //this.vue.config.performance = true;
+        // PROD
+        this.vue.config.devtools = false;
+        this.vue.config.debug = false;
+        this.vue.config.silent = true;
+
         this.vue.mount(`#tued-editor-window-inner-${this.instanceId}`);
 
         if (Location.getQueryVariable('showDebugbar') === 'true') {

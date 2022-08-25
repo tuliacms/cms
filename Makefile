@@ -31,4 +31,15 @@ up:
 down:
 	cd ../ && make down
 
+.PHONY: webpack-build-production
+webpack-build-production:
+	export NODE_ENV=production
+	npm run --prefix src/Cms/TuliaEditor/Infrastructure/Framework/Resources/public/tulia-editor build
+	npm run --prefix src/Cms/Filemanager/Infrastructure/Framework/Resources/public/filemanager build
+	npm run --prefix src/Cms/Content/Type/Infrastructure/Framework/Resources/public/layout-builder build
+	# && cd src/Cms/ContactForm/Infrastructure/Framework/Resources/public \
+	# && gulp \
+	export NODE_ENV=development
+	cd ../ && make console assets:publish
+
 .SILENT:

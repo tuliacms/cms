@@ -1,7 +1,13 @@
 import ContentBlockBuilderApp from './ContentBlockBuilderApp.vue';
 import draggable from 'vuedraggable';
 
-Vue.config.devtools = true;
+// DEV
+//Vue.config.devtools = true;
+//Vue.config.performance = true;
+// PROD
+Vue.config.devtools = false;
+Vue.config.debug = false;
+Vue.config.silent = true;
 
 Vue.use(draggable);
 

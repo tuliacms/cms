@@ -43,7 +43,7 @@
 
 <script setup>
 const axios = require('axios').default;
-const { defineProps, onMounted, reactive, inject, watch } = require('vue');
+const { defineProps, onMounted, reactive, inject, watch, toRaw } = require('vue');
 
 const eventDispatcher = inject('eventDispatcher');
 const commandBus = inject('commandBus');
@@ -68,6 +68,19 @@ const files = reactive({
                 }
             }
         }
+    },
+    fetch: (ids) => {
+        let list = [];
+
+        for (let f in files.list) {
+            for (let i in ids) {
+                if (files.list[f].id === ids[i]) {
+                    list.push(toRaw(files.list[f]));
+                }
+            }
+        }
+
+        return list;
     }
 });
 
@@ -185,9 +198,29 @@ const contextmenuOfFile = (event, fileId) => {
     commandBus.execute('contextmenu', event, 'file', selection.getSelected());
 };
 
+const select = function () {
+    const selected = selection.getSelected();
+    const filesList = files.fetch(selected);
+
+    if (props.options.targetInput) {
+        const input = document.querySelector(props.options.targetInput);
+
+        if (selected[0]) {
+            input.value = selected[0];
+        } else {
+            input.value = null;
+        }
+    } else if (props.options.onSelect) {
+        props.options.onSelect(filesList);
+    }
+
+    eventDispatcher.dispatch('files.selected', selected, filesList);
+};
+
 onMounted(() => {
     refreshFilesList();
 
+    commandBus.command('select', select);
     commandBus.command('files.list.refresh', refreshFilesList);
     commandBus.command('contextmenu.items.file', contextmenuItems);
     commandBus.command('files.list.delete', deleteFile);

@@ -26,8 +26,15 @@ class Instance {
         };
 
         this.vue = Vue.createApp(Filemanager, this.data);
-        this.vue.config.devtools = true;
-        this.vue.config.performance = true;
+
+        // DEV
+        //this.vue.config.devtools = true;
+        //this.vue.config.performance = true;
+        // PROD
+        this.vue.config.devtools = false;
+        this.vue.config.debug = false;
+        this.vue.config.silent = true;
+
         this.vue.mount('#' + selector);
     }
 
@@ -59,6 +66,7 @@ const defaults = {
     multiple: false,
     filter: null,
     closeOnSelect: true,
+    onSelect: (files) => {},
 };
 
 export default {

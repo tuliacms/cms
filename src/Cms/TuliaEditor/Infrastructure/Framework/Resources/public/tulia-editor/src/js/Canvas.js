@@ -40,8 +40,14 @@ export default class Canvas {
                 self.loadControls(self.vue);
                 self.loadExtensions(self.vue);
                 self.loadBlocks(self.vue);
-                self.vue.config.devtools = true;
-                self.vue.config.performance = true;
+
+                // DEV
+                //self.vue.config.devtools = true;
+                //self.vue.config.performance = true;
+                // PROD
+                self.vue.config.devtools = false;
+                self.vue.config.debug = false;
+                self.vue.config.silent = true;
 
                 self.vue.mount('#tulia-editor');
             });
