@@ -13,6 +13,7 @@ interface DirectoryRepositoryInterface
 {
     public function getNextId(): string;
     public function get(string $id): Directory;
+    public function getByFile(string $id): Directory;
     public function save(Directory $directory): void;
     public function delete(Directory $directory): void;
 }

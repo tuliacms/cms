@@ -7,7 +7,6 @@ namespace Tulia\Cms\Filemanager\Application\UseCase;
 use Tulia\Cms\Filemanager\Domain\WriteModel\DirectoryRepositoryInterface;
 use Tulia\Cms\Filemanager\Domain\WriteModel\Service\FileStorageInterface;
 use Tulia\Cms\Shared\Application\UseCase\AbstractTransactionalUseCase;
-use Tulia\Cms\Shared\Application\UseCase\IdResult;
 use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
 use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
@@ -15,7 +14,7 @@ use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-final class UploadFile extends AbstractTransactionalUseCase
+final class DeleteFile extends AbstractTransactionalUseCase
 {
     public function __construct(
         private readonly FileStorageInterface $fileStorage,
@@ -25,18 +24,19 @@ final class UploadFile extends AbstractTransactionalUseCase
     }
 
     /**
-     * @param RequestInterface&UploadFileRequest $request
+     * @param RequestInterface&DeleteFileRequest $request
      */
     protected function execute(RequestInterface $request): ?ResultInterface
     {
-        $fileId = $this->repository->getNextId();
+        $directory = $this->repository->getByFile($request->ids[0]);
 
-        $directory = $this->repository->get($request->directory);
-        $directory->placeFile($this->fileStorage, $fileId, $request->filepath, $request->filename);
+        foreach ($request->ids as $id) {
+            $directory->deleteFile($this->fileStorage, $id);
+        }
 
         $this->repository->save($directory);
         $this->eventBus->dispatchCollection($directory->collectDomainEvents());
 
-        return new IdResult($fileId);
+        return null;
     }
 }

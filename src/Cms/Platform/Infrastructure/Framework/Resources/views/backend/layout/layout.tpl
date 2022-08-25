@@ -16,6 +16,7 @@
     {% include relative(_self, 'parts/header.tpl') %}
     <main>
         {% include relative(_self, 'parts/sidebar.tpl') %}
+        <div class="mobile-menu-content-overlay"></div>
         {{ block('content') }}
     </main>
     {% include relative(_self, 'parts/footer.tpl') %}

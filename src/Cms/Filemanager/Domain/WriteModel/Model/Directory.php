@@ -44,13 +44,14 @@ class Directory extends AbstractAggregateRoot
         return new self(self::ROOT, 'root', null);
     }
 
-    public function place(
+    public function placeFile(
         FileStorageInterface $fileStorage,
         string $id,
-        string $filepath
+        string $filepath,
+        ?string $filename = null
     ): void {
         $destination = '/uploads/' . date('Y/m');
-        $file = $fileStorage->store($filepath, $destination);
+        $file = $fileStorage->store($filepath, $destination, $filename);
 
         $this->files->add(new File(
             $id,
@@ -63,6 +64,18 @@ class Directory extends AbstractAggregateRoot
             ImmutableDateTime::now(),
             ImmutableDateTime::now()
         ));
+    }
+
+    public function deleteFile(
+        FileStorageInterface $fileStorage,
+        string $id
+    ) {
+        foreach ($this->files as $file) {
+            if ($file->getId() === $id) {
+                $this->files->removeElement($file);
+                $fileStorage->remove($file->getFilepath());
+            }
+        }
     }
 
     private function guessType(string $extension): string

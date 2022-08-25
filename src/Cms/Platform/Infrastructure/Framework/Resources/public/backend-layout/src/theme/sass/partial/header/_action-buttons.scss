@@ -1,0 +1,120 @@
+header .actions-section {
+    padding:0 15px 0 6px;
+    .action-box {display:inline-block;vertical-align:middle;height:50px;}
+    .action-btn {
+        height:50px;line-height:50px;color:#fff;font-size:14px;padding-left:26px;padding-right:26px;border-radius:0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 250px;
+        width: 100%;
+        .btn-icon {font-size:20px}
+        &.btn-icon-left {padding-left:58px;}
+        &:hover,
+        &:focus {background-color:rgba(255,255,255,.2)}
+        .animate-ring {-webkit-animation:ring 4s .7s ease-in-out infinite;-webkit-transform-origin:50% 4px;-moz-animation:ring 4s .7s ease-in-out infinite;-moz-transform-origin:50% 4px;animation:ring 4s .7s ease-in-out infinite;transform-origin:50% 4px;}
+        .badge {position:absolute;top:5px;right:0;display:block;z-index:10;}
+    }
+    .language-selector .dropdown-menu {min-width:auto;}
+    .language-selector .dropdown-item {padding:$dropdown-item-padding;padding-right:4.5rem;position:relative;}
+    .language-selector .dropdown-item.active:after {display:none;}
+    .language-selector img {display:block;width:17px;position:absolute;top:50%;right:$dropdown-item-padding-x;transform:translateY(-50%);}
+    .notifications-list {
+        position: relative;
+        .headline {
+            border-radius: $border-radius $border-radius 0 0;
+            font-size: 16px;
+            padding: 11px;
+            border-bottom: 1px solid $border-color;
+            color: #fff;
+            letter-spacing: 0.6px;
+            font-weight: 300;
+            position: relative;
+            text-align: center;
+            background-image: url($header-bg);
+            background-position: center bottom;
+            background-repeat: no-repeat;
+        }
+        .notifications-dropdown {
+            width: 320px;
+            box-shadow: 0 3px 7px rgba(0,0,0,.13);
+            padding: 0;
+            border-radius: $border-radius $border-radius 0 0;
+        }
+        .notifications-container {height:300px;position:relative;}
+        .notification-item {padding:10px 12px;border-bottom:1px solid $border-color;display:block;}
+        .notification-item .notification-headline {font-weight:bold;margin-bottom:8px;}
+        .notification-item .notification-content {font-size:13px;}
+        .notification-item:last-child {border-bottom:none;}
+    }
+
+    .dropdown-item-logout {
+        margin-top: 8px;
+        background-color: #dcdcdc;
+        padding-top: 12px;
+        padding-bottom: 12px;
+        padding-left: 16px;
+        border-radius: 0 0 $border-radius $border-radius;
+
+        .dropdown-icon {
+            left: auto;
+            right: 16px;
+        }
+
+        &:hover,
+        &:focus {
+            background-color: #c7c7c7;
+            color: #000;
+
+            .dropdown-icon {
+                color: #333;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 1300px) {
+    header .actions-section {
+        .action-btn {
+            max-width: 150px;
+        }
+    }
+}
+
+@media only screen and (max-width: 1100px) {
+    header .actions-section {
+        padding: 0 6px;
+
+        .action-box-fullscreen {
+            display: none !important;
+        }
+        .action-btn {
+            max-width: 150px;
+            padding-left: 23px;
+            padding-right: 23px;
+
+            &.btn-icon-left {
+                padding-left: 26px;
+            }
+
+            span {
+                display: none;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 425px) {
+    header .actions-section {
+        .action-btn {
+            padding: 0 !important;
+            width: 48px;
+
+            &.btn.btn-icon-left .btn-icon {
+                top: 50%;
+                left: 50% !important;
+                transform: translate(-50%, -50%);
+            }
+        }
+    }
+}

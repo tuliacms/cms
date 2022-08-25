@@ -40,7 +40,6 @@ class CmsSettingsGroup extends AbstractSettingsGroup
             'maintenance_mode'    => $this->getOption('maintenance_mode'),
             'maintenance_message' => $this->getOption('maintenance_message'),
             'date_format'         => $this->getOption('date_format', 'j F, Y'),
-            'theme'               => $this->getOption('theme'),
             'wysiwyg_editor'      => $this->getOption('wysiwyg_editor'),
             'mail_transport'      => $this->getOption('mail.transport'),
             'mail_from_email'     => $this->getOption('mail.from_email'),

@@ -20,11 +20,11 @@ final class FilesystemFileStorage implements FileStorageInterface
     ) {
     }
 
-    public function store(string $source, string $destination): \SplFileInfo
+    public function store(string $source, string $destination, ?string $filename = null): \SplFileInfo
     {
         $file = new File($source);
 
-        $originalFilename = pathinfo($file->getFilename(), PATHINFO_FILENAME);
+        $originalFilename = pathinfo($filename ?? $file->getFilename(), PATHINFO_FILENAME);
         $extension = strtolower($file->guessExtension() ?? pathinfo($file->getFilename(), PATHINFO_EXTENSION));
 
         $destination = $this->publicDirectory . $destination;
@@ -47,6 +47,12 @@ final class FilesystemFileStorage implements FileStorageInterface
         $fs->copy($source, $destination.'/'.$newFilename);
 
         return new File($destination.'/'.$newFilename);
+    }
+
+    public function remove(string $filepath): void
+    {
+        $fs = new Filesystem();
+        $fs->remove($this->publicDirectory.$filepath);
     }
 
     private function uniqueName(string $directory, string $filename, string $extension): string

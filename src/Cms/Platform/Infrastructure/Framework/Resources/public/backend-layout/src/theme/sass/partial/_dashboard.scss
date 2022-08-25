@@ -70,3 +70,9 @@
     .dashboard-widgets .widget--1by3 {width:50%;}
     .dashboard-widgets .widget--2by3 {width:50%;}
 }
+
+@media only screen and (max-width: 650px) {
+    .dashboard-widgets .widget {width:100%;}
+    .dashboard-widgets .widget--1by3 {width:100%;}
+    .dashboard-widgets .widget--2by3 {width:100%;}
+}

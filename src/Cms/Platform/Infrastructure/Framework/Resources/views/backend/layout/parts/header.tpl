@@ -3,6 +3,13 @@
 
 <div class="layout-top">
     <header>
+        <div class="mobile-menu-trigger">
+            <button type="button" id="mobile-menu-trigger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
         <div class="header-inner">
             <div class="lead-section">
                 <div class="search-area" tabindex="-1">
@@ -11,7 +18,7 @@
                 </div>
             </div>
             <div class="actions-section">
-                <div class="action-box" data-bs-toggle="tooltip" data-bs-placement="left" title="{{ 'fullscreen'|trans }}">
+                <div class="action-box action-box-fullscreen" data-bs-toggle="tooltip" data-bs-placement="left" title="{{ 'fullscreen'|trans }}">
                     <button type="button" class="btn btn-icon-only action-btn toggle-fullscreen"><i class="btn-icon fas fa-expand"></i></button>
                 </div>
                 {% set __currentWebsite = current_website() %}
@@ -21,7 +28,7 @@
                             {% set __websiteId = __currentWebsite.id %}
                             <button class="btn btn-icon-left action-btn" type="button" data-bs-toggle="dropdown">
                                 <i class="btn-icon fas fa-globe"></i>
-                                {{ __currentWebsite.name }}
+                                <span>{{ __currentWebsite.name }}</span>
                             </button>
                             <div class="dropdown-menu">
                                 {% for item in website_list() %}
@@ -38,7 +45,7 @@
                         {% set __locale = __currentWebsite.locale.code %}
                         <button class="btn btn-icon-left action-btn" type="button" data-bs-toggle="dropdown">
                             <i class="btn-icon fa fa-language"></i>
-                            {{ 'languageName'|trans({ code: __locale }, 'languages') }}
+                            <span>{{ 'languageName'|trans({ code: __locale }, 'languages') }}</span>
                         </button>
                         {% if app.request.attributes.has('_route') %}
                             {% set _route = app.request.attributes.get('_route') %}

@@ -38,6 +38,15 @@ final class DoctrineDirectoryRepository extends ServiceEntityRepository implemen
         return $directory;
     }
 
+    public function getByFile(string $id): Directory
+    {
+        $directoryId = (string) $this->_em->getConnection()->fetchOne('SELECT BIN_TO_UUID(directory_id) AS directory_id FROM #__filemanager_file WHERE id = :id LIMIT 1', [
+            'id' => Uuid::fromString($id)->toBinary(),
+        ]);
+
+        return $this->get($directoryId);
+    }
+
     public function save(Directory $directory): void
     {
         $this->_em->persist($directory);

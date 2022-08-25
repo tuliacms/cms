@@ -1,0 +1,15 @@
+.breadcrumbs-container {padding:7px 0 9px;}
+.breadcrumbs-container .breadcrumb {display:block;background-color:transparent;font-size:0;padding:0;margin:0;height:32px;line-height:1;white-space:nowrap;overflow:hidden;position:relative;}
+.breadcrumbs-container .breadcrumb-item {display:inline-block;height:32px;line-height:1;margin:0;padding:0;position:relative;font-weight:500;font-size:11px;color:#fff;}
+.breadcrumbs-container .breadcrumb-item:after {display:none;}
+.breadcrumbs-container .breadcrumb-item:before {display:block;width:14px;height:14px;font-size:14px;line-height:14px;text-align:center;color:#fff;opacity:.6;content:"\f105";font-family:$base-font-awesome;font-weight:bold;position:absolute;top:50%;right:-8px;transform:translateY(-50%);}
+.breadcrumbs-container .breadcrumb-item a {color:#fff;opacity:.7;height:32px;line-height:32px;display:block;padding:0 14px 0 16px;position:relative;transition:.12s all;}
+.breadcrumbs-container .breadcrumb-item a:before,
+.breadcrumbs-container .breadcrumb-item a:after {display:none;}
+.breadcrumbs-container .breadcrumb-item:first-child {position:relative;}
+.breadcrumbs-container .breadcrumb-item:first-child a {padding-left:40px;position:relative;}
+.breadcrumbs-container .breadcrumb-item:first-child a:before {display:block;position:absolute;left:15px;top:50%;width:13px;height:13px;line-height:13px;z-index:100;transform:translateY(-50%);content:"\f015";font-family:$base-font-awesome;color:#fff;font-size:13px;font-weight:bold;}
+.breadcrumbs-container .breadcrumb-item:last-child:before {display:none;}
+.breadcrumbs-container .breadcrumb-item.active {height:32px;line-height:32px;padding:0 14px 0 16px;}
+.breadcrumbs-container .breadcrumb-item a:hover,
+.breadcrumbs-container .breadcrumb-item.active a {text-decoration:none;opacity:1;}

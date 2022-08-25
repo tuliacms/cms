@@ -1,4 +1,178 @@
 cms:
+    templating:
+        namespace_overwrite:
+            - { from: '@parent/', to: '@theme/' }
+            - { from: '@cms/',    to: '@parent/overwrite/cms/' }
+            - { from: '@module/', to: '@parent/overwrite/module/' }
+            - { from: '@widget/', to: '@parent/overwrite/widget/' }
+        paths:
+            - { name: backend/layout, path: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/views/backend/layout' }
+            - { name: _theme_views/DefaultTheme, path: '%cms.core_dir%/Cms/Platform/Infrastructure/DefaultTheme/Resources/views' }
+    twig:
+        loader:
+            array:
+                templates:
+                    backend:
+                        template: "{% extends '@backend/layout/layout.tpl' %}"
+                    theme:
+                        template: "{% extends [ '@theme/layout.tpl', '@parent/layout.tpl' ] %}"
+    public_paths:
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/backend-layout/dist', target: '/core/backend' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/animate-css', target: '/core/animate-css' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/bootstrap', target: '/core/bootstrap' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/bootstrap-datetimepicker', target: '/core/bootstrap-datetimepicker' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/bootstrap-datetimepicker-custom', target: '/core/bootstrap-datetimepicker-custom' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/chosen', target: '/core/chosen' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/customizer', target: '/core/customizer' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/datatable-tulia', target: '/core/datatable-tulia' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/datatables', target: '/core/datatables' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/frontend', target: '/core/frontend' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/frontend-toolbar', target: '/core/frontend-toolbar' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/fileapi', target: '/core/fileapi' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/flag-icons', target: '/core/flag-icons' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/font-awesome', target: '/core/font-awesome' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/jquery', target: '/core/jquery' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/jquery-nestable', target: '/core/jquery-nestable' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/jquery-typeahead', target: '/core/jquery-typeahead' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/jquery-ui', target: '/core/jquery-ui' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/js-cookie', target: '/core/js-cookie' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/jstree', target: '/core/jstree' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/lodash', target: '/core/lodash' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/masonry', target: '/core/masonry' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/momentjs', target: '/core/momentjs' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/popperjs', target: '/core/popperjs' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/quill', target: '/core/quill' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/simplebar', target: '/core/simplebar' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/sweetalert2', target: '/core/sweetalert2' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/tulia-dynamic-form', target: '/core/tulia-dynamic-form' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/vuejs', target: '/core/vuejs' }
+    assetter:
+        assets:
+            jquery:
+                scripts: [ '/assets/core/jquery/jquery-3.4.1.min.js' ]
+                group: head
+                priority: 1000
+            jquery_ui:
+                scripts: [ /assets/core/jquery-ui/js/jquery-ui.min.js ]
+                styles: [ /assets/core/jquery-ui/css/jquery-ui.min.css ]
+                group: head
+                priority: 500
+            popperjs:
+                scripts: [ '/assets/core/popperjs/popper.min.js' ]
+                priority: 800
+            font_awesome:
+                styles: [ '/assets/core/font-awesome/css/all.min.css' ]
+                priority: 1000
+                group: head
+            animate_css:
+                styles: [ '/assets/core/animate-css/animate.min.css' ]
+                priority: 1000
+            lodash:
+                priority: 1000
+                scripts: [ '/assets/core/lodash/lodash.min.js' ]
+            chosen:
+                require: [ 'chosen.css', 'chosen.js' ]
+            chosen.css:
+                styles: [ '/assets/core/chosen/chosen.min.css' ]
+                priority: 500
+                group: head
+            chosen.js:
+                scripts: [ '/assets/core/chosen/chosen.jquery.min.js' ]
+                priority: 500
+            sweetalert2:
+                scripts: [ '/assets/core/sweetalert2/sweetalert2.min.js' ]
+                priority: 500
+            js_cookie:
+                scripts: [ '/assets/core/js-cookie/js.cookie-2.2.0.min.js' ]
+                priority: 500
+            simplebar:
+                scripts: [ '/assets/core/simplebar/simplebar.min.js' ]
+                styles: [ '/assets/core/simplebar/simplebar.min.css' ]
+                priority: 500
+            datetimepicker:
+                scripts: [ '/assets/core/bootstrap-datetimepicker/js/tempusdominus-bootstrap-4.min.js', '/assets/core/bootstrap-datetimepicker-custom/defaults.js' ]
+                styles: [ '/assets/core/bootstrap-datetimepicker/css/tempusdominus-bootstrap-4.min.css' ]
+                require: [ 'momentjs' ]
+                priority: 500
+            momentjs:
+                scripts: [ '/assets/core/momentjs/moment-with-locales.min.js' ]
+                priority: 800
+            vue:
+                priority: 500
+                # Scripts defined in environments
+            nestable:
+                scripts: [ '/assets/core/jquery-nestable/jquery.nestable.min.js' ]
+                styles: [ '/assets/core/jquery-nestable/jquery.nestable.min.css' ]
+                priority: 500
+            jquery_typeahead:
+                scripts: [ '/assets/core/jquery-typeahead/jquery.typeahead.min.js' ]
+                styles: [ '/assets/core/jquery-typeahead/jquery.typeahead.min.css' ]
+                priority: 500
+            bootstrap:
+                require: [ 'jquery', 'popperjs', 'bootstrap.css', 'bootstrap.js' ]
+            bootstrap.css:
+                styles: [ '/assets/core/bootstrap/css/bootstrap.min.css' ]
+                priority: 500
+                group: head
+            bootstrap.js:
+                scripts: [ '/assets/core/bootstrap/js/bootstrap.min.js' ]
+                priority: 500
+            jstree:
+                scripts: [ '/assets/core/jstree/jstree.min.js' ]
+                styles: [ '/assets/core/jstree/themes/default/style.min.css' ]
+                priority: 500
+            fileapi:
+                scripts: [ '/assets/core/fileapi/FileAPI.html5.min.js' ]
+                priority: 500
+                group: head
+            masonry:
+                scripts: [ '/assets/core/masonry/masonry.pkgd.min.js' ]
+                priority: 500
+                group: head
+            datatables_core:
+                scripts: [ '/assets/core/datatables/datatables.min.js' ]
+                styles: [ '/assets/core/datatables/datatables.min.css' ]
+                priority: 800
+            datatables:
+                scripts: [ '/assets/core/datatables/integrations/js/dataTables.bootstrap4.min.js' ]
+                styles: [ '/assets/core/datatables/integrations/css/dataTables.bootstrap4.min.css' ]
+                require: [ 'datatables_core' ]
+                priority: 500
+            datatable_tulia:
+                scripts: [ '/assets/core/datatable-tulia/datatable.js' ]
+                require: [ 'datatables' ]
+                priority: 200
+            backend.font:
+                styles: [ 'https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&amp;subset=latin-ext' ]
+                group: head
+            backend.theme.head:
+                styles: [ '/assets/core/backend/theme/css/backend-theme.css' ]
+                require: [ 'backend.font', 'animate_css' ]
+                group: head
+            backend.theme:
+                scripts: [ '/assets/core/backend/theme/js/backend-theme.bundle.min.js' ]
+                require: [ 'vue', 'simplebar', 'lodash', 'backend.theme.head' ]
+            backend:
+                require: [ 'bootstrap', 'font_awesome', 'chosen', 'sweetalert2', 'js_cookie', 'backend.theme' ]
+            customizer.back:
+                scripts: [ '/assets/core/customizer/backend/customizer.js' ]
+                styles: [ '/assets/core/customizer/backend/customizer.css' ]
+                require: [ 'bootstrap', 'font_awesome', 'chosen', 'sweetalert2' ]
+            customizer.front:
+                scripts: [ '/assets/core/customizer/frontend/customizer.js' ]
+            frontend:
+                styles: [ '/assets/core/frontend/default-assets/style.css' ]
+                priority: 1000
+                group: head
+            tulia_dynamic_form:
+                scripts: [ '/assets/core/tulia-dynamic-form/tulia-dynamic-form.js' ]
+                collection: tulia-dynamic-form
+                priority: 1000
+                group: head
+            quill:
+                scripts: [ '/assets/core/quill/quill.min.js' ]
+                styles: [ '/assets/core/quill/quill.bubble.light.css' ]
+                group: head
     content_building:
         data_types:
             # Declare here Platform's internal field types,

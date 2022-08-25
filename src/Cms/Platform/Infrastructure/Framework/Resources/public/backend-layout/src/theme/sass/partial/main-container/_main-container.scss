@@ -1,0 +1,39 @@
+@import "breadcrumbs";
+
+#body-container {
+    position: relative;
+    padding-bottom: 45px;
+    min-height: 100vh;
+    padding-left: $sidebar-width-base;
+}
+
+main {margin-top:-50px;position:relative;}
+
+@media only screen and (max-width: 1100px) {
+    #body-container {
+        padding-left: $sidebar-width-mini;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    #body-container {
+        padding-left: 0;
+    }
+
+    .mobile-menu-content-overlay {
+        position: fixed;
+        display: none;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        background-color: rgba(0,0,0,.6);
+        z-index: 500;
+    }
+
+    .main-menu-opened {
+        .mobile-menu-content-overlay {
+            display: block;
+        }
+    }
+}

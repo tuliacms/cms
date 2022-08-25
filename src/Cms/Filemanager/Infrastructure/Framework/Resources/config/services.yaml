@@ -32,9 +32,5 @@ services:
         bind:
             $commands: !tagged_iterator filemanager.command
 
-    Tulia\Cms\Filemanager\Application\Command\Upload:
-        bind:
-            $projectDir: '%kernel.project_dir%'
-
     Tulia\Cms\Filemanager\Infrastructure\Framework\Theme\Customizer\FilepickerControl:
         tags: [ theme.customizer.control ]

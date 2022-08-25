@@ -9,7 +9,7 @@ const fs = require('fs');
 
 module.exports = {
     mode: 'development',
-    entry: './src/js/tulia-filemanager.js',
+    entry: './src/js/main.js',
     output: {
         filename: 'tulia-filemanager.js',
         path: path.resolve(__dirname, 'dist'),
@@ -61,7 +61,6 @@ module.exports = {
     plugins: [
         new VueLoaderPlugin(),
         new MiniCssExtractPlugin(),
-        new webpack.BannerPlugin(fs.readFileSync('./LICENSE', 'utf8')),
         new FileManagerPlugin({
             events: {
                 onEnd: {

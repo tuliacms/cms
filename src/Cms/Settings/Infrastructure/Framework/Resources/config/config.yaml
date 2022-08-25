@@ -2,7 +2,6 @@ framework:
     translator:
         paths:
             - '%cms.core_dir%/Cms/Settings/Infrastructure/Framework/Resources/translations'
-
 cms:
     templating:
         paths:
@@ -18,8 +17,6 @@ cms:
                 value: 'Page is under maintenance mode. Please come back later.'
                 multilingual: true
             date_format:
-                autoload: true
-            theme:
                 autoload: true
             wysiwyg_editor:
                 autoload: true

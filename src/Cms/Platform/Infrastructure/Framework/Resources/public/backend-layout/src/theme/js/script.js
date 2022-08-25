@@ -1,8 +1,4 @@
 $(function () {
-    /*var stickySidebar = new StickySidebar('main aside', {
-        topSpacing: 51
-    });*/
-
     if (Tulia.Menu) {
         let menu = new Tulia.Menu('aside .lead-menu');
     }
@@ -49,6 +45,13 @@ $(function () {
     });
 
     headerScroll.start();
+
+    $('#mobile-menu-trigger').click(() => {
+        $('body').toggleClass('main-menu-opened');
+    });
+    $('.mobile-menu-content-overlay').click(() => {
+        $('body').removeClass('main-menu-opened');
+    });
 
     Tulia.UI.refresh(body);
 });
@@ -320,7 +323,7 @@ Tulia.Confirmation = {
             text: 'You really want to do this operation?',
             type: 'warning',
             customClass: {
-                confirmButton: 'btn btn-success',
+                confirmButton: 'btn btn-danger',
                 cancelButton: 'btn btn-secondary',
             },
             showCancelButton: true,

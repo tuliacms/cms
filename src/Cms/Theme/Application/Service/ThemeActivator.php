@@ -18,9 +18,9 @@ use Tulia\Component\Theme\ManagerInterface;
 class ThemeActivator
 {
     public function __construct(
-        private ManagerInterface $manager,
-        private ActivatorInterface $activator,
-        private EventBusInterface $eventBus,
+        private readonly ManagerInterface $manager,
+        private readonly ActivatorInterface $activator,
+        private readonly EventBusInterface $eventBus,
     ) {
     }
 

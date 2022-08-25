@@ -29,6 +29,7 @@ class FileResponseFormatter
             'name' => $file->getFilename(),
             'preview' => $this->getPreview($file),
             'size' => $file->getSize(),
+            'extension' => $file->getExtension(),
             'size_formatted' => Unit::bytesFormat($file->getSize()),
             'metadata' => []/*array_merge($file->getMetadata()->all(), [
                 'type' => $file->getType(),

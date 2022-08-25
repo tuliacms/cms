@@ -25,4 +25,14 @@ class File
     ) {
         $this->createdAt = ImmutableDateTime::now();
     }
+
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    public function getFilepath(): string
+    {
+        return sprintf('%s/%s', $this->path, $this->filename);
+    }
 }
