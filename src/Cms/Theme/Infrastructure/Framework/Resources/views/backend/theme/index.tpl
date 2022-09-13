@@ -30,7 +30,6 @@
                     </div>
                 </div>
             {% endif %}
-            {{ development }}sdfsdfsfd
             <div class="row">
                 {% for item in themes %}
                     <div class="col-3">
@@ -63,21 +62,23 @@
                                 {% if theme.name == item.name %}
                                     <a href="{{ path('backend.theme.customize.current') }}" class="btn btn-sm btn-primary my-3">{{ 'customize'|trans({}, 'themes') }}</a>
                                 {% endif %}
-                                {% if theme.name != item.name %}
+                                {% if development and theme.name != item.name %}
                                     <form action="{{ path('backend.theme.activate') }}" method="POST" class="d-inline-block">
                                         <input type="hidden" novalidate="novalidate" name="_token" value="{{ csrf_token('theme.activate') }}" />
                                         <input type="hidden" name="theme" value="{{ item.name }}" />
                                         <button type="submit" class="btn btn-sm btn-secondary tulia-click-page-loader my-3">{{ 'activate'|trans({}, 'themes') }}</button>
                                     </form>
                                 {% endif %}
-                                <div class="dropup d-inline-block float-right">
-                                    <a href="#" class="card-link d-inline-block px-4 py-3 text-dark" data-bs-toggle="dropdown">
-                                        <i class="fas fa-ellipsis-v"></i>
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <a href="#" data-theme="{{ item.name }}" class="dropdown-item dropdown-item-danger dropdown-item-with-icon theme-delete-trigger" title="{{ 'uninstallTheme'|trans({}, 'themes') }}"><i class="dropdown-icon fas fa-times"></i>{{ 'uninstallTheme'|trans({}, 'themes') }}</a>
+                                {% if development %}
+                                    <div class="dropup d-inline-block float-right">
+                                        <a href="#" class="card-link d-inline-block px-4 py-3 text-dark" data-bs-toggle="dropdown">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </a>
+                                        <div class="dropdown-menu">
+                                            <a href="#" data-theme="{{ item.name }}" class="dropdown-item dropdown-item-danger dropdown-item-with-icon theme-delete-trigger" title="{{ 'uninstallTheme'|trans({}, 'themes') }}"><i class="dropdown-icon fas fa-times"></i>{{ 'uninstallTheme'|trans({}, 'themes') }}</a>
+                                        </div>
                                     </div>
-                                </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
