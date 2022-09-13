@@ -90,8 +90,8 @@ final class SetupSystem extends AbstractTransactionalUseCase
             true,
             [[
                 'code' => $locale,
-                'domain' => $localDomain,
-                'domain_development' => $productionDomain,
+                'domain' => $productionDomain,
+                'domain_development' => $localDomain,
             ]]
         ));
     }
