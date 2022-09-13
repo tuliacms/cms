@@ -9,13 +9,14 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\FieldTypeMappingRegistry;
+use Symfony\Component\Console\Attribute\AsCommand;
 
 /**
  * @author Adam Banaszkiewicz
  */
+#[AsCommand(name: 'content-builder:field-type:list')]
 class ContentBuilderFieldTypeListCommand extends Command
 {
-    protected static $defaultName = 'content-builder:field-type:list';
     private FieldTypeMappingRegistry $mappingRegistry;
 
     public function __construct(FieldTypeMappingRegistry $mappingRegistry)

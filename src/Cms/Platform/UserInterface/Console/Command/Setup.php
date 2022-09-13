@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Platform\UserInterface\Console\Command;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -16,10 +17,9 @@ use Tulia\Cms\Platform\Application\UseCase\SetupSystemRequest;
 /**
  * @author Adam Banaszkiewicz
  */
+#[AsCommand(name: 'cms:setup')]
 class Setup extends Command
 {
-    protected static $defaultName = 'cms:setup';
-
     public function __construct(
         private readonly SetupSystem $setupSystem,
     ) {

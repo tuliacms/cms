@@ -24,7 +24,7 @@ class Theme extends AbstractController
 {
     public function __construct(
         private readonly ManagerInterface $manager,
-        private readonly ThemeActivator $themeActivator
+        private readonly ThemeActivator $themeActivator,
     ) {
     }
 
@@ -47,6 +47,7 @@ class Theme extends AbstractController
             'theme'  => $theme,
             'usesDefaultTheme' => $theme instanceof DefaultTheme,
             'installatorForm' => $form->createView(),
+            'development' => $this->getParameter('kernel.environment') === 'dev',
         ]);
     }
 

@@ -11,9 +11,11 @@
 {% block content %}
     <div class="pane pane-lead">
         <div class="pane-header">
-            <div class="pane-buttons">
-                <a href="#" class="btn btn-success btn-icon-left" data-bs-toggle="modal" data-bs-target="#install-theme"><i class="btn-icon fas fa-cloud-upload-alt"></i> {{ 'installTheme'|trans({}, 'themes') }}</a>
-            </div>
+            {% if development == true %}
+                <div class="pane-buttons">
+                    <a href="#" class="btn btn-success btn-icon-left" data-bs-toggle="modal" data-bs-target="#install-theme"><i class="btn-icon fas fa-cloud-upload-alt"></i> {{ 'installTheme'|trans({}, 'themes') }}</a>
+                </div>
+            {% endif %}
             <i class="pane-header-icon fas fa-palette"></i>
             <h1 class="pane-title">{{ 'themes'|trans }}</h1>
         </div>
@@ -28,6 +30,7 @@
                     </div>
                 </div>
             {% endif %}
+            {{ development }}sdfsdfsfd
             <div class="row">
                 {% for item in themes %}
                     <div class="col-3">

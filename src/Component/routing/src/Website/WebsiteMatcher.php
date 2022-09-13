@@ -17,10 +17,10 @@ final class WebsiteMatcher
          * in proper order, so first we need to check the longest prefixes.
          */
         usort($websites, function ($a, $b) {
-            return \strlen($a['path_prefix']) < \strlen($b['path_prefix']);
+            return \strlen($a['path_prefix']) <=> \strlen($b['path_prefix']);
         });
         usort($websites, function ($a, $b) {
-            return \strlen($a['locale_prefix']) < \strlen($b['locale_prefix']);
+            return \strlen($a['locale_prefix']) <=> \strlen($b['locale_prefix']);
         });
 
         $prepared = [];
@@ -37,7 +37,7 @@ final class WebsiteMatcher
         }
 
         usort($prepared, function ($a, $b) {
-            return \strlen($a['basepath']) < \strlen($b['basepath']);
+            return \strlen($a['basepath']) <=> \strlen($b['basepath']);
         });
 
         $activeWebsite = null;

@@ -30,8 +30,6 @@ class Hierarchy implements HierarchyInterface
     public function flatten(): HierarchyInterface
     {
         $elements = [];
-
-
     }
 
     public function getIterator(): \Traversable
@@ -44,10 +42,7 @@ class Hierarchy implements HierarchyInterface
         return isset($this->elements[$offset]);
     }
 
-    /**
-     * @return mixed
-     */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return $this->elements[$offset];
     }

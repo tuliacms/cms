@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Theme\UserInterface\Console\Command;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -18,11 +19,10 @@ use Tulia\Component\Theme\ManagerInterface;
 /**
  * @author Adam Banaszkiewicz
  */
+#[AsCommand(name: 'make:theme:tulia-editor:init')]
 final class MakeTuliaEditorInit extends Command
 {
     use ThemeQuestionableTrait;
-
-    protected static $defaultName = 'make:theme:tulia-editor:init';
 
     public function __construct(
         private readonly ManagerInterface $themeManager,

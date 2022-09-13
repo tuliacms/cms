@@ -12,8 +12,9 @@ use Tulia\Cms\Node\Domain\WriteModel\Service\SlugGeneratorStrategy\SlugGenerator
 
 /**
  * @author Adam Banaszkiewicz
+ * @final
  */
-final class NodeTranslation
+class NodeTranslation
 {
     use AttributesAwareAggregateTrait;
 

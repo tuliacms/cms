@@ -115,6 +115,8 @@ final class WebsiteProvider
     {
         $result = [];
 
+        $developmentEnvironment = true;
+
         foreach ($websites as $website) {
             foreach ($website['locales'] as $locale) {
                 $result[] = [

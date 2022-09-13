@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Content\Type\UserInterface\Console\Command;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,9 +14,9 @@ use Tulia\Cms\Content\Type\Domain\WriteModel\Service\Configuration;
 /**
  * @author Adam Banaszkiewicz
  */
+#[AsCommand(name: 'content-builder:content-type:list')]
 class ContentBuilderContentTypeListCommand extends Command
 {
-    protected static $defaultName = 'content-builder:content-type:list';
     private Configuration $configuration;
 
     public function __construct(Configuration $configuration)

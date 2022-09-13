@@ -72,7 +72,7 @@ class ArrayConfiguration implements ConfigurationInterface
         $this->space = $space;
     }
 
-    public function get(string $name, $default = null)
+    public function get(string $name, $default = null): mixed
     {
         return $this->config[$name] ?? $default;
     }
@@ -112,10 +112,7 @@ class ArrayConfiguration implements ConfigurationInterface
         return isset($this->config[$offset]);
     }
 
-    /**
-     * @return mixed
-     */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return $this->config[$offset];
     }

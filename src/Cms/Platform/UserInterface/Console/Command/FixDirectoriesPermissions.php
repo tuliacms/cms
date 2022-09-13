@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Platform\UserInterface\Console\Command;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -13,10 +14,9 @@ use Symfony\Component\Finder\Finder;
 /**
  * @author Adam Banaszkiewicz
  */
+#[AsCommand(name: 'fs:dirs:permissions:fix')]
 final class FixDirectoriesPermissions extends Command
 {
-    protected static $defaultName = 'fs:dirs:permissions:fix';
-
     private array $directories = [
         '/public',
         '/var',

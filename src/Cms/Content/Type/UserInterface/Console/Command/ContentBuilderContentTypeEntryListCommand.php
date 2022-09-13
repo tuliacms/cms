@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Content\Type\UserInterface\Console\Command;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,9 +15,9 @@ use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface
 /**
  * @author Adam Banaszkiewicz
  */
+#[AsCommand(name: 'content-builder:content-type-entry:list')]
 class ContentBuilderContentTypeEntryListCommand extends Command
 {
-    protected static $defaultName = 'content-builder:content-type-entry:list';
     private ContentTypeRegistryInterface $contentTypeRegistry;
 
     public function __construct(ContentTypeRegistryInterface $contentTypeRegistry)

@@ -37,9 +37,9 @@ class ImportController extends AbstractController
     {
         ($importFile)(new ImportFileRequest(
             $request->files->get('file')->getPathname(),
-            $request->files->get('file')->getClientOriginalName(),
             $website->getId(),
-            $this->authenticatedUserProvider->getUser()->getId()
+            $this->authenticatedUserProvider->getUser()->getId(),
+            $request->files->get('file')->getClientOriginalName(),
         ));
 
         if ($request->query->has('return')) {

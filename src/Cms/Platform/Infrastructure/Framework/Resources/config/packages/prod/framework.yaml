@@ -1,4 +1,4 @@
-framework:
+cms:
     assetter:
         assets:
             vue:

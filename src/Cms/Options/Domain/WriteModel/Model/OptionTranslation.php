@@ -6,8 +6,9 @@ namespace Tulia\Cms\Options\Domain\WriteModel\Model;
 
 /**
  * @author Adam Banaszkiewicz
+ * @final
  */
-final class OptionTranslation
+class OptionTranslation
 {
     private string $id;
 

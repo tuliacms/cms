@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Content\Type\UserInterface\Console\Command;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,9 +14,9 @@ use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ConstraintTypeMappingRegistr
 /**
  * @author Adam Banaszkiewicz
  */
+#[AsCommand(name: 'content-builder:constraint-type:list')]
 class ContentBuilderConstraintTypeListCommand extends Command
 {
-    protected static $defaultName = 'content-builder:constraint-type:list';
     private ConstraintTypeMappingRegistry $mappingRegistry;
 
     public function __construct(ConstraintTypeMappingRegistry $mappingRegistry)

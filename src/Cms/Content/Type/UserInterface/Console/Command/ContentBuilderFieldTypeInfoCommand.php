@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Content\Type\UserInterface\Console\Command;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,9 +15,9 @@ use Tulia\Cms\Content\Type\Domain\ReadModel\Service\FieldTypeMappingRegistry;
 /**
  * @author Adam Banaszkiewicz
  */
+#[AsCommand(name: 'content-builder:field-type:info')]
 class ContentBuilderFieldTypeInfoCommand extends Command
 {
-    protected static $defaultName = 'content-builder:field-type:info';
     private FieldTypeMappingRegistry $mappingRegistry;
 
     public function __construct(FieldTypeMappingRegistry $mappingRegistry)

@@ -191,10 +191,10 @@ class Node extends AbstractAggregateRoot
         $this->markAsUpdated();
     }
 
-    public function moveAsChildOf(Node $parent, NodeLevelCalculatorInterface $calculator): void
+    public function moveAsChildOf(Node $parent/*, NodeLevelCalculatorInterface $calculator*/): void
     {
         $this->parent = $parent;
-        $this->level = $calculator->calculate($this->id);
+        /*$this->level = $calculator->calculate($this->id);*/
         $this->markAsUpdated();
     }
 

@@ -7,6 +7,7 @@ namespace Tulia\Cms\Theme\UserInterface\Console\Command;
 use Imagick;
 use ImagickDraw;
 use ImagickPixel;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -20,11 +21,10 @@ use Tulia\Component\Theme\ManagerInterface;
 /**
  * @author Adam Banaszkiewicz
  */
+#[AsCommand(name: 'make:theme:tulia-editor:block')]
 final class MakeTuliaEditorBlock extends Command
 {
     use ThemeQuestionableTrait;
-
-    protected static $defaultName = 'make:theme:tulia-editor:block';
 
     public function __construct(
         private readonly ManagerInterface $themeManager,

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Filemanager\UserInterface\Console\Command;
 
 use DirectoryIterator;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -16,9 +17,9 @@ use Tulia\Cms\Filemanager\Domain\ImageSize\ImageSizeRegistryInterface;
 /**
  * @author Adam Banaszkiewicz
  */
+#[AsCommand(name: 'filemanager:thumbnails:clear-nonexistent-sizes')]
 class FilemanagerThumbnailsClearNonexistentSizesCommand extends Command
 {
-    protected static $defaultName = 'filemanager:thumbnails:clear-nonexistent-sizes';
     private ImageSizeRegistryInterface $imageSizeRegistry;
     private string $publicDirectory;
 
