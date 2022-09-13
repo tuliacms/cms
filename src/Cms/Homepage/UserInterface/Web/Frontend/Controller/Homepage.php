@@ -20,8 +20,8 @@ use Tulia\Component\Templating\ViewInterface;
 class Homepage extends AbstractController
 {
     public function __construct(
-        private NodeFinderInterface $nodeFinder,
-        private Node $nodeController
+        private readonly NodeFinderInterface $nodeFinder,
+        private readonly Node $nodeController,
     ) {
     }
 

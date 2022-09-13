@@ -12,3 +12,4 @@ framework:
         log: true
     translator:
         default_path: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/translations'
+    error_controller: Tulia\Cms\Platform\UserInterface\Web\Controller\ErrorController::handle

@@ -45,7 +45,7 @@ final class DbalSearchEngine implements SearchEngineInterface
         );
 
         foreach ($result as $key => $row) {
-            $result[$key]['route_parameters'] = unserialize($row['route_parameters'], ['allowed_classes' => []]);
+            $result[$key]['route_parameters'] = json_decode($row['route_parameters'], true);
             $result[$key]['tags'] = [[
                 'tag' => $this->translator->trans('indexGroup_'.$row['index_group'], [], 'search_anything'),
                 'icon' => 'fas fa-tag'

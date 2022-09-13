@@ -21,11 +21,8 @@ use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderInterface;
 class CrumbsResolver implements BreadcrumbsResolverInterface
 {
     protected RouterInterface $router;
-
     protected ContentTypeRegistryInterface $contentTypeRegistry;
-
     protected NodeFinderInterface $nodeFinder;
-
     protected TermFinderInterface $termFinder;
 
     public function __construct(
@@ -44,6 +41,10 @@ class CrumbsResolver implements BreadcrumbsResolverInterface
     {
         $route = $request->attributes->get('_route');
         $node  = $request->attributes->get('node');
+
+        if (!$route || !$node) {
+            return null;
+        }
 
         return strncmp($route, 'node.', 5) === 0
             && $node instanceof Node

@@ -12,7 +12,8 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class Homepage extends AbstractController
 {
-    public function index(): ViewInterface {
+    public function index(): ViewInterface
+    {
         return $this->view('@backend/homepage/homepage.tpl');
     }
 }

@@ -16,9 +16,9 @@ use Tulia\Component\Theme\ThemeInterface;
 class ConfigurationResolver implements ResolverInterface
 {
     public function __construct(
-        private ManagerInterface $manager,
-        private DetectorInterface $detector,
-        private ConfigurationRegistry $configurationRegistry,
+        private readonly ManagerInterface $manager,
+        private readonly DetectorInterface $detector,
+        private readonly ConfigurationRegistry $configurationRegistry,
     ) {
     }
 

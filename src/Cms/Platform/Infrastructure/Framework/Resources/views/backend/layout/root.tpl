@@ -34,6 +34,7 @@
         {% if prevent_load_backend_assets is not defined %}
             <script nonce="{{ csp_nonce() }}">
                 typeof moment !== 'undefined' ? moment.locale('{{ user().locale }}') : null;
+                $(() => Tulia.UI.init());
             </script>
         {% endif %}
 

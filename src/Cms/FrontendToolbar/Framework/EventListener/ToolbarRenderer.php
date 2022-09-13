@@ -15,18 +15,11 @@ use Tulia\Cms\FrontendToolbar\Builder\Builder;
  */
 class ToolbarRenderer implements EventSubscriberInterface
 {
-    private Builder $builder;
-    private AuthorizationCheckerInterface $authorizationChecker;
-    private TokenStorageInterface $tokenStorage;
-
     public function __construct(
-        Builder $builder,
-        AuthorizationCheckerInterface $authorizationChecker,
-        TokenStorageInterface $tokenStorage
+        private readonly Builder $builder,
+        private readonly AuthorizationCheckerInterface $authorizationChecker,
+        private readonly TokenStorageInterface $tokenStorage,
     ) {
-        $this->builder = $builder;
-        $this->authorizationChecker = $authorizationChecker;
-        $this->tokenStorage = $tokenStorage;
     }
 
     public static function getSubscribedEvents(): array
@@ -41,26 +34,22 @@ class ToolbarRenderer implements EventSubscriberInterface
         $request = $event->getRequest();
 
         if (
-            $request->server->get('TULIA_WEBSITE_IS_BACKEND')
+            null === $this->tokenStorage->getToken()
+            || $this->authorizationChecker->isGranted('ROLE_ADMIN') === false
+            || $request->server->get('TULIA_WEBSITE_IS_BACKEND')
             || strncmp($request->getPathInfo(), '/_wdt', 5) === 0
             || strncmp($request->getPathInfo(), '/_profiler', 10) === 0
         ) {
             return;
         }
 
-        if ($this->tokenStorage->getToken() !== null && $this->authorizationChecker->isGranted('ROLE_ADMIN') === false) {
-            return;
-        }
-
-        $stylepath = $request->getUriForPath('/assets/core/frontend-toolbar/css/bundle.min.css');
-        $scriptpath = $request->getUriForPath('/assets/core/frontend-toolbar/js/bundle.min.js');
+        $stylepath = $request->getUriForPath('/assets/core/frontend-toolbar/frontend-toolbar.css');
 
         $response = $event->getResponse();
         $content = $response->getContent();
 
         $toolbar = $this->builder->build($request);
         $toolbar .= '<link rel="stylesheet" type="text/css" href="' . $stylepath . '" />';
-        $toolbar .= '<script src="' . $scriptpath . '"></script>';
 
         $content = str_replace('</body>', $toolbar . '</body>', $content);
 

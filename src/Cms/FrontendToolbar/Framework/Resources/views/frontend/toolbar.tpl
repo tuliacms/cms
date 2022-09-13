@@ -31,7 +31,7 @@
 <div class="tulia-toolbar" style="display:none;">
     <div class="toolbar-content">
         <div class="tulia-toolbar-hl">
-            <img class="logo-image" src="{{ asset('/assets/core/backend/theme/images/logo.svg') }}" alt="Tulia CMS">
+            <img class="logo-image" src="{{ asset('/assets/core/backend/theme/images/logo-reverse.svg') }}" alt="Tulia CMS">
             <span>{{ 'frontendToolbar'|trans({}, 'frontend_toolbar') }}</span>
         </div>
         <ul class="tulia-toolbar-items">
@@ -59,5 +59,31 @@
         </svg>
     </div>
 </div>
+
+<script nonce="{{ csp_nonce() }}">
+    $(function () {
+        let body = $('body');
+
+        if (window.Cookies && Cookies.get('tulia-toolbar-opened') === 'yes') {
+            body.addClass('tulia-toolbar-opened');
+        }
+
+        body.find('.tulia-fisher').click(function () {
+            body.toggleClass('tulia-toolbar-opened');
+
+            let opened;
+
+            if (body.hasClass('tulia-toolbar-opened')) {
+                opened = 'yes';
+            } else {
+                opened = 'no';
+            }
+
+            if (window.Cookies) {
+                Cookies.set('tulia-toolbar-opened', opened, {expires: 365, path: '/'});
+            }
+        });
+    });
+</script>
 
 {{ contents|raw }}

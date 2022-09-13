@@ -17,9 +17,9 @@ use Twig\Extension\RuntimeExtensionInterface;
 class ThemeRuntime implements RuntimeExtensionInterface
 {
     public function __construct(
-        private ManagerInterface $manager,
-        private AssetterInterface $assetter,
-        private DetectorInterface $detector,
+        private readonly ManagerInterface $manager,
+        private readonly AssetterInterface $assetter,
+        private readonly DetectorInterface $detector,
     ) {
     }
 
@@ -55,7 +55,7 @@ class ThemeRuntime implements RuntimeExtensionInterface
 
     public function themeHead(): string
     {
-        return $this->assetter->build('head')->all().PHP_EOL.'<meta name="generator" content="TuliaCMS '.Version::VERSION.'" />';
+        return $this->assetter->build('head')->all().PHP_EOL.'<meta name="generator" content="Tulia CMS '.Version::VERSION.'" />';
     }
 
     public function themeBody(): string

@@ -8,7 +8,7 @@
         @paste="onPaste"
         @focusin="preventSelfUpdate = true"
         @focusout="preventSelfUpdate = false"
-        :data-placeholder="this.translator.trans('startTypingPlaceholder')"
+        :data-placeholder="translator.trans('startTypingPlaceholder')"
     ></span>
 </template>
 

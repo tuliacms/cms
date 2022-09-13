@@ -60,7 +60,7 @@ class RequestExtension extends AbstractExtension
                             $htmlClass[] = 'alert-dismissible fade show';
                         }
 
-                        $result .= '<div class="' . implode(' ', $htmlClass) . '">' . $message . ($options['dismissable'] ? '<button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' : '' ) . '</div>';
+                        $result .= '<div class="' . implode(' ', $htmlClass) . '">' . $message . ($options['dismissable'] ? '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' : '' ) . '</div>';
                     }
                 }
 
@@ -73,6 +73,10 @@ class RequestExtension extends AbstractExtension
 
     protected function getFlashes(array $types = []): array
     {
+        if (false === $this->getRequest()->hasSession()) {
+            return [];
+        }
+
         $types = $types === [] ? [ 'info', 'success', 'warning', 'danger' ] : $types;
         $flashbag = $this->getRequest()->getSession()->getFlashBag();
         $flashes  = [];

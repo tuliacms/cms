@@ -33,7 +33,7 @@ class ThemeConfigurationAssetsLoader
         if ($theme->getParent() && $this->manager->getStorage()->has($theme->getParent())) {
             $parent = $this->manager->getStorage()->get($theme->getParent());
 
-            $this->manager->getResolver()->resolve($parent);
+            $this->manager->getResolver()->resolve($theme->getConfig(), $parent);
             $this->loadAssets($parent);
         }
 

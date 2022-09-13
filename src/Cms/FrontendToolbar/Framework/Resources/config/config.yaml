@@ -7,4 +7,4 @@ cms:
         paths:
             - { name: cms/frontend_toolbar, path: '%cms.core_dir%/Cms/FrontendToolbar/Framework/Resources/views/frontend' }
     public_paths:
-        - { source: '%cms.core_dir%/Cms/FrontendToolbar/Framework/Resources/public/dist', target: '/core/frontend-toolbar' }
+        - { source: '%cms.core_dir%/Cms/FrontendToolbar/Framework/Resources/public/frontend-toolbar/dist', target: '/core/frontend-toolbar' }

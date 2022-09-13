@@ -2,7 +2,6 @@ framework:
     translator:
         paths:
             - '%cms.core_dir%/Cms/ContactForm/Infrastructure/Framework/Resources/translations'
-
 doctrine:
     orm:
         mappings:
@@ -12,7 +11,6 @@ doctrine:
                 is_bundle: false
                 prefix: Tulia\Cms\ContactForm\Domain\WriteModel\Model
                 alias: CmsForm
-
 cms:
     importer:
         objects:
@@ -41,7 +39,7 @@ cms:
             - { name: cms/forms, path: '%cms.core_dir%/Cms/ContactForm/Infrastructure/Framework/Resources/views/frontend' }
             - { name: backend/forms, path: '%cms.core_dir%/Cms/ContactForm/Infrastructure/Framework/Resources/views/backend' }
     public_paths:
-        - { source: '%cms.core_dir%/Cms/ContactForm/Infrastructure/Framework/Resources/public/dist', target: '/core/contact-forms' }
+        - { source: '%cms.core_dir%/Cms/ContactForm/Infrastructure/Framework/Resources/public/contact-form-builder/dist', target: '/core/contact-forms' }
     assetter:
         assets:
             tulia.contact_forms:

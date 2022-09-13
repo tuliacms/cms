@@ -24,17 +24,17 @@ class WebsiteExtension extends AbstractExtension
     {
         return [
             new TwigFunction('locales', function () {
-                return $this->requestStack->getCurrentRequest()->attributes->get('website')->getLocales();
+                return $this->requestStack->getMainRequest()->attributes->get('website')->getLocales();
             }, [
                  'is_safe' => [ 'html' ]
             ]),
             new TwigFunction('locale', function () {
-                return $this->requestStack->getCurrentRequest()->attributes->get('website')->getLocale();
+                return $this->requestStack->getMainRequest()->attributes->get('website')->getLocale();
             }, [
                  'is_safe' => [ 'html' ]
             ]),
             new TwigFunction('current_website', function () {
-                return $this->requestStack->getCurrentRequest()->attributes->get('website');
+                return $this->requestStack->getMainRequest()->attributes->get('website');
             }, [
                  'is_safe' => [ 'html' ]
             ]),

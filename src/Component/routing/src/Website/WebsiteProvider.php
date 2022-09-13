@@ -162,12 +162,4 @@ final class WebsiteProvider
 
         exit;
     }
-
-    private static function countUniqueWebsites(array $websites): int
-    {
-        return count(array_unique(array_map(
-            static fn($v) => $v['id'],
-            $websites
-        )));
-    }
 }

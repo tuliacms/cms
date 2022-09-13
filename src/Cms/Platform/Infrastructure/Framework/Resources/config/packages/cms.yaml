@@ -17,7 +17,7 @@ cms:
                     theme:
                         template: "{% extends [ '@theme/layout.tpl', '@parent/layout.tpl' ] %}"
     public_paths:
-        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/backend-layout/dist', target: '/core/backend' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/backend-layout/dist', target: '/core/backend/theme' }
         - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/animate-css', target: '/core/animate-css' }
         - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/bootstrap', target: '/core/bootstrap' }
         - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/bootstrap-datetimepicker', target: '/core/bootstrap-datetimepicker' }
@@ -109,13 +109,14 @@ cms:
                 styles: [ '/assets/core/jquery-typeahead/jquery.typeahead.min.css' ]
                 priority: 500
             bootstrap:
-                require: [ 'jquery', 'popperjs', 'bootstrap.css', 'bootstrap.js' ]
+                require: [ 'bootstrap.css', 'bootstrap.js' ]
             bootstrap.css:
                 styles: [ '/assets/core/bootstrap/css/bootstrap.min.css' ]
                 priority: 500
                 group: head
             bootstrap.js:
                 scripts: [ '/assets/core/bootstrap/js/bootstrap.min.js' ]
+                require: [ 'jquery', 'popperjs' ]
                 priority: 500
             jstree:
                 scripts: [ '/assets/core/jstree/jstree.min.js' ]
@@ -146,14 +147,15 @@ cms:
                 styles: [ 'https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&amp;subset=latin-ext' ]
                 group: head
             backend.theme.head:
-                styles: [ '/assets/core/backend/theme/css/backend-theme.css' ]
+                styles: [ '/assets/core/backend/theme/main.css' ]
                 require: [ 'backend.font', 'animate_css' ]
                 group: head
             backend.theme:
-                scripts: [ '/assets/core/backend/theme/js/backend-theme.bundle.min.js' ]
+                scripts: [ '/assets/core/backend/theme/backend-theme.bundle.min.js' ]
                 require: [ 'vue', 'simplebar', 'lodash', 'backend.theme.head' ]
             backend:
-                require: [ 'bootstrap', 'font_awesome', 'chosen', 'sweetalert2', 'js_cookie', 'backend.theme' ]
+                require: [ 'jquery', 'bootstrap.js', 'font_awesome', 'chosen', 'sweetalert2', 'js_cookie', 'backend.theme' ]
+                included: [ 'bootstrap.css' ]
             customizer.back:
                 scripts: [ '/assets/core/customizer/backend/customizer.js' ]
                 styles: [ '/assets/core/customizer/backend/customizer.css' ]

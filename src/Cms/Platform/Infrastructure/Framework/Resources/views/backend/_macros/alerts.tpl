@@ -10,7 +10,7 @@
     {% if not translated %}
         <div class="alert alert-info alert-dismissible fade show">
             {{ 'missingTranslationInThisLocaleSaveToSaveInThisLocale'|trans }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
@@ -29,7 +29,7 @@
     {% if app.request.attributes.get('_content_locale') != current_website().defaultLocale.code %}
         <div class="alert alert-info alert-dismissible fade show">
             {{ 'foreignLocaleElementCreationNotificationMessage'|trans }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>

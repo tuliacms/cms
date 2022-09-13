@@ -18,7 +18,6 @@ use Tulia\Cms\Taxonomy\Domain\ReadModel\TaxonomyBreadcrumbs;
 class CrumbsResolver implements BreadcrumbsResolverInterface
 {
     private RouterInterface $router;
-
     private TaxonomyBreadcrumbs $taxonomyBreadcrumbs;
 
     public function __construct(
@@ -33,6 +32,10 @@ class CrumbsResolver implements BreadcrumbsResolverInterface
     {
         $route = $request->attributes->get('_route');
         $term  = $request->attributes->get('term');
+
+        if (!$route || !$term) {
+            return null;
+        }
 
         return strncmp($route, 'term.', 5) === 0
             && $term instanceof Term
