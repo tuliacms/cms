@@ -17,7 +17,7 @@ class DirectoryDiscoveryStorage implements StorageInterface
     private array $themes = [];
 
     public function __construct(
-        private readonly string $extensionsDirectory,
+        private readonly array $extensionsDirectories,
         private readonly LoggerInterface $appLogger
     ) {
     }
@@ -82,22 +82,26 @@ class DirectoryDiscoveryStorage implements StorageInterface
 
     private function resolveThemes(): void
     {
-        foreach (new \DirectoryIterator($this->extensionsDirectory) as $namespace) {
-            if ($namespace->isDot() || !$namespace->isDir()) {
-                continue;
-            }
-
-            foreach (new \DirectoryIterator($this->extensionsDirectory . '/' . $namespace->getFilename()) as $theme) {
-                if ($theme->isDot()) {
+        foreach ($this->extensionsDirectories as $directory => $prefix) {
+            foreach (new \DirectoryIterator($directory) as $namespace) {
+                if ($namespace->isDot() || !$namespace->isDir()) {
                     continue;
                 }
 
-                $themeClassname = 'Tulia\\Theme\\' . $namespace->getFilename() . '\\' .  $theme->getFilename() . '\\Theme';
+                $themes = new \DirectoryIterator($directory . '/' . $namespace->getFilename());
 
-                /** @var ThemeInterface $themeObject */
-                $themeObject = new $themeClassname();
+                foreach ($themes as $theme) {
+                    if ($theme->isDot()) {
+                        continue;
+                    }
 
-                $this->themes[$themeObject->getName()] = $themeObject;
+                    $themeClassname = $prefix . '\\' . $namespace->getFilename() . '\\' .  $theme->getFilename() . '\\Theme';
+
+                    /** @var ThemeInterface $themeObject */
+                    $themeObject = new $themeClassname();
+
+                    $this->themes[$themeObject->getName()] = $themeObject;
+                }
             }
         }
     }
