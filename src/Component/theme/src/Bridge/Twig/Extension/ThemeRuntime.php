@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Theme\Bridge\Twig\Extension;
 
-use Requtize\Assetter\AssetterInterface;
-use Tulia\Cms\Platform\Version;
 use Tulia\Component\Theme\Customizer\DetectorInterface;
 use Tulia\Component\Theme\ManagerInterface;
 use Tulia\Component\Theme\ThemeInterface;
@@ -18,7 +16,6 @@ class ThemeRuntime implements RuntimeExtensionInterface
 {
     public function __construct(
         private readonly ManagerInterface $manager,
-        private readonly AssetterInterface $assetter,
         private readonly DetectorInterface $detector,
     ) {
     }
@@ -51,15 +48,5 @@ class ThemeRuntime implements RuntimeExtensionInterface
         }
 
         return '';
-    }
-
-    public function themeHead(): string
-    {
-        return $this->assetter->build('head')->all().PHP_EOL.'<meta name="generator" content="Tulia CMS '.Version::VERSION.'" />';
-    }
-
-    public function themeBody(): string
-    {
-        return $this->assetter->build()->all();
     }
 }

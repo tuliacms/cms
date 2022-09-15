@@ -21,7 +21,7 @@
             </script>
         {% endif %}
         {% block beforehead %}{% endblock %}
-        {{ theme_head() }}
+        {{ do_action('theme.head') }}
         <title>{% block title %}{{ title('Tulia CMS Backend') }}{% endblock %}</title>
         {% block head %}{% endblock %}
     </head>
@@ -30,7 +30,7 @@
 
         {% block body %}{% endblock %}
 
-        {{ theme_body() }}
+        {{ do_action('theme.body') }}
 
         {% if prevent_load_backend_assets is not defined %}
             <script nonce="{{ csp_nonce() }}">

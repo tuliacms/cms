@@ -14,3 +14,4 @@ imports:
     - { resource: services/theme.yaml }
     - { resource: services/utils.yaml }
     - { resource: services/fixtures.yaml }
+    - { resource: services/hooks.yaml }

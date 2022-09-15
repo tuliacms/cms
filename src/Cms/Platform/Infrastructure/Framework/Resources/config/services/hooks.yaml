@@ -1,0 +1,7 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Component\Hooks\Hooks: ~
+    Tulia\Component\Hooks\HooksInterface: '@Tulia\Component\Hooks\Hooks'

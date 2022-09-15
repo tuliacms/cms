@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    {{ theme_head() }}
+    {{ do_action('theme.head') }}
     <meta name="robots" content="noindex,nofollow">
     <title>{% block title %}Tulia CMS - Administration Panel login{% endblock %}</title>
     {% block head %}{% endblock %}
@@ -329,7 +329,7 @@
 
 </script>
 #}
-{{ theme_body() }}
+{{ do_action('theme.body') }}
 {% block afterbody %}{% endblock %}
 </body>
 </html>

@@ -12,6 +12,7 @@ use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\CachePass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\ContentBuilderPass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\DashboardPass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\FinderPass;
+use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\HooksPass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\RoutingPass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\TaxonomyPass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\TemplatingPass;
@@ -46,6 +47,7 @@ class TuliaCmsBundle extends Bundle
         $container->addCompilerPass(new FinderPass());
         $container->addCompilerPass(new ThemePass());
         $container->addCompilerPass(new UsecasePass());
+        $container->addCompilerPass(new HooksPass());
 
         /**
          * Parameter should be used in all Core configs, instead of "kernel.project_dir".

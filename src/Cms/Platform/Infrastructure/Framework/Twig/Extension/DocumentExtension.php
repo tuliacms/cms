@@ -14,22 +14,11 @@ use Twig\TwigFunction;
  */
 class DocumentExtension extends AbstractExtension implements GlobalsInterface
 {
-    /**
-     * @var DocumentInterface
-     */
-    protected $document;
-
-    /**
-     * @param DocumentInterface $document
-     */
-    public function __construct(DocumentInterface $document)
-    {
-        $this->document = $document;
+    public function __construct(
+        private readonly DocumentInterface $document,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getGlobals(): array
     {
         return [
@@ -37,9 +26,6 @@ class DocumentExtension extends AbstractExtension implements GlobalsInterface
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFunctions(): array
     {
         return [

@@ -50,8 +50,7 @@ class TuliaCmsExtension extends Extension
         $this->registerViewFilters($container);
 
         // Finders
-        $container->registerForAutoconfiguration(
-            \Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\AbstractFinder::class)
+        $container->registerForAutoconfiguration(\Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\AbstractFinder::class)
             ->addTag('finder');
         $container->registerForAutoconfiguration(\Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Plugin\PluginInterface::class)
             ->addTag('finder.plugin');
@@ -98,8 +97,7 @@ class TuliaCmsExtension extends Extension
             ->addTag('menu.builder.type_registrator');
 
         // Nodes
-        $container->registerForAutoconfiguration(
-            \Tulia\Cms\Node\Domain\WriteModel\Service\NodePurpose\NodePurposeProviderInterface::class)
+        $container->registerForAutoconfiguration(\Tulia\Cms\Node\Domain\WriteModel\Service\NodePurpose\NodePurposeProviderInterface::class)
             ->addTag('node.purpose_provider');
 
         // Terms
@@ -107,25 +105,19 @@ class TuliaCmsExtension extends Extension
             ->addTag('term.action_chain');
 
         // ContentBuilder
-        $container->registerForAutoconfiguration(
-            \Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeDecoratorInterface::class)
+        $container->registerForAutoconfiguration(\Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeDecoratorInterface::class)
             ->addTag('content_builder.content_type.decorator');
-        $container->registerForAutoconfiguration(
-            \Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeProviderInterface::class)
+        $container->registerForAutoconfiguration(\Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeProviderInterface::class)
             ->addTag('content_builder.content_type.provider');
-        $container->registerForAutoconfiguration(
-            \Tulia\Cms\Content\Type\Domain\WriteModel\Routing\Strategy\ContentTypeRoutingStrategyInterface::class)
+        $container->registerForAutoconfiguration(\Tulia\Cms\Content\Type\Domain\WriteModel\Routing\Strategy\ContentTypeRoutingStrategyInterface::class)
             ->addTag('content_builder.content_type.routing_strategy');
-        $container->registerForAutoconfiguration(
-            \Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Service\LayoutTypeBuilderInterface::class)
+        $container->registerForAutoconfiguration(\Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Service\LayoutTypeBuilderInterface::class)
             ->addTag('content_builder.layout_type.builder');
-        $container->registerForAutoconfiguration(
-            \Tulia\Cms\Content\Type\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderInterface::class)
+        $container->registerForAutoconfiguration(\Tulia\Cms\Content\Type\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderInterface::class)
             ->addTag('content_builder.data_types.builder')
             ->setShared(false)
             ->setLazy(true);
-        $container->registerForAutoconfiguration(
-            \Tulia\Cms\Content\Type\Domain\ReadModel\FieldTypeHandler\FieldTypeHandlerInterface::class)
+        $container->registerForAutoconfiguration(\Tulia\Cms\Content\Type\Domain\ReadModel\FieldTypeHandler\FieldTypeHandlerInterface::class)
             ->addTag('content_builder.data_types.handler')
             ->setShared(false)
             ->setLazy(true);
@@ -139,15 +131,20 @@ class TuliaCmsExtension extends Extension
             ->setLazy(true)
             ->addTag('cms.widget');
 
-        // Widgets
+        // Filemanager
         $container->registerForAutoconfiguration(\Tulia\Cms\Filemanager\Domain\ImageSize\ImagesSizeProviderInterface::class)
             ->setLazy(true)
             ->addTag('filemanager.image_size.provider');
 
-        // Widgets
+        // SearchAnything
         $container->registerForAutoconfiguration(\Tulia\Cms\SearchAnything\Domain\WriteModel\Service\DocumentCollectorInterface::class)
             ->setLazy(true)
             ->addTag('search_anything.document_collector');
+
+        // Hooks
+        $container->registerForAutoconfiguration(\Tulia\Component\Hooks\HooksSubscriberInterface::class)
+            ->setLazy(true)
+            ->addTag('hooks.subscriber');
     }
 
     protected function validateOptionsValues(array $definitions): array

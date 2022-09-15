@@ -78,6 +78,7 @@
         "psr-4": {
             "Tulia\\Bundle\\": "src/Bundle",
             "Tulia\\Component\\Datatable\\": "src/Component/datatable/src",
+            "Tulia\\Component\\Hooks\\": "src/Component/hooks/src",
             "Tulia\\Component\\Image\\": "src/Component/image/src",
             "Tulia\\Component\\Importer\\": "src/Component/importer/src",
             "Tulia\\Component\\Routing\\": "src/Component/routing/src",

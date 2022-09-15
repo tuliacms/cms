@@ -136,26 +136,28 @@ final class TuliaKernel extends Kernel
 
     private function getExtensionConfigDirs(string $type): array
     {
-        if (is_dir($this->getProjectDir().'/extension/'.$type) === false) {
-            return [];
-        }
-
         $configDirs = [];
 
-        foreach (new \DirectoryIterator($this->getProjectDir().'/extension/'.$type) as $vendor) {
-            if ($vendor->isDot() || !$vendor->isDir()) {
+        foreach (['extension', 'extension.local'] as $dir) {
+            if (is_dir($this->getProjectDir().'/'.$dir.'/'.$type) === false) {
                 continue;
             }
 
-            foreach (new \DirectoryIterator($this->getProjectDir().'/extension/'.$type.'/'.$vendor->getFilename()) as $ext) {
-                if ($ext->isDot() || !$ext->isDir()) {
+            foreach (new \DirectoryIterator($this->getProjectDir().'/'.$dir.'/'.$type) as $vendor) {
+                if ($vendor->isDot() || !$vendor->isDir()) {
                     continue;
                 }
 
-                $path = $this->getProjectDir().'/extension/'.$type.'/'.$vendor->getFilename().'/'.$ext->getFilename().'/Resources/config';
+                foreach (new \DirectoryIterator($this->getProjectDir().'/'.$dir.'/'.$type.'/'.$vendor->getFilename()) as $ext) {
+                    if ($ext->isDot() || !$ext->isDir()) {
+                        continue;
+                    }
 
-                if (is_dir($path)) {
-                    $configDirs[] = $path;
+                    $path = $this->getProjectDir().'/'.$dir.'/'.$type.'/'.$vendor->getFilename().'/'.$ext->getFilename().'/Resources/config';
+
+                    if (is_dir($path)) {
+                        $configDirs[] = $path;
+                    }
                 }
             }
         }

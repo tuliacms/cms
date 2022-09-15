@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     {% block beforehead %}{% endblock %}
-    {{ theme_head() }}
+    {{ do_action('theme.head') }}
     <title>{% block title %}{{ 'tuliaCmsInstallator'|trans({}, 'installator') }}{% endblock %}</title>
     {% block head %}{% endblock %}
     <meta name="robots" content="noindex,nofollow" />
@@ -32,7 +32,7 @@
         {% endif %}
     </div>
 
-    {{ theme_body() }}
+    {{ do_action('theme.body') }}
     <style>{% include relative(_self, 'style.css') %}</style>
     {% block javascripts %}{% endblock %}
 </body>

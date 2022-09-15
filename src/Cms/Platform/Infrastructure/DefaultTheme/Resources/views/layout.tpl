@@ -6,7 +6,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>{% block title %}{{ title(current_website().name) }}{% endblock %}</title>
-        {{ theme_head() }}
+        {{ do_action('theme.head') }}
         {% block head %}{% endblock %}
     </head>
     <body class="{{ body_class(app.request) }}">
@@ -27,7 +27,7 @@
         <footer class="border-top">
             <p class="text-center text-muted my-4">{{ 'now'|date('Y') }} &copy; {{ current_website().name }}</p>
         </footer>
-        {{ theme_body() }}
+        {{ do_action('theme.body') }}
         {% block afterbody %}{% endblock %}
     </body>
 </html>
