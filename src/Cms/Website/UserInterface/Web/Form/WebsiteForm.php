@@ -31,12 +31,14 @@ class WebsiteForm extends AbstractType
                 ],
             ])
             ->add('name', Type\TextType::class, [
+                'label' => 'name',
                 'required' => true,
                 'constraints' => [
                     new Assert\NotBlank(),
                 ],
             ])
             ->add('active', Type\ChoiceType::class, [
+                'label' => 'activity',
                 'required' => true,
                 'choices' => [
                     'Yes' => 1,

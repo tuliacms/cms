@@ -26,7 +26,7 @@ class Selector implements SelectorInterface
     /**
      * {@inheritdoc}
      */
-    public function render(TypeInterface $type, ?string $identity): string
+    public function render(TypeInterface $type, ?string $identity, string $websiteId, string $locale): string
     {
         [, $name] = explode(':', $type->getType());
         $field = 'node_search_' . $name;
@@ -36,6 +36,8 @@ class Selector implements SelectorInterface
             $field => $identity,
         ], [
             'node_type' => $nodeType,
+            'locale' => $locale,
+            'website_id' => $websiteId,
         ]);
 
         return $this->engine->render(new View('@backend/node/menu/selector.tpl', [

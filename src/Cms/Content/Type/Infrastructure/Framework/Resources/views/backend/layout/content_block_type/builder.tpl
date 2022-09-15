@@ -7,7 +7,7 @@
 <script nonce="{{ csp_nonce() }}">
     window.ContentBuilderLayoutBuilder = {
         translations: {
-            pageTitle: '{{ pageTitle }}',
+            pageTitle: '{{ pageTitle|raw }}',
             yes: '{{ 'yes'|trans({}, 'messages') }}',
             no: '{{ 'no'|trans({}, 'messages') }}',
             close: '{{ 'close'|trans({}, 'messages') }}',

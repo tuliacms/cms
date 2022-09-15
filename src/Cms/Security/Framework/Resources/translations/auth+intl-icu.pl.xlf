@@ -1,7 +1,11 @@
 <?xml version="1.0"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-    <file source-language="en" target-language="en" datatype="plaintext" original="auth+intl-icu.en.xlf">
+    <file source-language="en" target-language="pl" datatype="plaintext" original="auth+intl-icu.en.xlf">
         <body>
+            <trans-unit id="tuliacms.auth.1">
+                <source>givenLoginCredentialsAreInvalid</source>
+                <target>Login lub hasło są nieprawidłowe.</target>
+            </trans-unit>
             <trans-unit id="tuliacms.auth.2">
                 <source>loginToAdminPanel</source>
                 <target>Zaloguj się do Panelu Administracyjnego.</target>

@@ -34,6 +34,7 @@ final class UserDetailsForm extends AbstractType
     {
         $builder->add('id', HiddenType::class);
         $builder->add('email', TextType::class, [
+            'label' => 'email',
             'constraints' => [
                 new Assert\NotBlank(),
                 new Assert\Email(),
@@ -41,20 +42,27 @@ final class UserDetailsForm extends AbstractType
             ]
         ]);
         $builder->add('locale', LocaleType::class, [
+            'label' => 'language',
             'constraints' => [
                 new Assert\NotBlank(),
             ]
         ]);
         $builder->add('name', TextType::class, [
-            'label' => 'User name (first/last name)'
+            'label' => 'userFirstAndLastName',
+            'translation_domain' => 'users',
         ]);
-        $builder->add('enabled', YesNoType::class);
+        $builder->add('enabled', YesNoType::class, [
+            'label' => 'enabled',
+        ]);
         $builder->add('roles', UserRolesType::class, [
+            'label' => 'userRoles',
+            'translation_domain' => 'users',
             'constraints' => [
                 new Assert\NotBlank(),
             ]
         ]);
         $builder->add('avatar', UserAvatarType::class, [
+            'label' => false,
             'constraints' => [
                 new Assert\Image([
                     'minWidth' => 100,
@@ -69,15 +77,16 @@ final class UserDetailsForm extends AbstractType
         ]);
         $builder->get('avatar')->addModelTransformer($this->userAvatarTransformer);
         $builder->add('remove_avatar', CheckboxType::class, [
-            'label' => 'Remove avatar'
+            'label' => 'removeAvatar',
+            'translation_domain' => 'users',
         ]);
 
 
         $passwordField = [
             'type' => PasswordType::class,
             'invalid_message' => 'The password fields must match.',
-            'first_options' => ['label' => 'Password'],
-            'second_options' => ['label' => 'Repeat Password'],
+            'first_options' => ['label' => 'password'],
+            'second_options' => ['label' => 'passwordRepeat'],
         ];
 
         if (!$options['edit_form']) {

@@ -31,7 +31,11 @@ class NodeTypeaheadType extends AbstractType
             'search_route'  => 'backend.node.search.typeahead',
             'display_prop'  => 'title',
             'data_provider_single' => function (array $criteria): ?array {
-                $node = $this->nodeFinder->findOne(['id' => $criteria['value']], NodeFinderScopeEnum::INTERNAL);
+                $node = $this->nodeFinder->findOne([
+                    'id' => $criteria['value'],
+                    'locale' => $criteria['locale'],
+                    'website_id' => $criteria['website_id'],
+                ], NodeFinderScopeEnum::INTERNAL);
 
                 return $node ? ['title' => $node->getTitle()] : null;
             },

@@ -8,7 +8,7 @@
             data-bs-toggle="tab"
             data-bs-target="#tab-{{ id }}"
         >
-            {{ group.name }}
+            {{ group.name|trans({}, 'content_builder') }}
             {{ badge.errors_count(form, group.fieldsCodes|default([])) }}
         </a>
     </li>

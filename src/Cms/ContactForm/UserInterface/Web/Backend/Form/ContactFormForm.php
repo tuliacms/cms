@@ -32,27 +32,36 @@ class ContactFormForm extends AbstractType
                 ],
             ])
             ->add('sender_name', Type\TextType::class, [
+                'label' => 'senderName',
+                'translation_domain' => 'contact-form',
                 'constraints' => [
                     new Assert\NotBlank(),
                 ],
             ])
             ->add('sender_email', Type\TextType::class, [
+                'label' => 'senderEmail',
+                'translation_domain' => 'contact-form',
                 'constraints' => [
                     new Assert\NotBlank(),
                     new Assert\Email(),
                 ],
             ])
             ->add('reply_to', Type\TextType::class, [
+                'label' => 'replyTo',
+                'translation_domain' => 'contact-form',
                 'constraints' => [
                     new Assert\Email(),
                 ],
             ])
             ->add('name', Type\TextType::class, [
+                'label' => 'name',
                 'constraints' => [
                     new Assert\NotBlank(),
                 ],
             ])
             ->add('subject', Type\TextType::class, [
+                'label' => 'messageSubject',
+                'translation_domain' => 'contact-form',
                 'constraints' => [
                     new Assert\NotBlank(),
                 ],

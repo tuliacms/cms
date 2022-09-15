@@ -1,0 +1,176 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="pl" datatype="plaintext" original="users+intl-icu.en.xlf">
+        <body>
+            <trans-unit id="tuliacms.users.1">
+                <source>userSaved</source>
+                <target>Użytkownik został zapisany</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.2">
+                <source>userRoles</source>
+                <target>Role użytkownika</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.3">
+                <source>userAvatarSquareHelp</source>
+                <target>Awatar użytkownika musi być kwadratowym obrazem o rozmiarze od 150 do 300 pikseli.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.4">
+                <source>uploadAvatar</source>
+                <target>Wyślij awatar</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.5">
+                <source>removeAvatar</source>
+                <target>Usuń awatar</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.6">
+                <source>userHasNoAvatar</source>
+                <target>Użytkownik nie przesłał awatara.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.7">
+                <source>areYouSureYouWantToDeleteFollowingUsers</source>
+                <target>Czy na pewno chcesz usunąć następujących użytkowników?</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.8">
+                <source>deleteSelectedUsers</source>
+                <target>Usuń wybranych użytkowników</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.9">
+                <source>selectedUsersWereDeleted</source>
+                <target>Wybrani użytkownicy zostali usunięci.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.10">
+                <source>deleteUser</source>
+                <target>Usuń użytkownika</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.11">
+                <source>usersList</source>
+                <target>Lista użytkowników</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.12">
+                <source>editUser</source>
+                <target>Edytuj użytkownika</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.13">
+                <source>createUser</source>
+                <target>Stwórz użytkownika</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.14">
+                <source>users</source>
+                <target>Użytkownicy</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.15">
+                <source>name</source>
+                <target>Nazwa</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.16">
+                <source>nameHelp</source>
+                <target>Imię i nazwisko widoczne na stronie powinno być Twoim imieniem i nazwiskiem lub pseudonimem.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.17">
+                <source>accountIsDisabled</source>
+                <target>Konto jest zablokowane</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.18">
+                <source>accountIsEnabled</source>
+                <target>Konto jest odblokowane</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.19">
+                <source>passwordMinLength</source>
+                <target>Minimalna długość hasła</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.20">
+                <source>passwordMinDigits</source>
+                <target>Minimalna ilość cyfr w haśle</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.21">
+                <source>passwordMinSpecialChars</source>
+                <target>Minimalna ilość znaków specjalnych w haśle</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.22">
+                <source>passwordMinBigLetters</source>
+                <target>Minimalna ilość wielkich liter w haśle</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.23">
+                <source>passwordMinSmallLetters</source>
+                <target>Minimalna ilość małych liter w haśle</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.24">
+                <source>usernameMinLength</source>
+                <target>Minimalna długość nazwy użytkownika</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.25">
+                <source>emailAddress</source>
+                <target>Adres e-mail: {email}</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.26">
+                <source>cannotDeleteSelfUser</source>
+                <target>Nie możesz usunąć sam siebie.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.27">
+                <source>changePassword</source>
+                <target>Zmiana hasła</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.28">
+                <source>panelLocale</source>
+                <target>Język panelu administracyjnego</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.29">
+                <source>panelLocaleInfo</source>
+                <target>To jest język Twojego panelu administracyjnego. To ustawienie języka nie jest zgodne z ustawieniami języków treści (językiem edytowanej treści).</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.30">
+                <source>editAccount</source>
+                <target>Edycja konta</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.31">
+                <source>autoLogoutAfterPasswordChangeInfo</source>
+                <target>Zmiana hasła wiąże się z automatycznym wylogowaniem. Spróbuj gdzieś zapisać to hasło, aby móc ponownie się zalogować po jego zmianie.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.32">
+                <source>userNotExists</source>
+                <target>Użytkownik nie istnieje.</target>
+                <note>Alert message</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.33">
+                <source>passwordChangedSuccessfully</source>
+                <target>Hasło zostało zmienione.</target>
+                <note>Alert message</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.34">
+                <source>currentPassword</source>
+                <target>Aktualne hasło</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.35">
+                <source>currentPasswordHelpText</source>
+                <target>Wprowadź aktualne hasło i potwierdź, że naprawdę zmieniasz hasło.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.36">
+                <source>saveNewPassword</source>
+                <target>Zapisz nowe hasło</target>
+                <note>Button label</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.37">
+                <source>pleaseTypeValidCurrentPasswordToDoThisOperation</source>
+                <target>Proszę wpisać aktualne hasło, aby wykonać tę operację.</target>
+                <note>Alert message</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.38">
+                <source>cannotDeleteUserBecause</source>
+                <target>Użytkownika nie można usunąć, ponieważ: {reason}.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.39">
+                <source>yourAccount</source>
+                <target>Twoje konto</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.40">
+                <source>userFirstAndLastName</source>
+                <target>Nazwa użytkownika (Imię i Nazwisko)</target>
+                <note>Input label</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.41">
+                <source>userAvatar</source>
+                <target>Awatar użytkownika</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

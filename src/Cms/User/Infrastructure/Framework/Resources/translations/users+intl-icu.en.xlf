@@ -162,6 +162,15 @@
                 <source>yourAccount</source>
                 <target>Your account</target>
             </trans-unit>
+            <trans-unit id="tuliacms.users.40">
+                <source>userFirstAndLastName</source>
+                <target>User name (first/last name)</target>
+                <note>Input label</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.41">
+                <source>userAvatar</source>
+                <target>User avatar</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

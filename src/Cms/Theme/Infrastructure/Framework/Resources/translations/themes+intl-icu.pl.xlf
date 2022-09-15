@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="pl" datatype="plaintext" original="themes+intl-icu.en.xlf">
+        <body>
+            <trans-unit id="tuliacms.themes.1">
+                <source>themeActivated</source>
+                <target>Szablon został aktywowany.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.2">
+                <source>childOfTheme</source>
+                <target>Szablon dziedziczący po {name}.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.3">
+                <source>activeTheme</source>
+                <target>Aktywny</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.4">
+                <source>customize</source>
+                <target>Dostosuj</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.5">
+                <source>activate</source>
+                <target>Aktywuj</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.6">
+                <source>defaultThemeInUse</source>
+                <target>Domyślny szablon w użyciu.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.7">
+                <source>youUseDefaultThemeInfo</source>
+                <target>Używasz teraz motywu domyślnego, którego nie można dostosować. Wybierz jeden z dostępnych motywów, aby skonfigurować swoją stronę internetową do swoich potrzeb. Możesz także zainstalować nowe motywy za pomocą katalogu instalacyjnego lub rozszerzeń. Spraw, aby Twoja strona była piękna!</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.8">
+                <source>installTheme</source>
+                <target>Zainstaluj szablon</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.9">
+                <source>installThemeShortInfo</source>
+                <target>Wybierz plik szablonu do zainstalowania. To musi być plik .zip.</target>
+                <note>Info showed around input field in installation section.</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.10">
+                <source>themePackage</source>
+                <target>Paczka z szablonem</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.11">
+                <source>install</source>
+                <target>Instaluj</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.12">
+                <source>themeHasBeenInstalled</source>
+                <target>Szablon został zainstalowany</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.13">
+                <source>uninstallTheme</source>
+                <target>Odinstaluj szablon</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.14">
+                <source>doYouWantToUninstallThisTheme</source>
+                <target>Czy chcesz odinstalować ten szablon?</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.15">
+                <source>themeHasBeenUninstalled</source>
+                <target>Szablon został odinstalowany.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.16">
+                <source>themeImports</source>
+                <target>Import do szablonu</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.17">
+                <source>importWebsiteContentForThisTheme</source>
+                <target>Importuj zawartość witryny do motywu</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.18">
+                <source>importSampleContentOrSkipToCreateContentYourself</source>
+                <target>W tym szablonie zdefiniowano kilka przykładowych kolekcji treści witryny, które można teraz zaimportować. Zaimportuj jeden z wymienionych poniżej lub pomiń, aby samodzielnie utworzyć zawartość.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.19">
+                <source>themeHasntGotAnyCollectionsToImport</source>
+                <target>Ten szablon nie ma żadnych kolekcji do zaimportowania.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.20">
+                <source>collectionHasBeenImported</source>
+                <target>Kolekcja została zaimportowana.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.21">
+                <source>doImport</source>
+                <target>Importuj</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.22">
+                <source>finish</source>
+                <target>Zakończ</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

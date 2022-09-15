@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Settings\UserInterface\Web\Backend\Controller;
 
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Swift_Plugins_LoggerPlugin;
 use Swift_Plugins_Loggers_ArrayLogger;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -13,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Options\Domain\WriteModel\OptionsRepositoryInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
+use Tulia\Cms\Settings\Domain\Event\SettingsUpdated;
 use Tulia\Cms\Settings\Domain\Group\SettingsGroupRegistryInterface;
 use Tulia\Cms\Shared\Infrastructure\Mail\MailerInterface;
 use Tulia\Component\Routing\Website\WebsiteInterface;
@@ -24,9 +26,10 @@ use Tulia\Component\Templating\ViewInterface;
 class Settings extends AbstractController
 {
     public function __construct(
-        private SettingsGroupRegistryInterface $settings,
-        private OptionsRepositoryInterface $optionsRepository,
-        private FormFactoryInterface $formFactory
+        private readonly SettingsGroupRegistryInterface $settings,
+        private readonly OptionsRepositoryInterface $optionsRepository,
+        private readonly FormFactoryInterface $formFactory,
+        private readonly EventDispatcherInterface $dispatcher,
     ) {
     }
 
@@ -53,6 +56,8 @@ class Settings extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $groupObj->saveAction($form->getData());
+
+            $this->dispatcher->dispatch(new SettingsUpdated());
 
             $this->setFlash('success', $this->trans('settingsSaved', [], 'settings'));
             return $this->redirectToRoute('backend.settings', [ 'group' => $groupObj->getId() ]);

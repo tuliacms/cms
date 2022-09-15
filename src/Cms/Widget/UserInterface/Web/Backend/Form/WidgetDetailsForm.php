@@ -27,16 +27,27 @@ final class WidgetDetailsForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('name', TextType::class, [
+            'label' => 'name',
             'constraints' => [
                 new Assert\NotBlank()
             ]
         ]);
         $builder->add('space', ChoiceType::class, $this->buildSpaceOptions());
-        $builder->add('visibility', YesNoType::class);
-        $builder->add('title', TextType::class);
+        $builder->add('visibility', YesNoType::class, [
+            'label' => 'visibility',
+        ]);
+        $builder->add('title', TextType::class, [
+            'label' => 'title',
+        ]);
         $builder->add('styles', ChoiceType::class, $this->buildStylesOptions());
-        $builder->add('htmlClass', TextType::class);
-        $builder->add('htmlId', TextType::class);
+        $builder->add('htmlClass', TextType::class, [
+            'label' => 'htmlClass',
+            'translation_domain' => 'widgets',
+        ]);
+        $builder->add('htmlId', TextType::class, [
+            'label' => 'htmlId',
+            'translation_domain' => 'widgets',
+        ]);
     }
 
     private function buildStylesOptions(): array
@@ -50,6 +61,8 @@ final class WidgetDetailsForm extends AbstractType
             }
         }
 
+        $options['label'] = 'styles';
+        $options['translation_domain'] = 'widgets';
         $options['multiple'] = true;
         $options['choices'] = $widgetStyles;
         $options['choice_translation_domain'] = false;
@@ -77,6 +90,8 @@ final class WidgetDetailsForm extends AbstractType
             );
         }
 
+        $options['label'] = 'space';
+        $options['translation_domain'] = 'widgets';
         $options['choices'] = $spaces;
         $options['choice_translation_domain'] = false;
         $options['constraints'][] = new Assert\NotBlank();

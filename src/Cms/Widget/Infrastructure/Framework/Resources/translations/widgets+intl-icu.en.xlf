@@ -48,7 +48,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.widgets.12">
                 <source>styles</source>
-                <target>Styles</target>
+                <target>Widget styles</target>
             </trans-unit>
             <trans-unit id="tuliacms.widgets.13">
                 <source>stylesDescription</source>
@@ -113,6 +113,14 @@
             <trans-unit id="tuliacms.widgets.28">
                 <source>widget.features.description</source>
                 <target>List of features with texts and icons.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.widgets.29">
+                <source>htmlClass</source>
+                <target>HTML Class</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.widgets.30">
+                <source>htmlId</source>
+                <target>HTML ID</target>
             </trans-unit>
         </body>
     </file>

@@ -28,9 +28,9 @@ use Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserTypeahead\UserType
 final class NodeDetailsForm extends AbstractType
 {
     public function __construct(
-        private NodePurposeRegistryInterface $flagRegistry,
-        private TranslatorInterface $translator,
-        private AuthenticatedUserProviderInterface $authenticatedUserProvider
+        private readonly NodePurposeRegistryInterface $flagRegistry,
+        private readonly TranslatorInterface $translator,
+        private readonly AuthenticatedUserProviderInterface $authenticatedUserProvider
     ) {
     }
 
@@ -41,6 +41,7 @@ final class NodeDetailsForm extends AbstractType
 
         $builder->add('id', HiddenType::class);
         $builder->add('title', TextType::class, [
+            'label' => 'title',
             'constraints' => [
                 new Assert\NotBlank()
             ]
@@ -76,11 +77,14 @@ final class NodeDetailsForm extends AbstractType
                 new Assert\NotBlank()
             ],
             'empty_data' => $this->authenticatedUserProvider->getUser()->getId(),
+            'website_id' => $options['website_id'],
+            'locale' => $options['locale'],
         ]);
         $builder->add('purposes', ChoiceType::class, [
+            'label' => 'nodePurpose',
+            'help' => 'nodePurposeInfo',
             'translation_domain' => 'node',
             'choices' => $this->buildPurposes(),
-            'help' => 'nodePurposeInfo',
             'choice_translation_domain' => false,
             'multiple' => true,
         ]);
@@ -125,7 +129,7 @@ final class NodeDetailsForm extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired('content_type');
+        $resolver->setRequired(['content_type', 'website_id', 'locale']);
     }
 
     private function buildPurposes(): array

@@ -12,21 +12,27 @@ use Tulia\Component\Routing\Website\WebsiteInterface;
 class WebsitePrefixesResolver
 {
     public function __construct(
-        private WebsiteInterface $website
+        private readonly WebsiteInterface $website,
     ) {
     }
 
     public function appendWebsitePrefixes(string $name, string $uri, array $parameters = []): string
     {
+        if (!isset($parameters['_locale'])) {
+            $parameters['_locale'] = $this->website->getLocale()->getCode();
+        }
+
+        /**
+         * Temporary fix to remove _locale parameter from homepage link.
+         * @todo Find a better solution for that.
+         */
+        $uri = str_replace(['?_locale='.$parameters['_locale'], '&_locale='.$parameters['_locale']], '', $uri);
+
         /** @var array $parts */
         $parts = parse_url($uri);
 
         if (! isset($parts['path'])) {
             $parts['path'] = '/';
-        }
-
-        if (!isset($parameters['_locale'])) {
-            $parameters['_locale'] = $this->website->getLocale()->getCode();
         }
 
         $localePrefix = $this->website->getLocaleByCode($parameters['_locale'])->getLocalePrefix();

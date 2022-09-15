@@ -74,7 +74,6 @@ class CmsSettingsGroup extends AbstractSettingsGroup
         $this->setOption('maintenance_mode', $data['maintenance_mode']);
         $this->setOption('maintenance_message', $data['maintenance_message']);
         $this->setOption('date_format', $data['date_format']);
-        $this->setOption('theme', $data['theme']);
         $this->setOption('wysiwyg_editor', $data['wysiwyg_editor']);
         $this->setOption('mail.transport', $data['mail_transport']);
         $this->setOption('mail.from_email', $data['mail_from_email']);

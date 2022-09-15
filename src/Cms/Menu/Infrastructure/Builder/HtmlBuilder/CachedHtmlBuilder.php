@@ -23,6 +23,7 @@ class CachedHtmlBuilder implements HtmlBuilderInterface
     public function build(HierarchyInterface $hierarchy): string
     {
         return $this->menuCache->get(sprintf('menu_html_%s', $hierarchy->getId()), function (ItemInterface $item) use ($hierarchy) {
+            $item->tag('menu');
             $item->tag('menu_html');
             $item->tag(sprintf('menu_%s', $hierarchy->getId()));
 

@@ -14,14 +14,10 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class HomepageProvider implements IdentityProviderInterface
 {
-    protected RouterInterface $router;
-
-    protected string $homepage;
-
-    public function __construct(RouterInterface $router, string $homepage = 'homepage')
-    {
-        $this->router   = $router;
-        $this->homepage = $homepage;
+    public function __construct(
+        private readonly RouterInterface $router,
+        private readonly string $homepage = 'homepage',
+    ) {
     }
 
     /**

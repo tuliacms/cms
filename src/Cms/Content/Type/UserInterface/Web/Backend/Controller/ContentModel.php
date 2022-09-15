@@ -71,9 +71,12 @@ class ContentModel extends AbstractController
 
         $layoutBuilder = $this->layoutTypeBuilderRegistry->get($this->configuration->getLayoutBuilder($contentType));
 
+        $builderView = $layoutBuilder->builderView($contentType, $data, $contentTypeFormHandler->getErrors(), true);
+        $builderView->addData(['theme' => $this->themeManager->getTheme()]);
+
         return $this->view('@backend/content_builder/content_type/create.tpl', [
             'type' => $contentType,
-            'builderView' => $layoutBuilder->builderView($contentType, $data, $contentTypeFormHandler->getErrors(), true),
+            'builderView' => $builderView,
             'cleaningResult' => $contentTypeFormHandler->getCleaningResult(),
         ]);
     }

@@ -17,8 +17,8 @@ use Tulia\Cms\Menu\Domain\ReadModel\Model\Item;
 class HierarchyBuilder implements HierarchyBuilderInterface
 {
     public function __construct(
-        protected MenuFinderInterface $menuFinder,
-        protected RegistryInterface $registry,
+        private readonly MenuFinderInterface $menuFinder,
+        private readonly RegistryInterface $registry,
     ) {
     }
 

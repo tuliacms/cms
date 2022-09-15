@@ -21,8 +21,8 @@ class SymfonyRouter implements RouterInterface, RequestMatcherInterface
     private ?RequestContext $context = null;
 
     public function __construct(
-        private FrontendRouteSuffixResolver $frontendRouteSuffixResolver,
-        private Router $contentTypeRouter
+        private readonly FrontendRouteSuffixResolver $frontendRouteSuffixResolver,
+        private readonly Router $contentTypeRouter
     ) {
     }
 

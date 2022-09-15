@@ -1,0 +1,258 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="pl" datatype="plaintext" original="content_builder+intl-icu.en.xlf">
+        <body>
+            <trans-unit id="tuliacms.content_builder.1">
+                <source>contentTypes</source>
+                <target>Typy treści</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.2">
+                <source>contentTypeName</source>
+                <target>Nazwa typu treści</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.3">
+                <source>contentTypeNameInfo</source>
+                <target>Używaj liczby pojedynczej, bezokolicznika, np. Post, News, Article, House.</target>
+                <note>Describe how user should create Content Type name</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.4">
+                <source>createContentTypeOf</source>
+                <target>Stwórz typ treści "{name}"</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.5">
+                <source>editContentTypeOf</source>
+                <target>Edytuj typ treści "{name}"</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.6">
+                <source>contentTypesListOf</source>
+                <target>Lista typów treści "{name}"</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.7">
+                <source>addNewSection</source>
+                <target>Nowa sekcja</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.8">
+                <source>addNewField</source>
+                <target>Nowe pole</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.9">
+                <source>editField</source>
+                <target>Edytuj pole</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.10">
+                <source>fieldLabel</source>
+                <target>Etykieta pola</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.11">
+                <source>fieldLabelHelp</source>
+                <target>Ta etykieta będzie wyświetlana w formularzu treści dla administratorów.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.12">
+                <source>fieldCode</source>
+                <target>Nazwa kodowa pola</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.13">
+                <source>fieldCodeHelp</source>
+                <target>Użyj tylko znaki angielskiego alfabetu (bez polskich znaków), cyfry oraz podkreślnik. Używaj angielskich oznaczeń, np.: name, description, main_image. To pole jest używane w API oraz w szablonach</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.14">
+                <source>youCannotCreateTwoFieldsWithTheSameCode</source>
+                <target>Nie możesz utworzyć dwóch pól z tym samym kodem.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.15">
+                <source>contentTypeNotExists</source>
+                <target>Taki typ treści nie istnieje.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.17">
+                <source>removeField</source>
+                <target>Usuń pole</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.18">
+                <source>removeSection</source>
+                <target>Usuń sekcję</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.19">
+                <source>fieldType</source>
+                <target>Typ pola</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.20">
+                <source>theseOptionsWillNotBeEditableAfterSave</source>
+                <target>Te opcje (z wyjątkiem etykiety pola) nie będą dostępne do edycji po zapisaniu.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.21">
+                <source>multilingualField</source>
+                <target>To pole jest wielojęzyczne</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.22">
+                <source>multilingualFieldInfo</source>
+                <target>Pozwala przetłumaczyć to pole we wszystkich zdefiniowanych lokalizacjach na stronie.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.23">
+                <source>multipleField</source>
+                <target>To pole przechowuje wiele wartości</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.24">
+                <source>multipleFieldInfo</source>
+                <target>Pozwala ustawić wiele wartości w jednym polu tego samego typu.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.25">
+                <source>nextStep</source>
+                <target>Dalej</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.26">
+                <source>previousStep</source>
+                <target>Wróć</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.27">
+                <source>pleaseFillThisField</source>
+                <target>Proszę uzupełnić to pole.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.28">
+                <source>fieldCodeMustContainOnlyAlphanumsAndUnderline</source>
+                <target>Nazwa kodowa pola musi zawierać tylko małe litery i podkreślenie.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.29">
+                <source>sectionIdCodeMustContainOnlyAlphanumsAndUnderline</source>
+                <target>Nazwa kodowa sekcji musi zawierać tylko małe litery i podkreślenie.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.30">
+                <source>fieldTypeConfiguration</source>
+                <target>Konfiguracja</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.31">
+                <source>fieldDetails</source>
+                <target>Szczegóły pola</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.32">
+                <source>fieldTypeConstraints</source>
+                <target>Ograniczenia</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.33">
+                <source>editContentTypeDetails</source>
+                <target>Edytuj szczegóły typu treści</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.34">
+                <source>contentTypeCode</source>
+                <target>Nazwa kodowa typu treści</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.35">
+                <source>contentTypeCodeHelp</source>
+                <target>Użyj tylko znaki angielskiego alfabetu (bez polskich znaków), cyfry oraz podkreślnik. Używaj angielskich oznaczeń pól, np.: post, article, house.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.36">
+                <source>contentTypeCodeMustContainOnlyAlphanumsAndUnderline</source>
+                <target>Nazwa kodowa typu treści może zawierać tylko małe litery i podkreślenie.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.39">
+                <source>routableType</source>
+                <target>Typ treści z osobnymi podstronami</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.40">
+                <source>routableTypeHelp</source>
+                <target>Zdecyduj, czy ten typ treści ma własne strony (adresy URL) w witrynie.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.41">
+                <source>hierarchicalType</source>
+                <target>Typ treści z hierarchicznymi treściami</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.42">
+                <source>hierarchicalTypeHelp</source>
+                <target>Zdecyduj, czy każdy element może mieć elementy potomne, i stwórz hierarchiczne drzewo elementów.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.43">
+                <source>pleaseSelectValue</source>
+                <target>Proszę wybrać wartość</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.45">
+                <source>fieldTypeNotExists</source>
+                <target>Typ pola "{type}" nie istnieje.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.47">
+                <source>thisContentTypeIsAlreadyRegistered</source>
+                <target>Ten typ treści jest już zarejestrowany w systemie.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.48">
+                <source>fieldHasErrors</source>
+                <target>Pole zawiera błędy.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.49">
+                <source>internalContentType</source>
+                <target>Wbudowany typ treści</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.50">
+                <source>isRoutable</source>
+                <target>Posiada węzły z adresami URL</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.51">
+                <source>isHierarchical</source>
+                <target>Hierarchiczny</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.53">
+                <source>taxonomyTypesList</source>
+                <target>Lista typów taksonomii</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.54">
+                <source>taxonomyTypeCode</source>
+                <target>Nazwa kodowa taksonomii</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.55">
+                <source>contentTypeUpdatedSuccessfully</source>
+                <target>Pomyślnie zaktualizowano typ treści.</target>
+                <note>Flash message</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.56">
+                <source>contentTypeCreatedSuccessfully</source>
+                <target>Typ treści utworzono pomyślnie.</target>
+                <note>Flash message</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.57">
+                <source>routingStrategy</source>
+                <target>Strategia routingu</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.58">
+                <source>routingStrategyHelp</source>
+                <target>Zdecyduj, jak powinny być budowane adresy URL tego elementu.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.59">
+                <source>node</source>
+                <target>Węzeł</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.60">
+                <source>taxonomy</source>
+                <target>Taksonomia</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.61">
+                <source>contentTypeStrategy_simple</source>
+                <target>Prosty - URL jest tworzony tylko z pola slug</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.62">
+                <source>contentTypeStrategy_full_path</source>
+                <target>Pełna ścieżka — wszystkie hierarchiczne elementy nadrzędne są używane do tworzenia adresu URL</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.63">
+                <source>contentTypeOfNotExists</source>
+                <target>Typ treści {name} nie istnieje.</target>
+                <note>Flash message</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.64">
+                <source>contentTypeWasRemoved</source>
+                <target>Typ treści został usunięty.</target>
+                <note>Flash message</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.65">
+                <source>moveUp</source>
+                <target>W górę</target>
+                <note>Button tooltip</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.66">
+                <source>moveDown</source>
+                <target>W dół</target>
+                <note>Button tooltip</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.67">
+                <source>themeRequiresContentFieldToBeExistence</source>
+                <target><![CDATA[Motyw oczekuje pola o nazwie "<b>{name}</b>", które przechowuje główną zawartość węzła typu treści. Pamiętaj o utworzeniu takiego pola, jeśli chcesz wyświetlać treści z Edytora wizualnego Tulia.]]></target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

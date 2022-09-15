@@ -24,8 +24,8 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\YesNoType;
 final class MenuItemDetailsForm extends AbstractType
 {
     public function __construct(
-        protected RegistryInterface $registry,
-        protected TranslatorInterface $translator
+        private readonly RegistryInterface $registry,
+        private readonly TranslatorInterface $translator
     ) {
     }
 
@@ -41,8 +41,11 @@ final class MenuItemDetailsForm extends AbstractType
                 new NotBlank(),
             ]
         ]);
-        $builder->add('visibility', YesNoType::class);
+        $builder->add('visibility', YesNoType::class, [
+            'label' => 'visibility',
+        ]);
         $builder->add('type', ChoiceType::class, [
+            'label' => 'type',
             'choices' => $itemTypes,
             'choice_translation_domain' => false,
             'constraints' => [
@@ -50,9 +53,14 @@ final class MenuItemDetailsForm extends AbstractType
                 new Choice([ 'choices' => $itemTypes ]),
             ]
         ]);
-        $builder->add('hash', TextType::class);
+        $builder->add('hash', TextType::class, [
+            'label' => 'itemHash',
+            'translation_domain' => 'menu',
+        ]);
         $builder->add('identity', HiddenType::class);
         $builder->add('target', ChoiceType::class, [
+            'label' => 'itemTarget',
+            'translation_domain' => 'menu',
             'choices' => $itemTargets,
             'choice_translation_domain' => false,
             'constraints' => [
@@ -60,14 +68,16 @@ final class MenuItemDetailsForm extends AbstractType
             ],
         ]);
         $builder->add('parent', MenuItemChoiceType::class, [
-            'menu_id' => $options['menu_id']
+            'label' => 'parentItem',
+            'translation_domain' => 'menu',
+            'menu_id' => $options['menu_id'],
         ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('menu_id', null);
-        $resolver->isRequired('menu_id');
+        $resolver->setRequired(['menu_id']);
         $resolver->setAllowedTypes('menu_id', 'string');
     }
 

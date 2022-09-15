@@ -158,6 +158,21 @@
                 <source>widget.description</source>
                 <target>Shows contact form.</target>
             </trans-unit>
+            <trans-unit id="tuliacms.contact-form.40">
+                <source>senderName</source>
+                <target>Nadawca - Nazwa</target>
+                <note>Field label</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.41">
+                <source>senderEmail</source>
+                <target>Nadawca - Adres e-mail</target>
+                <note>Field label</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.42">
+                <source>replyTo</source>
+                <target>Odpowiedź do - adres e-mail</target>
+                <note>Field label</note>
+            </trans-unit>
         </body>
     </file>
 </xliff>

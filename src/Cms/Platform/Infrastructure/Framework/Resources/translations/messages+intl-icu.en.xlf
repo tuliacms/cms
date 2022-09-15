@@ -849,6 +849,10 @@
                 <source>noActivityYet</source>
                 <target>No activity yet.</target>
             </trans-unit>
+            <trans-unit id="tuliacms.messages.212">
+                <source>activity</source>
+                <target>Activity</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

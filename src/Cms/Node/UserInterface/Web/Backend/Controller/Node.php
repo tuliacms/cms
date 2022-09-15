@@ -93,7 +93,12 @@ class Node extends AbstractController
                 'published_at' => new ImmutableDateTime(),
                 'status' => 'published',
             ],
-            ['content_type' => $nodeType, 'csrf_protection' => false]
+            [
+                'content_type' => $nodeType,
+                'csrf_protection' => false,
+                'website_id' => $website->getId(),
+                'locale' => $website->getLocale()->getCode(),
+            ]
         );
         $nodeDetailsForm->handleRequest($request);
 
@@ -133,8 +138,13 @@ class Node extends AbstractController
      * @return RedirectResponse|ViewInterface
      * @IgnoreCsrfToken()
      */
-    public function edit(string $id, string $node_type, Request $request, UpdateNode $updateNode, WebsiteInterface $website)
-    {
+    public function edit(
+        string $id,
+        string $node_type,
+        Request $request,
+        UpdateNode $updateNode,
+        WebsiteInterface $website
+    ) {
         $this->validateCsrfToken($request, $node_type);
 
         try {
@@ -153,7 +163,12 @@ class Node extends AbstractController
         $nodeDetailsForm = $this->createForm(
             NodeDetailsForm::class,
             $nodeArray,
-            ['content_type' => $nodeType, 'csrf_protection' => false]
+            [
+                'content_type' => $nodeType,
+                'csrf_protection' => false,
+                'website_id' => $website->getId(),
+                'locale' => $website->getLocale()->getCode(),
+            ]
         );
         $nodeDetailsForm->handleRequest($request);
 

@@ -37,11 +37,11 @@
                 {% for type in context.types %}
                     {% if item.type == type.type.type %}
                         <div class="menu-item-type" data-type="{{ type.type.type }}">
-                            {{ type.selector.render(type.type, item.identity)|raw }}
+                            {{ type.selector.render(type.type, item.identity, websiteId, locale)|raw }}
                         </div>
                     {% else %}
                         <div class="menu-item-type d-none" data-type="{{ type.type.type }}">
-                            {{ type.selector.render(type.type, null)|raw }}
+                            {{ type.selector.render(type.type, null, websiteId, locale)|raw }}
                         </div>
                     {% endif %}
                 {% endfor %}

@@ -11,29 +11,13 @@ use Tulia\Cms\Options\Domain\ReadModel\Options;
  */
 class FrontendRouteSuffixResolver
 {
-    /**
-     * @var Options
-     */
-    protected $options;
+    private ?string $suffix = null;
 
-    /**
-     * @var string
-     */
-    private $suffix;
-
-    /**
-     * @param Options $options
-     */
-    public function __construct(Options $options)
-    {
-        $this->options = $options;
+    public function __construct(
+        private readonly Options $options
+    ) {
     }
 
-    /**
-     * @param string $url
-     *
-     * @return string
-     */
     public function appendSuffix(string $url): string
     {
         if ($this->suffixExists($url)) {
@@ -43,11 +27,6 @@ class FrontendRouteSuffixResolver
         return $url . $this->getSuffix();
     }
 
-    /**
-     * @param string $url
-     *
-     * @return string
-     */
     public function removeSuffix(string $url): string
     {
         if ($this->suffixExists($url) === false) {
@@ -57,21 +36,14 @@ class FrontendRouteSuffixResolver
         return substr($url, 0, -\strlen($this->getSuffix()));
     }
 
-    /**
-     * @param string $url
-     *
-     * @return bool
-     */
     public function suffixExists(string $url): bool
     {
         return substr($url, -\strlen($this->getSuffix())) === $this->getSuffix();
     }
 
-    /**
-     * @return string
-     */
     public function getSuffix(): string
     {
+        dump($this->suffix);
         if ($this->suffix) {
             return $this->suffix;
         }

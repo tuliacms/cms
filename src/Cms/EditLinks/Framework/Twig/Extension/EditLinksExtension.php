@@ -42,6 +42,16 @@ class EditLinksExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
+            new TwigFunction('edit_links_enabled', function ($context) {
+                $request = $context['app']->getRequest();
+
+                return ! ($this->detector->isCustomizerMode()
+                    || $request->cookies->get('tulia_editlinks_show') !== 'yes'
+                    || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') === false);
+            }, [
+                'is_safe' => [ 'html' ],
+                'needs_context' => true,
+            ]),
             new TwigFunction('edit_links', function ($context, $object, array $options = []) {
                 $request = $context['app']->getRequest();
 

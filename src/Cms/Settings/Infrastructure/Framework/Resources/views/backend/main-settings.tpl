@@ -7,12 +7,12 @@
             {{ badge.errors_count(form, [ 'website_favicon', 'administrator_email', 'date_format', 'theme' ]) }}
         </a>
     </li>
-    <li class="nav-item">
+    {#<li class="nav-item">
         <a class="nav-link" data-bs-toggle="tab" href="#settings-maintenance-tab">
             {{ 'maintenance'|trans }}
             {{ badge.errors_count(form, [ 'maintenance_mode', 'maintenance_message' ]) }}
         </a>
-    </li>
+    </li>#}
     <li class="nav-item">
         <a class="nav-link" data-bs-toggle="tab" href="#settings-content-tab">
             {{ 'content'|trans }}
@@ -96,7 +96,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">{{ 'testMessageSendStatus'|trans({}, 'settings') }}</h4>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>

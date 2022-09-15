@@ -7,6 +7,9 @@ namespace Tulia\Cms\ImportExport\UserInterface\Web\Controller\Backend;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Tulia\Cms\ImportExport\Application\UseCase\ImportFile;
 use Tulia\Cms\ImportExport\Application\UseCase\ImportFileRequest;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
@@ -22,6 +25,7 @@ class ImportController extends AbstractController
 {
     public function __construct(
         private readonly AuthenticatedUserProviderInterface $authenticatedUserProvider,
+        private readonly ValidatorInterface $validator,
     ) {
     }
 
@@ -35,18 +39,31 @@ class ImportController extends AbstractController
      */
     public function importFile(Request $request, ImportFile $importFile, WebsiteInterface $website): Response
     {
+        if ($request->query->has('return')) {
+            $redirectUrl = $request->getUriForPath($request->query->get('return'));
+        } else {
+            $redirectUrl = $this->generateUrl('backend.import_export.importer', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        }
+
+        $isValid = $this->validator->validate(
+            $request->files->get('file'),
+            [
+                new File(mimeTypes: ['application/json', 'application/javascript'],),
+                new NotBlank()
+            ]
+        );
+
+        if ($isValid->count()) {
+            $this->addFlash('danger', $isValid[0]->getMessage());
+            return $this->redirect($redirectUrl);
+        }
+
         ($importFile)(new ImportFileRequest(
             $request->files->get('file')->getPathname(),
             $website->getId(),
             $this->authenticatedUserProvider->getUser()->getId(),
             $request->files->get('file')->getClientOriginalName(),
         ));
-
-        if ($request->query->has('return')) {
-            $redirectUrl = $request->getUriForPath($request->query->get('return'));
-        } else {
-            $redirectUrl = $this->generateUrl('backend.import_export.importer', [], UrlGeneratorInterface::ABSOLUTE_URL);
-        }
 
         $this->addFlash('success', $this->trans('contentTypeFileImported', [], 'import_export'));
         return $this->redirect($redirectUrl);

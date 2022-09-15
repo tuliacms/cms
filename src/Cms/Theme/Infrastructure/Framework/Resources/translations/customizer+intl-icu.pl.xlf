@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="pl" datatype="plaintext" original="customizer+intl-icu.en.xlf">
+        <body>
+            <trans-unit id="tuliacms.customizer.1">
+                <source>website</source>
+                <target>Strona</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.2">
+                <source>websiteName</source>
+                <target>Nazwa strony</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.3">
+                <source>websiteFavicon</source>
+                <target>Favikona strony</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.4">
+                <source>publish</source>
+                <target>Opublikuj</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.5">
+                <source>themeCustomize</source>
+                <target>Dostosowywanie szablonu</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.6">
+                <source>cancelChangesQuestion</source>
+                <target>Anulować zmiany?</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.7">
+                <source>areYouSureToCancelChanges</source>
+                <target>Czy na pewno chcesz anulować te zmiany??</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.8">
+                <source>saveChangesQuestion</source>
+                <target>Zapisać zmiany?</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.9">
+                <source>areYouSureToSaveChanges</source>
+                <target>Jesteś pewny? Tej operacji nie można cofnąć!</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.10">
+                <source>tools</source>
+                <target>Narzędzia</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.11">
+                <source>copySettingsFromParentTheme</source>
+                <target>Skopiuj ustawienia z rodzica</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.12">
+                <source>copySettings</source>
+                <target>Skopiuj ustawienia</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.13">
+                <source>resetCustomizerSettings</source>
+                <target>Zresetuj ustawienia</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.14">
+                <source>resetSettings</source>
+                <target>Zresetuj ustawienia</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.15">
+                <source>layouts</source>
+                <target>Układy</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.16">
+                <source>browseLayouts</source>
+                <target>Przeglądaj układy</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.17">
+                <source>saveCurrentLayout</source>
+                <target>Zapisz aktualny układ</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.18">
+                <source>multilingualDescription</source>
+                <target>Pola z tą plakietką zostaną zapisane tylko dla bieżącego języka. Pozostałe pola są zapisywane dla wszystkich języków, nawet jeśli edytujesz któryś ze zdefiniowanych języków.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.19">
+                <source>switchWebsite</source>
+                <target>Przełącz stronę</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.20">
+                <source>useThisOptionToResetCustomizerConfigurationToDefaultValues</source>
+                <target><![CDATA[Użyj tej opcji, aby zresetować ustawienia szablonu do domyślnych, wstępnie zdefiniowanych wartości. Ta opcja usunie każdą konfigurację, <b> tej operacji nie można cofnąć! </b>]]></target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

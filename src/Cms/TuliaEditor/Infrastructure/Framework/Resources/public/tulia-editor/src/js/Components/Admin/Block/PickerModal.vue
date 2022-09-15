@@ -5,7 +5,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">{{ translator.trans('newBlock') }}</h5>
-                        <button type="button" class="close" @click="blocksPicker.close()">
+                        <button type="button" class="btn-close" @click="blocksPicker.close()">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>

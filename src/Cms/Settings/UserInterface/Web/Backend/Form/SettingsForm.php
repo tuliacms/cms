@@ -172,6 +172,7 @@ class SettingsForm extends AbstractType
             ])
             ->add('url_suffix', Type\TextType::class, [
                 'label' => 'urlSuffix',
+                'help' => 'urlSuffixHelp',
                 'translation_domain' => 'settings',
             ]);
     }

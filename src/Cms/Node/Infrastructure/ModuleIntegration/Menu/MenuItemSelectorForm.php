@@ -21,6 +21,8 @@ class MenuItemSelectorForm extends AbstractType
     {
         $builder->add('node_search_' . $options['node_type']->getCode(), NodeTypeaheadType::class, [
             'label' => 'node',
+            'locale' => $options['locale'],
+            'website_id' => $options['website_id'],
             'search_route_params' => [
                 'node_type' => $options['node_type']->getCode(),
             ],
@@ -32,6 +34,6 @@ class MenuItemSelectorForm extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setRequired(['node_type']);
+        $resolver->setRequired(['node_type', 'locale', 'website_id']);
     }
 }

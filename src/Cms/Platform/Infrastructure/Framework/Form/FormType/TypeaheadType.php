@@ -66,7 +66,7 @@ class TypeaheadType extends AbstractType
             'debug' => false,
         ]);
 
-        $resolver->setRequired([ 'search_route', 'data_provider_single', 'display_prop' ]);
+        $resolver->setRequired([ 'search_route', 'data_provider_single', 'display_prop', 'locale', 'website_id' ]);
 
         $resolver->setAllowedTypes('data_provider_single', [ 'null', 'callable' ]);
         $resolver->setAllowedTypes('search_route', 'string');
@@ -106,7 +106,14 @@ class TypeaheadType extends AbstractType
          */
         if ($view->vars['value']) {
             if (\is_callable($options['data_provider_single'])) {
-                $selected = \call_user_func($options['data_provider_single'], ['value' => $view->vars['value']]);
+                $selected = \call_user_func(
+                    $options['data_provider_single'],
+                    [
+                        'value' => $view->vars['value'],
+                        'locale' => $options['locale'],
+                        'website_id' => $options['website_id']
+                    ]
+                );
 
                 if ($selected) {
                     $view->vars['display_value'] = $selected[$options['display_prop']];

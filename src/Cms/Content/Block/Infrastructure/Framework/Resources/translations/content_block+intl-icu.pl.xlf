@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="pl" datatype="plaintext" original="content_block+intl-icu.en.xlf">
+        <body>
+            <trans-unit id="tuliacms.content_block.1">
+                <source>removeBlock</source>
+                <target>Usuń blok</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_block.2">
+                <source>addBlock</source>
+                <target>Dodak blok</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_block.3">
+                <source>blockName</source>
+                <target>Nazwa bloku</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_block.4">
+                <source>createAndConfigure</source>
+                <target>Stwórz i skonfiguruj</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_block.5">
+                <source>pleaseFillThisField</source>
+                <target>Proszę uzupełnić to pole.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_block.6">
+                <source>pleaseSelectBlockType</source>
+                <target>Proszę wybrać typ bloku.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_block.7">
+                <source>editBlock</source>
+                <target>Edytuj</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_block.8">
+                <source>loading</source>
+                <target>Ładowanie...</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_block.9">
+                <source>missingBlockType</source>
+                <target>Brak typu zawartości. Nie można edytować tego bloku.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_block.10">
+                <source>cannotEditBlockWhenContentTypeNotExists</source>
+                <target>Nie można edytować bloku typu, ponieważ jego typ treści nie istnieje.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_block.11">
+                <source>cannotEditThisBlock</source>
+                <target>Nie można edytować tego bloku</target>
+                <note>Message headline in alertbox</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_block.12">
+                <source>duplicateBlock</source>
+                <target>Zduplikuj blok</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_block.13">
+                <source>import</source>
+                <target>Importuj bloki</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_block.14">
+                <source>export</source>
+                <target>Eksportuj bloki</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_block.15">
+                <source>pasteJsonBlocks</source>
+                <target>Wklej JSON z blokami</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_block.16">
+                <source>toggleVisibility</source>
+                <target>Pokaż/ukryj</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

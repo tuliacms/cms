@@ -1,0 +1,171 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="pl" datatype="plaintext" original="menu+intl-icu.en.xlf">
+        <body>
+            <trans-unit id="tuliacms.menu.1">
+                <source>deleteMenu</source>
+                <target>Usuń menu</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.2">
+                <source>deleteSelectedMenus</source>
+                <target>Usuń wybrane menu</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.3">
+                <source>areYouSureYouWantToDeleteMenu</source>
+                <target>Czy na pewno chcesz usunąć to menu i wszystkie jego elementy??</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.4">
+                <source>addMenu</source>
+                <target>Dodaj menu</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.5">
+                <source>menuName</source>
+                <target>Nazwa menu</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.6">
+                <source>pleaseProvideMenuName</source>
+                <target>Prosze podać nazwę menu.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.7">
+                <source>editMenu</source>
+                <target>Edytuj menu</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.8">
+                <source>menuUpdated</source>
+                <target>Menu zostało zaktualizowane.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.9">
+                <source>selectedMenusWereDeleted</source>
+                <target>Wybrane menu i jego pozycje zostały usunięte.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.10">
+                <source>menuNotFound</source>
+                <target>Przepraszamy, to menu nie istnieje.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.11">
+                <source>menuItems</source>
+                <target>Elementy menu</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.12">
+                <source>deleteSelectedItems</source>
+                <target>Usuń wybrane elementy</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.13">
+                <source>areYouSureYouWantToDeleteFollowingItems</source>
+                <target>Czy na pewno chcesz usunąć następujące elementy?</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.14">
+                <source>deleteItem</source>
+                <target>Usuń element</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.15">
+                <source>createItem</source>
+                <target>Stwórz element</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.16">
+                <source>editItem</source>
+                <target>Edytuj</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.17">
+                <source>itemType</source>
+                <target>Tym elementu</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.18">
+                <source>itemTypeHomepage</source>
+                <target>Strona główna</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.19">
+                <source>itemTypeHash</source>
+                <target>Hash/fragment</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.20">
+                <source>itemTypeNode</source>
+                <target>Węzeł</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.21">
+                <source>itemTypeTerm</source>
+                <target>Kategoria (Term)</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.22">
+                <source>itemTypeUrl</source>
+                <target>Adres URL</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.23">
+                <source>parentItem</source>
+                <target>Element nadrzędny</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.24">
+                <source>itemHash</source>
+                <target>Hash/fragment</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.25">
+                <source>itemTarget</source>
+                <target>Otwórz w</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.26">
+                <source>itemTargetAuto</source>
+                <target>Auto - wykrywaj według docelowego adresu URL</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.27">
+                <source>itemTargetSelf</source>
+                <target>_self - To samo okno przeglądarki</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.28">
+                <source>itemTargetBlank</source>
+                <target>_blank - Nowe okno przeglądarki</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.29">
+                <source>rootItem</source>
+                <target>Element-Rdzeń</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.30">
+                <source>rootItemSpecial</source>
+                <target>-- główny element --</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.31">
+                <source>itemSaved</source>
+                <target>Element został zapisany.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.32">
+                <source>selectedItemsWereDeleted</source>
+                <target>Wybrane elementy zostały usunięte.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.33">
+                <source>addChildItem</source>
+                <target>Dodaj element podrzędny</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.34">
+                <source>changeHierarchy</source>
+                <target>Zmień hierarchię</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.35">
+                <source>menuCreated</source>
+                <target>Menu utworzone pomyślnie.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.36">
+                <source>menuItemNotFound</source>
+                <target>Przepraszamy, ta pozycja menu nie istnieje.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.37">
+                <source>horizontal</source>
+                <target>Horyzontalnie</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.38">
+                <source>vertical</source>
+                <target>Wertykalnie</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.39">
+                <source>basics</source>
+                <target>Szczegóły</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.40">
+                <source>destination</source>
+                <target>Cel</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.41">
+                <source>options</source>
+                <target>Opcje</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

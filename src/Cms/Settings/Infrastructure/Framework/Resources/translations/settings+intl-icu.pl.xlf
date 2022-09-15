@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="pl" datatype="plaintext" original="settings+intl-icu.en.xlf">
+        <body>
+            <trans-unit id="tuliacms.settings.1">
+                <source>maintenanceMode</source>
+                <target>Tryb konserwacji</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.2">
+                <source>maintenanceModeHelp</source>
+                <target>Tryb konserwacji wyłącza witrynę dla użytkowników końcowych i wyświetla informacje o konserwacji na każdej stronie. Tylko użytkownicy z dostępem do Panelu Administracyjnego mogą wyświetlać witrynę w trybie konserwacji.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.3">
+                <source>maintenanceMessage</source>
+                <target>Komunikat konserwacyjny</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.4">
+                <source>maintenanceMessageHelp</source>
+                <target>Komunikat o konserwacji zostanie wyświetlony, gdy witryna będzie w trybie konserwacji.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.7">
+                <source>settingsSaved</source>
+                <target>Ustawienia zostały zapisane.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.8">
+                <source>perPage</source>
+                <target>Elementów na stronę</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.9">
+                <source>dateFormat</source>
+                <target>Format daty</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.11">
+                <source>administratorEmail</source>
+                <target>Adres e-mail administratora</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.12">
+                <source>administratorEmailHelp</source>
+                <target>Ten e-mail służy do powiadamiania administratora witryny o ważnych szczegółach dotyczących witryny i aplikacji.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.13">
+                <source>mailTransport</source>
+                <target>E-mail transport</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.14">
+                <source>mailFromEmail</source>
+                <target>Adres e-mail nadawcy</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.15">
+                <source>mailFromName</source>
+                <target>Nazwa nadawcy</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.16">
+                <source>mailHost</source>
+                <target>Host (nazwa serwera)</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.17">
+                <source>mailPort</source>
+                <target>Numer portu</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.18">
+                <source>mailUsername</source>
+                <target>Nazwa użytkownika (adres e-mail)</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.19">
+                <source>mailPassword</source>
+                <target>Hasło</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.20">
+                <source>mailEncryption</source>
+                <target>Szyfrowanie</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.21">
+                <source>mailSendmailpath</source>
+                <target>Ścieżka Sendmail</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.22">
+                <source>testMessageSentSuccessfull</source>
+                <target>Wiadomość testowa wysłana pomyślnie. Sprawdź swoją skrzynkę pocztową.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.23">
+                <source>testMessageNotSendCheckLog</source>
+                <target>Wiadomość testowa nie została wysłana pomyślnie. Przeczytaj dziennik, aby uzyskać więcej informacji.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.24">
+                <source>pleaseTypeValidEmailAddress</source>
+                <target>Proszę wpisać poprawny adres e-mail.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.25">
+                <source>mailTransportTestMessageLog</source>
+                <target>Log wysyłania testowej wiadomości</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.26">
+                <source>testMailSubmitAppErrorConnection</source>
+                <target>Wystąpił błąd żądania, prawdopodobnie serwer pocztowy ma problemy techniczne i nie działa. Spróbuj ponownie później.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.27">
+                <source>loadingTestMailResult</source>
+                <target>Wczytuję wynik testu wiadomości e-mail</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.28">
+                <source>testMessageSendStatus</source>
+                <target>Status wysyłki wiadomości testowej</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.29">
+                <source>testMessageSubject</source>
+                <target>TO jest wiadomość testowa</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.30">
+                <source>testMessageBody</source>
+                <target>Ta testowa wiadomość sprawdza, czy ustawienia poczty na Twojej stronie są poprawnie skonfigurowane.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.31">
+                <source>sendTestMessage</source>
+                <target>Wyślij wiadomość testową</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.32">
+                <source>sendTestMessageInfo</source>
+                <target>Zapisz ustawienia i wyślij wiadomość testową, aby sprawdzić wprowadzone dane. Wiadomość zostanie wysłana na podany poniżej adres e-mail.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.33">
+                <source>mailSenderEmailInfo</source>
+                <target>Jako adres e-mail nadawcy wpisz ten sam adres e-mail, którego używasz do logowania do swojej skrzynki SMTP lub adres e-mail utworzony na serwerze, na którym stoi strona. Niektóre serwery uniemożliwiają wysyłanie wiadomości, gdy jako nadawca podany jest adres e-mail, który nie jest przypisany do serwera.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.34">
+                <source>websiteFavicon</source>
+                <target>Favikona strony</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.35">
+                <source>settingsGroupNotFound</source>
+                <target>Grupa ustawień nie została znaleziona.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.36">
+                <source>wysiwygEditor</source>
+                <target>Edytor WYSIWYG</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.37">
+                <source>wysiwygEditorHelp</source>
+                <target>Domyślny edytor WYSIWYG używany do edycji zawartości stron i tak dalej.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.38">
+                <source>urlSuffix</source>
+                <target>Suffix URL</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.39">
+                <source>frontendRouting</source>
+                <target>Adresy URL</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.settings.40">
+                <source>urlSuffixHelp</source>
+                <target>Pamiętaj, że zmieniając suffix zmieniasz adres URL do wszystkich podstron. Upewnij się, że wiesz co robisz ponieważ zmiana tego parametru spowoduje problemy z indeksacją Twojej strony w Google.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

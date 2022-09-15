@@ -15,6 +15,11 @@
                 <target>Objects were imported.</target>
                 <note>Flash message</note>
             </trans-unit>
+            <trans-unit id="tuliacms.import_export.4">
+                <source>selectFile</source>
+                <target>Select file</target>
+                <note>Button label</note>
+            </trans-unit>
         </body>
     </file>
 </xliff>

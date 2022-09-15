@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="pl" datatype="plaintext" original="node+intl-icu.en.xlf">
+        <body>
+            <trans-unit id="tuliacms.node.1">
+                <source>node</source>
+                <target>Węzeł</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.2">
+                <source>nodes</source>
+                <target>Węzły treści</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.3">
+                <source>nodeSaved</source>
+                <target>Węzeł treści został zapisany.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.4">
+                <source>trashNode</source>
+                <target>Do kosza</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.5">
+                <source>deleteNode</source>
+                <target>Usuń węzeł</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.6">
+                <source>publishNode</source>
+                <target>Opublikuj węzeł</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.7">
+                <source>trashSelectedNodes</source>
+                <target>Wrzuć zaznaczone do kosza</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.8">
+                <source>deleteSelectedNodes</source>
+                <target>Usuń zaznaczone</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.9">
+                <source>publishSelectedNodes</source>
+                <target>Opublikuj zaznaczone</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.10">
+                <source>areYouSureYouWantToTrashFollowingNodes</source>
+                <target>Czy na pewno chcesz usunąć następujące węzły?</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.11">
+                <source>areYouSureYouWantToDeleteFollowingNodes</source>
+                <target>Czy na pewno chcesz usunąć następujące węzły?</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.12">
+                <source>areYouSureYouWantToPublishFollowingNodes</source>
+                <target>Czy na pewno chcesz opublikować następujące węzły?</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.13">
+                <source>selectedNodesWereTrashed</source>
+                <target>Wybrane węzły zostały przeniesione do kosza.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.14">
+                <source>selectedNodesWereDeleted</source>
+                <target>Wybrane węzły zostały usunięte.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.15">
+                <source>selectedNodesWerePublished</source>
+                <target>Wybrane węzły zostały opublikowane.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.16">
+                <source>selectedNodesWereUpdated</source>
+                <target>Wybrane węzły zostały uaktualnione.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.17">
+                <source>previewNode</source>
+                <target>Podgląd treści</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.18">
+                <source>nodesList</source>
+                <target>Lista węzłów treści</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.19">
+                <source>editNode</source>
+                <target>Edytuj węzeł treści</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.20">
+                <source>createNode</source>
+                <target>Stwórz nowy węzeł treści</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.21">
+                <source>nodeNotFound</source>
+                <target>Węzeł nie został znaleziony.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.22">
+                <source>parentNode</source>
+                <target>Węzeł nadrzędny</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.23">
+                <source>cannotAssignSelfNodeParent</source>
+                <target>Nie można przypisać węzła własnego jako nadrzędnego. Wybierz inny węzeł nadrzędny.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.24">
+                <source>activityUserCreatedNewNode</source>
+                <target><![CDATA[Użytkownik {username} stworzył nowy <a href="{link}">węzeł</a>.]]></target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.25">
+                <source>activityUserDeletedNode</source>
+                <target>Użytkownik {username} usunął węzeł.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.26">
+                <source>draft</source>
+                <target>Szkic</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.27">
+                <source>published</source>
+                <target>Opublikowany</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.28">
+                <source>trashed</source>
+                <target>W koszu</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.30">
+                <source>nodesListOfType</source>
+                <target>Węzły typu {type}</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.31">
+                <source>nodePurpose</source>
+                <target>Przeznaczenie węzła</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.32">
+                <source>purposeWithName</source>
+                <target>Przeznaczenie: {purpose}</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.33">
+                <source>nodePurposeInfo</source>
+                <target>Tutaj możesz ustawić, np. czy ten węzeł ma być stroną domową.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.34">
+                <source>purposeType.page:homepage</source>
+                <target>Strona główna</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.35">
+                <source>purposeType.page:contact</source>
+                <target>Strona kontaktu</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.36">
+                <source>purposeType.page:privacy_policy</source>
+                <target>Polityka Prywatności</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.37">
+                <source>Page</source>
+                <target>Strona</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.38">
+                <source>cannotDeleteNodeReason</source>
+                <target>Nie można usunąć węzła "{title}", ponieważ: {reason}</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.39">
+                <source>Node has child subnodes</source>
+                <target>Węzeł ma węzły podrzędne. Najpierw usuń wszystkie węzły podrzędne lub przenieś dzieci z tego rodzica.</target>
+                <note>Translation of Tulia\Cms\Node\Domain\WriteModel\Rules\CanDeleteNode::NodeHasChildren</note>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

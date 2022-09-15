@@ -8,7 +8,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.validators.2">
                 <source>websites.pleaseSelectDefaultLocale</source>
-                <target>lease select the default locale for this website</target>
+                <target>Please select the default locale for this website</target>
             </trans-unit>
             <trans-unit id="tuliacms.validators.3">
                 <source>websites.thereCanBeOnlyOneDefaultLocaleButSelected</source>

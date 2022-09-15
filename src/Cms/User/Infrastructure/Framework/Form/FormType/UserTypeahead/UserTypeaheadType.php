@@ -15,11 +15,9 @@ use Tulia\Cms\User\Domain\ReadModel\Finder\UserFinderScopeEnum;
  */
 class UserTypeaheadType extends AbstractType
 {
-    protected UserFinderInterface $userFinder;
-
-    public function __construct(UserFinderInterface $userFinder)
-    {
-        $this->userFinder = $userFinder;
+    public function __construct(
+        private readonly UserFinderInterface $userFinder
+    ) {
     }
 
     public function configureOptions(OptionsResolver $resolver): void

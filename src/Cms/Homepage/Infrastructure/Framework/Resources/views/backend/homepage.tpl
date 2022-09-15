@@ -203,7 +203,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">Ustawienia wiadomości widgetu Tulia News</h5>
-                            <button type="button" class="close" data-bs-dismiss="modal">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>

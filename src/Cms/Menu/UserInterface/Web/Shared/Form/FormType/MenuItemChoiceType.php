@@ -18,8 +18,8 @@ use Tulia\Cms\Menu\Domain\ReadModel\Finder\MenuFinderScopeEnum;
 class MenuItemChoiceType extends ChoiceType
 {
     public function __construct(
-        protected MenuFinderInterface $menuFinder,
-        protected TranslatorInterface $translator
+        private readonly MenuFinderInterface $menuFinder,
+        private readonly TranslatorInterface $translator,
     ) {
         parent::__construct();
     }
@@ -92,7 +92,7 @@ class MenuItemChoiceType extends ChoiceType
         $choices = [];
 
         foreach ($items as $item) {
-            $name = $item->getName();
+            $name = $item->getName() === 'root' ? $this->translator->trans('rootItemSpecial', [], 'menu') : $item->getName();
 
             if ($item->getLevel()) {
                 $name = str_repeat('- ', $item->getLevel() - 1) . $name;
@@ -104,7 +104,7 @@ class MenuItemChoiceType extends ChoiceType
         return $choices;
     }
 
-    private function sort(array $items, int $level = 1, string $parent = ''): array
+    private function sort(array $items, int $level = 0, ?string $parent = null): array
     {
         $result = [];
 

@@ -57,7 +57,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.14">
                 <source>youCannotCreateTwoFieldsWithTheSameCode</source>
-                <target>Yout cannot create two fields with the same Code.</target>
+                <target>You cannot create two fields with the same Code.</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.15">
                 <source>contentTypeNotExists</source>

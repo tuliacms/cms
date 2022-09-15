@@ -109,7 +109,7 @@
             <div class="modal-content">
                 <div class="modal-header bg-danger text-white">
                     <h5 class="modal-title">{{ 'resetCustomizerSettings'|trans({}, 'customizer') }}</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -128,7 +128,7 @@
             <div class="modal-content">
                 <div class="modal-header bg-danger text-white">
                     <h5 class="modal-title">{{ 'copySettingsFromParentTheme'|trans({}, 'customizer') }}</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>

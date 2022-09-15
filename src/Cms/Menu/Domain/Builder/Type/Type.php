@@ -12,11 +12,8 @@ use Tulia\Cms\Menu\UserInterface\Web\Backend\Selector\SelectorInterface;
 class Type implements TypeInterface
 {
     protected string $type;
-
     protected string $label = '';
-
     protected string $translationDomain = '';
-
     protected ?SelectorInterface $selectorService = null;
 
     public function __construct(string $type)

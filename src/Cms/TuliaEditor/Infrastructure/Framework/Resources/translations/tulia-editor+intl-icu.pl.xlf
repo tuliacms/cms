@@ -4,7 +4,123 @@
         <body>
             <trans-unit id="tuliacms.tulia-editor.1">
                 <source>contentNotSupportedByEditorCopyToNotLoss</source>
-                <target>Wygląda na to, że ta treść nie została edytowana za pomocą Tulia Editora, dlatego nie może ona zostać wyświetlona. Poniżej znajduje się oryginalna treść, której nie można pokazać w edytorze. Skopiuj ją jeśli potrzebujesz, ponieważ gdy zapiszesz treść edytowaną za pomocą Tulia Edytora - ta przepadnie.</target>
+                <target>Wygląda na to, że ta treść nie była edytowana w Tulia Editor, dlatego nie można jej wyświetlić. Poniżej znajduje się oryginalna treść, której nie można wyświetlić w edytorze. Skopiuj go, jeśli potrzebujesz, ponieważ gdy zapiszesz treść edytowaną za pomocą Tulia Editor - ta zostanie utracona.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.2">
+                <source>section</source>
+                <target>Sekcja</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.3">
+                <source>column</source>
+                <target>Kolumna</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.4">
+                <source>row</source>
+                <target>Wiersz</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.5">
+                <source>block</source>
+                <target>Blok</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.6">
+                <source>selectEditableElementToShowOptions</source>
+                <target>Wybierz edytowalny element, aby wyświetlić opcje</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.7">
+                <source>startTypingPlaceholder</source>
+                <target>Zacznij pisać...</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.8">
+                <source>choseImage</source>
+                <target>Wybierz zdjęcie</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.9">
+                <source>removeItem</source>
+                <target>Usuń element</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.10">
+                <source>addItem</source>
+                <target>Dodaj element</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.11">
+                <source>selectIcon</source>
+                <target>Wybierz ikonę</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.12">
+                <source>emptySearchResults</source>
+                <target>Pusty wynik wyszukiwania...</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.13">
+                <source>searchForIcon</source>
+                <target>Szukaj ikony</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.14">
+                <source>selectParentElement</source>
+                <target>Wybierz element nadrzędny</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.15">
+                <source>delete</source>
+                <target>Usuń</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.16">
+                <source>moveBackward</source>
+                <target>Wstecz</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.17">
+                <source>moveForward</source>
+                <target>Dalej</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.18">
+                <source>moveUp</source>
+                <target>W górę</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.19">
+                <source>moveDown</source>
+                <target>W dół</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.20">
+                <source>edit</source>
+                <target>Edit</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.21">
+                <source>contentPreview</source>
+                <target>Podgląd treści</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.22">
+                <source>editContent</source>
+                <target>Edytuj treść</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.23">
+                <source>newSection</source>
+                <target>Nowa sekcja</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.24">
+                <source>newBlock</source>
+                <target>Nowy blok</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.25">
+                <source>selected</source>
+                <target>Zaznaczenie</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.26">
+                <source>structure</source>
+                <target>Struktura</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.27">
+                <source>startCreatingNewContent</source>
+                <target>Rozpocznij tworzenie nowej treści</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.28">
+                <source>emptySection</source>
+                <target>Pusta sekcja</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.29">
+                <source>emptyRow</source>
+                <target>Pusty wiersz</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.30">
+                <source>emptyColumn</source>
+                <target>Pusta kolumna</target>
             </trans-unit>
         </body>
     </file>

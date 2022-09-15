@@ -98,7 +98,9 @@ class MenuItem extends AbstractController
             [
                 'itemDetailsForm' => $itemDetailsForm->createView(),
                 'item' => $this->getEmptyItem(),
-                'types' => $this->collectMenuTypes()
+                'types' => $this->collectMenuTypes(),
+                'website_id' => $website->getId(),
+                'locale' => $website->getLocale()->getCode(),
             ]
         );
         $formDescriptor->handleRequest($request);
@@ -158,7 +160,9 @@ class MenuItem extends AbstractController
             [
                 'itemDetailsForm' => $itemDetailsForm->createView(),
                 'item' => $item,
-                'types' => $this->collectMenuTypes()
+                'types' => $this->collectMenuTypes(),
+                'website_id' => $website->getId(),
+                'locale' => $website->getLocale()->getCode(),
             ]
         );
         $formDescriptor->handleRequest($request);

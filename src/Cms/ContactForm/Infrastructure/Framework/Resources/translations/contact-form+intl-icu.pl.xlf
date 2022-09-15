@@ -1,0 +1,178 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="pl" datatype="plaintext" original="contact-form+intl-icu.en.xlf">
+        <body>
+            <trans-unit id="tuliacms.contact-form.1">
+                <source>forms</source>
+                <target>Formularze kontaktowe</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.2">
+                <source>list</source>
+                <target>Lista formularzy</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.3">
+                <source>form</source>
+                <target>Formularz</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.4">
+                <source>deleteForm</source>
+                <target>Usuń formularz</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.5">
+                <source>createForm</source>
+                <target>Stwórz formularz</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.6">
+                <source>formHasBeenSentThankYou</source>
+                <target>Wiadomość została wysłana, dziękujemy za kontakt.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.7">
+                <source>formNotHasBeenSentTryAgain</source>
+                <target>Wiadomość nie została wysłana, proszę spróbować ponownie. Przepraszamy za niedogodności.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.8">
+                <source>formSaved</source>
+                <target>Formularz został zapisany.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.9">
+                <source>formNotFound</source>
+                <target>Nie znaleziono takiego formularza.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.10">
+                <source>editForm</source>
+                <target>Edycja formularza</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.11">
+                <source>messageTemplate</source>
+                <target>Szablon wiadomości</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.12">
+                <source>receivers</source>
+                <target>Odbiorcy</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.13">
+                <source>receiversHelpText</source>
+                <target>Możesz wprowadzić wielu odbiorców, oddzielonych przecinkiem.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.14">
+                <source>messageSubject</source>
+                <target>Tytuł wiadomości</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.15">
+                <source>sender</source>
+                <target>Nadawca</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.16">
+                <source>notificationMessages</source>
+                <target>Powiadomienia</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.17">
+                <source>fields</source>
+                <target>Pola formularza</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.18">
+                <source>fieldsTemplate</source>
+                <target>Szablon pól formularza</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.19">
+                <source>fieldsTemplateInfo</source>
+                <target>Tutaj możesz zdefiniować swój kod HTML dla formularza. Ten Szablon pól będzie używany w interfejsie użytkownika do wyświetlania zdefiniowanych przez Ciebie pól formularza. Możesz tutaj używać kodu HTML. Kliknij "Dodaj" na jednym z dostępnych pól zdefiniowanych w Kreatorze Pól, aby dodać to pole do Szablonu Pól. Pola utworzone w Kreatorze, a nie dodane do szablonu, również zostaną automatycznie wyrenderowane na końcu szablonu.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.20">
+                <source>successMessage</source>
+                <target>Treść wiadomości po wysłaniu formularza</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.21">
+                <source>successMessageHelpText</source>
+                <target>Ta wiadomość zostanie wyświetlona, gdy użytkownik pomyślnie prześle swój formularz.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.22">
+                <source>failMessage</source>
+                <target>Treść wiadomości w razie problemów z wysłaniem</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.23">
+                <source>failMessageHelpText</source>
+                <target></target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.24">
+                <source>addField</source>
+                <target>Dodaj pole</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.25">
+                <source>selectFieldType</source>
+                <target>Wybierz typ pola</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.26">
+                <source>formFieldNameContainsInvalidName</source>
+                <target>Nazwa pola musi być alfanumeryczna z podkreśleniem, podano "{name}". Popraw nazwę i ponownie zapisz formularz.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.27">
+                <source>fieldsBuilder</source>
+                <target>Kreator pól formularza</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.28">
+                <source>fieldsBuilderInfo</source>
+                <target>Tutaj możesz zdefiniować swoje nazwy pól, etykiety i inne ustawienia. Pola zdefiniowane na tej liście można umieścić w szablonie pól.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.29">
+                <source>availableFields</source>
+                <target>Dostępne pola</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.30">
+                <source>availableFieldsInfo</source>
+                <target>Oto lista dostępnych pól, których możesz użyć do stworzenia swojego formularza. Kliknij nazwę konkretnego pola, aby dodać je do kreatora. W następnym kroku możesz użyć tych pól w szablonie pól.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.31">
+                <source>addAnyFieldsToCreateForm</source>
+                <target>Proszę dodać dowolne pole wymienione powyżej, aby utworzyć swój formularz.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.32">
+                <source>controlOptionLabel</source>
+                <target>Etykieta pola</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.33">
+                <source>valuesSeparatedByPipeAllowedFollowing</source>
+                <target><![CDATA[Wartości oddzielone pionową kreską (<code>|</code>). Dozwolone co najmniej jedno z poniższych:]]></target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.34">
+                <source>removeField</source>
+                <target>Usuń pole</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.35">
+                <source>addFieldToTemplate</source>
+                <target>Dodaj pole do szablonu</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.36">
+                <source>selectedFormsWereRemoved</source>
+                <target>WYbrane pola zostały usunięte.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.37">
+                <source>multipleFieldOccuredInTemplate</source>
+                <target>Wykryto wielokrotne wstawienia tego samego pola "{name}" do szablonu pól. Każde pole może być użyte tylko raz.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.38">
+                <source>widget.name</source>
+                <target>Formularz kontaktowy</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.39">
+                <source>widget.description</source>
+                <target>Pokazuje formularz kontaktowy.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.40">
+                <source>senderName</source>
+                <target>Nadawca - Nazwa</target>
+                <note>Field label</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.41">
+                <source>senderEmail</source>
+                <target>Nadawca - Adres e-mail</target>
+                <note>Field label</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.42">
+                <source>replyTo</source>
+                <target>Odpowiedź do - adres e-mail</target>
+                <note>Field label</note>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

@@ -5,7 +5,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">{{ translator.trans('selectIcon') }}</h5>
-                        <button type="button" class="close" @click="modalOpened = false">
+                        <button type="button" class="btn-close" @click="modalOpened = false">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>

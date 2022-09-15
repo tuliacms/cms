@@ -23,7 +23,7 @@
                         {{ 'importingOverwriteNotification'|trans }}
                     </div>
                     <div class="mb-3">
-                        <label for="importing-file" class="form-label">Select field</label>
+                        <label for="importing-file" class="form-label">{{ 'selectFile'|trans({}, 'import_export') }}</label>
                         <input class="form-control" name="file" type="file" id="importing-file" />
                     </div>
                     <div class="text-right">

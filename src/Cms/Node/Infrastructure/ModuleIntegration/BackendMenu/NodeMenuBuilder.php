@@ -15,16 +15,10 @@ use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface
  */
 class NodeMenuBuilder implements BuilderInterface
 {
-    protected BuilderHelperInterface $helper;
-
-    protected ContentTypeRegistryInterface $contentTypeRegistry;
-
     public function __construct(
-        BuilderHelperInterface $helper,
-        ContentTypeRegistryInterface $contentTypeRegistry
+        private readonly BuilderHelperInterface $helper,
+        private readonly ContentTypeRegistryInterface $contentTypeRegistry,
     ) {
-        $this->helper = $helper;
-        $this->contentTypeRegistry = $contentTypeRegistry;
     }
 
     public function build(ItemRegistryInterface $registry): void
