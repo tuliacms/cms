@@ -104,6 +104,7 @@
                 {{ this.locale_url_preview() }}
 
                 {{ form_row(form.locales.vars.prototype.domain, { attr: { class: 'locale-domain-input' } }) }}
+                {{ form_row(form.locales.vars.prototype.domain_development, { attr: { class: 'locale-domain-input' } }) }}
                 {{ form_row(form.locales.vars.prototype.path_prefix, { attr: { class: 'locale-path-prefix-input' } }) }}
                 {{ form_row(form.locales.vars.prototype.locale_prefix, { attr: { class: 'locale-locale-prefix-input' } }) }}
                 {{ form_row(form.locales.vars.prototype.code, { attr: { class: 'locale-code-select' } }) }}

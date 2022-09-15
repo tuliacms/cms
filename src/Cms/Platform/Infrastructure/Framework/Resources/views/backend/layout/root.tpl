@@ -10,6 +10,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="robots" content="noindex,nofollow">
+        <link rel="icon" type="image/x-icon" href="{{ asset('/assets/core/backend/theme/images/favicon.png') }}">
         {% if prevent_load_backend_assets is not defined %}
             <script nonce="{{ csp_nonce() }}">
                 window.Tulia = {};
@@ -22,7 +23,7 @@
         {% endif %}
         {% block beforehead %}{% endblock %}
         {{ do_action('theme.head') }}
-        <title>{% block title %}{{ title('Tulia CMS Backend') }}{% endblock %}</title>
+        <title>{% block title %}{{ title('Tulia CMS Administration Panel') }}{% endblock %}</title>
         {% block head %}{% endblock %}
     </head>
     <body>

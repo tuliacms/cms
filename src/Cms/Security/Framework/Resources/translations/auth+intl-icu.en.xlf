@@ -10,6 +10,14 @@
                 <source>loginToAdminPanel</source>
                 <target>Login to Your Administration Panel.</target>
             </trans-unit>
+            <trans-unit id="tuliacms.auth.3">
+                <source>unleashYourCreativity</source>
+                <target>Unleash Your Creativity</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.auth.4">
+                <source>didYouForgotPassword</source>
+                <target>Forgot password?</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

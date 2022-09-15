@@ -853,6 +853,10 @@
                 <source>activity</source>
                 <target>Aktywność</target>
             </trans-unit>
+            <trans-unit id="tuliacms.messages.213">
+                <source>didYouFoundBug</source>
+                <target>Znalazłeś błąd?</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

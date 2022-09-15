@@ -1,10 +1,10 @@
 <footer>
-    <div class="cms-status">
+    {#<div class="cms-status">
         <a href="https://tuliacms.org/intl/help" target="_blank" title="Need help?" rel="noopener">
             <i class="status-icon fas fa-question-circle"></i>
             <span class="status-text">Need help?</span>
         </a>
-    </div>
+    </div>#}
     <div class="cms-version"><a href="http://tuliacms.org/" target="_blank" title="Tulia CMS" rel="noopener">Tulia CMS v. {{ constant('Tulia\\Cms\\Platform\\Version::VERSION') }}</a></div>
 </footer>
 
@@ -64,6 +64,23 @@
                 <div class="pane-body">
                     No results. Try to find using whole words.
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="tuliacms-found-bug-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">{{ 'didYouFoundBug'|trans }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdxaicfnJMJNa4V_kbfqL6Zcuuz9syW5r4EGA4g8t0nx2-IJg/viewform?embedded=true" width="750" height="850" frameborder="0" marginheight="0" marginwidth="0">Ładuję…</iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'close'|trans }}</button>
             </div>
         </div>
     </div>

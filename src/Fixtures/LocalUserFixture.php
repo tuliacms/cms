@@ -18,28 +18,35 @@ use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
 final class LocalUserFixture extends Fixture implements FixtureGroupInterface
 {
     public function __construct(
-        private UserRepositoryInterface $userRepository,
-        private UserPasswordHasherInterface $passwordHasher,
+        private readonly UserRepositoryInterface $userRepository,
+        private readonly UserPasswordHasherInterface $passwordHasher,
     ) {
     }
 
     public function load(ObjectManager $manager)
     {
-        $securityUser = new CoreUser('admin@gmail.com', null, ['ROLE_ADMIN']);
-        $hashedPassword = $this->passwordHasher->hashPassword($securityUser, 'admin');
-
-        $admin = User::create(
-            $this->userRepository->getNextId(),
-            'admin@gmail.com',
-            $hashedPassword,
-            ['ROLE_ADMIN']
-        );
-        $manager->persist($admin);
-        $manager->flush();
+        $this->createUser($manager, 'admin@gmail.com', 'admin', 'en_US');
+        $this->createUser($manager, 'admin_pl@gmail.com', 'admin', 'pl_PL');
     }
 
     public static function getGroups(): array
     {
         return ['local-database'];
+    }
+
+    private function createUser(ObjectManager $manager, string $username, string $password, string $locale): void
+    {
+        $securityUser = new CoreUser($username, null, ['ROLE_ADMIN']);
+        $hashedPassword = $this->passwordHasher->hashPassword($securityUser, $password);
+
+        $admin = User::create(
+            $this->userRepository->getNextId(),
+            $username,
+            $hashedPassword,
+            ['ROLE_ADMIN'],
+            locale: $locale,
+        );
+        $manager->persist($admin);
+        $manager->flush();
     }
 }
