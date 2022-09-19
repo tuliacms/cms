@@ -12,11 +12,9 @@ use Tulia\Component\Theme\ManagerInterface;
  */
 class ThemeConfigurationImagesSizeProvider implements ImagesSizeProviderInterface
 {
-    protected ManagerInterface $manager;
-
-    public function __construct(ManagerInterface $manager)
-    {
-        $this->manager = $manager;
+    public function __construct(
+        private readonly ManagerInterface $manager,
+    ) {
     }
 
     /**

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Widget\Infrastructure\Widget\Storage;
 
 use Doctrine\DBAL\Connection;
+use Symfony\Component\Uid\Uuid;
 use Tulia\Cms\Widget\Domain\Catalog\Storage\StorageInterface;
 use Tulia\Cms\Widget\Infrastructure\Persistence\Domain\ReadModel\Finder\DbalWidgetAttributesFinder;
 
@@ -16,7 +17,7 @@ class DatabaseStorage implements StorageInterface
     private static array $cache = [];
 
     public function __construct(
-        private Connection $connection,
+        private readonly Connection $connection,
         private readonly DbalWidgetAttributesFinder $attributesFinder
     ) {
     }
@@ -24,13 +25,13 @@ class DatabaseStorage implements StorageInterface
     /**
      * {@inheritdoc}
      */
-    public function all(?string $space, string $locale): array
+    public function all(?string $space, string $websiteId, string $locale): array
     {
-        if (isset(static::$cache['all'])) {
-            return static::$cache['all'];
+        if (isset(static::$cache[$websiteId]['all'])) {
+            return static::$cache[$websiteId]['all'];
         }
 
-        static::$cache['all'] = $this->connection->fetchAllAssociative('
+        static::$cache[$websiteId]['all'] = $this->connection->fetchAllAssociative('
             SELECT
                 tm.*,
                 BIN_TO_UUID(tm.id) AS id,
@@ -39,22 +40,23 @@ class DatabaseStorage implements StorageInterface
                 tl.visibility
             FROM #__widget AS tm
             INNER JOIN #__widget_translation AS tl
-                ON tl.widget_id = tm.id AND tl.locale = :locale', [
+                ON tl.widget_id = tm.id AND tm.website_id = :websiteId AND tl.locale = :locale', [
             'locale' => $locale,
+            'websiteId' => Uuid::fromString($websiteId)->toBinary(),
         ]);
 
-        static::$cache['all'] = $this->fetchAttributes(static::$cache['all']);
+        static::$cache[$websiteId]['all'] = $this->fetchAttributes(static::$cache[$websiteId]['all']);
 
-        return static::$cache['all'];
+        return static::$cache[$websiteId]['all'];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function findById(string $id, string $locale): ?array
+    public function findById(string $id, string $websiteId, string $locale): ?array
     {
-        if (isset(static::$cache[$id])) {
-            return static::$cache[$id];
+        if (isset(static::$cache[$websiteId][$id])) {
+            return static::$cache[$websiteId][$id];
         }
 
         $result = $this->connection->fetchAllAssociative('
@@ -66,29 +68,30 @@ class DatabaseStorage implements StorageInterface
                 tl.visibility
             FROM #__widget AS tm
             INNER JOIN #__widget_translation AS tl
-                ON tl.widget_id = tm.id AND tl.locale = :locale
+                ON tl.widget_id = tm.id AND tm.website_id = :websiteId AND tl.locale = :locale
             WHERE tm.id = :id
             LIMIT 1', [
             'locale' => $locale,
+            'websiteId' => Uuid::fromString($websiteId)->toBinary(),
             'id' => $id,
         ]);
 
         if (isset($result[0]['id'])) {
-            static::$cache[$id] = $this->fetchAttributes($result)[0];
+            static::$cache[$websiteId][$id] = $this->fetchAttributes($result)[0];
 
-            return static::$cache[$id] = $result[0];
+            return static::$cache[$websiteId][$id] = $result[0];
         }
 
         return null;
     }
 
-    public function findBySpace(string $space, string $locale): array
+    public function findBySpace(string $space, string $websiteId, string $locale): array
     {
-        if (isset(static::$cache[$space])) {
-            return static::$cache[$space];
+        if (isset(static::$cache[$websiteId][$space])) {
+            return static::$cache[$websiteId][$space];
         }
 
-        static::$cache[$space] = $this->connection->fetchAllAssociative('
+        static::$cache[$websiteId][$space] = $this->connection->fetchAllAssociative('
             SELECT
                 tm.*,
                 BIN_TO_UUID(tm.id) AS id,
@@ -97,16 +100,17 @@ class DatabaseStorage implements StorageInterface
                 tl.visibility
             FROM #__widget AS tm
             INNER JOIN #__widget_translation AS tl
-                ON tl.widget_id = tm.id AND tl.locale = :locale
+                ON tl.widget_id = tm.id AND tm.website_id = :websiteId AND tl.locale = :locale
             WHERE tm.space = :space
         ', [
             'locale' => $locale,
+            'websiteId' => Uuid::fromString($websiteId)->toBinary(),
             'space' => $space,
         ]);
 
-        static::$cache[$space] = $this->fetchAttributes(static::$cache[$space]);
+        static::$cache[$websiteId][$space] = $this->fetchAttributes(static::$cache[$websiteId][$space]);
 
-        return static::$cache[$space];
+        return static::$cache[$websiteId][$space];
     }
 
     private function fetchAttributes(array $rows): array

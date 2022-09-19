@@ -19,8 +19,8 @@ use Tulia\Component\Theme\ManagerInterface;
 final class WidgetDetailsForm extends AbstractType
 {
     public function __construct(
-        private ManagerInterface $themeManager,
-        private TranslatorInterface $translator
+        private readonly ManagerInterface $themeManager,
+        private readonly TranslatorInterface $translator
     ) {
     }
 

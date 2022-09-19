@@ -17,8 +17,8 @@ use Tulia\Cms\User\Domain\WriteModel\Event\UserUpdated;
 final class UpdateSearchAnythingWhenUserUpdates implements EventSubscriberInterface
 {
     public function __construct(
-        private IndexerInterface $indexer,
-        private UserSearchCollectorInterface $collector
+        private readonly IndexerInterface $indexer,
+        private readonly UserSearchCollectorInterface $collector
     ) {
     }
 

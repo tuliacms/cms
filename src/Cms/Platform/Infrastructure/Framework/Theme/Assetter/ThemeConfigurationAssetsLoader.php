@@ -7,6 +7,7 @@ namespace Tulia\Cms\Platform\Infrastructure\Framework\Theme\Assetter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 use Tulia\Component\Theme\Assetter\ThemeConfigurationAssetsLoader as BaseLoader;
 
 /**
@@ -14,11 +15,10 @@ use Tulia\Component\Theme\Assetter\ThemeConfigurationAssetsLoader as BaseLoader;
  */
 class ThemeConfigurationAssetsLoader implements EventSubscriberInterface
 {
-    protected BaseLoader $loader;
-
-    public function __construct(BaseLoader $loader)
-    {
-        $this->loader = $loader;
+    public function __construct(
+        private readonly BaseLoader $loader,
+        private readonly WebsiteInterface $website,
+    ) {
     }
 
     public static function getSubscribedEvents(): array
@@ -35,6 +35,6 @@ class ThemeConfigurationAssetsLoader implements EventSubscriberInterface
             return;
         }
 
-        $this->loader->load();
+        $this->loader->load($this->website->getId(), $this->website->getLocale()->getCode());
     }
 }

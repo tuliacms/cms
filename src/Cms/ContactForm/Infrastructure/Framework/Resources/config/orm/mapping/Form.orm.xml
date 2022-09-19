@@ -8,6 +8,7 @@
             <generator strategy="NONE"/>
         </id>
 
+        <field name="websiteId" type="uuid"/>
         <field name="name"/>
         <field name="receivers" type="simple_array"/>
         <field name="replyTo" nullable="true"/>

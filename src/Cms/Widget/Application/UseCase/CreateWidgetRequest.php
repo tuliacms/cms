@@ -15,6 +15,7 @@ final class CreateWidgetRequest implements RequestInterface
         public readonly string $type,
         public readonly array $details,
         public readonly array $attributes,
+        public readonly string $websiteId,
         public readonly string $locale,
         public readonly string $defaultLocale,
         public readonly array $localeCodes,

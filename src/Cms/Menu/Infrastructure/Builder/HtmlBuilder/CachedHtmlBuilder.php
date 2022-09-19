@@ -15,19 +15,19 @@ use Tulia\Cms\Menu\Domain\Builder\HtmlBuilder\HtmlBuilderInterface;
 class CachedHtmlBuilder implements HtmlBuilderInterface
 {
     public function __construct(
-        private HtmlBuilderInterface $builder,
-        private TagAwareCacheInterface $menuCache
+        private readonly HtmlBuilderInterface $builder,
+        private readonly TagAwareCacheInterface $menuCache,
     ) {
     }
 
-    public function build(HierarchyInterface $hierarchy): string
+    public function build(HierarchyInterface $hierarchy, string $websiteId, string $locale): string
     {
-        return $this->menuCache->get(sprintf('menu_html_%s', $hierarchy->getId()), function (ItemInterface $item) use ($hierarchy) {
+        return $this->menuCache->get(sprintf('menu_html_%s_%s_%s', $websiteId, $locale, $hierarchy->getId()), function (ItemInterface $item) use ($hierarchy, $websiteId, $locale) {
             $item->tag('menu');
             $item->tag('menu_html');
             $item->tag(sprintf('menu_%s', $hierarchy->getId()));
 
-            return $this->builder->build($hierarchy);
+            return $this->builder->build($hierarchy, $websiteId, $locale);
         });
     }
 }

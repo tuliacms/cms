@@ -42,6 +42,7 @@ final class WidgetImporter implements ObjectImporterInterface
             $objectData['type'],
             $details,
             $this->transformObjectDataToAttributes($objectData),
+            $this->getWebsite()->getId(),
             $this->getWebsite()->getLocale()->getCode(),
             $this->getWebsite()->getDefaultLocale()->getCode(),
             $this->getWebsite()->getLocaleCodes(),

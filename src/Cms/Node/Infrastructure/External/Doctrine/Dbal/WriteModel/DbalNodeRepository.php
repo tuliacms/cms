@@ -25,11 +25,23 @@ final class DbalNodeRepository extends ServiceEntityRepository implements NodeRe
         parent::__construct($registry, Node::class);
     }
 
-    public function create(string $nodeType, string $author, string $websiteId): Node
-    {
+    public function create(
+        string $nodeType,
+        string $author,
+        string $title,
+        string $websiteId,
+        array $availableLocales,
+    ): Node {
         $this->contentTypeRegistry->get($nodeType);
 
-        return Node::create($this->uuidGenerator->generate(), $nodeType, $websiteId, $author);
+        return Node::create(
+            $this->uuidGenerator->generate(),
+            $nodeType,
+            $websiteId,
+            $author,
+            $title,
+            $availableLocales,
+        );
     }
 
     public function referenceTo(string $id): Node

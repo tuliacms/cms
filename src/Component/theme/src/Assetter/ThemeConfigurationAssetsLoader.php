@@ -14,26 +14,23 @@ use Tulia\Component\Theme\ManagerInterface;
  */
 class ThemeConfigurationAssetsLoader
 {
-    private ManagerInterface $manager;
-    private AssetterInterface $assetter;
-
-    public function __construct(ManagerInterface $manager, AssetterInterface $assetter)
-    {
-        $this->manager  = $manager;
-        $this->assetter = $assetter;
+    public function __construct(
+        private readonly ManagerInterface $manager,
+        private readonly AssetterInterface $assetter,
+    ) {
     }
 
     /**
      * @throws MissingAssetException
      */
-    public function load(): void
+    public function load(string $websiteId, string $locale): void
     {
         $theme = $this->manager->getTheme();
 
         if ($theme->getParent() && $this->manager->getStorage()->has($theme->getParent())) {
             $parent = $this->manager->getStorage()->get($theme->getParent());
 
-            $this->manager->getResolver()->resolve($theme->getConfig(), $parent);
+            $this->manager->getResolver()->resolve($theme->getConfig(), $parent, $websiteId, $locale);
             $this->loadAssets($parent);
         }
 

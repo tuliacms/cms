@@ -3,6 +3,14 @@ cms:
         paths:
             - { name: backend/security, path: '%cms.core_dir%/Cms/Security/Framework/Resources/views/backend' }
             - { name: cms/security, path: '%cms.core_dir%/Cms/Security/Framework/Resources/views/frontend' }
+    public_paths:
+        - { source: '%cms.core_dir%/Cms/Security/Framework/Resources/public/login-form/dist', target: '/core/backend/login-form' }
+    assetter:
+        assets:
+            backend.login_form:
+                scripts: [ '/assets/core/backend/login-form/login-form.build.js' ]
+                styles: [ '/assets/core/backend/login-form/main.css' ]
+                require: [ vue, jquery ]
 framework:
     translator:
         paths:

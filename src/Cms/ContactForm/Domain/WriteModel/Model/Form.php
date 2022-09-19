@@ -22,6 +22,7 @@ class Form extends AbstractAggregateRoot
 
     private function __construct(
         private string $id,
+        private string $websiteId,
         private string $name,
         private Sender $sender,
         /** @var string[] $receivers */
@@ -43,12 +44,14 @@ class Form extends AbstractAggregateRoot
         array $fields,
         ?string $fieldsTemplate,
         ?string $messageTemplate,
+        string $websiteId,
         string $locale,
         string $defaultLocale,
         array $localeCodes,
     ): self {
         $self = new self(
             $id,
+            $websiteId,
             $name,
             new Sender($senderEmail, $senderName),
             $receivers,

@@ -24,9 +24,9 @@ class Renderer implements RendererInterface
     /**
      * {@inheritdoc}
      */
-    public function forId(string $id, string $locale): string
+    public function forId(string $id, string $websiteId, string $locale): string
     {
-        $widget = $this->storage->findById($id, $locale);
+        $widget = $this->storage->findById($id, $websiteId, $locale);
 
         if ($widget === []) {
             return '';
@@ -38,15 +38,15 @@ class Renderer implements RendererInterface
             return '';
         }
 
-        return $this->render($widget, $locale);
+        return $this->render($widget, $websiteId, $locale);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function forSpace(string $space, string $locale): string
+    public function forSpace(string $space, string $websiteId, string $locale): string
     {
-        $widgets = $this->storage->findBySpace($space, $locale);
+        $widgets = $this->storage->findBySpace($space, $websiteId, $locale);
 
         if ($widgets === []) {
             return '';
@@ -61,13 +61,13 @@ class Renderer implements RendererInterface
                 continue;
             }
 
-            $result[] = $this->render($widget, $locale);
+            $result[] = $this->render($widget, $websiteId, $locale);
         }
 
         return implode('', $result);
     }
 
-    private function render(array $data, string $locale): string
+    private function render(array $data, string $websiteId, string $locale): string
     {
         if ($this->registry->has($data['type']) === false) {
             return '';
@@ -77,6 +77,7 @@ class Renderer implements RendererInterface
         $widget = $this->registry->get($data['type'])->getInstance();
         $widget->configure($config);
         $config->set('locale', $locale);
+        $config->set('website_id', $websiteId);
         $config->merge($data['attributes']);
 
         $view = $widget->render($config);

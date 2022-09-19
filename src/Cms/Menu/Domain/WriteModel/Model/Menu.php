@@ -24,7 +24,8 @@ class Menu extends AbstractAggregateRoot
 
     private function __construct(
         private string $id,
-        private string $name
+        private string $websiteId,
+        private string $name,
     ) {
         $this->items = new ArrayCollection([Item::createRoot($this)]);
         $this->recordThat(new MenuCreated($this->id));
@@ -32,9 +33,10 @@ class Menu extends AbstractAggregateRoot
 
     public static function create(
         string $id,
+        string $websiteId,
         string $name
     ) : self {
-        return new self($id, $name);
+        return new self($id, $websiteId, $name);
     }
 
     public function getId(): string

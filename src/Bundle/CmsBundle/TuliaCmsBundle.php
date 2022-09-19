@@ -49,12 +49,15 @@ class TuliaCmsBundle extends Bundle
         $container->addCompilerPass(new UsecasePass());
         $container->addCompilerPass(new HooksPass());
 
+        $dynamicConfigFilepath = $container->getParameter('kernel.project_dir').'/config/dynamic.php';
+
         /**
          * Parameter should be used in all Core configs, instead of "kernel.project_dir".
          * It points to the /src directory of the core system.
          */
         $container->setParameter('cms.core_dir', dirname(__DIR__, 2));
+        $container->setParameter('cms.dynamic_config', include $dynamicConfigFilepath);
 
-        $container->addResource(new FileResource($container->getParameter('kernel.project_dir').'/config/dynamic.php'));
+        $container->addResource(new FileResource($dynamicConfigFilepath));
     }
 }

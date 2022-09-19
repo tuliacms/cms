@@ -9,6 +9,7 @@
         </id>
 
         <field name="name"/>
+        <field name="websiteId" type="uuid"/>
 
         <one-to-many field="items" orphan-removal="true" target-entity="Tulia\Cms\Menu\Domain\WriteModel\Model\Item" mapped-by="menu">
             <cascade>

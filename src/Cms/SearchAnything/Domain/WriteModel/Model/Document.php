@@ -25,7 +25,8 @@ class Document extends AbstractAggregateRoot
     public function __construct(
         private readonly string $indexGroup,
         private readonly string $sourceId,
-        private readonly string $locale
+        private readonly string $websiteId,
+        private readonly string $locale,
     ) {
         $this->createdAt = ImmutableDateTime::now();
     }

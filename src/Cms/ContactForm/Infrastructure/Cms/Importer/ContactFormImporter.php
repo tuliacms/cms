@@ -36,6 +36,7 @@ final class ContactFormImporter implements ObjectImporterInterface
             $this->createFieldsCollection($objectData['fields']),
             $objectData['fields_template'],
             $objectData['message_template'],
+            $this->getWebsite()->getId(),
             $this->getWebsite()->getLocale()->getCode(),
             $this->getWebsite()->getDefaultLocale()->getCode(),
             $this->getWebsite()->getLocaleCodes(),

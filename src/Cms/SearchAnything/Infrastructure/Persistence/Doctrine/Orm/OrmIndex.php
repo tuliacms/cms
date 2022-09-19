@@ -19,6 +19,7 @@ final class OrmIndex implements IndexInterface
         private DocumentRepository $repository,
         private Connection $connection,
         private string $index,
+        private string $websiteId,
         private string $locale,
     ) {
     }
@@ -28,10 +29,11 @@ final class OrmIndex implements IndexInterface
         $document = $this->repository->findOneBy([
             'sourceId' => $sourceId,
             'indexGroup' => $this->index,
-            'locale' => $this->locale
+            'locale' => $this->locale,
+            'websiteId' => $this->websiteId,
         ]);
 
-        return $document ?? new Document($this->index, $sourceId, $this->locale);
+        return $document ?? new Document($this->index, $sourceId, $this->websiteId, $this->locale);
     }
 
     public function save(Document $document): void
@@ -50,8 +52,10 @@ final class OrmIndex implements IndexInterface
     {
         $this->connection->createQueryBuilder()
             ->delete('#__search_anything_document')
+            ->where('website_id = :website_id')
             ->where('locale = :locale')
             ->andWhere('index_group = :index')
+            ->setParameter('website_id', $this->websiteId)
             ->setParameter('locale', $this->locale)
             ->setParameter('index', $this->index)
             ->executeQuery()

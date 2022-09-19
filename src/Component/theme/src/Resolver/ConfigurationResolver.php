@@ -22,7 +22,7 @@ class ConfigurationResolver implements ResolverInterface
     ) {
     }
 
-    public function resolve(ConfigurationInterface $configuration, ThemeInterface $theme): void
+    public function resolve(ConfigurationInterface $configuration, ThemeInterface $theme, string $websiteId, string $locale): void
     {
         if ($theme->getParent()) {
             $parent = $this->manager->getStorage()->get($theme->getParent());

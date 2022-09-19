@@ -13,14 +13,14 @@ class ArrayStorage implements StorageInterface
 {
     protected $changesets = [];
 
-    public function has(string $id, string $locale): bool
+    public function has(string $id, string $websiteId, string $locale): bool
     {
-        return isset($this->changesets[$id]);
+        return isset($this->changesets[$websiteId][$id]);
     }
 
-    public function get(string $id, string $locale): ChangesetInterface
+    public function get(string $id, string $websiteId, string $locale): ChangesetInterface
     {
-        return $this->changesets[$id];
+        return $this->changesets[$websiteId][$id];
     }
 
     public function remove(ChangesetInterface $changeset)
@@ -28,12 +28,12 @@ class ArrayStorage implements StorageInterface
        unset($this->changesets[$changeset->getId()]);
     }
 
-    public function save(ChangesetInterface $changeset, string $locale, string $defaultLocale, array $availableLocales): void
+    public function save(ChangesetInterface $changeset, string $websiteId, string $locale, string $defaultLocale, array $availableLocales): void
     {
-        $this->changesets[$changeset->getId()] = $changeset;
+        $this->changesets[$websiteId][$changeset->getId()] = $changeset;
     }
 
-    public function getActiveChangeset(string $theme, string $locale): ?ChangesetInterface
+    public function getActiveChangeset(string $theme, string $websiteId, string $locale): ?ChangesetInterface
     {
         return null;
     }

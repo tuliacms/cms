@@ -20,9 +20,9 @@ class DatatableFinder extends AbstractDatatableFinder
 {
     public function __construct(
         Connection $connection,
-        private TranslatorInterface $translator,
-        private WidgetRegistryInterface $widgetRegistry,
-        private ManagerInterface $themeManager,
+        private readonly TranslatorInterface $translator,
+        private readonly WidgetRegistryInterface $widgetRegistry,
+        private readonly ManagerInterface $themeManager,
     ) {
         parent::__construct($connection);
     }

@@ -12,6 +12,7 @@ class NodeDeleted extends AbstractNodeDomainEvent
     public function __construct(
         string $id,
         string $type,
+        public readonly string $websiteId,
         public readonly array $translatedTo
     ) {
         parent::__construct($id, $type);

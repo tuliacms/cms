@@ -22,30 +22,31 @@ class Security extends AbstractController
     public function login(
         Request $request,
         AuthenticationUtils $authenticationUtils,
-        WebsiteInterface $website
+        WebsiteInterface $website,
     ) {
         if ($this->getUser()) {
             return $this->redirectToRoute('backend.homepage');
         }
 
-        $users = [
-            'en_US' => [
-                'username' => 'admin@gmail.com',
-                'password' => 'admin',
-            ],
-            'pl_PL' => [
-                'username' => 'admin_pl@gmail.com',
-                'password' => 'admin',
-            ],
-        ];
         $locale = $website->getLocale()->getCode();
+
+        $prefLocales = array_reduce(
+            explode(',', str_replace('-', '_', $request->headers->get('Accept-Language'))),
+            function ($res, $el) {
+                list($l, $q) = array_merge(explode(';q=', $el), [1]);
+                $res[$l] = (float) $q;
+                return $res;
+            },
+            []
+        );
+        arsort($prefLocales);
 
         return $this->view('@backend/security/login.tpl', [
             'bgImages'      => $this->getCollection(),
             'last_username' => $request->query->get('username', $authenticationUtils->getLastUsername()),
+            'password'      => $request->query->get('password'),
             'error'         => $authenticationUtils->getLastAuthenticationError(),
-            'username' => $users[$locale]['username'] ?? '',
-            'password' => $users[$locale]['password'] ?? '',
+            'clientLocale'  => $prefLocales,
         ]);
     }
 

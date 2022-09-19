@@ -12,10 +12,11 @@ use Tulia\Cms\Platform\Domain\Service\DynamicConfigurationInterface;
 final class FilesystemDynamicConfiguration implements DynamicConfigurationInterface
 {
     private bool $opened = false;
-    private array $config = [];
 
     public function __construct(
-        private string $configFilename
+        private readonly string $configFilename,
+        private readonly string $environment,
+        private array $config,
     ) {
     }
 
@@ -54,7 +55,7 @@ final class FilesystemDynamicConfiguration implements DynamicConfigurationInterf
 
     public function open(): void
     {
-        if ($this->opened) {
+        if ($this->environment === 'prod' || $this->opened) {
             return;
         }
 

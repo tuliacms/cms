@@ -34,6 +34,8 @@ down:
 .PHONY: webpack-build-production
 webpack-build-production:
 	export NODE_ENV=production
+	echo "Executing: \e[94mBuilding Webpack production for Login Page:\e[0m"
+	npm run --prefix src/Cms/Security/Framework/Resources/public/login-form build
 	echo "Executing: \e[94mBuilding Webpack production for TuliaEditor:\e[0m"
 	npm run --prefix src/Cms/TuliaEditor/Infrastructure/Framework/Resources/public/tulia-editor build
 	echo "Executing: \e[94mBuilding Webpack production for Filemanager:\e[0m"

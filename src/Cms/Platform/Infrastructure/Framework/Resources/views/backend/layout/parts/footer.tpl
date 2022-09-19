@@ -77,7 +77,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdxaicfnJMJNa4V_kbfqL6Zcuuz9syW5r4EGA4g8t0nx2-IJg/viewform?embedded=true" width="750" height="850" frameborder="0" marginheight="0" marginwidth="0">Ładuję…</iframe>
+                <iframe data-src="https://docs.google.com/forms/d/e/1FAIpQLSdxaicfnJMJNa4V_kbfqL6Zcuuz9syW5r4EGA4g8t0nx2-IJg/viewform?embedded=true" width="750" height="850" frameborder="0" marginheight="0" marginwidth="0">Ładuję…</iframe>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'close'|trans }}</button>
@@ -85,3 +85,14 @@
         </div>
     </div>
 </div>
+
+<script nonce="{{ csp_nonce() }}">
+    $(function () {
+        const modal = document.getElementById('tuliacms-found-bug-modal');
+        modal.addEventListener('show.bs.modal', event => {
+            const iframe = modal.querySelector('iframe');
+            const src = iframe.getAttribute('data-src');
+            iframe.setAttribute('src', src);
+        });
+    });
+</script>

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Menu\Application\UseCase;
 
 use Tulia\Cms\Menu\Domain\WriteModel\MenuRepositoryInterface;
+use Tulia\Cms\Menu\Domain\WriteModel\Model\Menu;
 use Tulia\Cms\Shared\Application\UseCase\AbstractTransactionalUseCase;
 use Tulia\Cms\Shared\Application\UseCase\IdResult;
 use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
@@ -27,7 +28,11 @@ final class CreateMenu extends AbstractTransactionalUseCase
      */
     protected function execute(RequestInterface $request): ?ResultInterface
     {
-        $menu = $this->repository->createNewMenu($request->name);
+        $menu = Menu::create(
+            $this->repository->getNextId(),
+            $request->websiteId,
+            $request->name
+        );
 
         $this->repository->save($menu);
         $this->eventBus->dispatchCollection($menu->collectDomainEvents());

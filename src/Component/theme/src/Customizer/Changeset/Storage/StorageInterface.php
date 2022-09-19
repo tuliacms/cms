@@ -12,14 +12,14 @@ use Tulia\Component\Theme\Exception\ChangesetNotFoundException;
  */
 interface StorageInterface
 {
-    public function has(string $id, string $locale): bool;
+    public function has(string $id, string $websiteId, string $locale): bool;
 
     /**
      * @throws ChangesetNotFoundException
      */
-    public function get(string $id, string $locale): ChangesetInterface;
+    public function get(string $id, string $websiteId, string $locale): ChangesetInterface;
 
-    public function save(ChangesetInterface $changeset, string $locale, string $defaultLocale, array $availableLocales): void;
+    public function save(ChangesetInterface $changeset, string $websiteId, string $locale, string $defaultLocale, array $availableLocales): void;
 
-    public function getActiveChangeset(string $theme, string $locale): ?ChangesetInterface;
+    public function getActiveChangeset(string $theme, string $websiteId, string $locale): ?ChangesetInterface;
 }

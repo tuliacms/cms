@@ -40,14 +40,14 @@ final class IndexCommand extends Command
                         $this->translator->setLocale($locale->getCode());
                     }
 
-                    $index = $this->indexer->index($collector->getIndex(), $locale->getCode());
+                    $index = $this->indexer->index($collector->getIndex(), $this->website->getId(), $locale->getCode());
                     $index->clear();
                     $offset = 0;
                     $limit = 100;
 
                     do {
                         $delta = $index->getDelta();
-                        $collector->collect($index, $locale->getCode(), $offset, $limit);
+                        $collector->collect($index, $this->website->getId(), $locale->getCode(), $offset, $limit);
                         $offset += $limit;
                     } while ($delta !== $index->getDelta());
                 }
@@ -56,14 +56,14 @@ final class IndexCommand extends Command
                     $this->translator->setLocale($defaultLocale);
                 }
 
-                $index = $this->indexer->index($collector->getIndex(), 'unilingual');
+                $index = $this->indexer->index($collector->getIndex(), $this->website->getId(), 'unilingual');
                 $index->clear();
                 $offset = 0;
                 $limit = 100;
 
                 do {
                     $delta = $index->getDelta();
-                    $collector->collect($index, 'unilingual', $offset, $limit);
+                    $collector->collect($index, $this->website->getId(), 'unilingual', $offset, $limit);
                     $offset += $limit;
                 } while ($delta !== $index->getDelta());
             }

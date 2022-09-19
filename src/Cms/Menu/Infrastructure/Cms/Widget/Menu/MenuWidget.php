@@ -15,7 +15,7 @@ use Tulia\Component\Templating\ViewInterface;
 class MenuWidget extends AbstractWidget
 {
     public function __construct(
-        private BuilderInterface $builder
+        private readonly BuilderInterface $builder,
     ) {
     }
 
@@ -30,7 +30,8 @@ class MenuWidget extends AbstractWidget
         return $this->view('@widget/internal/menu/frontend.tpl', [
             'menu' => $this->builder->buildHtml(
                 (string) $config->get('menu_id'),
-                $config->get('locale')
+                $config->get('website_id'),
+                $config->get('locale'),
             ),
         ]);
     }

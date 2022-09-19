@@ -16,13 +16,13 @@ use Tulia\Cms\SearchAnything\Domain\WriteModel\Service\IndexInterface;
 class NodeDocumentCollector extends AbstractDocumentCollector
 {
     public function __construct(
-        private NodeSearchCollectorInterface $collector
+        private readonly NodeSearchCollectorInterface $collector
     ) {
     }
 
-    public function collect(IndexInterface $index, string $locale, int $offset, int $limit): void
+    public function collect(IndexInterface $index, string $websiteId, string $locale, int $offset, int $limit): void
     {
-        foreach ($this->collector->collectDocumentsOfLocale($locale, $offset, $limit) as $node) {
+        foreach ($this->collector->collectDocumentsOfLocale($locale, $websiteId, $offset, $limit) as $node) {
             $document = $index->document($node['id']);
             $document->setLink('backend.node.edit', ['id' => $node['id'], 'node_type' => $node['type']]);
             $document->setTitle($node['title']);
@@ -31,9 +31,9 @@ class NodeDocumentCollector extends AbstractDocumentCollector
         }
     }
 
-    public function countDocuments(string $locale): int
+    public function countDocuments(string $websiteId, string $locale): int
     {
-        return $this->collector->countDocumentsOfLocale($locale);
+        return $this->collector->countDocumentsOfLocale($websiteId, $locale);
     }
 
     public function getIndex(): string

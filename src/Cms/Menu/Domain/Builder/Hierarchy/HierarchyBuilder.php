@@ -25,7 +25,7 @@ class HierarchyBuilder implements HierarchyBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function build(string $id, string $locale, array $collection = []): HierarchyInterface
+    public function build(string $id, string $websiteId, string $locale, array $collection = []): HierarchyInterface
     {
         $hierarchy = new Hierarchy($id);
 

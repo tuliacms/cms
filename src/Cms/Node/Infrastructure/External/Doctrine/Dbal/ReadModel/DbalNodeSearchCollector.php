@@ -21,7 +21,7 @@ final class DbalNodeSearchCollector implements NodeSearchCollectorInterface
     public function collectTranslationsOfNode(string $id): array
     {
         return $this->connection->fetchAllAssociative(
-            'SELECT BIN_TO_UUID(tm.id) AS id, tm.type, tl.title, tl.locale
+            'SELECT BIN_TO_UUID(tm.id) AS id, tm.type, tm.website_id, tl.title, tl.locale
             FROM #__node AS tm
             LEFT JOIN #__node_translation AS tl
                 ON tm.id = tl.node_id
@@ -31,28 +31,30 @@ final class DbalNodeSearchCollector implements NodeSearchCollectorInterface
         );
     }
 
-    public function collectDocumentsOfLocale(string $locale, int $offset, int $limit): array
+    public function collectDocumentsOfLocale(string $websiteId, string $locale, int $offset, int $limit): array
     {
         return $this->connection->fetchAllAssociative(
-            'SELECT BIN_TO_UUID(tm.id) AS id, tm.type, tl.title, tl.locale
+            'SELECT BIN_TO_UUID(tm.id) AS id, tm.type, tm.website_id, tl.title, tl.locale
             FROM #__node AS tm
             INNER JOIN #__node_translation AS tl
-                ON tm.id = tl.node_id AND tl.locale = :locale
+                ON tm.id = tl.node_id AND tm.website_id = :websiteId AND tl.locale = :locale
             LIMIT :offset, :limit',
             [
                 'limit' => $limit,
                 'offset' => $offset,
                 'locale' => $locale,
+                'websiteId' => $locale,
             ],
             [
                 'limit' => \PDO::PARAM_INT,
                 'offset' => \PDO::PARAM_INT,
                 'locale' => \PDO::PARAM_STR,
+                'websiteId' => \PDO::PARAM_STR,
             ]
         );
     }
 
-    public function countDocumentsOfLocale(string $locale): int
+    public function countDocumentsOfLocale(string $websiteId, string $locale): int
     {
 
     }

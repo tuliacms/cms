@@ -89,7 +89,7 @@ class ContentModel extends AbstractController
         string $code,
         string $contentType,
         Request $request,
-        FormHandler $contentTypeFormHandler
+        FormHandler $contentTypeFormHandler,
     ) {
         if ($this->configuration->typeExists($contentType) === false) {
             $this->addFlash('danger', $this->trans('contentTypeOfNotExists', ['name' => $contentType], 'content_builder'));

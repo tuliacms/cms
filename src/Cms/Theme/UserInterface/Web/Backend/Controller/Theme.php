@@ -14,7 +14,6 @@ use Tulia\Cms\Theme\Application\Service\ThemeActivator;
 use Tulia\Cms\Theme\UserInterface\Web\Backend\Form\ThemeInstallatorForm;
 use Tulia\Component\Routing\Website\WebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
-use Tulia\Component\Theme\Activator\ActivatorInterface;
 use Tulia\Component\Theme\ManagerInterface;
 
 /**

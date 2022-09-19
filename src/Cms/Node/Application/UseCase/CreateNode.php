@@ -18,7 +18,13 @@ class CreateNode extends AbstractNodeUseCase
      */
     protected function execute(RequestInterface $request): ?ResultInterface
     {
-        $node = $this->repository->create($request->nodeType, $request->author, $request->websiteId);
+        $node = $this->repository->create(
+            $request->nodeType,
+            $request->author,
+            $request->details['title'],
+            $request->websiteId,
+            $request->availableLocales,
+        );
 
         $this->updateModel($request, $node);
 

@@ -47,8 +47,10 @@ class NodeEntryImporter implements ObjectImporterInterface
             $this->getAuthorId(),
             $details,
             $this->transformObjectDataToAttributes($objectData),
-            $this->getWebsite()->getLocale()->getCode(),
             $this->getWebsite()->getId(),
+            $this->getWebsite()->getLocale()->getCode(),
+            $this->getWebsite()->getDefaultLocale()->getCode(),
+            $this->getWebsite()->getLocaleCodes(),
         ));
 
         return $result->id;

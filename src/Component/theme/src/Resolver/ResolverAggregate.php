@@ -20,10 +20,10 @@ class ResolverAggregate implements ResolverAggregateInterface
         $this->resolvers = $resolvers;
     }
 
-    public function resolve(ConfigurationInterface $configuration, ThemeInterface $theme): void
+    public function resolve(ConfigurationInterface $configuration, ThemeInterface $theme, string $websiteId, string $locale): void
     {
         foreach ($this->resolvers as $resolver) {
-            $resolver->resolve($configuration, $theme);
+            $resolver->resolve($configuration, $theme, $websiteId, $locale);
         }
     }
 }

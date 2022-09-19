@@ -11,8 +11,6 @@ use Tulia\Cms\Menu\Domain\WriteModel\Model\Menu;
  */
 interface MenuRepositoryInterface
 {
-    public function createNewMenu(string $name): Menu;
-
     public function get(string $id): Menu;
 
     public function save(Menu $menu): void;

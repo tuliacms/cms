@@ -24,6 +24,7 @@ class Widget extends AbstractAggregateRoot
 
     private function __construct(
         private string $id,
+        private string $websiteId,
         private string $type,
         private string $space,
         private string $name,
@@ -41,13 +42,14 @@ class Widget extends AbstractAggregateRoot
 
     public static function create(
         string $id,
+        string $websiteId,
         string $type,
         string $space,
         string $name,
         string $creatingLocale,
         array $localeCodes,
     ): self {
-        $self = new self($id, $type, $space, $name, $creatingLocale, $localeCodes);
+        $self = new self($id, $websiteId, $type, $space, $name, $creatingLocale, $localeCodes);
         $self->recordThat(new Event\WidgetCreated($self->id, $self->type));
 
         return $self;

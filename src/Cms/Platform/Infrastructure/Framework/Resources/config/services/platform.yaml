@@ -35,6 +35,7 @@ services:
         class: Tulia\Cms\Platform\Infrastructure\Filesystem\FilesystemDynamicConfiguration
         bind:
             $configFilename: '%kernel.project_dir%/config/dynamic.php'
+            $config: '%cms.dynamic_config%'
 
     Tulia\Cms\Platform\Application\Service\FrameworkCacheService:
         bind:

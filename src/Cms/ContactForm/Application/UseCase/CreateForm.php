@@ -42,6 +42,7 @@ final class CreateForm extends AbstractTransactionalUseCase
             $this->collectFields($request->fields),
             $request->fieldsTemplate,
             $request->messageTemplate,
+            $request->websiteId,
             $request->locale,
             $request->defaultLocale,
             $request->localeCodes,

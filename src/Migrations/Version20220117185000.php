@@ -119,44 +119,6 @@ CREATE TABLE `#__customizer_changeset_lang` (
   `payload_localized` json DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
 EOF);
-        /*$this->addSql(<<<EOF
-CREATE TABLE `#__filemanager_directory` (
-  `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `parent_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '00000000-0000-0000-0000-000000000000',
-  `level` tinyint NOT NULL DEFAULT '0',
-  `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-EOF);
-        $this->addSql(<<<EOF
-CREATE TABLE `#__filemanager_file` (
-  `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `directory` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '00000000-0000-0000-0000-000000000000',
-  `filename` varchar(127) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `extension` varchar(6) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `type` varchar(16) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'file',
-  `mimetype` varchar(16) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `size` int DEFAULT NULL,
-  `path` varchar(127) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-
-INSERT INTO `#__filemanager_file` (`id`, `directory`, `filename`, `extension`, `type`, `mimetype`, `size`, `path`, `created_at`, `updated_at`) VALUES
-('5e2f9909-c497-4b05-ac62-b632f000a736', '00000000-0000-0000-0000-000000000000', 'denys-nevozhai-z0nvqfroqwa-unsplash.jpg', 'jpg', 'image', '', 2052321, 'uploads/2021/06', '2021-06-19 17:23:25', NULL),
-('8d3d54b7-0c74-4423-bb1c-3014099e613e', '00000000-0000-0000-0000-000000000000', 'denys-nevozhai-z0nvqfroqwa-unsplash.jpg', 'jpg', 'image', '', 2052321, 'uploads/2022/02', '2022-02-17 17:02:37', NULL),
-('ae642eef-754e-408f-9f0f-dccafce0afbe', '00000000-0000-0000-0000-000000000000', '91374-1.png', 'png', 'image', '', 259664, 'uploads/2021/06', '2021-06-18 06:05:29', NULL),
-('db387e74-eeab-4d6c-b711-8c57ec02646a', '00000000-0000-0000-0000-000000000000', '91374.png', 'png', 'image', '', 259664, 'uploads/2021/06', '2021-06-18 06:04:48', NULL),
-('e57f834a-17d6-4a42-8331-22a5cc508c8e', '00000000-0000-0000-0000-000000000000', 'alexandru-zdrobau-4bmtmxguvqo-unsplash.jpg', 'jpg', 'image', '', 1551268, 'uploads/2021/06', '2021-06-18 06:09:11', NULL),
-('f59bb5de-23e4-4994-99e8-b21d8ca53349', '00000000-0000-0000-0000-000000000000', 'artem-kovalev-fk3xucftavk-unsplash.jpg', 'jpg', 'image', '', 664395, 'uploads/2021/06', '2021-06-18 06:24:23', NULL);
-EOF);*/
-        $this->addSql(<<<EOF
-CREATE TABLE `#__filemanager_image_thumbnail` (
-  `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `file_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `size` varchar(16) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `filename` varchar(127) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-EOF);
        /* $this->addSql(<<<EOF
 CREATE TABLE `#__model_change_history` (
   `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
@@ -180,22 +142,6 @@ CREATE TABLE `#__node_term_relationship` (
   `type` varchar(16) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `taxonomy` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-
-INSERT INTO `#__node_term_relationship` (`node_id`, `term_id`, `type`, `taxonomy`) VALUES
-('04f47ff0-c066-4712-8e28-df676695924c', '2e2f328e-72ff-48d2-b423-4936890f7d33', 'MAIN', 'category'),
-('11157ad7-a212-4c75-a989-c1234c99e0e3', '2e2f328e-72ff-48d2-b423-4936890f7d33', 'MAIN', 'category'),
-('1de8280a-2363-4c09-bb4f-94e6b0ea2ef0', '58ed4a0c-4965-4a54-81d7-bcc51e52463e', 'MAIN', 'tag'),
-('6e5445fa-4a40-46fa-89f8-72c572af9bb0', '2e2f328e-72ff-48d2-b423-4936890f7d33', 'MAIN', 'category');
-EOF);
-        $this->addSql(<<<EOF
-CREATE TABLE `#__parameter` (
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `value` text CHARACTER SET utf8 COLLATE utf8_unicode_ci,
-  `type` varchar(16) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-
-INSERT INTO `#__parameter` (`name`, `value`, `type`) VALUES
-('modules.enabled.list', '[]', 'array');
 EOF);
         $this->addSql(<<<EOF
 CREATE TABLE `#__term` (
@@ -234,16 +180,6 @@ CREATE TABLE `#__term_attribute` (
   `compiled_value` longtext COLLATE utf8_unicode_ci,
   `payload` json DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-
-INSERT INTO `#__term_attribute` (`id`, `owner_id`, `is_renderable`, `has_nonscalar_value`, `name`, `uri`, `value`, `compiled_value`, `payload`) VALUES
-('00048ec0-b4f4-4dd7-9ef3-38e36ef0b524', '66435c83-584b-48ee-8115-db7aa23608b7', 0, 0, 'thumbnail', '', NULL, NULL, NULL),
-('30cb5001-1488-4df0-bbc9-836cb1835183', 'a94d7e88-001a-45c1-99eb-c9dff24620b2', 0, 0, 'visibility', '', '1', NULL, NULL),
-('3daa5ce4-dc1a-4454-9079-2ea6e4137736', '21d4cd46-64ce-45c6-ad2b-ad6281250726', 0, 0, 'thumbnail', '', NULL, NULL, NULL),
-('619588a8-a543-4482-8cee-01dc1a44a393', '66435c83-584b-48ee-8115-db7aa23608b7', 0, 0, 'visibility', '', '1', NULL, NULL),
-('b53cc7a8-19af-4e9c-9351-0200323aad49', '217ae341-de24-4b61-8405-66ec416b4398', 0, 0, 'thumbnail', '', NULL, NULL, NULL),
-('ba439d5a-1298-4a5c-9c99-4fb1bcf8ca99', '58ed4a0c-4965-4a54-81d7-bcc51e52463e', 0, 0, 'thumbnail', '', NULL, NULL, NULL),
-('d4e87841-0a42-4c4d-95b8-e00c652b4aef', '9a4c4ca3-4c83-46c0-8471-f2d5f8b9ef2c', 0, 0, 'thumbnail', '', NULL, NULL, NULL),
-('e7f3743b-8b0f-427c-b2f0-6f28982d44cb', 'a94d7e88-001a-45c1-99eb-c9dff24620b2', 0, 0, 'thumbnail', '', NULL, NULL, NULL);
 EOF);
         $this->addSql(<<<EOF
 CREATE TABLE `#__term_attribute_lang` (
@@ -314,18 +250,6 @@ ALTER TABLE `#__customizer_changeset`
 ALTER TABLE `#__customizer_changeset_lang`
   ADD UNIQUE KEY `customizer_changeset_id` (`customizer_changeset_id`,`locale`);
 
-ALTER TABLE `#__filemanager_directory`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `parent` (`parent_id`);
-
-ALTER TABLE `#__filemanager_file`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `directory` (`directory`);
-
-ALTER TABLE `#__filemanager_image_thumbnail`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `file_id` (`file_id`,`size`);
-
 ALTER TABLE `#__model_change_history`
   ADD PRIMARY KEY (`id`);
 
@@ -333,9 +257,6 @@ ALTER TABLE `#__node_term_relationship`
   ADD PRIMARY KEY (`node_id`,`term_id`),
   ADD KEY `node_id` (`node_id`) USING BTREE,
   ADD KEY `term_id` (`term_id`) USING BTREE;
-
-ALTER TABLE `#__parameter`
-  ADD PRIMARY KEY (`name`);
 
 ALTER TABLE `#__term`
   ADD PRIMARY KEY (`id`),

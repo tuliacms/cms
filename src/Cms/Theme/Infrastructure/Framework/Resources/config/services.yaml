@@ -14,8 +14,6 @@ services:
 
     Tulia\Component\Theme\Loader\ThemeLoader\ThemeLoaderInterface:
         class: Tulia\Cms\Theme\Infrastructure\Framework\Theme\Loader\ThemeLoader
-        bind:
-            $configFilename: '%kernel.project_dir%/config/dynamic.php'
 
     Tulia\Cms\Theme\Infrastructure\Filemanager\ImageSize\ThemeConfigurationImagesSizeProvider:
         tags: [ filemanager.image_size.provider ]
@@ -27,3 +25,6 @@ services:
         class: Tulia\Component\Theme\Customizer\Changeset\Factory\ChangesetFactory
         bind:
             $classname: \Tulia\Cms\Theme\Infrastructure\Framework\Theme\Customizer\Changeset\Changeset
+
+    Tulia\Component\Theme\Configuration\ConfigurationLoaderInterface:
+        class: Tulia\Cms\Theme\Infrastructure\Framework\Theme\Loader\ConfigurationLoader

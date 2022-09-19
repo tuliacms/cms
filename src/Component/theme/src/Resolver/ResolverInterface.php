@@ -12,5 +12,5 @@ use Tulia\Component\Theme\ThemeInterface;
  */
 interface ResolverInterface
 {
-    public function resolve(ConfigurationInterface $configuration, ThemeInterface $theme): void;
+    public function resolve(ConfigurationInterface $configuration, ThemeInterface $theme, string $websiteId, string $locale): void;
 }

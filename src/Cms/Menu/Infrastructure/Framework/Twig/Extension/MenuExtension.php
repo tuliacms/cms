@@ -15,8 +15,8 @@ use Twig\TwigFunction;
 class MenuExtension extends AbstractExtension
 {
     public function __construct(
-        private BuilderInterface $builder,
-        private WebsiteInterface $website
+        private readonly BuilderInterface $builder,
+        private readonly WebsiteInterface $website
     ) {
     }
 
@@ -27,7 +27,11 @@ class MenuExtension extends AbstractExtension
     {
         return [
             new TwigFunction('show_menu', function (string $id) {
-                return $this->builder->buildHtml($id, $this->website->getLocale()->getCode());
+                return $this->builder->buildHtml(
+                    $id,
+                    $this->website->getId(),
+                    $this->website->getLocale()->getCode(),
+                );
             }, [
                 'is_safe' => [ 'html' ]
             ]),

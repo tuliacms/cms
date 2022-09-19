@@ -19,6 +19,7 @@ use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotExistsException;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Datatable\DatatableFactory;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
 
 /**
@@ -49,9 +50,10 @@ class Menu extends AbstractController
      */
     public function create(
         Request $request,
-        CreateMenu $createMenu
+        CreateMenu $createMenu,
+        WebsiteInterface $website,
     ): RedirectResponse {
-        ($createMenu)(new CreateMenuRequest($request->request->get('name')));
+        ($createMenu)(new CreateMenuRequest($request->request->get('name'), $website->getId()));
 
         $this->setFlash('success', $this->trans('menuCreated', [], 'menu'));
         return $this->redirectToRoute('backend.menu');

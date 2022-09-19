@@ -15,6 +15,7 @@ use Tulia\Cms\Node\Domain\WriteModel\Rules\CanAddPurpose\CanImposePurposeInterfa
 use Tulia\Cms\Node\Domain\WriteModel\Rules\CanAddPurpose\CanImposePurposeReasonEnum;
 use Tulia\Cms\Node\Domain\WriteModel\Rules\CanDeleteNode\CanDeleteNodeInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Rules\CanDeleteNode\CanDeleteNodeReasonEnum;
+use Tulia\Cms\Node\Domain\WriteModel\Service\SlugGeneratorStrategy\SlugGeneratorStrategyInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 
@@ -40,7 +41,7 @@ class Node extends AbstractAggregateRoot
         private string $id,
         private string $type,
         private string $websiteId,
-        private string $author
+        private string $author,
     ) {
     }
 
@@ -48,11 +49,13 @@ class Node extends AbstractAggregateRoot
         string $id,
         string $type,
         string $websiteId,
-        string $author
+        string $author,
+        string $title,
+        array $availableLocales,
     ): self {
         $self = new self($id, $type, $websiteId, $author);
         $self->createdAt = new ImmutableDateTime();
-        $self->translations = new ArrayCollection();
+        $self->translations = self::createTranslations($self, $title, $availableLocales);
         $self->purposes = new ArrayCollection();
         $self->recordThat(new Event\NodeCreated($id, $type));
 
@@ -77,6 +80,24 @@ class Node extends AbstractAggregateRoot
         $self->level = (int) ($data['level'] ?? 0);
 
         return $self;
+    }
+
+    /**
+     * @param string[] $availableLocales
+     * @return NodeTranslation[]|ArrayCollection<int, NodeTranslation>
+     */
+    private static function createTranslations(
+        self $node,
+        string $title,
+        array $availableLocales,
+    ): ArrayCollection {
+        $translations = [];
+
+        foreach ($availableLocales as $locale) {
+            $translations[] = new NodeTranslation($node, $locale, $title, false);
+        }
+
+        return new ArrayCollection($translations);
     }
 
     public function toArray(string $locale, string $defaultLocale): array
@@ -136,24 +157,10 @@ class Node extends AbstractAggregateRoot
         return $this->type;
     }
 
-    private function trans(string $locale): NodeTranslation
-    {
-        foreach ($this->translations as $translation) {
-            if ($translation->isFor($locale)) {
-                $translation->setUpdateCallback(function () {
-                    $this->markAsUpdated();
-                });
-                return $translation;
-            }
-        }
-
-        throw NodeTranslationDoesntExists::fromLocale($this->id, $locale);
-    }
-
     public function isTranslatedTo(string $locale): bool
     {
         foreach ($this->translations as $translation) {
-            if ($translation->isFor($locale)) {
+            if ($translation->isFor($locale) && $translation->isTranslated()) {
                 return true;
             }
         }
@@ -161,20 +168,54 @@ class Node extends AbstractAggregateRoot
         return false;
     }
 
-    public function translate(string $locale): NodeTranslation
+    private function trans(string $locale): NodeTranslation
     {
-        if ($this->isTranslatedTo($locale)) {
-            $translation = $this->trans($locale);
-        } else {
-            $translation = new NodeTranslation($this, $locale);
-            $this->translations->add($translation);
+        foreach ($this->translations as $translation) {
+            if ($translation->isFor($locale)) {
+                return $translation;
+            }
         }
 
-        $translation->setUpdateCallback(function () {
-            $this->markAsUpdated();
-        });
+        throw NodeTranslationDoesntExists::fromLocale($this->id, $locale);
+    }
 
-        return $translation;
+    public function changeTitle(
+        string $locale,
+        string $defaultLocale,
+        SlugGeneratorStrategyInterface $slugGeneratorStrategy,
+        string $title,
+        ?string $slug = null,
+    ): void {
+        $trans = $this->trans($locale);
+        $trans->changeTitle($slugGeneratorStrategy, $title, $slug);
+        $trans->translated = true;
+
+        if ($locale === $defaultLocale) {
+            foreach ($this->translations as $translation) {
+                if (false === $translation->isTranslated()) {
+                    $translation->changeTitle($slugGeneratorStrategy, $title, $slug);
+                }
+            }
+        }
+
+        $this->markAsUpdated();
+    }
+
+    public function persistAttributes(string $locale, string $defaultLocale, array $attributes): void
+    {
+        $trans = $this->trans($locale);
+        $trans->persistAttributes(...$attributes);
+        $trans->translated = true;
+
+        if ($locale === $defaultLocale) {
+            foreach ($this->translations as $translation) {
+                if (false === $translation->isTranslated()) {
+                    $translation->persistAttributes(...$attributes);
+                }
+            }
+        }
+
+        $this->markAsUpdated();
     }
 
     public function publish(ImmutableDateTime $publishedAt): void
@@ -183,6 +224,7 @@ class Node extends AbstractAggregateRoot
         $this->status = 'published';
 
         $this->recordThat(new Event\NodePublished($this->id, $this->type, $this->publishedAt));
+        $this->markAsUpdated();
     }
 
     public function setStatus(string $status): void
@@ -305,7 +347,7 @@ class Node extends AbstractAggregateRoot
             throw CannotDeleteNodeException::fromReason($reason, $this->id);
         }
 
-        $this->recordThat(new Event\NodeDeleted($this->id, $this->type, $this->getTranslationsLocales()));
+        $this->recordThat(new Event\NodeDeleted($this->id, $this->type, $this->websiteId, $this->getTranslationsLocales()));
     }
 
     private function markAsUpdated(): void

@@ -18,6 +18,15 @@
                 <source>didYouForgotPassword</source>
                 <target>Zapomniałeś hasła?</target>
             </trans-unit>
+            <trans-unit id="tuliacms.auth.5">
+                <source>insertEmailToRestorePassword</source>
+                <target>Podaj swój adres e-mail by przywrócić hasło.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.auth.6">
+                <source>doProcess</source>
+                <target>Przywróć</target>
+                <note>Button label</note>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -15,7 +15,7 @@ class HtmlBuilder implements HtmlBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function build(HierarchyInterface $hierarchy): string
+    public function build(HierarchyInterface $hierarchy, string $websiteId, string $locale): string
     {
         $result = '<ul class="navbar-nav navbar-nav-hoverable mr-auto tulia-navbar">';
 

@@ -59,11 +59,11 @@
                             <div class="card-footer py-0 pr-0">
                                 <a href="{{ path('backend.website.edit', { id: website.id }) }}" class="card-link py-3 d-inline-block" title="{{ 'edit'|trans }}">{{ 'edit'|trans }}</a>
                                 <a href="#" class="card-link"></a>
-                                <div class="dropup d-inline-block float-right">
+                                <div class="dropup d-inline-block float-end">
                                     <a href="#" class="card-link d-inline-block px-4 py-3 text-dark" data-bs-toggle="dropdown">
                                         <i class="fas fa-ellipsis-v"></i>
                                     </a>
-                                    <div class="dropdown-menu dropdown-menu-right">
+                                    <div class="dropdown-menu">
                                         <a href="#" class="dropdown-item dropdown-item-with-icon website-locale-addresses-trigger" title="{{ 'showAddresses'|trans({}, 'websites') }}"><i class="dropdown-icon fas fa-link"></i>{{ 'showAddresses'|trans({}, 'websites') }}</a>
                                         {% if is_dev_env() %}
                                             <div class="dropdown-divider"></div>

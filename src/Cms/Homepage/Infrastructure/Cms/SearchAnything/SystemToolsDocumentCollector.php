@@ -22,7 +22,7 @@ class SystemToolsDocumentCollector extends AbstractDocumentCollector
     ) {
     }
 
-    public function collect(IndexInterface $index, string $locale, int $offset, int $limit): void
+    public function collect(IndexInterface $index, string $websiteId, string $locale, int $offset, int $limit): void
     {
         // No pagination in this collector. Next pages should be empty.
         if ($offset !== 0) {
@@ -45,7 +45,7 @@ class SystemToolsDocumentCollector extends AbstractDocumentCollector
         $this->addSpecialPages($index);
     }
 
-    public function countDocuments(string $locale): int
+    public function countDocuments(string $websiteId, string $locale): int
     {
         return count(array_merge(
             $this->tilesRegistry->getTiles('tools'),

@@ -27,11 +27,6 @@ class OrmMenuRepository extends ServiceEntityRepository implements MenuRepositor
         return (string) Uuid::v4();
     }
 
-    public function createNewMenu(string $name): Menu
-    {
-        return Menu::create($this->getNextId(), $name);
-    }
-
     public function get(string $id): Menu
     {
         $menu = $this->find($id);

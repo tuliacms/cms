@@ -13,6 +13,7 @@
             <index name="fulltext" columns="title,description" flags="fulltext"/>
         </indexes>
 
+        <field name="websiteId" type="uuid" />
         <field name="indexGroup" />
         <field name="sourceId" />
         <field name="locale" length="12"/>

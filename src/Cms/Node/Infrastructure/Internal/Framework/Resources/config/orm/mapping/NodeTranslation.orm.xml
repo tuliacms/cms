@@ -16,6 +16,7 @@
         <field name="locale" length="12"/>
         <field name="title"/>
         <field name="slug" nullable="true"/>
+        <field name="translated" type="boolean"/>
 
         <many-to-one field="node" target-entity="Tulia\Cms\Node\Domain\WriteModel\Model\Node" inversed-by="translations"/>
         <one-to-many field="attributes" orphan-removal="true" target-entity="Tulia\Cms\Node\Domain\WriteModel\Model\Attribute" mapped-by="nodeTranslation">

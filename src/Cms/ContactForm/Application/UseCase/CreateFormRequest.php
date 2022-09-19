@@ -21,6 +21,7 @@ final class CreateFormRequest implements RequestInterface
         public readonly array $fields,
         public readonly ?string $fieldsTemplate,
         public readonly ?string $messageTemplate,
+        public readonly string $websiteId,
         public readonly string $locale,
         public readonly string $defaultLocale,
         public readonly array $localeCodes,

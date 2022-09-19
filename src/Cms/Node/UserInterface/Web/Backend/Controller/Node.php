@@ -117,8 +117,10 @@ class Node extends AbstractController
                     $this->authenticatedUserProvider->getUser()->getId(),
                     $nodeDetailsForm->getData(),
                     $formDescriptor->getData(),
-                    $website->getLocale()->getCode(),
                     $website->getId(),
+                    $website->getLocale()->getCode(),
+                    $website->getDefaultLocale()->getCode(),
+                    $website->getLocaleCodes(),
                 ));
 
                 $this->setFlash('success', $this->trans('nodeSaved', [], 'node'));

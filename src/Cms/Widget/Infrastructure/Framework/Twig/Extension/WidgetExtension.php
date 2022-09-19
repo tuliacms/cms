@@ -16,9 +16,9 @@ use Twig\TwigFunction;
 class WidgetExtension extends AbstractExtension
 {
     public function __construct(
-        private RendererInterface $renderer,
-        private StorageInterface $storage,
-        private WebsiteInterface $website
+        private readonly RendererInterface $renderer,
+        private readonly StorageInterface $storage,
+        private readonly WebsiteInterface $website,
     ) {
     }
 
@@ -29,17 +29,17 @@ class WidgetExtension extends AbstractExtension
     {
         return [
             new TwigFunction('widget', function (string $id) {
-                return $this->renderer->forId($id, $this->website->getLocale()->getCode());
+                return $this->renderer->forId($id, $this->website->getId(), $this->website->getLocale()->getCode());
             }, [
                 'is_safe' => [ 'html' ]
             ]),
             new TwigFunction('widgets_space', function (string $space) {
-                return $this->renderer->forSpace($space, $this->website->getLocale()->getCode());
+                return $this->renderer->forSpace($space, $this->website->getId(), $this->website->getLocale()->getCode());
             }, [
                 'is_safe' => [ 'html' ]
             ]),
             new TwigFunction('widgets_space_count', function (string $space) {
-                return count($this->storage->findBySpace($space, $this->website->getLocale()->getCode()));
+                return count($this->storage->findBySpace($space, $this->website->getId(), $this->website->getLocale()->getCode()));
             }, [
                 'is_safe' => [ 'html' ]
             ]),

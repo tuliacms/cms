@@ -30,6 +30,7 @@ final class CreateWidget extends AbstractTransactionalUseCase
     {
         $widget = Widget::create(
             $this->repository->getNextId(),
+            $request->websiteId,
             $request->type,
             $request->details['space'],
             $request->details['name'],

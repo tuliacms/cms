@@ -17,11 +17,11 @@ use Tulia\Cms\SearchAnything\Domain\WriteModel\Service\IndexInterface;
 class UsersDocumentCollector extends AbstractDocumentCollector
 {
     public function __construct(
-        private UserSearchCollectorInterface $collector
+        private readonly UserSearchCollectorInterface $collector
     ) {
     }
 
-    public function collect(IndexInterface $index, string $locale, int $offset, int $limit): void
+    public function collect(IndexInterface $index, string $websiteId, string $locale, int $offset, int $limit): void
     {
         foreach ($this->collector->collectDocuments($offset, $limit) as $user) {
             $document = $index->document($user['id']);
@@ -38,7 +38,7 @@ class UsersDocumentCollector extends AbstractDocumentCollector
         }
     }
 
-    public function countDocuments(string $locale): int
+    public function countDocuments(string $websiteId, string $locale): int
     {
         return $this->collector->countDocuments();
     }

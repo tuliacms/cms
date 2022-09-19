@@ -17,15 +17,15 @@ use Tulia\Component\Theme\ThemeInterface;
 class CustomizerResolver implements ResolverInterface
 {
     public function __construct(
-        private DefaultChangesetFactory $defaultChangesetFactory,
-        private StorageInterface $storage,
-        private DetectorInterface $detector,
+        private readonly DefaultChangesetFactory $defaultChangesetFactory,
+        private readonly StorageInterface $storage,
+        private readonly DetectorInterface $detector,
     ) {
     }
 
-    public function resolve(ConfigurationInterface $configuration, ThemeInterface $theme): void
+    public function resolve(ConfigurationInterface $configuration, ThemeInterface $theme, string $websiteId, string $locale): void
     {
-        $changeset = $this->storage->getActiveChangeset($theme->getName(), 'en_US');
+        $changeset = $this->storage->getActiveChangeset($theme->getName(), $websiteId, $locale);
 
         if (! $changeset) {
             $changeset = $this->defaultChangesetFactory->buildForTheme($theme);
@@ -37,16 +37,16 @@ class CustomizerResolver implements ResolverInterface
         }
 
         if ($this->detector->isCustomizerMode()) {
-            $this->applyCustomizerAwareChangeset($configuration);
+            $this->applyCustomizerAwareChangeset($configuration, $websiteId, $locale);
         }
     }
 
-    private function applyCustomizerAwareChangeset(ConfigurationInterface $configuration): void
+    private function applyCustomizerAwareChangeset(ConfigurationInterface $configuration, string $websiteId, string $locale): void
     {
         $id = $this->detector->getChangesetId();
 
-        if ($this->storage->has($id, 'en_US')) {
-            $changeset = $this->storage->get($id, 'en_US');
+        if ($this->storage->has($id, $websiteId, $locale)) {
+            $changeset = $this->storage->get($id, $websiteId, $locale);
 
             foreach ($changeset as $key => $val) {
                 $configuration->add('customizer', $key, $val);

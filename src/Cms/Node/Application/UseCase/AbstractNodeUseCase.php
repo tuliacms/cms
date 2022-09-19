@@ -19,11 +19,11 @@ use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 abstract class AbstractNodeUseCase extends AbstractTransactionalUseCase
 {
     public function __construct(
-        protected NodeRepositoryInterface $repository,
-        protected EventBusInterface $eventBus,
-        protected CanImposePurposeInterface $canImposePurpose,
-        protected SlugGeneratorStrategyInterface $slugGeneratorStrategy,
-        protected ShortcodeProcessorInterface $processor
+        protected readonly NodeRepositoryInterface $repository,
+        protected readonly EventBusInterface $eventBus,
+        protected readonly CanImposePurposeInterface $canImposePurpose,
+        protected readonly SlugGeneratorStrategyInterface $slugGeneratorStrategy,
+        protected readonly ShortcodeProcessorInterface $processor,
     ) {
     }
 
@@ -34,12 +34,6 @@ abstract class AbstractNodeUseCase extends AbstractTransactionalUseCase
         $details = $request->details;
         $attributes = $request->attributes;
 
-        $this->updateCoreModel($node, $details);
-        $this->updateTranslationModel($node, $request->locale, $details, $attributes);
-    }
-
-    private function updateCoreModel(Node $node, array $details): void
-    {
         $node->setStatus($details['status']);
         $node->persistPurposes($this->canImposePurpose, ...$details['purposes']);
         $node->publishNodeAt(new ImmutableDateTime($details['published_at']));
@@ -47,7 +41,7 @@ abstract class AbstractNodeUseCase extends AbstractTransactionalUseCase
         /*if ($details['parent_id']) {
             $node->moveAsChildOf($this->repository->referenceTo($details['parent_id']));
         } else {*/
-            $node->moveAsRootNode();
+        $node->moveAsRootNode();
         //}
 
         if ($details['published_to']) {
@@ -55,13 +49,9 @@ abstract class AbstractNodeUseCase extends AbstractTransactionalUseCase
         } else {
             $node->publishNodeForever();
         }
-    }
 
-    private function updateTranslationModel(Node $node, string $locale, array $details, array $attributes): void
-    {
-        $translation = $node->translate($locale);
-        $translation->persistAttributes(...$this->processAttributes($attributes));
-        $translation->rename($this->slugGeneratorStrategy, $details['title'], $details['slug']);
+        $node->persistAttributes($request->locale, $request->defaultLocale, $this->processAttributes($attributes));
+        $node->changeTitle($request->locale, $request->defaultLocale, $this->slugGeneratorStrategy, $details['title'], $details['slug']);
     }
 
     private function processAttributes(array $attributes): array

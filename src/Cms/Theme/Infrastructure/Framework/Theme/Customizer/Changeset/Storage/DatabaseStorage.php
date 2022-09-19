@@ -17,33 +17,34 @@ use Tulia\Component\Theme\Exception\ChangesetNotFoundException;
 class DatabaseStorage implements StorageInterface
 {
     public function __construct(
-        protected Connection $connection,
-        protected ChangesetFactoryInterface $changesetFactory,
+        private readonly Connection $connection,
+        private readonly ChangesetFactoryInterface $changesetFactory,
     ) {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function has(string $id, string $locale): bool
+    public function has(string $id, string $websiteId, string $locale): bool
     {
-        return $this->getRow($id, $locale) !== [];
+        return $this->getRow($id, $websiteId, $locale) !== [];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getActiveChangeset(string $theme, string $locale): ?ChangesetInterface
+    public function getActiveChangeset(string $theme, string $websiteId, string $locale): ?ChangesetInterface
     {
         $result = $this->connection->fetchAllAssociative('SELECT *
             FROM #__customizer_changeset AS tm
             INNER JOIN #__customizer_changeset_lang AS tl
                 ON (tm.id = tl.customizer_changeset_id)
-            WHERE tm.theme = :theme AND tm.type = :type AND tl.locale = :locale
+            WHERE tm.theme = :theme AND tm.type = :type AND tm.website_id = :website_id AND tl.locale = :locale
             LIMIT 1', [
             'theme'  => $theme,
             'type'   => ChangesetTypeEnum::ACTIVE,
             'locale' => $locale,
+            'website_id' => $websiteId,
         ]);
 
         if ($result === []) {
@@ -56,9 +57,9 @@ class DatabaseStorage implements StorageInterface
     /**
      * {@inheritdoc}
      */
-    public function getTemporaryCopyOfActiveChangeset(string $theme, string $locale): ChangesetInterface
+    public function getTemporaryCopyOfActiveChangeset(string $theme, string $websiteId, string $locale): ChangesetInterface
     {
-        $active = $this->getActiveChangeset($theme, $locale);
+        $active = $this->getActiveChangeset($theme, $websiteId, $locale);
 
         if (!$active) {
             return $this->changesetFactory->factory();
@@ -75,22 +76,23 @@ class DatabaseStorage implements StorageInterface
             'id' => $newId,
         ]);
 
-        return $this->get($newId, $locale);
+        return $this->get($newId, $websiteId, $locale);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function get(string $id, string $locale): ChangesetInterface
+    public function get(string $id, string $websiteId, string $locale): ChangesetInterface
     {
         $result = $this->connection->fetchAllAssociative('SELECT *
             FROM #__customizer_changeset AS tm
             INNER JOIN #__customizer_changeset_lang AS tl
                 ON (tm.id = tl.customizer_changeset_id)
-            WHERE tm.id = :id  AND tl.locale = :locale
+            WHERE tm.id = :id AND tm.website_id = :website_id AND tl.locale = :locale
             LIMIT 1', [
             'id'     => $id,
             'locale' => $locale,
+            'website_id' => $websiteId,
         ]);
 
         if ($result === []) {
@@ -103,7 +105,7 @@ class DatabaseStorage implements StorageInterface
     /**
      * {@inheritdoc}
      */
-    public function save(ChangesetInterface $changeset, string $locale, string $defaultLocale, array $availableLocales): void
+    public function save(ChangesetInterface $changeset, string $websiteId, string $locale, string $defaultLocale, array $availableLocales): void
     {
         if ($changeset->isEmpty()) {
             return;
@@ -116,7 +118,7 @@ class DatabaseStorage implements StorageInterface
          * 3. Current edited changeset will be left in Database for the next savings.
          */
         if ($changeset->getType() === ChangesetTypeEnum::ACTIVE) {
-            $oldActive = $this->getActiveChangeset($changeset->getTheme(), $locale);
+            $oldActive = $this->getActiveChangeset($changeset->getTheme(), $websiteId, $locale);
 
             if ($oldActive && $oldActive->getId() !== $changeset->getId()) {
                 $this->remove($oldActive);
@@ -141,7 +143,7 @@ class DatabaseStorage implements StorageInterface
                 'customizer_changeset_id' => $newId,
             ]);
         } else {
-            $this->persist($changeset, $locale, $defaultLocale, $availableLocales);
+            $this->persist($changeset, $websiteId, $locale, $defaultLocale, $availableLocales);
         }
     }
 
@@ -157,12 +159,12 @@ class DatabaseStorage implements StorageInterface
     /**
      * @param ChangesetInterface $changeset
      */
-    private function persist(ChangesetInterface $changeset, string $locale, string $defaultLocale, array $availableLocales): void
+    private function persist(ChangesetInterface $changeset, string $websiteId, string $locale, string $defaultLocale, array $availableLocales): void
     {
         $payloadMain = json_encode($changeset->getAllNotMultilingual());
         $payloadLang = json_encode($changeset->getAllMultilingual());
 
-        if ($this->getRow($changeset->getId(), $locale) === []) {
+        if ($this->getRow($changeset->getId(), $websiteId, $locale) === []) {
             $this->connection->insert('#__customizer_changeset', [
                 'id'         => $changeset->getId(),
                 'type'       => $changeset->getType(),
@@ -170,6 +172,7 @@ class DatabaseStorage implements StorageInterface
                 'author_id'  => $changeset->getAuthorId(),
                 'created_at' => date('Y-m-d H:i:s'),
                 'payload'    => $payloadMain,
+                'website_id' => $websiteId,
             ]);
 
             foreach ($availableLocales as $loc) {
@@ -269,10 +272,11 @@ class DatabaseStorage implements StorageInterface
         return $changeset;
     }
 
-    private function getRow(string $id, string $locale): array
+    private function getRow(string $id, string $websiteId, string $locale): array
     {
-        $result = $this->connection->fetchAllAssociative('SELECT id FROM #__customizer_changeset WHERE id = :id LIMIT 1', [
-            'id' => $id
+        $result = $this->connection->fetchAllAssociative('SELECT id FROM #__customizer_changeset WHERE id = :id AND website_id = :website_id LIMIT 1', [
+            'id' => $id,
+            'website_id' => $websiteId,
         ]);
 
         return $result[0] ?? [];

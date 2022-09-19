@@ -43,7 +43,6 @@ class FrontendRouteSuffixResolver
 
     public function getSuffix(): string
     {
-        dump($this->suffix);
         if ($this->suffix) {
             return $this->suffix;
         }

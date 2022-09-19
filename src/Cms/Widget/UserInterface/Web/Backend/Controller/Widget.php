@@ -85,6 +85,7 @@ class Widget extends AbstractController
                 $type,
                 $widgetDetailsForm->getData(),
                 $formDescriptor->getData(),
+                $website->getId(),
                 $website->getLocale()->getCode(),
                 $website->getDefaultLocale()->getCode(),
                 $website->getLocaleCodes(),
