@@ -21,5 +21,7 @@ interface StorageInterface
 
     public function save(ChangesetInterface $changeset, string $websiteId, string $locale, string $defaultLocale, array $availableLocales): void;
 
+    public function remove(ChangesetInterface $changeset): void;
+
     public function getActiveChangeset(string $theme, string $websiteId, string $locale): ?ChangesetInterface;
 }

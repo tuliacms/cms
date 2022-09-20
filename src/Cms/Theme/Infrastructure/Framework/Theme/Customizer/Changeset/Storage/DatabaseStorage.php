@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Theme\Infrastructure\Framework\Theme\Customizer\Changeset\Storage;
 
 use Doctrine\DBAL\Connection;
+use Symfony\Component\Uid\Uuid;
 use Tulia\Component\Theme\Customizer\Changeset\ChangesetInterface;
 use Tulia\Component\Theme\Customizer\Changeset\Factory\ChangesetFactoryInterface;
 use Tulia\Component\Theme\Customizer\Changeset\Storage\StorageInterface;
@@ -22,17 +23,11 @@ class DatabaseStorage implements StorageInterface
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function has(string $id, string $websiteId, string $locale): bool
     {
         return $this->getRow($id, $websiteId, $locale) !== [];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getActiveChangeset(string $theme, string $websiteId, string $locale): ?ChangesetInterface
     {
         $result = $this->connection->fetchAllAssociative('SELECT *
@@ -44,7 +39,7 @@ class DatabaseStorage implements StorageInterface
             'theme'  => $theme,
             'type'   => ChangesetTypeEnum::ACTIVE,
             'locale' => $locale,
-            'website_id' => $websiteId,
+            'website_id' => Uuid::fromString($websiteId)->toBinary(),
         ]);
 
         if ($result === []) {
@@ -54,9 +49,6 @@ class DatabaseStorage implements StorageInterface
         return $this->buildChangesetFromDatabaseRow($result[0]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getTemporaryCopyOfActiveChangeset(string $theme, string $websiteId, string $locale): ChangesetInterface
     {
         $active = $this->getActiveChangeset($theme, $websiteId, $locale);
@@ -79,9 +71,6 @@ class DatabaseStorage implements StorageInterface
         return $this->get($newId, $websiteId, $locale);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function get(string $id, string $websiteId, string $locale): ChangesetInterface
     {
         $result = $this->connection->fetchAllAssociative('SELECT *
@@ -92,7 +81,7 @@ class DatabaseStorage implements StorageInterface
             LIMIT 1', [
             'id'     => $id,
             'locale' => $locale,
-            'website_id' => $websiteId,
+            'website_id' => Uuid::fromString($websiteId)->toBinary(),
         ]);
 
         if ($result === []) {
@@ -102,9 +91,6 @@ class DatabaseStorage implements StorageInterface
         return $this->buildChangesetFromDatabaseRow($result[0]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function save(ChangesetInterface $changeset, string $websiteId, string $locale, string $defaultLocale, array $availableLocales): void
     {
         if ($changeset->isEmpty()) {
@@ -147,10 +133,7 @@ class DatabaseStorage implements StorageInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function remove(ChangesetInterface $changeset)
+    public function remove(ChangesetInterface $changeset): void
     {
         $this->connection->delete('#__customizer_changeset', ['id' => $changeset->getId()]);
         $this->connection->delete('#__customizer_changeset_lang', ['customizer_changeset_id' => $changeset->getId()]);
@@ -172,7 +155,7 @@ class DatabaseStorage implements StorageInterface
                 'author_id'  => $changeset->getAuthorId(),
                 'created_at' => date('Y-m-d H:i:s'),
                 'payload'    => $payloadMain,
-                'website_id' => $websiteId,
+                'website_id' => Uuid::fromString($websiteId)->toBinary(),
             ]);
 
             foreach ($availableLocales as $loc) {
@@ -276,7 +259,7 @@ class DatabaseStorage implements StorageInterface
     {
         $result = $this->connection->fetchAllAssociative('SELECT id FROM #__customizer_changeset WHERE id = :id AND website_id = :website_id LIMIT 1', [
             'id' => $id,
-            'website_id' => $websiteId,
+            'website_id' => Uuid::fromString($websiteId)->toBinary(),
         ]);
 
         return $result[0] ?? [];

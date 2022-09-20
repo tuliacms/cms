@@ -23,7 +23,7 @@ class ArrayStorage implements StorageInterface
         return $this->changesets[$websiteId][$id];
     }
 
-    public function remove(ChangesetInterface $changeset)
+    public function remove(ChangesetInterface $changeset): void
     {
        unset($this->changesets[$changeset->getId()]);
     }

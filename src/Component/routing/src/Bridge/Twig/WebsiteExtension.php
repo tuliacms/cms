@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Tulia\Component\Routing\Bridge\Twig;
 
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Component\Routing\Website\WebsiteRegistryInterface;
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 /**
@@ -17,7 +19,19 @@ class WebsiteExtension extends AbstractExtension
     public function __construct(
         private readonly RequestStack $requestStack,
         private readonly WebsiteRegistryInterface $websiteRegistry,
+        private readonly TranslatorInterface $translator,
     ) {
+    }
+
+    public function getFilters(): array
+    {
+        return [
+            new TwigFilter('trans_locale', function (string $code) {
+                return $this->translator->trans('languageName', ['code' => $code], 'languages');
+            }, [
+                'is_safe' => [ 'html' ]
+            ]),
+        ];
     }
 
     public function getFunctions(): array
