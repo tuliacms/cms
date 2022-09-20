@@ -12,8 +12,8 @@ class YesNoControl extends SelectControl
     public function build(array $params): string
     {
         $params['choices'] = $params['choices'] ?? [
-            'yes' => 'yes',
-            'no' => 'no',
+            'yes' => $this->trans('yes'),
+            'no' => $this->trans('no'),
         ];
 
         return parent::build($params);

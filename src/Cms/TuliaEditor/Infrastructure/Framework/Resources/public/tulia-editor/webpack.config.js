@@ -48,6 +48,7 @@ module.exports = {
         vue: 'Vue',
         TuliaEditor: 'TuliaEditor',
         Tulia: 'Tulia',
+        TuliaFilemanager: 'TuliaFilemanager',
         lodash: '_',
     },
     resolve: {

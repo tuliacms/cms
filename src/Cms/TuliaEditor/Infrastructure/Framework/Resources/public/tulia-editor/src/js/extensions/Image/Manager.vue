@@ -4,7 +4,7 @@
 const { computed, defineProps, inject } = require('vue');
 const props = defineProps(['instance']);
 const extension = inject('extension.instance').manager('Image', props.instance);
-const Tulia = require('Tulia');
+const TuliaFilemanager = require('TuliaFilemanager');
 const options = inject('options');
 
 const filemanager = {
@@ -16,7 +16,7 @@ const getFilemanager = () => {
         return filemanager.instance;
     }
 
-    return filemanager.instance = Tulia.Filemanager.create({
+    return filemanager.instance = TuliaFilemanager.create({
         showOnInit: false,
         endpoint: options.filemanager.endpoint,
         filter: { type: 'image' },
@@ -36,7 +36,7 @@ const getFilemanager = () => {
 };
 
 extension.operation('chose-image', (data, success, fail) => {
-    getFilemanager().show();
+    getFilemanager().open();
     success();
 });
 </script>

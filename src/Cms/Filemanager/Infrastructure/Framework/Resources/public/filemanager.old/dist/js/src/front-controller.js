@@ -39,10 +39,3 @@ Tulia.Filemanager = function (options) {
         }
     };
 };
-
-Tulia.Filemanager.create = function (options) {
-    let editor = new Tulia.Filemanager(options);
-    editor.init();
-
-    return editor;
-};

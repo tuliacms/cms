@@ -17,9 +17,9 @@ use Tulia\Component\Image\ImageManagerInterface;
 class Cropper
 {
     public function __construct(
-        private ImageManagerInterface $imageManager,
-        private ImageSizeRegistryInterface $imageSize,
-        private string $filesDirectory,
+        private readonly ImageManagerInterface $imageManager,
+        private readonly ImageSizeRegistryInterface $imageSize,
+        private readonly string $filesDirectory,
     ) {
     }
 
@@ -32,7 +32,7 @@ class Cropper
         @ [$sizeName, $sizeDetails] = explode('_', $sizeName);
 
         if ($this->imageSize->has($sizeName) === false) {
-            throw new \InvalidArgumentException(sprintf('Image size not found in registered sizes, "%s" given.', $sizeName));
+            throw new \InvalidArgumentException(sprintf('Image size "%s" not found in registered sizes.', $sizeName));
         }
 
         $size = $this->imageSize->get($sizeName);

@@ -14,24 +14,18 @@
 
 <script nonce="{{ csp_nonce() }}">
     $(function () {
-        Tulia.Filemanager.create({
+        const filemanager = TuliaFilemanager.create({
             targetInput: '#{{ control_id }}',
-            openTrigger: $('#{{ control_id }}').closest('.input-group').find('button'),
             endpoint: '{{ path('backend.filemanager.endpoint') }}',
             filter: {
                 type: '{{ file_type ?? '*' }}',
             },
             multiple: false,
-            closeOnSelect: true,
-            onSelect: function (files) {
-                if (!files.length) {
-                    return;
-                }
+            closeOnSelect: true
+        });
 
-                $('#{{ control_id }}')
-                    .val(files[0].id)
-                    .trigger('change');
-            }
+        $('#{{ control_id }}').closest('.input-group').find('button').click(function () {
+            filemanager.open();
         });
     });
 </script>

@@ -210,6 +210,8 @@ const select = function () {
         } else {
             input.value = null;
         }
+
+        input.dispatchEvent(new Event('change'));
     } else if (props.options.onSelect) {
         props.options.onSelect(filesList);
     }

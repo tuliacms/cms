@@ -43,8 +43,9 @@ class ThemeRuntime implements RuntimeExtensionInterface
                 'type' => 'inner-text',
                 'default' => null,
             ], $options);
+            $options['control'] = $name;
 
-            return ' data-tulia-customizer-live-control=\'{"control":"'.$name.'","nl2br":"'.($options['nl2br'] ? 'true' : 'false').'","type":"'.$options['type'].'","default":"'.$options['default'].'"}\'';
+            return ' data-tulia-customizer-live-control=\''.json_encode($options).'\'';
         }
 
         return '';

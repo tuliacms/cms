@@ -86,6 +86,30 @@
     </div>
 </div>
 
+<div class="modal fade" id="tuliacms-intro-modal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Witaj w Tulia CMS</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center py-5">
+                <h1 class="display-5 fw-bold mb-5">Witaj w Tulia CMS</h1>
+                <div class="col-lg-8 mx-auto">
+                    <p class="lead mb-4">Rozpoczynasz właśnie testy systemu. Miej na uwadze to, że system może zawierać błędy - ale od czego są testy prawda <i class="far fa-smile-wink"></i></p>
+                    <p class="lead mb-4">Będzie nam miło, gdy zgłosisz znalezione błędy za pomocą formularza dostępnego pod przyciskiem na dole po lewej: <a href="#" title="Znalazłeś błąd?" class="d-inline-block"><i class="fas fa-bug"></i> Znalazłeś błąd?</a></p>
+                    <p class="lead mb-0">Miłego testowania <i class="far fa-smile-wink"></i></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'close'|trans }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% assets ['js_cookie'] %}
+
 <script nonce="{{ csp_nonce() }}">
     $(function () {
         const modal = document.getElementById('tuliacms-found-bug-modal');
@@ -94,5 +118,13 @@
             const src = iframe.getAttribute('data-src');
             iframe.setAttribute('src', src);
         });
+
+        if (Cookies.get('tulia-intromodal-showed') !== 'yes') {
+            const intromodal = document.getElementById('tuliacms-intro-modal');
+            (new bootstrap.Modal(intromodal)).show();
+            intromodal.addEventListener('hidden.bs.modal', event => {
+                Cookies.set('tulia-intromodal-showed', 'yes');
+            });
+        }
     });
 </script>

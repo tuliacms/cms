@@ -24,10 +24,14 @@ class ImageUrlResolver
 
     public function size(File $image, string $sizeName): string
     {
-        $size = $this->imageSize->get($sizeName);
+        if ($sizeName === 'original') {
+            $size = $sizeName;
+        } else {
+            $size = $this->imageSize->get($sizeName)->getCode();
+        }
 
         return $this->router->generate('filemanager.resolve.image.size', [
-            'size' => $size->getCode(),
+            'size' => $size,
             'id'   => $image->getId(),
             'filename' => $image->getFilename(),
         ]);

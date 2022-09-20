@@ -86,8 +86,11 @@
 
                     switch (options.type) {
                         case 'background-image':
+                            if (!options.image_size) {
+                                throw new Error('Please provide "image_size" option.');
+                            }
                             if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value)) {
-                                value = '/media/resolve/image/node_thumbnail/' + value + '/image.jpg';
+                                value = '/media/resolve/image/' + options.image_size + '/' + value + '/image.jpg';
                             }
 
                             $(this).css('background-image', 'url(' + value + ')');
