@@ -1,0 +1,29 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Tulia\Cms\Theme\Domain\WriteModel\Model\Changeset" table="#__theme_customization_changeset">
+        <id name="id" type="uuid">
+            <generator strategy="NONE"/>
+        </id>
+
+        <indexes>
+            <index name="active" columns="theme,type"/>
+        </indexes>
+
+        <field name="updatedAt" type="datetime_immutable"/>
+        <field name="theme" length="64"/>
+        <field name="type" length="16"/>
+        <field name="payload" type="json"/>
+
+        <many-to-one field="themeCustomization" target-entity="Tulia\Cms\Theme\Domain\WriteModel\Model\ThemeCustomization" inversed-by="changesets"/>
+
+        <one-to-many field="translations" orphan-removal="true" target-entity="Tulia\Cms\Theme\Domain\WriteModel\Model\ChangesetTranslation" mapped-by="changeset">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
+    </entity>
+</doctrine-mapping>

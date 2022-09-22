@@ -9,7 +9,7 @@
         <div class="side-panel">
             <div class="panel-headline">
                 <div class="headline-btns">
-                    <a href="{{ path('backend.theme.customize.left', { changeset: changeset.id, returnUrl: returnUrl }) }}" class="customizer-close" data-bs-toggle="tooltip" data-bs-placement="right" title="{{ 'close'|trans }}"><i class="fas fa-times"></i></a>
+                    <a href="{{ path('backend.theme.customize.left', { changeset: changeset.id, returnUrl: returnUrl, theme: theme.name }) }}" class="customizer-close" data-bs-toggle="tooltip" data-bs-placement="right" title="{{ 'close'|trans }}"><i class="fas fa-times"></i></a>
                     {% if locales()|length > 1 %}
                         {% set contentLocale = current_website().locale.code %}
                         <div class="dropdown d-inline" data-bs-toggle="tooltip" data-bs-placement="left" title="{{ 'changeLanguage'|trans }}">
@@ -25,22 +25,22 @@
                         </div>
                     {% endif %}
                     <a href="#" class="btn btn-primary btn-sm customizer-save disabled">{{ 'publish'|trans({}, 'customizer') }}</a>
-                    <div class="dropdown d-inline">
+                    {#<div class="dropdown d-inline">
                         <a class="btn btn-dark btn-sm btn-icon-only btn-customizer-more" href="#" data-bs-toggle="dropdown">
                             <i class="btn-icon fas fa-ellipsis-v"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <h6 class="dropdown-header">{{ 'layouts'|trans({}, 'customizer') }}</h6>
-                            {#<a class="dropdown-item customizer-layouts-list dropdown-item-with-icon" href="#" data-bs-toggle="modal" data-target="#modal-customizer-layouts"><i class="dropdown-icon fas fa-folder-open"></i> {{ 'browseLayouts'|trans({}, 'customizer') }}</a>#}
+                            #}{#<a class="dropdown-item customizer-layouts-list dropdown-item-with-icon" href="#" data-bs-toggle="modal" data-target="#modal-customizer-layouts"><i class="dropdown-icon fas fa-folder-open"></i> {{ 'browseLayouts'|trans({}, 'customizer') }}</a>#}{#
                             <a class="dropdown-item customizer-layouts-save dropdown-item-with-icon" href="#"><i class="dropdown-icon fas fa-save"></i> {{ 'saveCurrentLayout'|trans({}, 'customizer') }}</a>
-                            {% if theme.parent %}
+                            {% if theme.parent %}new .gitignore (GitIgnore)
                                 <div class="dropdown-divider"></div>
                                 <h6 class="dropdown-header">{{ 'tools'|trans({}, 'customizer') }}</h6>
                                 <a class="dropdown-item dropdown-item-with-icon" href="#" data-bs-toggle="modal" data-target="#modal-customizer-copy-settings"><i class="dropdown-icon fas fa-copy"></i> {{ 'copySettingsFromParentTheme'|trans({}, 'customizer') }}</a>
                             {% endif %}
-                            {#<a class="dropdown-item dropdown-item-with-icon" href="#" data-bs-toggle="modal" data-target="#modal-customizer-reset-settings"><i class="dropdown-icon fas fa-eraser"></i> {{ 'resetCustomizerSettings'|trans({}, 'customizer') }}</a>#}
+                            #}{#<a class="dropdown-item dropdown-item-with-icon" href="#" data-bs-toggle="modal" data-target="#modal-customizer-reset-settings"><i class="dropdown-icon fas fa-eraser"></i> {{ 'resetCustomizerSettings'|trans({}, 'customizer') }}</a>#}{#
                         </div>
-                    </div>
+                    </div>#}
                 </div>
             </div>
             <div class="panel-controls">

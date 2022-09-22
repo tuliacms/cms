@@ -1,0 +1,22 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Tulia\Cms\Theme\Domain\WriteModel\Model\ThemeCustomization" table="#__theme_customization">
+        <id name="id" type="uuid">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+
+        <field name="websiteId" type="uuid"/>
+        <field name="theme"/>
+
+        <one-to-many field="changesets" orphan-removal="true" target-entity="Tulia\Cms\Theme\Domain\WriteModel\Model\Changeset" mapped-by="themeCustomization">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
+    </entity>
+</doctrine-mapping>

@@ -58,7 +58,7 @@
                                     <p class="text-muted m-0">{{ 'childOfTheme'|trans({ name: '<i>' ~ item.parent ~ '</i>' }, 'themes')|raw }}</p>
                                 {% endif %}
                             </div>
-                            <div class="card-footer py-0 pr-0">
+                            <div class="card-footer py-0 pr-0 pe-0">
                                 {% if theme.name == item.name %}
                                     <a href="{{ path('backend.theme.customize.current') }}" class="btn btn-sm btn-primary my-3">{{ 'customize'|trans({}, 'themes') }}</a>
                                 {% endif %}
@@ -70,8 +70,8 @@
                                     </form>
                                 {% endif %}
                                 {% if development %}
-                                    <div class="dropup d-inline-block float-right">
-                                        <a href="#" class="card-link d-inline-block px-4 py-3 text-dark" data-bs-toggle="dropdown">
+                                    <div class="dropup d-inline-block float-end">
+                                        <a href="#" class="card-link d-inline-block px-4 py-3 mt-1 text-dark" data-bs-toggle="dropdown">
                                             <i class="fas fa-ellipsis-v"></i>
                                         </a>
                                         <div class="dropdown-menu">

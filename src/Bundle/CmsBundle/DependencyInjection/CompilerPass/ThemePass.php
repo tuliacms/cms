@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\Theme\Domain\ThemeImportCollectionRegistry;
+use Tulia\Cms\Theme\Domain\WriteModel\Service\ThemeImportCollectionRegistry;
 use Tulia\Component\Theme\Configuration\Configuration;
 use Tulia\Component\Theme\Configuration\ConfigurationRegistry;
 use Tulia\Component\Theme\Customizer\Builder\Structure\StructureRegistry;

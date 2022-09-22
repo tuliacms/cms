@@ -9,6 +9,11 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
+use Tulia\Cms\Shared\Application\UseCase\IdResult;
+use Tulia\Cms\Theme\Application\UseCase\LeftChangeset;
+use Tulia\Cms\Theme\Application\UseCase\LeftChangesetRequest;
+use Tulia\Cms\Theme\Application\UseCase\NewCustomization;
+use Tulia\Cms\Theme\Application\UseCase\NewCustomizationRequest;
 use Tulia\Cms\Theme\Infrastructure\Framework\Theme\Customizer\Changeset\Changeset;
 use Tulia\Component\Routing\Website\WebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
@@ -30,19 +35,27 @@ class Customizer extends AbstractController
     ) {
     }
 
-    public function customizeRedirect(Request $request, WebsiteInterface $website): RedirectResponse
-    {
+    public function customizeRedirect(
+        Request $request,
+        WebsiteInterface $website,
+        NewCustomization $newCustomization,
+    ): RedirectResponse {
         $theme = $this->themeManager->getTheme();
 
         if (! $theme) {
             return $this->redirectToRoute('backend.theme');
         }
 
-        $changeset = $this->customizerChangesetStorage->getTemporaryCopyOfActiveChangeset($theme->getName(), $website->getId(), $website->getLocale()->getCode());
+        /** @var IdResult $result */
+        $result = $newCustomization(new NewCustomizationRequest(
+            $theme->getName(),
+            $website->getId(),
+            $website->getLocaleCodes(),
+        ));
 
         $parameters = [
             'theme'     => $theme->getName(),
-            'changeset' => $changeset->getId(),
+            'changeset' => $result->id,
         ];
 
         if ($request->query->has('open')) {
@@ -175,26 +188,19 @@ class Customizer extends AbstractController
     }
 
     /**
-     * @param string $changeset
-     *
-     * @return RedirectResponse
-     *
      * @throws ChangesetNotFoundException
      */
-    public function left(Request $request, WebsiteInterface $website, string $changeset): RedirectResponse
-    {
-        if ($this->customizerChangesetStorage->has($changeset, $website->getId(), $website->getLocale()->getCode())) {
-            $changesetItem = $this->customizerChangesetStorage->get($changeset, $website->getId(), $website->getLocale()->getCode());
-
-            if ($changesetItem->getType() !== ChangesetTypeEnum::TEMPORARY) {
-                return $this->redirectToRoute('backend.theme');
-            }
-
-            $this->customizerChangesetStorage->remove($changesetItem);
-        }
+    public function left(
+        Request $request,
+        WebsiteInterface $website,
+        LeftChangeset $leftChangeset,
+        string $changeset,
+        string $theme,
+    ): RedirectResponse {
+        $leftChangeset(new LeftChangesetRequest($theme, $website->getId(), $changeset));
 
         if (empty($request->query->get('returnUrl')) === false) {
-            return $this->redirectToUrl($request->getUriForPath($request->query->get('returnUrl')));
+            return $this->redirect($request->getUriForPath($request->query->get('returnUrl')));
         }
 
         return $this->redirectToRoute('backend.theme');

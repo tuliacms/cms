@@ -1,0 +1,21 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Tulia\Cms\Theme\Domain\WriteModel\Model\ChangesetTranslation" table="#__theme_customization_changeset_translation">
+        <id name="id" type="uuid">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+
+        <indexes>
+            <index name="translation" columns="changeset_id,locale"/>
+        </indexes>
+
+        <field name="locale"/>
+        <field name="payload" type="json"/>
+
+        <many-to-one field="changeset" target-entity="Tulia\Cms\Theme\Domain\WriteModel\Model\Changeset" inversed-by="translations"/>
+    </entity>
+</doctrine-mapping>

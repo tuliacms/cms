@@ -45,7 +45,7 @@
             <div class="card-footer py-0 pr-0">
                 <a href="{{ path('backend.content.type.content_type.edit', { code: type.code, contentType: type.type }) }}" class="card-link py-3 d-inline-block" title="{{ 'edit'|trans({}, 'messages') }}">{{ 'edit'|trans({}, 'messages') }}</a>
                 <a href="#" class="card-link"></a>
-                <div class="dropup d-inline-block float-right">
+                <div class="dropup d-inline-block float-end">
                     <a href="#" class="card-link d-inline-block px-4 py-3 text-dark" data-bs-toggle="dropdown">
                         <i class="fas fa-ellipsis-v"></i>
                     </a>

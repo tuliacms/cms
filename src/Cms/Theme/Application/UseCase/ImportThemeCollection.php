@@ -7,7 +7,7 @@ namespace Tulia\Cms\Theme\Application\UseCase;
 use Tulia\Cms\Shared\Application\UseCase\AbstractTransactionalUseCase;
 use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
 use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
-use Tulia\Cms\Theme\Domain\ThemeImportCollectionRegistry;
+use Tulia\Cms\Theme\Domain\WriteModel\Service\ThemeImportCollectionRegistry;
 use Tulia\Component\Importer\ImporterInterface;
 use Tulia\Component\Theme\ManagerInterface;
 
