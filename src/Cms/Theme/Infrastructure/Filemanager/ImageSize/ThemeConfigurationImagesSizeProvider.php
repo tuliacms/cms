@@ -17,9 +17,6 @@ class ThemeConfigurationImagesSizeProvider implements ImagesSizeProviderInterfac
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function provide(): array
     {
         $sizes = [];

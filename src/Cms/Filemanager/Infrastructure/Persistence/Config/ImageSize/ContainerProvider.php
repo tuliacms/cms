@@ -11,11 +11,9 @@ use Tulia\Cms\Filemanager\Domain\ImageSize\ImagesSizeProviderInterface;
  */
 class ContainerProvider implements ImagesSizeProviderInterface
 {
-    private array $imageSizes;
-
-    public function __construct(array $imageSizes)
-    {
-        $this->imageSizes = $imageSizes;
+    public function __construct(
+        private readonly array $imageSizes,
+    ) {
     }
 
     public function provide(): array
