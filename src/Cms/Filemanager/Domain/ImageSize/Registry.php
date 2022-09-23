@@ -54,6 +54,7 @@ class Registry implements ImageSizeRegistryInterface
 
         foreach ($this->providers as $provider) {
             foreach ($provider->provide() as $size) {
+                dump($size['name']);
                 $name = $size['name'];
 
                 $this->sizes[$name] = array_merge([

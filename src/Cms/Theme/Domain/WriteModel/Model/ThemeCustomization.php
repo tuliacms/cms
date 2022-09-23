@@ -71,12 +71,7 @@ class ThemeCustomization extends AbstractAggregateRoot
 
     public function activateChangeset(string $id): void
     {
-        if ($this->isSomeActiveOne()) {
-            $activeOne = $this->getActiveOne();
-            $activeOne->detach();
-            $this->changesets->removeElement($activeOne);
-        }
-
+        $this->removeOldActiveChangesets();
         $this->getChangeset($id)->activate();
     }
 
@@ -90,6 +85,11 @@ class ThemeCustomization extends AbstractAggregateRoot
         }
     }
 
+    public function reset(): void
+    {
+        $this->changesets->clear();
+    }
+
     private function modifyUsingActiveOne(
         IdGeneratorInterface $idGenerator,
     ): string {
@@ -97,6 +97,8 @@ class ThemeCustomization extends AbstractAggregateRoot
         $temporary = $this->copyChangesetToNewOne($idGenerator->getNextId(), $activeOne);
 
         $this->changesets->add($temporary);
+
+        dump($activeOne, $temporary);
 
         return $temporary->getId();
     }
@@ -110,6 +112,7 @@ class ThemeCustomization extends AbstractAggregateRoot
             $this,
             $idGenerator->getNextId(),
             $this->theme,
+            $this->websiteId,
             $availableLocales,
             $provider->provideDefaultValues($this->theme),
             $provider->provideMultilingualControls($this->theme),
@@ -134,7 +137,7 @@ class ThemeCustomization extends AbstractAggregateRoot
     private function getChangeset(string $id): Changeset
     {
         foreach ($this->changesets as $changeset) {
-            if ($changeset->isActive()) {
+            if ($changeset->getId() === $id) {
                 return $changeset;
             }
         }
@@ -165,6 +168,16 @@ class ThemeCustomization extends AbstractAggregateRoot
                 $changeset->isActive() === false
                 && $changeset->isUpdatedBefore(ImmutableDateTime::now()->modify(self::OLD_CHANGESETS))
             ) {
+                $changeset->detach();
+                $this->changesets->removeElement($changeset);
+            }
+        }
+    }
+
+    private function removeOldActiveChangesets(): void
+    {
+        foreach ($this->changesets as $changeset) {
+            if ($changeset->isActive()) {
                 $changeset->detach();
                 $this->changesets->removeElement($changeset);
             }

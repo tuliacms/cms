@@ -24,7 +24,7 @@ class AppearenceMenuBuilder implements BuilderInterface
     {
         $registry->add('appearance_customize', [
             'label'  => $this->helper->trans('customize'),
-            'link'   => $this->helper->generateUrl('backend.theme.customize.current'),
+            'link'   => $this->helper->generateUrl('backend.theme.customize'),
             'parent' => 'appearance',
         ]);
         $registry->add('appearance_widgets', [

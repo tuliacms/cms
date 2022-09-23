@@ -9,5 +9,4 @@ namespace Tulia\Component\Theme\Exception;
  */
 class ThemeException extends \Exception
 {
-
 }

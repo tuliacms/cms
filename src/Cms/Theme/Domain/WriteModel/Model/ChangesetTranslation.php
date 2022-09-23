@@ -24,9 +24,9 @@ class ChangesetTranslation
         return $this->locale === $locale;
     }
 
-    public function copy(): self
+    public function copy(Changeset $newChangeset): self
     {
-        $copy = new self($this->changeset, $this->locale, $this->payload);
+        $copy = new self($newChangeset, $this->locale, $this->payload);
         $copy->payload = $this->payload;
 
         return $copy;

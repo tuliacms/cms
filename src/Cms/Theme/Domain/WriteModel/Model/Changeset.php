@@ -26,7 +26,8 @@ class Changeset
         private ?ThemeCustomization $themeCustomization,
         private string $id,
         private readonly string $theme,
-        private readonly string $type = self::TEMPORARY,
+        private readonly string $websiteId,
+        private string $type = self::TEMPORARY,
     ) {
         $this->translations = new ArrayCollection();
         $this->updatedAt = ImmutableDateTime::now();
@@ -36,11 +37,12 @@ class Changeset
         ThemeCustomization $themeCustomization,
         string $id,
         string $theme,
+        string $websiteId,
         array $availableLocales,
         array $payload,
         array $multilingualOptions,
     ): self {
-        $self = new self($themeCustomization, $id, $theme);
+        $self = new self($themeCustomization, $id, $theme, $websiteId);
 
         [$self->payload, $multilingualPayload] = $self->separatePayload($payload, $multilingualOptions);
 
@@ -79,11 +81,11 @@ class Changeset
 
     public function copy(string $id): self
     {
-        $newOne = new self($this->themeCustomization, $id, $this->theme);
+        $newOne = new self($this->themeCustomization, $id, $this->theme, $this->websiteId);
         $newOne->payload = $this->payload;
 
         foreach ($this->translations as $translation) {
-            $newOne->translations->add($translation->copy());
+            $newOne->translations->add($translation->copy($newOne));
         }
 
         return $newOne;

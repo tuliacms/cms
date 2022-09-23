@@ -23,16 +23,6 @@ class ArrayStorage implements StorageInterface
         return $this->changesets[$websiteId][$id];
     }
 
-    public function remove(ChangesetInterface $changeset): void
-    {
-       unset($this->changesets[$changeset->getId()]);
-    }
-
-    public function save(ChangesetInterface $changeset, string $websiteId, string $locale, string $defaultLocale, array $availableLocales): void
-    {
-        $this->changesets[$websiteId][$changeset->getId()] = $changeset;
-    }
-
     public function getActiveChangeset(string $theme, string $websiteId, string $locale): ?ChangesetInterface
     {
         return null;

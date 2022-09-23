@@ -15,16 +15,12 @@ use Twig\Source;
  */
 class NamespaceLoader implements LoaderInterface
 {
-    private ManagerInterface $manager;
-    private AdvancedFilesystemLoader $filesystemLoader;
     private ?FilesystemLoader $loader = null;
 
     public function __construct(
-        ManagerInterface $manager,
-        AdvancedFilesystemLoader $filesystemLoader
+        private readonly ManagerInterface $manager,
+        private readonly AdvancedFilesystemLoader $filesystemLoader,
     ) {
-        $this->manager = $manager;
-        $this->filesystemLoader = $filesystemLoader;
     }
 
     public function getSourceContext($name): Source
@@ -67,10 +63,18 @@ class NamespaceLoader implements LoaderInterface
         $this->loader = new FilesystemLoader;
 
         foreach ($this->manager->getThemes() as $theme) {
-            $this->loader->addPath($theme->getViewsDirectory(), $theme->getName());
-            $this->filesystemLoader->setPath('@'.$theme->getName(), $theme->getViewsDirectory());
+            if (is_dir($theme->getViewsDirectory())) {
+                $this->loader->addPath($theme->getViewsDirectory(), $theme->getName());
+                $this->filesystemLoader->setPath('@'.$theme->getName(), $theme->getViewsDirectory());
+            }
         }
 
-        $this->loader->addPath($this->manager->getTheme()->getViewsDirectory(), 'theme');
+        $theme = $this->manager->getTheme();
+
+        if (!is_dir($theme->getViewsDirectory())) {
+            $theme = $this->manager->getStorage()->get($theme->getParent());
+        }
+
+        $this->loader->addPath($theme->getViewsDirectory(), 'theme');
     }
 }

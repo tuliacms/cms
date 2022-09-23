@@ -7,6 +7,6 @@ namespace Tulia\Component\Theme\Exception;
 /**
  * @author Adam Banaszkiewicz
  */
-class ChangesetException extends \Exception
+final class ThemeConfigurationNotResolverException extends ThemeException
 {
 }

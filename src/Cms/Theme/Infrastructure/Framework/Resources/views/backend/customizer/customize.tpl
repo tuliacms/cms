@@ -154,7 +154,7 @@
             let options = {
                 paths: {
                     preview: '{{ previewUrl|raw }}',
-                    save: '{{ path('backend.theme.customize.save', { changeset: changeset.id, theme: theme.name, _token: csrf_token('theme.customizer.save') })|raw }}'
+                    save: '{{ path('backend.theme.customize.save', { theme: theme.name, _token: csrf_token('theme.customizer.save') })|raw }}'
                 },
                 changeset: '{{ changeset.id }}',
                 predefinedChangesets: {{ predefinedChangesetsJson|json_encode|raw }},

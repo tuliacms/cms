@@ -266,8 +266,9 @@ let Customizer = function (options) {
                 title: self.trans('saveChangesQuestion'),
                 text: self.trans('areYouSureToSaveChanges'),
             }).then(function (result) {
-                if(result.value)
+                if (result.value) {
                     self.saveChangeset();
+                }
             });
         });
     };
@@ -293,6 +294,7 @@ let Customizer = function (options) {
             data: {
                 mode: 'temporary',
                 data: this.getControlsData(),
+                changeset: this.options.changeset,
             },
             dataType: 'json',
             success: function (data) {
@@ -317,11 +319,15 @@ let Customizer = function (options) {
             data: {
                 mode: 'theme',
                 data: this.getControlsData(),
+                changeset: this.options.changeset,
             },
             dataType: 'json',
             success: function (data) {
-                if(data.status == 'success')
-                {
+                if (data.status === 'success') {
+                    if (data.changeset) {
+                        self.options.changeset = data.changeset;
+                    }
+
                     Tulia.Info.success('Zapisano.');
 
                     $('.customizer-form').trigger('tulia:form:submitted');
@@ -364,9 +370,9 @@ let Customizer = function (options) {
 
     this.getRefreshedPreviewPath = function () {
         if (this.options.paths.preview.indexOf('?') === -1) {
-            return this.options.paths.preview + '?refresh=' + (new Date).getTime();
+            return this.options.paths.preview + '?refresh=' + (new Date).getTime() + '&changeset=' + this.options.changeset;
         } else {
-            return this.options.paths.preview + '&refresh=' + (new Date).getTime()
+            return this.options.paths.preview + '&refresh=' + (new Date).getTime() + '&changeset=' + this.options.changeset;
         }
     };
 
@@ -374,8 +380,7 @@ let Customizer = function (options) {
         let data = {};
         let source = $('.customizer-form').serializeArray();
 
-        for(let i = 0; i < source.length; i++)
-        {
+        for (let i = 0; i < source.length; i++) {
             data[source[i].name] = source[i].value;
         }
 

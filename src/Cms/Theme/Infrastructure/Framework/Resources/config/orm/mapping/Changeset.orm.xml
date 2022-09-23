@@ -12,6 +12,7 @@
             <index name="active" columns="theme,type"/>
         </indexes>
 
+        <field name="websiteId" type="uuid"/>
         <field name="updatedAt" type="datetime_immutable"/>
         <field name="theme" length="64"/>
         <field name="type" length="16"/>

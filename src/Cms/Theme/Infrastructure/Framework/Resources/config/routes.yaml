@@ -30,10 +30,6 @@ backend.theme.installator.uninstall:
     controller: Tulia\Cms\Theme\UserInterface\Web\Backend\Controller\Installator::uninstall
     methods: POST
 
-backend.theme.customize.current:
-    path: /administrator/theme/customize
-    controller: Tulia\Cms\Theme\UserInterface\Web\Backend\Controller\Customizer::customizeRedirect
-
 backend.theme.customize.left:
     path: /administrator/theme/customize/{theme}/left/{changeset}
     controller: Tulia\Cms\Theme\UserInterface\Web\Backend\Controller\Customizer::left
@@ -41,7 +37,7 @@ backend.theme.customize.left:
         theme: '([a-zA-Z0-9]+\/[a-zA-Z0-9]+)'
 
 backend.theme.customize.reset:
-    path: /administrator/theme/customize//{theme}reset
+    path: /administrator/theme/customize/{theme}/reset
     controller: Tulia\Cms\Theme\UserInterface\Web\Backend\Controller\Customizer::reset
     requirements:
         theme: '([a-zA-Z0-9]+\/[a-zA-Z0-9]+)'
@@ -53,16 +49,12 @@ backend.theme.customize.copy_changeset_from_parent:
         theme: '([a-zA-Z0-9]+\/[a-zA-Z0-9]+)'
 
 backend.theme.customize.save:
-    path: /administrator/theme/customize/{theme}/save/{changeset}
+    path: /administrator/theme/customize/{theme}/save
     controller: Tulia\Cms\Theme\UserInterface\Web\Backend\Controller\Customizer::save
     methods: POST|GET
     requirements:
         theme: '([a-zA-Z0-9]+\/[a-zA-Z0-9]+)'
 
 backend.theme.customize:
-    path: /administrator/theme/customize/{theme}/{changeset}
+    path: /administrator/theme/customize
     controller: Tulia\Cms\Theme\UserInterface\Web\Backend\Controller\Customizer::customize
-    requirements:
-        theme: '([a-zA-Z0-9]+\/[a-zA-Z0-9]+)'
-    defaults:
-        changeset: null

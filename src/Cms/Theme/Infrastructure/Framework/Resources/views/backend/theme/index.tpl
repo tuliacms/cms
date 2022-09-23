@@ -60,7 +60,7 @@
                             </div>
                             <div class="card-footer py-0 pr-0 pe-0">
                                 {% if theme.name == item.name %}
-                                    <a href="{{ path('backend.theme.customize.current') }}" class="btn btn-sm btn-primary my-3">{{ 'customize'|trans({}, 'themes') }}</a>
+                                    <a href="{{ path('backend.theme.customize') }}" class="btn btn-sm btn-primary my-3">{{ 'customize'|trans({}, 'themes') }}</a>
                                 {% endif %}
                                 {% if development and theme.name != item.name %}
                                     <form action="{{ path('backend.theme.activate') }}" method="POST" class="d-inline-block">

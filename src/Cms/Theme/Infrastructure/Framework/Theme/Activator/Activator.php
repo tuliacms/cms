@@ -15,8 +15,8 @@ use Tulia\Component\Theme\Storage\StorageInterface;
 class Activator implements ActivatorInterface
 {
     public function __construct(
-        private StorageInterface $storage,
-        private DynamicConfigurationInterface $configuration
+        private readonly StorageInterface $storage,
+        private readonly DynamicConfigurationInterface $configuration,
     ) {
     }
 

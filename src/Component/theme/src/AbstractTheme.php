@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Component\Theme;
 
 use Tulia\Component\Theme\Configuration\ConfigurationInterface;
+use Tulia\Component\Theme\Exception\ThemeConfigurationNotResolverException;
 
 /**
  * @author Adam Banaszkiewicz
@@ -86,6 +87,10 @@ abstract class AbstractTheme implements ThemeInterface
      */
     public function getConfig(): ConfigurationInterface
     {
+        if (!$this->config) {
+            throw new ThemeConfigurationNotResolverException('Configuration is not set on this theme. Please resolve theme to set up its configuration.');
+        }
+
         return $this->config;
     }
 
