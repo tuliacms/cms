@@ -15,18 +15,18 @@ use Twig\TwigFunction;
 class BackendMenuExtension extends AbstractExtension
 {
     public function __construct(
-        private HtmlBuilderInterface $builder
+        private readonly HtmlBuilderInterface $builder,
     ) {
     }
 
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('backend_menu', function ($context) {
+            new TwigFunction('backend_menu', function ($context, string $websiteId, string $locale) {
                 $cookie = $context['app']->getRequest()->cookies->get('aside-menuitems-opened');
                 $ids = $cookie ? explode('|', $cookie) : [];
 
-                return $this->builder->build([
+                return $this->builder->build($websiteId, $locale, [
                     'opened' => $ids,
                 ]);
             }, [

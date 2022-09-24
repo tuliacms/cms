@@ -89,7 +89,16 @@ class MenuItem extends AbstractController
             return $this->redirectToRoute('backend.menu');
         }
 
-        $itemDetailsForm = $this->createForm(MenuItemDetailsForm::class, [], ['csrf_protection' => false, 'menu_id' => $menuId]);
+        $itemDetailsForm = $this->createForm(
+            MenuItemDetailsForm::class,
+            [],
+            [
+                'csrf_protection' => false,
+                'menu_id' => $menuId,
+                'locale' => $website->getLocale()->getCode(),
+                'website_id' => $website->getId(),
+            ]
+        );
         $itemDetailsForm->handleRequest($request);
 
         $formDescriptor = $this->contentFormService->buildFormDescriptor(
@@ -151,7 +160,16 @@ class MenuItem extends AbstractController
             $website->getDefaultLocale()->getCode(),
         );
 
-        $itemDetailsForm = $this->createForm(MenuItemDetailsForm::class, $item, ['csrf_protection' => false, 'menu_id' => $menuId]);
+        $itemDetailsForm = $this->createForm(
+            MenuItemDetailsForm::class,
+            $item,
+            [
+                'csrf_protection' => false,
+                'menu_id' => $menuId,
+                'locale' => $website->getLocale()->getCode(),
+                'website_id' => $website->getId(),
+            ]
+        );
         $itemDetailsForm->handleRequest($request);
 
         $formDescriptor = $this->contentFormService->buildFormDescriptor(

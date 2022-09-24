@@ -21,7 +21,7 @@ class NodeMenuBuilder implements BuilderInterface
     ) {
     }
 
-    public function build(ItemRegistryInterface $registry): void
+    public function build(ItemRegistryInterface $registry, string $websiteId, string $locale): void
     {
         foreach ($this->contentTypeRegistry->all() as $type) {
             if ($type->isType('node')) {

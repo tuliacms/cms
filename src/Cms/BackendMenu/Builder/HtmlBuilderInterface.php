@@ -9,5 +9,5 @@ namespace Tulia\Cms\BackendMenu\Builder;
  */
 interface HtmlBuilderInterface
 {
-    public function build(array $params = []): string;
+    public function build(string $websiteId, string $locale, array $params = []): string;
 }

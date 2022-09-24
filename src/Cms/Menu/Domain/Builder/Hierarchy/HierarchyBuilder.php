@@ -29,7 +29,7 @@ class HierarchyBuilder implements HierarchyBuilderInterface
     {
         $hierarchy = new Hierarchy($id);
 
-        $items = $collection === [] ? $this->getItems($id) : $collection;
+        $items = $collection === [] ? $this->getItems($id, $websiteId, $locale) : $collection;
 
         foreach ($items as $item) {
             if ($item->getLevel() === 1) {
@@ -40,9 +40,13 @@ class HierarchyBuilder implements HierarchyBuilderInterface
         return $hierarchy;
     }
 
-    private function getItems(string $id): array
+    private function getItems(string $id, string $websiteId, string $locale): array
     {
-        $menu = $this->menuFinder->findOne(['id' => $id], MenuFinderScopeEnum::BUILD_MENU);
+        $menu = $this->menuFinder->findOne([
+            'id' => $id,
+            'website_id' => $websiteId,
+            'locale' => $locale,
+        ], MenuFinderScopeEnum::BUILD_MENU);
 
         return $menu ? $menu->getItems() : [];
     }

@@ -22,20 +22,11 @@ class MenuMenuBuilder implements BuilderInterface, EventSubscriberInterface
 {
     private const SESSION_KEY = '_cms_app_backendmenu_menu_cache_%s';
 
-    protected BuilderHelperInterface $helper;
-
-    protected MenuFinderInterface $menuFinder;
-
-    protected RequestStack $requestStack;
-
     public function __construct(
-        BuilderHelperInterface $helper,
-        MenuFinderInterface $menuFinder,
-        RequestStack $requestStack
+        private readonly BuilderHelperInterface $helper,
+        private readonly MenuFinderInterface $menuFinder,
+        private readonly RequestStack $requestStack,
     ) {
-        $this->helper = $helper;
-        $this->menuFinder = $menuFinder;
-        $this->requestStack  = $requestStack;
     }
 
     public static function getSubscribedEvents(): array
@@ -59,7 +50,7 @@ class MenuMenuBuilder implements BuilderInterface, EventSubscriberInterface
         }
     }
 
-    public function build(ItemRegistryInterface $registry): void
+    public function build(ItemRegistryInterface $registry, string $websiteId, string $locale): void
     {
         $root = 'menu';
 
@@ -78,7 +69,7 @@ class MenuMenuBuilder implements BuilderInterface, EventSubscriberInterface
             'priority' => 5000,
         ]);
 
-        foreach ($this->getMenus() as $menu) {
+        foreach ($this->getMenus($websiteId, $locale) as $menu) {
             $registry->add($root . '_menu_' . $menu['id'], [
                 'label'    => $menu['name'],
                 'link'     => $this->helper->generateUrl('backend.menu.item', ['menuId' => $menu['id']]),
@@ -88,7 +79,7 @@ class MenuMenuBuilder implements BuilderInterface, EventSubscriberInterface
         }
     }
 
-    private function getMenus(): array
+    private function getMenus(string $websiteId, string $locale): array
     {
         $request = $this->requestStack->getMainRequest();
 
@@ -96,7 +87,10 @@ class MenuMenuBuilder implements BuilderInterface, EventSubscriberInterface
             return $request->getSession()->get($this->getCachekey());
         }
 
-        $source = $this->menuFinder->find([], MenuFinderScopeEnum::INTERNAL);
+        $source = $this->menuFinder->find([
+            'website_id' => $websiteId,
+            'locale' => $locale,
+       ], MenuFinderScopeEnum::INTERNAL);
 
         $menus = [];
 

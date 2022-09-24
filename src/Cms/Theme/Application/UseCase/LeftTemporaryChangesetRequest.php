@@ -9,7 +9,7 @@ use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-final class LeftChangesetRequest implements RequestInterface
+final class LeftTemporaryChangesetRequest implements RequestInterface
 {
     public function __construct(
         public readonly string $theme,

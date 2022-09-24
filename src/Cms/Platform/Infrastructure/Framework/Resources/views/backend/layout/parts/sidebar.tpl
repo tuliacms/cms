@@ -23,7 +23,7 @@
                 </a>
             </div>
             <div class="lead-menu">
-                {{ backend_menu() }}
+                {{ backend_menu(current_website().id, current_website().locale.code) }}
             </div>
         </div>
     </div>

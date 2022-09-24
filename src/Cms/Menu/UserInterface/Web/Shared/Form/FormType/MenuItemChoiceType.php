@@ -26,7 +26,7 @@ class MenuItemChoiceType extends ChoiceType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $choices = $this->collectChoices($options['menu_id']);
+        $choices = $this->collectChoices($options['menu_id'], $options['locale'], $options['website_id']);
 
         $options['choices'] = array_flip($choices);
         $options['constraints'] = [
@@ -77,11 +77,17 @@ class MenuItemChoiceType extends ChoiceType
         $resolver->setAllowedTypes('empty_option', 'bool');
         $resolver->setAllowedTypes('empty_option_label', [ 'null', 'string' ]);
         $resolver->setAllowedTypes('empty_option_translation_domain', [ 'null', 'bool', 'string' ]);
+
+        $resolver->setRequired(['locale', 'website_id']);
     }
 
-    protected function collectChoices(string $menuId): array
+    protected function collectChoices(string $menuId, string $locale, string $websiteId): array
     {
-        $source = $this->menuFinder->findOne(['id' => $menuId], MenuFinderScopeEnum::INTERNAL);
+        $source = $this->menuFinder->findOne([
+            'id' => $menuId,
+            'locale' => $locale,
+            'website_id' => $websiteId,
+        ], MenuFinderScopeEnum::INTERNAL);
 
         if (! $source) {
             return [];

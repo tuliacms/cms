@@ -35,7 +35,7 @@ class MenuCacheClearer implements EventSubscriberInterface
 
     public function clearMenuCache(MenuCreated|MenuUpdated|MenuDeleted $event): void
     {
-        $this->menuCache->invalidateTags([sprintf('menu_%s', $event->id)]);
+        $this->menuCache->invalidateTags([sprintf('menu_%s', $event->id), 'menu']);
     }
 
     public function clearAllMenuCache(): void

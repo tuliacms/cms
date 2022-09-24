@@ -15,8 +15,8 @@ use Tulia\Cms\Menu\Domain\Builder\Hierarchy\HierarchyInterface;
 class CachedHierarchyBuilder implements HierarchyBuilderInterface
 {
     public function __construct(
-        private HierarchyBuilderInterface $builder,
-        private TagAwareCacheInterface $menuCache
+        private readonly HierarchyBuilderInterface $builder,
+        private readonly TagAwareCacheInterface $menuCache,
     ) {
     }
 

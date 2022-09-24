@@ -7,12 +7,15 @@ namespace Tulia\Cms\Website\Domain\WriteModel\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
+use Tulia\Cms\Website\Domain\WriteModel\Event\LocaleAdded;
+use Tulia\Cms\Website\Domain\WriteModel\Event\LocaleDeleted;
 use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteCreated;
 use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteDeleted;
 use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteUpdated;
 use Tulia\Cms\Website\Domain\WriteModel\Exception;
 use Tulia\Cms\Website\Domain\WriteModel\Exception\CannotDeleteWebsiteException;
 use Tulia\Cms\Website\Domain\WriteModel\Exception\CannotTurnOffWebsiteException;
+use Tulia\Cms\Website\Domain\WriteModel\Exception\LocaleNotExistsException;
 use Tulia\Cms\Website\Domain\WriteModel\Rules\CanDeleteWebsite\CanDeleteWebsiteInterface;
 use Tulia\Cms\Website\Domain\WriteModel\Rules\CanDeleteWebsite\CanDeleteWebsiteReasonEnum;
 use Tulia\Cms\Website\Domain\WriteModel\Rules\CanTurnOffWebsite\CanTurnOffWebsiteInterface;
@@ -130,6 +133,8 @@ class Website extends AbstractAggregateRoot
 
     public function replaceLocales(array $locales): void
     {
+        $oldLocales = $this->collectLocaleCodes();
+
         $this->locales->clear();
 
         foreach ($locales as $locale) {
@@ -150,10 +155,22 @@ class Website extends AbstractAggregateRoot
                 (bool) ($locale['is_default'] ?? 1),
             ));
         }
+
+        $newLocales = $this->collectLocaleCodes();
+
+        $added = array_diff($newLocales, $oldLocales);
+        $deleted = array_diff($oldLocales, $newLocales);
+
+        foreach ($added as $code) {
+            $this->recordThat(new LocaleAdded($this->id, $code, $this->getDefaultLocale()->getCode()));
+        }
+
+        foreach ($deleted as $code) {
+            $this->recordThat(new LocaleDeleted($this->id, $code));
+        }
     }
 
     /**
-     * @param Locale $locale
      * @throws Exception\LocalePrefixInvalidException
      * @throws Exception\PathPrefixInvalidException
      */
@@ -178,9 +195,16 @@ class Website extends AbstractAggregateRoot
         $this->recordWebsiteChange();
     }
 
+    public function delete(CanDeleteWebsiteInterface $rules): void
+    {
+        if (CanDeleteWebsiteReasonEnum::OK !== ($reason = $rules->decide($this->id))) {
+            throw CannotDeleteWebsiteException::fromReason($reason, $this->id);
+        }
+
+        $this->recordThat(new WebsiteDeleted($this->id));
+    }
+
     /**
-     * @param Locale $locale
-     *
      * @throws Exception\LocalePrefixInvalidException
      * @throws Exception\PathPrefixInvalidException
      */
@@ -217,12 +241,25 @@ class Website extends AbstractAggregateRoot
         $this->changedInThisSession = true;
     }
 
-    public function delete(CanDeleteWebsiteInterface $rules): void
+    /**
+     * @return string[]
+     */
+    private function collectLocaleCodes(): array
     {
-        if (CanDeleteWebsiteReasonEnum::OK !== ($reason = $rules->decide($this->id))) {
-            throw CannotDeleteWebsiteException::fromReason($reason, $this->id);
+        return array_map(
+            static fn(Locale $v) => $v->getCode(),
+            $this->locales->toArray()
+        );
+    }
+
+    private function getDefaultLocale(): Locale
+    {
+        foreach ($this->locales as $locale) {
+            if ($locale->isDefault()) {
+                return $locale;
+            }
         }
 
-        $this->recordThat(new WebsiteDeleted($this->id));
+        throw new LocaleNotExistsException(sprintf('Default locale of Website %s does not exists, but it should.', $this->id));
     }
 }

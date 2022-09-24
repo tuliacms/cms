@@ -41,14 +41,14 @@ class HtmlBuilder implements HtmlBuilderInterface
         $this->builders[] = $builder;
     }
 
-    public function build(array $params = []): string
+    public function build(string $websiteId, string $locale, array $params = []): string
     {
         $params = array_merge($this->defaults, $params);
 
         $registry = new ItemRegistry();
 
         foreach ($this->builders as $builder) {
-            $builder->build($registry);
+            $builder->build($registry, $websiteId, $locale);
         }
 
         $elements = $registry->all();

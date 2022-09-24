@@ -71,14 +71,18 @@ final class MenuItemDetailsForm extends AbstractType
             'label' => 'parentItem',
             'translation_domain' => 'menu',
             'menu_id' => $options['menu_id'],
+            'locale' => $options['locale'],
+            'website_id' => $options['website_id'],
         ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('menu_id', null);
-        $resolver->setRequired(['menu_id']);
+        $resolver->setRequired(['menu_id', 'locale', 'website_id']);
         $resolver->setAllowedTypes('menu_id', 'string');
+        $resolver->setAllowedTypes('locale', 'string');
+        $resolver->setAllowedTypes('website_id', 'string');
     }
 
     private function buildItemTypesChoices(): array

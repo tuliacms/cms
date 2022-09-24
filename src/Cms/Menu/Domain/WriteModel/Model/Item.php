@@ -57,7 +57,7 @@ class Item
         Item $parent,
         array $locales,
         string $creatingLocale,
-        string $name
+        string $name,
     ): self {
         return new self(
             $menu,

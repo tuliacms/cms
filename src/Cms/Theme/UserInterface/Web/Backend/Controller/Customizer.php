@@ -10,8 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\Shared\Application\UseCase\IdResult;
-use Tulia\Cms\Theme\Application\UseCase\LeftChangeset;
-use Tulia\Cms\Theme\Application\UseCase\LeftChangesetRequest;
+use Tulia\Cms\Theme\Application\UseCase\LeftTemporaryChangeset;
+use Tulia\Cms\Theme\Application\UseCase\LeftTemporaryChangesetRequest;
 use Tulia\Cms\Theme\Application\UseCase\NewCustomization;
 use Tulia\Cms\Theme\Application\UseCase\NewCustomizationRequest;
 use Tulia\Cms\Theme\Application\UseCase\ResetThemeCustomization;
@@ -137,11 +137,11 @@ class Customizer extends AbstractController
     public function left(
         Request $request,
         WebsiteInterface $website,
-        LeftChangeset $leftChangeset,
+        LeftTemporaryChangeset $leftChangeset,
         string $changeset,
         string $theme,
     ): RedirectResponse {
-        $leftChangeset(new LeftChangesetRequest($theme, $website->getId(), $changeset));
+        $leftChangeset(new LeftTemporaryChangesetRequest($theme, $website->getId(), $changeset));
 
         if (empty($request->query->get('returnUrl')) === false) {
             return $this->redirect($request->getUriForPath($request->query->get('returnUrl')));

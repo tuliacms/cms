@@ -20,7 +20,7 @@ class ContactFormMenuBuilder implements BuilderInterface
         $this->helper = $helper;
     }
 
-    public function build(ItemRegistryInterface $registry): void
+    public function build(ItemRegistryInterface $registry, string $websiteId, string $locale): void
     {
         $registry->add('forms', [
             'label'    => $this->helper->trans('forms', [], 'contact-form'),

@@ -20,7 +20,7 @@ class AppearenceMenuBuilder implements BuilderInterface
         $this->helper = $helper;
     }
 
-    public function build(ItemRegistryInterface $registry): void
+    public function build(ItemRegistryInterface $registry, string $websiteId, string $locale): void
     {
         $registry->add('appearance_customize', [
             'label'  => $this->helper->trans('customize'),

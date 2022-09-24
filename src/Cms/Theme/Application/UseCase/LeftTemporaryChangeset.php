@@ -12,7 +12,7 @@ use Tulia\Cms\Theme\Domain\WriteModel\ThemeCustomizationRepositoryInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-final class LeftChangeset extends AbstractTransactionalUseCase
+final class LeftTemporaryChangeset extends AbstractTransactionalUseCase
 {
     public function __construct(
         private readonly ThemeCustomizationRepositoryInterface $repository,
@@ -20,12 +20,12 @@ final class LeftChangeset extends AbstractTransactionalUseCase
     }
 
     /**
-     * @param RequestInterface&LeftChangesetRequest $request
+     * @param RequestInterface&LeftTemporaryChangesetRequest $request
      */
     protected function execute(RequestInterface $request): ?ResultInterface
     {
         $customization = $this->repository->get($request->theme, $request->websiteId);
-        $customization->deleteChangeset($request->changesetId);
+        $customization->deleteTemporaryChangeset($request->changesetId);
 
         $this->repository->save($customization);
 

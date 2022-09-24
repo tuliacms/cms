@@ -14,8 +14,8 @@ use Tulia\Cms\Menu\Domain\Builder\HtmlBuilder\HtmlBuilderInterface;
 class Builder implements BuilderInterface
 {
     public function __construct(
-        protected HierarchyBuilderInterface $hierarchyBuilder,
-        protected HtmlBuilderInterface $htmlBuilder
+        private readonly HierarchyBuilderInterface $hierarchyBuilder,
+        private readonly HtmlBuilderInterface $htmlBuilder,
     ) {
     }
 

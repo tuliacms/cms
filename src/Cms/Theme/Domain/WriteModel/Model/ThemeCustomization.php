@@ -75,10 +75,10 @@ class ThemeCustomization extends AbstractAggregateRoot
         $this->getChangeset($id)->activate();
     }
 
-    public function deleteChangeset(string $changesetId): void
+    public function deleteTemporaryChangeset(string $changesetId): void
     {
         foreach ($this->changesets as $changeset) {
-            if ($changeset->getId() === $changesetId) {
+            if ($changeset->getId() === $changesetId && !$changeset->isActive()) {
                 $changeset->detach();
                 $this->changesets->removeElement($changeset);
             }

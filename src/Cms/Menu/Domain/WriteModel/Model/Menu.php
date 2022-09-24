@@ -85,6 +85,8 @@ class Menu extends AbstractAggregateRoot
             throw MenuItemDoesntExistsException::fromId($this->id, $id);
         }
 
+        $this->recordThat(new MenuUpdated($this->id));
+
         return $item;
     }
 

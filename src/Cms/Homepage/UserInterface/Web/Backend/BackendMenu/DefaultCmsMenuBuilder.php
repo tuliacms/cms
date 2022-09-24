@@ -24,10 +24,8 @@ class DefaultCmsMenuBuilder implements BuilderInterface
      * 5000 Dashboard
      * 4000 Contents
      * 2000 Administration
-     *
-     * @param ItemRegistryInterface $registry
      */
-    public function build(ItemRegistryInterface $registry): void
+    public function build(ItemRegistryInterface $registry, string $websiteId, string $locale): void
     {
         $registry->add('section_dashboard', [
             'type'     => 'section',

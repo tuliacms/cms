@@ -11,5 +11,5 @@ use Tulia\Cms\BackendMenu\Builder\Registry\ItemRegistryInterface;
  */
 interface BuilderInterface
 {
-    public function build(ItemRegistryInterface $registry): void;
+    public function build(ItemRegistryInterface $registry, string $websiteId, string $locale): void;
 }

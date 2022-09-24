@@ -23,7 +23,7 @@ class SettingsMenuBuilder implements BuilderInterface
     /**
      * @param ItemRegistryInterface $registry
      */
-    public function build(ItemRegistryInterface $registry): void
+    public function build(ItemRegistryInterface $registry, string $websiteId, string $locale): void
     {
         $registry->add('settings', [
             'label'    => $this->helper->trans('settings'),

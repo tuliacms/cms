@@ -40,11 +40,11 @@ class DbalQuery extends AbstractDbalQuery
              * Search for rows in the website. Given null search in all websites.
              * @param null|string
              */
-            'website' => null,
+            'website_id' => null,
             /**
              * Locale of the menu/menu_items to fetch.
              */
-            'locale' => 'en_US',
+            'locale' => null,
             /**
              * Visibility of menu items.
              * @param null|int|bool
@@ -118,19 +118,23 @@ class DbalQuery extends AbstractDbalQuery
 
     protected function setDefaults(array $criteria): void
     {
+        if (!$criteria['locale']) {
+            throw new \InvalidArgumentException('Please provide "locale" in query parameters.');
+        }
+        if (!$criteria['website_id']) {
+            throw new \InvalidArgumentException('Please provide "website_id" in query parameters.');
+        }
+
         $qb = $this->queryBuilder
             ->select('tm.*, BIN_TO_UUID(tm.id) AS id')
-            ->from('#__menu', 'tm');
+            ->from('#__menu', 'tm')
+            ->where('tm.website_id = :tm_website_id')
+            ->setParameter('tm_website_id', Uuid::fromString($criteria['website_id'])->toBinary(), PDO::PARAM_STR);
 
         if ($criteria['id']) {
             $qb->andWhere('tm.id = :tm_id')
                 ->setParameter('tm_id', Uuid::fromString($criteria['id'])->toBinary(), PDO::PARAM_STR)
                 ->setMaxResults(1);
-        }
-
-        if ($criteria['website']) {
-            $qb->andWhere('tm.website_id = :tm_website_id')
-                ->setParameter('tm_website_id', $criteria['website'], PDO::PARAM_STR);
         }
     }
 
