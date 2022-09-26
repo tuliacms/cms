@@ -73,7 +73,7 @@ EOF
             $websiteProductionDomain,
             $username,
             $password,
-            $sampleData,
+            $sampleData === 'yes',
         ));
 
         $output->writeln('<info>Tulia CMS installed. Go to http://localhost/ to start new adventure!</info>');

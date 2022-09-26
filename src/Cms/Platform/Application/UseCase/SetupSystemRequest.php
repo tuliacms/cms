@@ -18,7 +18,7 @@ final class SetupSystemRequest implements RequestInterface
         public readonly string $websiteProductionDomain,
         public readonly string $username,
         public readonly string $userPassword,
-        public readonly string $installSampleData,
+        public readonly bool $installSampleData,
     ) {
     }
 }
