@@ -103,6 +103,7 @@ class Node extends AbstractController
         $nodeDetailsForm->handleRequest($request);
 
         $formDescriptor = $this->contentFormService->buildFormDescriptor(
+            $website,
             $nodeType->getCode(),
             [],
             ['nodeDetailsForm' => $nodeDetailsForm]
@@ -175,6 +176,7 @@ class Node extends AbstractController
         $nodeDetailsForm->handleRequest($request);
 
         $formDescriptor = $this->contentFormService->buildFormDescriptor(
+            $website,
             $node_type,
             $nodeArray['attributes'],
             ['nodeDetailsForm' => $nodeDetailsForm]

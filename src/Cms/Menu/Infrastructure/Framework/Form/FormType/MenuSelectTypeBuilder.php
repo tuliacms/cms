@@ -16,16 +16,17 @@ use Tulia\Cms\Menu\Domain\ReadModel\Finder\MenuFinderScopeEnum;
  */
 class MenuSelectTypeBuilder extends AbstractFieldTypeBuilder
 {
-    private MenuFinderInterface $menuFinder;
-
-    public function __construct(MenuFinderInterface $menuFinder)
-    {
-        $this->menuFinder = $menuFinder;
+    public function __construct(
+        private readonly MenuFinderInterface $menuFinder,
+    ) {
     }
 
     public function buildOptions(Field $field, array $options, ContentType $contentType): array
     {
-        $source = $this->menuFinder->find([], MenuFinderScopeEnum::INTERNAL);
+        $source = $this->menuFinder->find([
+            'locale' => $options['locale'],
+            'website_id' => $options['website_id'],
+        ], MenuFinderScopeEnum::INTERNAL);
         $menus = [];
 
         foreach ($source as $item) {

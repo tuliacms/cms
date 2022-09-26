@@ -79,7 +79,8 @@ Tulia.UI.refresh = function (container) {
             .addClass('ui-done-select')
             .chosen({
                 search_contains: true,
-                width: '100%'
+                width: '100%',
+                disable_search_threshold: 6,
             })
             .on('ui:update', function () {
                 $(this).trigger('chosen:updated');

@@ -21,6 +21,7 @@ use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term as Model;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\TermId;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\TaxonomyRepository;
 use Tulia\Component\Datatable\DatatableFactory;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
 
 /**
@@ -175,9 +176,14 @@ class Term extends AbstractController
         return $this->redirectToRoute('backend.term', [ 'taxonomyType' => $taxonomy->getType()->getType() ]);
     }
 
-    private function produceFormDescriptor(Taxonomy $taxonomy, Model $term, Request $request): ContentTypeFormDescriptor
-    {
+    private function produceFormDescriptor(
+        Taxonomy $taxonomy,
+        Model $term,
+        Request $request,
+        WebsiteInterface $website,
+    ): ContentTypeFormDescriptor {
         return $this->contentFormService->buildFormDescriptor(
+            $website,
             $taxonomy->getType(),
             array_merge(
                 [

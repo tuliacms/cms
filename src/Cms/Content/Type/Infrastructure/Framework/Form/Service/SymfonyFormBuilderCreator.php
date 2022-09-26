@@ -16,6 +16,7 @@ use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ConstraintsBuilder;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\FieldTypeMappingRegistry;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\CancelType;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\SubmitType;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -46,6 +47,7 @@ class SymfonyFormBuilderCreator
      * @param Attribute[] $attributes
      */
     public function createBuilder(
+        WebsiteInterface $website,
         ContentType $contentType,
         array $attributes,
         bool $expectCqrsToken = true
@@ -58,7 +60,7 @@ class SymfonyFormBuilderCreator
             $expectCqrsToken
         );
 
-        $this->buildFieldsWithBuilder($builder, $contentType, $fields);
+        $this->buildFieldsWithBuilder($builder, $contentType, $fields, $website);
 
         return $builder;
     }
@@ -85,7 +87,8 @@ class SymfonyFormBuilderCreator
     private function buildFieldsWithBuilder(
         FormBuilderInterface $builder,
         ContentType $contentType,
-        array $fields
+        array $fields,
+        WebsiteInterface $website,
     ): void {
         /** @var Field $field */
         foreach ($fields as $field) {
@@ -93,7 +96,8 @@ class SymfonyFormBuilderCreator
                 $this->symfonyFieldBuilder->buildFieldAndAddToBuilder(
                     $builder,
                     $contentType,
-                    $field
+                    $field,
+                    $website,
                 );
             } catch (ConstraintNotExistsException $e) {
                 $this->logger->warning(

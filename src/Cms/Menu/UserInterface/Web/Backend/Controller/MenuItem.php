@@ -102,6 +102,7 @@ class MenuItem extends AbstractController
         $itemDetailsForm->handleRequest($request);
 
         $formDescriptor = $this->contentFormService->buildFormDescriptor(
+            $website,
             'menu_item',
             [],
             [
@@ -173,6 +174,7 @@ class MenuItem extends AbstractController
         $itemDetailsForm->handleRequest($request);
 
         $formDescriptor = $this->contentFormService->buildFormDescriptor(
+            $website,
             'menu_item',
             $item,
             [

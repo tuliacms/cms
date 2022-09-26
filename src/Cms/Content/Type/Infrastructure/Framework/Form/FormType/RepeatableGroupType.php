@@ -12,18 +12,16 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Service\SymfonyFieldBuilder;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class RepeatableGroupType extends AbstractType
 {
-    private SymfonyFieldBuilder $symfonyFieldBuilder;
-
     public function __construct(
-        SymfonyFieldBuilder $symfonyFieldBuilder
+        private readonly SymfonyFieldBuilder $symfonyFieldBuilder,
     ) {
-        $this->symfonyFieldBuilder = $symfonyFieldBuilder;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -32,7 +30,8 @@ class RepeatableGroupType extends AbstractType
             $this->symfonyFieldBuilder->buildFieldAndAddToBuilder(
                 $builder,
                 $options['content_type'],
-                $field
+                $field,
+                $options['website'],
             );
         }
 
@@ -52,6 +51,9 @@ class RepeatableGroupType extends AbstractType
 
         $resolver->setRequired('fields');
         $resolver->addAllowedTypes('fields', 'array');
+
+        $resolver->setRequired('website');
+        $resolver->addAllowedTypes('website', WebsiteInterface::class);
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options)

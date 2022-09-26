@@ -29,5 +29,13 @@ class ContentBuilderFormExtension extends AbstractTypeExtension
         $resolver->setRequired('content_builder_field_handler');
         $resolver->setAllowedTypes('content_builder_field_handler', ['null', FieldTypeHandlerInterface::class]);
         $resolver->setDefault('content_builder_field_handler', null);
+
+        $resolver->setRequired('locale');
+        $resolver->setAllowedTypes('locale', ['null', 'string']);
+        $resolver->setDefault('locale', null);
+
+        $resolver->setRequired('website_id');
+        $resolver->setAllowedTypes('website_id', ['null', 'string']);
+        $resolver->setDefault('website_id', null);
     }
 }

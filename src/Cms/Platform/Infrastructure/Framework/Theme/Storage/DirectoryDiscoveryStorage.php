@@ -18,7 +18,7 @@ class DirectoryDiscoveryStorage implements StorageInterface
 
     public function __construct(
         private readonly array $extensionsDirectories,
-        private readonly LoggerInterface $appLogger
+        private readonly LoggerInterface $appLogger,
     ) {
     }
 

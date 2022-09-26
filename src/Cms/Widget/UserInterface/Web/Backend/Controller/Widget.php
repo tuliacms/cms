@@ -35,9 +35,9 @@ use Tulia\Component\Templating\ViewInterface;
 class Widget extends AbstractController
 {
     public function __construct(
-        private WidgetRegistryInterface $widgetRegistry,
-        private WidgetRepositoryInterface $repository,
-        private ContentFormService $contentFormService
+        private readonly WidgetRegistryInterface $widgetRegistry,
+        private readonly WidgetRepositoryInterface $repository,
+        private readonly ContentFormService $contentFormService,
     ) {
     }
 
@@ -77,7 +77,7 @@ class Widget extends AbstractController
         $widgetDetailsForm = $this->createForm(WidgetDetailsForm::class, [], ['csrf_protection' => false]);
         $widgetDetailsForm->handleRequest($request);
 
-        $formDescriptor = $this->produceFormDescriptor($type, [], $widgetDetailsForm);
+        $formDescriptor = $this->produceFormDescriptor($type, [], $widgetDetailsForm, $website);
         $formDescriptor->handleRequest($request);
 
         if ($formDescriptor->isFormValid()) {
@@ -127,7 +127,7 @@ class Widget extends AbstractController
         );
         $widgetDetailsForm->handleRequest($request);
 
-        $formDescriptor = $this->produceFormDescriptor($widget->getType(), $widgetData['attributes'], $widgetDetailsForm);
+        $formDescriptor = $this->produceFormDescriptor($widget->getType(), $widgetData['attributes'], $widgetDetailsForm, $website);
         $formDescriptor->handleRequest($request);
 
         if ($formDescriptor->isFormValid()) {
@@ -176,9 +176,14 @@ class Widget extends AbstractController
         return $this->redirectToRoute('backend.widget');
     }
 
-    private function produceFormDescriptor(string $type, array $attributes, FormInterface $widgetDetailsForm): ContentTypeFormDescriptor
-    {
+    private function produceFormDescriptor(
+        string $type,
+        array $attributes,
+        FormInterface $widgetDetailsForm,
+        WebsiteInterface $website,
+    ): ContentTypeFormDescriptor {
         return $this->contentFormService->buildFormDescriptor(
+            $website,
             str_replace('.', '_', 'widget_'.$type),
             $attributes,
             ['widgetDetailsForm' => $widgetDetailsForm]

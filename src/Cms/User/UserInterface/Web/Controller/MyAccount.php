@@ -17,6 +17,7 @@ use Tulia\Cms\User\Application\UseCase\UpdateMyAccountRequest;
 use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
 use Tulia\Cms\User\UserInterface\Web\Form\MyAccountDetailsForm;
 use Tulia\Cms\User\UserInterface\Web\Form\PasswordForm;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
 
 /**
@@ -50,7 +51,7 @@ class MyAccount extends AbstractController
      * @return RedirectResponse|ViewInterface
      * @CsrfToken(id="content_builder_form_user")
      */
-    public function edit(Request $request, UpdateMyAccount $updateMyAccount)
+    public function edit(Request $request, UpdateMyAccount $updateMyAccount, WebsiteInterface $website)
     {
         $user = $this->userRepository->get($this->authenticatedUserProvider->getUser()->getId());
 
@@ -63,7 +64,7 @@ class MyAccount extends AbstractController
         $userDetailsForm = $this->createForm(MyAccountDetailsForm::class, $userData, ['csrf_protection' => false]);
         $userDetailsForm->handleRequest($request);
 
-        $formDescriptor = $this->contentFormService->buildFormDescriptor('user', $userData['attributes'], ['userDetailsForm' => $userDetailsForm]);
+        $formDescriptor = $this->contentFormService->buildFormDescriptor($website, 'user', $userData['attributes'], ['userDetailsForm' => $userDetailsForm]);
         $formDescriptor->handleRequest($request);
 
         if ($formDescriptor->isFormValid()) {

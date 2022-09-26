@@ -11,6 +11,7 @@ use Tulia\Cms\Content\Type\Domain\ReadModel\Model\Field;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ConstraintsBuilderInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\FieldTypeMappingRegistry;
 use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\FormType\RepeatableGroupType;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -18,18 +19,19 @@ use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\FormType\RepeatableGrou
 class SymfonyFieldBuilder
 {
     public function __construct(
-        private FieldTypeMappingRegistry $mappingRegistry,
-        private ConstraintsBuilderInterface $constraintsBuilder,
+        private readonly FieldTypeMappingRegistry $mappingRegistry,
+        private readonly ConstraintsBuilderInterface $constraintsBuilder,
     ) {
     }
 
     public function buildFieldAndAddToBuilder(
         FormBuilderInterface $builder,
         ContentType $contentType,
-        Field $field
+        Field $field,
+        WebsiteInterface $website,
     ): void {
         if ($field->getType() === 'repeatable') {
-            $this->buildRepeatable($builder, $contentType, $field);
+            $this->buildRepeatable($builder, $contentType, $field, $website);
             return;
         }
 
@@ -44,6 +46,8 @@ class SymfonyFieldBuilder
             'constraints' => $this->constraintsBuilder->build($field->getConstraints()),
             'content_builder_field' => $field,
             'content_builder_field_handler' => $typeHandler,
+            'locale' => $website->getLocale()->getCode(),
+            'website_id' => $website->getId(),
         ];
 
         if ($typeBuilder) {
@@ -64,7 +68,8 @@ class SymfonyFieldBuilder
     private function buildRepeatable(
         FormBuilderInterface $builder,
         ContentType $contentType,
-        Field $field
+        Field $field,
+        WebsiteInterface $website,
     ): void {
         $prototypeName = sprintf('__name_%s__', $field->getCode());
 
@@ -87,6 +92,7 @@ class SymfonyFieldBuilder
                     'fields' => $field->getChildren(),
                     'repeatable_field' => true,
                     'content_type' => $contentType,
+                    'website' => $website,
                 ],
             ]);
     }

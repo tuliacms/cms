@@ -9,37 +9,33 @@ use Tulia\Cms\Content\Attributes\Domain\WriteModel\Service\UriToArrayTransformer
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\FieldTypeMappingRegistry;
 use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\ContentTypeFormDescriptor;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class ContentFormService
 {
-    private ContentTypeRegistryInterface $contentTypeRegistry;
-    private SymfonyFormBuilderCreator $formBuilder;
-    private UriToArrayTransformer $attributesToArrayTransformer;
-    private FieldTypeMappingRegistry $fieldTypeMappingRegistry;
-
     public function __construct(
-        ContentTypeRegistryInterface $contentTypeRegistry,
-        SymfonyFormBuilderCreator $formBuilder,
-        UriToArrayTransformer $attributesToArrayTransformer,
-        FieldTypeMappingRegistry $fieldTypeMappingRegistry
+        private readonly ContentTypeRegistryInterface $contentTypeRegistry,
+        private readonly SymfonyFormBuilderCreator $formBuilder,
+        private readonly UriToArrayTransformer $attributesToArrayTransformer,
+        private readonly FieldTypeMappingRegistry $fieldTypeMappingRegistry,
     ) {
-        $this->contentTypeRegistry = $contentTypeRegistry;
-        $this->formBuilder = $formBuilder;
-        $this->attributesToArrayTransformer = $attributesToArrayTransformer;
-        $this->fieldTypeMappingRegistry = $fieldTypeMappingRegistry;
     }
 
     /**
      * @param Attribute[] $attributes
      */
-    public function buildFormDescriptor(string $type, array $attributes, array $viewContext = []): ContentTypeFormDescriptor
-    {
-        $contentType = $this->contentTypeRegistry->get($type);
+    public function buildFormDescriptor(
+        WebsiteInterface $website,
+        string $typeCode,
+        array $attributes,
+        array $viewContext = []
+    ): ContentTypeFormDescriptor {
+        $contentType = $this->contentTypeRegistry->get($typeCode);
         $flattened = $this->attributesToArrayTransformer->transform($attributes);
-        $form = $this->formBuilder->createBuilder($contentType, $flattened);
+        $form = $this->formBuilder->createBuilder($website, $contentType, $flattened);
 
         return new ContentTypeFormDescriptor($this->fieldTypeMappingRegistry, $contentType, $form, $viewContext);
     }

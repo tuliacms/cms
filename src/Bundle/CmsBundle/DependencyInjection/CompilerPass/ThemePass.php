@@ -84,7 +84,6 @@ class ThemePass implements CompilerPassInterface
                 $service->addMethodCall('add', ['image_size', $size['name'], $size]);
             }
         }
-
         if (isset($config['node_content_field'])) {
             $service->addMethodCall('add', ['node_content_field', '', $config['node_content_field']]);
         }

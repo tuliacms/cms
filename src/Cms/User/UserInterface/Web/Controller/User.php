@@ -23,6 +23,7 @@ use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
 use Tulia\Cms\User\Infrastructure\Persistence\Dbal\ReadModel\DbalDatatableFinder;
 use Tulia\Cms\User\UserInterface\Web\Form\UserDetailsForm;
 use Tulia\Component\Datatable\DatatableFactory;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
 
 /**
@@ -57,12 +58,12 @@ class User extends AbstractController
     /**
      * @CsrfToken(id="content_builder_form_user")
      */
-    public function create(Request $request, CreateUser $createUser)
+    public function create(Request $request, CreateUser $createUser, WebsiteInterface $website)
     {
         $userDetailsForm = $this->createForm(UserDetailsForm::class, [], ['csrf_protection' => false]);
         $userDetailsForm->handleRequest($request);
 
-        $formDescriptor = $this->contentFormService->buildFormDescriptor('user', [], ['userDetailsForm' => $userDetailsForm, 'layout' => 'admin']);
+        $formDescriptor = $this->contentFormService->buildFormDescriptor($website, 'user', [], ['userDetailsForm' => $userDetailsForm, 'layout' => 'admin']);
         $formDescriptor->handleRequest($request);
 
         if ($formDescriptor->isFormValid() && $userDetailsForm->isSubmitted() && $userDetailsForm->isValid()) {
@@ -83,7 +84,7 @@ class User extends AbstractController
     /**
      * @CsrfToken(id="content_builder_form_user")
      */
-    public function edit(Request $request, string $id, UpdateUser $updateUser)
+    public function edit(Request $request, string $id, UpdateUser $updateUser, WebsiteInterface $website)
     {
         $user = $this->repository->get($id);
 
@@ -101,7 +102,7 @@ class User extends AbstractController
         );
         $userDetailsForm->handleRequest($request);
 
-        $formDescriptor = $this->contentFormService->buildFormDescriptor('user', $userData['attributes'], ['userDetailsForm' => $userDetailsForm, 'layout' => 'admin']);
+        $formDescriptor = $this->contentFormService->buildFormDescriptor($website, 'user', $userData['attributes'], ['userDetailsForm' => $userDetailsForm, 'layout' => 'admin']);
         $formDescriptor->handleRequest($request);
 
         if ($formDescriptor->isFormValid()) {
