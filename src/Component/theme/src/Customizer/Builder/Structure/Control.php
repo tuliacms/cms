@@ -47,6 +47,16 @@ class Control
         ];
     }
 
+    public function merge(self $control): void
+    {
+        $this->code = $control->code;
+        $this->type = $control->type;
+        $this->label = $control->label;
+        $this->defaultValue = $control->defaultValue;
+        $this->transport = $control->transport;
+        $this->isMultilingual = $control->isMultilingual;
+    }
+
     public function getCode(): string
     {
         return $this->code;

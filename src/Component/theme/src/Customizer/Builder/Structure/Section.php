@@ -10,9 +10,9 @@ namespace Tulia\Component\Theme\Customizer\Builder\Structure;
 class Section
 {
     private string $code;
-    private string $label;
     private array $controls = [];
-    private ?string $parent;
+    private ?string $label = null;
+    private ?string $parent = null;
     private string $transationDomain = 'messages';
 
     public function __construct(string $code, string $label, array $controls = [], ?string $parent = null)
@@ -22,16 +22,35 @@ class Section
         $this->parent = $parent;
 
         foreach ($controls as $control) {
-            $this->controls[] = Control::fromArray($control);
+            $this->controls[$control['code']] = Control::fromArray($control);
         }
     }
 
     public static function fromArray(array $data): self
     {
-        $self = new self($data['code'], $data['label'], $data['controls'], $data['parent']);
+        $self = new self($data['code'], (string) $data['label'], $data['controls'], $data['parent']);
         $self->transationDomain = $data['translation_domain'];
 
         return $self;
+    }
+
+    public function merge(self $section): void
+    {
+        if ($section->label) {
+            $this->label = $section->label ?? $this->label;
+        }
+        if ($section->label) {
+            $this->parent = $section->parent ?? $this->parent;
+        }
+
+        /** @var Control $control */
+        foreach ($section->controls as $control) {
+            if (isset($this->controls[$control->getCode()])) {
+                $this->controls[$control->getCode()]->merge($control);
+            } else {
+                $this->controls[$control->getCode()] = $control;
+            }
+        }
     }
 
     public function getCode(): string

@@ -15,20 +15,22 @@ use Tulia\Component\Theme\ThemeInterface;
  */
 class Builder implements BuilderInterface
 {
-    private StructureRegistry $structureRegistry;
-    private SectionRendererInterface $sectionRenderer;
-
     public function __construct(
-        StructureRegistry $structureRegistry,
-        SectionRendererInterface $sectionRenderer
+        private readonly StructureRegistry $structureRegistry,
+        private readonly SectionRendererInterface $sectionRenderer,
     ) {
-        $this->structureRegistry = $structureRegistry;
-        $this->sectionRenderer = $sectionRenderer;
     }
 
     public function build(ChangesetInterface $changeset, ThemeInterface $theme): CustomizerView
     {
-        $structure = $this->structureRegistry->get($theme->getName());
+        $themes = [$theme->getName()];
+
+        if ($theme->hasParent()) {
+            array_unshift($themes, $theme->getParentName());
+        }
+
+        $structure = $this->structureRegistry->get($themes);
+
         $result = [];
 
         foreach ($structure as $section) {

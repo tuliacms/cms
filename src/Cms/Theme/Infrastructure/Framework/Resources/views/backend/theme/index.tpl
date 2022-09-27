@@ -53,9 +53,9 @@
                                 {% if item.info %}
                                     <p class="card-text mt-3">{{ item.info }}</p>
                                 {% endif %}
-                                {% if item.parent %}
+                                {% if item.hasParent %}
                                     <hr />
-                                    <p class="text-muted m-0">{{ 'childOfTheme'|trans({ name: '<i>' ~ item.parent ~ '</i>' }, 'themes')|raw }}</p>
+                                    <p class="text-muted m-0">{{ 'childOfTheme'|trans({ name: '<i>' ~ item.parentName ~ '</i>' }, 'themes')|raw }}</p>
                                 {% endif %}
                             </div>
                             <div class="card-footer py-0 pr-0 pe-0">

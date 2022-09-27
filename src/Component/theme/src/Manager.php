@@ -30,8 +30,12 @@ class Manager implements ManagerInterface
             return $this->theme;
         }
 
-        $this->theme = $this->loader->load();
-        $this->theme->setConfig($this->configurationLoader->load($this->resolver, $this->theme));
+        $this->theme = $this->loader->getActiveTheme();
+        $this->theme->setConfigurationLoader($this->configurationLoader, $this->resolver);
+
+        if ($this->theme->hasParent()) {
+            $this->theme->setParentThemeLoader(fn($name) => $this->storage->get($name));
+        }
 
         return $this->theme;
     }
@@ -44,15 +48,5 @@ class Manager implements ManagerInterface
     public function getStorage(): StorageInterface
     {
         return $this->storage;
-    }
-
-    public function getResolver(): ResolverAggregateInterface
-    {
-        return $this->resolver;
-    }
-
-    public function getLoader(): ThemeLoaderInterface
-    {
-        return $this->loader;
     }
 }

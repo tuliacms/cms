@@ -11,5 +11,5 @@ use Tulia\Component\Theme\ThemeInterface;
  */
 interface ThemeLoaderInterface
 {
-    public function load(): ThemeInterface;
+    public function getActiveTheme(): ThemeInterface;
 }

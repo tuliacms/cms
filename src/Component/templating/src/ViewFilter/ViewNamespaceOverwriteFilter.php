@@ -67,14 +67,14 @@ class ViewNamespaceOverwriteFilter implements FilterInterface
     {
         $theme = $this->manager->getTheme();
         $themeName = $theme->getName();
-        $parentThemeName = $theme->getParent();
+        $hasParent = $theme->hasParent();
 
         foreach ($views as $key => $view) {
             if (strncmp($view, '@theme/', 7) === 0) {
                 $views[$key] = str_replace('@theme/', "@$themeName/", $view);
             }
-            if ($parentThemeName && strncmp($view, '@parent/', 8) === 0) {
-                $views[$key] = str_replace('@parent/', "@$parentThemeName/", $view);
+            if ($hasParent && strncmp($view, '@parent/', 8) === 0) {
+                $views[$key] = str_replace('@parent/', "@{$theme->getParent()->getName()}/", $view);
             }
         }
 

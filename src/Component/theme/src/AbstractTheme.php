@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Tulia\Component\Theme;
 
 use Tulia\Component\Theme\Configuration\ConfigurationInterface;
+use Tulia\Component\Theme\Configuration\ConfigurationLoaderInterface;
 use Tulia\Component\Theme\Exception\ThemeConfigurationNotResolverException;
+use Tulia\Component\Theme\Resolver\ResolverAggregateInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -22,6 +24,13 @@ abstract class AbstractTheme implements ThemeInterface
     protected $authorUrl;
     protected $info;
     protected $thumbnail;
+    private \Closure $parentThemeLoader;
+    private ?ThemeInterface $parentInstance = null;
+
+    /*public function __construct(
+        private readonly ConfigurationLoaderInterface $configurationLoader,
+    ) {
+    }*/
 
     public function getName(): string
     {
@@ -32,6 +41,16 @@ abstract class AbstractTheme implements ThemeInterface
         $this->resolveName();
 
         return $this->name;
+    }
+
+    public function hasParent(): bool
+    {
+        return !!$this->parent;
+    }
+
+    public function setParentThemeLoader(callable $loader): void
+    {
+        $this->parentThemeLoader = $loader;
     }
 
     public function getVendor(): string
@@ -69,17 +88,23 @@ abstract class AbstractTheme implements ThemeInterface
         return realpath(\dirname((new \ReflectionClass($this))->getFileName()));
     }
 
-    public function getParent(): ?string
+    public function getParent(): self
     {
-        return $this->parent;
+        if (! $this->hasParent()) {
+            throw new \Exception(sprintf('Theme %s does not have a parent. Please check this with hasParent() method.', $this->name));
+        }
+
+        if (!$this->parentInstance) {
+            $this->parentInstance = ($this->parentThemeLoader)($this->parent);
+            $this->parentInstance->setConfigurationLoader($this->configurationLoader, $this->resolverAggregate);
+        }
+
+        return $this->parentInstance;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function hasConfig(): bool
+    public function getParentName(): ?string
     {
-        return (bool) $this->config;
+        return $this->parent;
     }
 
     /**
@@ -88,18 +113,18 @@ abstract class AbstractTheme implements ThemeInterface
     public function getConfig(): ConfigurationInterface
     {
         if (!$this->config) {
-            throw new ThemeConfigurationNotResolverException('Configuration is not set on this theme. Please resolve theme to set up its configuration.');
+            $this->config = $this->configurationLoader->load($this->resolverAggregate, $this);
         }
 
         return $this->config;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setConfig(ConfigurationInterface $config): void
-    {
-        $this->config = $config;
+    public function setConfigurationLoader(
+        ConfigurationLoaderInterface $configurationLoader,
+        ResolverAggregateInterface $resolverAggregate,
+    ): void {
+        $this->configurationLoader = $configurationLoader;
+        $this->resolverAggregate = $resolverAggregate;
     }
 
     public function getAuthor()

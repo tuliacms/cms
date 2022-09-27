@@ -31,7 +31,7 @@ class ThemeRuntime implements RuntimeExtensionInterface
      */
     public function customizerGet(string $name, $default = null)
     {
-        return $this->manager->getTheme()->getConfig()->get('customizer', $name, $default);
+        return $this->manager->getTheme()->getConfig()->getCustomizerVariable($name, $default);
     }
 
     public function customizerLiveControl(string $name, array $options = []): string

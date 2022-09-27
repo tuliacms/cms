@@ -11,7 +11,7 @@ use Tulia\Component\Theme\ThemeInterface;
  */
 class VoidThemeLoader implements ThemeLoaderInterface
 {
-    public function load(): ThemeInterface
+    public function getActiveTheme(): ThemeInterface
     {
         throw new \RuntimeException('You must provide theme loader which always returns any theme!');
     }

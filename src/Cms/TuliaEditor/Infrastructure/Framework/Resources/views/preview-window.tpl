@@ -3,8 +3,7 @@
 {% set prevent_load_backend_assets = true %}
 
 {% assets ['tulia_editor', 'font_awesome'] %}
-{% assets theme().config.all('asset')|keys %}
-{% assets theme().config.all('tulia_editor_plugin')|keys %}
+{% assets theme().config.assets %}
 
 {% block body %}
     <div class="tued-preview-wrapper">

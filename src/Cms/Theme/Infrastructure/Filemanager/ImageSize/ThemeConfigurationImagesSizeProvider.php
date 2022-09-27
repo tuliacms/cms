@@ -21,13 +21,16 @@ class ThemeConfigurationImagesSizeProvider implements ImagesSizeProviderInterfac
     {
         $sizes = [];
 
-        foreach ($this->manager->getTheme()->getConfig()->all('image_size') as $size) {
+        $config = $this->manager->getTheme()->getConfig();
+
+        foreach ($config->getImageSizes() as $size) {
             $sizes[] = [
                 'name'  => $size['name'],
                 'width'  => $size['width'] ?? 0,
                 'height' => $size['height'] ?? 0,
                 'label'  => $size['label'] ?? $size['name'],
-                'translation_domain' => $size['translation_domain'] ?? null,
+                'mode'  => $size['mode'],
+                'translation_domain' => $config->getTranslationDomain(),
             ];
         }
 

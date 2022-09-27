@@ -33,7 +33,7 @@ class CustomizerResolver implements ResolverInterface
         }
 
         foreach ($changeset as $key => $val) {
-            $configuration->add('customizer', $key, $val);
+            $configuration->setCustomizerVariable($key, $val);
         }
 
         if ($this->detector->isCustomizerMode()) {
@@ -49,7 +49,7 @@ class CustomizerResolver implements ResolverInterface
             $changeset = $this->storage->get($id, $websiteId, $locale);
 
             foreach ($changeset as $key => $val) {
-                $configuration->add('customizer', $key, $val);
+                $configuration->setCustomizerVariable($key, $val);
             }
         }
     }

@@ -6,6 +6,7 @@ namespace Tulia\Cms\Theme\Infrastructure\Framework\Theme\Customizer;
 
 use Tulia\Cms\Theme\Domain\WriteModel\Service\DefaultThemeConfigurationProviderInterface;
 use Tulia\Component\Theme\Customizer\Builder\Structure\StructureRegistry;
+use Tulia\Component\Theme\Storage\StorageInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -14,6 +15,7 @@ final class DefaultThemeConfigurationProvider implements DefaultThemeConfigurati
 {
     public function __construct(
         private readonly StructureRegistry $registry,
+        private readonly StorageInterface $storage,
     ) {
     }
 
@@ -21,7 +23,7 @@ final class DefaultThemeConfigurationProvider implements DefaultThemeConfigurati
     {
         $values = [];
 
-        foreach ($this->registry->get($theme) as $section) {
+        foreach ($this->registry->get($this->collectThemeHierarchy($theme)) as $section) {
             foreach ($section->getControls() as $control) {
                 $values[$control->getCode()] = $control->getDefaultValue();
             }
@@ -34,7 +36,7 @@ final class DefaultThemeConfigurationProvider implements DefaultThemeConfigurati
     {
         $controls = [];
 
-        foreach ($this->registry->get($theme) as $section) {
+        foreach ($this->registry->get($this->collectThemeHierarchy($theme)) as $section) {
             foreach ($section->getControls() as $control) {
                 if ($control->isMultilingual()) {
                     $controls[] = $control->getCode();
@@ -43,5 +45,17 @@ final class DefaultThemeConfigurationProvider implements DefaultThemeConfigurati
         }
 
         return $controls;
+    }
+
+    private function collectThemeHierarchy(string $themeName): array
+    {
+        $theme = $this->storage->get($themeName);
+        $themes = [$theme->getName()];
+
+        if ($theme->hasParent()) {
+            array_unshift($themes, $theme->getParentName());
+        }
+
+        return $themes;
     }
 }

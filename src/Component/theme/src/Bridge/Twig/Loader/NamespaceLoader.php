@@ -72,7 +72,7 @@ class NamespaceLoader implements LoaderInterface
         $theme = $this->manager->getTheme();
 
         if (!is_dir($theme->getViewsDirectory())) {
-            $theme = $this->manager->getStorage()->get($theme->getParent());
+            $theme = $theme->getParent();
         }
 
         $this->loader->addPath($theme->getViewsDirectory(), 'theme');

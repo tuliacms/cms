@@ -6,7 +6,6 @@ namespace Tulia\Component\Theme\Assetter;
 
 use Requtize\Assetter\AssetterInterface;
 use Requtize\Assetter\Exception\MissingAssetException;
-use Tulia\Component\Theme\ThemeInterface;
 use Tulia\Component\Theme\ManagerInterface;
 
 /**
@@ -23,25 +22,10 @@ class ThemeConfigurationAssetsLoader
     /**
      * @throws MissingAssetException
      */
-    public function load(string $websiteId, string $locale): void
+    public function load(): void
     {
         $theme = $this->manager->getTheme();
 
-        if ($theme->getParent() && $this->manager->getStorage()->has($theme->getParent())) {
-            $parent = $this->manager->getStorage()->get($theme->getParent());
-
-            $this->manager->getResolver()->resolve($theme->getConfig(), $parent, $websiteId, $locale);
-            $this->loadAssets($parent);
-        }
-
-        $this->loadAssets($theme);
-    }
-
-    /**
-     * @throws MissingAssetException
-     */
-    private function loadAssets(ThemeInterface $theme): void
-    {
-        $this->assetter->require(array_keys($theme->getConfig()->all('asset')));
+        $this->assetter->require($theme->getConfig()->getAssets());
     }
 }

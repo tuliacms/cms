@@ -22,9 +22,6 @@ class DirectoryDiscoveryStorage implements StorageInterface
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function all(): iterable
     {
         $this->resolveThemes();
@@ -32,9 +29,6 @@ class DirectoryDiscoveryStorage implements StorageInterface
         return $this->themes;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function add(ThemeInterface $theme): void
     {
         $this->resolveThemes();
@@ -42,9 +36,6 @@ class DirectoryDiscoveryStorage implements StorageInterface
         $this->themes[$theme->getName()] = $theme;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function get(string $name): ThemeInterface
     {
         $this->resolveThemes();
@@ -56,9 +47,6 @@ class DirectoryDiscoveryStorage implements StorageInterface
         return $this->themes[$name];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function has(?string $name): bool
     {
         if (!$name) {
@@ -70,9 +58,6 @@ class DirectoryDiscoveryStorage implements StorageInterface
         return isset($this->themes[$name]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): \Traversable
     {
         $this->resolveThemes();

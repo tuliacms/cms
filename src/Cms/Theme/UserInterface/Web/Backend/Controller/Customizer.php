@@ -163,11 +163,11 @@ class Customizer extends AbstractController
             return $this->redirectToRoute('backend.theme.customize');
         }
 
-        if (! $themeInstance->getParent()) {
+        if (! $themeInstance->hasParent()) {
             return $this->redirectToRoute('backend.theme.customize');
         }
 
-        $parent  = $this->themeManager->getStorage()->get($themeInstance->getParent());
+        $parent  = $themeInstance->getParent();
 
         $changeset = $this->customizerChangesetStorage->getActiveChangeset($parent->getName(), $website->getId(), $website->getLocale()->getCode());
 

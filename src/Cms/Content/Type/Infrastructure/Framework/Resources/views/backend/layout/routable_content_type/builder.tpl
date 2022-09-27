@@ -58,6 +58,6 @@
         creationMode: {{ creationMode ? 'true' : 'false' }},
         listingUrl: '{{ path('backend.content.type.homepage') }}',
         csrfToken: '{{ csrf_token('create-content-type') }}',
-        themeNodeContentFieldName: '{{ theme.config.get('node_content_field') }}'
+        themeNodeContentFieldName: '{{ theme.config.nodeContentField }}'
     };
 </script>

@@ -13,15 +13,10 @@ use Tulia\Component\Theme\ThemeInterface;
  */
 class DefaultChangesetFactory
 {
-    private ChangesetFactoryInterface $changesetFactory;
-    private StructureRegistry $structureRegistry;
-
     public function __construct(
-        ChangesetFactoryInterface $changesetFactory,
-        StructureRegistry $structureRegistry
+        private readonly ChangesetFactoryInterface $changesetFactory,
+        private readonly StructureRegistry $structureRegistry,
     ) {
-        $this->changesetFactory = $changesetFactory;
-        $this->structureRegistry = $structureRegistry;
     }
 
     public function buildForTheme(ThemeInterface $theme): ChangesetInterface
@@ -29,7 +24,13 @@ class DefaultChangesetFactory
         $changeset = $this->changesetFactory->factory();
         $changeset->setTheme($theme->getName());
 
-        foreach ($this->structureRegistry->get($changeset->getTheme()) as $section) {
+        $themes = [$theme->getName()];
+
+        if ($theme->hasParent()) {
+            array_unshift($themes, $theme->getParentName());
+        }
+
+        foreach ($this->structureRegistry->get($themes) as $section) {
             foreach ($section->getControls() as $control) {
                 $changeset->set($control->getCode(), $control->getDefaultValue());
             }

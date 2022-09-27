@@ -21,8 +21,4 @@ interface ManagerInterface
      * @return ThemeInterface[]
      */
     public function getThemes(): iterable;
-
-    public function getResolver(): ResolverAggregateInterface;
-
-    public function getLoader(): ThemeLoaderInterface;
 }

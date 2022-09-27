@@ -33,10 +33,10 @@ class ThemePass implements CompilerPassInterface
 
         foreach ($container->getParameter('cms.themes.configuration') as $theme => $config) {
             if (isset($config['configuration']['base'])) {
-                $this->processThemeConfiguration($container, $configurationRegistry, 'base', $theme, $config['configuration']['base']);
+                $this->processThemeConfiguration($container, $configurationRegistry, 'base', $theme, $config['configuration']['base'], $config['translation_domain']);
             }
             if (isset($config['configuration']['customizer'])) {
-                $this->processThemeConfiguration($container, $configurationRegistry, 'customizer', $theme, $config['configuration']['customizer']);
+                $this->processThemeConfiguration($container, $configurationRegistry, 'customizer', $theme, $config['configuration']['customizer'], $config['translation_domain']);
             }
             if (isset($config['imports']['collections'])) {
                 $this->processThemeImports($container, $themeImportCollectionRegistry, $theme, $config['imports']['collections']);
@@ -54,38 +54,34 @@ class ThemePass implements CompilerPassInterface
         }
     }
 
-    private function processThemeConfiguration(ContainerBuilder $container, Definition $registry, string $group, string $theme, array $config): void
+    private function processThemeConfiguration(ContainerBuilder $container, Definition $registry, string $group, string $theme, array $config, string $translationDomain): void
     {
         $service = new Definition(Configuration::class);
         $service->setShared(true);
+        $service->addMethodCall('setTranslationDomain', [$translationDomain]);
 
         if (isset($config['assets'])) {
             foreach ($config['assets'] as $asset) {
-                $service->addMethodCall('add', ['asset', $asset]);
-            }
-        }
-        if (isset($config['colors'])) {
-            foreach ($config['colors'] as $color) {
-                $service->addMethodCall('add', ['color', $color['name'], $color['value']]);
+                $service->addMethodCall('addAsset', [$asset]);
             }
         }
         if (isset($config['widget_spaces'])) {
             foreach ($config['widget_spaces'] as $space) {
-                $service->addMethodCall('add', ['widget_space', $space['name'], $space['label']]);
+                $service->addMethodCall('addWidgetSpace', [$space['name'], $space['label']]);
             }
         }
         if (isset($config['widget_styles'])) {
             foreach ($config['widget_styles'] as $style) {
-                $service->addMethodCall('add', ['widget_style', $style['name'], $style['label']]);
+                $service->addMethodCall('addWidgetStyle', [$style['name'], $style['label']]);
             }
         }
         if (isset($config['image_sizes'])) {
             foreach ($config['image_sizes'] as $size) {
-                $service->addMethodCall('add', ['image_size', $size['name'], $size]);
+                $service->addMethodCall('addImageSize', [$size['name'], $size['width'], $size['height'], $size['mode']]);
             }
         }
         if (isset($config['node_content_field'])) {
-            $service->addMethodCall('add', ['node_content_field', '', $config['node_content_field']]);
+            $service->addMethodCall('setNodeContentField', [$config['node_content_field']]);
         }
 
         $serviceName = sprintf('theme.configuration.%s.%s', $theme, $group);

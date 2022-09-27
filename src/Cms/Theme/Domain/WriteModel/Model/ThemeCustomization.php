@@ -98,8 +98,6 @@ class ThemeCustomization extends AbstractAggregateRoot
 
         $this->changesets->add($temporary);
 
-        dump($activeOne, $temporary);
-
         return $temporary->getId();
     }
 

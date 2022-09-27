@@ -21,25 +21,16 @@ class ArrayStorage implements StorageInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function all(): iterable
     {
         return $this->themes;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function add(ThemeInterface $theme): void
     {
         $this->themes[$theme->getName()] = $theme;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function get(string $name): ThemeInterface
     {
         if (!isset($this->themes[$name])) {
@@ -49,17 +40,11 @@ class ArrayStorage implements StorageInterface
         return $this->themes[$name];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function has(?string $name): bool
     {
         return isset($this->themes[$name]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->themes);

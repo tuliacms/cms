@@ -13,7 +13,7 @@ services:
         exclude: '../../../../{Infrastructure/Framework/Resources,UI/Web/Controller/Backend/Theme.php}'
 
     Tulia\Component\Theme\Loader\ThemeLoader\ThemeLoaderInterface:
-        class: Tulia\Cms\Theme\Infrastructure\Framework\Theme\Loader\ThemeLoader
+        class: Tulia\Cms\Theme\Infrastructure\Framework\Theme\Loader\ConfigurationThemeLoader
 
     Tulia\Cms\Theme\Infrastructure\Filemanager\ImageSize\ThemeConfigurationImagesSizeProvider:
         tags: [ filemanager.image_size.provider ]

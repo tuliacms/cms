@@ -137,12 +137,12 @@ class DatatableFinder extends AbstractDatatableFinder
 
     private function collectSpacesList(): array
     {
-        $theme  = $this->themeManager->getTheme();
-        $spaces = $theme->hasConfig() ? $theme->getConfig()->getRegisteredWidgetSpaces() : [];
+        $config = $this->themeManager->getTheme()->getConfig();
+        $spaces = $config->getWidgetSpaces();
         $spacesList = [];
 
         foreach ($spaces as $space) {
-            $spacesList[$space['name']] = $this->translator->trans($space['label'], [], $space['translation_domain']);
+            $spacesList[$space['name']] = $this->translator->trans($space['label'], [], $config->getTranslationDomain());
         }
 
         return $spacesList;

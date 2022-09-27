@@ -14,7 +14,7 @@ use Tulia\Cms\Platform\Infrastructure\DefaultTheme\DefaultTheme;
 /**
  * @author Adam Banaszkiewicz
  */
-class ThemeLoader implements ThemeLoaderInterface
+class ConfigurationThemeLoader implements ThemeLoaderInterface
 {
     public function __construct(
         private readonly StorageInterface $storage,
@@ -23,7 +23,7 @@ class ThemeLoader implements ThemeLoaderInterface
     ) {
     }
 
-    public function load(): ThemeInterface
+    public function getActiveTheme(): ThemeInterface
     {
         $config = $this->configuration->get('cms.theme');
         $websiteId = $this->website->getId();

@@ -11,7 +11,7 @@ class StructureRegistry
 {
     private array $structureByThemes;
 
-    public function addForTheme(string $theme, array $structure)
+    public function addForTheme(string $theme, array $structure): void
     {
         $this->structureByThemes[$theme] = $structure;
     }
@@ -19,16 +19,22 @@ class StructureRegistry
     /**
      * @return Section[]
      */
-    public function get(string $theme): array
+    public function get(array $themes): array
     {
-        if (isset($this->structureByThemes[$theme]) === false) {
-            return [];
-        }
-
         $result = [];
 
-        foreach ($this->structureByThemes[$theme] as $section) {
-            $result[] = Section::fromArray($section);
+        foreach ($themes as $theme) {
+            if (isset($this->structureByThemes[$theme]) === false) {
+                continue;
+            }
+
+            foreach ($this->structureByThemes[$theme] as $section) {
+                if (isset($result[$section['code']])) {
+                    $result[$section['code']]->merge(Section::fromArray($section));
+                } else {
+                    $result[$section['code']] = Section::fromArray($section);
+                }
+            }
         }
 
         return $result;

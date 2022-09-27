@@ -30,8 +30,8 @@ class PredefinedChangesetRegistry
             $changesets = $this->structureByThemes[$theme->getName()];
         }
 
-        if (isset($this->structureByThemes[$theme->getParent()])) {
-            $changesets += $this->structureByThemes[$theme->getParent()];
+        if ($theme->hasParent() && isset($this->structureByThemes[$theme->getParent()->getName()])) {
+            $changesets += $this->structureByThemes[$theme->getParent()->getName()];
         }
 
         $result = [];

@@ -11,13 +11,15 @@ use Tulia\Component\Theme\Configuration\ConfigurationInterface;
  */
 interface ThemeInterface
 {
-    public function hasConfig(): bool;
+    public function getName(): string;
 
     public function getConfig(): ConfigurationInterface;
 
-    public function setConfig(ConfigurationInterface $config): void;
+    public function getParent(): ThemeInterface;
 
-    public function getParent(): ?string;
+    public function getParentName(): ?string;
 
-    public function getName(): string;
+    public function hasParent(): bool;
+
+    public function setParentThemeLoader(callable $loader): void;
 }

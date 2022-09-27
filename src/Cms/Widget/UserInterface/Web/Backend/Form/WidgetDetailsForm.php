@@ -55,10 +55,8 @@ final class WidgetDetailsForm extends AbstractType
         $theme = $this->themeManager->getTheme();
         $widgetStyles = [];
 
-        if ($theme->hasConfig()) {
-            foreach ($theme->getConfig()->getRegisteredWidgetStyles() as $style) {
-                $widgetStyles[$this->translator->trans($style['label'], [], $style['translation_domain'])] = $style['name'];
-            }
+        foreach ($theme->getConfig()->getWidgetStyles() as $style) {
+            $widgetStyles[$this->translator->trans($style['label'], [], $theme->getConfig()->getTranslationDomain())] = $style['name'];
         }
 
         $options['label'] = 'styles';
@@ -76,19 +74,16 @@ final class WidgetDetailsForm extends AbstractType
     public function buildSpaceOptions(): array
     {
         $theme = $this->themeManager->getTheme();
-        $spaces = [];
 
-        if ($theme->hasConfig()) {
-            $spaces = $theme->getConfig()->getRegisteredWidgetSpaces();
-            $spaces = array_combine(
-                array_map(function ($item) {
-                    return $item['label'];
-                }, $spaces),
-                array_map(function ($item) {
-                    return $item['name'];
-                }, $spaces),
-            );
-        }
+        $spaces = $theme->getConfig()->getWidgetSpaces();
+        $spaces = array_combine(
+            array_map(function ($item) {
+                return $item['label'];
+            }, $spaces),
+            array_map(function ($item) {
+                return $item['name'];
+            }, $spaces),
+        );
 
         $options['label'] = 'space';
         $options['translation_domain'] = 'widgets';
