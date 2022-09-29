@@ -29,24 +29,27 @@ final class RegisterMissingOptions extends AbstractTransactionalUseCase
      */
     protected function execute(RequestInterface $request): ?ResultInterface
     {
-        foreach ($this->fetchWebsites($request->websiteIdList) as $website) {
-            $this->optionsRegistrator->registerMissingOptions($website->getId());
+        foreach ($this->fetchWebsiteIdList($request->websiteIdList) as $id) {
+            $this->optionsRegistrator->registerMissingOptions($id);
         }
 
         return null;
     }
 
     /**
-     * @return Website[]
+     * @return string[]
      */
-    private function fetchWebsites(array $websites): Collection
+    private function fetchWebsiteIdList(array $websites): array
     {
-        $criteria = [];
+        $ids = array_map(
+            static fn($v) => $v->getId(),
+            $this->finder->all()
+        );
 
         if ($websites !== []) {
-            $criteria = ['id__in' => $websites];
+            $ids = array_intersect($ids, $websites);
         }
 
-        return $this->finder->find($criteria, WebsiteFinderScopeEnum::INTERNAL);
+        return $ids;
     }
 }

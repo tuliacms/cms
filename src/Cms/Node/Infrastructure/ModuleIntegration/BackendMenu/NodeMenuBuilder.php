@@ -13,7 +13,7 @@ use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface
 /**
  * @author Adam Banaszkiewicz
  */
-class NodeMenuBuilder implements BuilderInterface
+final class NodeMenuBuilder implements BuilderInterface
 {
     public function __construct(
         private readonly BuilderHelperInterface $helper,

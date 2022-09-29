@@ -129,8 +129,8 @@ final class WebsiteProvider
                     ),
                     'path_prefix' => (string) $locale['path_prefix'],
                     'locale_prefix' => (string) $locale['locale_prefix'],
-                    'locale_code' => (string) $locale['locale_code'],
-                    'default' => (bool) $locale['default'],
+                    'locale_code' => (string) $locale['code'],
+                    'is_default' => (bool) $locale['is_default'],
                     'ssl_mode' => (string) $locale['ssl_mode'],
                 ];
             }
@@ -142,7 +142,7 @@ final class WebsiteProvider
     private static function findDefaultWebsite(array $locales, string $activeWebsiteId): array
     {
         foreach ($locales as $locale) {
-            if ($locale['id'] === $activeWebsiteId && $locale['default']) {
+            if ($locale['id'] === $activeWebsiteId && $locale['is_default']) {
                 return $locale;
             }
         }

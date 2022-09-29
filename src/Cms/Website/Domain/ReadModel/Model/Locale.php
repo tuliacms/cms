@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Website\Domain\ReadModel\Model;
 
-use Tulia\Component\Routing\Enum\SslModeEnum;
-
 /**
  * @author Adam Banaszkiewicz
  */

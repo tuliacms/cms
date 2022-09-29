@@ -34,10 +34,23 @@
 </template>
 
 <script setup>
-const { defineProps, inject } = require('vue');
+const { defineProps, inject, computed } = require('vue');
 
 const blocksPicker = inject('blocks.picker');
 const translator = inject('translator');
+const options = inject('options');
 
 const props = defineProps(['availableBlocks', 'blockPickerData']);
+
+const availableBlocks = computed(function () {
+    let blocks = [];
+
+    for (let i in props.availableBlocks) {
+        if (0 <= options.themes.indexOf(props.availableBlocks[i].theme) || props.availableBlocks[i].theme === '*') {
+            blocks.push(props.availableBlocks[i]);
+        }
+    }
+
+    return blocks;
+});
 </script>

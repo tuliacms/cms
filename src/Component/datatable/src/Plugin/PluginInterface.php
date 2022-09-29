@@ -13,9 +13,9 @@ use Tulia\Component\Datatable\Finder\FinderContext;
 interface PluginInterface
 {
     public function supports(string $configurationKey): bool;
-    public function getColumns(): array;
+    public function getColumns(FinderContext $context): array;
     public function prepareQueryBuilder(QueryBuilder $queryBuilder, FinderContext $context): QueryBuilder;
-    public function buildActions(array $row): array;
+    public function buildActions(FinderContext $context, array $row): array;
     public function getFilters(FinderContext $context): array;
     public function prepareResult(array $result): array;
 }

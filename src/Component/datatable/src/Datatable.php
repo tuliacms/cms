@@ -51,19 +51,16 @@ class Datatable
         $this->plugins[] = $plugin;
     }
 
-    public function generateFront(array $options): array
+    public function generateFront(array $contextSource = []): array
     {
-        $context = $this->createFinderContext();
+        $context = $this->createFinderContext($contextSource);
 
         $front = [];
-        $front['columns'] = $this->getColumns();
-
-        if ($options['actions_column'] === true) {
-            $front['columns']['actions'] = [
-                'type'  => 'actions',
-                'label' => $this->translator->trans('actions'),
-            ];
-        }
+        $front['columns'] = $this->getColumns($context);
+        $front['columns']['actions'] = [
+            'type'  => 'actions',
+            'label' => $this->translator->trans('actions'),
+        ];
 
         foreach ($this->getFilters($context) as $name => $info) {
             $front['filters'][$name] = [
@@ -101,17 +98,18 @@ class Datatable
         return $front;
     }
 
-    public function generateResponse(): JsonResponse
+    public function generateResponse(array $contextSource = []): JsonResponse
     {
-        $context = $this->createFinderContext();
+        $context = $this->createFinderContext($contextSource);
 
         $filters = (new FilterCollectionBuilder())->build(
             (array) $this->request->get('filter', []),
             $this->getFilters($context),
-            $this->getColumns()
+            $this->getColumns($context)
         );
 
         $result = $this->getAll(
+            $context,
             $filters,
             $this->request->get('sort_by'),
             $this->request->get('sort_dir'),
@@ -119,7 +117,7 @@ class Datatable
             (int) $this->request->get('page')
         );
 
-        foreach ($this->getColumns() as $column => $info) {
+        foreach ($this->getColumns($context) as $column => $info) {
             foreach ($result as $key => $row) {
                 if (isset($row[$column]) && isset($info['view'])) {
                     $data = array_merge($info['view_context'] ?? [], [
@@ -134,7 +132,7 @@ class Datatable
         return new JsonResponse([
             'data' => $result,
             'meta' => [
-                'total_rows' => $this->countAll($filters),
+                'total_rows' => $this->countAll($context, $filters),
                 'limit' => (int) $this->request->get('limit'),
                 'page' => (int) $this->request->get('page'),
                 'sort_by' => $this->request->get('sort_by'),
@@ -143,12 +141,12 @@ class Datatable
         ]);
     }
 
-    public function getColumns(): array
+    private function getColumns(FinderContext $context): array
     {
-        $columns[] = $this->finder->getColumns();
+        $columns[] = $this->finder->getColumns($context);
 
         foreach ($this->plugins as $plugin) {
-            $columns[] = $plugin->getColumns();
+            $columns[] = $plugin->getColumns($context);
         }
 
         $columns = array_merge(...$columns);
@@ -170,13 +168,17 @@ class Datatable
         return $columns;
     }
 
-    public function getAll(array $filters = [], ?string $orderBy = null, ?string $orderDir = null, ?int $limit = null, ?int $page = null): array
-    {
-        $context = $this->createFinderContext();
-
+    private function getAll(
+        FinderContext $context,
+        array $filters = [],
+        ?string $orderBy = null,
+        ?string $orderDir = null,
+        ?int $limit = null,
+        ?int $page = null
+    ): array {
         $qb = $this->getQueryBuilder($context);
 
-        $this->applyOrderBy($qb, $orderBy, $orderDir);
+        $this->applyOrderBy($context, $qb, $orderBy, $orderDir);
         $this->applyPagination($qb, $limit, $page);
         $this->applyFilters($qb, $filters);
 
@@ -190,10 +192,10 @@ class Datatable
 
         foreach ($result as $key => $row) {
             $actions = [];
-            $actions[] = $this->finder->buildActions($row);
+            $actions[] = $this->finder->buildActions($context, $row);
 
             foreach ($this->plugins as $plugin) {
-                $actions[] = $plugin->buildActions($row);
+                $actions[] = $plugin->buildActions($context, $row);
             }
 
             foreach ($actions as $gk => $group) {
@@ -225,9 +227,9 @@ class Datatable
         return $result;
     }
 
-    public function countAll(array $filters = []): int
+    private function countAll(FinderContext $context, array $filters = []): int
     {
-        $qb = $this->getQueryBuilder($this->createFinderContext());
+        $qb = $this->getQueryBuilder($context);
         $qb->select('COUNT(*) AS count');
         $this->applyFilters($qb, $filters);
 
@@ -247,12 +249,9 @@ class Datatable
         return array_merge(...$filters);
     }
 
-    private function createFinderContext(): FinderContext
+    private function createFinderContext(array $context): FinderContext
     {
-        return new FinderContext(
-            $this->request->getLocale(),
-            $this->request->getDefaultLocale()
-        );
+        return new FinderContext($context);
     }
 
     private function getQueryBuilder(FinderContext $context): QueryBuilder
@@ -264,7 +263,7 @@ class Datatable
             $queryBuilder = $plugin->prepareQueryBuilder($queryBuilder, $context);
         }
 
-        foreach ($this->getColumns() as $name => $info) {
+        foreach ($this->getColumns($context) as $name => $info) {
             if (isset($info['selector'])) {
                 $queryBuilder->addSelect(sprintf('%s AS %s', $info['selector'], $name));
             }
@@ -273,13 +272,13 @@ class Datatable
         return $queryBuilder;
     }
 
-    private function applyOrderBy(QueryBuilder $qb, ?string $orderBy = null, ?string $orderDir = null): void
+    private function applyOrderBy(FinderContext $context, QueryBuilder $qb, ?string $orderBy = null, ?string $orderDir = null): void
     {
         if (! $orderBy || ! $orderDir) {
             return;
         }
 
-        $columns = $this->getColumns();
+        $columns = $this->getColumns($context);
 
         if (isset($columns[$orderBy]['sortable']) === false || $columns[$orderBy]['sortable'] !== true) {
             return;

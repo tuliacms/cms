@@ -66,18 +66,19 @@ class Website extends AbstractAggregateRoot
             $data['name'] ?? '',
             $data['backend_prefix'] ?? '/administrator'
         );
+        $website->active = $data['active'] ?? true;
 
         foreach ($data['locales'] ?? [] as $locale) {
-            $website->addLocale(new Locale(
+            $website->locales[] = new Locale(
                 $website,
                 $locale['code'] ?? 'en_US',
                 $locale['domain'] ?? 'localhost',
-                $locale['domainDevelopment'] ?? 'localhost',
-                $locale['localePrefix'] ?? null,
-                $locale['pathPrefix'] ?? null,
-                $locale['sslMode'] ?? null,
-                $locale['isDefault'] ?? null,
-            ));
+                $locale['domain_development'] ?? 'localhost',
+                $locale['locale_prefix'] ?? null,
+                $locale['path_prefix'] ?? null,
+                SslModeEnum::tryFrom($locale['ssl_mode'] ?? SslModeEnum::ALLOWED_BOTH),
+                (bool) ($locale['is_default'] ?? false),
+            );
         }
 
         return $website;
@@ -89,6 +90,7 @@ class Website extends AbstractAggregateRoot
             'id' => $this->id,
             'name' => $this->name,
             'active' => $this->active,
+            'backend_prefix' => $this->backendPrefix,
             'locales' => $this->localesToArray(),
         ];
     }

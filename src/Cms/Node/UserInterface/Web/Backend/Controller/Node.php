@@ -54,22 +54,26 @@ class Node extends AbstractController
         return $this->redirectToRoute('backend.node.list', ['node_type' => $node_type]);
     }
 
-    public function list(Request $request, string $node_type): ViewInterface
+    public function list(Request $request, string $node_type, WebsiteInterface $website): ViewInterface
     {
         $nodeTypeObject = $this->findNodeType($node_type);
-        $this->finder->setContentType($nodeTypeObject);
 
         return $this->view('@backend/node/list.tpl', [
             'nodeType'   => $nodeTypeObject,
-            'datatable'  => $this->factory->create($this->finder, $request),
+            'datatable'  => $this->factory->create($this->finder, $request)->generateFront([
+                'website' => $website,
+                'node_type' => $this->findNodeType($node_type),
+            ]),
             'taxonomies' => $this->collectTaxonomies($nodeTypeObject),
         ]);
     }
 
-    public function datatable(Request $request, string $node_type): JsonResponse
+    public function datatable(Request $request, string $node_type, WebsiteInterface $website): JsonResponse
     {
-        $this->finder->setContentType($this->findNodeType($node_type));
-        return $this->factory->create($this->finder, $request)->generateResponse();
+        return $this->factory->create($this->finder, $request)->generateResponse([
+            'website' => $website,
+            'node_type' => $this->findNodeType($node_type),
+        ]);
     }
 
     /**

@@ -47,7 +47,7 @@ class DbalTermDatatableFinder extends AbstractDatatableFinder implements TermDat
     /**
      * {@inheritdoc}
      */
-    public function getColumns(): array
+    public function getColumns(FinderContext $context): array
     {
         return [
             'id' => [
@@ -110,7 +110,7 @@ class DbalTermDatatableFinder extends AbstractDatatableFinder implements TermDat
     /**
      * {@inheritdoc}
      */
-    public function buildActions(array $row): array
+    public function buildActions(FinderContext $context, array $row): array
     {
         return [
             'main' => '@backend/taxonomy/term/parts/datatable/links/edit-link.tpl',

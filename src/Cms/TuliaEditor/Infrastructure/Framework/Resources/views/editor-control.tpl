@@ -2,6 +2,12 @@
 
 <div id="{{ params.id }}"></div>
 
+{% set themes = [theme().name] %}
+
+{% if theme().hasParent %}
+    {% set themes = themes|merge([theme().parentName]) %}
+{% endif %}
+
 <script>
     $(function () {
         TuliaEditor.trans('{{ user().locale }}', 'default', {
@@ -77,7 +83,8 @@
                 endpoints: {
                     form_list: '{{ path('backend.contact_form.list_forms') }}'
                 }
-            }
+            },
+            themes: ['{{ themes|join("', '")|raw }}'],
         });
     });
 </script>

@@ -7,6 +7,7 @@ namespace Tulia\Cms\Node\Infrastructure\External\Doctrine\Dbal\ReadModel;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use PDO;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\Node\Domain\ReadModel\Datatable\NodeDatatableFinderInterface;
@@ -20,8 +21,6 @@ use Tulia\Component\Datatable\Finder\FinderContext;
  */
 class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDatatableFinderInterface
 {
-    private ContentType $contentType;
-
     public function __construct(
         Connection $connection,
         private TermFinderInterface $termFinder,
@@ -30,26 +29,15 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
         parent::__construct($connection);
     }
 
-    public function setContentType(ContentType $contentType): void
-    {
-        $this->contentType = $contentType;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigurationKey(): string
     {
         return __CLASS__;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getColumns(): array
+    public function getColumns(FinderContext $context): array
     {
-        $context = [
-            'contentType' => $this->contentType,
+        $viewContext = [
+            'contentType' => $context['node_type'],
         ];
 
         $columns = [
@@ -63,7 +51,7 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
                 'label' => 'title',
                 'html_attr' => ['class' => 'col-title'],
                 'view' => '@backend/node/parts/datatable/title.tpl',
-                'view_context' => $context,
+                'view_context' => $viewContext,
             ],
             'published_at' => [
                 'selector' => 'tm.published_at',
@@ -112,9 +100,6 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
         return $filters;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function prepareQueryBuilder(QueryBuilder $queryBuilder, FinderContext $context): QueryBuilder
     {
         $queryBuilder
@@ -123,15 +108,17 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
             ->leftJoin('tm', '#__node_translation', 'tl', 'tm.id = tl.node_id AND tl.locale = :locale')
             ->leftJoin('tm', '#__node_has_purpose', 'tnhf', 'tm.id = tnhf.node_id')
             ->where('tm.type = :type')
-            ->setParameter('type', $this->contentType->getCode(), PDO::PARAM_STR)
-            ->setParameter('locale', $context->locale, PDO::PARAM_STR)
+            ->andWhere('tm.website_id = :website_id')
+            ->setParameter('type', $context['node_type']->getCode(), PDO::PARAM_STR)
+            ->setParameter('locale', $context['website']->getLocale()->getCode(), PDO::PARAM_STR)
+            ->setParameter('website_id', Uuid::fromString($context['website']->getId())->toBinary(), PDO::PARAM_STR)
             ->addOrderBy('tm.level', 'ASC')
             ->addGroupBy('tm.id')
         ;
 
-        if (false === $context->isDefaultLocale()) {
+        /*if (false === $context->isDefaultLocale()) {
             $queryBuilder->addSelect('IF(ISNULL(tl.title), 0, 1) AS translated');
-        }
+        }*/
 
         if ($this->supportsCategoryTaxonomy()) {
             $queryBuilder
@@ -153,27 +140,24 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
         return $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function buildActions(array $row): array
+    public function buildActions(FinderContext $context, array $row): array
     {
-        $context = [
-            'contentType' => $this->contentType,
+        $viewContext = [
+            'contentType' => $context['node_type'],
         ];
 
         return [
             'main' => [
                 'view' => '@backend/node/parts/datatable/links/edit-link.tpl',
-                'view_context' => $context,
+                'view_context' => $viewContext,
             ],
             'preview' => [
                 'view' => '@backend/node/parts/datatable/links/preview-link.tpl',
-                'view_context' => $context,
+                'view_context' => $viewContext,
             ],
             'delete' => [
                 'view' => '@backend/node/parts/datatable/links/delete-link.tpl',
-                'view_context' => $context,
+                'view_context' => $viewContext,
             ],
         ];
     }

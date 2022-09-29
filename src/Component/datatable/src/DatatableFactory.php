@@ -16,9 +16,9 @@ use Tulia\Component\Templating\EngineInterface;
 class DatatableFactory
 {
     public function __construct(
-        private TranslatorInterface $translator,
-        private PluginsRegistry $pluginsRegistry,
-        private EngineInterface $engine,
+        private readonly TranslatorInterface $translator,
+        private readonly PluginsRegistry $pluginsRegistry,
+        private readonly EngineInterface $engine,
     ) {
     }
 

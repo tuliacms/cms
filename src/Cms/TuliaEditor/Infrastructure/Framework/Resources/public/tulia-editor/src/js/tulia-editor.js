@@ -89,6 +89,8 @@ export default {
         filemanager: {
             image_resolve_path: null,
             endpoint: null
-        }
+        },
+        // Themes supported by this instance of Editor
+        themes: [],
     }
 }

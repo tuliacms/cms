@@ -13,19 +13,19 @@ class Website
     protected string $name;
     protected string $backendPrefix;
     protected bool $active = true;
-
-    /**
-     * @var Locale[]
-     */
+    /** @var Locale[] */
     protected array $locales = [];
 
     public function __construct(string $id, array $locales, string $backendPrefix, string $name, bool $active = true)
     {
         $this->id = $id;
-        $this->locales = $locales;
         $this->backendPrefix = $backendPrefix;
         $this->name = $name;
         $this->active = $active;
+
+        foreach ($locales as $locale) {
+            $this->addLocale($locale);
+        }
     }
 
     public static function buildFromArray(array $data = []): self

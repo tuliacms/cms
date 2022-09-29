@@ -19,7 +19,7 @@ abstract class AbstractPlugin implements PluginInterface
         return $queryBuilder;
     }
 
-    public function buildActions(array $row): array
+    public function buildActions(FinderContext $context, array $row): array
     {
         return [];
     }
@@ -29,7 +29,7 @@ abstract class AbstractPlugin implements PluginInterface
         return [];
     }
 
-    public function getColumns(): array
+    public function getColumns(FinderContext $context): array
     {
         return [];
     }

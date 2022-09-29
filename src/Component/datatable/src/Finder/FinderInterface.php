@@ -13,7 +13,7 @@ interface FinderInterface
 {
     public function getConfigurationKey(): string;
 
-    public function getColumns(): array;
+    public function getColumns(FinderContext $context): array;
 
     public function getFilters(FinderContext $context): array;
 
@@ -21,7 +21,7 @@ interface FinderInterface
 
     public function getQueryBuilder(): QueryBuilder;
 
-    public function buildActions(array $row): array;
+    public function buildActions(FinderContext $context, array $row): array;
 
     public function prepareResult(array $result): array;
 

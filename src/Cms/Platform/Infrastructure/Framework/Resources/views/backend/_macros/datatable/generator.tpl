@@ -2,7 +2,6 @@
     {% assets ['datatable_tulia'] %}
 
     {% set datatableId = 'tulia-datatable-' ~ uniqid() %}
-    {% set front = datatable.generateFront({ actions_column: options.actions_column ?? true }) %}
 
     <div id="{{ datatableId }}"></div>
 
@@ -11,8 +10,8 @@
             new Tulia.DataTable('#{{ datatableId }}', {
                 data_endpoint: '{{ options.data_endpoint ?? '#' }}',
                 per_page_limit: {{ options.per_page_limit ?? 20 }},
-                columns: {{ front.columns|default([])|json_encode|raw }},
-                filters: {{ front.filters|default([])|json_encode|raw }},
+                columns: {{ datatable.columns|default([])|json_encode|raw }},
+                filters: {{ datatable.filters|default([])|json_encode|raw }},
                 pagination: {{ (options.pagination ?? true) ? 'true' : 'false' }},
                 i18n: {
                     translations: {

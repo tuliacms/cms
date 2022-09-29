@@ -24,7 +24,7 @@ class DbalDatatableFinder extends AbstractDatatableFinder
     /**
      * {@inheritdoc}
      */
-    public function getColumns(): array
+    public function getColumns(FinderContext $context): array
     {
         return [
             'id' => [
@@ -98,7 +98,7 @@ class DbalDatatableFinder extends AbstractDatatableFinder
     /**
      * {@inheritdoc}
      */
-    public function buildActions(array $row): array
+    public function buildActions(FinderContext $context, array $row): array
     {
         return [
             'main' => '@backend/user/user/parts/datatable/links/edit-link.tpl',

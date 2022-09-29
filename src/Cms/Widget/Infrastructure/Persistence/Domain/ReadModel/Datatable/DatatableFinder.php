@@ -38,7 +38,7 @@ class DatatableFinder extends AbstractDatatableFinder
     /**
      * {@inheritdoc}
      */
-    public function getColumns(): array
+    public function getColumns(FinderContext $context): array
     {
         $context = [
             'widget_names' => $this->collectWidgetsNames(),
@@ -127,7 +127,7 @@ class DatatableFinder extends AbstractDatatableFinder
     /**
      * {@inheritdoc}
      */
-    public function buildActions(array $row): array
+    public function buildActions(FinderContext $context, array $row): array
     {
         return [
             'main' => '@backend/widget/parts/datatable/links/edit-link.tpl',

@@ -7,6 +7,7 @@ namespace Tulia\Cms\Website\UserInterface\Web\Controller\Backend;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
+use Tulia\Cms\Platform\Infrastructure\Framework\Exception\NotDevelopmentEnvironmentAccessDeniedException;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\Website\Application\UseCase\CreateWebsite;
 use Tulia\Cms\Website\Application\UseCase\CreateWebsiteRequest;
@@ -14,11 +15,11 @@ use Tulia\Cms\Website\Application\UseCase\DeleteWebsite;
 use Tulia\Cms\Website\Application\UseCase\DeleteWebsiteRequest;
 use Tulia\Cms\Website\Application\UseCase\UpdateWebsite;
 use Tulia\Cms\Website\Application\UseCase\UpdateWebsiteRequest;
+use Tulia\Cms\Website\Domain\ReadModel\Finder\WebsiteFinderInterface;
 use Tulia\Cms\Website\Domain\ReadModel\Finder\WebsiteFinderScopeEnum;
 use Tulia\Cms\Website\Domain\WriteModel\Exception\CannotDeleteWebsiteException;
 use Tulia\Cms\Website\Domain\WriteModel\Exception\CannotTurnOffWebsiteException;
 use Tulia\Cms\Website\Domain\WriteModel\WebsiteRepositoryInterface;
-use Tulia\Cms\Website\Infrastructure\Persistence\Doctrine\Dbal\Finder\DbalFinder;
 use Tulia\Cms\Website\UserInterface\Web\Form\WebsiteForm;
 use Tulia\Cms\Website\UserInterface\Web\Service\WebsiteRequestExtractor;
 use Tulia\Component\Templating\ViewInterface;
@@ -29,9 +30,9 @@ use Tulia\Component\Templating\ViewInterface;
 class Website extends AbstractController
 {
     public function __construct(
-        private DbalFinder $finder,
-        private WebsiteRepositoryInterface $repository,
-        private WebsiteRequestExtractor $requestExtractor
+        private readonly WebsiteFinderInterface $finder,
+        private readonly WebsiteRepositoryInterface $repository,
+        private readonly WebsiteRequestExtractor $requestExtractor,
     ) {
     }
 
@@ -45,16 +46,15 @@ class Website extends AbstractController
      */
     public function list()
     {
-        $result = $this->finder->find([], WebsiteFinderScopeEnum::BACKEND_LISTING);
-
         return $this->view('@backend/website/list.tpl', [
-            'websites' => $result,
+            'websites' => $this->finder->all(),
         ]);
     }
 
     /**
      * @return RedirectResponse|ViewInterface
      * @CsrfToken(id="website_form")
+     * @throws NotDevelopmentEnvironmentAccessDeniedException
      */
     public function create(Request $request, CreateWebsite $createWebsite)
     {
@@ -64,6 +64,7 @@ class Website extends AbstractController
             'id' => $this->repository->getNextId(),
             'locales' => [
                 [
+                    'domain_development' => 'localhost',
                     'domain' => $request->getHttpHost(),
                     'code' => $request->getPreferredLanguage(),
                     'is_default' => true,
@@ -104,6 +105,7 @@ class Website extends AbstractController
     /**
      * @return RedirectResponse|ViewInterface
      * @CsrfToken(id="website_form")
+     * @throws NotDevelopmentEnvironmentAccessDeniedException
      */
     public function edit(string $id, Request $request, UpdateWebsite $updateWebsite)
     {
