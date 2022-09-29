@@ -28,21 +28,21 @@ use Tulia\Component\Templating\ViewInterface;
 class Menu extends AbstractController
 {
     public function __construct(
-        private DatatableFactory $factory,
-        private MenuDatatableFinderInterface $finder
+        private readonly DatatableFactory $factory,
+        private readonly MenuDatatableFinderInterface $finder,
     ) {
     }
 
-    public function list(Request $request): ViewInterface
+    public function list(Request $request, WebsiteInterface $website): ViewInterface
     {
         return $this->view('@backend/menu/menu/list.tpl', [
-            'datatable' => $this->factory->create($this->finder, $request),
+            'datatable' => $this->factory->create($this->finder, $request)->generateFront(['website' => $website]),
         ]);
     }
 
-    public function datatable(Request $request): JsonResponse
+    public function datatable(Request $request, WebsiteInterface $website): JsonResponse
     {
-        return $this->factory->create($this->finder, $request)->generateResponse();
+        return $this->factory->create($this->finder, $request)->generateResponse(['website' => $website]);
     }
 
     /**

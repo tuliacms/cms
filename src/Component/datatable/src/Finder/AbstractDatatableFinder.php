@@ -17,7 +17,11 @@ abstract class AbstractDatatableFinder implements FinderInterface
     ) {
     }
 
-    abstract public function getConfigurationKey(): string;
+    public function getConfigurationKey(): string
+    {
+        return get_class($this);
+    }
+
     abstract public function getColumns(FinderContext $context): array;
     abstract public function prepareQueryBuilder(QueryBuilder $queryBuilder, FinderContext $context): QueryBuilder;
 

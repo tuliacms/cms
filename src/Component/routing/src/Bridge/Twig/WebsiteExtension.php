@@ -52,6 +52,11 @@ class WebsiteExtension extends AbstractExtension
             }, [
                  'is_safe' => [ 'html' ]
             ]),
+            new TwigFunction('page_locale', function () {
+                return $this->requestStack->getMainRequest()->attributes->get('website')->getLocale()->getCode();
+            }, [
+                 'is_safe' => [ 'html' ]
+            ]),
             new TwigFunction('website_list', function () {
                 return $this->websiteRegistry->all();
             }, [

@@ -1,0 +1,3 @@
+import '../sass/style.scss';
+
+// Here You can place Your JavaScript code...

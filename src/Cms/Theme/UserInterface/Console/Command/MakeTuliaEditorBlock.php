@@ -15,6 +15,7 @@ use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Tulia\Cms\Theme\UserInterface\Console\Command\Traits\MakerFilesManagementTrait;
 use Tulia\Cms\Theme\UserInterface\Console\Command\Traits\ThemeQuestionableTrait;
 use Tulia\Component\Theme\ManagerInterface;
 
@@ -25,13 +26,14 @@ use Tulia\Component\Theme\ManagerInterface;
 final class MakeTuliaEditorBlock extends Command
 {
     use ThemeQuestionableTrait;
+    use MakerFilesManagementTrait;
 
     public function __construct(
         private readonly ManagerInterface $themeManager,
         private readonly string $filesTemplates,
         private readonly string $fontsPath,
     ) {
-        parent::__construct(static::$defaultName);
+        parent::__construct();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -45,42 +47,16 @@ final class MakeTuliaEditorBlock extends Command
         $blockName = $this->askForBlockName($input, $output);
 
         $replacements = $this->generateReplacements($theme->getName(), $blockName);
-        $filesList = $this->collectFilesList('tulia-editor.block');
+        $filesList = $this->collectFilesList($this->filesTemplates.'/tulia-editor.block');
         $filesList = $this->interpolate($filesList, $replacements);
 
         $symfonyStyle->writeln('<fg=gray>Generating files...</>');
-        $this->writeFilesToTheme($filesList, $theme->getDirectory().'/Resources/public/tulia-editor-blocks/src');
+        $this->writeFiles($filesList, $theme->getDirectory().'/Resources/public/tulia-editor-blocks/src');
         $this->updateBlockList($theme->getDirectory().'/Resources/public/tulia-editor-blocks/src', $blockName);
 
         $symfonyStyle->writeln('<info>All done.</info>');
 
         return Command::SUCCESS;
-    }
-
-    private function collectFilesList(string $group): array
-    {
-        $finder = new Finder();
-        $finder->files()->ignoreDotFiles(false)->in($this->filesTemplates.'/'.$group);
-
-        $files = [];
-
-        foreach ($finder as $file) {
-            $files[$file->getRelativePathname()] = $file->getContents();
-        }
-
-        return $files;
-    }
-
-    private function interpolate(array $filesList, array $replacements): array
-    {
-        foreach ($filesList as $key => $file) {
-            unset($filesList[$key]);
-            $key = (string) str_replace(array_keys($replacements), array_values($replacements), $key);
-
-            $filesList[$key] = str_replace(array_keys($replacements), array_values($replacements), $file);
-        }
-
-        return $filesList;
     }
 
     private function generateReplacements(string $theme, string $blockName): array
@@ -104,22 +80,6 @@ final class MakeTuliaEditorBlock extends Command
         });
 
         return $this->getHelper('question')->ask($input, $output, $question);
-    }
-
-    private function writeFilesToTheme(array $filesList, string $destination): void
-    {
-        $filesystem = new Filesystem();
-
-        foreach ($filesList as $filename => $content) {
-            $filepath = $destination.'/'.$filename;
-            $directory = dirname($filepath);
-
-            if (!is_dir($destination)) {
-                $filesystem->mkdir($directory);
-            }
-
-            $filesystem->dumpFile($filepath, $content);
-        }
     }
 
     private function updateBlockList(string $destination, string $blockName): void

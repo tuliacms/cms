@@ -46,7 +46,7 @@ class User extends AbstractController
     public function list(Request $request, DatatableFactory $factory, DbalDatatableFinder $finder): ViewInterface
     {
         return $this->view('@backend/user/user/list.tpl', [
-            'datatable' => $factory->create($finder, $request),
+            'datatable' => $factory->create($finder, $request)->generateFront(),
         ]);
     }
 

@@ -6,6 +6,7 @@ namespace Tulia\Cms\ContactForm\Infrastructure\Persistence\Domain\ReadModel\Data
 
 use Doctrine\DBAL\Query\QueryBuilder;
 use PDO;
+use Symfony\Component\Uid\Uuid;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
 use Tulia\Component\Datatable\Finder\FinderContext;
 
@@ -14,17 +15,6 @@ use Tulia\Component\Datatable\Finder\FinderContext;
  */
 class DatatableFinder extends AbstractDatatableFinder
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getConfigurationKey(): string
-    {
-        return __CLASS__;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getColumns(FinderContext $context): array
     {
         return [
@@ -42,9 +32,6 @@ class DatatableFinder extends AbstractDatatableFinder
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFilters(FinderContext $context): array
     {
         $filters = [
@@ -57,22 +44,18 @@ class DatatableFinder extends AbstractDatatableFinder
         return $filters;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function prepareQueryBuilder(QueryBuilder $queryBuilder, FinderContext $context): QueryBuilder
     {
         $queryBuilder
             ->from('#__form', 'tm')
-            ->setParameter('locale', $context->locale, PDO::PARAM_STR)
+            ->where('tm.website_id = :website_id')
+            ->setParameter('website_id', Uuid::fromString($context['website']->getId())->toBinary(), PDO::PARAM_STR)
+            ->setParameter('locale', $context['website']->getLocale()->getCode(), PDO::PARAM_STR)
         ;
 
         return $queryBuilder;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildActions(FinderContext $context, array $row): array
     {
         return [

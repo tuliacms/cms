@@ -23,15 +23,10 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
 {
     public function __construct(
         Connection $connection,
-        private TermFinderInterface $termFinder,
-        private TranslatorInterface $translator,
+        private readonly TermFinderInterface $termFinder,
+        private readonly TranslatorInterface $translator,
     ) {
         parent::__construct($connection);
-    }
-
-    public function getConfigurationKey(): string
-    {
-        return __CLASS__;
     }
 
     public function getColumns(FinderContext $context): array
@@ -104,7 +99,7 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
     {
         $queryBuilder
             ->from('#__node', 'tm')
-            ->addSelect('tm.type, tm.level, tm.parent_id, tl.slug, tm.status, GROUP_CONCAT(tnhf.purpose SEPARATOR \',\') AS purposes')
+            ->addSelect('tm.type, tm.level, tm.parent_id, tl.slug, tm.status, tl.translated, GROUP_CONCAT(tnhf.purpose SEPARATOR \',\') AS purposes')
             ->leftJoin('tm', '#__node_translation', 'tl', 'tm.id = tl.node_id AND tl.locale = :locale')
             ->leftJoin('tm', '#__node_has_purpose', 'tnhf', 'tm.id = tnhf.node_id')
             ->where('tm.type = :type')
@@ -115,10 +110,6 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
             ->addOrderBy('tm.level', 'ASC')
             ->addGroupBy('tm.id')
         ;
-
-        /*if (false === $context->isDefaultLocale()) {
-            $queryBuilder->addSelect('IF(ISNULL(tl.title), 0, 1) AS translated');
-        }*/
 
         if ($this->supportsCategoryTaxonomy()) {
             $queryBuilder

@@ -13,6 +13,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;
+use Tulia\Cms\Theme\UserInterface\Console\Command\Traits\MakerFilesManagementTrait;
 use Tulia\Cms\Theme\UserInterface\Console\Command\Traits\ThemeQuestionableTrait;
 use Tulia\Component\Theme\ManagerInterface;
 
@@ -23,12 +24,13 @@ use Tulia\Component\Theme\ManagerInterface;
 final class MakeTuliaEditorInit extends Command
 {
     use ThemeQuestionableTrait;
+    use MakerFilesManagementTrait;
 
     public function __construct(
         private readonly ManagerInterface $themeManager,
         private readonly string $filesTemplates
     ) {
-        parent::__construct(static::$defaultName);
+        parent::__construct();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -39,11 +41,11 @@ final class MakeTuliaEditorInit extends Command
         $theme = $this->askForTheme($input, $output);
 
         $replacements = $this->generateReplacements($theme->getName());
-        $filesList = $this->collectFilesList('tulia-editor.init');
+        $filesList = $this->collectFilesList($this->filesTemplates.'/tulia-editor.init');
         $filesList = $this->interpolate($filesList, $replacements);
 
         $symfonyStyle->writeln('<fg=gray>Generating files...</>');
-        $this->writeFilesToTheme($filesList, $theme->getDirectory().'/Resources/public/tulia-editor-blocks');
+        $this->writeFiles($filesList, $theme->getDirectory().'/Resources/public/tulia-editor-blocks');
         $symfonyStyle->writeln('<fg=gray>Updating assets in config...</>');
         $this->updateAssets($theme->getDirectory(), $theme->getName());
 
@@ -61,48 +63,6 @@ final class MakeTuliaEditorInit extends Command
             '{{ theme.public_path }}' => strtolower($theme),
             '{{ theme.name }}' => $theme,
         ];
-    }
-
-    private function collectFilesList(string $group): array
-    {
-        $finder = new Finder();
-        $finder->files()->ignoreDotFiles(false)->in($this->filesTemplates.'/'.$group);
-
-        $files = [];
-
-        foreach ($finder as $file) {
-            $files[$file->getRelativePathname()] = $file->getContents();
-        }
-
-        return $files;
-    }
-
-    private function interpolate(array $filesList, array $replacements): array
-    {
-        foreach ($filesList as $key => $file) {
-            unset($filesList[$key]);
-            $key = (string) str_replace(array_keys($replacements), array_values($replacements), $key);
-
-            $filesList[$key] = str_replace(array_keys($replacements), array_values($replacements), $file);
-        }
-
-        return $filesList;
-    }
-
-    private function writeFilesToTheme(array $filesList, string $destination): void
-    {
-        $filesystem = new Filesystem();
-
-        foreach ($filesList as $filename => $content) {
-            $filepath = $destination.'/'.$filename;
-            $directory = dirname($filepath);
-
-            if (!is_dir($destination)) {
-                $filesystem->mkdir($directory);
-            }
-
-            $filesystem->dumpFile($filepath, $content);
-        }
     }
 
     private function updateAssets(string $themeRoot, string $themeName): void

@@ -49,7 +49,7 @@ class MenuItem extends AbstractController
         ]);
     }
 
-    public function list(Request $request, string $menuId)
+    public function list(Request $request, string $menuId, WebsiteInterface $website)
     {
         $menu = $this->repository->find($menuId);
 
@@ -58,18 +58,21 @@ class MenuItem extends AbstractController
             return $this->redirectToRoute('backend.menu');
         }
 
-        $this->finder->setMenuId($menuId);
-
         return $this->view('@backend/menu/item/list.tpl', [
             'menu' => $menu,
-            'datatable' => $this->factory->create($this->finder, $request),
+            'datatable' => $this->factory->create($this->finder, $request)->generateFront([
+                'website' => $website,
+                'menu_id' => $menuId,
+            ]),
         ]);
     }
 
-    public function datatable(Request $request, string $menuId): JsonResponse
+    public function datatable(Request $request, string $menuId, WebsiteInterface $website): JsonResponse
     {
-        $this->finder->setMenuId($menuId);
-        return $this->factory->create($this->finder, $request)->generateResponse();
+        return $this->factory->create($this->finder, $request)->generateResponse([
+            'website' => $website,
+            'menu_id' => $menuId,
+        ]);
     }
 
     /**

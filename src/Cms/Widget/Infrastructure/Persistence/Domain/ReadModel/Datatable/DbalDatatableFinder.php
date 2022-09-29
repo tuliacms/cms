@@ -7,6 +7,7 @@ namespace Tulia\Cms\Widget\Infrastructure\Persistence\Domain\ReadModel\Datatable
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use PDO;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Widget\Domain\Catalog\Registry\WidgetRegistryInterface;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
@@ -16,7 +17,7 @@ use Tulia\Component\Theme\ManagerInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-class DatatableFinder extends AbstractDatatableFinder
+class DbalDatatableFinder extends AbstractDatatableFinder
 {
     public function __construct(
         Connection $connection,
@@ -27,20 +28,9 @@ class DatatableFinder extends AbstractDatatableFinder
         parent::__construct($connection);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getConfigurationKey(): string
-    {
-        return __CLASS__;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getColumns(FinderContext $context): array
     {
-        $context = [
+        $viewContext = [
             'widget_names' => $this->collectWidgetsNames(),
         ];
 
@@ -56,7 +46,7 @@ class DatatableFinder extends AbstractDatatableFinder
                 'sortable' => true,
                 'html_attr' => ['class' => 'col-title'],
                 'view' => '@backend/widget/parts/datatable/name.tpl',
-                'view_context' => $context,
+                'view_context' => $viewContext,
             ],
             'space' => [
                 'selector' => 'tm.space',
@@ -81,9 +71,6 @@ class DatatableFinder extends AbstractDatatableFinder
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFilters(FinderContext $context): array
     {
         return [
@@ -105,28 +92,20 @@ class DatatableFinder extends AbstractDatatableFinder
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function prepareQueryBuilder(QueryBuilder $queryBuilder, FinderContext $context): QueryBuilder
     {
         $queryBuilder
             ->from('#__widget', 'tm')
             ->addSelect('tm.type')
-            ->leftJoin('tm', '#__widget_translation', 'tl', 'tm.id = tl.widget_id AND tl.locale = :locale')
-            ->setParameter('locale', $context->locale, PDO::PARAM_STR)
+            ->innerJoin('tm', '#__widget_translation', 'tl', 'tm.id = tl.widget_id AND tl.locale = :locale')
+            ->where('tm.website_id = :website_id')
+            ->setParameter('website_id', Uuid::fromString($context['website']->getId())->toBinary(), PDO::PARAM_STR)
+            ->setParameter('locale', $context['website']->getLocale()->getCode(), PDO::PARAM_STR)
         ;
-
-        if (false === $context->isDefaultLocale()) {
-            $queryBuilder->addSelect('IF(ISNULL(tl.title), 0, 1) AS translated');
-        }
 
         return $queryBuilder;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildActions(FinderContext $context, array $row): array
     {
         return [

@@ -12,18 +12,14 @@ use Tulia\Component\Datatable\Finder\FinderInterface;
 class PluginsRegistry
 {
     /**
-     * @var PluginInterface[]
+     * @param PluginInterface[] $plugins
      */
-    private iterable $plugins;
-
-    public function __construct(iterable $plugins)
-    {
-        $this->plugins = $plugins;
+    public function __construct(
+        private readonly iterable $plugins,
+    ) {
     }
 
     /**
-     * @param FinderInterface $finder
-     *
      * @return PluginInterface[]
      */
     public function getForFinder(FinderInterface $finder): array

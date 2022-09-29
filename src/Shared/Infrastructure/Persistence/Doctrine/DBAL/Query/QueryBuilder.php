@@ -28,6 +28,8 @@ class QueryBuilder extends DoctrineQueryBuilder
         foreach ($this->getParameters() as $parameter => $value) {
             if (is_numeric($value)) {
                 $sql = str_replace(":$parameter", $value, $sql);
+            } if ($this->isBinary($value)) {
+                $sql = str_replace(":$parameter", '0x'.bin2hex($value), $sql);
             } if (is_array($value)) {
                 $values = implode("', '", array_map(fn($v) => $this->connection->quote($v), $value));
                 $sql = str_replace(":$parameter", $values, $sql);
@@ -39,5 +41,10 @@ class QueryBuilder extends DoctrineQueryBuilder
         }
 
         return $this->connection->prepareTablePrefix($sql);
+    }
+
+    private function isBinary(string $input): bool
+    {
+        return preg_match('~[^\x20-\x7E\t\r\n]~', $input) > 0;
     }
 }

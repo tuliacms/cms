@@ -36,17 +36,6 @@ class DbalTermDatatableFinder extends AbstractDatatableFinder implements TermDat
         $this->taxonomyType = $taxonomyType;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getConfigurationKey(): string
-    {
-        return __CLASS__;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getColumns(FinderContext $context): array
     {
         return [
@@ -75,9 +64,6 @@ class DbalTermDatatableFinder extends AbstractDatatableFinder implements TermDat
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function prepareQueryBuilder(QueryBuilder $queryBuilder, FinderContext $context): QueryBuilder
     {
         $queryBuilder
@@ -92,24 +78,14 @@ class DbalTermDatatableFinder extends AbstractDatatableFinder implements TermDat
             ->addOrderBy('tm.position', 'ASC')
         ;
 
-        if (false === $context->isDefaultLocale()) {
-            $queryBuilder->addSelect('IF(ISNULL(tl.title), 0, 1) AS translated');
-        }
-
         return $queryBuilder;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function prepareResult(array $result): array
     {
         return $this->sort($result);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildActions(FinderContext $context, array $row): array
     {
         return [

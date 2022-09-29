@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Menu\UserInterface\Web\Backend\BackendMenu;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Tulia\Cms\BackendMenu\Builder\BuilderInterface;
 use Tulia\Cms\BackendMenu\Builder\Helper\BuilderHelperInterface;
@@ -20,7 +21,7 @@ use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuUpdated;
  */
 class MenuMenuBuilder implements BuilderInterface, EventSubscriberInterface
 {
-    private const SESSION_KEY = '_cms_app_backendmenu_menu_cache_%s';
+    private const SESSION_KEY = '_cms_app_backendmenu_menu_cache';
 
     public function __construct(
         private readonly BuilderHelperInterface $helper,
@@ -81,10 +82,11 @@ class MenuMenuBuilder implements BuilderInterface, EventSubscriberInterface
 
     private function getMenus(string $websiteId, string $locale): array
     {
+        /** @var Request $request */
         $request = $this->requestStack->getMainRequest();
 
-        if ($request && $request->hasSession() && $request->getSession()->has($this->getCachekey())) {
-            return $request->getSession()->get($this->getCachekey());
+        if ($this->isCached($request, $websiteId, $locale)) {
+            return $this->getFromCache($request, $websiteId, $locale);
         }
 
         $source = $this->menuFinder->find([
@@ -102,7 +104,7 @@ class MenuMenuBuilder implements BuilderInterface, EventSubscriberInterface
         }
 
         if ($request && $request->hasSession()) {
-            $request->getSession()->set($this->getCachekey(), $menus);
+            $this->saveToCache($request, $websiteId, $locale, $menus);
         }
 
         return $menus;
@@ -111,5 +113,30 @@ class MenuMenuBuilder implements BuilderInterface, EventSubscriberInterface
     private function getCachekey(): string
     {
         return self::SESSION_KEY;
+    }
+
+    private function isCached(Request $request, string $websiteId, string $locale): bool
+    {
+        return $request->hasSession()
+            && $request->getSession()->has($this->getCachekey())
+            && isset($request->getSession()->get($this->getCachekey())[$websiteId][$locale]);
+    }
+
+    private function getFromCache(Request $request, string $websiteId, string $locale): array
+    {
+        return $request->getSession()->get($this->getCachekey())[$websiteId][$locale];
+    }
+
+    private function saveToCache(Request $request, string $websiteId, string $locale, array $menus)
+    {
+        $cache = [];
+
+        if ($request->getSession()->has($this->getCachekey())) {
+            $cache = $request->getSession()->get($this->getCachekey());
+        }
+
+        $cache[$websiteId][$locale] = $menus;
+
+        $request->getSession()->set($this->getCachekey(), $menus);
     }
 }

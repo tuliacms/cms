@@ -1,0 +1,48 @@
+cms:
+    public_paths:
+        -
+            source: '%kernel.project_dir%/extension/theme/{{ theme.name }}/Resources/public/theme/dist'
+            target: /theme/{{ theme.name.lc }}/theme
+        -
+            source: '%kernel.project_dir%/extension/theme/{{ theme.name }}/Resources/public/tulia-editor-blocks/dist'
+            target: /theme/{{ theme.name.lc }}/tulia-editor-blocks
+    templating:
+        paths:
+            -
+                name: theme/{{ theme.name.lc }}
+                path: '%kernel.project_dir%/extension/theme/{{ theme.name }}/Resources/views'
+    assetter:
+        assets:
+            {{ theme.assets_prefix }}.main:
+                require:
+                    - font_awesome
+                    - frontend
+                    -  {{ theme.assets_prefix }}.styles
+                    -  {{ theme.assets_prefix }}.scripts
+                styles:
+                    - /assets/theme/{{ theme.name.lc }}/theme/css/bundle.min.css
+                scripts:
+                    - /assets/theme/{{ theme.name.lc }}/theme/js/bundle.min.js
+                group: head
+                included:
+                    - bootstrap
+                    - jquery
+            {{ theme.assets_prefix }}.styles:
+                require:
+                    - font_awesome
+                    - frontend
+                styles:
+                    - /assets/theme/{{ theme.name.lc }}/theme/css/bundle.min.css
+                group: head
+            {{ theme.assets_prefix }}.scripts:
+                scripts:
+                    - /assets/theme/{{ theme.name.lc }}/theme/js/bundle.min.js
+                group: body
+    theme:
+        configuration:
+            {{ theme.name }}:
+                translation_domain: {{ theme.translation_domain }}
+                configuration:
+                    base:
+                        assets:
+                            - {{ theme.assets_prefix }}.main

@@ -23,7 +23,7 @@ use Tulia\Cms\Widget\Application\UseCase\UpdateWidgetRequest;
 use Tulia\Cms\Widget\Domain\Catalog\Registry\WidgetRegistryInterface;
 use Tulia\Cms\Widget\Domain\WriteModel\Exception\WidgetNotFoundException;
 use Tulia\Cms\Widget\Domain\WriteModel\WidgetRepositoryInterface;
-use Tulia\Cms\Widget\Infrastructure\Persistence\Domain\ReadModel\Datatable\DatatableFinder;
+use Tulia\Cms\Widget\Infrastructure\Persistence\Domain\ReadModel\Datatable\DbalDatatableFinder;
 use Tulia\Cms\Widget\UserInterface\Web\Backend\Form\WidgetDetailsForm;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\Routing\Website\WebsiteInterface;
@@ -49,18 +49,26 @@ class Widget extends AbstractController
         return $this->redirectToRoute('backend.widget.list');
     }
 
-    public function list(Request $request, DatatableFactory $factory, DatatableFinder $finder): ViewInterface
-    {
+    public function list(
+        Request $request,
+        DatatableFactory $factory,
+        DbalDatatableFinder $finder,
+        WebsiteInterface $website
+    ): ViewInterface {
         return $this->view('@backend/widget/list.tpl', [
             'space' => $request->query->get('space', ''),
             'availableWidgets' => $this->widgetRegistry->all(),
-            'datatable' => $factory->create($finder, $request),
+            'datatable' => $factory->create($finder, $request)->generateFront(['website' => $website]),
         ]);
     }
 
-    public function datatable(Request $request, DatatableFactory $factory, DatatableFinder $finder): JsonResponse
-    {
-        return $factory->create($finder, $request)->generateResponse();
+    public function datatable(
+        Request $request,
+        DatatableFactory $factory,
+        DbalDatatableFinder $finder,
+        WebsiteInterface $website
+    ): JsonResponse {
+        return $factory->create($finder, $request)->generateResponse(['website' => $website]);
     }
 
     /**

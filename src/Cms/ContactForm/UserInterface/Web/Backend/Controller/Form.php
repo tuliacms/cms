@@ -47,16 +47,16 @@ class Form extends AbstractController
         return $this->redirectToRoute('backend.contact_form.list');
     }
 
-    public function list(Request $request, DatatableFactory $factory, DatatableFinder $finder): ViewInterface
+    public function list(Request $request, DatatableFactory $factory, DatatableFinder $finder, WebsiteInterface $website): ViewInterface
     {
         return $this->view('@backend/forms/index.tpl', [
-            'datatable' => $factory->create($finder, $request),
+            'datatable' => $factory->create($finder, $request)->generateFront(['website' => $website]),
         ]);
     }
 
-    public function datatable(Request $request, DatatableFactory $factory, DatatableFinder $finder): JsonResponse
+    public function datatable(Request $request, DatatableFactory $factory, DatatableFinder $finder, WebsiteInterface $website): JsonResponse
     {
-        return $factory->create($finder, $request)->generateResponse();
+        return $factory->create($finder, $request)->generateResponse(['website' => $website]);
     }
 
     /**

@@ -13,17 +13,6 @@ use Tulia\Component\Datatable\Finder\FinderContext;
  */
 class DbalDatatableFinder extends AbstractDatatableFinder
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getConfigurationKey(): string
-    {
-        return __CLASS__;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getColumns(FinderContext $context): array
     {
         return [
@@ -59,9 +48,6 @@ class DbalDatatableFinder extends AbstractDatatableFinder
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFilters(FinderContext $context): array
     {
         return [
@@ -82,9 +68,6 @@ class DbalDatatableFinder extends AbstractDatatableFinder
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function prepareQueryBuilder(QueryBuilder $queryBuilder, FinderContext $context): QueryBuilder
     {
         $queryBuilder
@@ -95,9 +78,6 @@ class DbalDatatableFinder extends AbstractDatatableFinder
         return $queryBuilder;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildActions(FinderContext $context, array $row): array
     {
         return [

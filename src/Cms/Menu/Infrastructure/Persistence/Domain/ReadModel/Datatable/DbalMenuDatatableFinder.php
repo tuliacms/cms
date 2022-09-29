@@ -6,6 +6,7 @@ namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\Datatable;
 
 use Doctrine\DBAL\Query\QueryBuilder;
 use PDO;
+use Symfony\Component\Uid\Uuid;
 use Tulia\Cms\Menu\Domain\ReadModel\Datatable\MenuDatatableFinderInterface;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
 use Tulia\Component\Datatable\Finder\FinderContext;
@@ -15,17 +16,6 @@ use Tulia\Component\Datatable\Finder\FinderContext;
  */
 class DbalMenuDatatableFinder extends AbstractDatatableFinder implements MenuDatatableFinderInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getConfigurationKey(): string
-    {
-        return __CLASS__;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getColumns(FinderContext $context): array
     {
         return [
@@ -43,9 +33,6 @@ class DbalMenuDatatableFinder extends AbstractDatatableFinder implements MenuDat
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFilters(FinderContext $context): array
     {
         return [
@@ -56,21 +43,17 @@ class DbalMenuDatatableFinder extends AbstractDatatableFinder implements MenuDat
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function prepareQueryBuilder(QueryBuilder $queryBuilder, FinderContext $context): QueryBuilder
     {
         $queryBuilder
             ->from('#__menu', 'tm')
+            ->where('tm.website_id = :website_id')
+            ->setParameter('website_id', Uuid::fromString($context['website']->getId())->toBinary(), PDO::PARAM_STR)
         ;
 
         return $queryBuilder;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildActions(FinderContext $context, array $row): array
     {
         return [

@@ -16,11 +16,6 @@ final class FinderContext implements ArrayAccess
     ) {
     }
 
-    public function isDefaultLocale(): bool
-    {
-        return $this->locale === $this->defaultLocale;
-    }
-
     public function offsetExists(mixed $offset): bool
     {
         return \array_key_exists($offset, $this->context);

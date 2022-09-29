@@ -16,42 +16,20 @@ use Tulia\Component\Datatable\Finder\FinderContext;
 /**
  * @author Adam Banaszkiewicz
  */
-class DbalItemDatatableFinder extends AbstractDatatableFinder implements ItemDatatableFinderInterface
+final class DbalItemDatatableFinder extends AbstractDatatableFinder implements ItemDatatableFinderInterface
 {
-    private TranslatorInterface $translator;
-
-    private ?string $menuId = null;
-
     public function __construct(
         Connection $connection,
-        TranslatorInterface $translator
+        private readonly TranslatorInterface $translator,
     ) {
         parent::__construct($connection);
-
-        $this->translator = $translator;
     }
 
-    public function setMenuId(string $menuId): void
-    {
-        $this->menuId = $menuId;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getConfigurationKey(): string
-    {
-        return __CLASS__;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getColumns(FinderContext $context): array
     {
         return [
             'id' => [
-                'selector' => 'BIN_TO_UUID(tm.id)',
+                'selector' => 'BIN_TO_UUID(ti.id)',
                 'type' => 'uuid',
                 'label' => 'ID',
             ],
@@ -76,28 +54,25 @@ class DbalItemDatatableFinder extends AbstractDatatableFinder implements ItemDat
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function prepareQueryBuilder(QueryBuilder $queryBuilder, FinderContext $context): QueryBuilder
     {
         $queryBuilder
-            ->from('#__menu_item', 'tm')
-            ->leftJoin('tm', '#__menu_item_translation', 'tl', 'tm.id = tl.item_id AND tl.locale = :locale')
-            ->addSelect('BIN_TO_UUID(tm.menu_id) AS menu_id, tm.level, BIN_TO_UUID(tm.parent_id) AS parent_id, tm.is_root, tl.translated')
-            ->where('tm.menu_id = :menu_id')
-            ->setParameter('menu_id', Uuid::fromString($this->menuId)->toBinary(), PDO::PARAM_STR)
-            ->setParameter('locale', $context->locale, PDO::PARAM_STR)
-            ->addOrderBy('tm.level', 'ASC')
-            ->addOrderBy('tm.position', 'ASC')
+            ->from('#__menu_item', 'ti')
+            ->innerJoin('ti', '#__menu', 'tm', 'tm.id = ti.menu_id')
+            ->leftJoin('ti', '#__menu_item_translation', 'tl', 'ti.id = tl.item_id AND tl.locale = :locale')
+            ->addSelect('BIN_TO_UUID(tm.id) AS menu_id, ti.level, BIN_TO_UUID(ti.parent_id) AS parent_id, ti.is_root, tl.translated')
+            ->where('tm.id = :menu_id')
+            ->andWhere('tm.website_id = :website_id')
+            ->setParameter('menu_id', Uuid::fromString($context['menu_id'])->toBinary(), PDO::PARAM_STR)
+            ->setParameter('website_id', Uuid::fromString($context['website']->getId())->toBinary(), PDO::PARAM_STR)
+            ->setParameter('locale', $context['website']->getLocale()->getCode(), PDO::PARAM_STR)
+            ->addOrderBy('ti.level', 'ASC')
+            ->addOrderBy('ti.position', 'ASC')
         ;
 
         return $queryBuilder;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function prepareResult(array $result): array
     {
         if ($result === []) {
@@ -115,9 +90,6 @@ class DbalItemDatatableFinder extends AbstractDatatableFinder implements ItemDat
         return $this->sort($result, $root);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildActions(FinderContext $context, array $row): array
     {
         return [
@@ -126,7 +98,7 @@ class DbalItemDatatableFinder extends AbstractDatatableFinder implements ItemDat
         ];
     }
 
-    private function sort(array $items, string $parent, int $level = 1): array
+    private function sort(array $items, ?string $parent, int $level = 1): array
     {
         $result = [];
 
