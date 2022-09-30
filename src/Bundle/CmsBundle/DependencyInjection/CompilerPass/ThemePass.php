@@ -33,10 +33,10 @@ class ThemePass implements CompilerPassInterface
 
         foreach ($container->getParameter('cms.themes.configuration') as $theme => $config) {
             if (isset($config['configuration']['base'])) {
-                $this->processThemeConfiguration($container, $configurationRegistry, 'base', $theme, $config['configuration']['base'], $config['translation_domain']);
+                $this->processThemeConfiguration($container, $configurationRegistry, 'base', $theme, $config['configuration']['base'], $config['translation_domain'], $config['css_framework']);
             }
             if (isset($config['configuration']['customizer'])) {
-                $this->processThemeConfiguration($container, $configurationRegistry, 'customizer', $theme, $config['configuration']['customizer'], $config['translation_domain']);
+                $this->processThemeConfiguration($container, $configurationRegistry, 'customizer', $theme, $config['configuration']['customizer'], $config['translation_domain'], $config['css_framework']);
             }
             if (isset($config['imports']['collections'])) {
                 $this->processThemeImports($container, $themeImportCollectionRegistry, $theme, $config['imports']['collections']);
@@ -54,11 +54,19 @@ class ThemePass implements CompilerPassInterface
         }
     }
 
-    private function processThemeConfiguration(ContainerBuilder $container, Definition $registry, string $group, string $theme, array $config, string $translationDomain): void
-    {
+    private function processThemeConfiguration(
+        ContainerBuilder $container,
+        Definition $registry,
+        string $group,
+        string $theme,
+        array $config,
+        string $translationDomain,
+        string $cssFramework
+    ): void {
         $service = new Definition(Configuration::class);
         $service->setShared(true);
         $service->addMethodCall('setTranslationDomain', [$translationDomain]);
+        $service->addMethodCall('setCssFramework', [$cssFramework]);
 
         if (isset($config['assets'])) {
             foreach ($config['assets'] as $asset) {

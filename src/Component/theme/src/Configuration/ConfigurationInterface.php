@@ -23,6 +23,8 @@ interface ConfigurationInterface
     public function getAssets(): array;
     public function setNodeContentField(string $nodeContentField): void;
     public function getNodeContentField(): string;
+    public function setCssFramework(string $cssFramework): void;
+    public function getCssFramework(): string;
     public function setCustomizerVariable(string $name, mixed $value): void;
     public function getCustomizerVariable(string $name, mixed $default = null): mixed;
 }

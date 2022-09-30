@@ -1,4 +1,13 @@
 cms:
+    theme:
+        configuration:
+            {{ theme.name }}:
+                translation_domain: {{ theme.translation_domain }}
+                css_framework: bootstrap-5
+                configuration:
+                    base:
+                        assets:
+                            - {{ theme.assets_prefix }}.main
     public_paths:
         -
             source: '%kernel.project_dir%/extension/theme/{{ theme.name }}/Resources/public/theme/dist'
@@ -38,11 +47,3 @@ cms:
                 scripts:
                     - /assets/theme/{{ theme.name.lc }}/theme/js/bundle.min.js
                 group: body
-    theme:
-        configuration:
-            {{ theme.name }}:
-                translation_domain: {{ theme.translation_domain }}
-                configuration:
-                    base:
-                        assets:
-                            - {{ theme.assets_prefix }}.main

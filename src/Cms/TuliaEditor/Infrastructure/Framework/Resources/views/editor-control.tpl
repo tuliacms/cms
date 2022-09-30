@@ -85,6 +85,7 @@
                 }
             },
             themes: ['{{ themes|join("', '")|raw }}'],
+            css_framework: '{{ theme().config.cssFramework }}',
         });
     });
 </script>

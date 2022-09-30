@@ -532,6 +532,7 @@ class Configuration implements ConfigurationInterface
                                         ->end()
                                     ->end()
                                     ->scalarNode('translation_domain')->isRequired()->end()
+                                    ->scalarNode('css_framework')->isRequired()->end()
                                     ->arrayNode('configuration')
                                         ->children()
                                             ->arrayNode('base')

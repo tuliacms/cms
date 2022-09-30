@@ -6,7 +6,6 @@ namespace Tulia\Component\Theme;
 
 use Tulia\Component\Theme\Configuration\ConfigurationInterface;
 use Tulia\Component\Theme\Configuration\ConfigurationLoaderInterface;
-use Tulia\Component\Theme\Exception\ThemeConfigurationNotResolverException;
 use Tulia\Component\Theme\Resolver\ResolverAggregateInterface;
 
 /**
@@ -26,11 +25,6 @@ abstract class AbstractTheme implements ThemeInterface
     protected $thumbnail;
     private \Closure $parentThemeLoader;
     private ?ThemeInterface $parentInstance = null;
-
-    /*public function __construct(
-        private readonly ConfigurationLoaderInterface $configurationLoader,
-    ) {
-    }*/
 
     public function getName(): string
     {

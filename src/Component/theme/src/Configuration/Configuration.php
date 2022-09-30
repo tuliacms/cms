@@ -16,6 +16,7 @@ class Configuration implements ConfigurationInterface
     private array $customizer = [];
     private string $translationDomain = 'messages';
     private string $nodeContentField = 'content';
+    private string $cssFramework = '';
 
     public function getWidgetStyles(): array
     {
@@ -31,6 +32,7 @@ class Configuration implements ConfigurationInterface
         $this->customizer = array_merge($this->customizer, $configuration->customizer);
         $this->translationDomain = $configuration->translationDomain;
         $this->nodeContentField = $configuration->nodeContentField;
+        $this->cssFramework = $configuration->cssFramework;
     }
 
     public function addWidgetStyle(string $name, string $label): void
@@ -87,6 +89,16 @@ class Configuration implements ConfigurationInterface
     public function getNodeContentField(): string
     {
         return $this->nodeContentField;
+    }
+
+    public function setCssFramework(string $cssFramework): void
+    {
+        $this->cssFramework = $cssFramework;
+    }
+
+    public function getCssFramework(): string
+    {
+        return $this->cssFramework;
     }
 
     public function setTranslationDomain(string $translationDomain): void

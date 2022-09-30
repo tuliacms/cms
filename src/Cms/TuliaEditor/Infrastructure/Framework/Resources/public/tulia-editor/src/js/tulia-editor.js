@@ -92,5 +92,7 @@ export default {
         },
         // Themes supported by this instance of Editor
         themes: [],
+        // CSS framework, supported by Theme(s).
+        css_framework: '',
     }
 }

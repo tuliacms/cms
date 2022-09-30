@@ -10,9 +10,10 @@
                         </button>
                     </div>
                     <div class="modal-body p-0 m-0">
+                        <h3 class="pt-3 ps-3 mb-0">Global</h3>
                         <div class="tued-block-selector">
                             <div
-                                class="tued-block-item"
+                                :class="{ 'tued-block-item': true, 'd-none': block.theme !== '*' }"
                                 v-for="block in availableBlocks"
                                 :key="block.code"
                                 @click="blocksPicker.select(block.code)"
@@ -20,6 +21,22 @@
                                 <div class="tued-block-item-inner">
                                     <img :src="block.icon" />
                                     <span>{{ block.name }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-for="theme in options.themes">
+                            <h3 class="pt-3 ps-3 mb-0">{{ theme }}</h3>
+                            <div class="tued-block-selector">
+                                <div
+                                    :class="{ 'tued-block-item': true, 'd-none': block.theme !== theme }"
+                                    v-for="block in availableBlocks"
+                                    :key="block.code"
+                                    @click="blocksPicker.select(block.code)"
+                                >
+                                    <div class="tued-block-item-inner">
+                                        <img :src="block.icon" />
+                                        <span>{{ block.name }}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -42,11 +59,28 @@ const options = inject('options');
 
 const props = defineProps(['availableBlocks', 'blockPickerData']);
 
+const supportsTheme = block => {
+    return 0 <= options.themes.indexOf(block.theme) || block.theme === '*';
+};
+const supportsCssFramework = block => {
+    return options.css_framework === block.framework || block.framework === '*';
+};
+
 const availableBlocks = computed(function () {
     let blocks = [];
 
     for (let i in props.availableBlocks) {
-        if (0 <= options.themes.indexOf(props.availableBlocks[i].theme) || props.availableBlocks[i].theme === '*') {
+        if (!props.availableBlocks[i].hasOwnProperty('theme')) {
+            throw new Error(`Block ${props.availableBlocks[i].code} does not have defined supported theme option.`);
+        }
+        if (!props.availableBlocks[i].hasOwnProperty('framework')) {
+            throw new Error(`Block ${props.availableBlocks[i].code} does not have defined supported CSS framework option.`);
+        }
+
+        if (
+            supportsTheme(props.availableBlocks[i])
+            && supportsCssFramework(props.availableBlocks[i])
+        ) {
             blocks.push(props.availableBlocks[i]);
         }
     }

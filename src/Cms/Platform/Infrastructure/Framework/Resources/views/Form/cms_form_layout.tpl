@@ -187,7 +187,7 @@
                     return null;
                 },
                 filter: false,
-                emptyTemplate: '{{ 'noResultsForQuery'|trans({ query: '"<i>{{query}}</i>"' }) }}',
+                emptyTemplate: '{{ 'noResultsForQuery'|trans({ query: '"<i>{{query}}</i>"' })|raw }}',
                 source: {
                     result: {
                         display: '{{ display_prop }}',

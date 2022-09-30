@@ -3,6 +3,8 @@ const Render = require('./Render.vue').default;
 const Manager = require('./Manager.vue').default;
 
 export default {
+    theme: '{{ theme.name }}',
+    framework: 'bootstrap-5',
     code: '{{ block.name }}',
     name: '{{ block.name }}',
     icon: '{{ block.thumbnail }}',
