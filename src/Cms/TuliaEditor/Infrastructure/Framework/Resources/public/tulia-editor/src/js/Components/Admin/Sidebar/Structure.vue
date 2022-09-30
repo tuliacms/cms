@@ -19,6 +19,7 @@
                         @click.stop="selection.select('section', element.id, 'sidebar')"
                         @mouseenter="selection.hover('section', element.id, 'sidebar')"
                         @mouseleave="selection.resetHovered()"
+                        :tued-contextmenu="contextmenu.register('section', element.id)"
                     >
                         <div class="tued-structure-draggable-handler" @mousedown.stop="selection.select(section, element.id, 'sidebar')">
                             <i class="fas fa-arrows-alt"></i>
@@ -55,6 +56,7 @@ const structureDragOptions = inject('structureDragOptions');
 const structureManipulator = inject('structureManipulator');
 const translator = inject('translator');
 const blocksPicker = inject('blocks.picker');
+const contextmenu = inject('contextmenu');
 let draggableDeltaTranslator = null;
 
 const handleStart = (event) => {
@@ -87,6 +89,30 @@ onMounted(() => {
         }
 
         success();
+    });
+
+    contextmenu.items('sections', 'section', () => {
+        return [
+            {
+                group: 'section',
+                onClick: (id) => structureManipulator.newRow(id),
+                label: translator.trans('addRow'),
+                icon: 'fas fa-plus',
+            },
+            {
+                group: 'section',
+                onClick: (id) => structureManipulator.newSection(id),
+                label: translator.trans('addSectionBelow'),
+                icon: 'fas fa-plus',
+            },
+            {
+                group: 'section',
+                onClick: (id) => structureManipulator.removeElement(id),
+                label: translator.trans('delete'),
+                icon: 'fas fa-trash',
+                classname: 'dropdown-item-danger',
+            },
+        ];
     });
 });
 </script>

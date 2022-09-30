@@ -73,10 +73,18 @@ onMounted(() => {
         selection.resetSelection();
     });
 
-    document.addEventListener('click', (event) => {
+    document.addEventListener('click', event => {
         if (event.target.tagName === 'HTML') {
             props.container.messenger.notify('editor.click.outside');
         }
+    });
+
+    document.addEventListener('click', event => {
+        props.container.messenger.execute('contextmenu.hide');
+    });
+    document.addEventListener('contextmenu', event => {
+        event.preventDefault();
+        props.container.messenger.execute('contextmenu', ContextmenuEventTransformer.transformPointerEvent(event, 'editor'));
     });
 });
 
@@ -93,6 +101,14 @@ const extensionRegistry = new ExtensionRegistry(TuliaEditor.extensions);
 provide('extension.registry', extensionRegistry);
 provide('extension.instance', new Instantiator(props.container.messenger));
 
+
+/***************
+ * Contextmenu
+ **************/
+const ContextmenuEventTransformer = require("shared/Contextmenu/EventTransformer.js").default;
+const Contextmenu = require("shared/Contextmenu/Contextmenu.js").default;
+const contextmenu = new Contextmenu('editor', props.container.messenger);
+provide('contextmenu', contextmenu);
 
 
 /***********
@@ -112,7 +128,8 @@ const instantiator = new ElementsInstantiator(
     props.container.messenger,
     extensionRegistry,
     controlRegistry,
-    structureManipulator
+    structureManipulator,
+    contextmenu,
 );
 
 provide('blocks.instance', instantiator.instantiator('block'));

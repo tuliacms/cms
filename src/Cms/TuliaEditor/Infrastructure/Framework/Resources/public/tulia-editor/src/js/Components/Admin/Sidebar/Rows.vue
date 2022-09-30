@@ -19,6 +19,7 @@
                         @click.stop="selection.select('row', element.id, 'sidebar')"
                         @mouseenter="selection.hover('row', element.id, 'sidebar')"
                         @mouseleave="selection.resetHovered()"
+                        :tued-contextmenu="contextmenu.register('row', element.id)"
                     >
                         <div class="tued-structure-draggable-handler" @mousedown.stop="selection.select('row', element.id, 'sidebar')">
                             <i class="fas fa-arrows-alt"></i>
@@ -44,10 +45,33 @@ const Columns = require('components/Admin/Sidebar/Columns.vue').default;
 
 export default {
     props: ['parent', 'rows'],
-    inject: ['selection', 'structureDragOptions', 'translator'],
+    inject: ['selection', 'structureDragOptions', 'structureManipulator', 'translator', 'contextmenu'],
     components: {
         draggable,
         Columns
+    },
+    mounted() {
+        this.contextmenu.items('rows', 'row', (id) => {
+            const row = this.structureManipulator.find(id);
+            const items = [];
+
+            items.push({
+                group: 'row',
+                onClick: (id) => this.structureManipulator.newColumn(id),
+                label: this.translator.trans('addColumn'),
+                icon: 'fas fa-plus',
+            });
+
+            items.push({
+                group: 'row',
+                onClick: (id) => this.structureManipulator.removeElement(id),
+                label: this.translator.trans('delete'),
+                icon: 'fas fa-trash',
+                classname: 'dropdown-item-danger',
+            });
+
+            return items;
+        });
     }
 };
 </script>

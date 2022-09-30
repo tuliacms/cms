@@ -15,6 +15,8 @@ export default class StructureManipulator {
         this._listenToRemoveElement();
         this._listenToMoveElementUsingDelta();
         this._listenToNewSection();
+        this._listenToNewRow();
+        this._listenToNewColumn();
         this._listenToNewBlock();
     }
 
@@ -58,34 +60,32 @@ export default class StructureManipulator {
     }
 
     findParent (childId) {
-        let parent = null;
-
         for (let sk in this.structure.sections) {
-            parent = this.structure.sections[sk];
+            let parentSection = this.structure.sections[sk];
 
             let rows = this.structure.sections[sk].rows;
 
             for (let rk in rows) {
                 if (rows[rk].id === childId) {
-                    return parent;
+                    return parentSection;
                 }
 
-                parent = rows[rk];
+                let parentRow = rows[rk];
 
                 let columns = rows[rk].columns;
 
                 for (let ck in columns) {
                     if (columns[ck].id === childId) {
-                        return parent;
+                        return parentRow;
                     }
 
-                    parent = columns[ck];
+                    let parentColumn = columns[ck];
 
                     let blocks = columns[ck].blocks;
 
                     for (let bk in blocks) {
                         if (blocks[bk].id === childId) {
-                            return parent;
+                            return parentColumn;
                         }
                     }
                 }
@@ -95,17 +95,82 @@ export default class StructureManipulator {
         return null;
     }
 
-    newSection (callback) {
-        this.messenger.execute('structure.element.create-section', { section: this.fixer.fixSection({}) }).then((section) => {
+    newSection (after) {
+        this.messenger.execute('structure.element.create-section', { section: this.fixer.fixSection({}), after: after }).then((section) => {
             this.messenger.notify('structure.element.created', 'section', section.id);
-            callback && callback(section);
         });
     }
 
     _listenToNewSection () {
         this.messenger.operation('structure.element.create-section', (data, success, fail) => {
-            this.structure.sections.push(data.section);
+            let after;
+
+            if (data.after) {
+                after = this.__findElementInCollection(data.after, this.structure.sections) + 1;
+            } else {
+                after = this.structure.sections.length;
+            }
+
+            this.structure.sections.splice(after, 0, data.section);
+
             success(data.section);
+        });
+    }
+
+    newRow (inside) {
+        this.messenger.execute('structure.element.create-row', { row: this.fixer.fixRow({}), inside: inside }).then((row) => {
+            this.messenger.notify('structure.element.created', 'row', row.id);
+        });
+    }
+
+    _listenToNewRow () {
+        this.messenger.operation('structure.element.create-row', (data, success, fail) => {
+            this.find(data.inside).rows.push(data.row);
+
+            success(data.row);
+        });
+    }
+
+    newColumn (inside) {
+        this.messenger.execute('structure.element.create-column', { column: this.fixer.fixColumn({}), inside: inside }).then((column) => {
+            this.messenger.notify('structure.element.created', 'column', column.id);
+        });
+    }
+
+    newColumnBefore (before) {
+        this.messenger.execute('structure.element.create-column', { column: this.fixer.fixColumn({}), before: before }).then((column) => {
+            this.messenger.notify('structure.element.created', 'column', column.id);
+        });
+    }
+
+    newColumnAfter (after) {
+        this.messenger.execute('structure.element.create-column', { column: this.fixer.fixColumn({}), after: after }).then((column) => {
+            this.messenger.notify('structure.element.created', 'column', column.id);
+        });
+    }
+
+    _listenToNewColumn () {
+        this.messenger.operation('structure.element.create-column', (data, success, fail) => {
+            let after;
+            let parent;
+
+            if (data.before) {
+                parent = this.findParent(data.before);
+                after = this.__findElementInCollection(data.before, parent.columns) - 1;
+            } else if (data.after) {
+                parent = this.findParent(data.after);
+                after = this.__findElementInCollection(data.after, parent.columns) + 1;
+            } else {
+                parent = this.find(data.inside);
+            }
+
+            if (!after) {
+                after = parent.columns.length;
+            }
+
+            parent.columns.splice(after, 0, data.column);
+
+            success(data.column);
         });
     }
 
@@ -261,5 +326,15 @@ export default class StructureManipulator {
 
             success();
         });
+    }
+
+    __findElementInCollection (id, collection) {
+        for (let i in collection) {
+            if (collection[i].id === id) {
+                return parseInt(i);
+            }
+        }
+
+        return null;
     }
 };

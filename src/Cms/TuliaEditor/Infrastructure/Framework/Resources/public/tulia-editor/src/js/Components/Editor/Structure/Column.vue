@@ -6,6 +6,7 @@
         @mouseleave="$emit('selection-leave', 'column', props.column.id)"
         @mousedown.stop="selection.select('column', props.column.id, 'editor')"
         data-tagname="Column"
+        :tued-contextmenu="contextmenu.register('column', column.id)"
     >
         <Block
             v-for="block in props.column.blocks"
@@ -33,6 +34,7 @@ const SizesClassnameGenerator = require('shared/Structure/Columns/SizesClassname
 const props = defineProps(['column', 'parent']);
 const selection = inject('selection');
 const translator = inject('translator');
+const contextmenu = inject('contextmenu');
 
 const columnClass = computed(() => {
     return (new SizesClassnameGenerator(

@@ -6,6 +6,7 @@
         @mouseleave="$emit('selection-leave', 'section', section.id)"
         @mousedown.stop="selection.select('section', section.id, 'editor')"
         data-tagname="Section"
+        :tued-contextmenu="contextmenu.register('section', section.id)"
     >
         <div :class="containerClassname">
             <Row
@@ -34,6 +35,7 @@ const props = defineProps(['section']);
 const section = inject('sections.instance').editor(props);
 const selection = inject('selection');
 const translator = inject('translator');
+const contextmenu = inject('contextmenu');
 
 const containerClassname = computed(() => {
     switch (section.data.containerWidth) {

@@ -122,6 +122,30 @@
                 <source>emptyColumn</source>
                 <target>Empty column</target>
             </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.31">
+                <source>addBlock</source>
+                <target>Add new block</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.32">
+                <source>addSectionBelow</source>
+                <target>Add section below</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.33">
+                <source>addColumnBefore</source>
+                <target>Add column before</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.34">
+                <source>addColumnAfter</source>
+                <target>Add column after</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.35">
+                <source>addColumn</source>
+                <target>Add column</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.36">
+                <source>addRow</source>
+                <target>Add row</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -19,6 +19,7 @@
                         @click.stop="selection.select('block', element.id, 'sidebar')"
                         @mouseenter="selection.hover('block', element.id, 'sidebar')"
                         @mouseleave="selection.resetHovered()"
+                        :tued-contextmenu="contextmenu.register('block', element.id)"
                     >
                         <div class="tued-structure-draggable-handler" @mousedown.stop="selection.select('block', element.id, 'sidebar')">
                             <i class="fas fa-arrows-alt"></i>
@@ -35,7 +36,7 @@
 </template>
 
 <script setup>
-const { inject, defineProps } = require('vue');
+const { inject, defineProps, onMounted } = require('vue');
 const draggable = require('vuedraggable');
 
 const props = defineProps(['parent', 'blocks']);
@@ -46,4 +47,29 @@ const translator = inject('translator');
 const messenger = inject('messenger');
 const blocksRegistry = inject('blocks.registry');
 const blocksPicker = inject('blocks.picker');
+const contextmenu = inject('contextmenu');
+const structureManipulator = inject('structureManipulator');
+
+onMounted(() => {
+    contextmenu.items('blocks', 'column', () => {
+        return [
+            {
+                onClick: (id) => blocksPicker.newAt(id),
+                label: translator.trans('addBlock'),
+                icon: 'fas fa-plus',
+            },
+        ];
+    });
+    contextmenu.items('blocks', 'block', () => {
+        return [
+            {
+                group: 'block',
+                onClick: (id) => structureManipulator.removeElement(id),
+                label: translator.trans('delete'),
+                icon: 'fas fa-trash',
+                classname: 'dropdown-item-danger',
+            },
+        ];
+    });
+});
 </script>

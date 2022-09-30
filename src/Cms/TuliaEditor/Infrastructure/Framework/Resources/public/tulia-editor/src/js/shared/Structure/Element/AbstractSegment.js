@@ -10,8 +10,9 @@ export default class AbstractSegment {
     extensions;
     controls;
     structureTraversator;
+    contextmenuService;
 
-    constructor (type, element, options, messenger, extensions, controls, structureTraversator) {
+    constructor (type, element, options, messenger, extensions, controls, structureTraversator, contextmenu) {
         this.segment = this.getSegment();
         this.type = type;
         this.id = element.id;
@@ -21,6 +22,7 @@ export default class AbstractSegment {
         this.extensions = extensions;
         this.controls = controls;
         this.structureTraversator = structureTraversator;
+        this.contextmenuService = contextmenu;
         this.dataSynchronizer = new Data(element.id, this.type, this.segment, element.data, this.messenger);
         this.styleSynchronizer = new ElementStyle(element.style);
 

@@ -12,4 +12,8 @@ export default class Manager extends AbstractSegment {
     getSegment () {
         return 'manager';
     }
+
+    contextmenu (callable) {
+        this.contextmenuService.items(`${this.type}-${this.id}`, 'block', callable);
+    }
 }

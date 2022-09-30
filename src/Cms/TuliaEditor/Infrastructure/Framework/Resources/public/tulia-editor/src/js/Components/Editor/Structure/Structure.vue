@@ -64,7 +64,6 @@
 
 <script>
 const Section = require('components/Editor/Structure/Section.vue').default;
-const ObjectCloner = require("shared/Utils/ObjectCloner.js").default;
 const SelectedBoundaries = require('shared/Structure/Selection/Boundaries/Selected.js').default;
 const HoveredBoundaries = require('shared/Structure/Selection/Boundaries/Hovered.js').default;
 const HoverResolver = require('shared/Structure/Selection/HoverResolver.js').default;

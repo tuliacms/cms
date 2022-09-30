@@ -19,6 +19,7 @@
                         @click.stop="selection.select('column', element.id, 'sidebar')"
                         @mouseenter="selection.hover('column', element.id, 'sidebar')"
                         @mouseleave="selection.resetHovered()"
+                        :tued-contextmenu="contextmenu.register('column', element.id)"
                     >
                         <div class="tued-structure-draggable-handler" @mousedown.stop="selection.select('column', element.id, 'sidebar')">
                             <i class="fas fa-arrows-alt"></i>
@@ -54,7 +55,7 @@
 </template>
 
 <script setup>
-const { defineProps, computed, inject, ref } = require('vue');
+const { defineProps, computed, inject, ref, onMounted } = require('vue');
 const draggable = require('vuedraggable');
 const Blocks = require('components/Admin/Sidebar/Blocks.vue').default;
 const props = defineProps(['parent', 'columns']);
@@ -63,6 +64,8 @@ const canvas = inject('canvas');
 const columnsSize = inject('columns.size');
 const structureDragOptions = inject('structureDragOptions');
 const translator = inject('translator');
+const contextmenu = inject('contextmenu');
+const structureManipulator = inject('structureManipulator');
 
 const columns = {};
 
@@ -121,5 +124,31 @@ const changeSize = (column, event) => {
 const columnSizeByBreakpoint = (column) => {
     return column.sizes[canvas.getBreakpointName()].size;
 };
+
+onMounted(() => {
+    contextmenu.items('columns', 'column', () => {
+        return [
+            {
+                group: 'column',
+                onClick: (id) => structureManipulator.newColumnBefore(id),
+                label: translator.trans('addColumnBefore'),
+                icon: 'fas fa-plus',
+            },
+            {
+                group: 'column',
+                onClick: (id) => structureManipulator.newColumnAfter(id),
+                label: translator.trans('addColumnAfter'),
+                icon: 'fas fa-plus',
+            },
+            {
+                group: 'column',
+                onClick: (id) => structureManipulator.removeElement(id),
+                label: translator.trans('delete'),
+                icon: 'fas fa-trash',
+                classname: 'dropdown-item-danger',
+            },
+        ];
+    });
+});
 </script>
 

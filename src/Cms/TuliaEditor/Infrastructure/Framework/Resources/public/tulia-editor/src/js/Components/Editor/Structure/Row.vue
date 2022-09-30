@@ -6,6 +6,7 @@
         @mouseleave="$emit('selection-leave', 'row', row.id)"
         @mousedown.stop="selection.select('row', row.id, 'editor')"
         data-tagname="Row"
+        :tued-contextmenu="contextmenu.register('row', row.id)"
     >
         <Column
             v-for="column in props.row.columns"
@@ -26,13 +27,14 @@
 </template>
 
 <script setup>
-const Column = require('./Column.vue').default;
 const { defineProps, inject, computed } = require('vue');
+const Column = require('./Column.vue').default;
 const props = defineProps(['row', 'parent']);
 const row = inject('rows.instance').editor(props);
 const section = row.getParent();
 const selection = inject('selection');
 const translator = inject('translator');
+const contextmenu = inject('contextmenu');
 
 const rowClassname = computed(() => {
     let classname = 'tued-structure-row tued-structure-element-selectable row';

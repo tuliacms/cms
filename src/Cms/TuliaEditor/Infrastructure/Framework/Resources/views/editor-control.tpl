@@ -41,6 +41,12 @@
             emptySection: '{{ 'emptySection'|trans({}, 'tulia-editor') }}',
             emptyRow: '{{ 'emptyRow'|trans({}, 'tulia-editor') }}',
             emptyColumn: '{{ 'emptyColumn'|trans({}, 'tulia-editor') }}',
+            addBlock: '{{ 'addBlock'|trans({}, 'tulia-editor') }}',
+            addSectionBelow: '{{ 'addSectionBelow'|trans({}, 'tulia-editor') }}',
+            addRow: '{{ 'addRow'|trans({}, 'tulia-editor') }}',
+            addColumn: '{{ 'addColumn'|trans({}, 'tulia-editor') }}',
+            addColumnBefore: '{{ 'addColumnBefore'|trans({}, 'tulia-editor') }}',
+            addColumnAfter: '{{ 'addColumnAfter'|trans({}, 'tulia-editor') }}',
         });
 
         let structureSelector = '.tulia-editor-structure-field[data-tulia-editor-group-id="{{ params.group_id }}"]';

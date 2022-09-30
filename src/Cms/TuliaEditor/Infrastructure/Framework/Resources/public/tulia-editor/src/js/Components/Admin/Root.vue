@@ -4,11 +4,13 @@
             <CanvasComponent
                 :editorView="options.editor.view + '?tuliaEditorInstance=' + instanceId"
                 :canvasOptions="canvasOptions"
+                ref="canvas"
             ></CanvasComponent>
             <SidebarComponent
                 :structure="structure"
                 @cancel="cancelEditor"
                 @save="saveEditor"
+                @contextmenu.prevent="(event) => container.messenger.execute('contextmenu', ContextmenuEventTransformer.transformPointerEvent(event, 'sidebar'))"
             ></SidebarComponent>
             <Debugbar></Debugbar>
             <BlockPickerComponent
@@ -19,6 +21,19 @@
         <div v-for="(ext, key) in mountedExtensions" :key="key">
             <component :is="ext.code + 'Manager'" :instance="ext.instance"></component>
         </div>
+        <Teleport to="body">
+            <div class="dropdown-menu show tued-contextmenu" v-if="contextmenu.opened" :style="{ top: contextmenu.position.y + 'px', left: contextmenu.position.x + 'px' }">
+                <div v-for="group in contextmenu.items.collection" class="tued-dropdown-menu-group">
+                    <div v-if="group.label"><h6 class="dropdown-header">{{ group.label }}</h6></div>
+                    <div v-for="item in group.items">
+                        <a :class="contextmenuItemClass(item)" href="#" @click="item.callback()">
+                            <i v-if="item.icon" :class="contextmenuItemIcon(item)"></i>
+                            {{ item.label }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </Teleport>
     </div>
 </template>
 
@@ -29,7 +44,7 @@ const BlockPickerComponent = require("components/Admin/Block/PickerModal.vue").d
 const Debugbar = require("components/Admin/Debugbar/Debugbar.vue").default;
 const ObjectCloner = require("shared/Utils/ObjectCloner.js").default;
 const TuliaEditor = require('TuliaEditor');
-const { defineProps, onMounted, provide, reactive, isProxy, toRaw } = require('vue');
+const { defineProps, onMounted, provide, reactive, isProxy, toRaw, ref } = require('vue');
 
 const props = defineProps([
     'editor',
@@ -180,6 +195,60 @@ props.container.messenger.operation('extention.unmount', (data, success, fail) =
 
 
 
+/***************
+ * Contextmenu
+ **************/
+const ContextmenuEventTransformer = require("shared/Contextmenu/EventTransformer.js").default;
+const Contextmenu = require("shared/Contextmenu/Contextmenu.js").default;
+const cx = new Contextmenu('sidebar', props.container.messenger);
+provide('contextmenu', cx);
+
+const canvas = ref(null);
+const contextmenu = reactive({
+    items: [],
+    opened: false,
+    position: {
+        x: 0,
+        y: 0
+    }
+});
+const openContextmenu = (event) => {
+    if (!event) {
+        return;
+    }
+
+    if (event.source === 'editor') {
+        const iframe = canvas.value.$el.querySelector('.tued-canvas-device-faker iframe');
+        event.position.x = event.position.x + iframe.getBoundingClientRect().left;
+        event.position.y = event.position.y + iframe.getBoundingClientRect().top;
+    }
+
+    contextmenu.items = cx.collectItems(event.targets);
+
+    contextmenu.position.x = event.position.x;
+    contextmenu.position.y = event.position.y;
+    contextmenu.opened = contextmenu.items.total >= 1;
+};
+
+const hideContextmenu = () => {
+    contextmenu.opened = false;
+};
+
+const contextmenuItemIcon = item => {
+    return 'dropdown-icon ' + item.icon;
+};
+const contextmenuItemClass = item => {
+    let classname = 'dropdown-item';
+
+    if (item.icon) {
+        classname += ' dropdown-item-with-icon';
+    }
+
+    return classname + ' ' + item.classname;
+};
+
+
+
 /***********
  * Controls
  **********/
@@ -197,7 +266,8 @@ const instantiator = new ElementsInstantiator(
     props.container.messenger,
     extensionRegistry,
     controlRegistry,
-    structureManipulator
+    structureManipulator,
+    cx,
 );
 
 provide('blocks.instance', instantiator.instantiator('block'));
@@ -227,4 +297,22 @@ provide('blocks.picker', new BlocksPicker(blockPickerData, blocksRegistry, struc
  **********/
 const ColumnSize = require("shared/Structure/Columns/ColumnSize.js").default;
 provide('columns.size', new ColumnSize(structureManipulator));
+
+
+
+
+onMounted(() => {
+    props.container.messenger.operation('contextmenu', (data, success, fail) => {
+        openContextmenu(data);
+        success();
+    });
+    props.container.messenger.operation('contextmenu.hide', (data, success, fail) => {
+        hideContextmenu();
+        success();
+    });
+
+    document.body.addEventListener('click', (e) => {
+        props.container.messenger.execute('contextmenu.hide');
+    });
+});
 </script>

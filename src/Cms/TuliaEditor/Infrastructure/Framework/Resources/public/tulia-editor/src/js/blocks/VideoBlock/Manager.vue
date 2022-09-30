@@ -3,10 +3,9 @@
 </template>
 
 <script setup>
-const { defineProps, inject } = require('vue');
+const { defineProps, inject, onMounted } = require('vue');
 const props = defineProps(['block']);
 const block = inject('blocks.instance').manager(props);
-
 const Select = block.control('Select');
 
 const choices = {
@@ -15,4 +14,15 @@ const choices = {
     '16x9': '16x9',
     '21x9': '21x9',
 };
+
+/*onMounted(() => {
+    block.contextmenu(() => {
+        return [
+            {
+                onClick: (id) => alert(id),
+                label: 'asdasd',
+            },
+        ];
+    });
+});*/
 </script>

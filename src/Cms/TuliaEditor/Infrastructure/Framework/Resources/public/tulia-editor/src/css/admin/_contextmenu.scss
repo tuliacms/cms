@@ -1,0 +1,19 @@
+.dropdown-menu.tued-contextmenu {
+    z-index:10100 !important;
+    left: 50%;
+    top: 50%;
+    position: fixed;
+    display: block;
+
+    .dropdown-header {
+        margin-bottom: 6px;
+    }
+
+    .tued-dropdown-menu-group {
+        margin-bottom: 18px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
