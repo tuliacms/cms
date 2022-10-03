@@ -18,12 +18,18 @@
                     'tued-structure-selected-options': true,
                     'tued-structure-selected-active': selected.id === row.id && selected.type === 'row'
                 }">
-                    <Row :row="row"></Row>
+                    <div class="text-muted text-uppercase">{{ translator.trans('noEditOptionsForThisElement') }}</div>
                 </div>
                 <div
                     v-for="(column, key) in row.columns"
                     :key="'column-' + key"
                 >
+                    <div :class="{
+                        'tued-structure-selected-options': true,
+                        'tued-structure-selected-active': selected.id === column.id && selected.type === 'column'
+                    }">
+                        <div class="text-muted text-uppercase">{{ translator.trans('noEditOptionsForThisElement') }}</div>
+                    </div>
                     <div
                         v-for="(block, key) in column.blocks"
                         :key="'block-' + key"
@@ -32,10 +38,15 @@
                             'tued-structure-selected-options': true,
                             'tued-structure-selected-active': selected.id === block.id && selected.type === 'block'
                         }">
-                            <component
-                                :is="'block-' + block.code + '-manager'"
-                                :block="block"
-                            ></component>
+                            <div :class="{ 'd-block': existingBlocks[block.code], 'd-none': !existingBlocks[block.code] }">
+                                <component
+                                    :is="'block-' + block.code + '-manager'"
+                                    :block="block"
+                                ></component>
+                            </div>
+                            <div :class="{ 'd-block': !existingBlocks[block.code], 'd-none': existingBlocks[block.code] }">
+                                <div class="text-muted text-uppercase">{{ translator.trans('noEditOptionsForThisElement') }}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -49,8 +60,7 @@
 
 <script setup>
 const Section = require('components/Admin/Sidebar/Selected/Section.vue').default;
-const Row = require('components/Admin/Sidebar/Selected/Row.vue').default;
-const { defineProps, reactive, inject } = require('vue');
+const { defineProps, reactive, inject, computed, onMounted } = require('vue');
 
 const messenger = inject('messenger');
 const translator = inject('translator');
@@ -69,5 +79,15 @@ messenger.on('structure.selection.selected', (type, id) => {
 messenger.on('structure.selection.deselected', () => {
     selected.id = null;
     selected.type = null;
+});
+
+const existingBlocks = {};
+
+onMounted(() => {
+    for (let i in TuliaEditor.blocks) {
+        if (TuliaEditor.blocks[i].hasOwnProperty('manager')) {
+            existingBlocks[TuliaEditor.blocks[i].code] = TuliaEditor.blocks[i].code;
+        }
+    }
 });
 </script>

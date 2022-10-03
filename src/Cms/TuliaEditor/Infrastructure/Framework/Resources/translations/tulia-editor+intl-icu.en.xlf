@@ -146,6 +146,10 @@
                 <source>addRow</source>
                 <target>Add row</target>
             </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.37">
+                <source>noEditOptionsForThisElement</source>
+                <target>No edit options for this element.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

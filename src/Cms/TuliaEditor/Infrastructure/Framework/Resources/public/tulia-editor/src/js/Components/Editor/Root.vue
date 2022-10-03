@@ -83,8 +83,7 @@ onMounted(() => {
         props.container.messenger.execute('contextmenu.hide');
     });
     document.addEventListener('contextmenu', event => {
-        event.preventDefault();
-        props.container.messenger.execute('contextmenu', ContextmenuEventTransformer.transformPointerEvent(event, 'editor'));
+        contextmenu.open(event, 'editor');
     });
 });
 
@@ -105,7 +104,6 @@ provide('extension.instance', new Instantiator(props.container.messenger));
 /***************
  * Contextmenu
  **************/
-const ContextmenuEventTransformer = require("shared/Contextmenu/EventTransformer.js").default;
 const Contextmenu = require("shared/Contextmenu/Contextmenu.js").default;
 const contextmenu = new Contextmenu('editor', props.container.messenger);
 provide('contextmenu', contextmenu);

@@ -146,6 +146,10 @@
                 <source>addRow</source>
                 <target>Dodaj wiersz</target>
             </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.37">
+                <source>noEditOptionsForThisElement</source>
+                <target>Brak opcji edycji dla tego elementu.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

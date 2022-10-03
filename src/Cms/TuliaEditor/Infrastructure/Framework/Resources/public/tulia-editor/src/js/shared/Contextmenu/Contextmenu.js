@@ -1,3 +1,5 @@
+const ContextmenuEventTransformer = require("shared/Contextmenu/EventTransformer.js").default;
+
 export default class {
     source;
     messenger;
@@ -7,6 +9,21 @@ export default class {
         this.source = source;
         this.messenger = messenger;
     }
+
+    open (event, source) {
+        if (this.isTextSelected()) {
+            return;
+        }
+
+        event.preventDefault();
+
+        this.messenger.execute('contextmenu', ContextmenuEventTransformer.transformPointerEvent(event, source))
+    }
+
+    isTextSelected () {
+        let selection = window.getSelection();
+        return selection && selection.type === 'Range';
+    };
 
     register (type, elementId, data) {
         return JSON.stringify({

@@ -28,6 +28,8 @@ export default {
             }
         }
 
+        block.code = `${block.theme}:${block.code}`;
+
         this.blocks[block.code] = block;
     },
     trans: function (locale, domain, translations) {

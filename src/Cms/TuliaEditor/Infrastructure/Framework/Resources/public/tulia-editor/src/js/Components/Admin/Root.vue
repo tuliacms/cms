@@ -10,7 +10,7 @@
                 :structure="structure"
                 @cancel="cancelEditor"
                 @save="saveEditor"
-                @contextmenu.prevent="(event) => container.messenger.execute('contextmenu', ContextmenuEventTransformer.transformPointerEvent(event, 'sidebar'))"
+                @contextmenu="(event) => cx.open(event, 'sidebar')"
             ></SidebarComponent>
             <Debugbar></Debugbar>
             <BlockPickerComponent
@@ -198,7 +198,6 @@ props.container.messenger.operation('extention.unmount', (data, success, fail) =
 /***************
  * Contextmenu
  **************/
-const ContextmenuEventTransformer = require("shared/Contextmenu/EventTransformer.js").default;
 const Contextmenu = require("shared/Contextmenu/Contextmenu.js").default;
 const cx = new Contextmenu('sidebar', props.container.messenger);
 provide('contextmenu', cx);

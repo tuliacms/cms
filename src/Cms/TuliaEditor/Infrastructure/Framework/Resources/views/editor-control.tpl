@@ -18,6 +18,7 @@
             row: '{{ 'row'|trans({}, 'tulia-editor') }}',
             block: '{{ 'block'|trans({}, 'tulia-editor') }}',
             selectEditableElementToShowOptions: '{{ 'selectEditableElementToShowOptions'|trans({}, 'tulia-editor') }}',
+            noEditOptionsForThisElement: '{{ 'noEditOptionsForThisElement'|trans({}, 'tulia-editor') }}',
             startTypingPlaceholder: '{{ 'startTypingPlaceholder'|trans({}, 'tulia-editor') }}',
             choseImage: '{{ 'choseImage'|trans({}, 'tulia-editor') }}',
             removeItem: '{{ 'removeItem'|trans({}, 'tulia-editor') }}',

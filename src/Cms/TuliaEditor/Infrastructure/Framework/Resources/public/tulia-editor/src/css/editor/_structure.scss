@@ -4,7 +4,7 @@
     .tued-structure-empty-element {
         border: 1px dashed #e8e8e8;
         border-radius: 5px;
-        padding: 25px;
+        padding: 0 25px;
         text-align: center;
         transition: .12s all;
         text-transform: uppercase;
@@ -13,6 +13,16 @@
         font-style: italic;
         pointer-events: none;
         margin: 10px 0;
+        height: calc(100% - 20px);
+        position: relative;
+
+        span {
+            display: block;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
     }
 
     .tued-structure-new-element {

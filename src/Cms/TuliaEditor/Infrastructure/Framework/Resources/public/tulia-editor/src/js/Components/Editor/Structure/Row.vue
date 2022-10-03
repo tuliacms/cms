@@ -21,7 +21,7 @@
             class="tued-structure-empty-element"
             v-if="props.row.columns.length === 0"
         >
-            {{ translator.trans('emptyRow') }}
+            <span>{{ translator.trans('emptyRow') }}</span>
         </div>
     </div>
 </template>

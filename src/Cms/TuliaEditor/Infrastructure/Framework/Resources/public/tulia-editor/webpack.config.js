@@ -7,7 +7,7 @@ const FileManagerPlugin = require('filemanager-webpack-plugin');
 const path = require('path');
 const fs = require('fs');
 
-module.exports = {
+let config = {
     mode: 'development',
     entry: './src/js/tulia-editor.js',
     output: {
@@ -78,20 +78,20 @@ module.exports = {
     ]
 };
 
-if (process.env.NODE_ENV === 'production') {
-    module.exports.devtool = 'source-map';
-    module.exports.optimization = {
-        minimize: true
-    };
-    // http://vue-loader.vuejs.org/en/workflow/production.html
-    module.exports.plugins = (module.exports.plugins || []).concat([
-        new webpack.DefinePlugin({
+module.exports = (env, argv) => {
+    if (argv.mode === 'production') {
+        config.optimization = {
+            minimize: true
+        };
+        config.plugins.push(new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: '"production"'
             }
-        }),
-        new webpack.LoaderOptionsPlugin({
+        }));
+        config.plugins.push(new webpack.LoaderOptionsPlugin({
             minimize: true
-        })
-    ]);
-}
+        }));
+    }
+
+    return config;
+};

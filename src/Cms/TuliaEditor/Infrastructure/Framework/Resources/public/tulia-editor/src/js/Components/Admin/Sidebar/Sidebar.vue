@@ -47,7 +47,7 @@ const sidebar = ref('structure');
 
 onMounted(() => {
     messenger.on('structure.selection.selected', (id, type, trigger) => {
-        if (trigger !== 'sidebar') {
+        if (trigger !== 'sidebar' && type === 'block') {
             sidebar.value = 'selected';
         }
     });
