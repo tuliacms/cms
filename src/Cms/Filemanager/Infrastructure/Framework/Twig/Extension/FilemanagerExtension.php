@@ -19,9 +19,9 @@ use Twig\TwigFunction;
 class FilemanagerExtension extends AbstractExtension
 {
     public function __construct(
-        private FileFinderInterface $finder,
-        private ImageUrlResolver $urlResolver,
-        private string $publicDir,
+        private readonly FileFinderInterface $finder,
+        private readonly ImageUrlResolver $urlResolver,
+        private readonly string $publicDir,
     ) {
     }
 
@@ -44,8 +44,6 @@ class FilemanagerExtension extends AbstractExtension
      * Params:
      *     - attributes = List of img tag attributes for HTML
      *     - size = Size name of the image.
-     *     - version = Version of the image, added at the end of the URL
-     *       as query string, to force reload by browser.
      */
     public function image(string $id, array $params = []): string
     {
@@ -69,20 +67,18 @@ class FilemanagerExtension extends AbstractExtension
                 : 'original'
         );
 
-        if (isset($params['version']) && empty($params['version']) === false) {
-            $data['src'] .= '?version=' . $params['version'];
-        }
-
         return (new Html())->generateImageTag($data);
     }
 
     /**
      * @param string|File $id
      */
-    public function imageUrl($id, string $sizeName): string
+    public function imageUrl($id, array $params = []): string
     {
         if ($id instanceof File) {
             $image = $id;
+        } else if (empty($id)) {
+            return $params['default'] ?? '';
         } else {
             $image = $this->finder->findOne([
                 'id' => $id,
@@ -94,7 +90,7 @@ class FilemanagerExtension extends AbstractExtension
             }
         }
 
-        return $this->urlResolver->size($image, $sizeName);
+        return $this->urlResolver->size($image, $params['size'] ?? 'original');
     }
 
     public function gallery(array $ids, array $params = []): string

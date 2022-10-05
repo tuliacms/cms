@@ -181,7 +181,7 @@ let Customizer = function (options) {
             if (tagName === 'INPUT') {
                 let type = $(this).attr('type');
 
-                if (type == 'radio' || type == 'checkbox') {
+                if (type === 'radio' || type === 'checkbox') {
                     self.bindSimpleChangeEvent($(this));
                 } else {
                     self.bindDelayedChangeEvent($(this));
@@ -236,15 +236,12 @@ let Customizer = function (options) {
                 self.hideLoader();
             };
 
-            if(input.attr('data-transport') === 'postMessage')
-            {
+            if (input.attr('data-transport') === 'postMessage') {
                 self.sendPostMessage('customized', {
                     name : input.attr('name'),
                     value: input.val(),
                 });
-            }
-            else
-            {
+            } else {
                 callback = function () {
                     self.refreshPreview(function () {
                         self.hidePreviewLoader();

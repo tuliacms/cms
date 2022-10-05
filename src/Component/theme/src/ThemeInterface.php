@@ -22,4 +22,6 @@ interface ThemeInterface
     public function hasParent(): bool;
 
     public function setParentThemeLoader(callable $loader): void;
+
+    public function getPreviewDirectory(): ?string;
 }

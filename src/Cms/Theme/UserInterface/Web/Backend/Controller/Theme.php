@@ -6,6 +6,8 @@ namespace Tulia\Cms\Theme\UserInterface\Web\Backend\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Cms\Platform\Infrastructure\DefaultTheme\DefaultTheme;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
@@ -15,6 +17,7 @@ use Tulia\Cms\Theme\UserInterface\Web\Backend\Form\ThemeInstallatorForm;
 use Tulia\Component\Routing\Website\WebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
 use Tulia\Component\Theme\ManagerInterface;
+use Tulia\Component\Theme\Storage\StorageInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -24,6 +27,7 @@ class Theme extends AbstractController
     public function __construct(
         private readonly ManagerInterface $manager,
         private readonly ThemeActivator $themeActivator,
+        private readonly StorageInterface $storage,
     ) {
     }
 
@@ -65,5 +69,28 @@ class Theme extends AbstractController
 
         $this->setFlash('success', $this->trans('themeActivated', [], 'themes'));
         return $this->redirectToRoute('backend.theme');
+    }
+
+    public function preview(Request $request, string $theme, string $page): Response
+    {
+        $themeObject = $this->storage->get($theme);
+        $pageFilepath = $themeObject->getPreviewDirectory().'/'.$page;
+
+        if (!is_file($pageFilepath)) {
+            throw new NotFoundHttpException();
+        }
+
+        $headers = [];
+
+        $headers['Content-Type'] = match (pathinfo($page, PATHINFO_EXTENSION)) {
+            'html' => 'text/html',
+            'css' => 'text/css',
+            'js' => 'application/javascript',
+            'jpg' => 'image/jpeg',
+            'png' => 'image/png',
+            default => 'text/plain'
+        };
+
+        return new Response(file_get_contents($pageFilepath), Response::HTTP_OK, $headers);
     }
 }

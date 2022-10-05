@@ -11,6 +11,7 @@
 
             this.bindPostMessages();
             this.bindLiveControls();
+            this.bindThemeVariables();
         };
 
         this.bindLinks = function () {
@@ -21,14 +22,14 @@
 
                 let link = $(this).get(0);
 
-                if(self.isExternal(link))
-                {
+                if (self.isExternal(link)) {
                     alert('External links are blocked in Customizer mode.');
                     return;
                 }
 
-                if(self.isPreloadable(link) === false)
+                if (self.isPreloadable(link) === false) {
                     return;
+                }
 
                 self.open(link.href);
             });
@@ -39,17 +40,21 @@
         };
 
         this.isPreloadable = function (link) {
-            if(link.origin !== location.origin)
+            if (link.origin !== location.origin) {
                 return false;
+            }
 
-            if(link.protocol !== location.protocol)
+            if (link.protocol !== location.protocol) {
                 return false;
+            }
 
-            if(link.hash)
+            if (link.hash) {
                 return false;
+            }
 
-            if(link.getAttribute('href') === '#')
+            if (link.getAttribute('href') === '#') {
                 return false;
+            }
 
             return true;
         };
@@ -58,14 +63,15 @@
             let self = this;
 
             window.addEventListener('message', function (event) {
-                if(event.origin !== document.location.origin)
+                if (event.origin !== document.location.origin) {
                     return;
+                }
 
-                if(event.data.channel !== 'customizer')
+                if (event.data.channel !== 'customizer') {
                     return;
+                }
 
-                switch(event.data.command)
-                {
+                switch (event.data.command) {
                     case 'customized': self.callCustomized(event.data.payload.name, event.data.payload.value); break;
                 }
             }, false);
@@ -95,6 +101,16 @@
 
                             $(this).css('background-image', 'url(' + value + ')');
                             break;
+                        case 'image-source':
+                            if (!options.image_size) {
+                                throw new Error('Please provide "image_size" option.');
+                            }
+                            if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value)) {
+                                value = '/media/resolve/image/' + options.image_size + '/' + value + '/image.jpg';
+                            }
+
+                            $(this).attr('src', value);
+                            break;
                         // default means case: 'inner-text'
                         default:
                             $(this).text(value);
@@ -102,6 +118,37 @@
                     }
                 });
             });
+        };
+
+        this.bindThemeVariables = function () {
+            const style = $('#theme-configuration-variables');
+            const variables = JSON.parse($('#tulia-theme-configuration-variables').html());
+
+            const refreshStyle = (style, variables) => {
+                let result = '';
+
+                for (let selector in variables) {
+                    result += `${selector}{`;
+
+                    for (let variable in variables[selector]) {
+                        result += `--${variable}:${variables[selector][variable].value};`;
+                    }
+
+                    result += '}';
+                }
+
+                style.html(result);
+            };
+
+            for (let selector in variables) {
+                for (let variable in variables[selector]) {
+                    customizer.customized(variables[selector][variable].key, value => {
+                        variables[selector][variable].value = value;
+
+                        refreshStyle(style, variables);
+                    });
+                }
+            }
         };
 
         this.open = function (link) {
@@ -116,20 +163,19 @@
         };
 
         this.callCustomized = function (name, value) {
-            if(this.customizedEvents[name])
-            {
-                for(let i = 0; i < this.customizedEvents[name].length; i++)
-                {
+            if (this.customizedEvents[name]) {
+                for (let i = 0; i < this.customizedEvents[name].length; i++) {
                     this.customizedEvents[name][i](value);
                 }
             }
         };
 
         this.customized = function (name, callback) {
-            if(! this.customizedEvents[name])
-                this.customizedEvents[name] = [ callback ];
-            else
+            if (!this.customizedEvents[name]) {
+                this.customizedEvents[name] = [callback];
+            } else {
                 this.customizedEvents[name].push(callback);
+            }
         };
     };
 

@@ -27,4 +27,6 @@ interface ConfigurationInterface
     public function getCssFramework(): string;
     public function setCustomizerVariable(string $name, mixed $value): void;
     public function getCustomizerVariable(string $name, mixed $default = null): mixed;
+    public function setVariables(array $variables): void;
+    public function getVariables(): array;
 }

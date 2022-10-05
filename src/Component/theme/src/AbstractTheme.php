@@ -47,6 +47,13 @@ abstract class AbstractTheme implements ThemeInterface
         $this->parentThemeLoader = $loader;
     }
 
+    public function getPreviewDirectory(): ?string
+    {
+        $directory = $this->getDirectory().'/Resources/preview';
+
+        return is_dir($directory) ? $directory : null;
+    }
+
     public function getVendor(): string
     {
         if ($this->vendor) {

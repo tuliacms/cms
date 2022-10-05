@@ -248,6 +248,7 @@ class Configuration implements ConfigurationInterface
                                     ->scalarNode('translation_domain')->defaultNull()->end()
                                 ->end()
                             ->end()
+                            ->validate()->always($this->validateCollectionsNames(...))->end()
                         ->end()
                     ->end()
                 ->end()
@@ -546,6 +547,7 @@ class Configuration implements ConfigurationInterface
                                                                 ->scalarNode('label')->isRequired()->end()
                                                             ->end()
                                                         ->end()
+                                                        ->validate()->always($this->validateCollectionsNames(...))->end()
                                                     ->end()
                                                     ->arrayNode('widget_styles')
                                                         ->arrayPrototype()
@@ -554,6 +556,7 @@ class Configuration implements ConfigurationInterface
                                                                 ->scalarNode('label')->isRequired()->end()
                                                             ->end()
                                                         ->end()
+                                                        ->validate()->always($this->validateCollectionsNames(...))->end()
                                                     ->end()
                                                     ->arrayNode('image_sizes')
                                                         ->arrayPrototype()
@@ -564,6 +567,7 @@ class Configuration implements ConfigurationInterface
                                                                 ->scalarNode('mode')->defaultValue('fit')->end()
                                                             ->end()
                                                         ->end()
+                                                        ->validate()->always($this->validateCollectionsNames(...))->end()
                                                     ->end()
                                                 ->end()
                                             ->end()
@@ -576,6 +580,29 @@ class Configuration implements ConfigurationInterface
                                     ->end()
                                     ->arrayNode('customizer')
                                         ->children()
+                                            ->variableNode('variables')
+                                                ->defaultValue([])
+                                                ->validate()
+                                                ->always(function (array $variables) {
+                                                    foreach ($variables as $key => $val) {
+                                                        if (!is_array($val)) {
+                                                            throw new \InvalidArgumentException(sprintf('Value of cms.theme.configuration.[theme].customizer.variables.%s must be an array.', $key));
+                                                        }
+
+                                                        foreach ($val as $variable => $value) {
+                                                            if (!is_string($variable)) {
+                                                                throw new \InvalidArgumentException(sprintf('Key of cms.theme.configuration.[theme].customizer.variables.%s.%s must be a string.', $key, $variable));
+                                                            }
+                                                            if (!is_scalar($value)) {
+                                                                throw new \InvalidArgumentException(sprintf('Value of cms.theme.configuration.[theme].customizer.variables.%s.%s must be a scalar.', $key, $variable));
+                                                            }
+                                                        }
+                                                    }
+
+                                                    return $variables;
+                                                })
+                                                ->end()
+                                            ->end()
                                             ->arrayNode('changesets')
                                                 ->arrayPrototype()
                                                     ->children()
@@ -616,5 +643,16 @@ class Configuration implements ConfigurationInterface
                 ->end()
             ->end()
         ;
+    }
+
+    private function validateCollectionsNames(array $collection): array
+    {
+        foreach ($collection as $element) {
+            if (!preg_match('#^([a-z0-9\-]+)$#i', $element['name'])) {
+                throw new \InvalidArgumentException(sprintf('Name "%s" must be named with alphanumeric string with optional dash', $element['name']));
+            }
+        }
+
+        return $collection;
     }
 }

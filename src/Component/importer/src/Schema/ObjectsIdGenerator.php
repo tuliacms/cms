@@ -35,7 +35,7 @@ final class ObjectsIdGenerator
             $ids[] = $this->collectObjectIds($object);
         }
 
-        return array_merge(...$ids);
+        return array_filter(array_merge(...$ids));
     }
 
     /**
@@ -55,7 +55,7 @@ final class ObjectsIdGenerator
             $ids[] = [$object['@id']];
         }
 
-        return array_merge(...$ids);
+        return array_filter(array_merge(...$ids));
     }
 
     /**

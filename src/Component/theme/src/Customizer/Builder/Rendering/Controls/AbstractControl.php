@@ -61,7 +61,7 @@ abstract class AbstractControl implements ControlInterface
      */
     public function escapeAttribute($input)
     {
-        if ($input === null || \is_int($input)) {
+        if ($input === null || \is_int($input) || \is_float($input)) {
             return $input;
         }
 

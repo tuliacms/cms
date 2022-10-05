@@ -131,7 +131,7 @@
         {
             "@type": "Widget",
             "type": "internal.text",
-            "space": "footer_info",
+            "space": "footer-info",
             "name": "Text in footer",
             "title": "Event Agency",
             "attributes": [
@@ -146,7 +146,7 @@
         {
             "@type": "Widget",
             "type": "internal.menu",
-            "space": "footer_quick_links",
+            "space": "footer-quick-links",
             "name": "Menu in footer",
             "title": "Quick links",
             "attributes": [

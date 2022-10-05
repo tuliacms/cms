@@ -14,6 +14,7 @@ class Configuration implements ConfigurationInterface
     private array $widgetSpaceList = [];
     private array $widgetStyleList = [];
     private array $customizer = [];
+    private array $variables = [];
     private string $translationDomain = 'messages';
     private string $nodeContentField = 'content';
     private string $cssFramework = '';
@@ -30,6 +31,7 @@ class Configuration implements ConfigurationInterface
         $this->widgetSpaceList = array_merge($this->widgetSpaceList, $configuration->widgetSpaceList);
         $this->widgetStyleList = array_merge($this->widgetStyleList, $configuration->widgetStyleList);
         $this->customizer = array_merge($this->customizer, $configuration->customizer);
+        $this->variables = array_merge($this->variables, $configuration->variables);
         $this->translationDomain = $configuration->translationDomain;
         $this->nodeContentField = $configuration->nodeContentField;
         $this->cssFramework = $configuration->cssFramework;
@@ -119,5 +121,15 @@ class Configuration implements ConfigurationInterface
     public function getCustomizerVariable(string $name, mixed $default = null): mixed
     {
         return $this->customizer[$name] ?? $default;
+    }
+
+    public function setVariables(array $variables): void
+    {
+        $this->variables = $variables;
+    }
+
+    public function getVariables(): array
+    {
+        return $this->variables;
     }
 }

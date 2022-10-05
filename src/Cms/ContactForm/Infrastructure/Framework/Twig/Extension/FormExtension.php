@@ -33,6 +33,10 @@ class FormExtension extends AbstractExtension
     {
         return [
             new TwigFunction('contact_form', function (Environment $env, $context, string $formId) {
+                if (!$formId) {
+                    return '<!-- Please provide a ContactForm ID -->';
+                }
+
                 $model = $this->finder->findOne(['id' => $formId, 'fetch_fields' => true], ContactFormFinderScopeEnum::SINGLE);
 
                 if ($model === null) {

@@ -69,6 +69,9 @@
                                         <button type="submit" class="btn btn-sm btn-secondary tulia-click-page-loader my-3">{{ 'activate'|trans({}, 'themes') }}</button>
                                     </form>
                                 {% endif %}
+                                {% if item.previewDirectory %}
+                                    <a href="{{ path('backend.theme.preview', { theme: item.name, page: 'index.html' }) }}" class="btn btn-sm btn-secondary btn-icon-only" title="Preview" data-bs-toggle="tooltip"><i class="btn-icon fas fa-eye"></i></a>
+                                {% endif %}
                                 {% if development %}
                                     <div class="dropup d-inline-block float-end">
                                         <a href="#" class="card-link d-inline-block px-4 py-3 mt-1 text-dark" data-bs-toggle="dropdown">

@@ -8,8 +8,8 @@
 {% block body %}
     <div id="tulia-editor"></div>
     <script>
-        $(function () {
+        document.addEventListener('DOMContentLoaded', function () {
             new TuliaEditor.Canvas();
-        });
+        }, false);
     </script>
 {% endblock %}

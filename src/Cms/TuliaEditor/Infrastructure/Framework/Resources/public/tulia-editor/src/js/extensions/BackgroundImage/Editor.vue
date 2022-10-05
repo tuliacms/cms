@@ -1,6 +1,7 @@
 <template>
     <div :class="classlist" :style="{ 'background-image': `url(${imageUrl})` }">
         <button type="button" @click="extension.execute('chose-image')"></button>
+        <slot />
     </div>
 </template>
 

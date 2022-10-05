@@ -24,8 +24,6 @@ class ThemeConfigurationAssetsLoader
      */
     public function load(): void
     {
-        $theme = $this->manager->getTheme();
-
-        $this->assetter->require($theme->getConfig()->getAssets());
+        $this->assetter->require($this->manager->getTheme()->getConfig()->getAssets());
     }
 }

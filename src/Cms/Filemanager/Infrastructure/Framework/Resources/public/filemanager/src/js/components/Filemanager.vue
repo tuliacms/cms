@@ -127,6 +127,7 @@ const anyFileIsSelected = ref(false);
 const updateSelectVisibility = () => {
     anyFileIsSelected.value = selection.getSelected().length !== 0;
 };
+const select = () => commandBus.execute('select');
 
 onMounted(() => {
     eventDispatcher.on('selection.change', updateSelectVisibility);

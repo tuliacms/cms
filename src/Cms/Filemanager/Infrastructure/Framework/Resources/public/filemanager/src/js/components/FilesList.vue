@@ -38,6 +38,9 @@
             </div>
         </div>
         <div :class="{ 'fm-files-list-loader': true, 'fm-active': view.loading }"></div>
+        <div class="fm-files-list-empty" v-if="files.list.length === 0">
+            <i class="fa-regular fa-file"></i>
+        </div>
     </div>
 </template>
 

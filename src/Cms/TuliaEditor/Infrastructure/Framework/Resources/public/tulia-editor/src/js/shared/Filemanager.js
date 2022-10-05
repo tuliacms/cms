@@ -11,7 +11,6 @@ export default class Filemanager {
         return imageResolvePath
                 .replace('{size}', size ?? 'original')
                 .replace('{id}', image.id)
-                .replace('{filename}', image.filename)
-            + '?ts=' + (new Date()).getTime();
+                .replace('{filename}', image.filename);
     }
 }

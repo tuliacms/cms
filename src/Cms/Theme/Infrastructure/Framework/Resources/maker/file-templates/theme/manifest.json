@@ -1,0 +1,7 @@
+{
+    "name": "{{ theme.name }}",
+    "version": "0.0.1",
+    "system_version": ">={{ system.version }}",
+    "css_framework": "bootstrap-5",
+    "supports": ["tulia-editor"]
+}

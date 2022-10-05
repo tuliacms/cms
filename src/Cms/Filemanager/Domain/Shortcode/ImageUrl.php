@@ -14,7 +14,7 @@ class ImageUrl implements ShortcodeCompilerInterface
 {
     public function compile(ShortcodeInterface $shortcode): string
     {
-        return "{{ image_url('{$shortcode->getParameter('id')}', '{$shortcode->getParameter('size')}') }}";
+        return "{{ image_url('{$shortcode->getParameter('id')}', { size: '{$shortcode->getParameter('size')}' }) }}";
     }
 
     public function getAlias(): string

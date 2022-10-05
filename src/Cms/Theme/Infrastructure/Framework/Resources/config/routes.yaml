@@ -7,6 +7,14 @@ backend.theme.activate:
     controller: Tulia\Cms\Theme\UserInterface\Web\Backend\Controller\Theme::activate
     methods: POST
 
+backend.theme.preview:
+    path: /administrator/theme/preview/{theme}/{page}
+    controller: Tulia\Cms\Theme\UserInterface\Web\Backend\Controller\Theme::preview
+    requirements:
+        theme: '([a-zA-Z0-9]+\/[a-zA-Z0-9]+)'
+        page: .+
+    methods: GET
+
 backend.theme.installator.install:
     path: /administrator/theme/installator/install
     controller: Tulia\Cms\Theme\UserInterface\Web\Backend\Controller\Installator::install

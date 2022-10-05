@@ -17,13 +17,10 @@ use Tulia\Component\Theme\Customizer\DetectorInterface;
  */
 class AssetsLoader implements EventSubscriberInterface
 {
-    protected AssetterInterface $assetter;
-    protected DetectorInterface $detector;
-
-    public function __construct(AssetterInterface $assetter, DetectorInterface $detector)
-    {
-        $this->assetter = $assetter;
-        $this->detector = $detector;
+    public function __construct(
+        private readonly AssetterInterface $assetter,
+        private readonly DetectorInterface $detector
+    ) {
     }
 
     public static function getSubscribedEvents(): array

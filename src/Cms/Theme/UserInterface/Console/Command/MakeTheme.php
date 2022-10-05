@@ -9,6 +9,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Tulia\Cms\Platform\Version;
 use Tulia\Cms\Theme\UserInterface\Console\Command\Traits\MakerFilesManagementTrait;
 use Tulia\Cms\Theme\UserInterface\Console\Command\Traits\ThemeQuestionableTrait;
 use Tulia\Component\Theme\ManagerInterface;
@@ -86,6 +87,7 @@ final class MakeTheme extends Command
             '{{ theme.code }}' => $code,
             '{{ theme.vendor.lc }}' => strtolower($vendor),
             '{{ theme.code.lc }}' => strtolower($code),
+            '{{ system.version }}' => Version::VERSION,
         ];
     }
 }

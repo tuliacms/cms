@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Platform\Infrastructure\Framework\Theme\Assetter;
+namespace Tulia\Cms\Theme\Infrastructure\Framework\Theme\Assetter;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
