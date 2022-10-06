@@ -37,7 +37,7 @@ class EditLinksCollector extends AbstractLinksCollector
     {
         $translation = $this->helper->trans('turnOn');
 
-        if ($request->cookies->get('tulia_editlinks_show') === 'yes') {
+        if ($request->cookies->get('tulia-editlinks-show') === 'yes') {
             $translation = $this->helper->trans('turnOff');
         }
 

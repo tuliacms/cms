@@ -15,6 +15,7 @@ final class Hooks implements HooksInterface
 
     public function __construct(
         private readonly ContainerInterface $locator,
+        private readonly ?ParametersBuilderInterface $parametersBuilder = null,
     ) {
     }
 
@@ -28,6 +29,8 @@ final class Hooks implements HooksInterface
         if (!isset($this->hooks['action'][$name])) {
             return null;
         }
+
+        $parameters = $this->buildParameters($name, $parameters);
 
         ksort($this->hooks['action'][$name]);
 
@@ -45,5 +48,14 @@ final class Hooks implements HooksInterface
         [$service, $method] = explode('::', $callable);
 
         return $this->locator->get($service)->{$method}(...$parameters);
+    }
+
+    private function buildParameters(string $name, array $parameters): array
+    {
+        if (!$this->parametersBuilder) {
+            return $parameters;
+        }
+
+        return $this->parametersBuilder->build($name, $parameters);
     }
 }

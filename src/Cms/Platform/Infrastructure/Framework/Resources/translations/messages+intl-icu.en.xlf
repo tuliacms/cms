@@ -857,6 +857,10 @@
                 <source>didYouFoundBug</source>
                 <target>Found bug?</target>
             </trans-unit>
+            <trans-unit id="tuliacms.messages.214">
+                <source>noResultsTryToFindUsingWholeWords</source>
+                <target>No results. Try to find using whole words.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

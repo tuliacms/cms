@@ -39,7 +39,7 @@
                     </ul>
                 </div>
                 <div class="layout-content">
-                    {{ form_start(form) }}
+                    {{ form_start(form, {attr: {class: 'tulia-dynamic-form' }} ) }}
                         <input type="text" name="username" style="display: block;position: fixed;left:-1000px;top:-1000px;opacity:0;" tabindex="-1" />
                         <input type="email" name="email" style="display: block;position: fixed;left:-1000px;top:-1000px;opacity:0;" tabindex="-1" />
                         <input type="password" name="password" style="display: block;position: fixed;left:-1000px;top:-1000px;opacity:0;" tabindex="-1" />

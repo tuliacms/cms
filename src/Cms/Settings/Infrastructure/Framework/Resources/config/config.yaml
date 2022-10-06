@@ -2,6 +2,13 @@ framework:
     translator:
         paths:
             - '%cms.core_dir%/Cms/Settings/Infrastructure/Framework/Resources/translations'
+    cache:
+        pools:
+            settings.cache:
+                adapter: '%tulia.cache.adapter%'
+                provider: '%tulia.cache.provider%'
+                default_lifetime: 31556926
+                tags: true
 cms:
     templating:
         paths:

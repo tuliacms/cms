@@ -46,6 +46,7 @@ trait ThemeQuestionableTrait
         $helper = $this->getHelper('question');
         $question = new Question('Theme name: ');
         $question->setValidator(function ($answer) {
+            $answer = (string) $answer;
             if (!preg_match('#^([a-z0-9]+)/([a-z0-9]+)$#i', $answer)) {
                 throw new \RuntimeException('Please provide theme name in format: Vendor/Name');
             }

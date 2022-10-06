@@ -2,6 +2,13 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+        bind:
+            Tulia\Component\Hooks\ParametersBuilderInterface: '@Tulia\Component\Hooks\ParametersBuilderInterface'
 
     Tulia\Component\Hooks\Hooks: ~
     Tulia\Component\Hooks\HooksInterface: '@Tulia\Component\Hooks\Hooks'
+
+    Tulia\Cms\Platform\Infrastructure\Hooks\ParametersBuilder:
+        arguments:
+            $config: '%cms.hooks.actions%'
+    Tulia\Component\Hooks\ParametersBuilderInterface: '@Tulia\Cms\Platform\Infrastructure\Hooks\ParametersBuilder'

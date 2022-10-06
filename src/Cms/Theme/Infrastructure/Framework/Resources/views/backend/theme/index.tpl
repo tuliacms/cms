@@ -32,30 +32,31 @@
             {% endif %}
             <div class="row">
                 {% for item in themes %}
-                    <div class="col-3">
+                    <div class="col-12 col-sm-6 col-md-4 col-xxl-3">
                         <div class="card{{ theme.name == item.name ? ' bg-light' : '' }} mb-4">
                             {% if theme.name == item.name %}
                                 <div class="ribbon"><span>{{ 'activeTheme'|trans({}, 'themes') }}</span></div>
                             {% endif %}
-                            {% if item.thumbnail %}
-                                <img src="{{ asset(item.thumbnail) }}" class="card-img-top" alt="{{ item.name }} theme thumbnail">
+                            {% if item.manifest.showreel is defined %}
+                                <div class="theme-image scroll-image-on-hover">
+                                    <img src="{{ path('backend.theme.internal_image', { theme: item.name, filepath: item.manifest.showreel }) }}" alt="{{ item.name }} theme thumbnail">
+                                </div>
+                            {% elseif item.manifest.thumbnail is defined %}
+                                <img src="{{ path('backend.theme.internal_image', { theme: item.name, filepath: item.manifest.thumbnail }) }}" class="card-img-top" alt="{{ item.name }} theme thumbnail">
                             {% else %}
-                                <svg class="bd-placeholder-img card-img-top" style="font-size:1.125rem;text-anchor:middle;" width="100%" height="180" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img">
-                                    <title>{{ 'noThumbnailAvailable'|trans }}</title>
-                                    <rect width="100%" height="100%" fill="#868e96"></rect>
-                                    <text x="50%" y="50%" fill="#ddd" dy=".3em">{{ 'noThumbnailAvailable'|trans }}</text>
-                                </svg>
+                                <div class="no-theme-image">
+                                    <span>{{ 'noThumbnailAvailable'|trans }}</span>
+                                </div>
                             {% endif %}
                             <div class="card-body">
                                 <h5 class="card-title mb-0">
                                     {{ item.name }}
                                 </h5>
-                                {% if item.info %}
-                                    <p class="card-text mt-3">{{ item.info }}</p>
-                                {% endif %}
                                 {% if item.hasParent %}
-                                    <hr />
                                     <p class="text-muted m-0">{{ 'childOfTheme'|trans({ name: '<i>' ~ item.parentName ~ '</i>' }, 'themes')|raw }}</p>
+                                {% endif %}
+                                {% if item.manifest.info is defined %}
+                                    <p class="card-text mt-3">{{ item.manifest.info|trans({}, configRegistry.get(item.name).translationDomain) }}</p>
                                 {% endif %}
                             </div>
                             <div class="card-footer py-0 pr-0 pe-0">
@@ -127,6 +128,18 @@
                     }
                 });
             });
+
+            $('.scroll-image-on-hover').hover(function () {
+                const image = $(this).find('img');
+                const imageHeight = parseInt(image.css('height'));
+                const viewHeight = parseInt($(this).css('height'));
+
+                image.stop().animate({
+                    top: - (imageHeight - viewHeight)
+                }, (imageHeight / 200) * 1000, 'linear');
+            }, function () {
+                $(this).find('img').stop().animate({top: 0}, 200);
+            });
         });
     </script>
     <style>
@@ -151,7 +164,6 @@
             text-align: center;
             line-height: 20px;
             transform: rotate(45deg);
-            -webkit-transform: rotate(45deg);
             width: 120px;
             display: block;
             background: #79A70A;
@@ -182,6 +194,44 @@
             border-right: 3px solid #1e5799;
             border-bottom: 3px solid transparent;
             border-top: 3px solid #1e5799;
+        }
+
+        .theme-image {
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(0,0,0,.176);
+        }
+        .theme-image:before {
+             content: "";
+             display: block;
+             padding-bottom: 55.5%;
+             background-color: rgba(0,0,0,.3);
+         }
+        .theme-image img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        .no-theme-image {
+            position: relative;
+        }
+        .no-theme-image:before {
+            content: "";
+            display: block;
+            padding-bottom: 55.5%;
+            background-color: rgba(0,0,0,.3);
+        }
+        .no-theme-image span {
+            display: block;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 14px;
+            white-space: nowrap;
         }
     </style>
 {% endblock %}

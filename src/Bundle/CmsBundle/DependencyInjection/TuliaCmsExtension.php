@@ -46,6 +46,7 @@ class TuliaCmsExtension extends Extension
         $container->setParameter('cms.templating.paths', $this->prepareTemplatingPaths($config['templating']['paths'] ?? []));
         $container->setParameter('cms.templating.namespace_overwrite', $config['templating']['namespace_overwrite'] ?? []);
         $container->setParameter('cms.themes.configuration', $config['theme']['configuration'] ?? []);
+        $container->setParameter('cms.hooks.actions', $config['hooks']['actions'] ?? []);
 
         $this->registerViewFilters($container);
 

@@ -32,6 +32,7 @@ class Configuration implements ConfigurationInterface
         $this->registerTwigConfiguration($root);
         $this->registerTemplatingConfiguration($root);
         $this->registerThemeConfiguration($root);
+        $this->registerHooksConfiguration($root);
 
         return $treeBuilder;
     }
@@ -634,6 +635,32 @@ class Configuration implements ConfigurationInterface
                                                     ->end()
                                                 ->end()
                                             ->end()
+                                        ->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
+    }
+
+    private function registerHooksConfiguration(ArrayNodeDefinition $root): void
+    {
+        $root
+            ->children()
+                ->arrayNode('hooks')
+                    ->children()
+                        ->arrayNode('actions')
+                            ->useAttributeAsKey('name')
+                            ->arrayPrototype()
+                                ->children()
+                                    ->arrayNode('parameters')
+                                        ->arrayPrototype()
+                                        ->children()
+                                            ->scalarNode('mode')->defaultValue('append')->end()
+                                            ->scalarNode('service')->defaultNull()->end()
                                         ->end()
                                     ->end()
                                 ->end()

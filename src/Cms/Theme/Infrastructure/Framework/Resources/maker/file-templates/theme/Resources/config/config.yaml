@@ -26,13 +26,8 @@ cms:
                 require:
                     - font_awesome
                     - frontend
-                    -  {{ theme.assets_prefix }}.styles
-                    -  {{ theme.assets_prefix }}.scripts
-                styles:
-                    - /assets/theme/{{ theme.name.lc }}/theme/css/bundle.min.css
-                scripts:
-                    - /assets/theme/{{ theme.name.lc }}/theme/js/bundle.min.js
-                group: head
+                    - {{ theme.assets_prefix }}.styles
+                    - {{ theme.assets_prefix }}.scripts
                 included:
                     - bootstrap
                     - jquery
@@ -41,9 +36,9 @@ cms:
                     - font_awesome
                     - frontend
                 styles:
-                    - /assets/theme/{{ theme.name.lc }}/theme/css/bundle.min.css
+                    - /assets/theme/{{ theme.name.lc }}/theme/theme-{{ theme.vendor.lc }}-{{ theme.code.lc }}.css
                 group: head
             {{ theme.assets_prefix }}.scripts:
                 scripts:
-                    - /assets/theme/{{ theme.name.lc }}/theme/js/bundle.min.js
+                    - /assets/theme/{{ theme.name.lc }}/theme/theme-{{ theme.vendor.lc }}-{{ theme.code.lc }}.js
                 group: body

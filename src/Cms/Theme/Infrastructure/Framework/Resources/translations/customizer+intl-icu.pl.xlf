@@ -82,6 +82,18 @@
                 <source>useThisOptionToResetCustomizerConfigurationToDefaultValues</source>
                 <target><![CDATA[Użyj tej opcji, aby zresetować ustawienia szablonu do domyślnych, wstępnie zdefiniowanych wartości. Ta opcja usunie każdą konfigurację, <b> tej operacji nie można cofnąć! </b>]]></target>
             </trans-unit>
+            <trans-unit id="tuliacms.customizer.21">
+                <source>websiteIdentity</source>
+                <target>Tożsamość strony</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.22">
+                <source>loading</source>
+                <target>Ładowanie...</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.23">
+                <source>faviconSizeDescription</source>
+                <target>Favikonka strony powinna być kwadratowa i wielkości co najmniej 512 × 512 pikseli.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -13,29 +13,19 @@ use Tulia\Cms\Settings\UserInterface\Web\Backend\Form\SettingsForm;
  */
 class CmsSettingsGroup extends AbstractSettingsGroup
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getId(): string
     {
         return 'cms';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'settings';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(): FormInterface
     {
         $data = [
-            'website_favicon'     => $this->getOption('website_favicon'),
             'administrator_email' => $this->getOption('administrator_email'),
             'maintenance_mode'    => $this->getOption('maintenance_mode'),
             'maintenance_message' => $this->getOption('maintenance_message'),
@@ -56,20 +46,13 @@ class CmsSettingsGroup extends AbstractSettingsGroup
         return $this->createForm(SettingsForm::class, $data);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildView(): array
     {
         return $this->view('@backend/settings/main-settings.tpl');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function saveAction(array $data): bool
     {
-        $this->setOption('website_favicon', $data['website_favicon']);
         $this->setOption('administrator_email', $data['administrator_email']);
         $this->setOption('maintenance_mode', $data['maintenance_mode']);
         $this->setOption('maintenance_message', $data['maintenance_message']);

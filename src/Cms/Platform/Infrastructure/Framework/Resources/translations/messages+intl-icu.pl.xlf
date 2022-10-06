@@ -352,11 +352,11 @@
             </trans-unit>
             <trans-unit id="tuliacms.messages.88">
                 <source>themes</source>
-                <target>Szablony</target>
+                <target>Motywy</target>
             </trans-unit>
             <trans-unit id="tuliacms.messages.89">
                 <source>theme</source>
-                <target>Szablon</target>
+                <target>Motyw</target>
             </trans-unit>
             <trans-unit id="tuliacms.messages.90">
                 <source>language</source>
@@ -856,6 +856,10 @@
             <trans-unit id="tuliacms.messages.213">
                 <source>didYouFoundBug</source>
                 <target>Znalazłeś błąd?</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.214">
+                <source>noResultsTryToFindUsingWholeWords</source>
+                <target>Nic nie znaleziono. Spróbuj szukać używając pełnych słów.</target>
             </trans-unit>
         </body>
     </file>

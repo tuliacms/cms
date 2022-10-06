@@ -5,7 +5,7 @@
     <div class="input-group">
         <input type="text" id="{{ control_id }}" name="{{ control_name }}" class="customizer-control form-control" value="{{ value }}" data-transport="{{ transport }}" />
         <div class="input-group-append">
-            <button class="btn btn-default btn-icon-only" type="button">
+            <button class="btn btn-default btn-icon-only" type="button" id="{{ control_id }}-trigger">
                 <i class="btn-icon fas fa-folder-open"></i>
             </button>
         </div>
@@ -14,18 +14,15 @@
 
 <script nonce="{{ csp_nonce() }}">
     $(function () {
-        const filemanager = TuliaFilemanager.create({
+         TuliaFilemanager.create({
             targetInput: '#{{ control_id }}',
             endpoint: '{{ path('backend.filemanager.endpoint') }}',
             filter: {
                 type: '{{ file_type ?? '*' }}',
             },
             multiple: false,
-            closeOnSelect: true
-        });
-
-        $('#{{ control_id }}').closest('.input-group').find('button').click(function () {
-            filemanager.open();
+            closeOnSelect: true,
+            openTrigger: '#{{ control_id }}-trigger',
         });
     });
 </script>

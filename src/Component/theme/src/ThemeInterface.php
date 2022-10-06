@@ -23,5 +23,11 @@ interface ThemeInterface
 
     public function setParentThemeLoader(callable $loader): void;
 
+    public function getDirectory(): string;
+
     public function getPreviewDirectory(): ?string;
+
+    public function getViewsDirectory(): string;
+
+    public function getManifest(): array;
 }

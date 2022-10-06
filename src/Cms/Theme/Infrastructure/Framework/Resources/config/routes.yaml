@@ -15,6 +15,14 @@ backend.theme.preview:
         page: .+
     methods: GET
 
+backend.theme.internal_image:
+    path: /administrator/theme/internal-image/{theme}/{filepath}
+    controller: Tulia\Cms\Theme\UserInterface\Web\Backend\Controller\Theme::internalImage
+    requirements:
+        theme: '([a-zA-Z0-9]+\/[a-zA-Z0-9]+)'
+        filepath: .+
+    methods: GET
+
 backend.theme.installator.install:
     path: /administrator/theme/installator/install
     controller: Tulia\Cms\Theme\UserInterface\Web\Backend\Controller\Installator::install

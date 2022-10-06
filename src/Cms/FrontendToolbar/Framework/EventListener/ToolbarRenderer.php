@@ -9,6 +9,7 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Tulia\Cms\FrontendToolbar\Builder\Builder;
+use Tulia\Component\Theme\Customizer\DetectorInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -19,6 +20,7 @@ class ToolbarRenderer implements EventSubscriberInterface
         private readonly Builder $builder,
         private readonly AuthorizationCheckerInterface $authorizationChecker,
         private readonly TokenStorageInterface $tokenStorage,
+        private readonly DetectorInterface $detector,
     ) {
     }
 
@@ -39,6 +41,7 @@ class ToolbarRenderer implements EventSubscriberInterface
             || $request->server->get('TULIA_WEBSITE_IS_BACKEND')
             || strncmp($request->getPathInfo(), '/_wdt', 5) === 0
             || strncmp($request->getPathInfo(), '/_profiler', 10) === 0
+            || $this->detector->isCustomizerMode()
         ) {
             return;
         }

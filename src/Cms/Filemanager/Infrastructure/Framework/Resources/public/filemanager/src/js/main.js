@@ -61,6 +61,7 @@ class Instance {
 
 const defaults = {
     targetInput: null,
+    openTrigger: null,
     showOnInit: true,
     endpoint: null,
     multiple: false,

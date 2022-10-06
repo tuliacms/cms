@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Theme\UserInterface\Web\Backend\Controller;
 
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Tulia\Cms\Options\Domain\ReadModel\OptionsFinderInterface;
+use Tulia\Cms\Options\Domain\WriteModel\OptionsRepositoryInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
+use Tulia\Cms\Settings\Domain\Event\SettingsUpdated;
 use Tulia\Cms\Shared\Application\UseCase\IdResult;
 use Tulia\Cms\Theme\Application\UseCase\LeftTemporaryChangeset;
 use Tulia\Cms\Theme\Application\UseCase\LeftTemporaryChangesetRequest;
@@ -47,6 +51,7 @@ class Customizer extends AbstractController
         PredefinedChangesetRegistry $predefinedChangesetRegistry,
         WebsiteInterface $website,
         NewCustomization $newCustomization,
+        OptionsFinderInterface $options,
     ) {
         $theme = $this->themeManager->getTheme();
 
@@ -86,6 +91,9 @@ class Customizer extends AbstractController
             'previewUrl' => $previewUrl,
             'returnUrl'  => $request->query->get('returnUrl'),
             'predefinedChangesets' => $predefinedChangesetRegistry->get($theme),
+            'settings' => [
+                'website_favicon' => $options->findByName('website_favicon', $website->getId(), $website->getLocale()->getCode()),
+            ],
         ]);
     }
 
@@ -99,10 +107,23 @@ class Customizer extends AbstractController
         WebsiteInterface $website,
         SaveChangeset $saveChangeset,
         NewCustomization $newCustomization,
+        OptionsRepositoryInterface $options,
+        EventDispatcherInterface $dispatcher,
     ) {
         if ($this->themeManager->getStorage()->has($theme) === false) {
             return $this->redirectToRoute('backend.theme');
         }
+
+        $data = $request->request->all('data');
+
+        $option = $options->get('website_favicon', $website->getId());
+        $option->setValue($data['settings.website_favicon'], $website->getLocale()->getCode(), $website->getDefaultLocale()->getCode());
+        $options->save($option);
+
+        $dispatcher->dispatch(new SettingsUpdated());
+
+        // Remove settings from changeset data
+        unset($data['settings.website_favicon']);
 
         $isActiveChangesetSaving = $request->request->get('mode') === 'theme';
 
@@ -111,7 +132,7 @@ class Customizer extends AbstractController
             $website->getId(),
             $website->getLocale()->getCode(),
             $request->request->get('changeset'),
-            $request->request->all('data'),
+            $data,
             $isActiveChangesetSaving,
         ));
 

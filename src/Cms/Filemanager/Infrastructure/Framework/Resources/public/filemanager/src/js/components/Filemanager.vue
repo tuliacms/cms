@@ -105,6 +105,13 @@ onMounted(() => {
             }
         }
     }
+    if (props.options.openTrigger) {
+        let trigger = document.querySelector(props.options.openTrigger);
+
+        if (trigger) {
+            trigger.addEventListener('click', () => open());
+        }
+    }
 
     if (props.options.showOnInit) {
         open();

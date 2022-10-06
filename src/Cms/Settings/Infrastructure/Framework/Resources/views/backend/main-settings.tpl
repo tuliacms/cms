@@ -4,7 +4,7 @@
     <li class="nav-item">
         <a class="nav-link active" data-bs-toggle="tab" href="#settings-main-tab">
             {{ 'settings'|trans }}
-            {{ badge.errors_count(form, [ 'website_favicon', 'administrator_email', 'date_format', 'theme' ]) }}
+            {{ badge.errors_count(form, [ 'administrator_email', 'date_format', 'theme' ]) }}
         </a>
     </li>
     {#<li class="nav-item">
@@ -35,7 +35,6 @@
 <div class="tab-content">
     <div class="tab-pane fade show active" id="settings-main-tab">
         <div class="form-controls-terminator">
-            {{ form_row(form.website_favicon) }}
             {{ form_row(form.administrator_email) }}
             {{ form_row(form.date_format) }}
         </div>

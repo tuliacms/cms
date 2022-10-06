@@ -16,6 +16,7 @@ use Tulia\Cms\Theme\Application\Service\ThemeActivator;
 use Tulia\Cms\Theme\UserInterface\Web\Backend\Form\ThemeInstallatorForm;
 use Tulia\Component\Routing\Website\WebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
+use Tulia\Component\Theme\Configuration\ConfigurationRegistry;
 use Tulia\Component\Theme\ManagerInterface;
 use Tulia\Component\Theme\Storage\StorageInterface;
 
@@ -28,6 +29,7 @@ class Theme extends AbstractController
         private readonly ManagerInterface $manager,
         private readonly ThemeActivator $themeActivator,
         private readonly StorageInterface $storage,
+        private readonly ConfigurationRegistry $configurationRegistry,
     ) {
     }
 
@@ -51,6 +53,7 @@ class Theme extends AbstractController
             'usesDefaultTheme' => $theme instanceof DefaultTheme,
             'installatorForm' => $form->createView(),
             'development' => $this->getParameter('kernel.environment') === 'dev',
+            'configRegistry' => $this->configurationRegistry,
         ]);
     }
 
@@ -71,7 +74,7 @@ class Theme extends AbstractController
         return $this->redirectToRoute('backend.theme');
     }
 
-    public function preview(Request $request, string $theme, string $page): Response
+    public function preview(string $theme, string $page): Response
     {
         $themeObject = $this->storage->get($theme);
         $pageFilepath = $themeObject->getPreviewDirectory().'/'.$page;
@@ -92,5 +95,19 @@ class Theme extends AbstractController
         };
 
         return new Response(file_get_contents($pageFilepath), Response::HTTP_OK, $headers);
+    }
+
+    public function internalImage(string $theme, string $filepath): Response
+    {
+        $themeObject = $this->storage->get($theme);
+        $imageFilepath = $themeObject->getDirectory().'/'.$filepath;
+
+        if (!is_file($imageFilepath)) {
+            throw new NotFoundHttpException();
+        }
+
+        return new Response(file_get_contents($imageFilepath), Response::HTTP_OK, [
+            'Content-Type' => 'image/jpeg',
+        ]);
     }
 }

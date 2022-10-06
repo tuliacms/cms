@@ -46,6 +46,7 @@
             <div class="panel-controls">
                 <form class="customizer-form">
                     {{ customizerView|raw }}
+                    {% include relative(_self, 'section-website-identity.tpl') %}
                 </form>
                 <div class="control-pane control-pane-name-home active" data-section="home">
                     <div class="home-control-pane-headline">
@@ -53,6 +54,9 @@
                         <h4>{{ theme.name }}</h4>
                     </div>
                     <div class="controls-list">
+                        <div class="control-trigger" data-show-pane="website-identity">
+                            {{ 'websiteIdentity'|trans({}, 'customizer') }}
+                        </div>
                         {% for section in customizerView.structure %}
                             {% if section.parent is empty %}
                                 <div class="control-trigger" data-show-pane="{{ section.code|str_replace('.', '_') }}">
@@ -65,30 +69,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="control-pane control-pane-name-layouts" data-section="layouts">
-                    <div class="control-pane-headline">
-                        <button type="button" class="control-pane-back" data-show-pane="home">
-                            <i class="icon fas fa-chevron-left"></i>
-                        </button>
-                        <h4>{{ 'browseLayouts'|trans({}, 'customizer') }}</h4>
-                    </div>
-                    <div class="control-pane-content">
-                        {% for item in predefinedChangesets %}
-                            <h5>{{ item.label|trans({}, item.translationDomain) }}</h5>
-                            {% if item.description %}
-                                <p>{{ item.description|trans({}, item.translationDomain) }}</p>
-                            {% endif %}
-                            <button type="button" class="btn btn-primary btn-sm customizer-predefined-changeset-apply" data-changeset-id="{{ item.id }}">{{ 'apply'|trans }}</button>
-                            <hr />
-                        {% endfor %}
-                        <h5>{{ 'resetCustomizerSettings'|trans({}, 'customizer') }}</h5>
-                        <button class="btn btn-primary btn-sm btn-icon-left" type="button" data-bs-toggle="modal" data-bs-target="#modal-customizer-reset-settings">
-                            <i class="btn-icon fas fa-eraser"></i> {{ 'resetCustomizerSettings'|trans({}, 'customizer') }}
-                        </button>
-                    </div>
-                </div>
+                {% include relative(_self, 'section-layouts.tpl') %}
             </div>
-            <div class="customizer-loader"><i class="fas fa-circle-notch fa-spin"></i><span>Loading...</span></div>
+            <div class="customizer-loader"><i class="fas fa-circle-notch fa-spin"></i><span>{{ 'loading'|trans({}, 'customizer') }}</span></div>
         </div>
         <div class="preview">
             <div class="preview-panel">

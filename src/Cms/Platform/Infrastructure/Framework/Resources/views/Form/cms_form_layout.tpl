@@ -30,6 +30,8 @@
 
 
 {% block filepicker_widget -%}
+    {% assets ['filemanager', 'tulia-dynamic-form'] %}
+
     <div class="input-group">
         {{- block('form_widget_simple') -}}
         <div class="input-group-append">

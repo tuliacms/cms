@@ -13,13 +13,10 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class ImageUrlResolver
 {
-    private RouterInterface $router;
-    private ImageSizeRegistryInterface $imageSize;
-
-    public function __construct(RouterInterface $router, ImageSizeRegistryInterface $imageSize)
-    {
-        $this->router = $router;
-        $this->imageSize = $imageSize;
+    public function __construct(
+        private readonly RouterInterface $router,
+        private readonly ImageSizeRegistryInterface $imageSize,
+    ) {
     }
 
     public function size(File $image, string $sizeName): string

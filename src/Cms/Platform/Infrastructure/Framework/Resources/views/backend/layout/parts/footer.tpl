@@ -61,8 +61,8 @@
                     <i class="pane-header-icon tsa-loading-hide fas fa-search"></i>
                     <h1 class="pane-title">{{ 'searchResultsForQuery'|trans({ query: '<span class="tsa-query-preview"></span>' })|raw }}</h1>
                 </div>
-                <div class="pane-body">
-                    No results. Try to find using whole words.
+                <div class="pane-body py-5 px-5">
+                    {{ 'noResultsTryToFindUsingWholeWords'|trans }}
                 </div>
             </div>
         </div>

@@ -15,14 +15,10 @@ use Tulia\Component\Templating\View;
  */
 class Builder
 {
-    private ProviderRegistry $registry;
-
-    private EngineInterface $engine;
-
-    public function __construct(ProviderRegistry $registry, EngineInterface $engine)
-    {
-        $this->registry = $registry;
-        $this->engine = $engine;
+    public function __construct(
+        private readonly ProviderRegistry $registry,
+        private readonly EngineInterface $engine,
+    ) {
     }
 
     public function build(Request $request): string
@@ -36,8 +32,17 @@ class Builder
             $contents .= $provider->provideContent($request);
         }
 
+        $linksCollection = $links->all();
+
+        foreach ($linksCollection as $link) {
+            $attrs = $link->getAttributes();
+            $attrs['class'] = ($attrs['class'] ?? '').' tulia-toolbar-item';
+
+            $link->setAttributes($attrs);
+        }
+
         return $this->engine->render(new View('@cms/frontend_toolbar/toolbar.tpl', [
-            'links' => $links->all(),
+            'links' => $linksCollection,
             'contents' => $contents,
         ]));
     }

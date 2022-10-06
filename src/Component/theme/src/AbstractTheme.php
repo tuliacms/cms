@@ -13,16 +13,10 @@ use Tulia\Component\Theme\Resolver\ResolverAggregateInterface;
  */
 abstract class AbstractTheme implements ThemeInterface
 {
-    protected $name;
-    protected $vendor;
-    protected $directory;
+    private $name;
+    private $directory;
     protected $parent;
-    protected $config;
-    protected $version = '0.0.1';
-    protected $author;
-    protected $authorUrl;
-    protected $info;
-    protected $thumbnail;
+    private $config;
     private \Closure $parentThemeLoader;
     private ?ThemeInterface $parentInstance = null;
 
@@ -52,22 +46,6 @@ abstract class AbstractTheme implements ThemeInterface
         $directory = $this->getDirectory().'/Resources/preview';
 
         return is_dir($directory) ? $directory : null;
-    }
-
-    public function getVendor(): string
-    {
-        if ($this->vendor) {
-            return $this->vendor;
-        }
-
-        $this->resolveName();
-
-        return $this->vendor;
-    }
-
-    public function getVersion(): string
-    {
-        return $this->version;
     }
 
     public function getDirectory(): string
@@ -108,9 +86,6 @@ abstract class AbstractTheme implements ThemeInterface
         return $this->parent;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfig(): ConfigurationInterface
     {
         if (!$this->config) {
@@ -120,32 +95,23 @@ abstract class AbstractTheme implements ThemeInterface
         return $this->config;
     }
 
+    public function getManifest(): array
+    {
+        $manifest = $this->getDirectory().'/manifest.json';
+
+        if (!is_file($manifest)) {
+            return [];
+        }
+
+        return json_decode(file_get_contents($this->getDirectory().'/manifest.json'), true);
+    }
+
     public function setConfigurationLoader(
         ConfigurationLoaderInterface $configurationLoader,
         ResolverAggregateInterface $resolverAggregate,
     ): void {
         $this->configurationLoader = $configurationLoader;
         $this->resolverAggregate = $resolverAggregate;
-    }
-
-    public function getAuthor()
-    {
-        return $this->author;
-    }
-
-    public function getThumbnail()
-    {
-        return $this->thumbnail;
-    }
-
-    public function getAuthorUrl()
-    {
-        return $this->authorUrl;
-    }
-
-    public function getInfo()
-    {
-        return $this->info;
     }
 
     protected function resolveName(): void

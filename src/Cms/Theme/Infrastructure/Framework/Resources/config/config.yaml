@@ -6,7 +6,11 @@ cms:
     templating:
         paths:
             - { name: backend/theme, path: '%cms.core_dir%/Cms/Theme/Infrastructure/Framework/Resources/views/backend' }
-
+    hooks:
+        actions:
+            theme.head:
+                parameters:
+                    - { mode: prepend, service: 'Tulia\Component\Routing\Website\WebsiteInterface' }
 doctrine:
     orm:
         mappings:

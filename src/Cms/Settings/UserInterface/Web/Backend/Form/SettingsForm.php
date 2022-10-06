@@ -87,10 +87,6 @@ class SettingsForm extends AbstractType
                 'choice_translation_domain' => false,
                 'translation_domain' => 'settings',
             ])
-            ->add('website_favicon', FilepickerType::class, [
-                'label' => 'websiteFavicon',
-                'translation_domain' => 'settings',
-            ])
             ->add('administrator_email', Type\TextType::class, [
                 'label' => 'administratorEmail',
                 'help' => 'administratorEmailHelp',

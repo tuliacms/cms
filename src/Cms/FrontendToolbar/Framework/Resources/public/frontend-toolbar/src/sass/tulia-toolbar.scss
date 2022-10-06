@@ -149,22 +149,27 @@ $tulia-toolbar-background-color: #2b2b3c;
             position: relative;
             z-index: 40;
 
-            a {
+            .tulia-toolbar-item {
                 display: block;
                 padding: 10px 20px;
                 font-size: 15px;
                 color: #fff;
                 white-space: nowrap;
+                transition: .12s all;
+
+                &:hover {
+                    cursor: pointer;
+                }
             }
 
             &.tulia-toolbar-item-has-icon {
-                > a {
+                > .tulia-toolbar-item {
                     padding-left: 40px;
                 }
             }
 
             &.tulia-toolbar-item-has-children {
-                > a:after {
+                > .tulia-toolbar-item:after {
                     display: block;
                     content: "\203A";
                     position: absolute;
@@ -177,7 +182,7 @@ $tulia-toolbar-background-color: #2b2b3c;
             }
 
             &:hover {
-                > a {
+                > .tulia-toolbar-item {
                     background-color: rgba(255, 255, 255, 0.1);
                 }
 
@@ -186,7 +191,7 @@ $tulia-toolbar-background-color: #2b2b3c;
                 }
 
                 &.tulia-toolbar-item-has-icon {
-                    > a {
+                    > .tulia-toolbar-item {
                         padding-left: 45px;
                     }
                 }

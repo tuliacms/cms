@@ -12,14 +12,6 @@ use Tulia\Component\Theme\AbstractTheme;
  */
 class DefaultTheme extends AbstractTheme
 {
-    protected $version = Version::VERSION;
-    protected $name    = 'DefaultTheme';
-    protected $author  = 'Adam Banaszkiewicz';
-    protected $info    = 'Default Theme for Tulia CMS.';
-
-    /**
-     * {@inheritdoc}
-     */
     public function getDirectory(): string
     {
         return __DIR__;

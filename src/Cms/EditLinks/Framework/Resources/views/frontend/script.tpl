@@ -1,17 +1,25 @@
 {% assets ['js_cookie'] %}
 
 <script nonce="{{ csp_nonce() }}">
-    $('body').on('click', '.tulia-edit-links-toggle', function (e) {
-        e.preventDefault();
-        let show = Cookies.get('tulia_editlinks_show');
-
-        if (show === 'yes') {
-            Cookies.remove('tulia_editlinks_show');
-        } else {
-            Cookies.set('tulia_editlinks_show', 'yes', { expires: 365 });
+    $(function () {
+        function getCookie (name) {
+            let value = `; ${document.cookie}`;
+            let parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
         }
 
-        Cookies.remove('tulia-toolbar-opened');
-        document.location.reload();
+        $('body').on('click', '.tulia-edit-links-toggle', function (e) {
+            e.preventDefault();
+            let show = getCookie('tulia-editlinks-show');
+
+            if (show === 'yes') {
+                document.cookie = `tulia-editlinks-show=; path=/; max-age=0;`;
+            } else {
+                document.cookie = `tulia-editlinks-show=yes; path=/; max-age=${60 * 60 * 24 * 365}`;
+            }
+
+            document.cookie = `tulia-toolbar-opened=; path=/; max-age=0;`;
+            document.location.reload();
+        });
     });
 </script>

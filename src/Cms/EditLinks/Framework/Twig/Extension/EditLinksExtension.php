@@ -46,7 +46,7 @@ class EditLinksExtension extends AbstractExtension
                 $request = $context['app']->getRequest();
 
                 return ! ($this->detector->isCustomizerMode()
-                    || $request->cookies->get('tulia_editlinks_show') !== 'yes'
+                    || $request->cookies->get('tulia-editlinks-show') !== 'yes'
                     || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') === false);
             }, [
                 'is_safe' => [ 'html' ],
@@ -57,7 +57,7 @@ class EditLinksExtension extends AbstractExtension
 
                 if (
                     $this->detector->isCustomizerMode()
-                    || $request->cookies->get('tulia_editlinks_show') !== 'yes'
+                    || $request->cookies->get('tulia-editlinks-show') !== 'yes'
                     || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') === false
                 ) {
                     return '';
