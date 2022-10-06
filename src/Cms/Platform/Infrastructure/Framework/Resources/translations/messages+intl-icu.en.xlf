@@ -861,6 +861,10 @@
                 <source>noResultsTryToFindUsingWholeWords</source>
                 <target>No results. Try to find using whole words.</target>
             </trans-unit>
+            <trans-unit id="tuliacms.messages.215">
+                <source>noWysiwygEditor</source>
+                <target>No WYSIWYG editor</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

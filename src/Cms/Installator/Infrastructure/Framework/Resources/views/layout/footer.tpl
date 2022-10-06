@@ -4,7 +4,7 @@
         {% set currentWebsite = current_website() %}
         {% set currentLocale  = currentWebsite.locale %}
         {% set _route = app.request.attributes.get('_route') %}
-        <select class="form-control form-control-raw language-selector">
+        <select class="form-control language-selector">
             {% for locale in currentWebsite.locales %}
                 <option value="{{ path(_route, { _locale: locale.code }) }}" {{ currentLocale.code == locale.code ? 'selected="selected"' : '' }}>{{ 'languageName'|trans({ code: locale.code }, 'languages') }}</option>
             {% endfor %}

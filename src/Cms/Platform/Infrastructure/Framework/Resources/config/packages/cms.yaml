@@ -172,9 +172,20 @@ cms:
                 priority: 1000
                 group: head
             quill:
-                scripts: [ '/assets/core/quill/quill.min.js' ]
+                require: [ quill.scripts ]
+                styles: [ '/assets/core/quill/quill.core.css', '/assets/core/quill/quill.snow.css' ]
+                group: head
+            quill.bubble:
                 styles: [ '/assets/core/quill/quill.bubble.light.css' ]
                 group: head
+                require: [ quill.scripts ]
+            quill.scripts:
+                scripts: [ '/assets/core/quill/quill.min.js' ]
+                group: body
+            quill.dynamic_form_plugin:
+                scripts: [ '/assets/core/quill/quill.dynamic-form-plugin.js' ]
+                collection: tulia-dynamic-form
+                require: [ quill, tulia_dynamic_form ]
     content_building:
         data_types:
             # Declare here Platform's internal field types,

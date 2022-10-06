@@ -7,3 +7,6 @@ cms:
                     classname: 'Tulia\Cms\WysiwygEditor\Infrastructure\Framework\Form\FormType\WysiwygEditorType'
                     flags: [compilable]
                     constraints: [required]
+    templating:
+        paths:
+            - { name: backend/wysiwyg, path: '%cms.core_dir%/Cms/WysiwygEditor/Infrastructure/Framework/Resources/views' }

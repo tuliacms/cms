@@ -8,6 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\FilepickerType;
 use Tulia\Cms\Shared\Infrastructure\Utils\DateTime\DateFormatterInterface;
 use Tulia\Cms\WysiwygEditor\Application\RegistryInterface;
@@ -18,16 +19,11 @@ use Tulia\Cms\WysiwygEditor\Application\WysiwygEditorInterface;
  */
 class SettingsForm extends AbstractType
 {
-    protected DateFormatterInterface $formatter;
-
-    protected RegistryInterface $editorRegistry;
-
     public function __construct(
-        DateFormatterInterface $formatter,
-        RegistryInterface $editorRegistry
+        private readonly DateFormatterInterface $formatter,
+        private readonly RegistryInterface $editorRegistry,
+        private readonly TranslatorInterface $translator,
     ) {
-        $this->formatter = $formatter;
-        $this->editorRegistry = $editorRegistry;
     }
 
     /**
@@ -43,7 +39,7 @@ class SettingsForm extends AbstractType
             $this->formatter->format(time(), 'H:i, j F Y') => 'H:i, j F Y',
         ];
 
-        $wysiwygEditors = ['---' => 'internal'];
+        $wysiwygEditors = [$this->translator->trans('noWysiwygEditor') => 'internal'];
 
         /** @var WysiwygEditorInterface $editor */
         foreach ($this->editorRegistry->getEditors() as $editor) {

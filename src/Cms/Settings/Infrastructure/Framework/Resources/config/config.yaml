@@ -27,6 +27,7 @@ cms:
                 autoload: true
             wysiwyg_editor:
                 autoload: true
+                value: quill
             mail.transport:
                 value: smtp
             mail.from_email:

@@ -73,9 +73,9 @@ Tulia.UI.init = function () {
 };
 Tulia.UI.refresh = function (container) {
     if($.fn.chosen) {
-        container.find('select')
+        container
+            .find('select.form-select-custom')
             .not('.ui-done-select')
-            .not('.form-control-raw')
             .addClass('ui-done-select')
             .chosen({
                 search_contains: true,

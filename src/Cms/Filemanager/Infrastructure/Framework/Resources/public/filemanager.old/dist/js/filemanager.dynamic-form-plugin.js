@@ -1,7 +1,6 @@
 Tulia.DynamicForm.plugin('filemanager', {
     on: {
         'open-filemanager': function (button) {
-            alert(1);
             const fieldId = button.attr('data-input-target');
             const filter = button.attr('data-filemanager-filter');
 

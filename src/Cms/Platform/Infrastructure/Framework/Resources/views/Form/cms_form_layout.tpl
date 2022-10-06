@@ -1,5 +1,10 @@
 {% use 'bootstrap_5_layout.html.twig' %}
 
+{%- block choice_widget_collapsed -%}
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' form-select-custom')|trim}) -%}
+    {{- parent() -}}
+{%- endblock choice_widget_collapsed -%}
+
 {#
     - Prepends text addon
     {{ form_row(form.name, { input_addon_prepend: '#' }) }}

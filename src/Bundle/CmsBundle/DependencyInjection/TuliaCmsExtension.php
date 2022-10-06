@@ -85,7 +85,7 @@ class TuliaCmsExtension extends Extension
         $container->registerForAutoconfiguration(\Tulia\Cms\BackendMenu\Builder\BuilderInterface::class)
             ->addTag('backend_menu.builder');
 
-        // EditLinksHa
+        // EditLinks
         $container->registerForAutoconfiguration(\Tulia\Cms\EditLinks\Service\EditLinksCollectorInterface::class)
             ->addTag('edit_links.collector');
 
@@ -146,6 +146,10 @@ class TuliaCmsExtension extends Extension
         $container->registerForAutoconfiguration(\Tulia\Component\Hooks\HooksSubscriberInterface::class)
             ->setLazy(true)
             ->addTag('hooks.subscriber');
+
+        // WysiwygEditor
+        $container->registerForAutoconfiguration(\Tulia\Cms\WysiwygEditor\Application\WysiwygEditorInterface::class)
+            ->addTag('wysiwyg_editor');
     }
 
     protected function validateOptionsValues(array $definitions): array

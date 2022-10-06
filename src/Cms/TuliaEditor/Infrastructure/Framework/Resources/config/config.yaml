@@ -15,7 +15,7 @@ cms:
                     - /assets/core/tulia-editor/tulia-editor.js
                 styles:
                     - /assets/core/tulia-editor/main.css
-                require: [ lodash, vue, quill ]
+                require: [ lodash, vue, quill.bubble ]
                 collection: tulia_editor
     public_paths:
         - { source: '%cms.core_dir%/Cms/TuliaEditor/Infrastructure/Framework/Resources/public/tulia-editor/dist', target: '/core/tulia-editor' }
