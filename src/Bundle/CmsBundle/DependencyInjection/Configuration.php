@@ -618,6 +618,7 @@ class Configuration implements ConfigurationInterface
                                                     ->addDefaultsIfNotSet()
                                                     ->children()
                                                         ->scalarNode('label')->defaultNull()->end()
+                                                        ->scalarNode('description')->defaultNull()->end()
                                                         ->scalarNode('parent')->defaultNull()->end()
                                                         ->arrayNode('controls')
                                                             ->arrayPrototype()

@@ -62,9 +62,18 @@ class Menu extends AbstractAggregateRoot
 
     public function createItem(array $locales, string $locale, string $name): Item
     {
-        $root = $this->getRoot();
-        $item = Item::create($this, $root, $locales, $locale, $name);
-        $root->addChild($item);
+        return $this->createChildOf($this->getRoot(), $locales, $locale, $name);
+    }
+
+    public function createChildItem(string $parentId, array $locales, string $locale, string $name): Item
+    {
+        return $this->createChildOf($this->getItem($parentId), $locales, $locale, $name);
+    }
+
+    private function createChildOf(Item $parent, array $locales, string $locale, string $name): Item
+    {
+        $item = Item::create($this, $parent, $locales, $locale, $name);
+        $parent->addChild($item);
 
         $this->recordThat(new MenuUpdated($this->id));
 

@@ -4,7 +4,7 @@
         <p class="text-muted">{{ translations.availableFieldsInfo }}</p>
         <button
             type="button"
-            class="btn btn-success mr-2"
+            class="btn btn-success me-2"
             v-for="item in availableFields"
             v-on:click="addInput(item.alias)"
         >{{ item.label }}</button>

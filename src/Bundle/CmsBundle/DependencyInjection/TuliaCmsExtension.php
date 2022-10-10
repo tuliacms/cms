@@ -147,9 +147,10 @@ class TuliaCmsExtension extends Extension
             ->setLazy(true)
             ->addTag('hooks.subscriber');
 
-        // WysiwygEditor
         $container->registerForAutoconfiguration(\Tulia\Cms\WysiwygEditor\Application\WysiwygEditorInterface::class)
             ->addTag('wysiwyg_editor');
+        $container->registerForAutoconfiguration(\Tulia\Cms\Deployment\Domain\WriteModel\Service\DeploymentFileGeneratorInterface::class)
+            ->addTag('deployment.file_generator');
     }
 
     protected function validateOptionsValues(array $definitions): array

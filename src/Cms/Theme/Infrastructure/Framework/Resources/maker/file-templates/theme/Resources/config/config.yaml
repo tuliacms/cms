@@ -42,3 +42,7 @@ cms:
                 scripts:
                     - /assets/theme/{{ theme.name.lc }}/theme/theme-{{ theme.vendor.lc }}-{{ theme.code.lc }}.js
                 group: body
+            {{ theme.assets_prefix }}.editor.plugins:
+                scripts:
+                    - /assets/theme/{{ theme.name.lc }}/tulia-editor-blocks/theme-{{ theme.vendor.lc }}-{{ theme.code.lc }}-tulia-editor-blocks.js
+                collection: tulia_editor

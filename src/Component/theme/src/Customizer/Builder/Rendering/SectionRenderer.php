@@ -48,6 +48,12 @@ class SectionRenderer implements SectionRendererInterface
 
         $controls = $this->buildControls($section, $changeset);
 
+        $description = '';
+
+        if ($section->getDescription()) {
+            $description = sprintf('<div class="control-pane-content-description">%s</div>', $section->getDescription());
+        }
+
         return '<div class="control-pane control-pane-name-' . $id . '" data-section="' . $id . '">
             <div class="control-pane-headline">
                 <button type="button" class="control-pane-back" data-show-pane="' . $parentId . '"><i class="icon fas fa-chevron-left"></i></button>
@@ -55,7 +61,7 @@ class SectionRenderer implements SectionRendererInterface
             </div>
             ' . $sections . '
             <div class="control-pane-content">
-                ' . $controls . '
+                ' . $description . $controls . '
             </div>
         </div>';
     }

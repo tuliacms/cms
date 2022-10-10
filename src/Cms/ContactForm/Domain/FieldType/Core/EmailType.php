@@ -12,34 +12,26 @@ use Tulia\Cms\ContactForm\Domain\FieldType\AbstractFieldType;
  */
 class EmailType extends AbstractFieldType
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getAlias(): string
     {
         return 'email';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFormType(): string
     {
         return \Symfony\Component\Form\Extension\Core\Type\EmailType::class;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildOptions(array $options): array
     {
         /**
          * By default, add Email constraint for all Email field types.
          */
         $options['constraints'][] = new Email();
+        $options['attr']['placeholder'] = $options['placeholder'];
 
         // Remove special option, used by sender.
-        unset($options['sender']);
+        unset($options['sender'], $options['placeholder']);
 
         return $options;
     }

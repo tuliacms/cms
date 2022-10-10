@@ -103,7 +103,7 @@
                 <target>Tekst</target>
             </trans-unit>
             <trans-unit id="tuliacms.widgets.26">
-                <source>widget.text,description</source>
+                <source>widget.text.description</source>
                 <target>Pokazuje edytor WYSIWYG, aby umieścić dowolną treść tekstową.</target>
             </trans-unit>
             <trans-unit id="tuliacms.widgets.27">

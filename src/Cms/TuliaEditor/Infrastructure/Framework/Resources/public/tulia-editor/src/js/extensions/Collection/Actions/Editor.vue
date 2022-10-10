@@ -1,10 +1,10 @@
 <template>
-    <button v-if="actions.indexOf('moveBackward') !== -1" type="button" class="tued-btn" @click="props.collection.moveBackward(props.item)" :title="translator.trans('moveBackward')"><i class="fas fa-arrow-left"></i></button>
-    <button v-if="actions.indexOf('moveForward') !== -1" type="button" class="tued-btn" @click="props.collection.moveForward(props.item)" :title="translator.trans('moveForward')"><i class="fas fa-arrow-right"></i></button>
-    <button v-if="actions.indexOf('moveUp') !== -1" type="button" class="tued-btn" @click="props.collection.moveBackward(props.item)" :title="translator.trans('moveUp')"><i class="fas fa-arrow-up"></i></button>
-    <button v-if="actions.indexOf('moveDown') !== -1" type="button" class="tued-btn" @click="props.collection.moveForward(props.item)" :title="translator.trans('moveDown')"><i class="fas fa-arrow-down"></i></button>
-    <button v-if="actions.indexOf('remove') !== -1" type="button" class="tued-btn tued-btn-danger" @click="props.collection.remove(props.item)" :title="translator.trans('removeItem')"><i class="fas fa-trash"></i></button>
-    <button v-if="actions.indexOf('add') !== -1" type="button" class="tued-btn" @click="props.collection.add()">{{ translator.trans('addItem') }}</button>
+    <span v-if="actions.indexOf('moveBackward') !== -1"><button type="button" class="tued-btn" @click="props.collection.moveBackward(props.item)" :title="translator.trans('moveBackward')"><i class="fas fa-arrow-left"></i></button>&nbsp;</span>
+    <span v-if="actions.indexOf('moveForward') !== -1"><button type="button" class="tued-btn" @click="props.collection.moveForward(props.item)" :title="translator.trans('moveForward')"><i class="fas fa-arrow-right"></i></button>&nbsp;</span>
+    <span v-if="actions.indexOf('moveUp') !== -1"><button type="button" class="tued-btn" @click="props.collection.moveBackward(props.item)" :title="translator.trans('moveUp')"><i class="fas fa-arrow-up"></i></button>&nbsp;</span>
+    <span v-if="actions.indexOf('moveDown') !== -1"><button type="button" class="tued-btn" @click="props.collection.moveForward(props.item)" :title="translator.trans('moveDown')"><i class="fas fa-arrow-down"></i></button>&nbsp;</span>
+    <span v-if="actions.indexOf('remove') !== -1"><button type="button" class="tued-btn tued-btn-danger" @click="props.collection.remove(props.item)" :title="translator.trans('removeItem')"><i class="fas fa-trash"></i></button>&nbsp;</span>
+    <span v-if="actions.indexOf('add') !== -1"><button type="button" class="tued-btn" @click="props.collection.add()">{{ translator.trans('addItem') }}</button>&nbsp;</span>
 </template>
 
 <script setup>

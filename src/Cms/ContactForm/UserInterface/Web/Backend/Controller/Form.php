@@ -97,7 +97,7 @@ class Form extends AbstractController
             }
         }
 
-        if ($request->request->has('form')) {
+        if ($request->request->has('contact_form_form')) {
             $fields = $this->collectFieldsFromRequest($request, $form);
         } else {
             $fields = $this->convertFieldsForViewFormat($formData['fields']);
@@ -161,7 +161,7 @@ class Form extends AbstractController
             }
         }
 
-        if ($request->request->has('form')) {
+        if ($request->request->has('contact_form_form')) {
             $fields = $this->collectFieldsFromRequest($request, $form);
         } else {
             $fields = $this->convertFieldsForViewFormat($formData['fields']);

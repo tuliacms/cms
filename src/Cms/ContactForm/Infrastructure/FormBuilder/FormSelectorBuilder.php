@@ -15,11 +15,9 @@ use Tulia\Cms\Content\Type\Domain\ReadModel\Model\Field;
  */
 class FormSelectorBuilder extends AbstractFieldTypeBuilder
 {
-    private ContactFormFinderInterface $finder;
-
-    public function __construct(ContactFormFinderInterface $finder)
-    {
-        $this->finder = $finder;
+    public function __construct(
+        private readonly ContactFormFinderInterface $finder,
+    ) {
     }
 
     public function buildOptions(Field $field, array $options, ContentType $contentType): array

@@ -56,17 +56,17 @@ class Connection extends DoctrineConnection
         return parent::delete($this->prepareTablePrefix($table), $criteria, $types);
     }
 
-    public function fetchAssociative(string $query, array $params = [], array $types = [])
+    public function fetchAssociative(string $query, array $params = [], array $types = []): array|bool
     {
         return parent::fetchAssociative($this->prepareTablePrefix($query), $params, $types);
     }
 
-    public function fetchNumeric(string $query, array $params = [], array $types = [])
+    public function fetchNumeric(string $query, array $params = [], array $types = []): array|bool
     {
         return parent::fetchNumeric($this->prepareTablePrefix($query), $params, $types);
     }
 
-    public function fetchOne(string $query, array $params = [], array $types = [])
+    public function fetchOne(string $query, array $params = [], array $types = []): mixed
     {
         return parent::fetchOne($this->prepareTablePrefix($query), $params, $types);
     }

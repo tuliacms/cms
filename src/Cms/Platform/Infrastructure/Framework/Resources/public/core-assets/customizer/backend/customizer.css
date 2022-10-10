@@ -42,6 +42,8 @@
 .control-pane-content {padding:10px;}
 .control-pane-content label {font-size:13px;margin-bottom:5px}
 
+.control-pane-content-description {margin-bottom:20px;font-style:italic;color:#565656;}
+
 .panel-toggle {position:fixed;left:0;bottom:0;}
 
 .customizer[data-resolution="tablet"] .customizer-preview {max-width:767px;}

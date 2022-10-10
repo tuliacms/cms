@@ -11,19 +11,22 @@ use Tulia\Cms\ContactForm\Domain\FieldType\AbstractFieldType;
  */
 class TextType extends AbstractFieldType
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getAlias(): string
     {
         return 'text';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFormType(): string
     {
         return \Symfony\Component\Form\Extension\Core\Type\TextType::class;
+    }
+
+    public function buildOptions(array $options): array
+    {
+        $options['attr']['placeholder'] = $options['placeholder'];
+
+        unset($options['placeholder']);
+
+        return $options;
     }
 }

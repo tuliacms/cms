@@ -148,11 +148,11 @@
             </trans-unit>
             <trans-unit id="tuliacms.menu.37">
                 <source>horizontal</source>
-                <target>Horyzontalnie</target>
+                <target>Poziomo</target>
             </trans-unit>
             <trans-unit id="tuliacms.menu.38">
                 <source>vertical</source>
-                <target>Wertykalnie</target>
+                <target>Pionowo</target>
             </trans-unit>
             <trans-unit id="tuliacms.menu.39">
                 <source>basics</source>

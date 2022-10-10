@@ -1,0 +1,16 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        bind:
+            $projectDir: '%kernel.project_dir%'
+
+    Tulia\Cms\Deployment\:
+        resource: '../../../../**'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources'
+
+    Tulia\Cms\Deployment\Domain\WriteModel\Service\DeploymentFileGeneratorRegistry:
+        lazy: true
+        arguments:
+            $generators: !tagged_iterator deployment.file_generator

@@ -14,6 +14,7 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Exception\RequestCsrfTokenException;
+use Tulia\Cms\Shared\Application\UseCase\IdResult;
 use Tulia\Cms\Widget\Application\UseCase\CreateWidget;
 use Tulia\Cms\Widget\Application\UseCase\CreateWidgetRequest;
 use Tulia\Cms\Widget\Application\UseCase\DeleteWidget;
@@ -89,7 +90,8 @@ class Widget extends AbstractController
         $formDescriptor->handleRequest($request);
 
         if ($formDescriptor->isFormValid()) {
-            ($createWidget)(new CreateWidgetRequest(
+            /** @var IdResult $result */
+            $result = ($createWidget)(new CreateWidgetRequest(
                 $type,
                 $widgetDetailsForm->getData(),
                 $formDescriptor->getData(),
@@ -100,7 +102,7 @@ class Widget extends AbstractController
             ));
 
             $this->setFlash('success', $this->trans('widgetSaved', [], 'widgets'));
-            return $this->redirectToRoute('backend.widget');
+            return $this->redirectToRoute('backend.widget.edit', ['id' => $result->id]);
         }
 
         return $this->view('@backend/widget/create.tpl', [
@@ -149,7 +151,7 @@ class Widget extends AbstractController
             ));
 
             $this->setFlash('success', $this->trans('widgetSaved', [], 'widgets'));
-            return $this->redirectToRoute('backend.widget');
+            return $this->redirectToRoute('backend.widget.edit', ['id' => $id]);
         }
 
         return $this->view('@backend/widget/edit.tpl', [

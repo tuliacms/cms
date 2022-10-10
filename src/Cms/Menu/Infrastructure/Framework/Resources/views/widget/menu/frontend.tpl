@@ -1,5 +1,7 @@
 {% extends 'widget' %}
 
 {% block content %}
-    {{ menu|raw }}
+    <div class="tulia-navbar tulia-navbar-layout-{{ layout }}">
+        {{ menu|raw }}
+    </div>
 {% endblock %}

@@ -26,9 +26,6 @@ class FormExtension extends AbstractExtension
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFunctions(): array
     {
         return [
@@ -46,10 +43,7 @@ class FormExtension extends AbstractExtension
                 return $env->render('@cms/forms/contact-form.tpl', [
                     'template' => $model->getFieldsView(),
                     'template_name' => sprintf('contact_form_field_template_%s', $formId),
-                    'form' => $this->buildForm(
-                        $context['app']->getRequest(),
-                        $model
-                    ),
+                    'form' => $this->buildForm($context['app']->getRequest(), $model),
                 ]);
             }, [
                 'is_safe' => [ 'html' ],

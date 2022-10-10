@@ -12,12 +12,9 @@ use Tulia\Cms\Menu\Domain\Builder\Hierarchy\Item;
  */
 class HtmlBuilder implements HtmlBuilderInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function build(HierarchyInterface $hierarchy, string $websiteId, string $locale): string
     {
-        $result = '<ul class="navbar-nav navbar-nav-hoverable mr-auto tulia-navbar">';
+        $result = '<ul class="navbar-nav">';
 
         foreach ($hierarchy as $item) {
             if ($item->isRoot()) {

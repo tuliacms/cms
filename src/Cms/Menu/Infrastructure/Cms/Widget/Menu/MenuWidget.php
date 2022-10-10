@@ -28,6 +28,7 @@ class MenuWidget extends AbstractWidget
     public function render(ConfigurationInterface $config): ?ViewInterface
     {
         return $this->view('@widget/internal/menu/frontend.tpl', [
+            'layout' => $config->get('layout'),
             'menu' => $this->builder->buildHtml(
                 (string) $config->get('menu_id'),
                 $config->get('website_id'),

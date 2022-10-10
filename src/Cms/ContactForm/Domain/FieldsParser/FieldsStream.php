@@ -11,32 +11,15 @@ use Tulia\Cms\ContactForm\Domain\FieldsParser\Exception\InvalidFieldNameExceptio
  */
 class FieldsStream implements FieldsStreamInterface
 {
-    /**
-     * @var array
-     */
-    private $fields = [];
+    private array $fields = [];
+    private string $source;
+    private ?string $result = null;
 
-    /**
-     * @var string
-     */
-    private $source;
-
-    /**
-     * @var null|string
-     */
-    private $result;
-
-    /**
-     * @param string $source
-     */
     public function __construct(string $source)
     {
         $this->source = $source;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addField(string $name, array $field): void
     {
         if (! preg_match('/^[a-z0-9_]+$/i', $name)) {
@@ -46,25 +29,16 @@ class FieldsStream implements FieldsStreamInterface
         $this->fields[$name] = $field;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function allFields(): array
     {
         return $this->fields;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getResult(): ?string
     {
         return $this->result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setResult(?string $result): void
     {
         $this->result = $result;

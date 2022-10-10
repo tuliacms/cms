@@ -90,7 +90,7 @@ class ContactFormForm extends AbstractType
 
         $builder->get('receivers')->addModelTransformer(new CallbackTransformer(
             static fn($v) => implode(',', $v),
-            static fn($v) => explode(',', $v),
+            static fn($v) => explode(',', (string) $v),
         ));
     }
 

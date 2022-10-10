@@ -14,6 +14,7 @@ class Section
     private ?string $label = null;
     private ?string $parent = null;
     private string $transationDomain = 'messages';
+    private ?string $description = null;
 
     public function __construct(string $code, string $label, array $controls = [], ?string $parent = null)
     {
@@ -30,6 +31,7 @@ class Section
     {
         $self = new self($data['code'], (string) $data['label'], $data['controls'], $data['parent']);
         $self->transationDomain = $data['translation_domain'];
+        $self->description = $data['description'];
 
         return $self;
     }
@@ -89,5 +91,10 @@ class Section
     public function getTransationDomain(): string
     {
         return $this->transationDomain;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
     }
 }

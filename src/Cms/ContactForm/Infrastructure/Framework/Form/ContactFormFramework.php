@@ -45,6 +45,14 @@ class ContactFormFramework extends AbstractType
 
     protected function buildOptions(array $options): array
     {
+        /**
+         * If user leave empty label in builder, this means he wants label to
+         * not show in form. So any value casted to false must removes the label.
+         */
+        if (!$options['label']) {
+            $options['label'] = false;
+        }
+
         return $this->buildConstraints($options);
     }
 

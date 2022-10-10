@@ -15,20 +15,14 @@ use Tulia\Cms\Content\Type\Domain\ReadModel\FieldTypeHandler\FieldTypeHandlerReg
  */
 class FieldTypeMappingRegistry
 {
-    private ConstraintsResolverInterface $constraintsResolver;
     private array $mapping = [];
     private bool $mappingResolved = false;
-    private FieldTypeBuilderRegistry $builderRegistry;
-    private FieldTypeHandlerRegistry $handlerRegistry;
 
     public function __construct(
-        ConstraintsResolverInterface $constraintsResolver,
-        FieldTypeBuilderRegistry $builderRegistry,
-        FieldTypeHandlerRegistry $handlerRegistry
+        private readonly ConstraintsResolverInterface $constraintsResolver,
+        private readonly FieldTypeBuilderRegistry $builderRegistry,
+        private readonly FieldTypeHandlerRegistry $handlerRegistry
     ) {
-        $this->constraintsResolver = $constraintsResolver;
-        $this->builderRegistry = $builderRegistry;
-        $this->handlerRegistry = $handlerRegistry;
     }
 
     public function addMapping(string $type, array $mapingInfo): void

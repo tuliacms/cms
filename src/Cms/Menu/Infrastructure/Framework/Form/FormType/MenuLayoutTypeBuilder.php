@@ -15,18 +15,16 @@ use Tulia\Cms\Content\Type\Domain\ReadModel\Model\Field;
  */
 class MenuLayoutTypeBuilder extends AbstractFieldTypeBuilder
 {
-    private TranslatorInterface $translator;
-
-    public function __construct(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
+    public function __construct(
+        private readonly TranslatorInterface $translator,
+    ) {
     }
 
     public function buildOptions(Field $field, array $options, ContentType $contentType): array
     {
         $layout = [
-            $this->translator->trans('horizontal', [], 'menu') => 0,
-            $this->translator->trans('vertical', [], 'menu') => 1,
+            $this->translator->trans('horizontal', [], 'menu') => 'horizontal',
+            $this->translator->trans('vertical', [], 'menu') => 'vertical',
         ];
 
         $options['choices'] = $layout;

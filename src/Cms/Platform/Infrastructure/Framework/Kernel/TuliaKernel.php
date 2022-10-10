@@ -58,40 +58,45 @@ final class TuliaKernel extends Kernel
     {
         $base = \dirname(__DIR__, 4);
 
-        return array_merge(
-            [
-                $base . '/Platform/Infrastructure/Framework/Resources/config',
-                $base . '/Activity/Framework/Resources/config',
-                $base . '/BackendMenu/Framework/Resources/config',
-                $base . '/BodyClass/Framework/Resources/config',
-                $base . '/Breadcrumbs/Framework/Resources/config',
-                $base . '/ContactForm/Infrastructure/Framework/Resources/config',
-                $base . '/EditLinks/Framework/Resources/config',
-                $base . '/Filemanager/Infrastructure/Framework/Resources/config',
-                $base . '/FrontendToolbar/Framework/Resources/config',
-                $base . '/Homepage/Infrastructure/Framework/Resources/config',
-                //$base . '/Installator/Infrastructure/Framework/Resources/config',
-                $base . '/Menu/Infrastructure/Framework/Resources/config',
-                $base . '/Node/Infrastructure/Internal/Framework/Resources/config',
-                $base . '/Options/Infrastructure/Framework/Resources/config',
-                $base . '/SearchAnything/Infrastructure/Framework/Resources/config',
-                $base . '/Security/Framework/Resources/config',
-                $base . '/Settings/Infrastructure/Framework/Resources/config',
-                $base . '/Taxonomy/Infrastructure/Framework/Resources/config',
-                $base . '/Theme/Infrastructure/Framework/Resources/config',
-                $base . '/User/Infrastructure/Framework/Resources/config',
-                $base . '/Website/Infrastructure/Framework/Resources/config',
-                $base . '/Widget/Infrastructure/Framework/Resources/config',
-                $base . '/WysiwygEditor/Infrastructure/Framework/Resources/config',
-                $base . '/TuliaEditor/Infrastructure/Framework/Resources/config',
-                $base . '/Content/Attributes/Infrastructure/Framework/Resources/config',
-                $base . '/Content/Block/Infrastructure/Framework/Resources/config',
-                $base . '/Content/Type/Infrastructure/Framework/Resources/config',
-                $base . '/ImportExport/Infrastructure/Framework/Resources/config',
-            ],
-            $this->getExtensionConfigDirs('module'),
-            $this->getExtensionConfigDirs('theme'),
-        );
+        $dirs = [
+            $base . '/Platform/Infrastructure/Framework/Resources/config',
+            $base . '/Activity/Framework/Resources/config',
+            $base . '/BackendMenu/Framework/Resources/config',
+            $base . '/BodyClass/Framework/Resources/config',
+            $base . '/Breadcrumbs/Framework/Resources/config',
+            $base . '/ContactForm/Infrastructure/Framework/Resources/config',
+            $base . '/EditLinks/Framework/Resources/config',
+            $base . '/Filemanager/Infrastructure/Framework/Resources/config',
+            $base . '/FrontendToolbar/Framework/Resources/config',
+            $base . '/Homepage/Infrastructure/Framework/Resources/config',
+            //$base . '/Installator/Infrastructure/Framework/Resources/config',
+            $base . '/Menu/Infrastructure/Framework/Resources/config',
+            $base . '/Node/Infrastructure/Internal/Framework/Resources/config',
+            $base . '/Options/Infrastructure/Framework/Resources/config',
+            $base . '/SearchAnything/Infrastructure/Framework/Resources/config',
+            $base . '/Security/Framework/Resources/config',
+            $base . '/Settings/Infrastructure/Framework/Resources/config',
+            $base . '/Taxonomy/Infrastructure/Framework/Resources/config',
+            $base . '/Theme/Infrastructure/Framework/Resources/config',
+            $base . '/User/Infrastructure/Framework/Resources/config',
+            $base . '/Website/Infrastructure/Framework/Resources/config',
+            $base . '/Widget/Infrastructure/Framework/Resources/config',
+            $base . '/WysiwygEditor/Infrastructure/Framework/Resources/config',
+            $base . '/TuliaEditor/Infrastructure/Framework/Resources/config',
+            $base . '/Content/Attributes/Infrastructure/Framework/Resources/config',
+            $base . '/Content/Block/Infrastructure/Framework/Resources/config',
+            $base . '/Content/Type/Infrastructure/Framework/Resources/config',
+            $base . '/ImportExport/Infrastructure/Framework/Resources/config',
+        ];
+
+        if ($this->environment === 'dev') {
+            $dirs[] = $base . '/Deployment/Infrastructure/Framework/Resources/config';
+        }
+
+        $dirs = array_merge($dirs, $this->getExtensionConfigDirs('module'));
+        $dirs = array_merge($dirs, $this->getExtensionConfigDirs('theme'));
+
+        return $dirs;
     }
 
     protected function configureContainer(ContainerConfigurator $container): void

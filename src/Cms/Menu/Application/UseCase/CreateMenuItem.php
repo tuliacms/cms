@@ -16,8 +16,8 @@ use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 class CreateMenuItem extends AbstractTransactionalUseCase
 {
     public function __construct(
-        private MenuRepositoryInterface $repository,
-        private EventBusInterface $eventBus
+        private readonly MenuRepositoryInterface $repository,
+        private readonly EventBusInterface $eventBus,
     ) {
     }
 
@@ -28,7 +28,12 @@ class CreateMenuItem extends AbstractTransactionalUseCase
     {
         $menu = $this->repository->get($request->menuId);
 
-        $item = $menu->createItem($request->availableLocales, $request->locale, $request->details['name']);
+        if ($request->details['parent']) {
+            $item = $menu->createChildItem($request->details['parent'], $request->availableLocales, $request->locale, $request->details['name']);
+        } else {
+            $item = $menu->createItem($request->availableLocales, $request->locale, $request->details['name']);
+        }
+
         $item->linksTo(
             (string) $request->details['type'],
             (string) $request->details['identity'],

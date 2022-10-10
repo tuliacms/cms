@@ -4,7 +4,8 @@ const Image = require('./Image/Image.js').default;
 const BackgroundImage = require('./BackgroundImage/BackgroundImage.js').default;
 const FontIcon = require('./FontIcon/FontIcon.js').default;
 const Collection = require('./Collection/Collection.js').default;
-const CollectionActions = require('./Collection/Collection.Actions.js').default;
+const CollectionActions = require('./Collection/Actions/Actions.js').default;
+const CollectionCarousel = require('./Collection/Carousel/Carousel.js').default;
 const DynamicBlock = require('./DynamicBlock/DynamicBlock.js').default;
 
 export default {
@@ -15,5 +16,6 @@ export default {
     'FontIcon': FontIcon,
     'Collection': Collection,
     'Collection.Actions': CollectionActions,
+    'Collection.Carousel': CollectionCarousel,
     'DynamicBlock': DynamicBlock,
 }

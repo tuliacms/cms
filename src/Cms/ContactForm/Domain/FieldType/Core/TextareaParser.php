@@ -13,17 +13,11 @@ use Tulia\Component\Shortcode\ShortcodeInterface;
  */
 class TextareaParser extends AbstractFieldParser
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getAlias(): string
     {
         return 'textarea';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function parseShortcode(ShortcodeInterface $shortcode): array
     {
         $constraints = $this->parseConstraints($shortcode->getParameter('constraints'));
@@ -42,6 +36,7 @@ class TextareaParser extends AbstractFieldParser
                 'constraints' => $constraintsRaw,
                 'label' => $shortcode->getParameter('label'),
                 'help' => $shortcode->getParameter('help'),
+                'placeholder' => $shortcode->getParameter('placeholder'),
             ],
         ];
     }
@@ -62,7 +57,11 @@ class TextareaParser extends AbstractFieldParser
                 'label' => [
                     'name' => 'Label showed in field form.',
                     'type' => 'text',
-                    'required' => true,
+                    'multilingual' => true,
+                ],
+                'placeholder' => [
+                    'name' => 'Placeholder showed inside the field.',
+                    'type' => 'text',
                     'multilingual' => true,
                 ],
                 'help' => [
