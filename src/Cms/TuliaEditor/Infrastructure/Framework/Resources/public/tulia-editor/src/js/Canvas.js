@@ -37,6 +37,7 @@ export default class Canvas {
                     availableBlocks: TuliaEditor.blocks,
                     structure: ObjectCloner.deepClone(options.structure.source)
                 });
+                self.loadDirectives(self.vue);
                 self.loadControls(self.vue);
                 self.loadExtensions(self.vue);
                 self.loadBlocks(self.vue);
@@ -52,6 +53,12 @@ export default class Canvas {
                 self.vue.mount('#tulia-editor');
             });
         });
+    }
+
+    loadDirectives (vueApp) {
+        for (let i in TuliaEditor.directives) {
+            vueApp.directive(i, TuliaEditor.directives[i]);
+        }
     }
 
     loadControls (vueApp) {

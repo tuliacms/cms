@@ -1,0 +1,15 @@
+.tued-tooltip {
+    pointer-events: none;
+    opacity: 0;
+    transition: .12s all;
+    background-color: #fff;
+    border-radius: 3px;
+    font-size: 13px;
+    padding: 4px 8px;
+    box-shadow: 0 0 4px rgba(0,0,0,.2);
+    z-index: 9;
+
+    &.tued-showed {
+        opacity: 1;
+    }
+}

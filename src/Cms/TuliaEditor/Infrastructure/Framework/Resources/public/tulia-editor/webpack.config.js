@@ -50,6 +50,7 @@ let config = {
         Tulia: 'Tulia',
         TuliaFilemanager: 'TuliaFilemanager',
         lodash: '_',
+        Popper: 'Popper',
     },
     resolve: {
         extensions: ['.js', '.scss'],
@@ -58,6 +59,7 @@ let config = {
             controls: path.resolve(__dirname, 'src/js/Controls'),
             blocks: path.resolve(__dirname, 'src/js/blocks'),
             extensions: path.resolve(__dirname, 'src/js/extensions'),
+            directives: path.resolve(__dirname, 'src/js/directives'),
             shared: path.resolve(__dirname, 'src/js/shared'),
         }
     },

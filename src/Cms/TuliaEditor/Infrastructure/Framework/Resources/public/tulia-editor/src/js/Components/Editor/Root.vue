@@ -1,5 +1,5 @@
 <template>
-    <div class="tued-container">
+    <div :class="{ 'tued-container': true, 'tued-show-preview': renderPreview }">
         <StructureComponent :structure="structure"></StructureComponent>
         <RenderingCanvasComponent ref="renderedContent" :structure="structure"></RenderingCanvasComponent>
     </div>
@@ -141,5 +141,19 @@ provide('sections.instance', instantiator.instantiator('section'));
  *********/
 const BlocksRegistry = require("shared/Structure/Blocks/Registry.js").default;
 provide('blocks.registry', new BlocksRegistry(props.availableBlocks));
+
+
+
+/**********************
+ * Render area preview
+ **********************/
+const renderPreview = ref(props.options.show_preview_in_canvas);
+props.container.messenger.operation('editor.canvas.preview.toggle', (params, success, fail) => {
+    renderPreview.value = !renderPreview.value;
+
+    props.container.messenger.notify('editor.canvas.preview.toggled', renderPreview.value);
+
+    success();
+});
 </script>
 

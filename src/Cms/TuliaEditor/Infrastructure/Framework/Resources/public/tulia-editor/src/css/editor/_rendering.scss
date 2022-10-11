@@ -1,17 +1,7 @@
 .tued-rendering-canvas {
     display: none;
+}
 
-    &.tued-rendering-canvas-showed {
-        display: block;
-
-        &:before {
-            content: "RENDERING PREVIEW";
-            text-align: center;
-            background-color: #ddd;
-            color: #000;
-            display: block;
-            padding: 10px;
-            margin: 0 auto 20px;
-        }
-    }
+.tued-container.tued-show-preview .tued-rendering-canvas {
+    display: block;
 }

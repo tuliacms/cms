@@ -150,6 +150,18 @@
                 <source>noEditOptionsForThisElement</source>
                 <target>No edit options for this element.</target>
             </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.38">
+                <source>selectImage</source>
+                <target>Select image</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.39">
+                <source>nextSlide</source>
+                <target>Next slide</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.40">
+                <source>prevSlide</source>
+                <target>Previous slide</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

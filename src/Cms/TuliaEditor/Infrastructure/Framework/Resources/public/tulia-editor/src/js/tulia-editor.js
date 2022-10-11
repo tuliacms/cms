@@ -45,6 +45,7 @@ export default {
     extensions: require("extensions/extensions.js").default,
     blocks: require("blocks/blocks.js").default,
     controls: require("controls/controls.js").default,
+    directives: require("directives/directives.js").default,
     translations: {},
     instances: {},
     defaults: {

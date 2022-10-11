@@ -64,23 +64,23 @@
             </trans-unit>
             <trans-unit id="tuliacms.tulia-editor.16">
                 <source>moveBackward</source>
-                <target>Wstecz</target>
+                <target>Przenieś wstecz</target>
             </trans-unit>
             <trans-unit id="tuliacms.tulia-editor.17">
                 <source>moveForward</source>
-                <target>Dalej</target>
+                <target>Przenieś dalej</target>
             </trans-unit>
             <trans-unit id="tuliacms.tulia-editor.18">
                 <source>moveUp</source>
-                <target>W górę</target>
+                <target>Przenieś w górę</target>
             </trans-unit>
             <trans-unit id="tuliacms.tulia-editor.19">
                 <source>moveDown</source>
-                <target>W dół</target>
+                <target>Przenieś w dół</target>
             </trans-unit>
             <trans-unit id="tuliacms.tulia-editor.20">
                 <source>edit</source>
-                <target>Edit</target>
+                <target>Edytuj</target>
             </trans-unit>
             <trans-unit id="tuliacms.tulia-editor.21">
                 <source>contentPreview</source>
@@ -149,6 +149,18 @@
             <trans-unit id="tuliacms.tulia-editor.37">
                 <source>noEditOptionsForThisElement</source>
                 <target>Brak opcji edycji dla tego elementu.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.38">
+                <source>selectImage</source>
+                <target>Wybierz zdjęcie</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.39">
+                <source>nextSlide</source>
+                <target>Nastepny slajd</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.40">
+                <source>prevSlide</source>
+                <target>Poprzedni slajd</target>
             </trans-unit>
         </body>
     </file>

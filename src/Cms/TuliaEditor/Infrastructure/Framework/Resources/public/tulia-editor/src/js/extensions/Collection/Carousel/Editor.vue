@@ -5,20 +5,71 @@
                 <slot name="slide" :slide="slide"></slot>
                 <div class="tued-carousel-actions">
                     <div v-if="actions.slide">
-                        Slide {{state.active + 1}}/{{modelValue.collection.length}}: &nbsp; <Actions :actions="actions.slide" :collection="modelValue" :item="slide"></Actions>
+                        Slide {{state.active + 1}}/{{modelValue.collection.length}}: &nbsp; <Actions :actions="actions.slide" :collection="modelValue" :item="slide" @movedTo="movedTo"></Actions>
                     </div>
                     <div v-if="actions.collection">
-                        Collection: &nbsp; <Actions :actions="actions.collection" :collection="modelValue"></Actions>
+                        Collection: &nbsp; <Actions :actions="actions.collection" :collection="modelValue" @added="added"></Actions>
                     </div>
                 </div>
             </div>
         </div>
         <div class="tued-carousel-navigation">
-            <span class="tued-carousel-next" @click="nextSlide" v-if="modelValue.collection.length > 1"><i class="tued-chevron tued-chevron-right"></i></span>
-            <span class="tued-carousel-prev" @click="prevSlide" v-if="modelValue.collection.length > 1"><i class="tued-chevron tued-chevron-left"></i></span>
+            <span class="tued-carousel-next" @click="nextSlide" v-if="modelValue.collection.length > 1" :title="translator.trans('nextSlide')" v-tooltip><i class="tued-chevron tued-chevron-right"></i></span>
+            <span class="tued-carousel-prev" @click="prevSlide" v-if="modelValue.collection.length > 1" :title="translator.trans('prevSlide')" v-tooltip><i class="tued-chevron tued-chevron-left"></i></span>
         </div>
     </div>
 </template>
+
+<script setup>
+const Collection = require('./../Editor.js').default;
+const Actions = require('./../Actions/Editor.vue').default;
+const { onUnmounted, onMounted, reactive, defineProps, defineEmits, inject } = require('vue');
+const props = defineProps(['modelValue', 'actions']);
+const emit = defineEmits(['update:modelValue']);
+const extension = inject('extension.instance').editor('Collection.Carousel');
+const translator = inject('translator');
+
+const state = reactive({
+    active: 0,
+});
+
+const nextSlide = () => {
+    state.active++;
+
+    if ((props.modelValue.collection.length - 1) < state.active) {
+        state.active = 0;
+    }
+};
+const prevSlide = () => {
+    state.active--;
+
+    if (state.active < 0) {
+        state.active = props.modelValue.collection.length - 1;
+    }
+};
+
+const validateCollection = () => {
+    if (!props.modelValue instanceof Collection) {
+        throw new Error('v-model must be instance of Collection extension.');
+    }
+};
+
+const movedTo = (newIndex) => {
+    state.active = newIndex;
+};
+const added = (index) => {
+    state.active = index;
+};
+
+onUnmounted(() => extension.unmount());
+onMounted(() => validateCollection());
+</script>
+
+<script>
+export default {
+    name: 'CollectionCarousel'
+}
+</script>
 
 <style scoped lang="scss">
 .tued-carousel {
@@ -84,47 +135,3 @@
     }
 }
 </style>
-
-<script setup>
-const Collection = require('./../Editor.js').default;
-const Actions = require('./../Actions/Editor.vue').default;
-const { onUnmounted, onMounted, reactive, defineProps, defineEmits } = require('vue');
-const props = defineProps(['modelValue', 'actions']);
-const emit = defineEmits(['update:modelValue']);
-
-const state = reactive({
-    active: 0,
-});
-
-const nextSlide = () => {
-    state.active++;
-
-    if ((props.modelValue.collection.length - 1) < state.active) {
-        state.active = 0;
-    }
-};
-const prevSlide = () => {
-    state.active--;
-
-    if (state.active < 0) {
-        state.active = props.modelValue.collection.length - 1;
-    }
-};
-
-const validateCollection = () => {
-    if (!props.modelValue instanceof Collection) {
-        throw new Error('v-model must be instance of Collection extension.');
-    }
-
-    console.log(props.actions);
-};
-
-onUnmounted(() => extension.unmount());
-onMounted(() => validateCollection());
-</script>
-
-<script>
-export default {
-    name: 'CollectionCarousel'
-}
-</script>

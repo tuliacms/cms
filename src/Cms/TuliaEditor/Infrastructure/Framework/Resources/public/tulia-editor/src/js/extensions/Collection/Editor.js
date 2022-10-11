@@ -24,26 +24,40 @@ export default class Collection {
         element.id = this._generateId();
 
         this.collection.push(element);
+
+        return this.collection.length - 1;
     }
 
     moveBackward (element) {
         let index = this._findIndex(element);
 
-        if (!index) {
+        if (index === undefined) {
+            return;
+        }
+
+        if (index - 1 < 0) {
             return;
         }
 
         this.moveToIndex(element, index, index - 1);
+
+        return index - 1;
     }
 
     moveForward (element) {
         let index = this._findIndex(element);
 
-        if (!index) {
+        if (index === undefined) {
+            return;
+        }
+
+        if (index + 1 > this.collection.length - 1) {
             return;
         }
 
         this.moveToIndex(element, index, index + 1);
+
+        return index + 1;
     }
 
     moveToIndex (element, oldIndex, newIndex) {
@@ -54,7 +68,7 @@ export default class Collection {
     _findIndex (element) {
         for (let i in this.collection) {
             if (this.collection[i].id === element.id) {
-                return i;
+                return parseInt(i);
             }
         }
     }

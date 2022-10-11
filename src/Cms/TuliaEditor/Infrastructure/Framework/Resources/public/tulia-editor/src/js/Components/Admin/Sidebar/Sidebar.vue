@@ -2,13 +2,18 @@
     <div class="tued-sidebar">
         <div class="tued-sidebar-inner">
             <div class="tued-sidebar-toolbar">
-                <div class="tued-menu-holder">
-                    <div class="tued-menu-hamburger">
-                        <span></span>
-                        <span></span>
-                        <span></span>
+                <!--<div class="dropdown">
+                    <div class="tued-menu-holder" data-bs-toggle="dropdown">
+                        <div class="tued-menu-hamburger">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
                     </div>
-                </div>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item dropdown-item-with-icon" href="#" @click="messenger.execute('editor.canvas.preview.toggle')"><i class="dropdown-icon fa fa-eye"></i> Podgląd</a></li>
+                    </ul>
+                </div>-->
                 <button type="button" class="tued-main-btn tued-main-btn-default" @click="$emit('cancel')">{{ translator.trans('cancel') }}</button>
                 <button type="button" class="tued-main-btn tued-main-btn-success" @click="$emit('save')">{{ translator.trans('save') }}</button>
             </div>

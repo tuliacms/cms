@@ -48,6 +48,9 @@
             addColumn: '{{ 'addColumn'|trans({}, 'tulia-editor') }}',
             addColumnBefore: '{{ 'addColumnBefore'|trans({}, 'tulia-editor') }}',
             addColumnAfter: '{{ 'addColumnAfter'|trans({}, 'tulia-editor') }}',
+            selectImage: '{{ 'selectImage'|trans({}, 'tulia-editor') }}',
+            nextSlide: '{{ 'nextSlide'|trans({}, 'tulia-editor') }}',
+            prevSlide: '{{ 'prevSlide'|trans({}, 'tulia-editor') }}',
         });
 
         let structureSelector = '.tulia-editor-structure-field[data-tulia-editor-group-id="{{ params.group_id }}"]';
