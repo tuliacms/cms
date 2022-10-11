@@ -41,6 +41,7 @@ class MenuImporter implements ObjectImporterInterface
                 'identity' => $item['link_identity'] ?? null,
                 'hash' => $item['hash'] ?? '',
                 'target' => $item['target'] ?? '_self',
+                'parent' => $item['parent'] ?? null,
             ];
 
             ($this->createMenuItem)(new CreateMenuItemRequest(

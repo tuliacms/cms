@@ -39,6 +39,7 @@ cms:
                     hash: ~
                     position:
                         type: integer
+                    parent: ~
     templating:
         paths:
             - { name: backend/menu, path: '%cms.core_dir%/Cms/Menu/Infrastructure/Framework/Resources/views/backend' }
