@@ -26,7 +26,7 @@
     </code>
 #}
 {% macro foreign_locale_creation_info() %}
-    {% if app.request.attributes.get('_content_locale') != current_website().defaultLocale.code %}
+    {% if app.request.attributes.get('_locale') != current_website().defaultLocale.code %}
         <div class="alert alert-info alert-dismissible fade show">
             {{ 'foreignLocaleElementCreationNotificationMessage'|trans }}
             <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">

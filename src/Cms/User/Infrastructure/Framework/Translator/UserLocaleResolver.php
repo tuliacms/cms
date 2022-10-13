@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
-use Tulia\Component\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 
 /**
  * Listener sets current locale in Request to logged-in user defined.

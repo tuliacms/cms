@@ -16,7 +16,7 @@ use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ConstraintsBuilder;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\FieldTypeMappingRegistry;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\CancelType;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\SubmitType;
-use Tulia\Component\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz

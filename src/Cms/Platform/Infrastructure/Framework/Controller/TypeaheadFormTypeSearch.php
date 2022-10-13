@@ -6,7 +6,7 @@ namespace Tulia\Cms\Platform\Infrastructure\Framework\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Component\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz

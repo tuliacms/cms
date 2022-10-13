@@ -64,7 +64,7 @@ class Website extends AbstractController
             'id' => $this->repository->getNextId(),
             'locales' => [
                 [
-                    'domain_development' => 'localhost',
+                    'domain_development' => $request->getHttpHost(),
                     'domain' => $request->getHttpHost(),
                     'code' => $request->getPreferredLanguage(),
                     'is_default' => true,

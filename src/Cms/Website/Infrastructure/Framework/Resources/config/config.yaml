@@ -9,3 +9,12 @@ cms:
     templating:
         paths:
             - { name: backend/website, path: '%cms.core_dir%/Cms/Website/Infrastructure/Framework/Resources/views/backend' }
+doctrine:
+    orm:
+        mappings:
+            Tulia\Cms\Website\Domain\WriteModel\Model:
+                type: xml
+                dir: '%cms.core_dir%/Cms/Website/Infrastructure/Framework/Resources/config/orm/mapping'
+                is_bundle: false
+                prefix: Tulia\Cms\Website\Domain\WriteModel\Model
+                alias: CmsWebsite

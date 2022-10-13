@@ -27,7 +27,7 @@ use Tulia\Cms\Widget\Domain\WriteModel\WidgetRepositoryInterface;
 use Tulia\Cms\Widget\Infrastructure\Persistence\Domain\ReadModel\Datatable\DbalDatatableFinder;
 use Tulia\Cms\Widget\UserInterface\Web\Backend\Form\WidgetDetailsForm;
 use Tulia\Component\Datatable\DatatableFactory;
-use Tulia\Component\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
 
 /**

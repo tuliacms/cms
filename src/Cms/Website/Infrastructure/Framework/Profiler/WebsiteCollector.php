@@ -7,7 +7,7 @@ namespace Tulia\Cms\Website\Infrastructure\Framework\Profiler;
 use Symfony\Bundle\FrameworkBundle\DataCollector\AbstractDataCollector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Tulia\Component\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -27,7 +27,6 @@ final class WebsiteCollector extends AbstractDataCollector
             'active' => $this->website->isActive(),
             'backendPrefix' => $this->website->getBackendPrefix(),
             'isBackend' => $this->website->isBackend(),
-            'basepath' => $this->website->getBasepath(),
             'locale' => [
                 'code' => $this->website->getLocale()->getCode(),
                 'domain' => $this->website->getLocale()->getDomain(),

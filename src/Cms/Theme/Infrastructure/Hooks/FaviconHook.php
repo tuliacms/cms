@@ -12,7 +12,7 @@ use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\FileFinderScopeEnum;
 use Tulia\Cms\Filemanager\Domain\WriteModel\Model\FileTypeEnum;
 use Tulia\Cms\Options\Domain\ReadModel\OptionsFinderInterface;
 use Tulia\Component\Hooks\HooksSubscriberInterface;
-use Tulia\Component\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz

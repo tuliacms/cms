@@ -4,20 +4,13 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Platform\Infrastructure\Framework\Console;
 
-use Tulia\Component\Routing\Website\WebsiteInterface;
-use Tulia\Component\Routing\Website\WebsiteProvider;
-
 /**
  * @author Adam Banaszkiewicz
- * @todo Is this class needed?
  */
 final class ConsoleWebsiteProvider
 {
-    public static function provide(bool $developmentEnvironment): WebsiteInterface
+    public static function provideWebsite(): array
     {
-        $configFilename = __TULIA_PROJECT_DIR.'/config/dynamic.php';
-        assert(file_exists($configFilename), 'Tulia CMS seems to be not installed. Please call make setup do initialize system.');
-
         $locale = null;
         $website = null;
 
@@ -36,6 +29,6 @@ final class ConsoleWebsiteProvider
 
         $_SERVER['argc'] = count($_SERVER['argv']);
 
-        return WebsiteProvider::provideDirectly($configFilename, $website, $locale, $developmentEnvironment);
+        return [$website, $locale];
     }
 }

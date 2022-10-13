@@ -11,7 +11,18 @@ services:
 
     Tulia\Cms\Platform\:
         resource: '../../../../../**'
-        exclude: '../../../../../{Infrastructure/Framework/Resources,Domain/WriteModel,Shared}'
+        exclude:
+            - '../../../../../Infrastructure/Framework/Resources'
+            - '../../../../../Infrastructure/Framework/Routing/Exception'
+            - '../../../../../Infrastructure/Framework/Routing/Website/Website.php'
+            - '../../../../../Infrastructure/Framework/Routing/Website/WebsiteInterface.php'
+            - '../../../../../Infrastructure/Framework/Routing/Website/Locale.php'
+            - '../../../../../Infrastructure/Framework/Routing/Website/LocaleInterface.php'
+            - '../../../../../Infrastructure/Framework/Routing/Website/SslModeEnum.php'
+            - '../../../../../Infrastructure/Framework/Routing/Website/WebsiteMatcher.php'
+            - '../../../../../Infrastructure/Framework/Routing/Website/WebsiteFactory.php'
+            - '../../../../../Domain/WriteModel'
+            - '../../../../../Shared'
 
     Tulia\Cms\Shared\Infrastructure\Utils\DateTime\DateFormatterInterface:
         class: Tulia\Cms\Platform\Infrastructure\Utilities\DateTime\DateFormatterTranslatorAware
@@ -30,19 +41,13 @@ services:
 
     Tulia\Component\Theme\Storage\StorageInterface: '@Tulia\Cms\Platform\Infrastructure\Framework\Theme\Storage\DirectoryDiscoveryStorage'
 
-    Tulia\Cms\Platform\Domain\Service\DynamicConfigurationInterface:
-        class: Tulia\Cms\Platform\Infrastructure\Filesystem\FilesystemDynamicConfiguration
-        bind:
-            $configFilename: '%kernel.project_dir%/config/dynamic.php'
-            $config: '%cms.dynamic_config%'
-
     Tulia\Cms\Platform\Application\Service\FrameworkCacheService:
         bind:
             $kernelCacheFilepath: '%kernel.cache_file%'
 
-    Tulia\Component\Routing\Website\WebsiteInterface:
-        class: Tulia\Component\Routing\Website\Website
-        factory: Tulia\Cms\Platform\Infrastructure\Framework\Routing\WebsiteFactory::factory
+    Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface:
+        class: Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\Website
+        factory: Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteFactory::factory
 
     Tulia\Cms\Platform\Infrastructure\Framework\Routing\RoutingLoader:
         decorates: routing.loader
@@ -56,13 +61,5 @@ services:
         decorates: router
         arguments: ['@.inner']
 
-    #Tulia\Cms\Security\Framework\Security\Http\HttpUtils:
-    #    decorates: security.http_utils
-    #    arguments: ['@.inner']
-    #    calls:
-    #        - setWebsite: ['@Tulia\Component\Routing\Website\WebsiteInterface']
-
     security.http_utils:
         class: Tulia\Cms\Security\Framework\Security\Http\HttpUtils
-        calls:
-            - setWebsite: ['@Tulia\Component\Routing\Website\WebsiteInterface']

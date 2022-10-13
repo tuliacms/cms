@@ -15,7 +15,7 @@ interface ChainRouterInterface
     public function add(RouterInterface $router, int $priority = 0): void;
 
     /**
-     * @return RouterInterface[]
+     * @return RouterInterface[]|RequestMatcherInterface[]
      */
     public function all();
 }

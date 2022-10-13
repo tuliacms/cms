@@ -28,7 +28,7 @@ class Website
         }
     }
 
-    public static function buildFromArray(array $data = []): self
+    public static function fromArray(array $data = []): self
     {
         return new self(
             $data['id'],

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Theme\Infrastructure\Framework\Theme\Loader;
 
 use Tulia\Cms\Options\Domain\ReadModel\OptionsFinderInterface;
-use Tulia\Component\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 use Tulia\Component\Theme\Storage\StorageInterface;
 use Tulia\Component\Theme\ThemeInterface;
 use Tulia\Component\Theme\Loader\ThemeLoader\ThemeLoaderInterface;

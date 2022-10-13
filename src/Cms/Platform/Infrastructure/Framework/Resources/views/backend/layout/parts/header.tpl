@@ -40,37 +40,39 @@
                         </div>
                     </div>
                 {% endif %}
-                <div class="action-box language-selector noselect" data-bs-toggle="tooltip" data-bs-placement="left" title="{{ 'contentLocale'|trans }}">
-                    <div class="dropdown">
-                        {% set __locale = __currentWebsite.locale.code %}
-                        <button class="btn btn-icon-left action-btn" type="button" data-bs-toggle="dropdown">
-                            <i class="btn-icon fa fa-language"></i>
-                            <span>{{ 'languageName'|trans({ code: __locale }, 'languages') }}</span>
-                        </button>
-                        {% if app.request.attributes.has('_route') %}
-                            {% set _route = app.request.attributes.get('_route') %}
-                            {% set _route_params = app.request.attributes.get('_route_params')|default([]) %}
-                        {% else %}
-                            {% set _route = 'backend.homepage' %}
-                            {% set _route_params = [] %}
-                        {% endif %}
-                        {% set _route_params = _route_params|merge(app.request.query.all) %}
-                        <div class="dropdown-menu">
-                            {% for lang in locales() %}
-                                {% set _route_params = _route_params|merge({ _locale: lang.code }) %}
-                                <a class="dropdown-item{{ lang.code == __locale ? ' active' : '' }}" href="{{ url(_route, _route_params) }}">
-                                    <img src="{{ asset('/assets/core/flag-icons/' ~ lang.language ~ '.svg') }}" alt="" />
-                                    <span>
-                                        {{ 'languageName'|trans({ code: lang.code }, 'languages') }}
-                                        {% if lang.code == __currentWebsite.defaultLocale.code %}
-                                            {{ ('<span style="font-size:10px;opacity:.4;">[' ~ 'default'|trans ~ ']</span>')|raw }}
-                                        {% endif %}
-                                    </span>
-                                </a>
-                            {% endfor %}
+                {% if locales()|length > 1 %}
+                    <div class="action-box language-selector noselect" data-bs-toggle="tooltip" data-bs-placement="left" title="{{ 'contentLocale'|trans }}">
+                        <div class="dropdown">
+                            {% set __locale = __currentWebsite.locale.code %}
+                            <button class="btn btn-icon-left action-btn" type="button" data-bs-toggle="dropdown">
+                                <i class="btn-icon fa fa-language"></i>
+                                <span>{{ 'languageName'|trans({ code: __locale }, 'languages') }}</span>
+                            </button>
+                            {% if app.request.attributes.has('_route') %}
+                                {% set _route = app.request.attributes.get('_route') %}
+                                {% set _route_params = app.request.attributes.get('_route_params')|default([]) %}
+                            {% else %}
+                                {% set _route = 'backend.homepage' %}
+                                {% set _route_params = [] %}
+                            {% endif %}
+                            {% set _route_params = _route_params|merge(app.request.query.all) %}
+                            <div class="dropdown-menu">
+                                {% for lang in locales() %}
+                                    {% set _route_params = _route_params|merge({ _locale: lang.code }) %}
+                                    <a class="dropdown-item{{ lang.code == __locale ? ' active' : '' }}" href="{{ url(_route, _route_params) }}">
+                                        <img src="{{ asset('/assets/core/flag-icons/' ~ lang.language ~ '.svg') }}" alt="" />
+                                        <span>
+                                            {{ 'languageName'|trans({ code: lang.code }, 'languages') }}
+                                            {% if lang.code == __currentWebsite.defaultLocale.code %}
+                                                {{ ('<span style="font-size:10px;opacity:.4;">[' ~ 'default'|trans ~ ']</span>')|raw }}
+                                            {% endif %}
+                                        </span>
+                                    </a>
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
-                </div>
+                {% endif %}
                 {#<div class="action-box notifications-list" data-bs-toggle="tooltip" data-placement="left" title="{{ 'notifications'|trans }}">
                     <div class="dropdown dropdown-prevent-close">
                         <button class="btn btn-icon-only action-btn" type="button" data-bs-toggle="dropdown">

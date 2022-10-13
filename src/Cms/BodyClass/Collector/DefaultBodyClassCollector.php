@@ -29,6 +29,6 @@ class DefaultBodyClassCollector implements BodyClassCollectorInterface
             $collection->add('is-customizer');
         }
 
-        $collection->add('locale-' . $request->attributes->get('_content_locale'));
+        $collection->add('locale-' . $request->attributes->get('_locale'));
     }
 }

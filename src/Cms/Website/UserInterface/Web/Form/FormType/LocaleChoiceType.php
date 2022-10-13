@@ -8,7 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Component\Routing\Website\Locale\Storage\StorageInterface;
+use Tulia\Cms\Website\Domain\WriteModel\Service\StorageInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -16,9 +16,8 @@ use Tulia\Component\Routing\Website\Locale\Storage\StorageInterface;
 class LocaleChoiceType extends AbstractType
 {
     public function __construct(
-        // @todo TURNED OFFF ROUTING
-        //protected StorageInterface $storage,
-        protected TranslatorInterface $translator
+        private readonly StorageInterface $storage,
+        private readonly TranslatorInterface $translator,
     ) {
     }
 

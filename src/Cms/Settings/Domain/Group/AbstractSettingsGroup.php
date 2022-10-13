@@ -7,7 +7,7 @@ namespace Tulia\Cms\Settings\Domain\Group;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Tulia\Cms\Options\Domain\WriteModel\OptionsRepositoryInterface;
-use Tulia\Component\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz

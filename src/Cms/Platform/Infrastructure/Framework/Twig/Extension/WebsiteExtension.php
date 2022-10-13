@@ -6,8 +6,8 @@ namespace Tulia\Cms\Platform\Infrastructure\Framework\Twig\Extension;
 
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Component\Routing\Website\WebsiteInterface;
-use Tulia\Component\Routing\Website\WebsiteRegistryInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteRegistryInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;

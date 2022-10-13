@@ -64,7 +64,7 @@ class SymfonyRouter implements RouterInterface, RequestMatcherInterface
         $pathinfo = $this->frontendRouteSuffixResolver->removeSuffix($pathinfo);
 
         $parameters = $this->contentTypeRouter->match($pathinfo, [
-            '_locale' => $request->attributes->get('_content_locale'),
+            '_locale' => $request->attributes->get('_locale'),
             '_website' => $request->attributes->get('_website'),
         ]);
 

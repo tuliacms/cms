@@ -7,7 +7,7 @@ namespace Tulia\Cms\Theme\Infrastructure\Framework\Theme\Assetter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Tulia\Component\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 use Tulia\Component\Theme\Assetter\ThemeConfigurationAssetsLoader as BaseLoader;
 
 /**

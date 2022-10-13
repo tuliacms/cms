@@ -11,4 +11,8 @@ use Tulia\Cms\Shared\Domain\WriteModel\Exception\AbstractDomainException;
  */
 class WebsiteNotFoundException extends AbstractDomainException
 {
+    public static function fromId(string $id): self
+    {
+        return new self(sprintf('Website %s does not exists', $id));
+    }
 }

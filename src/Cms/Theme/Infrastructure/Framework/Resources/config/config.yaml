@@ -10,7 +10,7 @@ cms:
         actions:
             theme.head:
                 parameters:
-                    - { mode: prepend, service: 'Tulia\Component\Routing\Website\WebsiteInterface' }
+                    - { mode: prepend, service: 'Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface' }
 doctrine:
     orm:
         mappings:

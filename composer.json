@@ -72,7 +72,6 @@
             "Tulia\\Component\\Hooks\\": "src/Component/hooks/src",
             "Tulia\\Component\\Image\\": "src/Component/image/src",
             "Tulia\\Component\\Importer\\": "src/Component/importer/src",
-            "Tulia\\Component\\Routing\\": "src/Component/routing/src",
             "Tulia\\Component\\Shortcode\\": "src/Component/shortcode/src",
             "Tulia\\Component\\Templating\\": "src/Component/templating/src",
             "Tulia\\Component\\Theme\\": "src/Component/theme/src",

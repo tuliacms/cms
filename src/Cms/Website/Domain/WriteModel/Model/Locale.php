@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Website\Domain\WriteModel\Model;
 
-use Tulia\Component\Routing\Enum\SslModeEnum;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\SslModeEnum;
 
 /**
  * @author Adam Banaszkiewicz

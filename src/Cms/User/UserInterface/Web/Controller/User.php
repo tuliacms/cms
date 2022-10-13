@@ -23,7 +23,7 @@ use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
 use Tulia\Cms\User\Infrastructure\Persistence\Dbal\ReadModel\DbalDatatableFinder;
 use Tulia\Cms\User\UserInterface\Web\Form\UserDetailsForm;
 use Tulia\Component\Datatable\DatatableFactory;
-use Tulia\Component\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
 
 /**

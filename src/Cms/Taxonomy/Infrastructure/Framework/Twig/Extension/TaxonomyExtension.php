@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Infrastructure\Framework\Twig\Extension;
 
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Model\Term;
-use Tulia\Component\Routing\Exception\RoutingException;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -45,7 +45,7 @@ class TaxonomyExtension extends AbstractExtension
     {
         try {
             return $this->router->generate($this->getId($identity), $parameters, $type);
-        } catch (RoutingException $exception) {
+        } catch (RouteNotFoundException $exception) {
             return '';
         }
     }

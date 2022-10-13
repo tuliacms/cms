@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\TypeaheadFormTypeSearch;
 use Tulia\Cms\User\Domain\ReadModel\Finder\UserFinderInterface;
 use Tulia\Cms\User\Domain\ReadModel\Finder\UserFinderScopeEnum;
-use Tulia\Component\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz

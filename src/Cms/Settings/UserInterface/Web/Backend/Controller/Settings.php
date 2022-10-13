@@ -17,7 +17,7 @@ use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\Settings\Domain\Event\SettingsUpdated;
 use Tulia\Cms\Settings\Domain\Group\SettingsGroupRegistryInterface;
 use Tulia\Cms\Shared\Infrastructure\Mail\MailerInterface;
-use Tulia\Component\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
 
 /**

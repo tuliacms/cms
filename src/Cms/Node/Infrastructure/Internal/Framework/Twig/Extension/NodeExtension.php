@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Infrastructure\Internal\Framework\Twig\Extension;
 
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum;
 use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
-use Tulia\Component\Routing\Exception\RoutingException;
-use Tulia\Component\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -92,7 +92,7 @@ class NodeExtension extends AbstractExtension
                 $parameters,
                 $type
             );
-        } catch (RoutingException $exception) {
+        } catch (RouteNotFoundException $exception) {
             return '';
         }
     }

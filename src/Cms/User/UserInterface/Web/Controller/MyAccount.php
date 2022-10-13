@@ -17,7 +17,7 @@ use Tulia\Cms\User\Application\UseCase\UpdateMyAccountRequest;
 use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
 use Tulia\Cms\User\UserInterface\Web\Form\MyAccountDetailsForm;
 use Tulia\Cms\User\UserInterface\Web\Form\PasswordForm;
-use Tulia\Component\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
 
 /**

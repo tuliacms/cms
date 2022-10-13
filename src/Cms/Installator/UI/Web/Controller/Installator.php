@@ -12,7 +12,7 @@ use Tulia\Cms\Installator\UI\Web\Form\UserForm;
 use Tulia\Cms\Installator\UI\Web\Form\WebsiteForm;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\Website\Application\Service\BackendPrefixGenerator;
-use Tulia\Component\Routing\Enum\SslModeEnum;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\SslModeEnum;
 use Tulia\Component\Templating\ViewInterface;
 
 /**
