@@ -53,13 +53,6 @@ services:
         decorates: routing.loader
         arguments: ['@.inner']
 
-    Tulia\Cms\Platform\Infrastructure\Framework\Routing\UrlGenerator:
-        decorates: Symfony\Component\Routing\Generator\UrlGeneratorInterface
-        arguments: ['@.inner']
-
-    Tulia\Cms\Platform\Infrastructure\Framework\Routing\Router:
+    Tulia\Cms\Platform\Infrastructure\Framework\Routing\TuliaRouter:
         decorates: router
         arguments: ['@.inner']
-
-    security.http_utils:
-        class: Tulia\Cms\Security\Framework\Security\Http\HttpUtils

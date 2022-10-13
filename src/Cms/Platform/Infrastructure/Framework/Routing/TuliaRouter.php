@@ -21,7 +21,7 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface
 /**
  * @author Adam Banaszkiewicz
  */
-final class Router implements WarmableInterface, ServiceSubscriberInterface, RouterInterface, RequestMatcherInterface
+final class TuliaRouter implements WarmableInterface, ServiceSubscriberInterface, RouterInterface, RequestMatcherInterface
 {
     public function __construct(
         private readonly RouterInterface $symfonyRouter,
@@ -48,12 +48,17 @@ final class Router implements WarmableInterface, ServiceSubscriberInterface, Rou
         $request->attributes->set('_website', $this->website->getId());
         $request->attributes->set('_locale', $this->website->getLocale()->getCode());
 
+        $server = $request->server->all();
+        $server['REQUEST_URI'] = $this->website->prepareRequestUriToRoutingMatching($server['REQUEST_URI']);
+
+        $duplicate = $request->duplicate(server: $server);
+
         $methodNotAllowedException = null;
 
         foreach ($this->routers() as $router) {
             try {
                 if ($router instanceof RequestMatcherInterface) {
-                    return $router->matchRequest($request);
+                    return $router->matchRequest($duplicate);
                 }
             } catch (ResourceNotFoundException $e) {
                 $this->log('Router ' . \get_class($router) . ' was not able to match, message "' . $e->getMessage() . '"');
@@ -63,11 +68,7 @@ final class Router implements WarmableInterface, ServiceSubscriberInterface, Rou
             }
         }
 
-        $info = $request
-            ? "this request\n$request"
-            : "url '{$request->getPathinfo()}'";
-
-        throw $methodNotAllowedException ?: new ResourceNotFoundException("None of the routers in the chain matched $info", 0, $e);
+        throw $methodNotAllowedException ?: new ResourceNotFoundException("None of the routers in the chain matched url '{$duplicate->getPathinfo()}' (original '{$request->getPathinfo()}')", 0, $e);
     }
 
     public function getRouteCollection(): RouteCollection
@@ -90,15 +91,6 @@ final class Router implements WarmableInterface, ServiceSubscriberInterface, Rou
 
     public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string
     {
-        if (0 === strncmp($name, 'backend.', 8) || 0 === strncmp($name, 'frontend.', 9)) {
-            $name = sprintf(
-                '%s.%s.%s',
-                $parameters['_website'] ?? $this->website->getId(),
-                $parameters['_locale'] ?? $this->website->getLocale()->getCode(),
-                $name
-            );
-        }
-
         $context = $this->getContext();
         $context->setParameter('_locale', $this->website->getLocale()->getCode());
         $context->setParameter('_website', $this->website->getId());
@@ -109,6 +101,9 @@ final class Router implements WarmableInterface, ServiceSubscriberInterface, Rou
                 $path = $router->generate($name, $parameters, $referenceType);
 
                 if ($path !== null) {
+                    $path = $this->website->generateTargetPath($path, $parameters['_locale'] ?? $this->website->getLocale()->getCode());
+
+                    $name === 'frontend.homepage' && dump($name.'   -   '.$path);
                     return $path;
                 }
             } catch (RouteNotFoundException $e) {

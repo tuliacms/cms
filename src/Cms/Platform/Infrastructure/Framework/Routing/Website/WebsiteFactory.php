@@ -61,7 +61,7 @@ final class WebsiteFactory
             );
         }
 
-        return new Website(
+        $website = new Website(
             id: $website->getId(),
             name: $website->getName(),
             backendPrefix: $website->getBackendPrefix(),
@@ -71,6 +71,8 @@ final class WebsiteFactory
             activeLocale: $activeLocale,
             active: $website->isActive(),
         );
+
+        return $website;
     }
 
     /**

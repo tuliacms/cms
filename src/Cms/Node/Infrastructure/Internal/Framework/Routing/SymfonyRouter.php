@@ -44,11 +44,11 @@ class SymfonyRouter implements RouterInterface, RequestMatcherInterface
 
     public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string
     {
-        if (strpos($name, '.frontend.node.') === false) {
+        if (strpos($name, 'frontend.node.') === false) {
             return '';
         }
 
-        [, , , , $type, $identity] = explode('.', $name);
+        [, , $type, $identity] = explode('.', $name);
 
         $parameters['_locale'] = $this->context->getParameter('_locale');
         $parameters['_website'] = $this->context->getParameter('_website');

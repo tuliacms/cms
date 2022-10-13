@@ -4,7 +4,6 @@ services:
         autoconfigure: true
         bind:
             $environment: '%kernel.environment%'
-            $cacheDir: '%kernel.cache_dir%'
 
     Tulia\Cms\Website\:
         resource: '../../../../**'

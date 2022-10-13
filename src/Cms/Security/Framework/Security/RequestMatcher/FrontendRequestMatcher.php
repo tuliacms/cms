@@ -6,14 +6,20 @@ namespace Tulia\Cms\Security\Framework\Security\RequestMatcher;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestMatcherInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class FrontendRequestMatcher implements RequestMatcherInterface
 {
+    public function __construct(
+        private readonly WebsiteInterface $website,
+    ) {
+    }
+
     public function matches(Request $request): bool
     {
-        return false === ((bool) $request->attributes->get('_is_backend'));
+        return !$this->website->isBackend();
     }
 }

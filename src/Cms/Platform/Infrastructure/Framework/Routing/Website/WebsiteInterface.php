@@ -23,4 +23,5 @@ interface WebsiteInterface
     public function isDefaultLocale(): bool;
     public function isActive(): bool;
     public function getLocaleCodes(): array;
+    public function prepareRequestUriToRoutingMatching(string $requestUri): string;
 }

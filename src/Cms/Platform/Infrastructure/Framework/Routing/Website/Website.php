@@ -132,6 +132,67 @@ class Website implements WebsiteInterface
         );
     }
 
+    public function prepareRequestUriToRoutingMatching(string $requestUri): string
+    {
+        $locale = $this->getLocale();
+
+        if ($locale->getPathPrefix() && strpos($requestUri, $locale->getPathPrefix()) === 0) {
+            $requestUri = substr($requestUri, \strlen($locale->getPathPrefix()));
+        }
+        if ($this->isBackend()) {
+            $requestUri = substr($requestUri, \strlen($this->getBackendPrefix()));
+        }
+        if ($locale->getLocalePrefix() && strpos($requestUri, $locale->getLocalePrefix()) === 0) {
+            $requestUri = substr($requestUri, \strlen($locale->getLocalePrefix()));
+        }
+
+        if ($this->isBackend()) {
+            $requestUri = '/administrator'.$requestUri;
+        }
+
+        return $requestUri;
+    }
+
+    public function generateTargetPath(string $path, string $locale): string
+    {
+        $activeLocale = $this->getLocaleByCode($locale);
+        $localePrefix = $activeLocale->getLocalePrefix();
+
+        /**
+         * Temporary fix to remove _locale parameter from homepage link.
+         * @todo Find a better solution for that.
+         */
+        $path = str_replace(['?_locale='.$activeLocale->getCode(), '&_locale='.$activeLocale->getCode()], '', $path);
+
+        /** @var array $parts */
+        $parts = parse_url($path);
+
+        if (! isset($parts['path'])) {
+            $parts['path'] = '/';
+        }
+
+        if ($this->isBackend()) {
+            if ($localePrefix !== $this->getDefaultLocale()->getPathPrefix()) {
+                $parts['path'] = str_replace(
+                    $this->getBackendPrefix(),
+                    $this->getBackendPrefix() . $localePrefix,
+                    $parts['path']
+                );
+            }
+
+            $parts['path'] = $this->getLocale()->getPathPrefix() . $parts['path'];
+        } else {
+            $parts['path'] = $this->getLocale()->getPathPrefix() . $localePrefix . $parts['path'];
+        }
+
+        return
+            (isset($parts['scheme']) ? $parts['scheme'] . '://' : '')
+            .($parts['host'] ?? '')
+            .($parts['path'] ?? '')
+            .(isset($parts['query']) ? '?' . $parts['query'] : '')
+        ;
+    }
+
     /**
      * @param string|null $locale
      * @return LocaleInterface
