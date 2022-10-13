@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Component\Routing;
+namespace Tulia\Cms\Platform\Infrastructure\Framework\Routing;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\RouteCollection;

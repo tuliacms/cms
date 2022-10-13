@@ -51,13 +51,15 @@ export default {
         modelValue: {
             required: true,
             default: ''
-        }
+        },
+        class: {}
     },
     name: 'Wysiwyg',
     inject: ['messenger', 'translator'],
     data () {
         return {
             quill: null,
+            classname: this.class,
         };
     },
     mounted () {
@@ -77,6 +79,7 @@ export default {
         quill.on('text-change', () => {
             this.$emit('update:modelValue', quill.root.innerHTML);
         });
+        quill.root.classList.add(this.class);
 
         this.quill = quill;
 

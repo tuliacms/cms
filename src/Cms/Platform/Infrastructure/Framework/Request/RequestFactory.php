@@ -9,6 +9,7 @@ use Tulia\Component\Routing\Website\WebsiteProvider;
 
 /**
  * @author Adam Banaszkiewicz
+ * @todo Is this class needed?
  */
 final class RequestFactory
 {

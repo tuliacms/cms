@@ -9,6 +9,7 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Tulia\Cms\FrontendToolbar\Builder\Builder;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 use Tulia\Component\Theme\Customizer\DetectorInterface;
 
 /**
@@ -21,6 +22,7 @@ class ToolbarRenderer implements EventSubscriberInterface
         private readonly AuthorizationCheckerInterface $authorizationChecker,
         private readonly TokenStorageInterface $tokenStorage,
         private readonly DetectorInterface $detector,
+        private readonly WebsiteInterface $website,
     ) {
     }
 
@@ -38,7 +40,7 @@ class ToolbarRenderer implements EventSubscriberInterface
         if (
             null === $this->tokenStorage->getToken()
             || $this->authorizationChecker->isGranted('ROLE_ADMIN') === false
-            || $request->server->get('TULIA_WEBSITE_IS_BACKEND')
+            || $this->website->isBackend()
             || strncmp($request->getPathInfo(), '/_wdt', 5) === 0
             || strncmp($request->getPathInfo(), '/_profiler', 10) === 0
             || $this->detector->isCustomizerMode()

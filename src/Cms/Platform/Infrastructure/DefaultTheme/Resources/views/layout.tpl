@@ -12,7 +12,7 @@
     <body class="{{ body_class(app.request) }}">
         {% block beforebody %}{% endblock %}
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="{{ path('homepage') }}">{{ current_website().name }}</a>
+            <a class="navbar-brand" href="{{ path('frontend.homepage') }}">{{ current_website().name }}</a>
             {{ show_menu('2e996c06-0a74-4441-88cc-d0573bed8256') }}
         </nav>
         {{ breadcrumbs() }}

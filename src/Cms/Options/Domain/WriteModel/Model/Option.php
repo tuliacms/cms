@@ -39,9 +39,12 @@ class Option extends AbstractAggregateRoot
         return $this->value;
     }
 
-    public function setValue(mixed $value, string $locale, string $defaultLocale): void
+    public function setValue(mixed $value, ?string $locale = null, ?string $defaultLocale = null): void
     {
         if ($this->multilingual) {
+            \assert(empty($locale), 'Please provide $locale for this multilingual option');
+            \assert(empty($defaultLocale), 'Please provide defaultLocale for this multilingual option');
+
             if ($locale === $defaultLocale) {
                 $this->value = $value;
             }

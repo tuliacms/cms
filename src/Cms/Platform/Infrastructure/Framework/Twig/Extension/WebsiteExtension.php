@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Component\Routing\Bridge\Twig;
+namespace Tulia\Cms\Platform\Infrastructure\Framework\Twig\Extension;
 
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Tulia\Component\Routing\Website\WebsiteInterface;
 use Tulia\Component\Routing\Website\WebsiteRegistryInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -20,6 +21,7 @@ class WebsiteExtension extends AbstractExtension
         private readonly RequestStack $requestStack,
         private readonly WebsiteRegistryInterface $websiteRegistry,
         private readonly TranslatorInterface $translator,
+        private readonly WebsiteInterface $website,
     ) {
     }
 
@@ -38,22 +40,22 @@ class WebsiteExtension extends AbstractExtension
     {
         return [
             new TwigFunction('locales', function () {
-                return $this->requestStack->getMainRequest()->attributes->get('website')->getLocales();
+                return $this->website->getLocales();
             }, [
                  'is_safe' => [ 'html' ]
             ]),
             new TwigFunction('locale', function () {
-                return $this->requestStack->getMainRequest()->attributes->get('website')->getLocale();
+                return $this->website->getLocale();
             }, [
                  'is_safe' => [ 'html' ]
             ]),
             new TwigFunction('current_website', function () {
-                return $this->requestStack->getMainRequest()->attributes->get('website');
+                return $this->website;
             }, [
                  'is_safe' => [ 'html' ]
             ]),
             new TwigFunction('page_locale', function () {
-                return $this->requestStack->getMainRequest()->attributes->get('website')->getLocale()->getCode();
+                return $this->website->getLocale()->getCode();
             }, [
                  'is_safe' => [ 'html' ]
             ]),

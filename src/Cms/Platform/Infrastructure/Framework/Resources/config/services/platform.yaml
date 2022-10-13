@@ -39,3 +39,30 @@ services:
     Tulia\Cms\Platform\Application\Service\FrameworkCacheService:
         bind:
             $kernelCacheFilepath: '%kernel.cache_file%'
+
+    Tulia\Component\Routing\Website\WebsiteInterface:
+        class: Tulia\Component\Routing\Website\Website
+        factory: Tulia\Cms\Platform\Infrastructure\Framework\Routing\WebsiteFactory::factory
+
+    Tulia\Cms\Platform\Infrastructure\Framework\Routing\RoutingLoader:
+        decorates: routing.loader
+        arguments: ['@.inner']
+
+    Tulia\Cms\Platform\Infrastructure\Framework\Routing\UrlGenerator:
+        decorates: Symfony\Component\Routing\Generator\UrlGeneratorInterface
+        arguments: ['@.inner']
+
+    Tulia\Cms\Platform\Infrastructure\Framework\Routing\Router:
+        decorates: router
+        arguments: ['@.inner']
+
+    #Tulia\Cms\Security\Framework\Security\Http\HttpUtils:
+    #    decorates: security.http_utils
+    #    arguments: ['@.inner']
+    #    calls:
+    #        - setWebsite: ['@Tulia\Component\Routing\Website\WebsiteInterface']
+
+    security.http_utils:
+        class: Tulia\Cms\Security\Framework\Security\Http\HttpUtils
+        calls:
+            - setWebsite: ['@Tulia\Component\Routing\Website\WebsiteInterface']

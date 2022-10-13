@@ -16,7 +16,7 @@ class HomepageProvider implements IdentityProviderInterface
 {
     public function __construct(
         private readonly RouterInterface $router,
-        private readonly string $homepage = 'homepage',
+        private readonly string $homepage = 'frontend.homepage',
     ) {
     }
 

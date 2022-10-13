@@ -19,9 +19,9 @@ use Twig\TwigFunction;
 class NodeExtension extends AbstractExtension
 {
     public function __construct(
-        private RouterInterface $router,
-        private NodeFinderInterface $nodeFinder,
-        private WebsiteInterface $website
+        private readonly RouterInterface $router,
+        private readonly NodeFinderInterface $nodeFinder,
+        private readonly WebsiteInterface $website,
     ) {
     }
 
@@ -88,7 +88,7 @@ class NodeExtension extends AbstractExtension
             $parameters['_node_instance'] = $node;
 
             return $this->router->generate(
-                sprintf('node.%s.%s', $node->getType(), $node->getId()),
+                sprintf('frontend.node.%s.%s', $node->getType(), $node->getId()),
                 $parameters,
                 $type
             );

@@ -22,7 +22,7 @@ class WebsitePrefixesResolverTest extends TestCase
         // Arrange
         $resolver = new WebsitePrefixesResolver($this->produceWebsite());
         // Act
-        $result = $resolver->appendWebsitePrefixes('homepage', '/', []);
+        $result = $resolver->appendWebsitePrefixes('frontend.homepage', '/', []);
         // Assert
         self::assertSame('/', $result);
     }

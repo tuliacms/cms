@@ -15,6 +15,8 @@ cms:
             - { name: backend/settings, path: '%cms.core_dir%/Cms/Settings/Infrastructure/Framework/Resources/views/backend' }
     options:
         definitions:
+            theme:
+                autoload: true
             website_favicon:
             administrator_email:
                 value: admin@domain.com
@@ -35,7 +37,7 @@ cms:
             mail.from_name:
                 value: Website administrator
             mail.host:
-                value: tuliacms_tulia_mailhog_1 # Mailhog Docker's container name
+                value: tuliacms-tulia_mailhog-1 # Mailhog Docker's container name
             mail.port:
                 value: 1025
             mail.username:

@@ -79,12 +79,12 @@
             },
             /*blocks: {
                 "core-imageblock": {
-                    image_resolve_path: '{{ path('filemanager.resolve.image.size', { size: '{size}', id: '{id}', filename: '{filename}' }) }}',
+                    image_resolve_path: '{{ path('frontend.filemanager.resolve.image.size', { size: '{size}', id: '{id}', filename: '{filename}' }) }}',
                     filemanager_endpoint: '{{ path('backend.filemanager.endpoint') }}',
                 },
             },*/
             filemanager: {
-                image_resolve_path: '{{ path('filemanager.resolve.image.size', { size: '{size}', id: '{id}', filename: '{filename}' }) }}',
+                image_resolve_path: '{{ path('frontend.filemanager.resolve.image.size', { size: '{size}', id: '{id}', filename: '{filename}' }) }}',
                 endpoint: '{{ path('backend.filemanager.endpoint') }}',
             },
             //start_point: 'editor',

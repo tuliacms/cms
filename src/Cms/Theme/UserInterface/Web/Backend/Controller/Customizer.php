@@ -81,7 +81,7 @@ class Customizer extends AbstractController
 
             $previewUrl = $parsed['path'] . '?' . http_build_query($parsed['query']);
         } else {
-            $previewUrl = $this->generateUrl('homepage', $parameters);
+            $previewUrl = $this->generateUrl('frontend.homepage', $parameters);
         }
 
         return $this->view('@backend/theme/customizer/customize.tpl', [

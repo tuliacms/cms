@@ -1,22 +1,22 @@
 backend.website.create:
-    path: /administrator/website/create
+    path: /website/create
     controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Website::create
     methods: POST|GET
 
 backend.website.edit:
-    path: /administrator/website/edit/{id}
+    path: /website/edit/{id}
     controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Website::edit
     methods: POST|GET
 
 backend.website.delete:
-    path: /administrator/website/delete
+    path: /website/delete
     controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Website::delete
     methods: POST|GET
 
 backend.website.list:
-    path: /administrator/website/list
+    path: /website/list
     controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Website::list
 
 backend.website:
-    path: /administrator/website
+    path: /website
     controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Website::index

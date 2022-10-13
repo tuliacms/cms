@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Component\Routing\Bridge\Twig;
+namespace Tulia\Cms\Platform\Infrastructure\Framework\Twig\Extension;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Extension\AbstractExtension;
@@ -14,7 +14,7 @@ use Twig\TwigFunction;
 final class RoutingExtension extends AbstractExtension
 {
     public function __construct(
-        private UrlGeneratorInterface $generator
+        private readonly UrlGeneratorInterface $generator,
     ) {
     }
 

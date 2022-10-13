@@ -1,14 +1,14 @@
 backend.theme:
-    path: /administrator/theme/list
+    path: /theme/list
     controller: Tulia\Cms\Theme\UserInterface\Web\Backend\Controller\Theme::index
 
 backend.theme.activate:
-    path: /administrator/theme/activate
+    path: /theme/activate
     controller: Tulia\Cms\Theme\UserInterface\Web\Backend\Controller\Theme::activate
     methods: POST
 
 backend.theme.preview:
-    path: /administrator/theme/preview/{theme}/{page}
+    path: /theme/preview/{theme}/{page}
     controller: Tulia\Cms\Theme\UserInterface\Web\Backend\Controller\Theme::preview
     requirements:
         theme: '([a-zA-Z0-9]+\/[a-zA-Z0-9]+)'
@@ -16,7 +16,7 @@ backend.theme.preview:
     methods: GET
 
 backend.theme.internal_image:
-    path: /administrator/theme/internal-image/{theme}/{filepath}
+    path: /theme/internal-image/{theme}/{filepath}
     controller: Tulia\Cms\Theme\UserInterface\Web\Backend\Controller\Theme::internalImage
     requirements:
         theme: '([a-zA-Z0-9]+\/[a-zA-Z0-9]+)'
@@ -24,53 +24,53 @@ backend.theme.internal_image:
     methods: GET
 
 backend.theme.installator.install:
-    path: /administrator/theme/installator/install
+    path: /theme/installator/install
     controller: Tulia\Cms\Theme\UserInterface\Web\Backend\Controller\Installator::install
     methods: POST
 
 backend.theme.installator.publish_assets:
-    path: /administrator/theme/installator/publish-assets
+    path: /theme/installator/publish-assets
     controller: Tulia\Cms\Theme\UserInterface\Web\Backend\Controller\Installator::publishAssetsAfterInstallation
 
 backend.theme.installator.importer:
-    path: /administrator/theme/installator/importer
+    path: /theme/installator/importer
     controller: Tulia\Cms\Theme\UserInterface\Web\Backend\Controller\Installator::importer
 
 backend.theme.installator.importer.import:
-    path: /administrator/theme/installator/importer/import
+    path: /theme/installator/importer/import
     controller: Tulia\Cms\Theme\UserInterface\Web\Backend\Controller\Installator::import
     methods: POST
 
 backend.theme.installator.uninstall:
-    path: /administrator/theme/installator/uninstall
+    path: /theme/installator/uninstall
     controller: Tulia\Cms\Theme\UserInterface\Web\Backend\Controller\Installator::uninstall
     methods: POST
 
 backend.theme.customize.left:
-    path: /administrator/theme/customize/{theme}/left/{changeset}
+    path: /theme/customize/{theme}/left/{changeset}
     controller: Tulia\Cms\Theme\UserInterface\Web\Backend\Controller\Customizer::left
     requirements:
         theme: '([a-zA-Z0-9]+\/[a-zA-Z0-9]+)'
 
 backend.theme.customize.reset:
-    path: /administrator/theme/customize/{theme}/reset
+    path: /theme/customize/{theme}/reset
     controller: Tulia\Cms\Theme\UserInterface\Web\Backend\Controller\Customizer::reset
     requirements:
         theme: '([a-zA-Z0-9]+\/[a-zA-Z0-9]+)'
 
 backend.theme.customize.copy_changeset_from_parent:
-    path: /administrator/theme/customize/{theme}/copy-changeset-from-parent
+    path: /theme/customize/{theme}/copy-changeset-from-parent
     controller: Tulia\Cms\Theme\UserInterface\Web\Backend\Controller\Customizer::copyChangesetFromParent
     requirements:
         theme: '([a-zA-Z0-9]+\/[a-zA-Z0-9]+)'
 
 backend.theme.customize.save:
-    path: /administrator/theme/customize/{theme}/save
+    path: /theme/customize/{theme}/save
     controller: Tulia\Cms\Theme\UserInterface\Web\Backend\Controller\Customizer::save
     methods: POST|GET
     requirements:
         theme: '([a-zA-Z0-9]+\/[a-zA-Z0-9]+)'
 
 backend.theme.customize:
-    path: /administrator/theme/customize
+    path: /theme/customize
     controller: Tulia\Cms\Theme\UserInterface\Web\Backend\Controller\Customizer::customize

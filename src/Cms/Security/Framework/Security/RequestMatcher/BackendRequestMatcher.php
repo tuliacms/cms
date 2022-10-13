@@ -14,6 +14,6 @@ class BackendRequestMatcher implements RequestMatcherInterface
 {
     public function matches(Request $request): bool
     {
-        return (bool) $request->server->get('TULIA_WEBSITE_IS_BACKEND');
+        return (bool) $request->attributes->get('_is_backend');
     }
 }

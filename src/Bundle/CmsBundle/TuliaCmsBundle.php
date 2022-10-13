@@ -42,6 +42,7 @@ class TuliaCmsBundle extends Bundle
         $container->addCompilerPass(new ContentBuilderPass());
         $container->addCompilerPass(new ImporterPass());
         $container->addCompilerPass(new TemplatingPass());
+        // @todo TURNED OFFF ROUTING
         $container->addCompilerPass(new RoutingPass());
         $container->addCompilerPass(new SecurityPass());
         $container->addCompilerPass(new FinderPass());

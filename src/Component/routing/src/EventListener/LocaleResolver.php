@@ -36,7 +36,7 @@ class LocaleResolver implements EventSubscriberInterface
         $parameters = $request->attributes->all();
         $parameters['_locale'] = $request->server->get('TULIA_WEBSITE_LOCALE');
         $parameters['_content_locale'] = $request->server->get('TULIA_WEBSITE_LOCALE');
-        $parameters['_website_id'] = $request->server->get('TULIA_WEBSITE_ID');
+        $parameters['_website'] = $request->server->get('TULIA_WEBSITE_ID');
 
         $request->attributes->add($parameters);
 
@@ -49,6 +49,6 @@ class LocaleResolver implements EventSubscriberInterface
         $request = $event->getRequest();
         $request->setDefaultLocale($request->server->get('TULIA_WEBSITE_LOCALE_DEFAULT'));
         $this->router?->getContext()->setParameter('_locale', $request->server->get('TULIA_WEBSITE_LOCALE_DEFAULT'));
-        $this->router?->getContext()->setParameter('_website_id', $request->server->get('TULIA_WEBSITE_ID'));
+        $this->router?->getContext()->setParameter('_website', $request->server->get('TULIA_WEBSITE_ID'));
     }
 }

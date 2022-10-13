@@ -1,61 +1,61 @@
 backend.menu:
-    path: /administrator/menu/list
+    path: /menu/list
     controller: Tulia\Cms\Menu\UserInterface\Web\Backend\Controller\Menu::list
 
 # Menu routes
 backend.menu.datatable:
-    path: /administrator/menu/datatable
+    path: /menu/datatable
     controller: Tulia\Cms\Menu\UserInterface\Web\Backend\Controller\Menu::datatable
 
 backend.menu.create:
-    path: /administrator/menu/create
+    path: /menu/create
     controller: Tulia\Cms\Menu\UserInterface\Web\Backend\Controller\Menu::create
     methods: POST
 
 backend.menu.edit:
-    path: /administrator/menu/edit
+    path: /menu/edit
     controller: Tulia\Cms\Menu\UserInterface\Web\Backend\Controller\Menu::edit
     methods: POST
 
 backend.menu.delete:
-    path: /administrator/menu/delete
+    path: /menu/delete
     controller: Tulia\Cms\Menu\UserInterface\Web\Backend\Controller\Menu::delete
     methods: POST
 
 
 # Menu item routes
 backend.menu.item:
-    path: /administrator/menu/{menuId}/item
+    path: /menu/{menuId}/item
     controller: Tulia\Cms\Menu\UserInterface\Web\Backend\Controller\MenuItem::index
 
 backend.menu.item.list:
-    path: /administrator/menu/{menuId}/item/list
+    path: /menu/{menuId}/item/list
     controller: Tulia\Cms\Menu\UserInterface\Web\Backend\Controller\MenuItem::list
 
 backend.menu.item.datatable:
-    path: /administrator/menu/{menuId}/item/datatable
+    path: /menu/{menuId}/item/datatable
     controller: Tulia\Cms\Menu\UserInterface\Web\Backend\Controller\MenuItem::datatable
 
 backend.menu.item.create:
-    path: /administrator/menu/{menuId}/item/create
+    path: /menu/{menuId}/item/create
     controller: Tulia\Cms\Menu\UserInterface\Web\Backend\Controller\MenuItem::create
     methods: GET|POST
 
 backend.menu.item.edit:
-    path: /administrator/menu/{menuId}/item/edit/{id}
+    path: /menu/{menuId}/item/edit/{id}
     controller: Tulia\Cms\Menu\UserInterface\Web\Backend\Controller\MenuItem::edit
     methods: GET|POST
 
 backend.menu.item.delete:
-    path: /administrator/menu/{menuId}/item/delete
+    path: /menu/{menuId}/item/delete
     controller: Tulia\Cms\Menu\UserInterface\Web\Backend\Controller\MenuItem::delete
     methods: POST
 
 backend.menu.item.hierarchy:
-    path: /administrator/menu/{menuId}/item/hierarchy
+    path: /menu/{menuId}/item/hierarchy
     controller: Tulia\Cms\Menu\UserInterface\Web\Backend\Controller\Hierarchy::index
 
 backend.menu.item.hierarchy.save:
-    path: /administrator/menu/{menuId}/item/hierarchy/save
+    path: /menu/{menuId}/item/hierarchy/save
     controller: Tulia\Cms\Menu\UserInterface\Web\Backend\Controller\Hierarchy::save
     methods: POST

@@ -7,7 +7,7 @@ namespace Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use Tulia\Component\Routing\ChainRouterInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\ChainRouterInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -21,7 +21,5 @@ class RoutingPass implements CompilerPassInterface
         foreach ($container->findTaggedServiceIds('routing_chain.router') as $id => $tags) {
             $chain->addMethodCall('add', [new Reference($id)]);
         }
-
-        //$container->setParameter('website', include $container->getParameter('kernel.project_dir').'/config/dynamic/website.php');
     }
 }

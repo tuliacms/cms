@@ -2,29 +2,29 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-        bind:
-            $environment: '%kernel.environment%'
+        #bind:
+        #    $environment: '%kernel.environment%'
 
-    Tulia\Component\Routing\:
-        resource: '../../../../../../../Component/routing/src/*'
-        exclude:
-            - '../../../../../../../Component/routing/src/Website/Website.php'
-            - '../../../../../../../Component/routing/src/**/*Exception.php'
-            - '../../../../../../../Component/routing/src/Bridge/Symfony/SymfonyRouterDecorator.php'
+    #Tulia\Component\Routing\:
+    #    resource: '../../../../../../../Component/routing/src/*'
+    #    exclude:
+    #        - '../../../../../../../Component/routing/src/Website/Website.php'
+    #        - '../../../../../../../Component/routing/src/**/*Exception.php'
+    #        - '../../../../../../../Component/routing/src/Bridge/Symfony/SymfonyRouterDecorator.php'
 
-    Tulia\Component\Routing\Bridge\Symfony\SymfonyRouterDecorator:
-        decorates: router
-        autowire: false
-        autoconfigure: false
-        arguments:
-            - '@.inner'
-            - '@Tulia\Component\Routing\ChainRouterInterface'
-            - '@Tulia\Component\Routing\WebsitePrefixesResolver'
-            - '@Psr\Log\LoggerInterface'
+#    Tulia\Component\Routing\Bridge\Symfony\SymfonyRouterDecorator:
+#        decorates: router
+#        autowire: false
+#        autoconfigure: false
+#        arguments:
+#            - '@.inner'
+#            - '@Tulia\Cms\Platform\Infrastructure\Framework\Routing\ChainRouterInterface'
+#            - '@Tulia\Component\Routing\WebsitePrefixesResolver'
+#            - '@Psr\Log\LoggerInterface'
 
-    Tulia\Component\Routing\EventListener\RequestMatcher:
-        bind:
-            $symfonyListener: '@router_listener'
+    #Tulia\Component\Routing\EventListener\RequestMatcher:
+    #    bind:
+    #        $symfonyListener: '@router_listener'
 
-    Tulia\Component\Routing\Website\WebsiteInterface:
-        synthetic: true
+    #Tulia\Component\Routing\Website\WebsiteInterface:
+    #    synthetic: true

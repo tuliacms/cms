@@ -33,7 +33,7 @@ class Node extends AbstractController
             $node->hasPurpose(NodePurposeEnum::PAGE_HOMEPAGE)
             && $this->isHomepage($request) === false
         ) {
-            return $this->redirectToRoute('homepage');
+            return $this->redirectToRoute('frontend.homepage');
         }
 
         $this->getDocument()->setTitle($node->getTitle());

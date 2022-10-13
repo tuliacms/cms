@@ -35,7 +35,7 @@ class Website implements WebsiteInterface
         array $locales,
         string $defaultLocale,
         string $activeLocale,
-        bool $active
+        bool $active,
     ) {
         $this->id = $id;
         $this->name = $name;

@@ -33,7 +33,7 @@ class HomepageBreadcrumbsResolver implements BreadcrumbsResolverInterface
     public function fillBreadcrumbs(Crumb $crumb, BreadcrumbsInterface $breadcrumbs): ?Crumb
     {
         $breadcrumbs->unshift(
-            $this->router->generate('homepage'),
+            $this->router->generate('frontend.homepage'),
             $this->translator->trans('homepage')
         );
 
@@ -42,6 +42,6 @@ class HomepageBreadcrumbsResolver implements BreadcrumbsResolverInterface
 
     public function supports(Crumb $crumb): bool
     {
-        return $crumb->getCode() === 'homepage';
+        return $crumb->getCode() === 'frontend.homepage';
     }
 }

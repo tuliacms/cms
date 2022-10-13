@@ -1,6 +1,6 @@
 backend.tulia_editor.editor_view:
-    path: /administrator/tulia-editor/editor-view
+    path: /tulia-editor/editor-view
     controller: Tulia\Cms\TuliaEditor\UserInterface\Web\Backend\Controller\Editor::editor
 backend.tulia_editor.editor_preview:
-    path: /administrator/tulia-editor/editor-preview
+    path: /tulia-editor/editor-preview
     controller: Tulia\Cms\TuliaEditor\UserInterface\Web\Backend\Controller\Editor::preview

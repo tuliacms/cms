@@ -22,7 +22,7 @@ class SymfonyRouter implements RouterInterface, RequestMatcherInterface
 
     public function __construct(
         private readonly FrontendRouteSuffixResolver $frontendRouteSuffixResolver,
-        private readonly Router $contentTypeRouter
+        private readonly Router $contentTypeRouter,
     ) {
     }
 
@@ -44,14 +44,14 @@ class SymfonyRouter implements RouterInterface, RequestMatcherInterface
 
     public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string
     {
-        if (strncmp($name, 'node.', 5) !== 0) {
+        if (strpos($name, '.frontend.node.') === false) {
             return '';
         }
 
-        [, $type, $identity] = explode('.', $name);
+        [, , , , $type, $identity] = explode('.', $name);
 
         $parameters['_locale'] = $this->context->getParameter('_locale');
-        $parameters['_website_id'] = $this->context->getParameter('_website_id');
+        $parameters['_website'] = $this->context->getParameter('_website');
 
         $path = $this->contentTypeRouter->generate($type, $identity, $parameters);
 
@@ -65,7 +65,7 @@ class SymfonyRouter implements RouterInterface, RequestMatcherInterface
 
         $parameters = $this->contentTypeRouter->match($pathinfo, [
             '_locale' => $request->attributes->get('_content_locale'),
-            '_website_id' => $request->attributes->get('_website_id'),
+            '_website' => $request->attributes->get('_website'),
         ]);
 
         if ($parameters === []) {
