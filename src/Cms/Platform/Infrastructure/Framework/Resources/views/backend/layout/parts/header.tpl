@@ -14,7 +14,7 @@
             <div class="lead-section">
                 <div class="search-area" tabindex="-1">
                     <span class="search-area-icon"><i class="fas fa-search"></i></span>
-                    <div class="search-area-input">Przeszukaj panel administracyjny...</div>
+                    <div class="search-area-input">{{ 'searchInAdminPanel'|trans({}, 'search-anything') }}</div>
                 </div>
             </div>
             <div class="actions-section">

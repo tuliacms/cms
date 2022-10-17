@@ -2,11 +2,9 @@ framework:
     translator:
         paths:
             - '%cms.core_dir%/Cms/User/Infrastructure/Framework/Resources/translations'
-
 twig:
     form_themes:
         - '@backend/user/form/user_form_layout.tpl'
-
 doctrine:
     orm:
         mappings:
@@ -16,7 +14,6 @@ doctrine:
                 is_bundle: false
                 prefix: Tulia\Cms\User\Domain\WriteModel\Model
                 alias: CmsUser
-
 cms:
     options:
         definitions:

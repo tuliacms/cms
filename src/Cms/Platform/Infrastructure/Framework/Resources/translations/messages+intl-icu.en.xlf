@@ -602,50 +602,6 @@
                 <source>websites</source>
                 <target>Websites</target>
             </trans-unit>
-            <trans-unit id="tuliacms.messages.151">
-                <source>startTyping</source>
-                <target>Start typing...</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.messages.152">
-                <source>searchAnything</source>
-                <target>Search anything...</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.messages.153">
-                <source>searchInWholeAdmin</source>
-                <target>Search anything in Your website!</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.messages.154">
-                <source>searchInContents</source>
-                <target>In contents (pages, news, products etc.)</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.messages.155">
-                <source>searchInTaxonomies</source>
-                <target>In taxonomies (categories, tags etc.)</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.messages.156">
-                <source>searchInSettings</source>
-                <target>In settings</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.messages.157">
-                <source>searchInTools</source>
-                <target>In tools</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.messages.158">
-                <source>searchInSystem</source>
-                <target>In system</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.messages.159">
-                <source>searchInHelp</source>
-                <target>In help</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.messages.160">
-                <source>searchResultsForQuery</source>
-                <target>Search results: {query}</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.messages.161">
-                <source>searchingInProgress</source>
-                <target><![CDATA[Searching for {query} &hellip;]]></target>
-            </trans-unit>
             <trans-unit id="tuliacms.messages.162">
                 <source>languages</source>
                 <target>Languages</target>
@@ -858,12 +814,12 @@
                 <target>Found bug?</target>
             </trans-unit>
             <trans-unit id="tuliacms.messages.214">
-                <source>noResultsTryToFindUsingWholeWords</source>
-                <target>No results. Try to find using whole words.</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.messages.215">
                 <source>noWysiwygEditor</source>
                 <target>No WYSIWYG editor</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.215">
+                <source>selectOption</source>
+                <target>Select option</target>
             </trans-unit>
         </body>
     </file>

@@ -36,7 +36,7 @@ cms:
             array:
                 templates:
                     widget:
-                        template: "{% extends [ '@theme/widget.tpl', '@parent/widget.tpl', '@widget-base/widget.tpl' ] %}"
+                        template: "{% extends [ template('widget.tpl'), parent_template('widget.tpl'), '@widget-base/widget.tpl' ] %}"
     templating:
         paths:
             - { name: backend/widget, path: '%cms.core_dir%/Cms/Widget/Infrastructure/Framework/Resources/views/backend' }

@@ -46,6 +46,7 @@ services:
             $kernelCacheFilepath: '%kernel.cache_file%'
 
     Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface:
+        lazy: true
         class: Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\Website
         factory: Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteFactory::factory
 
@@ -55,4 +56,8 @@ services:
 
     Tulia\Cms\Platform\Infrastructure\Framework\Routing\TuliaRouter:
         decorates: router
+        arguments: ['@.inner']
+
+    Tulia\Cms\Platform\Infrastructure\Framework\Theme\ViewOverwritingResponseViewRenderer:
+        decorates: 'Tulia\Component\Templating\EventListener\ResponseViewRenderer'
         arguments: ['@.inner']

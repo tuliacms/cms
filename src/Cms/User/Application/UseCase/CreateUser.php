@@ -6,6 +6,7 @@ namespace Tulia\Cms\User\Application\UseCase;
 
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Tulia\Cms\Security\Framework\Security\Core\User\User as CoreUser;
+use Tulia\Cms\Shared\Application\UseCase\AbstractTransactionalUseCase;
 use Tulia\Cms\Shared\Application\UseCase\IdResult;
 use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
 use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
@@ -17,15 +18,14 @@ use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-final class CreateUser extends AbstractUserUseCase
+final class CreateUser extends AbstractTransactionalUseCase
 {
     public function __construct(
-        UserRepositoryInterface $repository,
-        EventBusInterface $eventDispatcher,
-        private UserPasswordHasherInterface $passwordHasher,
-        private UploaderInterface $uploader,
+        private readonly UserRepositoryInterface $repository,
+        private readonly EventBusInterface $eventDispatcher,
+        private readonly UserPasswordHasherInterface $passwordHasher,
+        private readonly UploaderInterface $uploader,
     ) {
-        parent::__construct($repository, $eventDispatcher);
     }
 
     /**
@@ -51,7 +51,8 @@ final class CreateUser extends AbstractUserUseCase
             $user->changeAvatar($this->uploader->upload($request->avatar));
         }
 
-        $this->create($user);
+        $this->repository->save($user);
+        $this->eventDispatcher->dispatchCollection($user->collectDomainEvents());
 
         return new IdResult($user->getId());
     }

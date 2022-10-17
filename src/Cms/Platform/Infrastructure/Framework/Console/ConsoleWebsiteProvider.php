@@ -27,6 +27,10 @@ final class ConsoleWebsiteProvider
             }
         }
 
+        if (!$locale || !$website) {
+            throw new \Exception('Website and locale is required to execute this operation. Please provide a --website and --locale parameters.');
+        }
+
         $_SERVER['argc'] = count($_SERVER['argv']);
 
         return [$website, $locale];

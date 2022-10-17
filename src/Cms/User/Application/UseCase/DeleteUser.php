@@ -18,10 +18,10 @@ use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
 final class DeleteUser extends AbstractTransactionalUseCase
 {
     public function __construct(
-        private UploaderInterface $uploader,
-        private UserRepositoryInterface $repository,
-        private EventBusInterface $eventDispatcher,
-        private CanDeleteUserInterface $canDeleteUser
+        private readonly UploaderInterface $uploader,
+        private readonly UserRepositoryInterface $repository,
+        private readonly EventBusInterface $eventDispatcher,
+        private readonly CanDeleteUserInterface $canDeleteUser,
     ) {
     }
 

@@ -25,10 +25,6 @@ class Engine implements EngineInterface
     }
 
     /**
-     * @param ViewInterface $view
-     *
-     * @return string|null
-     *
      * @throws ViewNotFoundException
      * @throws LoaderError
      * @throws RuntimeError
@@ -55,12 +51,6 @@ class Engine implements EngineInterface
     }
 
     /**
-     * @param string      $view
-     * @param array       $data
-     * @param string|null $debugName
-     *
-     * @return string|null
-     *
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError

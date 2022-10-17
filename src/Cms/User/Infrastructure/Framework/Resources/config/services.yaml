@@ -13,10 +13,12 @@ services:
             - '../../../../Domain/WriteModel/Event'
 
     Tulia\Cms\User\Infrastructure\Framework\Validator\PasswordValidatorInterface:
+        lazy: true
         class: Tulia\Cms\User\Infrastructure\Framework\Validator\PasswordValidator
         factory: Tulia\Cms\User\Infrastructure\Framework\Validator\PasswordValidatorFactory::factory
 
     Tulia\Cms\User\Infrastructure\Framework\Validator\UsernameValidatorInterface:
+        lazy: true
         class: Tulia\Cms\User\Infrastructure\Framework\Validator\UsernameValidator
         factory: Tulia\Cms\User\Infrastructure\Framework\Validator\UsernameValidatorFactory::factory
 

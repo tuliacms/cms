@@ -14,7 +14,7 @@ class FrontendRouteSuffixResolver
     private ?string $suffix = null;
 
     public function __construct(
-        private readonly Options $options
+        private readonly Options $options,
     ) {
     }
 

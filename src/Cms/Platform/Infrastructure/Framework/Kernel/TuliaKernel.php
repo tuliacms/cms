@@ -22,6 +22,13 @@ final class TuliaKernel extends Kernel
         return __TULIA_PROJECT_DIR;
     }
 
+    public function boot(): void
+    {
+        parent::boot();
+
+        date_default_timezone_set($this->getContainer()->getParameter('timezone'));
+    }
+
     public function getPublicDir(): string
     {
         return $this->getProjectDir() . '/public';
@@ -29,7 +36,7 @@ final class TuliaKernel extends Kernel
 
     public function registerBundles(): iterable
     {
-        $contents = require dirname(__DIR__) . '/Resources/config/bundles.php';
+        $contents = require $this->getConfigDir() . '/bundles.php';
 
         foreach ($contents as $class => $envs) {
             if ($envs[$this->environment] ?? $envs['all'] ?? false) {
@@ -44,6 +51,7 @@ final class TuliaKernel extends Kernel
 
         $dirs = [
             $base . '/Platform/Infrastructure/Framework/Resources/config',
+            $this->getProjectDir() . '/config',
             $base . '/Activity/Framework/Resources/config',
             $base . '/BackendMenu/Framework/Resources/config',
             $base . '/BodyClass/Framework/Resources/config',
@@ -53,7 +61,6 @@ final class TuliaKernel extends Kernel
             $base . '/Filemanager/Infrastructure/Framework/Resources/config',
             $base . '/FrontendToolbar/Framework/Resources/config',
             $base . '/Homepage/Infrastructure/Framework/Resources/config',
-            //$base . '/Installator/Infrastructure/Framework/Resources/config',
             $base . '/Menu/Infrastructure/Framework/Resources/config',
             $base . '/Node/Infrastructure/Internal/Framework/Resources/config',
             $base . '/Options/Infrastructure/Framework/Resources/config',

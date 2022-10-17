@@ -26,41 +26,26 @@ class View implements ViewInterface
         $this->data  = $data;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getViews(): array
     {
         return $this->views;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setViews(array $views): void
     {
         $this->views = $views;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getData(): array
     {
         return $this->data;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setData(array $data): void
     {
         $this->data = $data;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addData(array $data): void
     {
         $this->data = array_merge($this->data, $data);

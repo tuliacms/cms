@@ -2,6 +2,8 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+        bind:
+            $themesPath: '%kernel.project_dir%/extension/theme'
 
     Tulia\Component\Theme\:
         resource: '../../../../../../../Component/theme/src/*'
@@ -11,6 +13,7 @@ services:
             - '../../../../../../Component/theme/src/Customizer/Changeset/ChangesetInterface.php'
             - '../../../../../../Component/theme/src/Customizer/Builder/Structure/Section.php'
             - '../../../../../../Component/theme/src/Customizer/Builder/Structure/Control.php'
+            - '../../../../../../Component/theme/src/Bridge/Twig/Loader/NamespaceLoader.php'
 
     Tulia\Component\Theme\Customizer\Builder\BuilderInterface:
         class: Tulia\Component\Theme\Customizer\Builder\Builder

@@ -14,6 +14,7 @@ use Tulia\Cms\Node\Domain\ReadModel\Query\LazyNodeAttributesFinder;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Enum\TermTypeEnum;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
+use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\AbstractDbalQuery;
 
 /**
@@ -88,34 +89,6 @@ class DbalFinderQuery extends AbstractDbalQuery
              * @param null|string|array
              */
             'node_status__not' => [],
-            /**
-             * Limits search results to nodes published in given date or in the past,
-             * but not in the future.
-             *
-             * When using with default query() method, searching is limited to rows
-             * published NOW or in past.
-             *
-             * You can type here any valid MySQL date format.
-             *
-             * If not provided, search all posts.
-             *
-             * @param null|string
-             */
-            'published_after' => null,
-            /**
-             * Limits search results to nodes which are published to this date or in past,
-             * but not in the future.
-             *
-             * When using with default query() method, searching is limited to rows
-             * published to NOW or in future.
-             *
-             * You can type here any valid MySQL date format.
-             *
-             * If not provided, search all posts.
-             *
-             * @param null|string
-             */
-            'published_to' => null,
             'taxonomy' => [],
             /**
              * Search for nodes in specified category or categories.
@@ -466,31 +439,14 @@ class DbalFinderQuery extends AbstractDbalQuery
 
     protected function buildDate(array $criteria): void
     {
-        if (! $criteria['published_after']) {
-            return;
-        }
-
-        if ($criteria['published_after'] === 'now') {
-            $criteria['published_after'] = date('Y-m-d H:i:s');
-        } else {
-            $criteria['published_after'] = strtotime('Y-m-d H:i:s', $criteria['published_after']);
-        }
-
         $this->queryBuilder
-            ->andWhere('tm.published_at <= :tm_published_after')
-            ->setParameter('tm_published_after', $criteria['published_after'], PDO::PARAM_STR);
-
-        if ($criteria['published_to']) {
-            if ($criteria['published_to'] === 'now') {
-                $criteria['published_to'] = date('Y-m-d H:i:s');
-            } else {
-                $criteria['published_to'] = strtotime('Y-m-d H:i:s', $criteria['published_to']);
-            }
-
-            $this->queryBuilder
-                ->andWhere('IF(tm.published_to IS NULL, 1, tm.published_to >= :tm_published_to) = 1')
-                ->setParameter('tm_published_to', $criteria['published_to'], PDO::PARAM_STR);
-        }
+            ->andWhere('IF(
+                tm.published_to IS NULL,
+                :now >= tm.published_at,
+                :now BETWEEN tm.published_at AND tm.published_to
+            )')
+            ->setParameter('now', ImmutableDateTime::now()->toStringWithPrecision() , PDO::PARAM_STR)
+        ;
     }
 
     protected function buildOffset(array $criteria): void

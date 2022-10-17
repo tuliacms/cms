@@ -20,7 +20,7 @@ use Tulia\Component\Templating\ViewInterface;
 class Node extends AbstractController
 {
     public function __construct(
-        private TermFinderInterface $termFinder
+        private readonly TermFinderInterface $termFinder,
     ) {
     }
 

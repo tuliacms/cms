@@ -602,50 +602,6 @@
                 <source>websites</source>
                 <target>Strony</target>
             </trans-unit>
-            <trans-unit id="tuliacms.messages.151">
-                <source>startTyping</source>
-                <target>Co chcesz wyszukać...</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.messages.152">
-                <source>searchAnything</source>
-                <target>Szukaj wszędzie...</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.messages.153">
-                <source>searchInWholeAdmin</source>
-                <target>Szukaj czegokolwiek w swojej witrynie!</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.messages.154">
-                <source>searchInContents</source>
-                <target>W typach treściach (strong, wiadomości, produkty itd.)</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.messages.155">
-                <source>searchInTaxonomies</source>
-                <target>W kategoriach (kategorie, tagi itd.)</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.messages.156">
-                <source>searchInSettings</source>
-                <target>W ustawieniach</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.messages.157">
-                <source>searchInTools</source>
-                <target>W narzędziach</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.messages.158">
-                <source>searchInSystem</source>
-                <target>W systemie</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.messages.159">
-                <source>searchInHelp</source>
-                <target>W Centrum Pomocy</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.messages.160">
-                <source>searchResultsForQuery</source>
-                <target>Wyniki wyszukiwania: {query}</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.messages.161">
-                <source>searchingInProgress</source>
-                <target><![CDATA[Wyszukiwanie {query} &hellip;]]></target>
-            </trans-unit>
             <trans-unit id="tuliacms.messages.162">
                 <source>languages</source>
                 <target>Języki</target>
@@ -858,12 +814,12 @@
                 <target>Znalazłeś błąd?</target>
             </trans-unit>
             <trans-unit id="tuliacms.messages.214">
-                <source>noResultsTryToFindUsingWholeWords</source>
-                <target>Nic nie znaleziono. Spróbuj szukać używając pełnych słów.</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.messages.215">
                 <source>noWysiwygEditor</source>
                 <target>Bez edytora WYSIWYG</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.215">
+                <source>selectOption</source>
+                <target>Wybierz opcję</target>
             </trans-unit>
         </body>
     </file>

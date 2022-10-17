@@ -1,10 +1,5 @@
 cms:
     templating:
-        namespace_overwrite:
-            - { from: '@parent/', to: '@theme/' }
-            - { from: '@cms/',    to: '@parent/overwrite/cms/' }
-            - { from: '@module/', to: '@parent/overwrite/module/' }
-            - { from: '@widget/', to: '@parent/overwrite/widget/' }
         paths:
             - { name: backend/layout, path: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/views/backend/layout' }
             - { name: _theme_views/DefaultTheme, path: '%cms.core_dir%/Cms/Platform/Infrastructure/DefaultTheme/Resources/views' }
@@ -15,7 +10,7 @@ cms:
                     backend:
                         template: "{% extends '@backend/layout/layout.tpl' %}"
                     theme:
-                        template: "{% extends [ '@theme/layout.tpl', '@parent/layout.tpl' ] %}"
+                        template: "{% extends [ template('layout.tpl'), parent_template('layout.tpl') ] %}"
     public_paths:
         - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/backend-layout/dist', target: '/core/backend/theme' }
         - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/animate-css', target: '/core/animate-css' }
@@ -222,3 +217,15 @@ cms:
                     label: Locale selector
                     classname: 'Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\LocaleType'
                     constraints: [required]
+when@prod:
+    cms:
+        assetter:
+            assets:
+                vue:
+                    scripts: [ '/assets/core/vuejs/vue.min.js' ]
+when@dev:
+    cms:
+        assetter:
+            assets:
+                vue:
+                    scripts: [ '/assets/core/vuejs/vue.dev.js' ]

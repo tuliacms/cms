@@ -26,7 +26,7 @@ use Tulia\Cms\User\Infrastructure\Framework\Validator\Constraints\EmailUnique;
 final class UserDetailsForm extends AbstractType
 {
     public function __construct(
-        private UserAvatarModelTransformer $userAvatarTransformer
+        private readonly UserAvatarModelTransformer $userAvatarTransformer,
     ) {
     }
 

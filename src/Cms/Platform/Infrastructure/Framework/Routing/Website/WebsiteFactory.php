@@ -21,12 +21,6 @@ final class WebsiteFactory
         if (php_sapi_name() === 'cli') {
             [$websiteId, $activeLocale] = ConsoleWebsiteProvider::provideWebsite();
             $isBackend = false;
-
-            if (!$websiteId) {
-                $firstWebsite = $websiteFinder->all()[0];
-                $websiteId = $firstWebsite->getId();
-                $activeLocale = $firstWebsite->getDefaultLocale()->getCode();
-            }
         } else {
             $request = $requestStack->getMainRequest();
             $websites = self::flattenWebsites($websiteFinder->all(), $environment === 'dev');

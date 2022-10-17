@@ -6,6 +6,7 @@ namespace Tulia\Cms\User\Infrastructure\Framework\Validator;
 
 /**
  * @author Adam Banaszkiewicz
+ * @final
  */
 class UsernameValidator implements UsernameValidatorInterface
 {

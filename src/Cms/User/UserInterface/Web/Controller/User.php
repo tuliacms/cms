@@ -32,9 +32,9 @@ use Tulia\Component\Templating\ViewInterface;
 class User extends AbstractController
 {
     public function __construct(
-        private ContentFormService $contentFormService,
-        private UserRepositoryInterface $repository,
-        private SymfonyFieldBuilder $fieldBuilder
+        private readonly ContentFormService $contentFormService,
+        private readonly UserRepositoryInterface $repository,
+        private readonly SymfonyFieldBuilder $fieldBuilder,
     ) {
     }
 

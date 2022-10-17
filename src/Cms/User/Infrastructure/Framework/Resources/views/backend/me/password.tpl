@@ -15,15 +15,11 @@
 
 {% block mainContent %}
     {{ form_start(form) }}
-
-    <input type="text" name="username" style="display: block;position: fixed;left:-1000px;top:-1000px;opacity:0;" tabindex="-1" />
-    <input type="email" name="email" style="display: block;position: fixed;left:-1000px;top:-1000px;opacity:0;" tabindex="-1" />
-    <input type="password" name="password" style="display: block;position: fixed;left:-1000px;top:-1000px;opacity:0;" tabindex="-1" />
-
     {{ form_errors(form) }}
     {{ form_row(form._token) }}
     <div class="form-controls-terminator">
         {{ form_row(form.new_password) }}
+        {% include '@backend/user/user/parts/password-complexity.tpl' %}
         <div class="alert alert-info" style="margin-bottom: 40px">
             {{ 'autoLogoutAfterPasswordChangeInfo'|trans({}, 'users') }}
         </div>

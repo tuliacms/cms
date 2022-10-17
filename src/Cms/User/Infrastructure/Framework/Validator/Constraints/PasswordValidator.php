@@ -15,16 +15,11 @@ use Tulia\Cms\User\Infrastructure\Framework\Validator\PasswordValidatorInterface
  */
 class PasswordValidator extends ConstraintValidator
 {
-    protected PasswordValidatorInterface $passwordValidator;
-
-    public function __construct(PasswordValidatorInterface $passwordValidator)
-    {
-        $this->passwordValidator = $passwordValidator;
+    public function __construct(
+        private readonly PasswordValidatorInterface $passwordValidator,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function validate($value, Constraint $constraint): void
     {
         if (!$constraint instanceof Password) {

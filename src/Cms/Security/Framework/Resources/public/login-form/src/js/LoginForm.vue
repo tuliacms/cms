@@ -113,7 +113,7 @@
             </div>
         </div>
         <div class="credit-links">
-            <a href="#">Created with &#10084; by Codevia Studio</a>
+            <a>Created with &#10084; by Codevia Studio</a>
         </div>
     </div>
 </template>

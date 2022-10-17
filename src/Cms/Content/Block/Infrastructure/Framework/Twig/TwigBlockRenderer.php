@@ -15,23 +15,14 @@ use Tulia\Component\Templating\View;
  */
 final class TwigBlockRenderer implements BlockRendererInterface
 {
-    private ContentTypeRegistryInterface $contentTypeRegistry;
-    private EngineInterface $engine;
-    private string $environment;
-    private array $paths;
     private string $fallbackView;
 
     public function __construct(
-        ContentTypeRegistryInterface $contentTypeRegistry,
-        EngineInterface $engine,
-        string $environment,
-        array $paths
+        private readonly ContentTypeRegistryInterface $contentTypeRegistry,
+        private readonly EngineInterface $engine,
+        private readonly string $environment,
+        private array $paths,
     ) {
-        $this->contentTypeRegistry = $contentTypeRegistry;
-        $this->engine = $engine;
-        $this->environment = $environment;
-        $this->paths = $paths;
-
         $this->prepareViews();
     }
 
@@ -61,6 +52,7 @@ final class TwigBlockRenderer implements BlockRendererInterface
         $views = array_map(static function (string $path) use ($block) {
             return $path . $block['type'] . '.tpl';
         }, $this->paths);
+
         $views[] = $this->fallbackView;
 
         return $this->engine->render(
@@ -81,6 +73,7 @@ final class TwigBlockRenderer implements BlockRendererInterface
          * - Theme views - This allows to overwrite views from modules
          * - Modules views
          * - Fallback views - At the end, we have to add empty view, in case of any previous views are not defined.
+         * @todo Create absolute path to active theme instead of `@theme` namespace
          */
         array_unshift($this->paths, '@theme/content-block/');
     }

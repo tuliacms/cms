@@ -30,6 +30,16 @@ class ThemeExtension extends AbstractExtension
                 [ThemeRuntime::class, 'customizerLiveControl'],
                 ['is_safe' => [ 'html' ]]
             ),
+            new TwigFunction(
+                'template',
+                [ThemeRuntime::class, 'themeTemplate'],
+                ['is_safe' => [ 'html' ]]
+            ),
+            new TwigFunction(
+                'parent_template',
+                [ThemeRuntime::class, 'parentThemeTemplate'],
+                ['is_safe' => [ 'html' ]]
+            ),
         ];
     }
 }

@@ -25,6 +25,24 @@ class ThemeRuntime implements RuntimeExtensionInterface
         return $this->manager->getTheme();
     }
 
+    public function themeTemplate(string $template): string
+    {
+        $theme = $this->manager->getTheme();
+
+        return $theme->getViewsDirectory().'/'.$template;
+    }
+
+    public function parentThemeTemplate(string $template): string
+    {
+        $theme = $this->manager->getTheme();
+
+        if ($theme->hasParent()) {
+            $theme = $theme->getParent();
+        }
+
+        return $theme->getViewsDirectory().'/'.$template;
+    }
+
     /**
      * @param mixed $default
      * @return mixed

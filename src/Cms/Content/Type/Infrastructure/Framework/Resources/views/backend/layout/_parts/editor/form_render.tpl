@@ -6,10 +6,6 @@
     {% if form._token is defined %}
         {{ form_row(form._token) }}
     {% endif %}
-
-    <input type="text" name="username" style="display: block;position: fixed;left:-1000px;top:-1000px;opacity:0;" tabindex="-1" />
-    <input type="email" name="email" style="display: block;position: fixed;left:-1000px;top:-1000px;opacity:0;" tabindex="-1" />
-    <input type="password" name="password" style="display: block;position: fixed;left:-1000px;top:-1000px;opacity:0;" tabindex="-1" />
 {% endmacro %}
 
 {% macro form_end(form) %}
