@@ -11,7 +11,7 @@ use Tulia\Cms\Content\Type\Domain\ReadModel\Model\Field;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ConstraintsBuilderInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\FieldTypeMappingRegistry;
 use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\FormType\RepeatableGroupType;
-use Tulia\Component\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz

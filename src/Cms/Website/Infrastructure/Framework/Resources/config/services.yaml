@@ -9,5 +9,5 @@ services:
         resource: '../../../../**'
         exclude: '../../../../{Infrastructure/Framework/Resources}'
 
-    Tulia\Component\Routing\Website\WebsiteRegistryInterface:
-        '@Tulia\Cms\Website\Infrastructure\Persistence\LocalStorage\LocalStorageWebsiteRegistry'
+    Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteRegistryInterface:
+        '@Tulia\Cms\Website\Infrastructure\Persistence\Doctrine\Dbal\DbalWebsiteRegistry'

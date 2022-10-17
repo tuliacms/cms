@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Bundle\CmsBundle\DependencyInjection;
 
-use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Tulia\Component\Templating\ViewFilter\FilterInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -30,6 +28,8 @@ class TuliaCmsExtension extends Extension
             $paths[$key] = rtrim($path, '/') . '/';
         }
 
+        $projectDir = $container->getParameter('kernel.project_dir');
+
         $container->setParameter('cms.content_blocks.templating.paths', $paths);
         $container->setParameter('cms.content_builder.content_type_entry.config', $config['content_building']['content_type_entry']);
         $container->setParameter('cms.content_builder.content_type.config', $config['content_building']['content_type']);
@@ -41,14 +41,11 @@ class TuliaCmsExtension extends Extension
         $container->setParameter('cms.importer.objects', $config['importer']['objects'] ?? []);
 
         $container->setParameter('cms.assetter.assets', $config['assetter']['assets'] ?? []);
-        $container->setParameter('cms.assets.public_paths', $config['public_paths'] ?? []);
+        $container->setParameter('cms.assets.public_paths', $this->prepareAssetsPublicPaths($config['public_paths'] ?? [], $projectDir));
         $container->setParameter('cms.twig.loader.array.templates', $this->prepareTwigArrayLoaderTemplates($config['twig']['loader']['array']['templates'] ?? []));
         $container->setParameter('cms.templating.paths', $this->prepareTemplatingPaths($config['templating']['paths'] ?? []));
-        $container->setParameter('cms.templating.namespace_overwrite', $config['templating']['namespace_overwrite'] ?? []);
         $container->setParameter('cms.themes.configuration', $config['theme']['configuration'] ?? []);
         $container->setParameter('cms.hooks.actions', $config['hooks']['actions'] ?? []);
-
-        $this->registerViewFilters($container);
 
         // Finders
         $container->registerForAutoconfiguration(\Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\AbstractFinder::class)
@@ -192,16 +189,14 @@ class TuliaCmsExtension extends Extension
         return $output;
     }
 
-    private function registerViewFilters(ContainerBuilder $container): void
+    private function prepareAssetsPublicPaths(array $paths, string $projectDir): array
     {
-        if (! $container->has(FilterInterface::class)) {
-            return;
+        foreach ($paths as $key => $path) {
+            if ($path['source'][0] !== '/') {
+                $paths[$key]['source'] = $projectDir.'/'.$path['source'];
+            }
         }
 
-        $chain = $container->findDefinition(FilterInterface::class);
-
-        foreach ($container->findTaggedServiceIds('templating.view_filter') as $id => $tags) {
-            $chain->addMethodCall('addFilter', [new Reference($id)]);
-        }
+        return $paths;
     }
 }

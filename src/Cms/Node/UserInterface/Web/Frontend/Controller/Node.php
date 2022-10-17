@@ -20,7 +20,7 @@ use Tulia\Component\Templating\ViewInterface;
 class Node extends AbstractController
 {
     public function __construct(
-        private TermFinderInterface $termFinder
+        private readonly TermFinderInterface $termFinder,
     ) {
     }
 
@@ -33,7 +33,7 @@ class Node extends AbstractController
             $node->hasPurpose(NodePurposeEnum::PAGE_HOMEPAGE)
             && $this->isHomepage($request) === false
         ) {
-            return $this->redirectToRoute('homepage');
+            return $this->redirectToRoute('frontend.homepage');
         }
 
         $this->getDocument()->setTitle($node->getTitle());

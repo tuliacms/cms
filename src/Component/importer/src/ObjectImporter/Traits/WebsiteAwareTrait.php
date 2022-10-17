@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Importer\ObjectImporter\Traits;
 
-use Tulia\Component\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz

@@ -12,7 +12,7 @@ use Symfony\Contracts\Translation\LocaleAwareInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\SearchAnything\Domain\WriteModel\Service\DocumentCollectorRegistryInterface;
 use Tulia\Cms\SearchAnything\Domain\WriteModel\Service\IndexerInterface;
-use Tulia\Component\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz

@@ -3,6 +3,12 @@ const Popper = require('Popper');
 const tooltips = [];
 
 export default {
+    /**
+     * @todo Update Popper element when position of target element has changed
+     * This happend when we move for example FAQ element up/down - the popper element
+     * has not change his position until we scroll the page.
+     * https://popper.js.org/docs/v2/lifecycle/#manual-update
+     */
     mounted(el, binding, vnode, prevVnode) {
         const tooltip = document.createElement('div');
         tooltip.innerHTML = el.getAttribute('title');

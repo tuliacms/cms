@@ -33,7 +33,7 @@ class SimpleStrategy implements ContentTypeRoutingStrategyInterface
             throw new \InvalidArgumentException('Please provide locale.');
         }
 
-        $node = $this->findNodeById($id, $parameters['_website_id'], $parameters['_locale']);
+        $node = $this->findNodeById($id, $parameters['_website'], $parameters['_locale']);
 
         if ($node) {
             return '/' . $node->getSlug();
@@ -46,7 +46,7 @@ class SimpleStrategy implements ContentTypeRoutingStrategyInterface
     {
         $node = $this->findNodeBySlug(
             substr($pathinfo, 1),
-            $parameters['_website_id'],
+            $parameters['_website'],
             $parameters['_locale']
         );
 
@@ -63,7 +63,7 @@ class SimpleStrategy implements ContentTypeRoutingStrategyInterface
         return [
             'node' => $node,
             'slug' => $node->getSlug(),
-            '_route' => sprintf('node.%s.%s', $node->getType(), $node->getId()),
+            '_route' => sprintf('frontend.node.%s.%s', $node->getType(), $node->getId()),
             '_controller' => $nodeType->getController(),
         ];
     }

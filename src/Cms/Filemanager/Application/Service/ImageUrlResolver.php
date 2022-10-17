@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Filemanager\Application\Service;
 
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Tulia\Cms\Filemanager\Domain\ImageSize\ImageSizeRegistryInterface;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Model\File;
-use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -14,7 +14,7 @@ use Symfony\Component\Routing\RouterInterface;
 class ImageUrlResolver
 {
     public function __construct(
-        private readonly RouterInterface $router,
+        private readonly UrlGeneratorInterface $urlGenerator,
         private readonly ImageSizeRegistryInterface $imageSize,
     ) {
     }
@@ -27,7 +27,7 @@ class ImageUrlResolver
             $size = $this->imageSize->get($sizeName)->getCode();
         }
 
-        return $this->router->generate('filemanager.resolve.image.size', [
+        return $this->urlGenerator->generate('frontend.filemanager.resolve.image.size', [
             'size' => $size,
             'id'   => $image->getId(),
             'filename' => $image->getFilename(),
@@ -38,7 +38,7 @@ class ImageUrlResolver
     {
         $size = $this->imageSize->get('thumbnail');
 
-        return $this->router->generate('filemanager.resolve.image.size', [
+        return $this->urlGenerator->generate('frontend.filemanager.resolve.image.size', [
             'size' => $size->getCode(),
             'id'   => $image->getId(),
             'filename' => $image->getFilename(),

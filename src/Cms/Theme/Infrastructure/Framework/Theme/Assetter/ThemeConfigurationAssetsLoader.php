@@ -7,6 +7,7 @@ namespace Tulia\Cms\Theme\Infrastructure\Framework\Theme\Assetter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 use Tulia\Component\Theme\Assetter\ThemeConfigurationAssetsLoader as BaseLoader;
 
 /**
@@ -16,6 +17,7 @@ class ThemeConfigurationAssetsLoader implements EventSubscriberInterface
 {
     public function __construct(
         private readonly BaseLoader $loader,
+        private readonly WebsiteInterface $website,
     ) {
     }
 
@@ -29,7 +31,7 @@ class ThemeConfigurationAssetsLoader implements EventSubscriberInterface
 
     public function handle($event): void
     {
-        if ($event instanceof ViewEvent && $event->getRequest()->server->get('TULIA_WEBSITE_IS_BACKEND')) {
+        if ($event instanceof ViewEvent && $this->website->isBackend()) {
             return;
         }
 

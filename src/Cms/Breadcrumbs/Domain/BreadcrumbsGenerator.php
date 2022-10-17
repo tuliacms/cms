@@ -47,7 +47,7 @@ class BreadcrumbsGenerator implements BreadcrumbsGeneratorInterface
     public function generateFromIdentity(Crumb $crumb): BreadcrumbsInterface
     {
         $breadcrumbs = new Breadcrumbs();
-        $homepageAdded = $crumb->getCode() === 'homepage';
+        $homepageAdded = $crumb->getCode() === 'frontend.homepage';
         $parent = null;
         $securityLooper = 10;
 
@@ -64,7 +64,7 @@ class BreadcrumbsGenerator implements BreadcrumbsGeneratorInterface
             }
 
             if ($parent === null && $homepageAdded === false) {
-                $parent = new Crumb('homepage', []);
+                $parent = new Crumb('frontend.homepage', []);
                 $homepageAdded = true;
             }
 

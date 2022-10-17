@@ -15,11 +15,9 @@ use Tulia\Component\Templating\View;
  */
 class ResponseViewRenderer implements EventSubscriberInterface
 {
-    protected Engine $engine;
-
-    public function __construct(Engine $engine)
-    {
-        $this->engine = $engine;
+    public function __construct(
+        private readonly Engine $engine,
+    ) {
     }
 
     public static function getSubscribedEvents(): array
@@ -36,7 +34,7 @@ class ResponseViewRenderer implements EventSubscriberInterface
         }
 
         $response = new Response($this->engine->render($event->getControllerResult()));
-        $response->headers->set('content-type', 'text/html');
+        $response->headers->set('Content-Type', 'text/html');
 
         $event->setResponse($response);
     }

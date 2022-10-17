@@ -20,7 +20,7 @@ use Tulia\Cms\Website\Domain\WriteModel\Rules\CanDeleteWebsite\CanDeleteWebsiteI
 use Tulia\Cms\Website\Domain\WriteModel\Rules\CanDeleteWebsite\CanDeleteWebsiteReasonEnum;
 use Tulia\Cms\Website\Domain\WriteModel\Rules\CanTurnOffWebsite\CanTurnOffWebsiteInterface;
 use Tulia\Cms\Website\Domain\WriteModel\Rules\CanTurnOffWebsite\CanTurnOffWebsiteReasonEnum;
-use Tulia\Component\Routing\Enum\SslModeEnum;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\SslModeEnum;
 
 /**
  * @author Adam Banaszkiewicz
@@ -154,7 +154,7 @@ class Website extends AbstractAggregateRoot
                 $locale['locale_prefix'] ?? null,
                 $locale['path_prefix'] ?? null,
                 $locale['ssl_mode'],
-                (bool) ($locale['is_default'] ?? 1),
+                (bool) ($locale['is_default'] ?? 0),
             ));
         }
 
@@ -176,7 +176,7 @@ class Website extends AbstractAggregateRoot
      * @throws Exception\LocalePrefixInvalidException
      * @throws Exception\PathPrefixInvalidException
      */
-    public function addLocale(Locale $locale): void
+    private function addLocale(Locale $locale): void
     {
         $key = null;
 

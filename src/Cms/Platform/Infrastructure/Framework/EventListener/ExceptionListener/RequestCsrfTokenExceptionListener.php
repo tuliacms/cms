@@ -11,19 +11,18 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Exception\RequestCsrfTokenException;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class RequestCsrfTokenExceptionListener
 {
-    private RouterInterface $router;
-    private TranslatorInterface $translator;
-
-    public function __construct(RouterInterface $router, TranslatorInterface $translator)
-    {
-        $this->router = $router;
-        $this->translator = $translator;
+    public function __construct(
+        private readonly RouterInterface $router,
+        private readonly TranslatorInterface $translator,
+        private readonly WebsiteInterface $website,
+    ) {
     }
 
     public function __invoke(ExceptionEvent $event): void
@@ -59,10 +58,10 @@ class RequestCsrfTokenExceptionListener
             return new RedirectResponse($referer, Response::HTTP_FOUND, $headers);
         }
 
-        if ($request->server->get('TULIA_WEBSITE_IS_BACKEND')) {
-            $route = 'backend';
+        if ($this->website->isBackend()) {
+            $route = 'backend.homepage';
         } else {
-            $route = 'homepage';
+            $route = 'frontend.homepage';
         }
 
         return new RedirectResponse($this->router->generate($route), Response::HTTP_FOUND, $headers);

@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="pl" datatype="plaintext" original="search-anything+intl-icu.en.xlf">
+        <body>
+            <trans-unit id="tuliacms.search-anything.1">
+                <source>startTyping</source>
+                <target>Co chcesz wyszukać...</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.search-anything.2">
+                <source>searchAnything</source>
+                <target>Szukaj wszędzie...</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.search-anything.3">
+                <source>searchInWholeAdmin</source>
+                <target>Szukaj czegokolwiek w swojej witrynie!</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.search-anything.4">
+                <source>searchInContents</source>
+                <target>W typach treściach (strong, wiadomości, produkty itd.)</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.search-anything.5">
+                <source>searchInTaxonomies</source>
+                <target>W kategoriach (kategorie, tagi itd.)</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.search-anything.6">
+                <source>searchInSettings</source>
+                <target>W ustawieniach</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.search-anything.7">
+                <source>searchInTools</source>
+                <target>W narzędziach</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.search-anything.8">
+                <source>searchInSystem</source>
+                <target>W systemie</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.search-anything.9">
+                <source>searchInHelp</source>
+                <target>W Centrum Pomocy</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.search-anything.10">
+                <source>searchResultsForQuery</source>
+                <target>Wyniki wyszukiwania: {query}</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.search-anything.11">
+                <source>searchingInProgress</source>
+                <target><![CDATA[Wyszukiwanie {query} &hellip;]]></target>
+            </trans-unit>
+            <trans-unit id="tuliacms.search-anything.12">
+                <source>noResultsTryToFindUsingWholeWords</source>
+                <target>Nic nie znaleziono. Spróbuj szukać używając pełnych słów.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.search-anything.13">
+                <source>searchInAdminPanel</source>
+                <target>Przeszukaj panel administracyjny...</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

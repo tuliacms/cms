@@ -7,42 +7,39 @@ namespace Tulia\Cms\Website\Infrastructure\Framework\Profiler;
 use Symfony\Bundle\FrameworkBundle\DataCollector\AbstractDataCollector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Tulia\Component\Routing\Website\Website;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 final class WebsiteCollector extends AbstractDataCollector
 {
+    public function __construct(
+        private readonly WebsiteInterface $website,
+    ) {
+    }
+
     public function collect(Request $request, Response $response, \Throwable $exception = null)
     {
-        /** @var Website $website */
-        $website = $request->attributes->get('website');
-
-        if (!$website) {
-            return;
-        }
-
         $this->data = [
-            'id' => $website->getId(),
-            'name' => $website->getName(),
-            'active' => $website->isActive(),
-            'backendPrefix' => $website->getBackendPrefix(),
-            'isBackend' => $website->isBackend(),
-            'basepath' => $website->getBasepath(),
+            'id' => $this->website->getId(),
+            'name' => $this->website->getName(),
+            'active' => $this->website->isActive(),
+            'backendPrefix' => $this->website->getBackendPrefix(),
+            'isBackend' => $this->website->isBackend(),
             'locale' => [
-                'code' => $website->getLocale()->getCode(),
-                'domain' => $website->getLocale()->getDomain(),
-                'localePrefix' => $website->getLocale()->getLocalePrefix(),
-                'pathPrefix' => $website->getLocale()->getPathPrefix(),
-                'sslMode' => $website->getLocale()->getSslMode(),
+                'code' => $this->website->getLocale()->getCode(),
+                'domain' => $this->website->getLocale()->getDomain(),
+                'localePrefix' => $this->website->getLocale()->getLocalePrefix(),
+                'pathPrefix' => $this->website->getLocale()->getPathPrefix(),
+                'sslMode' => $this->website->getLocale()->getSslMode(),
             ],
             'defaultLocale' => [
-                'code' => $website->getDefaultLocale()->getCode(),
-                'domain' => $website->getDefaultLocale()->getDomain(),
-                'localePrefix' => $website->getDefaultLocale()->getLocalePrefix(),
-                'pathPrefix' => $website->getDefaultLocale()->getPathPrefix(),
-                'sslMode' => $website->getDefaultLocale()->getSslMode(),
+                'code' => $this->website->getDefaultLocale()->getCode(),
+                'domain' => $this->website->getDefaultLocale()->getDomain(),
+                'localePrefix' => $this->website->getDefaultLocale()->getLocalePrefix(),
+                'pathPrefix' => $this->website->getDefaultLocale()->getPathPrefix(),
+                'sslMode' => $this->website->getDefaultLocale()->getSslMode(),
             ],
         ];
     }

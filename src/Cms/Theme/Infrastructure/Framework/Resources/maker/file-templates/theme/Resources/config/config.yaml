@@ -9,17 +9,8 @@ cms:
                         assets:
                             - {{ theme.assets_prefix }}.main
     public_paths:
-        -
-            source: '%kernel.project_dir%/extension/theme/{{ theme.name }}/Resources/public/theme/dist'
-            target: /theme/{{ theme.name.lc }}/theme
-        -
-            source: '%kernel.project_dir%/extension/theme/{{ theme.name }}/Resources/public/tulia-editor-blocks/dist'
-            target: /theme/{{ theme.name.lc }}/tulia-editor-blocks
-    templating:
-        paths:
-            -
-                name: theme/{{ theme.name.lc }}
-                path: '%kernel.project_dir%/extension/theme/{{ theme.name }}/Resources/views'
+        - { source: extension/theme/{{ theme.name }}/Resources/public/theme/dist, target: /theme/{{ theme.name.lc }}/theme }
+        - { source: extension/theme/{{ theme.name }}/Resources/public/tulia-editor-blocks/dist, target: /theme/{{ theme.name.lc }}/tulia-editor-blocks }
     assetter:
         assets:
             {{ theme.assets_prefix }}.main:
@@ -46,3 +37,11 @@ cms:
                 scripts:
                     - /assets/theme/{{ theme.name.lc }}/tulia-editor-blocks/theme-{{ theme.vendor.lc }}-{{ theme.code.lc }}-tulia-editor-blocks.js
                 collection: tulia_editor
+twig:
+    paths:
+        # We add this for cache warmup
+        'extension/theme/{{ theme.name }}/Resources/views': ~
+framework:
+    translator:
+        paths:
+            - '%kernel.project_dir%/extension/theme/{{ theme.name }}/Resources/translations'

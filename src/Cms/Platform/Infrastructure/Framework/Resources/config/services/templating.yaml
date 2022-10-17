@@ -14,14 +14,4 @@ services:
         bind:
             $templates: '%cms.twig.loader.array.templates%'
 
-    Tulia\Component\Templating\ViewFilter\FilterInterface:
-        class: Tulia\Component\Templating\ViewFilter\DelegatingFilter
-
-    Tulia\Component\Templating\ViewFilter\ViewNamespaceOverwriteFilter:
-        tags: [ templating.view_filter ]
-
-    Tulia\Component\Templating\Config:
-        arguments:
-            - { namespace_overwrite: '%cms.templating.namespace_overwrite%' }
-
     Twig\Extension\StringLoaderExtension: ~

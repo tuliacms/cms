@@ -7,3 +7,11 @@ doctrine:
                 is_bundle: false
                 prefix: Tulia\Cms\SearchAnything\Domain\WriteModel\Model
                 alias: cmsSearchAnythingDocument
+framework:
+    translator:
+        paths:
+            - '%cms.core_dir%/Cms/SearchAnything/Infrastructure/Framework/Resources/translations'
+cms:
+    templating:
+        paths:
+            - { name: backend/search-anything, path: '%cms.core_dir%/Cms/SearchAnything/Infrastructure/Framework/Resources/views/backend' }

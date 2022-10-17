@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Templating\Twig\Loader;
 
-use Tulia\Component\Templating\ViewFilter\FilterInterface;
 use Twig\Error\LoaderError;
 use Twig\Loader\LoaderInterface;
 use Twig\Source;
@@ -18,11 +17,11 @@ class AdvancedFilesystemLoader implements LoaderInterface
     protected array $cache = [];
     protected array $errorCache = [];
     private string $rootPath;
-    private FilterInterface $filter;
 
-    public function __construct(FilterInterface $filter, array $paths = [], string $rootPath = null)
+    public function __construct(array $paths = [], string $rootPath = null)
     {
         $this->rootPath = ($rootPath ?? getcwd()) . \DIRECTORY_SEPARATOR;
+
         if (false !== $realPath = realpath($this->rootPath)) {
             $this->rootPath = $realPath . \DIRECTORY_SEPARATOR;
         }
@@ -30,8 +29,6 @@ class AdvancedFilesystemLoader implements LoaderInterface
         foreach ($paths as $prefix => $path) {
             $this->setPath($prefix, $path);
         }
-
-        $this->filter = $filter;
     }
 
     public function getPaths(): array
@@ -127,22 +124,22 @@ class AdvancedFilesystemLoader implements LoaderInterface
             throw new LoaderError($this->errorCache[$name]);
         }
 
-        $names = $this->filter->filter($name);
-
         $lastException = null;
 
-        foreach ($names as $namePrepared) {
-            try {
-                $this->validateName($namePrepared);
+        try {
+            $this->validateName($name);
 
-                [$prefix, $shortname] = $this->parseName($namePrepared);
-
-                if ($path = $this->getViewPathname($namePrepared, $prefix, $shortname, $throw)) {
-                    return $path;
-                }
-            } catch (LoaderError $e) {
-                $lastException = $e;
+            if (is_file($name)) {
+                return $this->cache[$name] = $name;
             }
+
+            [$prefix, $shortname] = $this->parseName($name);
+
+            if ($path = $this->getViewPathname($name, $prefix, $shortname, $throw)) {
+                return $path;
+            }
+        } catch (LoaderError $e) {
+            $lastException = $e;
         }
 
         if ($lastException) {
@@ -225,7 +222,7 @@ class AdvancedFilesystemLoader implements LoaderInterface
     private function validateName(string $name): void
     {
         if (false !== strpos($name, "\0")) {
-            throw new LoaderError('A template name cannot contain NUL bytes.');
+            throw new LoaderError('A template name cannot contain NULL bytes.');
         }
 
         $name = ltrim($name, '/');

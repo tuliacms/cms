@@ -14,7 +14,7 @@ use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\Theme\Application\Exception\ThemeNotFoundException;
 use Tulia\Cms\Theme\Application\Service\ThemeActivator;
 use Tulia\Cms\Theme\UserInterface\Web\Backend\Form\ThemeInstallatorForm;
-use Tulia\Component\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
 use Tulia\Component\Theme\Configuration\ConfigurationRegistry;
 use Tulia\Component\Theme\ManagerInterface;
@@ -62,8 +62,6 @@ class Theme extends AbstractController
      */
     public function activate(Request $request, WebsiteInterface $website): RedirectResponse
     {
-        $this->denyIfNotDevelopmentEnvironment();
-
         try {
             $this->themeActivator->activateTheme($request->request->get('theme'), $website->getId());
         } catch (ThemeNotFoundException $e) {

@@ -1,16 +1,16 @@
 backend.content.type.homepage:
-    path: /administrator/content/type
+    path: /content/type
     controller: Tulia\Cms\Content\Type\UserInterface\Web\Backend\Controller\ContentModel::index
 
 backend.content.type.content_type.create:
-    path: /administrator/content/type/{contentType}/create
+    path: /content/type/{contentType}/create
     controller: Tulia\Cms\Content\Type\UserInterface\Web\Backend\Controller\ContentModel::create
     methods: [GET, POST]
     requirements:
         contentType: '[a-zA-Z0-9_]+'
 
 backend.content.type.content_type.edit:
-    path: /administrator/content/type/{contentType}/edit/{code}
+    path: /content/type/{contentType}/edit/{code}
     controller: Tulia\Cms\Content\Type\UserInterface\Web\Backend\Controller\ContentModel::edit
     methods: [GET, POST]
     requirements:
@@ -18,7 +18,7 @@ backend.content.type.content_type.edit:
         code: '[a-zA-Z0-9_]+'
 
 backend.content.type.content_type.delete:
-    path: /administrator/content/type/{contentType}/delete/{code}
+    path: /content/type/{contentType}/delete/{code}
     controller: Tulia\Cms\Content\Type\UserInterface\Web\Backend\Controller\ContentModel::delete
     methods: [GET, POST]
     requirements:

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Menu\Infrastructure\Framework\Twig\Extension;
 
 use Tulia\Cms\Menu\Domain\Builder\BuilderInterface;
-use Tulia\Component\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -16,7 +16,7 @@ class MenuExtension extends AbstractExtension
 {
     public function __construct(
         private readonly BuilderInterface $builder,
-        private readonly WebsiteInterface $website
+        private readonly WebsiteInterface $website,
     ) {
     }
 

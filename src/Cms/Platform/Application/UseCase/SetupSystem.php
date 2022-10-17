@@ -18,7 +18,7 @@ use Tulia\Cms\User\Application\UseCase\CreateUserRequest;
 use Tulia\Cms\Website\Application\UseCase\UpdateWebsite;
 use Tulia\Cms\Website\Application\UseCase\UpdateWebsiteRequest;
 use Tulia\Component\Importer\ImporterInterface;
-use Tulia\Component\Routing\Website\WebsiteRegistryInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteRegistryInterface;
 
 /**
  * @author Adam Banaszkiewicz

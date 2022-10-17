@@ -13,3 +13,6 @@ services:
 
     Tulia\Cms\Shared\Infrastructure\Mail\MailerConfigurationProviderInterface:
         class: Tulia\Cms\Options\Infrastructure\Mailer\OptionsAwareMailerConfigurationProvider
+
+    Tulia\Cms\Options\Domain\ReadModel\Options:
+        lazy: true

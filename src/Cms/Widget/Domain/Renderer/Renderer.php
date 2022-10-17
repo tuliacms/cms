@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Widget\Domain\Renderer;
 
+use Tulia\Cms\Platform\Infrastructure\Framework\Theme\ThemeViewOverwriteProducer;
 use Tulia\Cms\Widget\Domain\Catalog\Configuration\ArrayConfiguration;
 use Tulia\Cms\Widget\Domain\Catalog\Registry\WidgetRegistryInterface;
 use Tulia\Cms\Widget\Domain\Catalog\Storage\StorageInterface;
@@ -15,15 +16,13 @@ use Tulia\Component\Templating\EngineInterface;
 class Renderer implements RendererInterface
 {
     public function __construct(
-        private StorageInterface $storage,
-        private WidgetRegistryInterface $registry,
-        private EngineInterface $engine,
+        private readonly StorageInterface $storage,
+        private readonly WidgetRegistryInterface $registry,
+        private readonly EngineInterface $engine,
+        private readonly ThemeViewOverwriteProducer $overwriteProducer,
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function forId(string $id, string $websiteId, string $locale): string
     {
         $widget = $this->storage->findById($id, $websiteId, $locale);
@@ -41,9 +40,6 @@ class Renderer implements RendererInterface
         return $this->render($widget, $websiteId, $locale);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function forSpace(string $space, string $websiteId, string $locale): string
     {
         $widgets = $this->storage->findBySpace($space, $websiteId, $locale);
@@ -80,11 +76,13 @@ class Renderer implements RendererInterface
         $config->set('website_id', $websiteId);
         $config->merge($data['attributes']);
 
-        $view = $widget->render($config);
+        $widgetView = $widget->render($config);
 
-        if (! $view) {
+        if (! $widgetView) {
             return '';
         }
+
+        $widgetView->setViews($this->overwriteProducer->produce('widget', $widgetView->getViews()));
 
         $classes = 'widget-item';
         $classes .= ' widget-item-outer';
@@ -105,13 +103,13 @@ class Renderer implements RendererInterface
             $attributes['id'] = $data['html_id'];
         }
 
-        $view->addData([
+        $widgetView->addData([
             'config' => $config,
             'widgetTitle' => $data['title'],
             'widgetAttributes' => $attributes,
         ]);
 
-        return $this->engine->render($view);
+        return $this->engine->render($widgetView);
     }
 
     private function prepareWidgetData(array $widget): array

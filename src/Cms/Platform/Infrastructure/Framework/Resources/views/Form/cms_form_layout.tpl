@@ -2,6 +2,7 @@
 
 {%- block choice_widget_collapsed -%}
     {%- set attr = attr|merge({class: (attr.class|default('') ~ ' form-select-custom')|trim}) -%}
+    {%- set attr = attr|merge({'data-placeholder': 'selectOption'|trans}) -%}
     {{- parent() -}}
 {%- endblock choice_widget_collapsed -%}
 

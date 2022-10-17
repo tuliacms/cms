@@ -23,7 +23,7 @@ use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
 use Tulia\Cms\User\Infrastructure\Persistence\Dbal\ReadModel\DbalDatatableFinder;
 use Tulia\Cms\User\UserInterface\Web\Form\UserDetailsForm;
 use Tulia\Component\Datatable\DatatableFactory;
-use Tulia\Component\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
 
 /**
@@ -32,9 +32,9 @@ use Tulia\Component\Templating\ViewInterface;
 class User extends AbstractController
 {
     public function __construct(
-        private ContentFormService $contentFormService,
-        private UserRepositoryInterface $repository,
-        private SymfonyFieldBuilder $fieldBuilder
+        private readonly ContentFormService $contentFormService,
+        private readonly UserRepositoryInterface $repository,
+        private readonly SymfonyFieldBuilder $fieldBuilder,
     ) {
     }
 

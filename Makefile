@@ -1,6 +1,6 @@
 .PHONY: bash behat deptrac
 
-PHPROOT = docker exec -it --user "$(id -u):$(id -g)" --workdir="/var/www/html/core" tuliacms_tulia_www_1
+PHPROOT = docker exec -it --user "$(id -u):$(id -g)" --workdir="/var/www/html/core" tuliacms-tulia_www-1
 ARGS = $(filter-out $@,$(MAKECMDGOALS))
 
 .PHONY: bash

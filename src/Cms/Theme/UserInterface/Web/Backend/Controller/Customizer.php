@@ -22,7 +22,7 @@ use Tulia\Cms\Theme\Application\UseCase\ResetThemeCustomization;
 use Tulia\Cms\Theme\Application\UseCase\ResetThemeCustomizationRequest;
 use Tulia\Cms\Theme\Application\UseCase\SaveChangeset;
 use Tulia\Cms\Theme\Application\UseCase\SaveChangesetRequest;
-use Tulia\Component\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
 use Tulia\Component\Theme\Customizer\Builder\BuilderInterface;
 use Tulia\Component\Theme\Customizer\Changeset\PredefinedChangesetRegistry;
@@ -81,7 +81,7 @@ class Customizer extends AbstractController
 
             $previewUrl = $parsed['path'] . '?' . http_build_query($parsed['query']);
         } else {
-            $previewUrl = $this->generateUrl('homepage', $parameters);
+            $previewUrl = $this->generateUrl('frontend.homepage', $parameters);
         }
 
         return $this->view('@backend/theme/customizer/customize.tpl', [

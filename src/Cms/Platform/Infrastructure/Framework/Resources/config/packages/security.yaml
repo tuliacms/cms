@@ -33,25 +33,19 @@ security:
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 604800
-        main:
+        frontend:
             stateless: false
             context: backend_context
             lazy: true
             provider: tulia_chain_user_provider
             request_matcher: Tulia\Cms\Security\Framework\Security\RequestMatcher\FrontendRequestMatcher
             logout:
-                path: logout
-                target: homepage
+                path: frontend.logout
+                target: frontend.homepage
                 invalidate_session: true
             form_login:
-                login_path: login
+                login_path: frontend.login
                 enable_csrf: true
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 604800
-
-    access_control:
-        - { path: ^/auth, roles: PUBLIC_ACCESS }
-        - { path: ^/profile, roles: ROLE_USER }
-        - { path: ^/administrator/auth, roles: PUBLIC_ACCESS }
-        - { path: ^/administrator, roles: ROLE_ADMIN }

@@ -6,16 +6,16 @@
             <div class="pane-header">
                 <div class="pane-buttons">
                     <div class="dropdown">
-                        <button class="btn btn-icon-only" type="button" data-bs-toggle="dropdown">
-                            <i class="btn-icon fas fa-ellipsis-v"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            {% if block('dropdown') is defined %}
+                        {% if block('dropdown') is defined %}
+                            <button class="btn btn-icon-only" type="button" data-bs-toggle="dropdown">
+                                <i class="btn-icon fas fa-ellipsis-v"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
                                 {{ block('dropdown') }}
-                            {% else %}
-                                {{ hideThisWidget|raw }}
-                            {% endif %}
-                        </div>
+                            </div>
+                        {#{% else %}
+                            {{ hideThisWidget|raw }}#}
+                        {% endif %}
                     </div>
                 </div>
                 <i class="pane-header-icon {{ icon|default('fas fa-box')|raw }}"></i>

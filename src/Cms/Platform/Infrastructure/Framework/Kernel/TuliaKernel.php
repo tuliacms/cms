@@ -9,7 +9,6 @@ use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
-use Tulia\Component\Routing\Website\WebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -18,24 +17,16 @@ final class TuliaKernel extends Kernel
 {
     use MicroKernelTrait;
 
-    private WebsiteInterface $website;
-
-    public function __construct(string $environment, bool $debug, WebsiteInterface $website)
-    {
-        parent::__construct($environment, $debug);
-        $this->website = $website;
-    }
-
-    protected function initializeContainer(): void
-    {
-        parent::initializeContainer();
-
-        $this->container->set(WebsiteInterface::class, $this->website);
-    }
-
     public function getProjectDir(): string
     {
         return __TULIA_PROJECT_DIR;
+    }
+
+    public function boot(): void
+    {
+        parent::boot();
+
+        date_default_timezone_set($this->getContainer()->getParameter('timezone'));
     }
 
     public function getPublicDir(): string
@@ -45,7 +36,7 @@ final class TuliaKernel extends Kernel
 
     public function registerBundles(): iterable
     {
-        $contents = require dirname(__DIR__) . '/Resources/config/bundles.php';
+        $contents = require $this->getConfigDir() . '/bundles.php';
 
         foreach ($contents as $class => $envs) {
             if ($envs[$this->environment] ?? $envs['all'] ?? false) {
@@ -60,6 +51,7 @@ final class TuliaKernel extends Kernel
 
         $dirs = [
             $base . '/Platform/Infrastructure/Framework/Resources/config',
+            $this->getProjectDir() . '/config',
             $base . '/Activity/Framework/Resources/config',
             $base . '/BackendMenu/Framework/Resources/config',
             $base . '/BodyClass/Framework/Resources/config',
@@ -69,7 +61,6 @@ final class TuliaKernel extends Kernel
             $base . '/Filemanager/Infrastructure/Framework/Resources/config',
             $base . '/FrontendToolbar/Framework/Resources/config',
             $base . '/Homepage/Infrastructure/Framework/Resources/config',
-            //$base . '/Installator/Infrastructure/Framework/Resources/config',
             $base . '/Menu/Infrastructure/Framework/Resources/config',
             $base . '/Node/Infrastructure/Internal/Framework/Resources/config',
             $base . '/Options/Infrastructure/Framework/Resources/config',

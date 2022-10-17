@@ -6,7 +6,7 @@ namespace Tulia\Cms\Website\UserInterface\Web\Service;
 
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
-use Tulia\Component\Routing\Enum\SslModeEnum;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\SslModeEnum;
 
 /**
  * @author Adam Banaszkiewicz

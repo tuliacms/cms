@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Theme\Infrastructure\Framework\Theme\Activator;
 
-use Tulia\Cms\Platform\Domain\Service\DynamicConfigurationInterface;
+use Tulia\Cms\Options\Domain\WriteModel\OptionsRepositoryInterface;
 use Tulia\Component\Theme\Activator\ActivatorInterface;
 use Tulia\Component\Theme\Exception\MissingThemeException;
 use Tulia\Component\Theme\Storage\StorageInterface;
@@ -16,7 +16,7 @@ class Activator implements ActivatorInterface
 {
     public function __construct(
         private readonly StorageInterface $storage,
-        private readonly DynamicConfigurationInterface $configuration,
+        private readonly OptionsRepositoryInterface $options,
     ) {
     }
 
@@ -26,12 +26,8 @@ class Activator implements ActivatorInterface
             throw new MissingThemeException(sprintf('Theme %s not found in storage.', $name));
         }
 
-        $this->configuration->open();
-
-        $themes = $this->configuration->get('cms.theme');
-        $themes[$websiteId] = $name;
-
-        $this->configuration->set('cms.theme', $themes);
-        $this->configuration->write();
+        $option = $this->options->get('theme', $websiteId);
+        $option->setValue($name);
+        $this->options->save($option);
     }
 }

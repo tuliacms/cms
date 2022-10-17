@@ -11,7 +11,7 @@ class Locale
 {
     protected string $code;
     protected string $domain;
-    protected ?string $developmentDomain = null;
+    protected string $developmentDomain;
     protected ?string $localePrefix = null;
     protected ?string $pathPrefix = null;
     protected string $sslMode;
@@ -20,7 +20,7 @@ class Locale
     public function __construct(
         string $code,
         string $domain,
-        ?string $developmentDomain = null,
+        string $developmentDomain,
         ?string $localePrefix = null,
         ?string $pathPrefix = null,
         string $sslMode = 'ALLOWED_BOTH',
@@ -33,6 +33,19 @@ class Locale
         $this->pathPrefix = $pathPrefix;
         $this->sslMode = $sslMode;
         $this->isDefault = $isDefault;
+    }
+
+    public static function fromArray(array $data = []): self
+    {
+        return new self(
+            $data['code'],
+            $data['domain'],
+            $data['development_domain'],
+            $data['locale_prefix'] ?? null,
+            $data['path_prefix'] ?? null,
+            $data['ssl_mode'] ?? 'ALLOWED_BOTH',
+            (bool) ($data['is_default'] ?? true),
+        );
     }
 
     public function __toString(): string
@@ -75,7 +88,7 @@ class Locale
         return $this->isDefault;
     }
 
-    public function getDevelopmentDomain(): ?string
+    public function getDevelopmentDomain(): string
     {
         return $this->developmentDomain;
     }

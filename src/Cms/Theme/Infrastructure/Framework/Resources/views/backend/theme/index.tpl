@@ -63,7 +63,7 @@
                                 {% if theme.name == item.name %}
                                     <a href="{{ path('backend.theme.customize') }}" class="btn btn-sm btn-primary my-3">{{ 'customize'|trans({}, 'themes') }}</a>
                                 {% endif %}
-                                {% if development and theme.name != item.name %}
+                                {% if theme.name != item.name %}
                                     <form action="{{ path('backend.theme.activate') }}" method="POST" class="d-inline-block">
                                         <input type="hidden" novalidate="novalidate" name="_token" value="{{ csrf_token('theme.activate') }}" />
                                         <input type="hidden" name="theme" value="{{ item.name }}" />

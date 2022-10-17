@@ -1,0 +1,22 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Tulia\Cms\Website\Domain\WriteModel\Model\Locale" table="#__website_locale">
+        <id name="id" type="uuid">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+
+        <field name="code" length="12"/>
+        <field name="domain" nullable="true"/>
+        <field name="domainDevelopment"/>
+        <field name="localePrefix" nullable="true"/>
+        <field name="pathPrefix" nullable="true"/>
+        <field name="sslMode" length="16"/>
+        <field name="isDefault" type="boolean"/>
+
+        <many-to-one field="website" target-entity="Tulia\Cms\Website\Domain\WriteModel\Model\Website" inversed-by="locales"/>
+    </entity>
+</doctrine-mapping>

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Application\UseCase;
 
+use Tulia\Cms\Shared\Application\UseCase\AbstractTransactionalUseCase;
 use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
 use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
@@ -14,15 +15,14 @@ use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-final class UpdateUser extends AbstractUserUseCase
+final class UpdateUser extends AbstractTransactionalUseCase
 {
     public function __construct(
-        UserRepositoryInterface $repository,
-        EventBusInterface $eventDispatcher,
-        private UploaderInterface $uploader,
-        private PasswordHasherInterface $passwordHasher
+        private readonly UserRepositoryInterface $repository,
+        private readonly EventBusInterface $eventDispatcher,
+        private readonly UploaderInterface $uploader,
+        private readonly PasswordHasherInterface $passwordHasher,
     ) {
-        parent::__construct($repository, $eventDispatcher);
     }
 
     /**
@@ -55,7 +55,8 @@ final class UpdateUser extends AbstractUserUseCase
             $user->changeAvatar($this->uploader->upload($request->avatar));
         }
 
-        $this->update($user);
+        $this->repository->save($user);
+        $this->eventDispatcher->dispatchCollection($user->collectDomainEvents());
 
         return null;
     }

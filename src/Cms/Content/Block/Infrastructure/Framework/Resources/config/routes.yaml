@@ -1,5 +1,5 @@
 backend.content.block.panel.builder:
-    path: /administrator/content/block/panel/{type}/builder
+    path: /content/block/panel/{type}/builder
     controller: Tulia\Cms\Content\Block\UserInterface\Web\Backend\Controller\BlockPanel::index
     methods: [POST]
     requirements:

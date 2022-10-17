@@ -6,7 +6,7 @@ namespace Tulia\Cms\Widget\Infrastructure\Framework\Twig\Extension;
 
 use Tulia\Cms\Widget\Domain\Catalog\Storage\StorageInterface;
 use Tulia\Cms\Widget\Domain\Renderer\RendererInterface;
-use Tulia\Component\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 

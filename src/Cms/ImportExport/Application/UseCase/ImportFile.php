@@ -8,7 +8,7 @@ use Tulia\Cms\Shared\Application\UseCase\AbstractTransactionalUseCase;
 use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
 use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
 use Tulia\Component\Importer\ImporterInterface;
-use Tulia\Component\Routing\Website\WebsiteRegistryInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteRegistryInterface;
 
 /**
  * @author Adam Banaszkiewicz

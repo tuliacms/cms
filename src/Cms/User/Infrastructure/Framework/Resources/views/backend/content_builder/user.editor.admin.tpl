@@ -17,7 +17,7 @@
     {% block sidebar_accordion %}
         <div class="accordion-section">
             <div class="accordion-section-button" data-bs-toggle="collapse" data-bs-target="#form-collapse-sidebar-details">
-                {{ 'details'|trans }}
+                {{ 'details'|trans({}, 'users') }}
             </div>
             <div id="form-collapse-sidebar-details" class="accordion-collapse collapse show">
                 <div class="accordion-section-body">
@@ -53,6 +53,7 @@
                 <div class="row">
                     <div class="col">
                         {{ form_row(userDetailsForm.password) }}
+                        {% include '@backend/user/user/parts/password-complexity.tpl' %}
                         {{ form_row(userDetailsForm.enabled) }}
                         {{ form_row(userDetailsForm.roles) }}
                     </div>

@@ -8,7 +8,6 @@ imports:
     - { resource: services/importer.yaml }
     - { resource: services/mailer.yaml }
     - { resource: services/platform.yaml }
-    - { resource: services/routing.yaml }
     - { resource: services/shortcode.yaml }
     - { resource: services/templating.yaml }
     - { resource: services/theme.yaml }

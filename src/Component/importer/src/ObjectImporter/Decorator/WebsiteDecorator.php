@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Component\Importer\ObjectImporter\Decorator;
 
 use Tulia\Component\Importer\ObjectImporter\ObjectImporterInterface;
-use Tulia\Component\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 use Tulia\Component\Importer\ObjectImporter\Traits\WebsiteAwareTrait;
 
 /**

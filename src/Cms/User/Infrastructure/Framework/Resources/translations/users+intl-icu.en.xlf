@@ -171,6 +171,34 @@
                 <source>userAvatar</source>
                 <target>User avatar</target>
             </trans-unit>
+            <trans-unit id="tuliacms.users.42">
+                <source>details</source>
+                <target>Details</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.43">
+                <source>passwordComplexityRequirements</source>
+                <target>Password requirements:</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.44">
+                <source>passwordMimimumLength</source>
+                <target>Minimum password length: {num}</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.45">
+                <source>passwordMimimumDigits</source>
+                <target>Minimum digits: {num}</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.46">
+                <source>passwordMimimumSpecialCharacters</source>
+                <target>Minimum special chars: {num}</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.47">
+                <source>passwordMimimumBigLetters</source>
+                <target>Minimum BIG letters: {num}</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.48">
+                <source>passwordMimimumSmallLetters</source>
+                <target>Minimum small letters: {num}</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

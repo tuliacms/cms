@@ -20,7 +20,7 @@ use Tulia\Cms\Theme\Application\UseCase\UninstallThemeRequest;
 use Tulia\Cms\Theme\Domain\WriteModel\Service\ThemeImportCollectionRegistry;
 use Tulia\Cms\Theme\UserInterface\Web\Backend\Form\ThemeInstallatorForm;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
-use Tulia\Component\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
 use Tulia\Component\Theme\ManagerInterface;
 

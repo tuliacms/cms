@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\User\Infrastructure\Framework\Twig\Extension;
 
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
+use Tulia\Cms\User\Infrastructure\Framework\Validator\PasswordValidatorInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -14,16 +15,25 @@ use Twig\TwigFunction;
 class UserExtension extends AbstractExtension
 {
     public function __construct(
-        private readonly AuthenticatedUserProviderInterface $authenticatedUserProvider
+        private readonly AuthenticatedUserProviderInterface $authenticatedUserProvider,
+        private readonly PasswordValidatorInterface $passwordValidator,
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFunctions(): array
     {
         return [
+            new TwigFunction('user_password_complexity', function () {
+                return [
+                    'minLength' => $this->passwordValidator->getMinLength(),
+                    'minDigits' => $this->passwordValidator->getMinDigits(),
+                    'minSpecialChars' => $this->passwordValidator->getMinSpecialChars(),
+                    'minBigLetters' => $this->passwordValidator->getMinBigLetters(),
+                    'minSmallLetters' => $this->passwordValidator->getMinSmallLetters(),
+                ];
+            }, [
+                'is_safe' => [ 'html' ]
+            ]),
             new TwigFunction('user', function () {
                 return $this->authenticatedUserProvider->getUser();
             }, [

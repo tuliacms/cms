@@ -76,7 +76,7 @@ class SymfonyRouter implements RouterInterface, RequestMatcherInterface
         }
 
         // @todo Fix routing locales
-        $locale = 'en_US';//$this->getContext()->getParameter('_content_locale'),
+        $locale = 'en_US';//$this->getContext()->getParameter('_locale'),
         [, $type, $identity] = explode('.', $name);
 
         $path = $this->storage->findPathByTermId($identity, $locale)['path'] ?? null;
@@ -97,7 +97,7 @@ class SymfonyRouter implements RouterInterface, RequestMatcherInterface
         $pathinfo = urldecode($pathinfo);
         $pathinfo = $this->frontendRouteSuffixResolver->removeSuffix($pathinfo);
         // @todo Fix routing locales
-        $locale = 'en_US';//$this->getContext()->getParameter('_content_locale'),
+        $locale = 'en_US';//$this->getContext()->getParameter('_locale'),
         $termId = $this->storage->findTermIdByPath($pathinfo, $locale);
 
         if ($termId === null) {

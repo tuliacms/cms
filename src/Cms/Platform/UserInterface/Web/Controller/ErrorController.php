@@ -8,9 +8,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
-use Tulia\Component\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Component\Templating\View;
+use Tulia\Component\Theme\ManagerInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -20,6 +21,7 @@ final class ErrorController extends AbstractController
     public function __construct(
         private readonly string $environment,
         private readonly EngineInterface $engine,
+        private readonly ManagerInterface $manager,
     ) {
     }
 
@@ -31,7 +33,7 @@ final class ErrorController extends AbstractController
                     $view = '@backend/error-404.tpl';
                     $code = Response::HTTP_NOT_FOUND;
                 } else {
-                    $view = '@theme/404.tpl';
+                    $view = $this->manager->getTheme()->getViewsDirectory().'/404.tpl';
                     $code = Response::HTTP_NOT_FOUND;
                 }
 

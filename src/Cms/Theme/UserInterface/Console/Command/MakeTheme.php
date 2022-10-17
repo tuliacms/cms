@@ -9,7 +9,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Tulia\Cms\Platform\Domain\Service\DynamicConfigurationInterface;
 use Tulia\Cms\Platform\Version;
 use Tulia\Cms\Theme\UserInterface\Console\Command\Traits\MakerFilesManagementTrait;
 use Tulia\Cms\Theme\UserInterface\Console\Command\Traits\ThemeQuestionableTrait;
@@ -29,7 +28,6 @@ final class MakeTheme extends Command
         private readonly ManagerInterface $themeManager,
         private readonly string $filesTemplates,
         private readonly string $themesDir,
-        private readonly DynamicConfigurationInterface $configuration,
     ){
         parent::__construct();
     }
@@ -61,9 +59,7 @@ final class MakeTheme extends Command
         $io->writeln('<fg=gray>Generating files...</>');
         $this->writeFiles($filesList, $this->themesDir.'/'.$themeName);
 
-        // Refresh cache by touch dynamic config file
-        $this->configuration->open();
-        $this->configuration->write();
+        // @todo Refresh cache, when new Theme was added
 
         $io->writeln('<info>Theme generated. Next steps:</info>');
         $io->writeln('   1. Activate Your theme in Administration Panel');

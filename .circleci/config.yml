@@ -4,7 +4,7 @@ orbs:
 jobs:
     test:
         docker:
-            - image: cimg/php:7.4.26
+            - image: cimg/php:8.1.11
         working_directory: ~/tuliacms/cms
         steps:
             - checkout

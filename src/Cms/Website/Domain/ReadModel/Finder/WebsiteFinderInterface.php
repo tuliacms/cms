@@ -13,4 +13,6 @@ interface WebsiteFinderInterface
 {
     /** @return Website[] */
     public function all(): array;
+
+    public function get(string $id): Website;
 }

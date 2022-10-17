@@ -184,10 +184,10 @@ Tulia.Form = function (form, options) {
         $('body').on('click', 'a', function (e) {
             let a = $(this);
 
-            if(self.isValidLink(a) && self.isPrevented(a) === false)
-            {
-                if(self.controls == self.form.serialize())
+            if (self.isValidLink(a) && self.isPrevented(a) === false) {
+                if (self.controls === self.form.serialize()) {
                     return;
+                }
 
                 e.preventDefault();
 
@@ -195,8 +195,9 @@ Tulia.Form = function (form, options) {
                     title: 'Unsaved form!',
                     text: 'Do You want cancel form?'
                 }).then(function (result) {
-                    if(result.value)
+                    if (result.value) {
                         document.location.href = a.prop('href');
+                    }
                 });
             }
         });
