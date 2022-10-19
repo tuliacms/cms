@@ -14,21 +14,12 @@ use Twig\TwigFunction;
  */
 class BreadcrumbsExtension extends AbstractExtension
 {
-    protected BreadcrumbsGeneratorInterface $generator;
-
-    protected DocumentInterface $document;
-
     public function __construct(
-        BreadcrumbsGeneratorInterface $generator,
-        DocumentInterface $document
+        private readonly BreadcrumbsGeneratorInterface $generator,
+        private readonly DocumentInterface $document,
     ) {
-        $this->generator = $generator;
-        $this->document  = $document;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFunctions(): array
     {
         return [

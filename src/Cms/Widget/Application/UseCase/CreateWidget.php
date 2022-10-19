@@ -18,8 +18,8 @@ use Tulia\Cms\Widget\Domain\WriteModel\WidgetRepositoryInterface;
 final class CreateWidget extends AbstractTransactionalUseCase
 {
     public function __construct(
-        private WidgetRepositoryInterface $repository,
-        private EventBusInterface $eventBus
+        private readonly WidgetRepositoryInterface $repository,
+        private readonly EventBusInterface $eventBus,
     ) {
     }
 

@@ -16,8 +16,8 @@ use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 final class UpdateMenuItem extends AbstractTransactionalUseCase
 {
     public function __construct(
-        private MenuRepositoryInterface $repository,
-        private EventBusInterface $eventBus
+        private readonly MenuRepositoryInterface $repository,
+        private readonly EventBusInterface $eventBus,
     ) {
     }
 

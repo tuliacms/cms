@@ -51,6 +51,10 @@
             selectImage: '{{ 'selectImage'|trans({}, 'tulia-editor') }}',
             nextSlide: '{{ 'nextSlide'|trans({}, 'tulia-editor') }}',
             prevSlide: '{{ 'prevSlide'|trans({}, 'tulia-editor') }}',
+            editMap: '{{ 'editMap'|trans({}, 'tulia-editor') }}',
+            finishMapEditing: '{{ 'finishMapEditing'|trans({}, 'tulia-editor') }}',
+            mapHeight: '{{ 'mapHeight'|trans({}, 'tulia-editor') }}',
+            mapZoom: '{{ 'mapZoom'|trans({}, 'tulia-editor') }}',
         });
 
         let structureSelector = '.tulia-editor-structure-field[data-tulia-editor-group-id="{{ params.group_id }}"]';

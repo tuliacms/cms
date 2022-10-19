@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Filemanager\Domain\Shortcode;
+namespace Tulia\Cms\Filemanager\Infrastructure\Cms\Shortcode;
 
 use Tulia\Component\Shortcode\Compiler\ShortcodeCompilerInterface;
 use Tulia\Component\Shortcode\ShortcodeInterface;
@@ -10,7 +10,7 @@ use Tulia\Component\Shortcode\ShortcodeInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-class Gallery implements ShortcodeCompilerInterface
+class GalleryShortcode implements ShortcodeCompilerInterface
 {
     public function compile(ShortcodeInterface $shortcode): string
     {

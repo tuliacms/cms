@@ -9,15 +9,17 @@ export default class ElementsInstantiator {
     controls;
     structureManipulator;
     contextmenu;
+    assets;
     instances = {};
 
-    constructor (options, messenger, extensions, controls, structureManipulator, contextmenu) {
+    constructor (options, messenger, extensions, controls, structureManipulator, contextmenu, assets) {
         this.options = options;
         this.messenger = messenger;
         this.extensions = extensions;
         this.controls = controls;
         this.structureManipulator = structureManipulator;
         this.contextmenu = contextmenu;
+        this.assets = assets;
     }
 
     instantiator (type) {
@@ -67,6 +69,7 @@ export default class ElementsInstantiator {
             this.controls,
             this.structureTraversator(type, element.id, segment),
             this.contextmenu,
+            this.assets,
         ];
 
         let instance;

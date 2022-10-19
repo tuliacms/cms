@@ -12,9 +12,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class SubmitType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -25,9 +22,6 @@ class SubmitType extends AbstractType
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBlockPrefix(): string
     {
         return 'tulia_submit';

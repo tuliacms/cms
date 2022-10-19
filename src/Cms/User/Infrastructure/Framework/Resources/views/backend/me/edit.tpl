@@ -11,7 +11,9 @@
     <li class="breadcrumb-item active" aria-current="page">{{ 'editAccount'|trans({}, 'users') }}</li>
 {% endblock %}
 
-{% block page_buttons %}{{ form_row(formDescriptor.formView.save) }}{% endblock %}
+{% block page_buttons %}
+    <a href="#" data-submit-form="{{ formDescriptor.formView.vars.id }}" class="btn btn-success btn-icon-left"><i class="btn-icon fas fa-save"></i> {{ 'save'|trans({}, 'messages') }}</a>
+{% endblock %}
 
 {% block mainContent %}
     <div class="form-controls-terminator">

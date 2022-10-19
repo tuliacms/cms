@@ -162,6 +162,22 @@
                 <source>prevSlide</source>
                 <target>Previous slide</target>
             </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.41">
+                <source>editMap</source>
+                <target>Edit map</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.42">
+                <source>finishMapEditing</source>
+                <target>Finish editing</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.43">
+                <source>mapHeight</source>
+                <target>Map height</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.44">
+                <source>mapZoom</source>
+                <target>Map zoom</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

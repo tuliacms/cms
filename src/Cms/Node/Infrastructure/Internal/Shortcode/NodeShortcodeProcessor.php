@@ -13,7 +13,7 @@ use Tulia\Component\Shortcode\ProcessorInterface;
 final class NodeShortcodeProcessor implements ShortcodeProcessorInterface
 {
     public function __construct(
-        private ProcessorInterface $processor
+        private readonly ProcessorInterface $processor,
     ) {
     }
 

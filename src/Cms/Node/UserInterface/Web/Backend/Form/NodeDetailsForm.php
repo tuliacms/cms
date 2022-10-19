@@ -116,15 +116,6 @@ final class NodeDetailsForm extends AbstractType
                 ]
             ]);
         }
-
-        $builder
-            ->add('cancel', CancelType::class, [
-                'route' => 'backend.node.list',
-                'route_params' => [
-                    'node_type' => $contentType->getCode(),
-                ],
-            ])
-            ->add('save', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

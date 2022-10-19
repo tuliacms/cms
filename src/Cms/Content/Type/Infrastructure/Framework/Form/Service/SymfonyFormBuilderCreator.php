@@ -14,8 +14,6 @@ use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\Field;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ConstraintsBuilder;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\FieldTypeMappingRegistry;
-use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\CancelType;
-use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\SubmitType;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 
 /**
@@ -117,13 +115,6 @@ class SymfonyFormBuilderCreator
                 );
             }
         }
-
-        $builder
-            ->add('cancel', CancelType::class, [
-                // @todo Configure back button URL
-                'route' => 'backend.widget',
-            ])
-            ->add('save', SubmitType::class);
     }
 
     /**

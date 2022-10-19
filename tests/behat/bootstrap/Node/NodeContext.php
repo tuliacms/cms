@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Tests\Behat\Node;
 
-use Assert;
+use Tulia\Cms\Tests\Behat\Assert;
 use Behat\Behat\Context\Context;
-use Behat\Behat\Tester\Exception\PendingException;
 use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeDeleted;
 use Tulia\Cms\Node\Domain\WriteModel\Event\PurposesUpdated;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\CannotDeleteNodeException;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\CannotImposePurposeToNodeException;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
-use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\Author;
 use Tulia\Cms\Node\Domain\WriteModel\Rules\CanAddPurpose\AlwaysTrueCanImposePurpose;
 use Tulia\Cms\Node\Domain\WriteModel\Rules\CanAddPurpose\CanImposePurpose;
 use Tulia\Cms\Node\Domain\WriteModel\Rules\CanDeleteNode\CanDeleteNode;

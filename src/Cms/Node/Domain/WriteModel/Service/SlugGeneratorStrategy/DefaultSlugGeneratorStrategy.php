@@ -13,8 +13,8 @@ use Tulia\Cms\Shared\Domain\WriteModel\Service\SluggerInterface;
 final class DefaultSlugGeneratorStrategy implements SlugGeneratorStrategyInterface
 {
     public function __construct(
-        private SluggerInterface $slugger,
-        private NodeSlugUniquenessInterface $nodeSlugUniqueness
+        private readonly SluggerInterface $slugger,
+        private readonly NodeSlugUniquenessInterface $nodeSlugUniqueness,
     ) {
     }
 
@@ -40,7 +40,7 @@ final class DefaultSlugGeneratorStrategy implements SlugGeneratorStrategyInterfa
         ?string $locale,
     ): string {
         $securityLoop  = 0;
-        $slugGenerated = $this->slugger->url($slug);
+        $slugGenerated = (string) $this->slugger->url($slug);
 
         while ($securityLoop <= 100) {
             $slugProposed = $slugGenerated;

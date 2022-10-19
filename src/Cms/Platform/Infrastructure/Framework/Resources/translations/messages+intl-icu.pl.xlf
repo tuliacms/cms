@@ -602,6 +602,10 @@
                 <source>websites</source>
                 <target>Strony</target>
             </trans-unit>
+            <trans-unit id="tuliacms.messages.151">
+                <source>publish</source>
+                <target>Opublikuj</target>
+            </trans-unit>
             <trans-unit id="tuliacms.messages.162">
                 <source>languages</source>
                 <target>Języki</target>

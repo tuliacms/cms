@@ -20,21 +20,12 @@ use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderInterface;
  */
 class CrumbsResolver implements BreadcrumbsResolverInterface
 {
-    protected RouterInterface $router;
-    protected ContentTypeRegistryInterface $contentTypeRegistry;
-    protected NodeFinderInterface $nodeFinder;
-    protected TermFinderInterface $termFinder;
-
     public function __construct(
-        RouterInterface $router,
-        ContentTypeRegistryInterface $contentTypeRegistry,
-        NodeFinderInterface $nodeFinder,
-        TermFinderInterface $termFinder
+        private readonly RouterInterface $router,
+        private readonly ContentTypeRegistryInterface $contentTypeRegistry,
+        private readonly NodeFinderInterface $nodeFinder,
+        private readonly TermFinderInterface $termFinder,
     ) {
-        $this->router = $router;
-        $this->contentTypeRegistry = $contentTypeRegistry;
-        $this->nodeFinder = $nodeFinder;
-        $this->termFinder = $termFinder;
     }
 
     public function findRootCrumb(Request $request): ?Crumb
@@ -46,9 +37,9 @@ class CrumbsResolver implements BreadcrumbsResolverInterface
             return null;
         }
 
-        return strncmp($route, 'node.', 5) === 0
+        return strncmp($route, 'frontend.node.', 14) === 0
             && $node instanceof Node
-            ? new Crumb($route, [ sprintf('node.%s', $node->getId()) ], $node)
+            ? new Crumb($route, [ $this->generateRoute($node->getType(), $node->getId()) ], $node)
             : null;
     }
 
@@ -57,7 +48,7 @@ class CrumbsResolver implements BreadcrumbsResolverInterface
         /** @var Node $node */
         $node = $crumb->getContext();
 
-        $breadcrumbs->unshift($this->router->generate('node_' . $node->getId()), $node->getTitle());
+        $breadcrumbs->unshift($this->router->generate($this->generateRoute($node->getType(), $node->getId())), $node->getTitle());
 
         if ($this->contentTypeRegistry->has($node->getType())) {
             $type = $this->contentTypeRegistry->get($node->getType());
@@ -101,10 +92,15 @@ class CrumbsResolver implements BreadcrumbsResolverInterface
         foreach ($nodes as $parent) {
             $breadcrumbs->unshift(
                 $this->router->generate(
-                    sprintf('node.%s.%s', $parent->getType(), $parent->getId())
+                    $this->generateRoute($parent->getType(), $parent->getId())
                 ),
                 $parent->getTitle()
             );
         }
+    }
+
+    private function generateRoute(string $type, string $id): string
+    {
+        return sprintf('frontend.node.%s.%s', $type, $id);
     }
 }

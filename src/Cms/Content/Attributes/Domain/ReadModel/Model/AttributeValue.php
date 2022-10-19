@@ -12,10 +12,7 @@ class AttributeValue implements \Stringable, \ArrayAccess, \IteratorAggregate, \
     private array $values = [];
     private bool $isRepeatable = false;
 
-    /**
-     * @param mixed $values
-     */
-    public function __construct($values)
+    public function __construct(mixed $values)
     {
         if (is_array($values) === false) {
             $values = [$values];
@@ -63,7 +60,7 @@ class AttributeValue implements \Stringable, \ArrayAccess, \IteratorAggregate, \
         return count($this->values);
     }
 
-    public function offsetExists($offset): bool
+    public function offsetExists(mixed $offset): bool
     {
         return isset($this->values[$offset]);
     }
@@ -71,17 +68,17 @@ class AttributeValue implements \Stringable, \ArrayAccess, \IteratorAggregate, \
     /**
      * @return mixed
      */
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset)
     {
         return $this->values[$offset];
     }
 
-    public function offsetSet($offset, $value): void
+    public function offsetSet(mixed $offset, $value): void
     {
         $this->values[$offset] = $value;
     }
 
-    public function offsetUnset($offset): void
+    public function offsetUnset(mixed $offset): void
     {
         unset($this->values[$offset]);
     }

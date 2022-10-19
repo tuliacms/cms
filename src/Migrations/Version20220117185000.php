@@ -97,7 +97,7 @@ CREATE TABLE `#__content_type_field_group` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `#__content_type_field_group` (`content_type_code`, `code`, `name`, `section`, `interior`, `active`, `position`) VALUES
-('page', 'section_1653933292398_398_4', 'New section...', 'main', NULL, 0, 1);
+('page', 'section_1653933292398_398_4', 'Content', 'main', NULL, 0, 1);
 EOF);
        /* $this->addSql(<<<EOF
 CREATE TABLE `#__model_change_history` (

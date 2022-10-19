@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Filemanager\Domain\Shortcode;
+namespace Tulia\Cms\Filemanager\Infrastructure\Cms\Shortcode;
 
+use Tulia\Cms\Filemanager\Domain\Generator\Html;
 use Tulia\Component\Shortcode\Compiler\ShortcodeCompilerInterface;
 use Tulia\Component\Shortcode\ShortcodeInterface;
-use Tulia\Cms\Filemanager\Domain\Generator\Html;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class Image implements ShortcodeCompilerInterface
+class ImageShortcode implements ShortcodeCompilerInterface
 {
     public function compile(ShortcodeInterface $shortcode): string
     {

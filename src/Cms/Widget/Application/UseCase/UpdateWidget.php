@@ -17,8 +17,8 @@ use Tulia\Cms\Widget\Domain\WriteModel\WidgetRepositoryInterface;
 final class UpdateWidget extends AbstractTransactionalUseCase
 {
     public function __construct(
-        private WidgetRepositoryInterface $repository,
-        private EventBusInterface $eventBus
+        private readonly WidgetRepositoryInterface $repository,
+        private readonly EventBusInterface $eventBus,
     ) {
     }
 
@@ -42,6 +42,7 @@ final class UpdateWidget extends AbstractTransactionalUseCase
 
         $widget->changeTitle($request->locale, $request->defaultLocale, $request->details['title']);
         $widget->persistAttributes($request->locale, $request->defaultLocale, $request->attributes);
+        $widget->moveToSpace($request->details['space']);
 
         $this->repository->save($widget);
         $this->eventBus->dispatchCollection($widget->collectDomainEvents());

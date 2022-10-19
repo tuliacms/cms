@@ -32,6 +32,7 @@ cms:
         - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/jquery-ui', target: '/core/jquery-ui' }
         - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/js-cookie', target: '/core/js-cookie' }
         - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/jstree', target: '/core/jstree' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/leaflet', target: '/core/leaflet' }
         - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/lodash', target: '/core/lodash' }
         - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/masonry', target: '/core/masonry' }
         - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/momentjs', target: '/core/momentjs' }
@@ -40,6 +41,7 @@ cms:
         - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/simplebar', target: '/core/simplebar' }
         - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/sweetalert2', target: '/core/sweetalert2' }
         - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/tulia-dynamic-form', target: '/core/tulia-dynamic-form' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/tulia-simplemap', target: '/core/tulia-simplemap' }
         - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/vuejs', target: '/core/vuejs' }
     assetter:
         assets:
@@ -121,6 +123,11 @@ cms:
                 scripts: [ '/assets/core/fileapi/FileAPI.html5.min.js' ]
                 priority: 500
                 group: head
+            leaflet:
+                scripts: [ '/assets/core/leaflet/leaflet.js' ]
+                styles: [ '/assets/core/leaflet/leaflet.css' ]
+                priority: 500
+                group: head
             masonry:
                 scripts: [ '/assets/core/masonry/masonry.pkgd.min.js' ]
                 priority: 500
@@ -165,6 +172,10 @@ cms:
                 scripts: [ '/assets/core/tulia-dynamic-form/tulia-dynamic-form.js' ]
                 collection: tulia-dynamic-form
                 priority: 1000
+                group: head
+            tulia.simplemap:
+                require: [ leaflet ]
+                scripts: [ '/assets/core/tulia-simplemap/tulia-simplemap.js' ]
                 group: head
             quill:
                 require: [ quill.scripts ]

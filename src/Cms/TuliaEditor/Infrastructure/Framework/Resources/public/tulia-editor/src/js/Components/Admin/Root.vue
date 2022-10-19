@@ -64,6 +64,12 @@ const saveEditor = function () {
     props.container.messenger.execute('structure.fetch').then((data) => {
         selection.resetHovered();
         selection.resetSelection();
+        data.structure.assets = assets.collect();
+
+        if (data.structure.assets.length) {
+            data.content += `[assets names="${data.structure.assets.join(',')}"]`;
+        }
+
         structure.sections = data.structure.sections;
         useCurrentStructureAsPrevious();
         props.editor.updateContent(data.structure, data.content, data.style);
@@ -256,6 +262,16 @@ const controlRegistry = new ControlRegistry(TuliaEditor.controls);
 provide('control.registry', controlRegistry);
 
 
+
+/*********
+ * Assets
+ *********/
+const Assets = require("shared/Assets/Assets.js").default;
+const assets = new Assets();
+provide('assets', assets);
+
+
+
 /*********************
  * Elements instances
  ********************/
@@ -267,6 +283,7 @@ const instantiator = new ElementsInstantiator(
     controlRegistry,
     structureManipulator,
     cx,
+    assets,
 );
 
 provide('blocks.instance', instantiator.instantiator('block'));

@@ -89,7 +89,7 @@ class Widget extends AbstractController
         $formDescriptor = $this->produceFormDescriptor($type, [], $widgetDetailsForm, $website);
         $formDescriptor->handleRequest($request);
 
-        if ($formDescriptor->isFormValid()) {
+        if ($formDescriptor->isFormValid() && $widgetDetailsForm->isValid()) {
             /** @var IdResult $result */
             $result = ($createWidget)(new CreateWidgetRequest(
                 $type,

@@ -20,8 +20,8 @@
     <div class="pane pane-lead">
         <div class="pane-header">
             <div class="pane-buttons">
-                {{ form_row(formDescriptor.formView.cancel) }}
-                {{ form_row(formDescriptor.formView.save) }}
+                <a href="{{ path('backend.node', { node_type: nodeType.code }) }}" class="btn btn-secondary btn-icon-left"><i class="btn-icon fas fa-times"></i> {{ 'cancel'|trans({}, 'messages') }}</a>
+                <a href="#" data-submit-form="{{ formDescriptor.formView.vars.id }}" class="btn btn-success btn-icon-left"><i class="btn-icon fas fa-save"></i> {{ 'publish'|trans({}, 'messages') }}</a>
             </div>
             <i class="pane-header-icon {{ nodeType.icon }}"></i>
             <h1 class="pane-title">{{ block('title') }}</h1>

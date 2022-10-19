@@ -17,3 +17,8 @@ default:
                 features: '%paths.base%/tests/behat/features/node'
             contexts:
                 - Tulia\Cms\Tests\Behat\Node\NodeContext
+        website_features:
+            paths:
+                features: '%paths.base%/tests/behat/features/website'
+            contexts:
+                - Tulia\Cms\Tests\Behat\Website\WebsiteContext

@@ -169,6 +169,11 @@ class Widget extends AbstractAggregateRoot
     {
     }
 
+    public function moveToSpace(string $space): void
+    {
+        $this->space = $space;
+    }
+
     public function persistAttributes(string $locale, string $defaultLocale, array $attributes): void
     {
         $trans = $this->translation($locale, $defaultLocale);

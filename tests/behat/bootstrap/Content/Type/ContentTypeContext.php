@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Tests\Behat\Content\Type;
 
-use Assert;
+use Tulia\Cms\Tests\Behat\Assert;
 use Behat\Behat\Context\Context;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Event\ContentTypeCreated;
