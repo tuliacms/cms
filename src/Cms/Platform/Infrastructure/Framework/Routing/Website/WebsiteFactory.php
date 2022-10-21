@@ -47,7 +47,7 @@ final class WebsiteFactory
             $locales[] = new Locale(
                 code: $locale->getCode(),
                 domain: $environment === 'dev'
-                    ? $locale->getDevelopmentDomain()
+                    ? $locale->getDomainDevelopment()
                     : $locale->getDomain(),
                 localePrefix: $locale->getLocalePrefix(),
                 pathPrefix: $locale->getPathPrefix(),
@@ -84,7 +84,7 @@ final class WebsiteFactory
                     'name' => $website->getName(),
                     'backend_prefix' => $website->getBackendPrefix(),
                     'domain' => $developmentEnvironment
-                        ? $locale->getDevelopmentDomain()
+                        ? $locale->getDomainDevelopment()
                         : $locale->getDomain(),
                     'path_prefix' => (string) $locale->getPathPrefix(),
                     'locale_prefix' => (string) $locale->getLocalePrefix(),

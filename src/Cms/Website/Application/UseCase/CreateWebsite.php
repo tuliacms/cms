@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Website\Application\UseCase;
 
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\SslModeEnum;
 use Tulia\Cms\Shared\Application\UseCase\AbstractTransactionalUseCase;
 use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
 use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
@@ -29,29 +30,17 @@ final class CreateWebsite extends AbstractTransactionalUseCase
      */
     protected function execute(RequestInterface $request): ?ResultInterface
     {
-        $this->denyIfNotDevelopmentEnvironment();
-
-        $locale = $request->locales[0];
-
         $website = Website::create(
             $this->repository->getNextId(),
             $request->name,
-            $locale['code'],
-            $locale['domain'],
-            '/administrator',
-            $locale['domain_development'],
-            $locale['path_prefix'],
-            $locale['locale_prefix'],
-            $locale['ssl_mode'],
+            $request->locale,
+            $request->domain,
+            $request->backendPrefix,
+            $request->domainDevelopment,
+            $request->pathPrefix,
+            SslModeEnum::tryFrom($request->sslMode),
+            $request->active,
         );
-
-        if ($request->active) {
-            $website->turnOn();
-        } else {
-            $website->turnOff($this->canTurnOffWebsite);
-        }
-
-        $website->replaceLocales($request->locales);
 
         $this->repository->save($website);
         $this->eventBus->dispatchCollection($website->collectDomainEvents());

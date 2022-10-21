@@ -14,7 +14,7 @@ final class CannotDeleteWebsiteException extends AbstractDomainException
 {
     private function __construct(
         string $message,
-        public readonly string $reason
+        public readonly string $reason,
     ) {
         parent::__construct($message);
     }

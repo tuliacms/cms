@@ -6,18 +6,6 @@
                 <source>websites.pleaseProvideValidPathWithPrecededSlash</source>
                 <target>Podaj poprawną ścieżkę. Musi zawierać następujące znaki: [a-z, 0-9, -, _] i musi być poprzedzony ukośnikiem (jeden ukośnik na początku).</target>
             </trans-unit>
-            <trans-unit id="tuliacms.validators.2">
-                <source>websites.pleaseSelectDefaultLocale</source>
-                <target>Wybierz domyślny język dla tej witryny</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.validators.3">
-                <source>websites.thereCanBeOnlyOneDefaultLocaleButSelected</source>
-                <target>Może być tylko jeden domyślny język, wybrano {count}.</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.validators.4">
-                <source>websites.detectedDoubledLocale</source>
-                <target>Utworzyłeś wiele razy ten sam język (kod regionu: {code}) dla tej witryny. Upewnij się, że istnieje tylko jeden język jednego kodu.</target>
-            </trans-unit>
         </body>
     </file>
 </xliff>

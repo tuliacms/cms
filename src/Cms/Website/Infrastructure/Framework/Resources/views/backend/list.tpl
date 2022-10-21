@@ -1,4 +1,6 @@
 {% extends 'backend' %}
+{% assets ['tulia_websites_builder'] %}
+{% trans_default_domain 'websites' %}
 
 {% block title %}
     {{ 'websites'|trans({}, 'websites') }}
@@ -11,13 +13,70 @@
 {% set currentWebsite = current_website() %}
 
 {% block content %}
-    <div class="pane pane-lead">
+    <div id="tulia-websites-builder"></div>
+
+    <script nonce="{{ csp_nonce() }}">
+        $(function () {
+            new TuliaWebsiteBuilder('#tulia-websites-builder', {
+                websites: {{ websites|json_encode|raw }},
+                locales: {{ locales|json_encode|raw }},
+                endpoints: {
+                    newWebsite: {
+                        url: '{{ path('backend.website.create') }}',
+                        csrfToken: '{{ csrf_token('new_website_form') }}'
+                    },
+                    toggleWebsiteVisibility: {
+                        url: '{{ path('backend.website.visibility.toggle') }}',
+                        csrfToken: '{{ csrf_token('toggle_website_visibility') }}'
+                    },
+                    newLocale: {
+                        url: '{{ path('backend.website.locale.add') }}',
+                        csrfToken: '{{ csrf_token('add_locale_form') }}'
+                    },
+                },
+                translations: {
+                    websitesLongDescription: '{{ 'websitesLongDescription'|trans }}',
+                    websites: '{{ 'websites'|trans }}',
+                    websiteInactive: '{{ 'websiteInactive'|trans }}',
+                    websiteInactiveHint: '{{ 'websiteInactiveHint'|trans }}',
+                    defaultLocale: '{{ 'defaultLocale'|trans }}',
+                    addLocale: '{{ 'addLocale'|trans }}',
+                    edit: '{{ 'edit'|trans({}, 'messages') }}',
+                    manageLocale: '{{ 'manageLocale'|trans }}',
+                    createWebsite: '{{ 'createWebsite'|trans }}',
+                    domainDevelopment: '{{ 'domainDevelopment'|trans }}',
+                    domainDevelopmentHelp: '{{ 'domainDevelopmentHelp'|trans }}',
+                    pathPrefix: '{{ 'pathPrefix'|trans }}',
+                    pathPrefixHelp: '{{ 'pathPrefixHelp'|trans|raw }}',
+                    defaultLocaleCannotBeChangedAfterCreating: '{{ 'defaultLocaleCannotBeChangedAfterCreating'|trans }}',
+                    domain: '{{ 'domain'|trans }}',
+                    domainHelp: '{{ 'domainHelp'|trans }}',
+                    advancedOptions: '{{ 'advancedOptions'|trans }}',
+                    backendPrefix: '{{ 'backendPrefix'|trans }}',
+                    backendPrefixHelp: '{{ 'backendPrefixHelp'|trans }}',
+                    sslMode: '{{ 'sslMode'|trans }}',
+                    sslModeHelp: '{{ 'sslModeHelp'|trans }}',
+                    forceSSL: '{{ 'forceSSL'|trans }}',
+                    forceNonSSL: '{{ 'forceNonSSL'|trans }}',
+                    allowedBothSSL: '{{ 'allowedBothSSL'|trans }}',
+                    localePrefix: '{{ 'localePrefix'|trans }}',
+                    localePrefixHelp: '{{ 'localePrefixHelp'|trans }}',
+                    locale: '{{ 'locale'|trans }}',
+                    create: '{{ 'create'|trans({}, 'messages') }}',
+                    name: '{{ 'name'|trans({}, 'messages') }}',
+                    cancel: '{{ 'cancel'|trans({}, 'messages') }}',
+                    activity: '{{ 'activity'|trans({}, 'messages') }}',
+                    active: '{{ 'active'|trans({}, 'messages') }}',
+                    inactive: '{{ 'inactive'|trans({}, 'messages') }}',
+                }
+            });
+        });
+    </script>
+    {#<div class="pane pane-lead">
         <div class="pane-header">
-            {% if is_dev_env() %}
-                <div class="pane-buttons">
-                    <a href="{{ path('backend.website.create') }}" class="btn btn-success btn-icon-left"><i class="btn-icon fas fa-plus"></i> {{ 'create'|trans }}</a>
-                </div>
-            {% endif %}
+            <div class="pane-buttons">
+                <a href="{{ path('backend.website.create') }}" class="btn btn-success btn-icon-left"><i class="btn-icon fas fa-plus"></i> {{ 'create'|trans }}</a>
+            </div>
             <i class="pane-header-icon fas fa-globe"></i>
             <h1 class="pane-title">{{ block('title') }}</h1>
         </div>
@@ -180,5 +239,5 @@
                 addressModal.show();
             });
         });
-    </script>
+    </script>#}
 {% endblock %}

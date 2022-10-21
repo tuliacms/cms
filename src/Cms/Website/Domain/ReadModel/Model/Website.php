@@ -39,6 +39,20 @@ class Website
         );
     }
 
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'backend_prefix' => $this->backendPrefix,
+            'active' => $this->active,
+            'locales' => array_map(
+                static fn($l) => $l->toArray(),
+                $this->locales
+            ),
+        ];
+    }
+
     public function getId(): string
     {
         return $this->id;

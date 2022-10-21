@@ -8,7 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\Website\Domain\WriteModel\Service\StorageInterface;
+use Tulia\Cms\Website\Domain\WriteModel\Service\LocaleStorageInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -16,14 +16,11 @@ use Tulia\Cms\Website\Domain\WriteModel\Service\StorageInterface;
 class LocaleChoiceType extends AbstractType
 {
     public function __construct(
-        private readonly StorageInterface $storage,
+        private readonly LocaleStorageInterface $storage,
         private readonly TranslatorInterface $translator,
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $source = $this->storage->all();
@@ -39,9 +36,6 @@ class LocaleChoiceType extends AbstractType
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getParent(): string
     {
         return ChoiceType::class;

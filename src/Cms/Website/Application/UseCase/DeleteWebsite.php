@@ -28,8 +28,6 @@ final class DeleteWebsite extends AbstractTransactionalUseCase
      */
     protected function execute(RequestInterface $request): ?ResultInterface
     {
-        $this->denyIfNotDevelopmentEnvironment();
-
         $website = $this->repository->get($request->id);
         $website->delete($this->canDeleteWebsite);
 

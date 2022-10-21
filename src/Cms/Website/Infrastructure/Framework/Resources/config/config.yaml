@@ -6,6 +6,13 @@ twig:
     paths:
         '%cms.core_dir%/Cms/Website/Infrastructure/Framework/Resources/views': 'website'
 cms:
+    assetter:
+        assets:
+            tulia_websites_builder:
+                scripts: [ '/assets/core/tulia-websites-builder/websites-builder.js' ]
+                styles: [ '/assets/core/tulia-websites-builder/main.css' ]
+                require: [ jquery, vue ]
+
     templating:
         paths:
             - { name: backend/website, path: '%cms.core_dir%/Cms/Website/Infrastructure/Framework/Resources/views/backend' }

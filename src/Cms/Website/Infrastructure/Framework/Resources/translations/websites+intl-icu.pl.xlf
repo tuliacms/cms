@@ -4,15 +4,15 @@
         <body>
             <trans-unit id="tuliacms.websites.1">
                 <source>website</source>
-                <target>Strona</target>
+                <target>Witryna</target>
             </trans-unit>
             <trans-unit id="tuliacms.websites.2">
                 <source>websites</source>
-                <target>Strony</target>
+                <target>Witryny</target>
             </trans-unit>
             <trans-unit id="tuliacms.websites.3">
                 <source>websiteSaved</source>
-                <target>Strona została zapisana.</target>
+                <target>Witryna została zapisana.</target>
             </trans-unit>
             <trans-unit id="tuliacms.websites.4">
                 <source>address</source>
@@ -28,7 +28,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.websites.7">
                 <source>localesInWebsite</source>
-                <target>Języki w tej stronie</target>
+                <target>Języki w tej witrynie</target>
             </trans-unit>
             <trans-unit id="tuliacms.websites.8">
                 <source>noLocalesDefined</source>
@@ -44,11 +44,11 @@
             </trans-unit>
             <trans-unit id="tuliacms.websites.11">
                 <source>addWebsite</source>
-                <target>Dodaj stronę</target>
+                <target>Dodaj witrynę</target>
             </trans-unit>
             <trans-unit id="tuliacms.websites.12">
                 <source>editWebsite</source>
-                <target>Edytuj stronę</target>
+                <target>Edytuj witrynę</target>
             </trans-unit>
             <trans-unit id="tuliacms.websites.13">
                 <source>deleteWebsite</source>
@@ -84,7 +84,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.websites.21">
                 <source>websitesLongDescription</source>
-                <target>Strony umożliwiają tworzenie oddzielnych witryn o różnej zawartości, motywach i ustawieniach, zarządzanych przez jeden panel administracyjny (w tej samej domenie) lub różne panele administracyjne, gdy korzystasz z różnych domen i/lub prefiksów zaplecza.</target>
+                <target>Witryny umożliwiają tworzenie oddzielnych witryn o różnej zawartości, motywach i ustawieniach, zarządzanych przez jeden panel administracyjny (w tej samej domenie) lub różne panele administracyjne, gdy korzystasz z różnych domen i/lub prefiksów zaplecza.</target>
             </trans-unit>
             <trans-unit id="tuliacms.websites.22">
                 <source>thisIsADefaultLocale</source>
@@ -94,29 +94,29 @@
                 <source>defaultLocaleIsNotInSelectedLocales</source>
                 <target>Domyślny język musi być jednym z dostępnych języków witryny.</target>
             </trans-unit>
-            <trans-unit id="tuliacms.websites.24">
+            <!--<trans-unit id="tuliacms.websites.24">
                 <source>deleteSelectedWebsites</source>
-                <target>Usuń wybrane strony</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.websites.25">
+                <target>Usuń wybrane witrymy</target>
+            </trans-unit>-->
+            <!--<trans-unit id="tuliacms.websites.25">
                 <source>areYouSureYouWantToDeleteFollowingWebsites</source>
-                <target>Czy na pewno chcesz usunąć wszystkie wybrane strony?</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.websites.26">
+                <target>Czy na pewno chcesz usunąć wszystkie wybrane witryny?</target>
+            </trans-unit>-->
+            <!--<trans-unit id="tuliacms.websites.26">
                 <source>selectedWebsitesWereDeleted</source>
                 <target>Wybrane strony zostały usunięte.</target>
-            </trans-unit>
+            </trans-unit>-->
             <trans-unit id="tuliacms.websites.27">
                 <source>websiteNotFound</source>
-                <target>Nie znaleziono strony.</target>
+                <target>Nie znaleziono witryny.</target>
             </trans-unit>
             <trans-unit id="tuliacms.websites.28">
                 <source>cannotDeleteCurrentWebsite</source>
-                <target>Nie możesz usunąć aktualnej strony. Jedna strona musi być aktywna.</target>
+                <target>Nie możesz usunąć aktualnej witryny. Jedna witryna musi być aktywna.</target>
             </trans-unit>
             <trans-unit id="tuliacms.websites.29">
                 <source>locale</source>
-                <target>Język dla tej strony</target>
+                <target>Język</target>
             </trans-unit>
             <trans-unit id="tuliacms.websites.30">
                 <source>localeHelp</source>
@@ -128,7 +128,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.websites.32">
                 <source>localePrefixHelp</source>
-                <target>Jeśli chcesz dokonać separacji języka na stronie według ścieżki, a nie domeny, wypełnij to pole prefiksem ścieżki dla tego języka.</target>
+                <target>Jeśli chcesz dokonać separacji języka na witrynie według ścieżki, a nie domeny, wypełnij to pole prefiksem ścieżki dla tego języka.</target>
             </trans-unit>
             <trans-unit id="tuliacms.websites.33">
                 <source>domain</source>
@@ -136,7 +136,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.websites.34">
                 <source>domainHelp</source>
-                <target>Domena tego języka. Jeśli chcesz stworzyć wielojęzyczną stronę internetową w jednej domenie - wypełnij wszystkie lokalizacje tą samą domeną i wypełnij pole "Prefiks języka", aby oddzielić lokalizacje prefiksem ścieżki.</target>
+                <target>Podaj domenę produkcyjną pod którą będzie dostępna witryna.</target>
             </trans-unit>
             <trans-unit id="tuliacms.websites.35">
                 <source>addLocale</source>
@@ -152,7 +152,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.websites.38">
                 <source>websiteLocaleUrlPreview</source>
-                <target>Podgląd adresu URL strony:</target>
+                <target>Podgląd adresu URL witryny:</target>
             </trans-unit>
             <trans-unit id="tuliacms.websites.39">
                 <source>panelAddress</source>
@@ -180,7 +180,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.websites.45">
                 <source>removeWebsiteDataLossInformation</source>
-                <target>Usuwając całą stronę, usuwasz również wszystkie dane dołączone do tej strony, takie jak węzły, kategorie, tagi, ustawienia i inne treści. Upewnij się, że naprawdę chcesz to zrobić!</target>
+                <target>Usuwając całą witrynę, usuwasz również wszystkie dane dołączone do tej strony, takie jak węzły, kategorie, tagi, ustawienia i inne treści. Upewnij się, że naprawdę chcesz to zrobić!</target>
             </trans-unit>
             <trans-unit id="tuliacms.websites.46">
                 <source>domainDevelopment</source>
@@ -188,7 +188,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.websites.47">
                 <source>domainDevelopmentHelp</source>
-                <target>Domena pod lokalny development dla tego języka. Ta domena będzie używana tylko wtedy, gdy tworzysz system na innej domenie.</target>
+                <target>Ta domena będzie używana tylko wtedy, gdy tworzysz system lokalnie na innej domenie (np. localhost).</target>
             </trans-unit>
             <trans-unit id="tuliacms.websites.48">
                 <source>websiteInactive</source>
@@ -205,6 +205,42 @@
             <trans-unit id="tuliacms.websites.51">
                 <source>cannotDeleteWebsiteBecause</source>
                 <target>Nie można usunąć tej witryny, ponieważ {reason}.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.websites.52">
+                <source>manageLocale</source>
+                <target>Zarządzaj językiem</target>
+            </trans-unit>
+            <!--<trans-unit id="tuliacms.websites.53">
+                <source>manageWebsite</source>
+                <target>Zarządzaj stroną</target>
+            </trans-unit>-->
+            <trans-unit id="tuliacms.websites.54">
+                <source>createWebsite</source>
+                <target>Stwórz nową witrynę</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.websites.55">
+                <source>defaultLocaleCannotBeChangedAfterCreating</source>
+                <target>UWAGA: Domyślny język nie może zostać zmieniony po utworzeniu witryny.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.websites.57">
+                <source>advancedOptions</source>
+                <target>Opcje zaawansowane</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.websites.58">
+                <source>forceSSL</source>
+                <target>Wymuś SSL</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.websites.59">
+                <source>forceNonSSL</source>
+                <target>Wymuś brak SSL</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.websites.60">
+                <source>allowedBothSSL</source>
+                <target>Pozwól na obydwa</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.websites.61">
+                <source>This locale already exists in this website</source>
+                <target>Ten język już istnieje w stronie.</target>
             </trans-unit>
         </body>
     </file>

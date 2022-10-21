@@ -83,6 +83,7 @@
     },
     "autoload-dev": {
         "psr-4": {
+            "Tulia\\Cms\\Tests\\Helper\\": "tests/_helper",
             "Tulia\\Cms\\Tests\\Unit\\": "tests/unit",
             "Tulia\\Cms\\Tests\\Behat\\": "tests/behat/bootstrap",
             "Tulia\\Component\\Routing\\Tests\\Unit\\": "src/Component/routing/tests/unit"

@@ -592,19 +592,29 @@
             </trans-unit>
             <trans-unit id="tuliacms.messages.148">
                 <source>website</source>
-                <target>Strona</target>
+                <target>Witryna</target>
             </trans-unit>
             <trans-unit id="tuliacms.messages.149">
                 <source>switchWebsite</source>
-                <target>Zmień stronę</target>
+                <target>Zmień witrynę</target>
             </trans-unit>
             <trans-unit id="tuliacms.messages.150">
                 <source>websites</source>
-                <target>Strony</target>
+                <target>Witryny</target>
             </trans-unit>
             <trans-unit id="tuliacms.messages.151">
                 <source>publish</source>
                 <target>Opublikuj</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.152">
+                <source>active</source>
+                <target>Aktywny</target>
+                <note>Status of some element</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.153">
+                <source>inactive</source>
+                <target>Nieaktywny</target>
+                <note>Status of some element</note>
             </trans-unit>
             <trans-unit id="tuliacms.messages.162">
                 <source>languages</source>

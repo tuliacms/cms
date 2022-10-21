@@ -11,7 +11,7 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\LocaleInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-class ArrayStorage implements StorageInterface
+class ArrayLocaleStorage implements LocaleStorageInterface
 {
     /**
      * @var array
@@ -455,9 +455,6 @@ class ArrayStorage implements StorageInterface
         ['code' => 'zu_ZA', 'slug' => 'zu-za'],
     ];
 
-    /**
-     * {@inheritdoc}
-     */
     public function all(): array
     {
         $result = [];
@@ -467,19 +464,5 @@ class ArrayStorage implements StorageInterface
         }
 
         return $result;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getByCode(string $code): LocaleInterface
-    {
-        foreach (static::$locales as $item) {
-            if ($code === $item['code']) {
-                return new Locale($item['code'], $_SERVER['HTTP_HOST'], '/' . $item['slug']);
-            }
-        }
-
-        throw new LocaleNotExistsException(sprintf('Locale "%s" not exists.', $code));
     }
 }

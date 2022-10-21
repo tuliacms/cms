@@ -13,11 +13,15 @@ use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteCreated;
 use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteDeleted;
 use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteUpdated;
 use Tulia\Cms\Website\Domain\WriteModel\Exception;
+use Tulia\Cms\Website\Domain\WriteModel\Exception\CannotAddLocaleException;
 use Tulia\Cms\Website\Domain\WriteModel\Exception\CannotDeleteWebsiteException;
 use Tulia\Cms\Website\Domain\WriteModel\Exception\CannotTurnOffWebsiteException;
 use Tulia\Cms\Website\Domain\WriteModel\Exception\LocaleNotExistsException;
 use Tulia\Cms\Website\Domain\WriteModel\Rules\CanDeleteWebsite\CanDeleteWebsiteInterface;
 use Tulia\Cms\Website\Domain\WriteModel\Rules\CanDeleteWebsite\CanDeleteWebsiteReasonEnum;
+use Tulia\Cms\Website\Domain\WriteModel\Rules\CannAddLocale\CanAddLocale;
+use Tulia\Cms\Website\Domain\WriteModel\Rules\CannAddLocale\CanAddLocaleInterface;
+use Tulia\Cms\Website\Domain\WriteModel\Rules\CannAddLocale\CanAddLocaleReasonEnum;
 use Tulia\Cms\Website\Domain\WriteModel\Rules\CanTurnOffWebsite\CanTurnOffWebsiteInterface;
 use Tulia\Cms\Website\Domain\WriteModel\Rules\CanTurnOffWebsite\CanTurnOffWebsiteReasonEnum;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\SslModeEnum;
@@ -49,11 +53,11 @@ class Website extends AbstractAggregateRoot
         string $backendPrefix = '/administrator',
         ?string $domainDevelopment = null,
         ?string $pathPrefix = null,
-        ?string $localePrefix = null,
-        SslModeEnum $sslMode = SslModeEnum::ALLOWED_BOTH
+        SslModeEnum $sslMode = SslModeEnum::ALLOWED_BOTH,
+        bool $active = true,
     ): self {
-        $self = new self($id, $name, $backendPrefix);
-        $self->locales->add(new Locale($self, $localeCode, $domain, $domainDevelopment, $localePrefix, $pathPrefix, $sslMode, true));
+        $self = new self($id, $name, $backendPrefix, $active);
+        $self->locales->add(new Locale($self, $localeCode, $domain, $domainDevelopment, '', $pathPrefix, $sslMode, true));
         $self->recordThat(new WebsiteCreated($self->id));
 
         return $self;
@@ -146,7 +150,7 @@ class Website extends AbstractAggregateRoot
                 $locale['ssl_mode'] = SslModeEnum::from($locale['ssl_mode']);
             }
 
-            $this->addLocale(new Locale(
+            $this->addLocale(new CanAddLocale(), new Locale(
                 $this,
                 $locale['code'],
                 $locale['domain'],
@@ -172,11 +176,41 @@ class Website extends AbstractAggregateRoot
         }
     }
 
+    public function addLocale(
+        CanAddLocaleInterface $rules,
+        string $code,
+        string $domain = null,
+        ?string $domainDevelopment = null,
+        ?string $localePrefix = null,
+        ?string $pathPrefix = null,
+        SslModeEnum $sslMode = SslModeEnum::ALLOWED_BOTH,
+    ): void {
+        $reason = $rules->decide($code, $this->collectLocaleCodes());
+
+        if (CanAddLocaleReasonEnum::OK !== $reason) {
+            throw CannotAddLocaleException::fromReason($reason, $code, $this->id);
+        }
+
+        $defaultLocale = $this->getDefaultLocale();
+
+        $this->locales[] = new Locale(
+            $this,
+            $code,
+            $domain ?? $defaultLocale->getDomain(),
+            $domainDevelopment ?? $defaultLocale->getDomainDevelopment(),
+            $localePrefix,
+            $pathPrefix,
+            $sslMode,
+        );
+
+        $this->recordThat(new LocaleAdded($this->id, $code, $defaultLocale->getCode()));
+    }
+
     /**
      * @throws Exception\LocalePrefixInvalidException
      * @throws Exception\PathPrefixInvalidException
      */
-    private function addLocale(Locale $locale): void
+    /*private function addLocale(Locale $locale): void
     {
         $key = null;
 
@@ -195,7 +229,7 @@ class Website extends AbstractAggregateRoot
         }
 
         $this->recordWebsiteChange();
-    }
+    }*/
 
     public function delete(CanDeleteWebsiteInterface $rules): void
     {

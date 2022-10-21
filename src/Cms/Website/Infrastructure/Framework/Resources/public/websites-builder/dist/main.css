@@ -1,0 +1,47 @@
+/*!************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/components/modals/Modal.vue?vue&type=style&index=0&id=89e68560&scoped=true&lang=scss ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************************/
+.modal-dialog[data-v-89e68560] {
+  position: relative;
+  z-index: 1;
+}
+.loader[data-v-89e68560] {
+  position: absolute;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.5);
+  display: none !important;
+}
+.loader .load-inner[data-v-89e68560] {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.loader[data-v-89e68560]:hover {
+    cursor: wait;
+}
+.modal-loading .loader[data-v-89e68560] {
+  display: block !important;
+}
+
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/components/Root.vue?vue&type=style&index=0&id=378f20ae&scoped=true&lang=scss ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************/
+.websites-list .list-group-item[data-v-378f20ae] {
+  position: relative;
+  padding-left: 36px;
+}
+.websites-list .list-group-item .website-locale-flag-icon[data-v-378f20ae] {
+    position: absolute;
+    left: 11px;
+    top: 50%;
+    transform: translateY(-50%);
+    max-width: 16px;
+}
+
+
+/*# sourceMappingURL=main.css.map*/

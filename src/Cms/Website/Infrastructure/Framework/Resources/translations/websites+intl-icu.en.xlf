@@ -94,18 +94,18 @@
                 <source>defaultLocaleIsNotInSelectedLocales</source>
                 <target>Default locale mut be one of the selected website locales.</target>
             </trans-unit>
-            <trans-unit id="tuliacms.websites.24">
+            <!--<trans-unit id="tuliacms.websites.24">
                 <source>deleteSelectedWebsites</source>
                 <target>Delete selected websites</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.websites.25">
+            </trans-unit>-->
+            <!--<trans-unit id="tuliacms.websites.25">
                 <source>areYouSureYouWantToDeleteFollowingWebsites</source>
                 <target>Are You sure You want to delete all selected websites?</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.websites.26">
+            </trans-unit>-->
+            <!--<trans-unit id="tuliacms.websites.26">
                 <source>selectedWebsitesWereDeleted</source>
                 <target>Selected websites were deleted.</target>
-            </trans-unit>
+            </trans-unit>-->
             <trans-unit id="tuliacms.websites.27">
                 <source>websiteNotFound</source>
                 <target>Website not found.</target>
@@ -116,7 +116,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.websites.29">
                 <source>locale</source>
-                <target>Locale for this website</target>
+                <target>Locale</target>
             </trans-unit>
             <trans-unit id="tuliacms.websites.30">
                 <source>localeHelp</source>
@@ -136,7 +136,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.websites.34">
                 <source>domainHelp</source>
-                <target>Domain of this locale. If You want to make multilingual website in one, single domain - please fill all locales with the same domain, and fill "Locale prefix" field to separate locales with path prefix.</target>
+                <target>Type production domain where new website should be accessible.</target>
             </trans-unit>
             <trans-unit id="tuliacms.websites.35">
                 <source>addLocale</source>
@@ -188,7 +188,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.websites.47">
                 <source>domainDevelopmentHelp</source>
-                <target>Development domain for this locale. This domain will be used only when You are developing system on other domain. Simplify deployment system.</target>
+                <target>This domain will be used only when You are developing system locally on other domain (ie. localhost). Simplify deployment system.</target>
             </trans-unit>
             <trans-unit id="tuliacms.websites.48">
                 <source>websiteInactive</source>
@@ -205,6 +205,46 @@
             <trans-unit id="tuliacms.websites.51">
                 <source>cannotDeleteWebsiteBecause</source>
                 <target>Cannot delete this website, because {reason}.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.websites.52">
+                <source>manageLocale</source>
+                <target>Manage locale</target>
+            </trans-unit>
+            <!--<trans-unit id="tuliacms.websites.53">
+                <source>manageWebsite</source>
+                <target>Manage website</target>
+            </trans-unit>-->
+            <trans-unit id="tuliacms.websites.54">
+                <source>createWebsite</source>
+                <target>Create new website</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.websites.55">
+                <source>defaultLocaleCannotBeChangedAfterCreating</source>
+                <target>WARNING: Default locale cannot be changed after creating Website.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.websites.56">
+                <source>advancedOptions</source>
+                <target>Advanced options</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.websites.57">
+                <source>advancedOptions</source>
+                <target>Advanced options</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.websites.58">
+                <source>forceSSL</source>
+                <target>Force SSL</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.websites.59">
+                <source>forceNonSSL</source>
+                <target>Force Non-SSL</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.websites.60">
+                <source>allowedBothSSL</source>
+                <target>Allowed both</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.websites.61">
+                <source>This locale already exists in this website</source>
+                <target>This locale already exists in this website.</target>
             </trans-unit>
         </body>
     </file>

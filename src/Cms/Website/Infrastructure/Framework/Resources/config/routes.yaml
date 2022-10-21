@@ -1,17 +1,31 @@
 backend.website.create:
     path: /website/create
     controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Website::create
-    methods: POST|GET
+    methods: POST
+
+backend.website.visibility.toggle:
+    path: /website/visibiltiy/toggle
+    controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Website::toggleVisibility
+    methods: POST
+
+backend.website.locale.add:
+    path: /website/locale/add
+    controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Locale::create
+    methods: POST
+
+
+
+
 
 backend.website.edit:
     path: /website/edit/{id}
     controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Website::edit
-    methods: POST|GET
+    methods: POST
 
 backend.website.delete:
     path: /website/delete
     controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Website::delete
-    methods: POST|GET
+    methods: POST
 
 backend.website.list:
     path: /website/list

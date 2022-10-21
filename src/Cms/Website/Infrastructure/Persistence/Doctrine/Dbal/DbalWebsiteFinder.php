@@ -47,7 +47,7 @@ final class DbalWebsiteFinder implements WebsiteFinderInterface
                 $locales[] = Locale::fromArray([
                     'code' => $locale['code'],
                     'domain' => $locale['domain'],
-                    'development_domain' => $locale['domain_development'],
+                    'domain_development' => $locale['domain_development'],
                     'locale_prefix' => $locale['locale_prefix'],
                     'path_prefix' => $locale['path_prefix'],
                     'ssl_mode' => $locale['ssl_mode'],

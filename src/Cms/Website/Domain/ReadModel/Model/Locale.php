@@ -11,7 +11,7 @@ class Locale
 {
     protected string $code;
     protected string $domain;
-    protected string $developmentDomain;
+    protected string $domainDevelopment;
     protected ?string $localePrefix = null;
     protected ?string $pathPrefix = null;
     protected string $sslMode;
@@ -28,7 +28,7 @@ class Locale
     ) {
         $this->code = $code;
         $this->domain = $domain;
-        $this->developmentDomain = $developmentDomain;
+        $this->domainDevelopment = $developmentDomain;
         $this->localePrefix = $localePrefix;
         $this->pathPrefix = $pathPrefix;
         $this->sslMode = $sslMode;
@@ -40,12 +40,25 @@ class Locale
         return new self(
             $data['code'],
             $data['domain'],
-            $data['development_domain'],
+            $data['domain_development'],
             $data['locale_prefix'] ?? null,
             $data['path_prefix'] ?? null,
             $data['ssl_mode'] ?? 'ALLOWED_BOTH',
             (bool) ($data['is_default'] ?? true),
         );
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'code' => $this->code,
+            'domain' => $this->domain,
+            'domain_development' => $this->domainDevelopment,
+            'locale_prefix' => $this->localePrefix,
+            'path_prefix' => $this->pathPrefix,
+            'ssl_mode' => $this->sslMode,
+            'is_default' => $this->isDefault,
+        ];
     }
 
     public function __toString(): string
@@ -88,8 +101,8 @@ class Locale
         return $this->isDefault;
     }
 
-    public function getDevelopmentDomain(): string
+    public function getDomainDevelopment(): string
     {
-        return $this->developmentDomain;
+        return $this->domainDevelopment;
     }
 }
