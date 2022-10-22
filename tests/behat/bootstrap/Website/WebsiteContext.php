@@ -8,10 +8,18 @@ use Behat\Behat\Context\Context;
 use Symfony\Component\Uid\Uuid;
 use Tulia\Cms\Tests\Behat\AggregateRootSpy;
 use Tulia\Cms\Tests\Behat\Assert;
+use Tulia\Cms\Tests\Behat\Website\TestDoubles\StubCurrentWebsiteProvider;
+use Tulia\Cms\Tests\Behat\Website\TestDoubles\StubWebsitesCounterQuery;
 use Tulia\Cms\Website\Domain\WriteModel\Event\LocaleAdded;
+use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteActivityChanged;
 use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteCreated;
+use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteDeleted;
+use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteUpdated;
 use Tulia\Cms\Website\Domain\WriteModel\Exception\CannotAddLocaleException;
+use Tulia\Cms\Website\Domain\WriteModel\Exception\CannotDeleteWebsiteException;
 use Tulia\Cms\Website\Domain\WriteModel\Model\Website;
+use Tulia\Cms\Website\Domain\WriteModel\Query\WebsitesCounterQueryInterface;
+use Tulia\Cms\Website\Domain\WriteModel\Rules\CanDeleteWebsite\CanDeleteWebsite;
 use Tulia\Cms\Website\Domain\WriteModel\Rules\CannAddLocale\CanAddLocale;
 
 /**
@@ -22,7 +30,16 @@ final class WebsiteContext implements Context
     use WebsiteBuildableTrait;
 
     private ?AggregateRootSpy $websiteSpy = null;
+    private WebsitesCounterQueryInterface $websitesCounterQuery;
+    private StubCurrentWebsiteProvider $currentWebsitePrivider;
     private ?string $reasonWhyCannotAddLocale = null;
+    private ?string $reasonWhyCannotDeleteWebsite = null;
+
+    public function __construct()
+    {
+        $this->websitesCounterQuery = new StubWebsitesCounterQuery();
+        $this->currentWebsitePrivider = new StubCurrentWebsiteProvider();
+    }
 
     /**
      * @When I create website named :name, with default locale :code
@@ -79,6 +96,146 @@ final class WebsiteContext implements Context
         $event = $this->websiteSpy->findEvent(LocaleAdded::class);
 
         Assert::assertInstanceOf(LocaleAdded::class, $event, 'New locale should be added');
+    }
+
+    /**
+     * @When I deactivate this website
+     */
+    public function iDeactivateThisWebsite(): void
+    {
+        $this->website->deactivate();
+    }
+
+    /**
+     * @Then website's activity should not be turned off
+     */
+    public function websitesActivityShouldNotBeTurnedOff(): void
+    {
+        $event = $this->websiteSpy->findEvent(WebsiteActivityChanged::class);
+
+        Assert::assertNull($event, 'Activity should not be changed');
+    }
+
+    /**
+     * @Then website's activity should be turned off
+     */
+    public function websitesActivityShouldBeTurnedOff(): void
+    {
+        $event = $this->websiteSpy->findEvent(WebsiteActivityChanged::class);
+
+        Assert::assertInstanceOf(WebsiteActivityChanged::class, $event, 'Activity should be changed');
+        Assert::assertFalse($event->active);
+    }
+
+    /**
+     * @When I turn this website's activity on
+     */
+    public function iTurnThisWebsitesActivityOn(): void
+    {
+        $this->website->activate();
+    }
+
+    /**
+     * @Then website's activity should not be turned on
+     */
+    public function websitesActivityShouldNotBeTurnedOn(): void
+    {
+        $event = $this->websiteSpy->findEvent(WebsiteActivityChanged::class);
+
+        Assert::assertNull($event, 'Website activity should not be turned on');
+    }
+
+    /**
+     * @Then website's activity should be turned on
+     */
+    public function websitesActivityShouldBeTurnedOn(): void
+    {
+        $event = $this->websiteSpy->findEvent(WebsiteActivityChanged::class);
+
+        Assert::assertInstanceOf(WebsiteActivityChanged::class, $event, 'Website activity should be turned on');
+        Assert::assertTrue($event->active);
+    }
+
+    /**
+     * @Then website should not be updated
+     */
+    public function websiteShouldNotBeUpdated(): void
+    {
+        $event = $this->websiteSpy->findEvent(WebsiteUpdated::class);
+
+        Assert::assertNull($event, 'Website should not be updated');
+    }
+
+    /**
+     * @Then website should be updated
+     */
+    public function websiteShouldBeUpdated(): void
+    {
+        $event = $this->websiteSpy->findEvent(WebsiteUpdated::class);
+
+        Assert::assertInstanceOf(WebsiteUpdated::class, $event, 'Website should be updated');
+    }
+
+    /**
+     * @When I delete this website
+     */
+    public function iDeleteThisWebsite(): void
+    {
+        try {
+            $this->website->delete(
+                new CanDeleteWebsite(
+                    $this->websitesCounterQuery,
+                    $this->currentWebsitePrivider
+                )
+            );
+        } catch (CannotDeleteWebsiteException $e) {
+            $this->reasonWhyCannotDeleteWebsite = $e->reason;
+        }
+    }
+
+    /**
+     * @Then website should not be deleted, because :reason
+     */
+    public function websiteShouldNotBeDeletedBecause(string $reason): void
+    {
+        $event = $this->websiteSpy->findEvent(WebsiteDeleted::class);
+
+        Assert::assertNull($event, 'Website should not be deleted');
+        Assert::assertSame($reason, $this->reasonWhyCannotDeleteWebsite);
+    }
+
+    /**
+     * @Given there is at least one other inactive website in system
+     */
+    public function thereIsAtLeastOneOtherInactiveWebsiteInSystem(): void
+    {
+        $this->websitesCounterQuery->makeReturnValue(0);
+    }
+
+    /**
+     * @Given there is at least one other active website in system
+     */
+    public function thereIsAtLeastOneOtherActiveWebsiteInSystem(): void
+    {
+        $this->websitesCounterQuery->makeReturnValue(1);
+    }
+
+    /**
+     * @Then website should be deleted
+     */
+    public function websiteShouldBeDeleted(): void
+    {
+        $event = $this->websiteSpy->findEvent(WebsiteDeleted::class);
+
+        Assert::assertInstanceOf(WebsiteDeleted::class, $event, 'Website should be deleted');
+    }
+
+    /**
+     * @Given I am on the website :website right now
+     */
+    public function iAmOnTheWebsiteRightNow(string $website): void
+    {
+        $this->currentWebsitePrivider->setCurrentWebsite($website);
     }
 
     private function id(): string

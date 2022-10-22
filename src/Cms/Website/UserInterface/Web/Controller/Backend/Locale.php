@@ -6,6 +6,7 @@ namespace Tulia\Cms\Website\UserInterface\Web\Controller\Backend;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
@@ -52,6 +53,11 @@ final class Locale extends AbstractController
         }
 
         return new JsonResponse(['errors' => $this->getErrorMessages($form)], Response::HTTP_BAD_REQUEST);
+    }
+
+    public function delete(Request $request, DeleteLocale $deleteLocale): RedirectResponse
+    {
+
     }
 
     private function getErrorMessages(FormInterface $form): array

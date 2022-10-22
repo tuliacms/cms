@@ -84,7 +84,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.websites.21">
                 <source>websitesLongDescription</source>
-                <target>Witryny umożliwiają tworzenie oddzielnych witryn o różnej zawartości, motywach i ustawieniach, zarządzanych przez jeden panel administracyjny (w tej samej domenie) lub różne panele administracyjne, gdy korzystasz z różnych domen i/lub prefiksów zaplecza.</target>
+                <target>Witryny umożliwiają tworzenie oddzielnych stron internetowych o różnej zawartości, motywach i ustawieniach, zarządzanych przez jeden panel administracyjny (nawet w tej samej domenie) lub różne panele administracyjne, gdy korzystasz z różnych domen i/lub prefiksów zaplecza.</target>
             </trans-unit>
             <trans-unit id="tuliacms.websites.22">
                 <source>thisIsADefaultLocale</source>
@@ -94,18 +94,18 @@
                 <source>defaultLocaleIsNotInSelectedLocales</source>
                 <target>Domyślny język musi być jednym z dostępnych języków witryny.</target>
             </trans-unit>
-            <!--<trans-unit id="tuliacms.websites.24">
-                <source>deleteSelectedWebsites</source>
-                <target>Usuń wybrane witrymy</target>
-            </trans-unit>-->
+            <trans-unit id="tuliacms.websites.24">
+                <source>activityChanged</source>
+                <target>Zmieniono aktywność witryny.</target>
+            </trans-unit>
             <!--<trans-unit id="tuliacms.websites.25">
                 <source>areYouSureYouWantToDeleteFollowingWebsites</source>
                 <target>Czy na pewno chcesz usunąć wszystkie wybrane witryny?</target>
             </trans-unit>-->
-            <!--<trans-unit id="tuliacms.websites.26">
-                <source>selectedWebsitesWereDeleted</source>
-                <target>Wybrane strony zostały usunięte.</target>
-            </trans-unit>-->
+            <trans-unit id="tuliacms.websites.26">
+                <source>websiteWasDeleted</source>
+                <target>Witryna oraz wszystkie języki została usunięta.</target>
+            </trans-unit>
             <trans-unit id="tuliacms.websites.27">
                 <source>websiteNotFound</source>
                 <target>Nie znaleziono witryny.</target>
@@ -207,8 +207,8 @@
                 <target>Nie można usunąć tej witryny, ponieważ {reason}.</target>
             </trans-unit>
             <trans-unit id="tuliacms.websites.52">
-                <source>manageLocale</source>
-                <target>Zarządzaj językiem</target>
+                <source>deleteLocale</source>
+                <target>Usuń język</target>
             </trans-unit>
             <!--<trans-unit id="tuliacms.websites.53">
                 <source>manageWebsite</source>
@@ -241,6 +241,16 @@
             <trans-unit id="tuliacms.websites.61">
                 <source>This locale already exists in this website</source>
                 <target>Ten język już istnieje w stronie.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.websites.62">
+                <source>activate</source>
+                <target>Aktywuj</target>
+                <note>Action button label</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.websites.63">
+                <source>deactivate</source>
+                <target>Dezaktywuj</target>
+                <note>Action button label</note>
             </trans-unit>
         </body>
     </file>

@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
 use Tulia\Cms\Website\Domain\WriteModel\Event\LocaleAdded;
 use Tulia\Cms\Website\Domain\WriteModel\Event\LocaleDeleted;
+use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteActivityChanged;
 use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteCreated;
 use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteDeleted;
 use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteUpdated;
@@ -104,20 +105,6 @@ class Website extends AbstractAggregateRoot
         return $this->id;
     }
 
-    public function rename(string $name): void
-    {
-        $this->name = $name;
-
-        $this->recordWebsiteChange();
-    }
-
-    public function turnOn(): void
-    {
-        $this->active = true;
-
-        $this->recordWebsiteChange();
-    }
-
     public function turnOff(CanTurnOffWebsiteInterface $rules): void
     {
         if (CanTurnOffWebsiteReasonEnum::OK !== ($reason = $rules->decide($this->id))) {
@@ -204,32 +191,26 @@ class Website extends AbstractAggregateRoot
         );
 
         $this->recordThat(new LocaleAdded($this->id, $code, $defaultLocale->getCode()));
+        $this->recordWebsiteChange();
     }
 
-    /**
-     * @throws Exception\LocalePrefixInvalidException
-     * @throws Exception\PathPrefixInvalidException
-     */
-    /*private function addLocale(Locale $locale): void
+    public function deactivate(): void
     {
-        $key = null;
-
-        foreach ($this->locales as $duplicatedKey => $el) {
-            if ($locale->getCode() === $el->getCode()) {
-                $key = $duplicatedKey;
-            }
+        if ($this->active) {
+            $this->active = false;
+            $this->recordThat(new WebsiteActivityChanged($this->id, $this->active));
+            $this->recordWebsiteChange();
         }
+    }
 
-        $this->validateLocale($locale);
-
-        if ($key !== null) {
-            $this->locales[$key] = $locale;
-        } else {
-            $this->locales[] = $locale;
+    public function activate(): void
+    {
+        if (false === $this->active) {
+            $this->active = true;
+            $this->recordThat(new WebsiteActivityChanged($this->id, $this->active));
+            $this->recordWebsiteChange();
         }
-
-        $this->recordWebsiteChange();
-    }*/
+    }
 
     public function delete(CanDeleteWebsiteInterface $rules): void
     {
@@ -238,6 +219,10 @@ class Website extends AbstractAggregateRoot
         }
 
         $this->recordThat(new WebsiteDeleted($this->id));
+    }
+
+    public function deleteLocale(string $code): void
+    {
     }
 
     /**

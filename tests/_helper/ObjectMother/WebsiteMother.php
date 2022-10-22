@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Tests\Helper\ObjectMother;
 
-use Symfony\Component\Uid\Uuid;
 use Tulia\Cms\Website\Domain\WriteModel\Model\Website;
 use Tulia\Cms\Website\Domain\WriteModel\Rules\CannAddLocale\CanAddLocale;
 
@@ -15,6 +14,7 @@ final class WebsiteMother
 {
     private string $name;
     private string $defaultLocale = 'en_US';
+    private bool $active = true;
     private array $locales = [];
 
     private function __construct(string $name)
@@ -39,13 +39,20 @@ final class WebsiteMother
         return $this;
     }
 
+    public function isInactive(): self
+    {
+        $this->active = false;
+        return $this;
+    }
+
     public function build(): Website
     {
         $website = Website::create(
-            id: (string) Uuid::v4(),
+            id: $this->name,
             name: $this->name,
             localeCode: $this->defaultLocale,
             domain: 'localhost',
+            active: $this->active,
         );
 
         if ([] !== $this->locales) {

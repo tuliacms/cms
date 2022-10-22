@@ -3,9 +3,14 @@ backend.website.create:
     controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Website::create
     methods: POST
 
-backend.website.visibility.toggle:
-    path: /website/visibiltiy/toggle
-    controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Website::toggleVisibility
+backend.website.activate:
+    path: /website/activate
+    controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Website::activate
+    methods: POST
+
+backend.website.deactivate:
+    path: /website/deactivate
+    controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Website::deactivate
     methods: POST
 
 backend.website.locale.add:
@@ -13,13 +18,9 @@ backend.website.locale.add:
     controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Locale::create
     methods: POST
 
-
-
-
-
-backend.website.edit:
-    path: /website/edit/{id}
-    controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Website::edit
+backend.website.locale.delete:
+    path: /website/locale/delete
+    controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Locale::delete
     methods: POST
 
 backend.website.delete:

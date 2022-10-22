@@ -94,18 +94,18 @@
                 <source>defaultLocaleIsNotInSelectedLocales</source>
                 <target>Default locale mut be one of the selected website locales.</target>
             </trans-unit>
-            <!--<trans-unit id="tuliacms.websites.24">
-                <source>deleteSelectedWebsites</source>
-                <target>Delete selected websites</target>
-            </trans-unit>-->
+            <trans-unit id="tuliacms.websites.24">
+                <source>activityChanged</source>
+                <target>Website activity changed.</target>
+            </trans-unit>
             <!--<trans-unit id="tuliacms.websites.25">
                 <source>areYouSureYouWantToDeleteFollowingWebsites</source>
                 <target>Are You sure You want to delete all selected websites?</target>
             </trans-unit>-->
-            <!--<trans-unit id="tuliacms.websites.26">
-                <source>selectedWebsitesWereDeleted</source>
-                <target>Selected websites were deleted.</target>
-            </trans-unit>-->
+            <trans-unit id="tuliacms.websites.26">
+                <source>websiteWasDeleted</source>
+                <target>Website and all locales were deleted.</target>
+            </trans-unit>
             <trans-unit id="tuliacms.websites.27">
                 <source>websiteNotFound</source>
                 <target>Website not found.</target>
@@ -207,8 +207,8 @@
                 <target>Cannot delete this website, because {reason}.</target>
             </trans-unit>
             <trans-unit id="tuliacms.websites.52">
-                <source>manageLocale</source>
-                <target>Manage locale</target>
+                <source>deleteLocale</source>
+                <target>Delete locale</target>
             </trans-unit>
             <!--<trans-unit id="tuliacms.websites.53">
                 <source>manageWebsite</source>
@@ -245,6 +245,14 @@
             <trans-unit id="tuliacms.websites.61">
                 <source>This locale already exists in this website</source>
                 <target>This locale already exists in this website.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.websites.62">
+                <source>activate</source>
+                <target>Activate</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.websites.63">
+                <source>deactivate</source>
+                <target>Deactivate</target>
             </trans-unit>
         </body>
     </file>

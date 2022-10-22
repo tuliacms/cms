@@ -9,13 +9,11 @@ use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-final class UpdateWebsiteRequest implements RequestInterface
+final class DeleteLocaleRequest implements RequestInterface
 {
     public function __construct(
-        public readonly string $id,
-        public readonly string $name,
-        public readonly bool $active,
-        public readonly array $locales,
+        public readonly string $websiteId,
+        public readonly string $code,
     ) {
     }
 }

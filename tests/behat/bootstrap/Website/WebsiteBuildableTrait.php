@@ -47,4 +47,12 @@ trait WebsiteBuildableTrait
     {
         $this->websiteMother->withLocale($code);
     }
+
+    /**
+     * @Given which is inactive
+     */
+    public function whichIsInactive()
+    {
+        $this->websiteMother->isInactive();
+    }
 }

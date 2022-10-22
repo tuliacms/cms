@@ -15,8 +15,7 @@ use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
 use Tulia\Cms\Theme\Application\Service\ThemeActivator;
 use Tulia\Cms\User\Application\UseCase\CreateUser;
 use Tulia\Cms\User\Application\UseCase\CreateUserRequest;
-use Tulia\Cms\Website\Application\UseCase\UpdateWebsite;
-use Tulia\Cms\Website\Application\UseCase\UpdateWebsiteRequest;
+use Tulia\Cms\Website\Application\UseCase\CreateWebsite;
 use Tulia\Component\Importer\ImporterInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteRegistryInterface;
 
@@ -32,7 +31,7 @@ final class SetupSystem extends AbstractTransactionalUseCase
         private readonly CreateUser $createUser,
         private readonly WebsitesOptionsRegistrator $optionsRegistrator,
         private readonly OptionsRepositoryInterface $optionsRepository,
-        private readonly UpdateWebsite $updateWebsite,
+        private readonly CreateWebsite $createWebsite,
         private readonly Connection $connection,
         private readonly ThemeActivator $themeActivator,
         private readonly ImporterInterface $importer,
@@ -46,8 +45,8 @@ final class SetupSystem extends AbstractTransactionalUseCase
     protected function execute(RequestInterface $request): ?ResultInterface
     {
         $websiteId = $this->getWebsiteId();
+        $this->createWebsite($websiteId, $request->websiteName, $request->websiteLocale, $request->websiteLocalDomain, $request->websiteProductionDomain);
         $this->updateOptions($websiteId, $request->websiteLocale, $request->username);
-        $this->updateWebsite($websiteId, $request->websiteName, $request->websiteLocale, $request->websiteLocalDomain, $request->websiteProductionDomain);
         $this->updateTheme($websiteId);
         $userId = $this->createAdminUser($request->username, $request->userPassword);
 
@@ -82,9 +81,9 @@ final class SetupSystem extends AbstractTransactionalUseCase
         file_put_contents($this->rootDir.'/.env', implode('', $lines));
     }
 
-    private function updateWebsite(string $websiteId, string $name, string $locale, string $localDomain, string $productionDomain): void
+    private function createWebsite(string $websiteId, string $name, string $locale, string $localDomain, string $productionDomain): void
     {
-        ($this->updateWebsite)(new UpdateWebsiteRequest(
+        ($this->createWebsite)(new UpdateWebsiteRequest(
             $websiteId,
             $name,
             true,

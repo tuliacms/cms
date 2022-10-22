@@ -48,6 +48,75 @@ exports["default"] = (sfc, props) => {
 
 /***/ }),
 
+/***/ "./src/js/components/ActionForm.vue":
+/*!******************************************!*\
+  !*** ./src/js/components/ActionForm.vue ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _ActionForm_vue_vue_type_template_id_ea7c7e34__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ActionForm.vue?vue&type=template&id=ea7c7e34 */ "./src/js/components/ActionForm.vue?vue&type=template&id=ea7c7e34");
+/* harmony import */ var _ActionForm_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ActionForm.vue?vue&type=script&setup=true&lang=js */ "./src/js/components/ActionForm.vue?vue&type=script&setup=true&lang=js");
+/* harmony import */ var _home_adam_projects_tuliacms_development_tuliacms_core_src_Cms_Website_Infrastructure_Framework_Resources_public_websites_builder_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+
+
+
+
+;
+const __exports__ = /*#__PURE__*/(0,_home_adam_projects_tuliacms_development_tuliacms_core_src_Cms_Website_Infrastructure_Framework_Resources_public_websites_builder_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_ActionForm_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_ActionForm_vue_vue_type_template_id_ea7c7e34__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"src/js/components/ActionForm.vue"]])
+/* hot reload */
+if (false) {}
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__exports__);
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/components/ActionForm.vue?vue&type=script&setup=true&lang=js":
+/*!*************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/components/ActionForm.vue?vue&type=script&setup=true&lang=js ***!
+  \*************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  __name: 'ActionForm',
+  props: ['endpoint'],
+  setup(__props, { expose }) {
+
+const props = __props
+
+const Tulia = __webpack_require__(/*! Tulia */ "Tulia");
+const { defineProps, defineExpose, ref, reactive } = __webpack_require__(/*! vue */ "vue");
+
+const fields = reactive({
+    list: [],
+});
+
+const form = ref(null);
+const submit = (newFields) => {
+    fields.list = newFields;
+    Tulia.PageLoader.show();
+    form.value.submit();
+};
+
+expose({ submit });
+
+const __returned__ = { Tulia, defineProps, defineExpose, ref, reactive, props, fields, form, submit }
+Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
+return __returned__
+}
+
+});
+
+/***/ }),
+
 /***/ "./src/js/components/Root.vue":
 /*!************************************!*\
   !*** ./src/js/components/Root.vue ***!
@@ -98,12 +167,17 @@ const props = __props
 
 const NewWebsiteModal = (__webpack_require__(/*! ./modals/NewWebsite.vue */ "./src/js/components/modals/NewWebsite.vue")["default"]);
 const NewLocaleModal = (__webpack_require__(/*! ./modals/NewLocale.vue */ "./src/js/components/modals/NewLocale.vue")["default"]);
+const ActionForm = (__webpack_require__(/*! ./ActionForm.vue */ "./src/js/components/ActionForm.vue")["default"]);
 const { defineProps, computed, reactive, ref } = __webpack_require__(/*! vue */ "vue");
 const Tulia = __webpack_require__(/*! Tulia */ "Tulia");
 
 
 const newLocaleModal = ref(null);
 const newWebsiteModal = ref(null);
+const activateWebsiteForm = ref(null);
+const deactivateWebsiteForm = ref(null);
+const deleteWebsiteForm = ref(null);
+const deleteLocaleForm = ref(null);
 const modals = {
     newWebsite: {
         show: () => newWebsiteModal.value.show(),
@@ -113,23 +187,33 @@ const modals = {
     }
 };
 
-const toggleWebsiteVisibility = (id) => {
-    Tulia.PageLoader.show();
-    alert(`Manage ${id}`);
+const activateWebsite = (id) => {
+    activateWebsiteForm.value.submit({ id: id });
+};
+const deactivateWebsite = (id) => {
+    deactivateWebsiteForm.value.submit({ id: id });
+};
+const deleteLocale = (website, locale) => {
+    Tulia.Confirmation.warning().then((v) => {
+        if (v.value) {
+            deleteLocaleForm.value.submit({website, locale});
+        }
+    });
 };
 const createWebsite = () => {
     modals.newWebsite.show();
+};
+const deleteWebsite = (id) => {
+    Tulia.Confirmation.warning().then((v) => {
+        if (v.value) {
+            deleteWebsiteForm.value.submit(id);
+        }
+    });
 };
 
 const newLocale = (website) => {
     modals.newLocale.show(website);
 };
-const manageLocale = (websiteId, code) => {
-    alert(`Manage locale ${code} of website ${websiteId}`);
-};
-/*const manageWebsite = (websiteId) => {
-    alert(`Manage website ${websiteId}`);
-};*/
 
 const localeProperty = (code, property) => {
     for (let i = 0; i < props.locales.length; i++) {
@@ -141,7 +225,7 @@ const localeProperty = (code, property) => {
     return '';
 };
 
-const __returned__ = { NewWebsiteModal, NewLocaleModal, defineProps, computed, reactive, ref, Tulia, props, newLocaleModal, newWebsiteModal, modals, toggleWebsiteVisibility, createWebsite, newLocale, manageLocale, localeProperty }
+const __returned__ = { NewWebsiteModal, NewLocaleModal, ActionForm, defineProps, computed, reactive, ref, Tulia, props, newLocaleModal, newWebsiteModal, activateWebsiteForm, deactivateWebsiteForm, deleteWebsiteForm, deleteLocaleForm, modals, activateWebsite, deactivateWebsite, deleteLocale, createWebsite, deleteWebsite, newLocale, localeProperty }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -589,6 +673,21 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/js/components/ActionForm.vue?vue&type=script&setup=true&lang=js":
+/*!*****************************************************************************!*\
+  !*** ./src/js/components/ActionForm.vue?vue&type=script&setup=true&lang=js ***!
+  \*****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_ActionForm_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_ActionForm_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./ActionForm.vue?vue&type=script&setup=true&lang=js */ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/components/ActionForm.vue?vue&type=script&setup=true&lang=js");
+ 
+
+/***/ }),
+
 /***/ "./src/js/components/Root.vue?vue&type=script&setup=true&lang=js":
 /*!***********************************************************************!*\
   !*** ./src/js/components/Root.vue?vue&type=script&setup=true&lang=js ***!
@@ -646,6 +745,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_NewWebsite_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./NewWebsite.vue?vue&type=script&setup=true&lang=js */ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/components/modals/NewWebsite.vue?vue&type=script&setup=true&lang=js");
  
+
+/***/ }),
+
+/***/ "./src/js/components/ActionForm.vue?vue&type=template&id=ea7c7e34":
+/*!************************************************************************!*\
+  !*** ./src/js/components/ActionForm.vue?vue&type=template&id=ea7c7e34 ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_ActionForm_vue_vue_type_template_id_ea7c7e34__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_ActionForm_vue_vue_type_template_id_ea7c7e34__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./ActionForm.vue?vue&type=template&id=ea7c7e34 */ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/components/ActionForm.vue?vue&type=template&id=ea7c7e34");
+
 
 /***/ }),
 
@@ -709,6 +823,47 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/components/ActionForm.vue?vue&type=template&id=ea7c7e34":
+/*!******************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/components/ActionForm.vue?vue&type=template&id=ea7c7e34 ***!
+  \******************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "vue");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+
+
+const _hoisted_1 = ["action"]
+const _hoisted_2 = ["value"]
+const _hoisted_3 = ["name", "value"]
+
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("form", {
+    action: $props.endpoint.url,
+    method: "post",
+    ref: "form"
+  }, [
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+      type: "hidden",
+      value: $props.endpoint.csrfToken,
+      name: "_token"
+    }, null, 8 /* PROPS */, _hoisted_2),
+    ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.fields.list, (value, name) => {
+      return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("input", {
+        type: "hidden",
+        name: name,
+        value: value
+      }, null, 8 /* PROPS */, _hoisted_3))
+    }), 256 /* UNKEYED_FRAGMENT */))
+  ], 8 /* PROPS */, _hoisted_1))
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/components/Root.vue?vue&type=template&id=378f20ae&scoped=true":
 /*!************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/components/Root.vue?vue&type=template&id=378f20ae&scoped=true ***!
@@ -732,7 +887,7 @@ const _hoisted_5 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/(0,vue__WEBPACK
 const _hoisted_6 = { class: "pane-title" }
 const _hoisted_7 = { class: "pane-body" }
 const _hoisted_8 = { class: "alert alert-info" }
-const _hoisted_9 = { class: "row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 websites-list" }
+const _hoisted_9 = { class: "row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-3 websites-list" }
 const _hoisted_10 = { class: "col mb-4" }
 const _hoisted_11 = { class: "card" }
 const _hoisted_12 = { class: "card-body" }
@@ -741,7 +896,7 @@ const _hoisted_14 = ["onClick"]
 const _hoisted_15 = { class: "card-title" }
 const _hoisted_16 = { class: "text-muted" }
 const _hoisted_17 = { class: "list-group list-group-flush" }
-const _hoisted_18 = ["title", "onClick"]
+const _hoisted_18 = { class: "list-group-item d-flex justify-content-between align-items-center pe-1" }
 const _hoisted_19 = ["src"]
 const _hoisted_20 = { key: 0 }
 const _hoisted_21 = { key: 1 }
@@ -749,27 +904,39 @@ const _hoisted_22 = {
   key: 2,
   class: "text-lowercase"
 }
-const _hoisted_23 = ["title", "onClick"]
-const _hoisted_24 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", { class: "list-group-item-icon fa fa-plus" }, null, -1 /* HOISTED */))
-const _hoisted_25 = { class: "card-footer" }
-const _hoisted_26 = ["onClick"]
-const _hoisted_27 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", { class: "btn-icon fa fa-eye-slash" }, null, -1 /* HOISTED */))
+const _hoisted_23 = ["onClick", "title"]
+const _hoisted_24 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", { class: "btn-icon fa fa-eye-slash" }, null, -1 /* HOISTED */))
+const _hoisted_25 = [
+  _hoisted_24
+]
+const _hoisted_26 = ["onClick", "title"]
+const _hoisted_27 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", { class: "btn-icon fa fa-eye" }, null, -1 /* HOISTED */))
 const _hoisted_28 = [
   _hoisted_27
 ]
-const _hoisted_29 = ["onClick"]
-const _hoisted_30 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", { class: "btn-icon fa fa-eye" }, null, -1 /* HOISTED */))
+const _hoisted_29 = ["onClick", "title"]
+const _hoisted_30 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", { class: "btn-icon fa fa-trash" }, null, -1 /* HOISTED */))
 const _hoisted_31 = [
   _hoisted_30
 ]
-const _hoisted_32 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
-  href: "#",
-  title: "Remove website",
-  "data-bs-toggle": "tooltip",
-  class: "btn btn-sm btn-icon-only btn-outline-danger me-2"
-}, [
-  /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", { class: "btn-icon fa fa-trash" })
-], -1 /* HOISTED */))
+const _hoisted_32 = ["title", "onClick"]
+const _hoisted_33 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", { class: "list-group-item-icon fa fa-plus" }, null, -1 /* HOISTED */))
+const _hoisted_34 = { class: "card-footer px-2" }
+const _hoisted_35 = ["onClick", "title"]
+const _hoisted_36 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", { class: "btn-icon fa fa-eye-slash" }, null, -1 /* HOISTED */))
+const _hoisted_37 = [
+  _hoisted_36
+]
+const _hoisted_38 = ["onClick", "title"]
+const _hoisted_39 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", { class: "btn-icon fa fa-eye" }, null, -1 /* HOISTED */))
+const _hoisted_40 = [
+  _hoisted_39
+]
+const _hoisted_41 = ["onClick", "title"]
+const _hoisted_42 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", { class: "btn-icon fa fa-trash" }, null, -1 /* HOISTED */))
+const _hoisted_43 = [
+  _hoisted_42
+]
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [
@@ -800,7 +967,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                         key: 0,
                         "data-bs-toggle": "tooltip",
                         title: $props.translations.websiteInactiveHint,
-                        class: "badge badge-secondary"
+                        class: "badge badge-secondary mb-3"
                       }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.translations.websiteInactive), 9 /* TEXT, PROPS */, _hoisted_13))
                     : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true),
                   (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
@@ -813,14 +980,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 ]),
                 (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [
                   ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(website.locales, (locale) => {
-                    return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
-                      class: "list-group-item d-flex justify-content-between align-items-center",
-                      "data-bs-toggle": "tooltip",
-                      "data-bs-placement": "right",
-                      title: $props.translations.manageLocale,
-                      href: "#",
-                      onClick: $event => ($setup.manageLocale(website.id, locale.code))
-                    }, [
+                    return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_18, [
                       (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
                         src: $setup.localeProperty(locale.code, 'flag'),
                         alt: "",
@@ -833,8 +993,37 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                         : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_21, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.localeProperty(locale.code, 'name')), 1 /* TEXT */)),
                       (locale.is_default)
                         ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("small", _hoisted_22, "(" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.translations.defaultLocale) + ")", 1 /* TEXT */))
-                        : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)
-                    ], 8 /* PROPS */, _hoisted_18))
+                        : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true),
+                      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [
+                        (website.active)
+                          ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
+                              key: 0,
+                              href: "#",
+                              onClick: $event => ($setup.deactivateWebsite(website.id)),
+                              title: $props.translations.deactivate,
+                              "data-bs-toggle": "tooltip",
+                              class: "btn btn-sm btn-icon-only btn-outline-primary me-2"
+                            }, _hoisted_25, 8 /* PROPS */, _hoisted_23))
+                          : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true),
+                        (!website.active)
+                          ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
+                              key: 1,
+                              href: "#",
+                              onClick: $event => ($setup.activateWebsite(website.id)),
+                              title: $props.translations.activate,
+                              "data-bs-toggle": "tooltip",
+                              class: "btn btn-sm btn-icon-only btn-outline-primary me-2"
+                            }, _hoisted_28, 8 /* PROPS */, _hoisted_26))
+                          : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true),
+                        (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+                          href: "#",
+                          onClick: $event => ($setup.deleteLocale(website.id, locale.code)),
+                          title: $props.translations.deleteLocale,
+                          "data-bs-toggle": "tooltip",
+                          class: "btn btn-sm btn-icon-only btn-outline-danger me-2"
+                        }, _hoisted_31, 8 /* PROPS */, _hoisted_29)
+                      ])
+                    ]))
                   }), 256 /* UNKEYED_FRAGMENT */)),
                   (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
                     href: "#",
@@ -844,33 +1033,38 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                     title: $props.translations.addLocale,
                     onClick: $event => ($setup.newLocale(website))
                   }, [
-                    _hoisted_24,
+                    _hoisted_33,
                     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.translations.addLocale), 1 /* TEXT */)
-                  ], 8 /* PROPS */, _hoisted_23)
+                  ], 8 /* PROPS */, _hoisted_32)
                 ]),
-                (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, [
-                  (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("<a href=\"#\" @click=\"manageWebsite(website.id)\" class=\"card-link py-3 d-inline-block\" :title=\"translations.manageWebsite\"><i class=\"fa fa-pen\"></i> &nbsp; {{ translations.manageWebsite }}</a>"),
+                (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_34, [
                   (website.active)
                     ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
                         key: 0,
                         href: "#",
-                        onClick: $event => ($setup.toggleWebsiteVisibility(website.id)),
-                        title: "Deactivate website",
+                        onClick: $event => ($setup.deactivateWebsite(website.id)),
+                        title: $props.translations.deactivate,
                         "data-bs-toggle": "tooltip",
                         class: "btn btn-sm btn-icon-only btn-outline-primary me-2"
-                      }, _hoisted_28, 8 /* PROPS */, _hoisted_26))
+                      }, _hoisted_37, 8 /* PROPS */, _hoisted_35))
                     : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true),
                   (!website.active)
                     ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
                         key: 1,
                         href: "#",
-                        onClick: $event => ($setup.toggleWebsiteVisibility(website.id)),
-                        title: "Activate website",
+                        onClick: $event => ($setup.activateWebsite(website.id)),
+                        title: $props.translations.activate,
                         "data-bs-toggle": "tooltip",
                         class: "btn btn-sm btn-icon-only btn-outline-primary me-2"
-                      }, _hoisted_31, 8 /* PROPS */, _hoisted_29))
+                      }, _hoisted_40, 8 /* PROPS */, _hoisted_38))
                     : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true),
-                  _hoisted_32
+                  (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+                    href: "#",
+                    onClick: $event => ($setup.deleteWebsite(website.id)),
+                    title: $props.translations.deleteWebsite,
+                    "data-bs-toggle": "tooltip",
+                    class: "btn btn-sm btn-icon-only btn-outline-danger me-2"
+                  }, _hoisted_43, 8 /* PROPS */, _hoisted_41)
                 ])
               ])
             ]))
@@ -889,7 +1083,23 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       locales: $props.locales,
       endpoint: $props.endpoints.newLocale,
       ref: "newLocaleModal"
-    }, null, 8 /* PROPS */, ["translations", "locales", "endpoint"])
+    }, null, 8 /* PROPS */, ["translations", "locales", "endpoint"]),
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["ActionForm"], {
+      endpoint: $props.endpoints.activateWebsite,
+      ref: "activateWebsiteForm"
+    }, null, 8 /* PROPS */, ["endpoint"]),
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["ActionForm"], {
+      endpoint: $props.endpoints.deactivateWebsite,
+      ref: "deactivateWebsiteForm"
+    }, null, 8 /* PROPS */, ["endpoint"]),
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["ActionForm"], {
+      endpoint: $props.endpoints.deleteWebsite,
+      ref: "deleteWebsiteForm"
+    }, null, 8 /* PROPS */, ["endpoint"]),
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["ActionForm"], {
+      endpoint: $props.endpoints.deleteLocale,
+      ref: "deleteLocaleForm"
+    }, null, 8 /* PROPS */, ["endpoint"])
   ], 64 /* STABLE_FRAGMENT */))
 }
 

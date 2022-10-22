@@ -10,5 +10,6 @@ namespace Tulia\Cms\Website\Domain\WriteModel\Rules\CanDeleteWebsite;
 enum CanDeleteWebsiteReasonEnum: string
 {
     case AtLeastOneWebsiteMustBeActive = 'At least one website must be active';
+    case CannotDeleteCurrentWebsite = 'Cannot delete current website';
     case OK = 'OK';
 }
