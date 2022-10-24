@@ -3,7 +3,7 @@
         <Modal :title="translations.createWebsite" ref="modalInstance" modificators="modal-lg modal-dialog-centered">
             <template #body>
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col">
                         <fieldset class="mb-3">
                             <label for="new-locale-code" class="form-label">{{ translations.locale }}</label>
                             <select id="new-locale-code" :class="{ 'form-select': 1, 'is-invalid': hasError('code') }" v-model="form.values.code" @change="updateLocalePrefix">
@@ -87,6 +87,7 @@ const FetchAPI = require('./../../shared/FetchAPI.js').default;
 const { defineProps, ref, defineExpose, reactive, toRaw } = require('vue');
 const props = defineProps(['translations', 'locales', 'endpoint']);
 const Modal = require('./Modal.vue').default;
+const Tulia = require('Tulia');
 
 let website = null;
 let defaultLocale = null;
@@ -151,12 +152,14 @@ const updateLocalePrefix = () => {
 
 const submit = () => {
     modalInstance.value.showLoader();
+    Tulia.PageLoader.show();
 
     resetFormErrors();
 
     FetchAPI.post(props.endpoint, { 'add_locale_form': toRaw(form.values) })
         .then((data) => {
             if (data.errors) {
+                Tulia.PageLoader.hide();
                 modalInstance.value.hideLoader();
                 fillFormErrors(data.errors);
             } else {

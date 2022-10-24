@@ -15,9 +15,15 @@
             <script nonce="{{ csp_nonce() }}">
                 window.Tulia = {};
                 Tulia.Globals = {
+                    user: {
+                        locale: '{{ user().locale }}',
+                    },
                     search_anything: {
-                        endpoint: '{{ path('backend.search.search') }}'
-                    }
+                        endpoint: '{{ path('backend.search.search') }}',
+                    },
+                    password_protection: {
+                        endpoint: '{{ path('backend.security.verify_password') }}',
+                    },
                 };
             </script>
         {% endif %}
@@ -32,6 +38,7 @@
         {% block body %}{% endblock %}
 
         {{ do_action('theme.body') }}
+        <script src="{{ frontend_translations_script() }}"></script>
 
         {% if prevent_load_backend_assets is not defined %}
             <script nonce="{{ csp_nonce() }}">

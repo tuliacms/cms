@@ -138,9 +138,9 @@ const activateLocale = (website, code) => {
     activateLocaleForm.value.submit({ website, code });
 };
 const deleteLocale = (website, locale) => {
-    Tulia.Confirmation.warning().then((v) => {
+    Tulia.Confirmation.critical().then((v) => {
         if (v.value) {
-            deleteLocaleForm.value.submit({ website, locale });
+            deleteLocaleForm.value.submit({ website: website, locale: locale, password: v.password });
         }
     });
 };
@@ -148,9 +148,9 @@ const createWebsite = () => {
     modals.newWebsite.show();
 };
 const deleteWebsite = (id) => {
-    Tulia.Confirmation.warning().then((v) => {
+    Tulia.Confirmation.critical().then((v) => {
         if (v.value) {
-            deleteWebsiteForm.value.submit({ id });
+            deleteWebsiteForm.value.submit({ id: id, password: v.password });
         }
     });
 };

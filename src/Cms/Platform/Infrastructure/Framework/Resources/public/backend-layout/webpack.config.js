@@ -54,6 +54,7 @@ module.exports = {
             events: {
                 onEnd: {
                     copy: [
+                        { source: './src/js/translations', destination: './dist/translations' },
                         { source: './src/images', destination: './dist/images' },
                         { source: './dist', destination: './../../../../../../../../../public/assets/core/backend/theme' },
                     ],

@@ -16,17 +16,16 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class LocaleType extends AbstractType
 {
     public function __construct(
-        private TranslatorInterface $translator
+        private readonly TranslatorInterface $translator,
+        private readonly array $availableTranslations,
     ) {
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        // @todo Get available locales from some centralized place in system
-        $translationsSupported = ['en_US', 'pl_PL'];
         $locales = [];
 
-        foreach ($translationsSupported as $locale) {
+        foreach ($this->availableTranslations as $locale) {
             $locales[$this->translator->trans('languageName', [ 'code' => $locale ], 'languages')] = $locale;
         }
 

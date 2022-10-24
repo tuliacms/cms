@@ -8,6 +8,7 @@ services:
             $cmsCoreDir: '%cms.core_dir%'
             $assetsPublicPaths: '%cms.assets.public_paths%'
             $environment: '%kernel.environment%'
+            $availableTranslations: '%cms.available_translations%'
 
     Tulia\Cms\Platform\:
         resource: '../../../../../**'

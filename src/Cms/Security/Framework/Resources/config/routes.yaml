@@ -16,3 +16,7 @@ backend.logout:
     path: /auth/logout
     controller: Tulia\Cms\Security\Controller\Backend\Security::logout
     methods: GET|POST
+
+backend.security.verify_password:
+    path: /security/verify-password
+    controller: Tulia\Cms\Security\Controller\Backend\Security::verifyPassword

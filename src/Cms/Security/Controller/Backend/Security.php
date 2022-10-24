@@ -6,9 +6,14 @@ namespace Tulia\Cms\Security\Controller\Backend;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
+use Tulia\Cms\User\Domain\ReadModel\Finder\UserFinderInterface;
+use Tulia\Cms\User\Domain\ReadModel\Finder\UserFinderScopeEnum;
 use Tulia\Component\Templating\ViewInterface;
 
 /**
@@ -53,6 +58,20 @@ class Security extends AbstractController
     public function logout(): void
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+    }
+
+    public function verifyPassword(
+        Request $request,
+        TokenStorageInterface $tokenStorage,
+        PasswordHasherFactoryInterface $hasherFactory,
+        UserFinderInterface $finder,
+    ): Response {
+        $password = $request->query->get('password');
+        $coreUser = $this->getUser();
+        $user = $finder->find(['email' => $coreUser->getUserIdentifier()], UserFinderScopeEnum::INTERNAL)->first();
+        $hasher = $hasherFactory->getPasswordHasher($coreUser);
+
+        return new Response('', $hasher->verify($user->getPassword(), $password) ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
     }
 
     public function getCollection(): array
