@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Website\Domain\ReadModel\Model;
 
+use Tulia\Cms\Website\Domain\WriteModel\Exception\LocaleNotExistsException;
+
 /**
  * @author Adam Banaszkiewicz
  */

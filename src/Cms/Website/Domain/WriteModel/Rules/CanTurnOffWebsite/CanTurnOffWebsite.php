@@ -12,7 +12,7 @@ use Tulia\Cms\Website\Domain\WriteModel\Query\WebsitesCounterQueryInterface;
 final class CanTurnOffWebsite implements CanTurnOffWebsiteInterface
 {
     public function __construct(
-        private readonly WebsitesCounterQueryInterface $websitesCounterQuery
+        private readonly WebsitesCounterQueryInterface $websitesCounterQuery,
     ) {
     }
 

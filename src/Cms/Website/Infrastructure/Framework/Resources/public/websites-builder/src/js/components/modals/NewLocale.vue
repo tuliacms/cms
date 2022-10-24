@@ -50,8 +50,12 @@
                                             <div v-if="form.errors.pathPrefix" class="invalid-feedback">{{ form.errors.pathPrefix }}</div>
                                             <div class="form-text mt-0 help-text" v-html="translations.pathPrefixHelp"></div>
                                         </fieldset>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
                                         <fieldset class="mb-3">
-                                            <label for="new-locale-ssl-mode" class="form-label">{{ translations.sslMode }}</label>
+                                            <label for="new-locale-ssl-mode" class="form-label d-block">{{ translations.sslMode }}</label>
                                             <div :class="{ 'btn-group mb-1': 1, 'is-invalid': hasError('sslMode') }" role="group">
                                                 <input type="radio" class="btn-check" name="new-locale-ssl-mode" id="new-locale-ssl-force-ssl" v-model="form.values.sslMode" value="FORCE_SSL" autocomplete="off" checked>
                                                 <label class="btn btn-outline-success" for="new-locale-ssl-force-ssl">{{ translations.forceSSL }}</label>
@@ -174,9 +178,9 @@ const collectAvailableLocales = (currentLocales) => {
             }
         }
 
-       // if (!found) {
+        if (!found) {
             availableLocales.list.push(allLocales[j]);
-        //}
+        }
     }
 };
 

@@ -22,7 +22,7 @@ final class DeactivateWebsite extends AbstractTransactionalUseCase
     }
 
     /**
-     * @param RequestInterface&ActivateWebsiteRequest $request
+     * @param RequestInterface&DeactivateWebsiteRequest $request
      */
     protected function execute(RequestInterface $request): ?ResultInterface
     {

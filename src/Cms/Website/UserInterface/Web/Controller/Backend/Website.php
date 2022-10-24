@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\Website\Application\UseCase\ActivateWebsite;
 use Tulia\Cms\Website\Application\UseCase\ActivateWebsiteRequest;
@@ -47,10 +48,10 @@ class Website extends AbstractController
         return $this->redirectToRoute('backend.website.list');
     }
 
-    public function list(Packages $packages): ViewInterface
+    public function list(Packages $packages, WebsiteInterface $website): ViewInterface
     {
         return $this->view('@backend/website/list.tpl', [
-            'websites' => array_map(static fn($w) => $w->toArray(), $this->finder->all()),
+            'websites' => $this->collectWebsites($website),
             'locales' => array_map(fn($l) => [
                 'code' => $l->getCode(),
                 'path_prefix' => $l->getLocalePrefix(),
@@ -160,5 +161,31 @@ class Website extends AbstractController
     private function cannotDoThisBecause(string $message, string $reason): void
     {
         $this->setFlash('warning', $this->trans($message, ['reason' => $this->trans($reason, [], 'websites')], 'websites'));
+    }
+
+    private function collectWebsites(WebsiteInterface $website): array
+    {
+        $websites = array_map(
+            static fn($w) => $w->toArray(),
+            $this->finder->all()
+        );
+
+        foreach ($websites as $wk => $wv) {
+            if ($wv['id'] === $website->getId()) {
+                $websites[$wk]['is_current'] = true;
+            } else {
+                $websites[$wk]['is_current'] = false;
+            }
+
+            foreach ($wv['locales'] as $lk => $lv) {
+                if ($lv['code'] === $website->getLocale()->getCode()) {
+                    $websites[$wk]['locales'][$lk]['is_current'] = true;
+                } else {
+                    $websites[$wk]['locales'][$lk]['is_current'] = false;
+                }
+            }
+        }
+
+        return $websites;
     }
 }

@@ -35,7 +35,13 @@ final class WebsiteMother
 
     public function withLocale(string $code): self
     {
-        $this->locales[] = $code;
+        $this->locales[] = ['code' => $code, 'active' => true];
+        return $this;
+    }
+
+    public function withInactiveLocale(string $code): self
+    {
+        $this->locales[] = ['code' => $code, 'active' => false];
         return $this;
     }
 
@@ -57,7 +63,7 @@ final class WebsiteMother
 
         if ([] !== $this->locales) {
             foreach ($this->locales as $locale) {
-                $website->addLocale(new CanAddLocale(), $locale);
+                $website->addLocale(new CanAddLocale(), $locale['code'], active: $locale['active']);
             }
         }
 

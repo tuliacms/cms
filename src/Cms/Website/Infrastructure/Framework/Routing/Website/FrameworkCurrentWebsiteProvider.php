@@ -21,4 +21,9 @@ final class FrameworkCurrentWebsiteProvider implements CurrentWebsiteProviderInt
     {
         return $this->website->getId();
     }
+
+    public function getLocale(): string
+    {
+        return $this->website->getLocale()->getCode();
+    }
 }

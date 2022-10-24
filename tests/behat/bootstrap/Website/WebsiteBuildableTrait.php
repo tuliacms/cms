@@ -49,6 +49,14 @@ trait WebsiteBuildableTrait
     }
 
     /**
+     * @Given which have inactive locale :code
+     */
+    public function whichHaveInactiveLocale($code): void
+    {
+        $this->websiteMother->withInactiveLocale($code);
+    }
+
+    /**
      * @Given which is inactive
      */
     public function whichIsInactive()

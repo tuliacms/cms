@@ -17,7 +17,7 @@ const form = ref(null);
 const submit = (newFields) => {
     fields.list = newFields;
     Tulia.PageLoader.show();
-    form.value.submit();
+    setTimeout(() => form.value.submit(), 300);
 };
 
 defineExpose({ submit });

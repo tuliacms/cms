@@ -10,4 +10,5 @@ namespace Tulia\Cms\Website\Domain\WriteModel\Query;
 interface CurrentWebsiteProviderInterface
 {
     public function getId(): string;
+    public function getLocale(): string;
 }

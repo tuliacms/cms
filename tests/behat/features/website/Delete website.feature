@@ -14,7 +14,7 @@ Feature: Delete website
   Scenario: I cannot delete website I'm on right now
     Given there is a website "Default website", with default locale "en_US"
     And there is at least one other active website in system
-    And I am on the website "Default website" right now
+    And I am on the website "Default website", and locale "en_US" right now
     When I delete this website
     Then website should not be deleted, because "Cannot delete current website"
 

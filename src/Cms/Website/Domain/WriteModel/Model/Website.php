@@ -7,6 +7,7 @@ namespace Tulia\Cms\Website\Domain\WriteModel\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
+use Tulia\Cms\Website\Domain\WriteModel\Event\LocaleActivityChanged;
 use Tulia\Cms\Website\Domain\WriteModel\Event\LocaleAdded;
 use Tulia\Cms\Website\Domain\WriteModel\Event\LocaleDeleted;
 use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteActivityChanged;
@@ -15,9 +16,12 @@ use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteDeleted;
 use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteUpdated;
 use Tulia\Cms\Website\Domain\WriteModel\Exception;
 use Tulia\Cms\Website\Domain\WriteModel\Exception\CannotAddLocaleException;
+use Tulia\Cms\Website\Domain\WriteModel\Exception\CannotDeleteLocaleException;
 use Tulia\Cms\Website\Domain\WriteModel\Exception\CannotDeleteWebsiteException;
 use Tulia\Cms\Website\Domain\WriteModel\Exception\CannotTurnOffWebsiteException;
 use Tulia\Cms\Website\Domain\WriteModel\Exception\LocaleNotExistsException;
+use Tulia\Cms\Website\Domain\WriteModel\Rules\CanDeleteLocale\CanDeleteLocaleInterface;
+use Tulia\Cms\Website\Domain\WriteModel\Rules\CanDeleteLocale\CanDeleteLocaleReasonEnum;
 use Tulia\Cms\Website\Domain\WriteModel\Rules\CanDeleteWebsite\CanDeleteWebsiteInterface;
 use Tulia\Cms\Website\Domain\WriteModel\Rules\CanDeleteWebsite\CanDeleteWebsiteReasonEnum;
 use Tulia\Cms\Website\Domain\WriteModel\Rules\CannAddLocale\CanAddLocale;
@@ -58,7 +62,7 @@ class Website extends AbstractAggregateRoot
         bool $active = true,
     ): self {
         $self = new self($id, $name, $backendPrefix, $active);
-        $self->locales->add(new Locale($self, $localeCode, $domain, $domainDevelopment, '', $pathPrefix, $sslMode, true));
+        $self->locales->add(new Locale($self, $localeCode, $domain, $domainDevelopment, '', $pathPrefix, $sslMode, true, true));
         $self->recordThat(new WebsiteCreated($self->id));
 
         return $self;
@@ -82,6 +86,7 @@ class Website extends AbstractAggregateRoot
                 $locale['locale_prefix'] ?? null,
                 $locale['path_prefix'] ?? null,
                 SslModeEnum::tryFrom($locale['ssl_mode'] ?? SslModeEnum::ALLOWED_BOTH),
+                true,
                 (bool) ($locale['is_default'] ?? false),
             );
         }
@@ -124,45 +129,6 @@ class Website extends AbstractAggregateRoot
         return $this->locales->toArray();
     }
 
-    public function replaceLocales(array $locales): void
-    {
-        $oldLocales = $this->collectLocaleCodes();
-
-        $this->locales->clear();
-
-        foreach ($locales as $locale) {
-            if (!isset($locale['ssl_mode'])) {
-                $locale['ssl_mode'] = SslModeEnum::ALLOWED_BOTH;
-            } elseif (!$locale['ssl_mode'] instanceof SslModeEnum) {
-                $locale['ssl_mode'] = SslModeEnum::from($locale['ssl_mode']);
-            }
-
-            $this->addLocale(new CanAddLocale(), new Locale(
-                $this,
-                $locale['code'],
-                $locale['domain'],
-                $locale['domain_development'],
-                $locale['locale_prefix'] ?? null,
-                $locale['path_prefix'] ?? null,
-                $locale['ssl_mode'],
-                (bool) ($locale['is_default'] ?? 0),
-            ));
-        }
-
-        $newLocales = $this->collectLocaleCodes();
-
-        $added = array_diff($newLocales, $oldLocales);
-        $deleted = array_diff($oldLocales, $newLocales);
-
-        foreach ($added as $code) {
-            $this->recordThat(new LocaleAdded($this->id, $code, $this->getDefaultLocale()->getCode()));
-        }
-
-        foreach ($deleted as $code) {
-            $this->recordThat(new LocaleDeleted($this->id, $code));
-        }
-    }
-
     public function addLocale(
         CanAddLocaleInterface $rules,
         string $code,
@@ -171,6 +137,7 @@ class Website extends AbstractAggregateRoot
         ?string $localePrefix = null,
         ?string $pathPrefix = null,
         SslModeEnum $sslMode = SslModeEnum::ALLOWED_BOTH,
+        bool $active = true,
     ): void {
         $reason = $rules->decide($code, $this->collectLocaleCodes());
 
@@ -183,14 +150,15 @@ class Website extends AbstractAggregateRoot
         $this->locales[] = new Locale(
             $this,
             $code,
-            $domain ?? $defaultLocale->getDomain(),
-            $domainDevelopment ?? $defaultLocale->getDomainDevelopment(),
+            $domain ?? $defaultLocale->domain,
+            $domainDevelopment ?? $defaultLocale->domainDevelopment,
             $localePrefix,
             $pathPrefix,
             $sslMode,
+            $active,
         );
 
-        $this->recordThat(new LocaleAdded($this->id, $code, $defaultLocale->getCode()));
+        $this->recordThat(new LocaleAdded($this->id, $code, $defaultLocale->code));
         $this->recordWebsiteChange();
     }
 
@@ -221,8 +189,50 @@ class Website extends AbstractAggregateRoot
         $this->recordThat(new WebsiteDeleted($this->id));
     }
 
-    public function deleteLocale(string $code): void
+    public function deleteLocale(
+        CanDeleteLocaleInterface $rules,
+        string $code,
+    ): void {
+        $defaultLocale = $this->getDefaultLocale();
+        $reason = $rules->decide($code, $this->id, $this->collectLocaleCodes(), $defaultLocale->code);
+
+        if (CanDeleteLocaleReasonEnum::OK !== $reason) {
+            throw CannotDeleteLocaleException::fromReason($reason, $code, $this->id);
+        }
+
+        foreach ($this->locales as $locale) {
+            if ($locale->isA($code)) {
+                $this->locales->removeElement($locale);
+                $this->recordThat(new LocaleDeleted($this->id, $code));
+                $this->recordWebsiteChange();
+            }
+        }
+    }
+
+    public function activateLocale(string $code): void
     {
+        foreach ($this->locales as $locale) {
+            if ($locale->isA($code) && $locale->activate()) {
+                $this->recordThat(new LocaleActivityChanged($this->id, $code, $locale->active));
+                $this->recordWebsiteChange();
+            }
+        }
+    }
+
+    public function deactivateLocale(string $code): void
+    {
+        foreach ($this->locales as $locale) {
+            if ($locale->isA($code) && $locale->deactivate()) {
+                $this->recordThat(new LocaleActivityChanged($this->id, $code, $locale->active));
+                $this->recordWebsiteChange();
+            }
+        }
+    }
+
+    public function collectDomainEvents(): array
+    {
+        $this->changedInThisSession = false;
+        return parent::collectDomainEvents();
     }
 
     /**
@@ -268,7 +278,7 @@ class Website extends AbstractAggregateRoot
     private function collectLocaleCodes(): array
     {
         return array_map(
-            static fn(Locale $v) => $v->getCode(),
+            static fn(Locale $v) => $v->code,
             $this->locales->toArray()
         );
     }
@@ -276,7 +286,7 @@ class Website extends AbstractAggregateRoot
     private function getDefaultLocale(): Locale
     {
         foreach ($this->locales as $locale) {
-            if ($locale->isDefault()) {
+            if ($locale->isDefault) {
                 return $locale;
             }
         }

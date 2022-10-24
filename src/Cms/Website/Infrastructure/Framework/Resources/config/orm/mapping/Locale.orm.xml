@@ -16,6 +16,7 @@
         <field name="pathPrefix" nullable="true"/>
         <field name="sslMode" length="16"/>
         <field name="isDefault" type="boolean"/>
+        <field name="active" type="boolean"/>
 
         <many-to-one field="website" target-entity="Tulia\Cms\Website\Domain\WriteModel\Model\Website" inversed-by="locales"/>
     </entity>

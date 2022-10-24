@@ -249,10 +249,28 @@
             <trans-unit id="tuliacms.websites.62">
                 <source>activate</source>
                 <target>Activate</target>
+                <note>Action button label</note>
             </trans-unit>
             <trans-unit id="tuliacms.websites.63">
                 <source>deactivate</source>
                 <target>Deactivate</target>
+                <note>Action button label</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.websites.64">
+                <source>localeWasDeleted</source>
+                <target>Locale was deleted.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.websites.65">
+                <source>cannotDeleteLocaleBecause</source>
+                <target>Cannot delete locale, because {reason}.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.websites.66">
+                <source>Cannot delete default locale</source>
+                <target>Cannot delete default locale</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.websites.67">
+                <source>Cannot delete locale that You are on</source>
+                <target>Cannot delete locale that You are on</target>
             </trans-unit>
         </body>
     </file>

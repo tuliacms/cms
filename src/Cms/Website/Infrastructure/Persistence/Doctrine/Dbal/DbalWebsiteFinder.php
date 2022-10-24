@@ -52,6 +52,7 @@ final class DbalWebsiteFinder implements WebsiteFinderInterface
                     'path_prefix' => $locale['path_prefix'],
                     'ssl_mode' => $locale['ssl_mode'],
                     'is_default' => (bool) $locale['is_default'],
+                    'active' => (bool) $locale['active'],
                ]);
             }
 

@@ -41,6 +41,14 @@
                         url: '{{ path('backend.website.locale.add') }}',
                         csrfToken: '{{ csrf_token('add_locale_form') }}'
                     },
+                    activateLocale: {
+                        url: '{{ path('backend.website.locale.activate') }}',
+                        csrfToken: '{{ csrf_token('website.locale.activate') }}'
+                    },
+                    deactivateLocale: {
+                        url: '{{ path('backend.website.locale.deactivate') }}',
+                        csrfToken: '{{ csrf_token('website.locale.deactivate') }}'
+                    },
                     deleteLocale: {
                         url: '{{ path('backend.website.locale.delete') }}',
                         csrfToken: '{{ csrf_token('website.locale.delete') }}'

@@ -9,6 +9,7 @@ use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Website\Domain\WriteModel\Model\Website;
+use Tulia\Cms\Website\Domain\WriteModel\Rules\CannAddLocale\CanAddLocale;
 use Tulia\Cms\Website\Domain\WriteModel\WebsiteRepositoryInterface;
 
 /**
@@ -29,19 +30,9 @@ final class WebsiteFixture extends Fixture implements FixtureGroupInterface
             'Default website',
             'en_US',
             'localhost',
-            domainDevelopment: 'tulia.loc',
+            domainDevelopment: 'localhost',
         );
-        $website->replaceLocales([[
-            'code' => 'en_US',
-            'domain' => 'localhost',
-            'domain_development' => 'localhost',
-            'is_default' => true,
-        ], [
-            'code' => 'pl_PL',
-            'domain' => 'localhost',
-            'domain_development' => 'localhost',
-            'locale_prefix' => '/pl',
-        ]]);
+        $website->addLocale(new CanAddLocale(), 'pl_PL', localePrefix: '/pl');
 
         $manager->persist($website);
         $manager->flush();

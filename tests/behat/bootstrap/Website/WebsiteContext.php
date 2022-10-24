@@ -10,15 +10,19 @@ use Tulia\Cms\Tests\Behat\AggregateRootSpy;
 use Tulia\Cms\Tests\Behat\Assert;
 use Tulia\Cms\Tests\Behat\Website\TestDoubles\StubCurrentWebsiteProvider;
 use Tulia\Cms\Tests\Behat\Website\TestDoubles\StubWebsitesCounterQuery;
+use Tulia\Cms\Website\Domain\WriteModel\Event\LocaleActivityChanged;
 use Tulia\Cms\Website\Domain\WriteModel\Event\LocaleAdded;
+use Tulia\Cms\Website\Domain\WriteModel\Event\LocaleDeleted;
 use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteActivityChanged;
 use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteCreated;
 use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteDeleted;
 use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteUpdated;
 use Tulia\Cms\Website\Domain\WriteModel\Exception\CannotAddLocaleException;
+use Tulia\Cms\Website\Domain\WriteModel\Exception\CannotDeleteLocaleException;
 use Tulia\Cms\Website\Domain\WriteModel\Exception\CannotDeleteWebsiteException;
 use Tulia\Cms\Website\Domain\WriteModel\Model\Website;
 use Tulia\Cms\Website\Domain\WriteModel\Query\WebsitesCounterQueryInterface;
+use Tulia\Cms\Website\Domain\WriteModel\Rules\CanDeleteLocale\CanDeleteLocale;
 use Tulia\Cms\Website\Domain\WriteModel\Rules\CanDeleteWebsite\CanDeleteWebsite;
 use Tulia\Cms\Website\Domain\WriteModel\Rules\CannAddLocale\CanAddLocale;
 
@@ -231,11 +235,104 @@ final class WebsiteContext implements Context
     }
 
     /**
-     * @Given I am on the website :website right now
+     * @Given I am on the website :website, and locale :code right now
      */
-    public function iAmOnTheWebsiteRightNow(string $website): void
+    public function iAmOnTheWebsiteRightNow(string $website, string $code): void
     {
-        $this->currentWebsitePrivider->setCurrentWebsite($website);
+        $this->currentWebsitePrivider->setCurrentWebsite($website, $code);
+    }
+
+    /**
+     * @When I delete locale :code
+     */
+    public function iDeleteLocale(string $code): void
+    {
+        try {
+            $this->website->deleteLocale(new CanDeleteLocale($this->currentWebsitePrivider), $code);
+        } catch (CannotDeleteLocaleException $e) {
+            $this->reasonWhyCannotDeleteLocale = $e->reason;
+        }
+    }
+
+    /**
+     * @Then locale should be deleted
+     */
+    public function localeShouldBeDeleted(): void
+    {
+        $event = $this->websiteSpy->findEvent(LocaleDeleted::class);
+
+        Assert::assertInstanceOf(LocaleDeleted::class, $event, 'Locale should be deleted');
+    }
+
+    /**
+     * @Then locale should not be deleted, because :reason
+     */
+    public function localeShouldNotBeDeletedBecause(string $reason): void
+    {
+        $event = $this->websiteSpy->findEvent(LocaleDeleted::class);
+
+        Assert::assertNull($event, 'Locale should not be deleted');
+        Assert::assertSame($reason, $this->reasonWhyCannotDeleteLocale);
+    }
+
+    /**
+     * @When I turn this website's locale :code activity on
+     */
+    public function iTurnThisWebsitesLocaleActivityOn(string $code): void
+    {
+        $this->website->activateLocale($code);
+    }
+
+    /**
+     * @When I turn this website's locale :code activity off
+     */
+    public function iTurnThisWebsitesLocaleActivityOff(string $code): void
+    {
+        $this->website->deactivateLocale($code);
+    }
+
+    /**
+     * @Then website's locale :code activity should be turned on
+     */
+    public function websitesLocaleActivityShouldBeTurnedOn(string $code): void
+    {
+        $event = $this->websiteSpy->findEvent(LocaleActivityChanged::class);
+
+        Assert::assertInstanceOf(LocaleActivityChanged::class, $event, 'Locale activity should be changed');
+        Assert::assertSame($code, $event->code);
+        Assert::assertTrue($event->active);
+    }
+
+    /**
+     * @Then website's locale :code activity should be turned off
+     */
+    public function websitesLocaleActivityShouldBeTurnedOff(string $code): void
+    {
+        $event = $this->websiteSpy->findEvent(LocaleActivityChanged::class);
+
+        Assert::assertInstanceOf(LocaleActivityChanged::class, $event, 'Locale activity should be changed');
+        Assert::assertSame($code, $event->code);
+        Assert::assertFalse($event->active);
+    }
+
+    /**
+     * @Then website's locale :code activity should not be turned on
+     */
+    public function websitesLocaleActivityShouldNotBeTurnedOn(string $code): void
+    {
+        $event = $this->websiteSpy->findEvent(LocaleActivityChanged::class);
+
+        Assert::assertNull($event, 'Locale activity should not be changed');
+    }
+
+    /**
+     * @Then website's locale :code activity should not be turned off
+     */
+    public function websitesLocaleActivityShouldNotBeTurnedOff(string $code): void
+    {
+        $event = $this->websiteSpy->findEvent(LocaleActivityChanged::class);
+
+        Assert::assertNull($event, 'Locale activity should not be changed');
     }
 
     private function id(): string

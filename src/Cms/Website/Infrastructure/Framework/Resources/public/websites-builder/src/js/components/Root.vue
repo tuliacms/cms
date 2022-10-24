@@ -19,9 +19,7 @@
                                 :title="translations.websiteInactiveHint"
                                 class="badge badge-secondary mb-3"
                             >{{ translations.websiteInactive }}</span>
-                            <a href="#" @click="manageWebsite(website.id)">
-                                <h4 class="card-title">{{ website.name }}</h4>
-                            </a>
+                            <h4 class="card-title">{{ website.name }}</h4>
                             <small class="text-muted">ID: {{ website.id }}</small>
                         </div>
                         <div class="list-group list-group-flush">
@@ -29,18 +27,27 @@
                                 v-for="locale in website.locales"
                                 class="list-group-item d-flex justify-content-between align-items-center pe-1"
                             >
-                                <img :src="localeProperty(locale.code, 'flag')" alt="" class="website-locale-flag-icon" />
-                                <span v-if="locale.is_default">
-                                    <b>{{ localeProperty(locale.code, 'name') }}</b>
-                                </span>
-                                <span v-else>
-                                    {{ localeProperty(locale.code, 'name') }}
-                                </span>
-                                <small v-if="locale.is_default" class="text-lowercase">({{ translations.defaultLocale }})</small>
                                 <div>
-                                    <a v-if="website.active" href="#" @click="deactivateWebsite(website.id)" :title="translations.deactivate" data-bs-toggle="tooltip" class="btn btn-sm btn-icon-only btn-outline-primary me-2"><i class="btn-icon fa fa-eye-slash"></i></a>
-                                    <a v-if="!website.active" href="#" @click="activateWebsite(website.id)" :title="translations.activate" data-bs-toggle="tooltip" class="btn btn-sm btn-icon-only btn-outline-primary me-2"><i class="btn-icon fa fa-eye"></i></a>
-                                    <a href="#" @click="deleteLocale(website.id, locale.code)" :title="translations.deleteLocale" data-bs-toggle="tooltip" class="btn btn-sm btn-icon-only btn-outline-danger me-2"><i class="btn-icon fa fa-trash"></i></a>
+                                    <img :src="localeProperty(locale.code, 'flag')" alt="" class="website-locale-flag-icon" />
+                                    <span v-if="locale.is_default">
+                                        <b>{{ localeProperty(locale.code, 'name') }}</b>
+                                    </span>
+                                    <span v-else>
+                                        {{ localeProperty(locale.code, 'name') }}
+                                    </span>
+                                    <small v-if="locale.is_default" class="text-lowercase">&nbsp;({{ translations.defaultLocale }})</small>
+                                </div>
+                                <div>
+                                    <div v-if="locale.active" class="form-check form-switch d-inline">
+                                        <input class="form-check-input" type="checkbox" role="switch" @change="(e) => e.target.setAttribute('disabled', 'disabled') || deactivateLocale(website.id, locale.code)" :title="translations.deactivate" data-bs-toggle="tooltip" checked>
+                                    </div>
+                                    <div v-if="!locale.active" class="form-check form-switch d-inline">
+                                        <input class="form-check-input" type="checkbox" role="switch" @change="(e) => e.target.setAttribute('disabled', 'disabled') || activateLocale(website.id, locale.code)" :title="translations.activate" data-bs-toggle="tooltip">
+                                    </div>
+                                    <a v-if="!locale.is_default && !locale.is_current" href="#" @click="deleteLocale(website.id, locale.code)" :title="translations.deleteLocale" data-bs-toggle="tooltip" class="btn btn-sm btn-icon-only btn-outline-danger me-2"><i class="btn-icon fa fa-trash"></i></a>
+                                    <span v-if="locale.is_default || locale.is_current" class="d-inline-block">
+                                        <a href="#" disabled="disabled" class="btn btn-sm btn-icon-only btn-outline-danger disabled me-2"><i class="btn-icon fa fa-trash"></i></a>
+                                    </span>
                                 </div>
                             </div>
                             <a
@@ -55,10 +62,18 @@
                                 {{ translations.addLocale }}
                             </a>
                         </div>
-                        <div class="card-footer px-2">
-                            <a v-if="website.active" href="#" @click="deactivateWebsite(website.id)" :title="translations.deactivate" data-bs-toggle="tooltip" class="btn btn-sm btn-icon-only btn-outline-primary me-2"><i class="btn-icon fa fa-eye-slash"></i></a>
-                            <a v-if="!website.active" href="#" @click="activateWebsite(website.id)" :title="translations.activate" data-bs-toggle="tooltip" class="btn btn-sm btn-icon-only btn-outline-primary me-2"><i class="btn-icon fa fa-eye"></i></a>
-                            <a href="#" @click="deleteWebsite(website.id)" :title="translations.deleteWebsite" data-bs-toggle="tooltip" class="btn btn-sm btn-icon-only btn-outline-danger me-2"><i class="btn-icon fa fa-trash"></i></a>
+                        <div class="card-footer d-flex align-items-center pe-1">
+                            <span class="me-2">{{ translations.activity }}</span>
+                            <div v-if="website.active" class="form-check form-switch d-inline">
+                                <input class="form-check-input" type="checkbox" role="switch" @change="(e) => e.target.setAttribute('disabled', 'disabled') || deactivateWebsite(website.id)" :title="translations.deactivate" data-bs-toggle="tooltip" checked>
+                            </div>
+                            <div v-if="!website.active" class="form-check form-switch d-inline">
+                                <input class="form-check-input" type="checkbox" role="switch" @change="(e) => e.target.setAttribute('disabled', 'disabled') || activateWebsite(website.id)" :title="translations.activate" data-bs-toggle="tooltip">
+                            </div>
+                            <a v-if="!website.is_current" href="#" @click="deleteWebsite(website.id)" :title="translations.deleteWebsite" data-bs-toggle="tooltip" class="btn btn-sm btn-icon-only btn-outline-danger me-2 mx-auto"><i class="btn-icon fa fa-trash"></i></a>
+                            <span v-if="website.is_current" class="d-inline-block me-2 mx-auto">
+                                <a href="#" disabled="disabled" class="btn btn-sm btn-icon-only btn-outline-danger disabled"><i class="btn-icon fa fa-trash"></i></a>
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -79,6 +94,8 @@
     ></NewLocaleModal>
     <ActionForm :endpoint="endpoints.activateWebsite" ref="activateWebsiteForm"></ActionForm>
     <ActionForm :endpoint="endpoints.deactivateWebsite" ref="deactivateWebsiteForm"></ActionForm>
+    <ActionForm :endpoint="endpoints.activateLocale" ref="activateLocaleForm"></ActionForm>
+    <ActionForm :endpoint="endpoints.deactivateLocale" ref="deactivateLocaleForm"></ActionForm>
     <ActionForm :endpoint="endpoints.deleteWebsite" ref="deleteWebsiteForm"></ActionForm>
     <ActionForm :endpoint="endpoints.deleteLocale" ref="deleteLocaleForm"></ActionForm>
 </template>
@@ -97,6 +114,8 @@ const activateWebsiteForm = ref(null);
 const deactivateWebsiteForm = ref(null);
 const deleteWebsiteForm = ref(null);
 const deleteLocaleForm = ref(null);
+const activateLocaleForm = ref(null);
+const deactivateLocaleForm = ref(null);
 const modals = {
     newWebsite: {
         show: () => newWebsiteModal.value.show(),
@@ -107,15 +126,21 @@ const modals = {
 };
 
 const activateWebsite = (id) => {
-    activateWebsiteForm.value.submit({ id: id });
+    activateWebsiteForm.value.submit({ id });
 };
 const deactivateWebsite = (id) => {
-    deactivateWebsiteForm.value.submit({ id: id });
+    deactivateWebsiteForm.value.submit({ id });
+};
+const deactivateLocale = (website, code) => {
+    deactivateLocaleForm.value.submit({ website, code });
+};
+const activateLocale = (website, code) => {
+    activateLocaleForm.value.submit({ website, code });
 };
 const deleteLocale = (website, locale) => {
     Tulia.Confirmation.warning().then((v) => {
         if (v.value) {
-            deleteLocaleForm.value.submit({website, locale});
+            deleteLocaleForm.value.submit({ website, locale });
         }
     });
 };
@@ -157,6 +182,23 @@ const localeProperty = (code, property) => {
             top: 50%;
             transform: translateY(-50%);
             max-width: 16px;
+        }
+    }
+}
+.form-check-input {
+    height: 1.5em;
+}
+.form-switch {
+    padding-left: 0;
+    margin-right: 10px;
+
+    .form-check-input {
+        width: 3em;
+        margin-left: 0;
+        float: none;
+
+        &:checked {
+            background-color: var(--bs-success);
         }
     }
 }

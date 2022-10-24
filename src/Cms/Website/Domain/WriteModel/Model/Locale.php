@@ -16,13 +16,14 @@ class Locale
 
     public function __construct(
         private Website $website,
-        private string $code,
-        private string $domain,
-        private ?string $domainDevelopment = null,
-        private ?string $localePrefix = null,
-        private ?string $pathPrefix = null,
-        private SslModeEnum $sslMode = SslModeEnum::ALLOWED_BOTH,
-        private bool $isDefault = false,
+        public readonly string $code,
+        public string $domain,
+        public ?string $domainDevelopment = null,
+        public ?string $localePrefix = null,
+        public ?string $pathPrefix = null,
+        public SslModeEnum $sslMode = SslModeEnum::ALLOWED_BOTH,
+        public bool $active = true,
+        public bool $isDefault = false,
     ) {
     }
 
@@ -41,37 +42,33 @@ class Locale
             'path_prefix' => $this->pathPrefix,
             'ssl_mode' => $this->sslMode->value,
             'is_default' => $this->isDefault,
+            'active' => $this->active,
         ];
     }
 
-    public function getCode(): string
+    public function isA(string $code): bool
     {
-        return $this->code;
+        return $this->code === $code;
     }
 
-    public function setCode(string $code): void
+    public function activate(): bool
     {
-        $this->code = $code;
+        if ($this->active === false) {
+            $this->active = true;
+            return true;
+        }
+
+        return false;
     }
 
-    public function getDomain(): string
+    public function deactivate(): bool
     {
-        return $this->domain;
-    }
+        if ($this->active === true) {
+            $this->active = false;
+            return true;
+        }
 
-    public function setDomain(string $domain): void
-    {
-        $this->domain = $domain;
-    }
-
-    public function getDomainDevelopment(): ?string
-    {
-        return $this->domainDevelopment;
-    }
-
-    public function setDomainDevelopment(?string $domainDevelopment): void
-    {
-        $this->domainDevelopment = $domainDevelopment;
+        return false;
     }
 
     public function getLocalePrefix(): ?string
@@ -79,38 +76,8 @@ class Locale
         return $this->localePrefix;
     }
 
-    public function setLocalePrefix(?string $localePrefix): void
-    {
-        $this->localePrefix = $localePrefix;
-    }
-
     public function getPathPrefix(): ?string
     {
         return $this->pathPrefix;
-    }
-
-    public function setPathPrefix(?string $pathPrefix): void
-    {
-        $this->pathPrefix = $pathPrefix;
-    }
-
-    public function getSslMode(): SslModeEnum
-    {
-        return $this->sslMode;
-    }
-
-    public function setSslMode(SslModeEnum $sslMode): void
-    {
-        $this->sslMode = $sslMode;
-    }
-
-    public function isDefault(): bool
-    {
-        return $this->isDefault;
-    }
-
-    public function setIsDefault(bool $isDefault): void
-    {
-        $this->isDefault = $isDefault;
     }
 }

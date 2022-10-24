@@ -50,6 +50,8 @@ webpack-build-production:
 	npm run --prefix src/Cms/ContactForm/Infrastructure/Framework/Resources/public/contact-form-builder build
 	echo "Executing: \e[94mBuilding Webpack production for Frontend Toolbar:\e[0m"
 	npm run --prefix src/Cms/FrontendToolbar/Framework/Resources/public/frontend-toolbar build
+	echo "Executing: \e[94mBuilding Webpack production for Websites Builder:\e[0m"
+	npm run --prefix src/Cms/Website/Infrastructure/Framework/Resources/public/websites-builder build
 	export NODE_ENV=development
 	cd ../ && make console assets:publish
 

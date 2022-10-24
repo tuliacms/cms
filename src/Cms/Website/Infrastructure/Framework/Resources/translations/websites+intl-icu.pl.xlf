@@ -200,11 +200,11 @@
             </trans-unit>
             <trans-unit id="tuliacms.websites.50">
                 <source>cannotTurnOffWebsiteBecause</source>
-                <target>Nie można wyłączyć witryny, ponieważ {reason}.</target>
+                <target>Nie można wyłączyć witryny, ponieważ: {reason}.</target>
             </trans-unit>
             <trans-unit id="tuliacms.websites.51">
                 <source>cannotDeleteWebsiteBecause</source>
-                <target>Nie można usunąć tej witryny, ponieważ {reason}.</target>
+                <target>Nie można usunąć tej witryny, ponieważ: {reason}.</target>
             </trans-unit>
             <trans-unit id="tuliacms.websites.52">
                 <source>deleteLocale</source>
@@ -251,6 +251,22 @@
                 <source>deactivate</source>
                 <target>Dezaktywuj</target>
                 <note>Action button label</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.websites.64">
+                <source>localeWasDeleted</source>
+                <target>Język został usunięty.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.websites.65">
+                <source>cannotDeleteLocaleBecause</source>
+                <target>Nie można usunąć języka, ponieważ: {reason}.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.websites.66">
+                <source>Cannot delete default locale</source>
+                <target>Nie można usunąć domyślnego języka</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.websites.67">
+                <source>Cannot delete locale that You are on</source>
+                <target>Nie można usunąć języka na którym aktualnie jesteś</target>
             </trans-unit>
         </body>
     </file>

@@ -11,15 +11,22 @@ use Tulia\Cms\Website\Domain\WriteModel\Query\CurrentWebsiteProviderInterface;
  */
 final class StubCurrentWebsiteProvider implements CurrentWebsiteProviderInterface
 {
-    private string $currentWebsite = '';
+    private string $website = '';
+    private string $locale = '';
 
-    public function setCurrentWebsite(string $currentWebsite): void
+    public function setCurrentWebsite(string $website, string $locale): void
     {
-        $this->currentWebsite = $currentWebsite;
+        $this->website = $website;
+        $this->locale = $locale;
     }
 
     public function getId(): string
     {
-        return $this->currentWebsite;
+        return $this->website;
+    }
+
+    public function getLocale(): string
+    {
+        return $this->locale;
     }
 }

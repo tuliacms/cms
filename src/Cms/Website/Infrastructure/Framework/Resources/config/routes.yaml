@@ -23,6 +23,16 @@ backend.website.locale.delete:
     controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Locale::delete
     methods: POST
 
+backend.website.locale.activate:
+    path: /website/locale/activate
+    controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Locale::activate
+    methods: POST
+
+backend.website.locale.deactivate:
+    path: /website/locale/deactivate
+    controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Locale::deactivate
+    methods: POST
+
 backend.website.delete:
     path: /website/delete
     controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Website::delete
