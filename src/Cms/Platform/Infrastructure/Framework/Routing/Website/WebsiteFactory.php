@@ -6,6 +6,7 @@ namespace Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website;
 
 use Symfony\Component\HttpFoundation\RequestStack;
 use Tulia\Cms\Platform\Infrastructure\Framework\Console\ConsoleWebsiteProvider;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\NotFoundViewRenderer;
 use Tulia\Cms\Website\Domain\ReadModel\Finder\WebsiteFinderInterface;
 
 /**
@@ -16,6 +17,7 @@ final class WebsiteFactory
     public static function factory(
         RequestStack $requestStack,
         WebsiteFinderInterface $websiteFinder,
+        NotFoundViewRenderer $render,
         string $environment,
     ): WebsiteInterface {
         if (php_sapi_name() === 'cli') {
@@ -32,7 +34,7 @@ final class WebsiteFactory
             );
 
             if (!$sourceWebsite) {
-                self::show404($request->getPathInfo(), $request->getHttpHost(), $environment === 'dev', $websites);
+                $render->render();
             }
 
             $websiteId = $sourceWebsite['id'];
@@ -52,6 +54,7 @@ final class WebsiteFactory
                 localePrefix: $locale->getLocalePrefix(),
                 pathPrefix: $locale->getPathPrefix(),
                 sslMode: SslModeEnum::tryFrom($locale->getSslMode()),
+                active: $locale->isActive(),
             );
         }
 
@@ -91,23 +94,12 @@ final class WebsiteFactory
                     'locale_code' => $locale->getCode(),
                     'is_default' => $locale->isDefault(),
                     'ssl_mode' => $locale->getSslMode(),
+                    // Both must be active to assume request is available
+                    'is_active' => $website->isActive() && $locale->isActive(),
                 ];
             }
         }
 
         return $result;
-    }
-
-    private static function show404(string $path, string $host, bool $developmentEnvironment, array $websites): void
-    {
-        header('HTTP/1.1 404 Not Found', true, 404);
-
-        if ($developmentEnvironment) {
-            include dirname(__DIR__, 2).'/Resources/views/website/404.dev.php';
-        } else {
-            include dirname(__DIR__, 2).'/Resources/views/website/404.prod.php';
-        }
-
-        exit;
     }
 }

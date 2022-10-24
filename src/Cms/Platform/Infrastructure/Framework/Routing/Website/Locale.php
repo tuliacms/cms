@@ -18,6 +18,7 @@ class Locale implements LocaleInterface
         private readonly ?string $localePrefix = null,
         private readonly ?string $pathPrefix = null,
         private readonly SslModeEnum $sslMode = SslModeEnum::ALLOWED_BOTH,
+        private readonly bool $active = true,
     ) {
         if (strpos($code, '_') !== false) {
             [$this->language, $this->region] = explode('_', $code);
@@ -64,5 +65,10 @@ class Locale implements LocaleInterface
     public function getLocalePrefix(): ?string
     {
         return $this->localePrefix;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->active;
     }
 }

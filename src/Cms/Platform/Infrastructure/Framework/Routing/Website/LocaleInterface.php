@@ -17,4 +17,5 @@ interface LocaleInterface
     public function getSslMode(): string;
     public function getPathPrefix(): ?string;
     public function getLocalePrefix(): ?string;
+    public function isActive(): ?bool;
 }

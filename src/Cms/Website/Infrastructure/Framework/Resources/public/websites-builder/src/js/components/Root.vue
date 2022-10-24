@@ -150,7 +150,7 @@ const createWebsite = () => {
 const deleteWebsite = (id) => {
     Tulia.Confirmation.warning().then((v) => {
         if (v.value) {
-            deleteWebsiteForm.value.submit(id);
+            deleteWebsiteForm.value.submit({ id });
         }
     });
 };
