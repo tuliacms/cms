@@ -14,7 +14,11 @@ services:
 
     Tulia\Cms\Filemanager\:
         resource: '../../../../**'
-        exclude: '../../../../{Infrastructure/Framework/Resources,Domain/WriteModel/Model,Domain/ReadModel/Model}'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources'
+            - '../../../../Domain/WriteModel/Model'
+            - '../../../../Domain/WriteModel/Exception'
+            - '../../../../Domain/ReadModel/Model'
 
     Tulia\Cms\Filemanager\Application\Service\Cropper:
         bind:

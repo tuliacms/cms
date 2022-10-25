@@ -7,7 +7,12 @@ services:
 
     Tulia\Cms\Website\:
         resource: '../../../../**'
-        exclude: '../../../../{Infrastructure/Framework/Resources}'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources'
+            - '../../../../Domain/WriteModel/Model'
+            - '../../../../Domain/WriteModel/Exception'
+            - '../../../../Domain/WriteModel/Event'
+            - '../../../../Domain/ReadModel/Model'
 
     Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteRegistryInterface:
         '@Tulia\Cms\Website\Infrastructure\Persistence\Doctrine\Dbal\DbalWebsiteRegistry'

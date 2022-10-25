@@ -5,7 +5,10 @@ services:
 
     Tulia\Cms\Options\:
         resource: '../../../../**'
-        exclude: '../../../../{Infrastructure/Framework/Resources}'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources'
+            - '../../../../Domain/WriteModel/Model'
+            - '../../../../Domain/WriteModel/Exception'
 
     Tulia\Cms\Options\Infrastructure\Framework\Config\YamlRegisteredOptionsRegistry:
         bind:

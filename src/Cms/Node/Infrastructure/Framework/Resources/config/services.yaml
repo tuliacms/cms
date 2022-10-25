@@ -1,0 +1,27 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Cms\Node\:
+        resource: '../../../../**'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources'
+            - '../../../../Domain/WriteModel/Model'
+            - '../../../../Domain/WriteModel/Exception'
+            - '../../../../Domain/WriteModel/Event'
+            - '../../../../Domain/ReadModel/Model'
+
+    Tulia\Cms\Node\Domain\WriteModel\Service\NodePurpose\NodePurposeRegistryInterface:
+        class: Tulia\Cms\Node\Domain\WriteModel\Service\NodePurpose\NodePurposeRegistry
+        bind:
+            $providers: !tagged_iterator node.purpose_provider
+
+    Tulia\Cms\Node\Infrastructure\Framework\Routing\SymfonyRouter:
+        tags: [ routing_chain.router ]
+
+    Tulia\Cms\Node\Infrastructure\Menu\IdentityProvider:
+        tags: [ menu.identity_provider ]
+
+    Tulia\Cms\Node\Domain\WriteModel\Rules\CanAddPurpose\CanImposePurposeInterface:
+        class: Tulia\Cms\Node\Domain\WriteModel\Rules\CanAddPurpose\CanImposePurpose

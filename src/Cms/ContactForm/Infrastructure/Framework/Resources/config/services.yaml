@@ -11,7 +11,13 @@ services:
     Tulia\Cms\ContactForm\:
         resource: '../../../../**'
         exclude:
-            - '../../../../{Infrastructure/Framework/Resources,Domain/Event,Domain/Exception,Domain/FieldsParser/Exception,Domain/WriteModel/Model}'
+            - '../../../../Infrastructure/Framework/Resources'
+            - '../../../../Domain/FieldsParser/Exception'
+            - '../../../../Domain/WriteModel/Event'
+            - '../../../../Domain/WriteModel/Model'
+            - '../../../../Domain/Exception'
+            - '../../../../Domain/Event'
+            - '../../../../Domain/ReadModel/Model'
             - '../../../../Domain/FieldsParser/DynamicShortcode.php'
 
     Tulia\Cms\ContactForm\Domain\FieldType\FieldsTypeRegistryInterface:

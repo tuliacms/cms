@@ -6,8 +6,8 @@ services:
     Tulia\Cms\SearchAnything\:
         resource: '../../../../**'
         exclude:
-            - '../../../../Framework/Resources'
-            - '../../../../Model'
+            - '../../../../Infrastructure/Framework/Resources'
+            - '../../../../Domain/WriteModel/Model'
 
     Tulia\Cms\SearchAnything\Domain\WriteModel\Service\DocumentCollectorRegistry:
         arguments:

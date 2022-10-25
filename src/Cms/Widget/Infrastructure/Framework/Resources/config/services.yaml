@@ -5,7 +5,12 @@ services:
 
     Tulia\Cms\Widget\:
         resource: '../../../../**'
-        exclude: '../../../../{Infrastructure/Framework/Resources}'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources'
+            - '../../../../Domain/WriteModel/Model'
+            - '../../../../Domain/WriteModel/Exception'
+            - '../../../../Domain/WriteModel/Event'
+            - '../../../../Domain/ReadModel/Model'
 
     Tulia\Cms\Widget\Infrastructure\Framework\Twig\Extension\WidgetExtension:
         bind:

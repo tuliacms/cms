@@ -10,6 +10,7 @@ services:
             - '../../../../Domain/WriteModel/Exception'
             - '../../../../Domain/WriteModel/Event'
             - '../../../../Domain/WriteModel/Model'
+            - '../../../../Domain/ReadModel/Model'
 
     Tulia\Cms\Menu\Infrastructure\Framework\Twig\Extension\MenuExtension:
         tags: [ twig.extension ]
