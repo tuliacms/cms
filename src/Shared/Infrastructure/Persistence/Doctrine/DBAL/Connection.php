@@ -29,7 +29,7 @@ class Connection extends DoctrineConnection
 
     public function executeStatement($sql, array $params = [], array $types = [])
     {
-        return parent::executeQuery($this->prepareTablePrefix($sql), $params, $types);
+        return parent::executeStatement($this->prepareTablePrefix($sql), $params, $types);
     }
 
     public function prepareTablePrefix(string $query): string

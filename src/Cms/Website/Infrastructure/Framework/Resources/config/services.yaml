@@ -13,6 +13,12 @@ services:
             - '../../../../Domain/WriteModel/Exception'
             - '../../../../Domain/WriteModel/Event'
             - '../../../../Domain/ReadModel/Model'
+            - '../../../../Domain/WriteModel/Service/TranslationCopyMachine/TranslationsCopyMachine.php'
+            - '../../../../Domain/WriteModel/Service/TranslationCopyMachine/TranslationsCopyMachineInterface.php'
 
     Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteRegistryInterface:
         '@Tulia\Cms\Website\Infrastructure\Persistence\Doctrine\Dbal\DbalWebsiteRegistry'
+
+    Tulia\Cms\Website\Domain\WriteModel\Service\TranslationCopyMachine\TranslationsCopyMachineFactory:
+        bind:
+            $buses: !tagged_iterator translations.copy_machine.bus

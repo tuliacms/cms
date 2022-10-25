@@ -14,11 +14,12 @@ final class AddLocaleRequest implements RequestInterface
     public function __construct(
         public readonly string $websiteId,
         public readonly string $code,
-        public readonly string $domain,
-        public readonly string $domainDevelopment,
+        public readonly ?string $domain,
+        public readonly ?string $domainDevelopment,
         public readonly ?string $localePrefix,
         public readonly ?string $pathPrefix,
         public readonly string $sslMode,
+        public readonly CopyMachineEnum $copyMachineMode = CopyMachineEnum::RESPECT_THRESHOLD,
     ) {
     }
 }

@@ -9,7 +9,7 @@ use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Website\Domain\WriteModel\Model\Website;
-use Tulia\Cms\Website\Domain\WriteModel\Rules\CannAddLocale\CanAddLocale;
+use Tulia\Cms\Website\Domain\WriteModel\Rules\CanAddLocale\CanAddLocale;
 use Tulia\Cms\Website\Domain\WriteModel\WebsiteRepositoryInterface;
 
 /**

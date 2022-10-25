@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Tests\Helper\ObjectMother;
 
 use Tulia\Cms\Website\Domain\WriteModel\Model\Website;
-use Tulia\Cms\Website\Domain\WriteModel\Rules\CannAddLocale\CanAddLocale;
+use Tulia\Cms\Website\Domain\WriteModel\Rules\CanAddLocale\CanAddLocale;
 
 /**
  * @author Adam Banaszkiewicz

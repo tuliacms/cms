@@ -12,5 +12,6 @@ enum CanDeleteLocaleReasonEnum: string
     case CannotDeleteLocaleThatYouAreOn = 'Cannot delete locale that You are on';
     case LocaleDoesNotExists = 'Locale does not exists';
     case CannotDeleteDefaultLocale = 'Cannot delete default locale';
+    case TooManyTranslations = 'Too many translations';
     case OK = 'OK';
 }

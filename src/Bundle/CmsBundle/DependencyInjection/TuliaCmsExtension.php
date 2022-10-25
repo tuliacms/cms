@@ -148,6 +148,9 @@ class TuliaCmsExtension extends Extension
             ->addTag('wysiwyg_editor');
         $container->registerForAutoconfiguration(\Tulia\Cms\Deployment\Domain\WriteModel\Service\DeploymentFileGeneratorInterface::class)
             ->addTag('deployment.file_generator');
+        $container->registerForAutoconfiguration(\Tulia\Cms\Website\Domain\WriteModel\Service\TranslationCopyMachine\CopyBusInterface::class)
+            ->setLazy(true)
+            ->addTag('translations.copy_machine.bus');
     }
 
     protected function validateOptionsValues(array $definitions): array

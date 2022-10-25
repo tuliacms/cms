@@ -24,7 +24,7 @@ use Tulia\Cms\Website\Domain\WriteModel\Model\Website;
 use Tulia\Cms\Website\Domain\WriteModel\Query\WebsitesCounterQueryInterface;
 use Tulia\Cms\Website\Domain\WriteModel\Rules\CanDeleteLocale\CanDeleteLocale;
 use Tulia\Cms\Website\Domain\WriteModel\Rules\CanDeleteWebsite\CanDeleteWebsite;
-use Tulia\Cms\Website\Domain\WriteModel\Rules\CannAddLocale\CanAddLocale;
+use Tulia\Cms\Website\Domain\WriteModel\Rules\CanAddLocale\CanAddLocale;
 
 /**
  * @author Adam Banaszkiewicz

@@ -6,6 +6,7 @@ namespace Tulia\Cms\Website\Domain\WriteModel\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Tulia\Cms\Shared\Domain\WriteModel\Exception\UnexpectedDomainException;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
 use Tulia\Cms\Website\Domain\WriteModel\Event\LocaleActivityChanged;
 use Tulia\Cms\Website\Domain\WriteModel\Event\LocaleAdded;
@@ -18,17 +19,13 @@ use Tulia\Cms\Website\Domain\WriteModel\Exception;
 use Tulia\Cms\Website\Domain\WriteModel\Exception\CannotAddLocaleException;
 use Tulia\Cms\Website\Domain\WriteModel\Exception\CannotDeleteLocaleException;
 use Tulia\Cms\Website\Domain\WriteModel\Exception\CannotDeleteWebsiteException;
-use Tulia\Cms\Website\Domain\WriteModel\Exception\CannotTurnOffWebsiteException;
 use Tulia\Cms\Website\Domain\WriteModel\Exception\LocaleNotExistsException;
 use Tulia\Cms\Website\Domain\WriteModel\Rules\CanDeleteLocale\CanDeleteLocaleInterface;
 use Tulia\Cms\Website\Domain\WriteModel\Rules\CanDeleteLocale\CanDeleteLocaleReasonEnum;
 use Tulia\Cms\Website\Domain\WriteModel\Rules\CanDeleteWebsite\CanDeleteWebsiteInterface;
 use Tulia\Cms\Website\Domain\WriteModel\Rules\CanDeleteWebsite\CanDeleteWebsiteReasonEnum;
-use Tulia\Cms\Website\Domain\WriteModel\Rules\CannAddLocale\CanAddLocale;
-use Tulia\Cms\Website\Domain\WriteModel\Rules\CannAddLocale\CanAddLocaleInterface;
-use Tulia\Cms\Website\Domain\WriteModel\Rules\CannAddLocale\CanAddLocaleReasonEnum;
-use Tulia\Cms\Website\Domain\WriteModel\Rules\CanTurnOffWebsite\CanTurnOffWebsiteInterface;
-use Tulia\Cms\Website\Domain\WriteModel\Rules\CanTurnOffWebsite\CanTurnOffWebsiteReasonEnum;
+use Tulia\Cms\Website\Domain\WriteModel\Rules\CanAddLocale\CanAddLocaleInterface;
+use Tulia\Cms\Website\Domain\WriteModel\Rules\CanAddLocale\CanAddLocaleReasonEnum;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\SslModeEnum;
 
 /**
@@ -110,29 +107,10 @@ class Website extends AbstractAggregateRoot
         return $this->id;
     }
 
-    public function turnOff(CanTurnOffWebsiteInterface $rules): void
-    {
-        if (CanTurnOffWebsiteReasonEnum::OK !== ($reason = $rules->decide($this->id))) {
-            throw CannotTurnOffWebsiteException::fromReason($reason, $this->id);
-        }
-
-        $this->active = false;
-
-        $this->recordWebsiteChange();
-    }
-
-    /**
-     * @return Locale[]
-     */
-    public function getLocales(): array
-    {
-        return $this->locales->toArray();
-    }
-
     public function addLocale(
         CanAddLocaleInterface $rules,
         string $code,
-        string $domain = null,
+        ?string $domain = null,
         ?string $domainDevelopment = null,
         ?string $localePrefix = null,
         ?string $pathPrefix = null,
@@ -233,6 +211,17 @@ class Website extends AbstractAggregateRoot
     {
         $this->changedInThisSession = false;
         return parent::collectDomainEvents();
+    }
+
+    public function getDefaultLocaleCode(): string
+    {
+        foreach ($this->locales as $locale) {
+            if ($locale->isDefault) {
+                return $locale->code;
+            }
+        }
+
+        throw new UnexpectedDomainException(sprintf('Cannot find default locale of website %s', $this->id));
     }
 
     /**

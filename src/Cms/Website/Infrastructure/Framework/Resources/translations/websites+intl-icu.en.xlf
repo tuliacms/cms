@@ -272,6 +272,10 @@
                 <source>Cannot delete locale that You are on</source>
                 <target>Cannot delete locale that You are on</target>
             </trans-unit>
+            <trans-unit id="tuliacms.websites.68">
+                <source>Too many translations</source>
+                <target>Too many translations in system to process. You have to do this through Command Line.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

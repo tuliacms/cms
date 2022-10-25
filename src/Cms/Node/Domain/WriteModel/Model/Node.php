@@ -55,6 +55,7 @@ class Node extends AbstractAggregateRoot
     ): self {
         $self = new self($id, $type, $websiteId, $author);
         $self->createdAt = new ImmutableDateTime();
+        $self->publishedAt = new ImmutableDateTime();
         $self->translations = self::createTranslations($self, $title, $availableLocales);
         $self->purposes = new ArrayCollection();
         $self->recordThat(new Event\NodeCreated($id, $type));

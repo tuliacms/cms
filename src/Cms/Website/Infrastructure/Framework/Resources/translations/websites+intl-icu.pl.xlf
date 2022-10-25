@@ -268,6 +268,10 @@
                 <source>Cannot delete locale that You are on</source>
                 <target>Nie można usunąć języka na którym aktualnie jesteś</target>
             </trans-unit>
+            <trans-unit id="tuliacms.websites.68">
+                <source>Too many translations</source>
+                <target>Za dużo translacji by wykonać tą operację w przeglądarce. Zrób to za pomocą wiersza poleceń/konsoli.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
