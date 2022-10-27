@@ -608,12 +608,12 @@
             </trans-unit>
             <trans-unit id="tuliacms.messages.152">
                 <source>active</source>
-                <target>Aktywny</target>
+                <target>Active</target>
                 <note>Status of some element</note>
             </trans-unit>
             <trans-unit id="tuliacms.messages.153">
                 <source>inactive</source>
-                <target>Nieaktywny</target>
+                <target>Inactive</target>
                 <note>Status of some element</note>
             </trans-unit>
             <trans-unit id="tuliacms.messages.162">

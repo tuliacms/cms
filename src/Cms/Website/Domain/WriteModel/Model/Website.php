@@ -54,12 +54,15 @@ class Website extends AbstractAggregateRoot
         string $name,
         string $localeCode,
         string $domain,
-        string $backendPrefix = '/administrator',
         ?string $domainDevelopment = null,
+        ?string $backendPrefix = '/administrator',
         ?string $pathPrefix = null,
         SslModeEnum $sslMode = SslModeEnum::ALLOWED_BOTH,
         bool $enabled = true,
     ): self {
+        $backendPrefix = $backendPrefix ?? '/administrator';
+        $domain = $domain ? $domain : $domainDevelopment;
+
         $self = new self($id, $name, $backendPrefix, $enabled);
         $self->locales->add(new Locale($self, $localeCode, $domain, $domainDevelopment, '', $pathPrefix, $sslMode, true, true));
         $self->recordThat(new WebsiteCreated($self->id));

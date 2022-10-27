@@ -21,7 +21,7 @@ cms:
     importer:
         objects:
             Node:
-                importer: 'Tulia\Cms\Node\Infrastructure\Internal\Importer\NodeEntryImporter'
+                importer: 'Tulia\Cms\Node\Infrastructure\Importer\NodeEntryImporter'
                 mapping:
                     parent_id:
                         type: uuid

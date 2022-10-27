@@ -6,6 +6,7 @@ namespace Tulia\Cms\Website\Application\UseCase;
 
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\SslModeEnum;
 use Tulia\Cms\Shared\Application\UseCase\AbstractTransactionalUseCase;
+use Tulia\Cms\Shared\Application\UseCase\IdResult;
 use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
 use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
@@ -33,16 +34,16 @@ final class CreateWebsite extends AbstractTransactionalUseCase
             $request->name,
             $request->locale,
             $request->domain,
-            $request->backendPrefix,
             $request->domainDevelopment,
+            $request->backendPrefix,
             $request->pathPrefix,
-            SslModeEnum::tryFrom($request->sslMode),
-            $request->active,
+            SslModeEnum::tryFrom($request->sslMode ?? SslModeEnum::ALLOWED_BOTH->value),
+            $request->enabled,
         );
 
         $this->repository->save($website);
         $this->eventBus->dispatchCollection($website->collectDomainEvents());
 
-        return null;
+        return new IdResult($website->getId());
     }
 }

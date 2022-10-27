@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Platform\Application\UseCase;
 
-use Doctrine\DBAL\Connection;
 use Tulia\Cms\Options\Application\Service\WebsitesOptionsRegistrator;
 use Tulia\Cms\Options\Domain\WriteModel\OptionsRepositoryInterface;
 use Tulia\Cms\Shared\Application\UseCase\AbstractTransactionalUseCase;
@@ -16,6 +15,7 @@ use Tulia\Cms\Theme\Application\Service\ThemeActivator;
 use Tulia\Cms\User\Application\UseCase\CreateUser;
 use Tulia\Cms\User\Application\UseCase\CreateUserRequest;
 use Tulia\Cms\Website\Application\UseCase\CreateWebsite;
+use Tulia\Cms\Website\Application\UseCase\CreateWebsiteRequest;
 use Tulia\Component\Importer\ImporterInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteRegistryInterface;
 
@@ -26,13 +26,11 @@ final class SetupSystem extends AbstractTransactionalUseCase
 {
     public function __construct(
         private readonly string $rootDir,
-        private readonly string $cmsCoreDir,
         private readonly UuidGeneratorInterface $uuidGenerator,
         private readonly CreateUser $createUser,
         private readonly WebsitesOptionsRegistrator $optionsRegistrator,
         private readonly OptionsRepositoryInterface $optionsRepository,
         private readonly CreateWebsite $createWebsite,
-        private readonly Connection $connection,
         private readonly ThemeActivator $themeActivator,
         private readonly ImporterInterface $importer,
         private readonly WebsiteRegistryInterface $websiteRegistry,
@@ -44,8 +42,7 @@ final class SetupSystem extends AbstractTransactionalUseCase
      */
     protected function execute(RequestInterface $request): ?ResultInterface
     {
-        $websiteId = $this->getWebsiteId();
-        $this->createWebsite($websiteId, $request->websiteName, $request->websiteLocale, $request->websiteLocalDomain, $request->websiteProductionDomain);
+        $websiteId = $this->createWebsite($request->websiteName, $request->websiteLocale, $request->websiteLocalDomain, $request->websiteProductionDomain);
         $this->updateOptions($websiteId, $request->websiteLocale, $request->username);
         $this->updateTheme($websiteId);
         $userId = $this->createAdminUser($request->username, $request->userPassword);
@@ -81,24 +78,22 @@ final class SetupSystem extends AbstractTransactionalUseCase
         file_put_contents($this->rootDir.'/.env', implode('', $lines));
     }
 
-    private function createWebsite(string $websiteId, string $name, string $locale, string $localDomain, string $productionDomain): void
+    private function createWebsite(string $name, string $locale, string $domainDevelopment, string $domain): string
     {
-        ($this->createWebsite)(new UpdateWebsiteRequest(
-            $websiteId,
-            $name,
-            true,
-            [[
-                'code' => $locale,
-                'domain' => $productionDomain,
-                'domain_development' => $localDomain,
-            ]]
+        /** @var IdResult $result */
+        $result = ($this->createWebsite)(new CreateWebsiteRequest(
+            name: $name,
+            enabled: true,
+            locale: $locale,
+            domain: $domain,
+            domainDevelopment: $domainDevelopment,
         ));
+
+        return $result->id;
     }
 
     private function createAdminUser(string $username, string $password): string
     {
-        $this->connection->executeQuery('DELETE FROM #__user');
-
         /** @var IdResult $result */
         $result = ($this->createUser)(new CreateUserRequest(
             $username,
@@ -118,11 +113,6 @@ final class SetupSystem extends AbstractTransactionalUseCase
         $this->optionsRepository->save($option);
     }
 
-    private function getWebsiteId(): string
-    {
-        return $this->connection->fetchOne('SELECT BIN_TO_UUID(id) AS id from #__website');
-    }
-
     private function updateTheme(string $websiteId): void
     {
         $this->themeActivator->activateTheme('Tulia/Lisa', $websiteId);
@@ -131,7 +121,7 @@ final class SetupSystem extends AbstractTransactionalUseCase
     private function importSampleData(string $websiteId, string $authorId): void
     {
         $this->importer->importFromFile(
-            $this->cmsCoreDir.'/Cms/Platform/Infrastructure/Framework/Resources/imports/sample-website-data.json',
+            $this->rootDir.'/extension/theme/Tulia/Lisa/Resources/imports/sample-website-data.json',
             parameters: [
                 'website' => $this->websiteRegistry->get($websiteId),
                 'author_id' => $authorId,

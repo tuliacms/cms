@@ -52,16 +52,16 @@ EOF
         $io->writeln('<comment>Now, answer some questions to initialize Your Tulia CMS installation.</comment>');
 
         $websiteName = $this->askFor('Website name', $input, $output);
-        $websiteLocale = $this->askFor('Website locale', $input, $output, default: 'en_US');
-        $websiteLocalDomain = $this->askForChoices('Website local domain', $input, $output, ['localhost', 'tulia.loc']);
-        $websiteProductionDomain = $this->askFor('Website production domain (leave empty if not known yet)', $input, $output, required: false);
+        $websiteLocale = $this->askFor('Website default locale', $input, $output, default: 'en_US');
+        $websiteDomainDevelopment = $this->askFor('Website local domain', $input, $output, default: 'localhost');
+        $websiteDomain = $this->askFor('Website production domain (leave empty if not known yet)', $input, $output, default: 'localhost');
 
-        $username = $this->askFor('Admin email', $input, $output, validator: static function ($answer) {
+        $username = $this->askFor('Admin email', $input, $output, default: 'admin@gmail.com', validator: static function ($answer) {
             if (!filter_var($answer, FILTER_VALIDATE_EMAIL)) {
                 throw new \RuntimeException('Please provide a valid e-mail address.');
             }
         });
-        $password = $this->askFor('Admin password', $input, $output, default: 'root', hidden: true);
+        $password = $this->askFor('Admin password', $input, $output, default: 'admin', hidden: true);
         $sampleData = $this->askFor('I want to load sample website data', $input, $output, default: 'yes');
 
         $output->writeln('<info>Setting up...</info>');
@@ -69,8 +69,8 @@ EOF
         ($this->setupSystem)(new SetupSystemRequest(
             $websiteName,
             $websiteLocale,
-            $websiteLocalDomain,
-            $websiteProductionDomain,
+            $websiteDomainDevelopment,
+            $websiteDomain,
             $username,
             $password,
             $sampleData === 'yes',
