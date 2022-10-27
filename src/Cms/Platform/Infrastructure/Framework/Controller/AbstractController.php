@@ -29,16 +29,6 @@ abstract class AbstractController extends SymfonyController
         ];
     }
 
-    public function setFlash(string $type, string $message): void
-    {
-        /** @var Request $request */
-        $request = $this->container->get(RequestStack::class)->getMainRequest();
-
-        if ($request) {
-            $request->getSession()->getFlashBag()->add($type, $message);
-        }
-    }
-
     public function getFlashes(): array
     {
         /** @var Request $request */
@@ -89,7 +79,7 @@ abstract class AbstractController extends SymfonyController
 
     public function isHomepage(Request $request): bool
     {
-        return $request->getPathInfo() === '/';
+        return $request->getPathInfo() === $this->generateUrl('frontend.homepage');
     }
 
     /**

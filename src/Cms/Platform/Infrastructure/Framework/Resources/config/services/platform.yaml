@@ -62,3 +62,7 @@ services:
     Tulia\Cms\Platform\Infrastructure\Framework\Theme\ViewOverwritingResponseViewRenderer:
         decorates: 'Tulia\Component\Templating\EventListener\ResponseViewRenderer'
         arguments: ['@.inner']
+
+    Tulia\Cms\Platform\Infrastructure\Framework\EventListener\Throw404WhenWebsiteOrLocaleIsInactive:
+        arguments:
+            $firewallMap: '@security.firewall.map'

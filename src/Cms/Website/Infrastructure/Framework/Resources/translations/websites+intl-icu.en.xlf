@@ -248,12 +248,12 @@
             </trans-unit>
             <trans-unit id="tuliacms.websites.62">
                 <source>activate</source>
-                <target>Activate</target>
+                <target>Enable</target>
                 <note>Action button label</note>
             </trans-unit>
             <trans-unit id="tuliacms.websites.63">
                 <source>deactivate</source>
-                <target>Deactivate</target>
+                <target>Disable</target>
                 <note>Action button label</note>
             </trans-unit>
             <trans-unit id="tuliacms.websites.64">

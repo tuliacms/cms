@@ -10,10 +10,12 @@ use Tulia\Cms\Tests\Behat\AggregateRootSpy;
 use Tulia\Cms\Tests\Behat\Assert;
 use Tulia\Cms\Tests\Behat\Website\TestDoubles\StubCurrentWebsiteProvider;
 use Tulia\Cms\Tests\Behat\Website\TestDoubles\StubWebsitesCounterQuery;
-use Tulia\Cms\Website\Domain\WriteModel\Event\LocaleActivityChanged;
+use Tulia\Cms\Website\Domain\WriteModel\Event\LocaleDisabled;
+use Tulia\Cms\Website\Domain\WriteModel\Event\LocaleEnabled;
 use Tulia\Cms\Website\Domain\WriteModel\Event\LocaleAdded;
 use Tulia\Cms\Website\Domain\WriteModel\Event\LocaleDeleted;
-use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteActivityChanged;
+use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteDisabled;
+use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteEnabled;
 use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteCreated;
 use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteDeleted;
 use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteUpdated;
@@ -103,61 +105,59 @@ final class WebsiteContext implements Context
     }
 
     /**
-     * @When I deactivate this website
+     * @When I disable this website
      */
-    public function iDeactivateThisWebsite(): void
+    public function iDisableThisWebsite(): void
     {
-        $this->website->deactivate();
+        $this->website->disable();
     }
 
     /**
-     * @Then website's activity should not be turned off
+     * @Then website should not be disabled
      */
-    public function websitesActivityShouldNotBeTurnedOff(): void
+    public function websiteShouldNotBeDisabled(): void
     {
-        $event = $this->websiteSpy->findEvent(WebsiteActivityChanged::class);
+        $event = $this->websiteSpy->findEvent(WebsiteDisabled::class);
 
-        Assert::assertNull($event, 'Activity should not be changed');
+        Assert::assertNull($event, 'Website should not be disabled');
     }
 
     /**
-     * @Then website's activity should be turned off
+     * @Then website should be disabled
      */
-    public function websitesActivityShouldBeTurnedOff(): void
+    public function websiteShouldBeDisabled(): void
     {
-        $event = $this->websiteSpy->findEvent(WebsiteActivityChanged::class);
+        $event = $this->websiteSpy->findEvent(WebsiteDisabled::class);
 
-        Assert::assertInstanceOf(WebsiteActivityChanged::class, $event, 'Activity should be changed');
-        Assert::assertFalse($event->active);
+        Assert::assertInstanceOf(WebsiteDisabled::class, $event, 'Website should be disabled');
     }
 
     /**
-     * @When I turn this website's activity on
+     * @When I enable this website
      */
-    public function iTurnThisWebsitesActivityOn(): void
+    public function iEnableThisWebsite(): void
     {
-        $this->website->activate();
+        $this->website->enable();
     }
 
     /**
-     * @Then website's activity should not be turned on
+     * @Then website should not be enabled
      */
-    public function websitesActivityShouldNotBeTurnedOn(): void
+    public function websiteShouldNotBeEeabled(): void
     {
-        $event = $this->websiteSpy->findEvent(WebsiteActivityChanged::class);
+        $event = $this->websiteSpy->findEvent(WebsiteEnabled::class);
 
-        Assert::assertNull($event, 'Website activity should not be turned on');
+        Assert::assertNull($event, 'Website should not be enabled');
     }
 
     /**
-     * @Then website's activity should be turned on
+     * @Then website should be enabled
      */
-    public function websitesActivityShouldBeTurnedOn(): void
+    public function websiteShouldBeEnabled(): void
     {
-        $event = $this->websiteSpy->findEvent(WebsiteActivityChanged::class);
+        $event = $this->websiteSpy->findEvent(WebsiteEnabled::class);
 
-        Assert::assertInstanceOf(WebsiteActivityChanged::class, $event, 'Website activity should be turned on');
-        Assert::assertTrue($event->active);
+        Assert::assertInstanceOf(WebsiteEnabled::class, $event, 'Website should be enabled');
     }
 
     /**
@@ -276,63 +276,61 @@ final class WebsiteContext implements Context
     }
 
     /**
-     * @When I turn this website's locale :code activity on
+     * @When I enable :code of this website
      */
-    public function iTurnThisWebsitesLocaleActivityOn(string $code): void
+    public function iEnableLocale(string $code): void
     {
-        $this->website->activateLocale($code);
+        $this->website->enableLocale($code);
     }
 
     /**
-     * @When I turn this website's locale :code activity off
+     * @When I disable locale :code of this website
      */
-    public function iTurnThisWebsitesLocaleActivityOff(string $code): void
+    public function iDisableLocale(string $code): void
     {
-        $this->website->deactivateLocale($code);
+        $this->website->disableLocale($code);
     }
 
     /**
-     * @Then website's locale :code activity should be turned on
+     * @Then website's locale :code should be enabled
      */
-    public function websitesLocaleActivityShouldBeTurnedOn(string $code): void
+    public function websitesLocaleShouldBeEnabled(string $code): void
     {
-        $event = $this->websiteSpy->findEvent(LocaleActivityChanged::class);
+        $event = $this->websiteSpy->findEvent(LocaleEnabled::class);
 
-        Assert::assertInstanceOf(LocaleActivityChanged::class, $event, 'Locale activity should be changed');
+        Assert::assertInstanceOf(LocaleEnabled::class, $event, 'Locale should be enabled');
         Assert::assertSame($code, $event->code);
-        Assert::assertTrue($event->active);
     }
 
     /**
-     * @Then website's locale :code activity should be turned off
+     * @Then website's locale :code should be disabled
      */
-    public function websitesLocaleActivityShouldBeTurnedOff(string $code): void
+    public function websitesLocaleShouldBeDisabled(string $code): void
     {
-        $event = $this->websiteSpy->findEvent(LocaleActivityChanged::class);
+        $event = $this->websiteSpy->findEvent(LocaleDisabled::class);
 
-        Assert::assertInstanceOf(LocaleActivityChanged::class, $event, 'Locale activity should be changed');
+        Assert::assertInstanceOf(LocaleDisabled::class, $event, 'Locale should be disabled');
         Assert::assertSame($code, $event->code);
-        Assert::assertFalse($event->active);
     }
 
     /**
-     * @Then website's locale :code activity should not be turned on
+     * @Then website's locale :code should not be enabled
      */
-    public function websitesLocaleActivityShouldNotBeTurnedOn(string $code): void
+    public function websitesLocaleShouldNotBeEnabled(string $code): void
     {
-        $event = $this->websiteSpy->findEvent(LocaleActivityChanged::class);
+        $event = $this->websiteSpy->findEvent(LocaleEnabled::class);
 
-        Assert::assertNull($event, 'Locale activity should not be changed');
+        Assert::assertNull($event, 'Locale should not be enabled');
     }
 
     /**
-     * @Then website's locale :code activity should not be turned off
+     * @Then website's locale :code should not be disabled
      */
-    public function websitesLocaleActivityShouldNotBeTurnedOff(string $code): void
+    public function websitesLocaleShouldNotBeDisabled(string $code): void
     {
-        $event = $this->websiteSpy->findEvent(LocaleActivityChanged::class);
+        $event = $this->websiteSpy->findEvent(LocaleDisabled::class);
 
-        Assert::assertNull($event, 'Locale activity should not be changed');
+        Assert::assertNull($event, 'Locale should not be disabled');
     }
 
     private function id(): string

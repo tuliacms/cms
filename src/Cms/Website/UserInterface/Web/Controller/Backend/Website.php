@@ -13,12 +13,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
-use Tulia\Cms\Website\Application\UseCase\ActivateWebsite;
-use Tulia\Cms\Website\Application\UseCase\ActivateWebsiteRequest;
+use Tulia\Cms\Website\Application\UseCase\EnableWebsite;
+use Tulia\Cms\Website\Application\UseCase\EnableWebsiteRequest;
 use Tulia\Cms\Website\Application\UseCase\CreateWebsite;
 use Tulia\Cms\Website\Application\UseCase\CreateWebsiteRequest;
-use Tulia\Cms\Website\Application\UseCase\DeactivateWebsite;
-use Tulia\Cms\Website\Application\UseCase\DeactivateWebsiteRequest;
+use Tulia\Cms\Website\Application\UseCase\DisableWebsite;
+use Tulia\Cms\Website\Application\UseCase\DisableWebsiteRequest;
 use Tulia\Cms\Website\Application\UseCase\DeleteWebsite;
 use Tulia\Cms\Website\Application\UseCase\DeleteWebsiteRequest;
 use Tulia\Cms\Website\Domain\ReadModel\Finder\WebsiteFinderInterface;
@@ -85,7 +85,7 @@ class Website extends AbstractController
                 )
             );
 
-            $this->setFlash('success', $this->trans('websiteSaved', [], 'websites'));
+            $this->addFlash('success', $this->trans('websiteSaved', [], 'websites'));
             return new JsonResponse([], Response::HTTP_OK);
         }
 
@@ -93,30 +93,30 @@ class Website extends AbstractController
     }
 
     /**
-     * @CsrfToken(id="website.activate")
+     * @CsrfToken(id="website.enable")
      */
-    public function activate(Request $request, ActivateWebsite $activateWebsite): RedirectResponse
+    public function enable(Request $request, EnableWebsite $activateWebsite): RedirectResponse
     {
         try {
-            $activateWebsite(new ActivateWebsiteRequest($request->request->get('id')));
-            $this->setFlash('success', $this->trans('activityChanged', [], 'websites'));
+            $activateWebsite(new EnableWebsiteRequest($request->request->get('id')));
+            $this->addFlash('success', $this->trans('activityChanged', [], 'websites'));
         } catch (WebsiteNotFoundException $e) {
-            $this->setFlash('danger', $this->trans('websiteNotFound', [], 'websites'));
+            $this->addFlash('danger', $this->trans('websiteNotFound', [], 'websites'));
         }
 
         return $this->redirectToRoute('backend.website');
     }
 
     /**
-     * @CsrfToken(id="website.deactivate")
+     * @CsrfToken(id="website.disable")
      */
-    public function deactivate(Request $request, DeactivateWebsite $deactivateWebsite): RedirectResponse
+    public function disable(Request $request, DisableWebsite $deactivateWebsite): RedirectResponse
     {
         try {
-            $deactivateWebsite(new DeactivateWebsiteRequest($request->request->get('id')));
-            $this->setFlash('success', $this->trans('activityChanged', [], 'websites'));
+            $deactivateWebsite(new DisableWebsiteRequest($request->request->get('id')));
+            $this->addFlash('success', $this->trans('activityChanged', [], 'websites'));
         } catch (WebsiteNotFoundException $e) {
-            $this->setFlash('danger', $this->trans('websiteNotFound', [], 'websites'));
+            $this->addFlash('danger', $this->trans('websiteNotFound', [], 'websites'));
         }
 
         return $this->redirectToRoute('backend.website');
@@ -129,7 +129,7 @@ class Website extends AbstractController
     {
         try {
             ($deleteWebsite)(new DeleteWebsiteRequest($request->request->get('id')));
-            $this->setFlash('success', $this->trans('websiteWasDeleted', [], 'websites'));
+            $this->addFlash('success', $this->trans('websiteWasDeleted', [], 'websites'));
         } catch (CannotDeleteWebsiteException $e) {
             $this->cannotDoThisBecause('cannotDeleteWebsiteBecause', $e->reason);
         }
@@ -160,7 +160,7 @@ class Website extends AbstractController
 
     private function cannotDoThisBecause(string $message, string $reason): void
     {
-        $this->setFlash('warning', $this->trans($message, ['reason' => $this->trans($reason, [], 'websites')], 'websites'));
+        $this->addFlash('warning', $this->trans($message, ['reason' => $this->trans($reason, [], 'websites')], 'websites'));
     }
 
     private function collectWebsites(WebsiteInterface $activeWebsite): array

@@ -14,7 +14,7 @@
                     <div class="card">
                         <div class="card-body">
                             <span
-                                v-if="website.active === false"
+                                v-if="website.enabled === false"
                                 data-bs-toggle="tooltip"
                                 :title="translations.websiteInactiveHint"
                                 class="badge badge-secondary mb-3"
@@ -40,10 +40,10 @@
                                         <small v-if="locale.is_default" class="text-lowercase">&nbsp;({{ translations.defaultLocale }})</small>
                                     </div>
                                     <div>
-                                        <div v-if="locale.active" class="form-check form-switch d-inline">
+                                        <div v-if="locale.enabled" class="form-check form-switch d-inline">
                                             <input class="form-check-input" type="checkbox" role="switch" @change="(e) => e.target.setAttribute('disabled', 'disabled') || deactivateLocale(website.id, locale.code)" :title="translations.deactivate" data-bs-toggle="tooltip" checked>
                                         </div>
-                                        <div v-if="!locale.active" class="form-check form-switch d-inline">
+                                        <div v-if="!locale.enabled" class="form-check form-switch d-inline">
                                             <input class="form-check-input" type="checkbox" role="switch" @change="(e) => e.target.setAttribute('disabled', 'disabled') || activateLocale(website.id, locale.code)" :title="translations.activate" data-bs-toggle="tooltip">
                                         </div>
                                         <a v-if="!locale.is_default && !locale.is_current" href="#" @click="deleteLocale(website.id, locale.code)" :title="translations.deleteLocale" data-bs-toggle="tooltip" class="btn btn-sm btn-icon-only btn-outline-danger me-2"><i class="btn-icon fa fa-trash"></i></a>
@@ -68,10 +68,10 @@
                         </div>
                         <div class="card-footer d-flex align-items-center pe-1">
                             <span class="me-2">{{ translations.activity }}</span>
-                            <div v-if="website.active" class="form-check form-switch d-inline">
+                            <div v-if="website.enabled" class="form-check form-switch d-inline">
                                 <input class="form-check-input" type="checkbox" role="switch" @change="(e) => e.target.setAttribute('disabled', 'disabled') || deactivateWebsite(website.id)" :title="translations.deactivate" data-bs-toggle="tooltip" checked>
                             </div>
-                            <div v-if="!website.active" class="form-check form-switch d-inline">
+                            <div v-if="!website.enabled" class="form-check form-switch d-inline">
                                 <input class="form-check-input" type="checkbox" role="switch" @change="(e) => e.target.setAttribute('disabled', 'disabled') || activateWebsite(website.id)" :title="translations.activate" data-bs-toggle="tooltip">
                             </div>
                             <a v-if="!website.is_current" href="#" @click="deleteWebsite(website.id)" :title="translations.deleteWebsite" data-bs-toggle="tooltip" class="btn btn-sm btn-icon-only btn-outline-danger me-2 mx-auto"><i class="btn-icon fa fa-trash"></i></a>

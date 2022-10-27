@@ -59,7 +59,7 @@ class Settings extends AbstractController
 
             $this->dispatcher->dispatch(new SettingsUpdated());
 
-            $this->setFlash('success', $this->trans('settingsSaved', [], 'settings'));
+            $this->addFlash('success', $this->trans('settingsSaved', [], 'settings'));
             return $this->redirectToRoute('backend.settings', [ 'group' => $groupObj->getId() ]);
         }
 

@@ -20,7 +20,7 @@ final class RoutingLoader implements LoaderInterface
     ) {
     }
 
-    public function load(mixed $resource, string $type = null)
+    public function load(mixed $resource, string $type = null): mixed
     {
         /** @var RouteCollection $collection */
         $collection = $this->symfonyLoader->load($resource, $type);
@@ -34,18 +34,18 @@ final class RoutingLoader implements LoaderInterface
         return $collection;
     }
 
-    public function supports(mixed $resource, string $type = null)
+    public function supports(mixed $resource, string $type = null): bool
     {
         return $this->symfonyLoader->supports($resource, $type);
     }
 
-    public function getResolver()
+    public function getResolver(): LoaderResolverInterface
     {
         return $this->symfonyLoader->getResolver();
     }
 
-    public function setResolver(LoaderResolverInterface $resolver)
+    public function setResolver(LoaderResolverInterface $resolver): void
     {
-        return $this->symfonyLoader->setResolver($resolver);
+        $this->symfonyLoader->setResolver($resolver);
     }
 }

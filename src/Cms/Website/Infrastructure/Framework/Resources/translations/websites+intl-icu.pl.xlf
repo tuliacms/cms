@@ -243,12 +243,12 @@
                 <target>Ten język już istnieje w stronie.</target>
             </trans-unit>
             <trans-unit id="tuliacms.websites.62">
-                <source>activate</source>
+                <source>enable</source>
                 <target>Aktywuj</target>
                 <note>Action button label</note>
             </trans-unit>
             <trans-unit id="tuliacms.websites.63">
-                <source>deactivate</source>
+                <source>disable</source>
                 <target>Dezaktywuj</target>
                 <note>Action button label</note>
             </trans-unit>

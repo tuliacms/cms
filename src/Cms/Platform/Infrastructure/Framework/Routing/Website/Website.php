@@ -25,7 +25,7 @@ class Website implements WebsiteInterface
         array $locales,
         string $defaultLocale,
         string $activeLocale,
-        private bool $active,
+        private bool $enabled,
     ) {
         foreach ($locales as $locale) {
             $this->locales[$locale->getCode()] = $locale;
@@ -119,9 +119,9 @@ class Website implements WebsiteInterface
         return $this->activeLocale->getCode() === $this->defaultLocale->getCode();
     }
 
-    public function isActive(): bool
+    public function isEnabled(): bool
     {
-        return $this->active;
+        return $this->enabled;
     }
 
     public function getLocaleCodes(): array

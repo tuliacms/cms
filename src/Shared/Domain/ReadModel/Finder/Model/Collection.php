@@ -24,7 +24,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate
         return $this->elements;
     }
 
-    public function append($element): void
+    public function append(mixed $element): void
     {
         $this->elements[] = $element;
     }
@@ -55,7 +55,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate
         return (int) \call_user_func($this->totalFoundCallback);
     }
 
-    public function first()
+    public function first(): mixed
     {
         return $this->elements[0] ?? null;
     }
@@ -65,20 +65,17 @@ class Collection implements \ArrayAccess, \IteratorAggregate
         return new \ArrayIterator($this->elements);
     }
 
-    public function offsetExists($offset): bool
+    public function offsetExists(mixed $offset): bool
     {
         return isset($this->elements[$offset]);
     }
 
-    /**
-     * @return mixed
-     */
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset): mixed
     {
         return $this->elements[$offset];
     }
 
-    public function offsetSet($offset, $value): void
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         if ($offset !== null) {
             $this->elements[$offset] = $value;
@@ -87,7 +84,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate
         }
     }
 
-    public function offsetUnset($offset): void
+    public function offsetUnset(mixed $offset): void
     {
         unset($this->elements[$offset]);
     }

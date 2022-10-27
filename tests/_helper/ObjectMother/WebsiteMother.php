@@ -54,16 +54,16 @@ final class WebsiteMother
     public function build(): Website
     {
         $website = Website::create(
-            id: $this->name,
-            name: $this->name,
+            id:         $this->name,
+            name:       $this->name,
             localeCode: $this->defaultLocale,
-            domain: 'localhost',
-            active: $this->active,
+            domain:     'localhost',
+            enabled:    $this->active,
         );
 
         if ([] !== $this->locales) {
             foreach ($this->locales as $locale) {
-                $website->addLocale(new CanAddLocale(), $locale['code'], active: $locale['active']);
+                $website->addLocale(new CanAddLocale(), $locale['code'], enabled: $locale['active']);
             }
         }
 

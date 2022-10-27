@@ -21,7 +21,7 @@ interface WebsiteInterface
     public function getBackendAddress(?string $localeCode = null): string;
     public function isBackend(): bool;
     public function isDefaultLocale(): bool;
-    public function isActive(): bool;
+    public function isEnabled(): bool;
     public function getLocaleCodes(): array;
     public function prepareRequestUriToRoutingMatching(string $requestUri): string;
 }

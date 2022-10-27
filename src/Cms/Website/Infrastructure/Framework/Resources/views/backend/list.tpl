@@ -26,12 +26,12 @@
                         csrfToken: '{{ csrf_token('new_website_form') }}'
                     },
                     activateWebsite: {
-                        url: '{{ path('backend.website.activate') }}',
-                        csrfToken: '{{ csrf_token('website.activate') }}'
+                        url: '{{ path('backend.website.enable') }}',
+                        csrfToken: '{{ csrf_token('website.enable') }}'
                     },
                     deactivateWebsite: {
-                        url: '{{ path('backend.website.deactivate') }}',
-                        csrfToken: '{{ csrf_token('website.deactivate') }}'
+                        url: '{{ path('backend.website.disable') }}',
+                        csrfToken: '{{ csrf_token('website.disable') }}'
                     },
                     deleteWebsite: {
                         url: '{{ path('backend.website.delete') }}',
@@ -42,12 +42,12 @@
                         csrfToken: '{{ csrf_token('add_locale_form') }}'
                     },
                     activateLocale: {
-                        url: '{{ path('backend.website.locale.activate') }}',
-                        csrfToken: '{{ csrf_token('website.locale.activate') }}'
+                        url: '{{ path('backend.website.locale.enable') }}',
+                        csrfToken: '{{ csrf_token('website.locale.enable') }}'
                     },
                     deactivateLocale: {
-                        url: '{{ path('backend.website.locale.deactivate') }}',
-                        csrfToken: '{{ csrf_token('website.locale.deactivate') }}'
+                        url: '{{ path('backend.website.locale.disable') }}',
+                        csrfToken: '{{ csrf_token('website.locale.disable') }}'
                     },
                     deleteLocale: {
                         url: '{{ path('backend.website.locale.delete') }}',

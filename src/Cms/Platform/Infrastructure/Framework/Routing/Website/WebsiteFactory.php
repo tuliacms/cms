@@ -63,19 +63,21 @@ final class WebsiteFactory
                 localePrefix: $locale->getLocalePrefix(),
                 pathPrefix: $locale->getPathPrefix(),
                 sslMode: SslModeEnum::tryFrom($locale->getSslMode()),
-                active: $locale->isActive(),
+                default: $locale->isDefault(),
+                enabled: $locale->isEnabled(),
+                active: $activeLocale === $locale->getCode(),
             );
         }
 
         $website = new Website(
-            id: $website->getId(),
-            name: $website->getName(),
+            id:            $website->getId(),
+            name:          $website->getName(),
             backendPrefix: $website->getBackendPrefix(),
-            isBackend: $isBackend,
-            locales: $locales,
+            isBackend:     $isBackend,
+            locales:       $locales,
             defaultLocale: $website->getDefaultLocale()->getCode(),
-            activeLocale: $activeLocale,
-            active: $website->isActive(),
+            activeLocale:  $activeLocale,
+            enabled:       $website->isEnabled(),
         );
 
         return $website;
@@ -92,7 +94,7 @@ final class WebsiteFactory
             foreach ($website->getLocales() as $locale) {
                 $result[] = [
                     'id' => $website->getId(),
-                    'active' => $website->isActive(),
+                    'active' => $website->isEnabled(),
                     'name' => $website->getName(),
                     'backend_prefix' => $website->getBackendPrefix(),
                     'domain' => $developmentEnvironment
@@ -104,7 +106,7 @@ final class WebsiteFactory
                     'is_default' => $locale->isDefault(),
                     'ssl_mode' => $locale->getSslMode(),
                     // Both must be active to assume request is available
-                    'is_active' => $website->isActive() && $locale->isActive(),
+                    'is_active' => $website->isEnabled() && $locale->isEnabled(),
                 ];
             }
         }

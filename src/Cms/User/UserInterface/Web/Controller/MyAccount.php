@@ -76,7 +76,7 @@ class MyAccount extends AbstractController
                 )
             ));
 
-            $this->setFlash('success', $this->trans('userSaved', [], 'users'));
+            $this->addFlash('success', $this->trans('userSaved', [], 'users'));
             return $this->redirectToRoute('backend.me.edit');
         }
 
@@ -98,13 +98,13 @@ class MyAccount extends AbstractController
             $data = $form->getData();
 
             if ($this->authenticatedUserProvider->isPasswordValid($data['current_password']) === false) {
-                $this->setFlash('danger', $this->trans('pleaseTypeValidCurrentPasswordToDoThisOperation', [], 'users'));
+                $this->addFlash('danger', $this->trans('pleaseTypeValidCurrentPasswordToDoThisOperation', [], 'users'));
                 return $this->redirectToRoute('backend.me.password');
             }
 
             ($changePassword)(new ChangePasswordRequest($this->authenticatedUserProvider->getUser()->getId(), $data['new_password']));
 
-            $this->setFlash('danger', $this->trans('passwordChangedSuccessfully', [], 'users'));
+            $this->addFlash('danger', $this->trans('passwordChangedSuccessfully', [], 'users'));
             return $this->redirectToRoute('backend.logout');
         }
 

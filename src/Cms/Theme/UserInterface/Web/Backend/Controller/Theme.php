@@ -68,7 +68,7 @@ class Theme extends AbstractController
             return $this->redirectToRoute('backend.theme');
         }
 
-        $this->setFlash('success', $this->trans('themeActivated', [], 'themes'));
+        $this->addFlash('success', $this->trans('themeActivated', [], 'themes'));
         return $this->redirectToRoute('backend.theme');
     }
 

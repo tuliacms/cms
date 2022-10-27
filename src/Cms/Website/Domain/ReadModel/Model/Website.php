@@ -14,16 +14,16 @@ class Website
     protected string $id;
     protected string $name;
     protected string $backendPrefix;
-    protected bool $active = true;
+    protected bool $enabled = true;
     /** @var Locale[] */
     protected array $locales = [];
 
-    public function __construct(string $id, array $locales, string $backendPrefix, string $name, bool $active = true)
+    public function __construct(string $id, array $locales, string $backendPrefix, string $name, bool $enabled = true)
     {
         $this->id = $id;
         $this->backendPrefix = $backendPrefix;
         $this->name = $name;
-        $this->active = $active;
+        $this->enabled = $enabled;
 
         foreach ($locales as $locale) {
             $this->addLocale($locale);
@@ -37,7 +37,7 @@ class Website
             $data['locales'] ?? [],
             $data['backend_prefix'] ?? '/administrator',
             $data['name'] ?? '',
-            $data['active'] ?? true
+            $data['enabled'] ?? true
         );
     }
 
@@ -47,7 +47,7 @@ class Website
             'id' => $this->id,
             'name' => $this->name,
             'backend_prefix' => $this->backendPrefix,
-            'active' => $this->active,
+            'enabled' => $this->enabled,
             'locales' => array_map(
                 static fn($l) => $l->toArray(),
                 $this->locales
@@ -75,9 +75,9 @@ class Website
         return $this->backendPrefix;
     }
 
-    public function isActive(): bool
+    public function isEnabled(): bool
     {
-        return $this->active;
+        return $this->enabled;
     }
 
     /**

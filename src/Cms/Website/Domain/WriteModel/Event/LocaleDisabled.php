@@ -9,12 +9,11 @@ use Tulia\Cms\Shared\Domain\WriteModel\Event\AbstractDomainEvent;
 /**
  * @author Adam Banaszkiewicz
  */
-final class LocaleActivityChanged extends AbstractDomainEvent
+final class LocaleDisabled extends AbstractDomainEvent
 {
     public function __construct(
         public readonly string $websiteId,
         public readonly string $code,
-        public readonly bool $active,
     ) {
     }
 }

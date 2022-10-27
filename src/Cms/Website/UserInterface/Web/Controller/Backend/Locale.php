@@ -11,14 +11,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
-use Tulia\Cms\Website\Application\UseCase\ActivateLocale;
-use Tulia\Cms\Website\Application\UseCase\ActivateLocaleRequest;
+use Tulia\Cms\Website\Application\UseCase\EnableLocale;
+use Tulia\Cms\Website\Application\UseCase\EnableLocaleRequest;
 use Tulia\Cms\Website\Application\UseCase\AddLocale;
 use Tulia\Cms\Website\Application\UseCase\AddLocaleRequest;
-use Tulia\Cms\Website\Application\UseCase\DeactivateLocale;
-use Tulia\Cms\Website\Application\UseCase\DeactivateLocaleRequest;
-use Tulia\Cms\Website\Application\UseCase\DeactivateWebsite;
-use Tulia\Cms\Website\Application\UseCase\DeactivateWebsiteRequest;
+use Tulia\Cms\Website\Application\UseCase\DisableLocale;
+use Tulia\Cms\Website\Application\UseCase\DisableLocaleRequest;
+use Tulia\Cms\Website\Application\UseCase\DisableWebsite;
+use Tulia\Cms\Website\Application\UseCase\DisableWebsiteRequest;
 use Tulia\Cms\Website\Application\UseCase\DeleteLocale;
 use Tulia\Cms\Website\Application\UseCase\DeleteLocaleRequest;
 use Tulia\Cms\Website\Domain\WriteModel\Exception\CannotAddLocaleException;
@@ -58,7 +58,7 @@ final class Locale extends AbstractController
                 return new JsonResponse(['errors' => ['code' => [$this->trans($e->reason, [], 'websites')] ]], Response::HTTP_BAD_REQUEST);
             }
 
-            $this->setFlash('success', $this->trans('websiteSaved', [], 'websites'));
+            $this->addFlash('success', $this->trans('websiteSaved', [], 'websites'));
             return new JsonResponse([], Response::HTTP_OK);
         }
 
@@ -66,30 +66,30 @@ final class Locale extends AbstractController
     }
 
     /**
-     * @CsrfToken(id="website.locale.deactivate")
+     * @CsrfToken(id="website.locale.disable")
      */
-    public function deactivate(Request $request, DeactivateLocale $deactivateLocale): RedirectResponse
+    public function disable(Request $request, DisableLocale $deactivateLocale): RedirectResponse
     {
         try {
-            $deactivateLocale(new DeactivateLocaleRequest($request->request->get('website'), $request->request->get('code')));
-            $this->setFlash('success', $this->trans('activityChanged', [], 'websites'));
+            $deactivateLocale(new DisableLocaleRequest($request->request->get('website'), $request->request->get('code')));
+            $this->addFlash('success', $this->trans('activityChanged', [], 'websites'));
         } catch (WebsiteNotFoundException $e) {
-            $this->setFlash('danger', $this->trans('websiteNotFound', [], 'websites'));
+            $this->addFlash('danger', $this->trans('websiteNotFound', [], 'websites'));
         }
 
         return $this->redirectToRoute('backend.website');
     }
 
     /**
-     * @CsrfToken(id="website.locale.activate")
+     * @CsrfToken(id="website.locale.enable")
      */
-    public function activate(Request $request, ActivateLocale $activateLocale): RedirectResponse
+    public function enable(Request $request, EnableLocale $activateLocale): RedirectResponse
     {
         try {
-            $activateLocale(new ActivateLocaleRequest($request->request->get('website'), $request->request->get('code')));
-            $this->setFlash('success', $this->trans('activityChanged', [], 'websites'));
+            $activateLocale(new EnableLocaleRequest($request->request->get('website'), $request->request->get('code')));
+            $this->addFlash('success', $this->trans('activityChanged', [], 'websites'));
         } catch (WebsiteNotFoundException $e) {
-            $this->setFlash('danger', $this->trans('websiteNotFound', [], 'websites'));
+            $this->addFlash('danger', $this->trans('websiteNotFound', [], 'websites'));
         }
 
         return $this->redirectToRoute('backend.website');
@@ -102,7 +102,7 @@ final class Locale extends AbstractController
     {
         try {
             $deleteLocale(new DeleteLocaleRequest($request->request->get('website'), $request->request->get('locale')));
-            $this->setFlash('success', $this->trans('localeWasDeleted', [], 'websites'));
+            $this->addFlash('success', $this->trans('localeWasDeleted', [], 'websites'));
         } catch (CannotDeleteLocaleException $e) {
             $this->cannotDoThisBecause('cannotDeleteLocaleBecause', $e->reason);
         }
@@ -133,6 +133,6 @@ final class Locale extends AbstractController
 
     private function cannotDoThisBecause(string $message, string $reason): void
     {
-        $this->setFlash('warning', $this->trans($message, ['reason' => $this->trans($reason, [], 'websites')], 'websites'));
+        $this->addFlash('warning', $this->trans($message, ['reason' => $this->trans($reason, [], 'websites')], 'websites'));
     }
 }

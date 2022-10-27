@@ -72,7 +72,7 @@ class User extends AbstractController
                 $userDetailsForm->getData() + ['attributes' => $formDescriptor->getData()]
             ));
 
-            $this->setFlash('success', $this->trans('userSaved', [], 'users'));
+            $this->addFlash('success', $this->trans('userSaved', [], 'users'));
             return $this->redirectToRoute('backend.user.edit', [ 'id' => $result->id ]);
         }
 
@@ -89,7 +89,7 @@ class User extends AbstractController
         $user = $this->repository->get($id);
 
         if (! $user) {
-            $this->setFlash('danger', $this->trans('userNotExists', [], 'users'));
+            $this->addFlash('danger', $this->trans('userNotExists', [], 'users'));
             return $this->redirectToRoute('backend.user.list');
         }
 
@@ -113,7 +113,7 @@ class User extends AbstractController
                 )
             ));
 
-            $this->setFlash('success', $this->trans('userSaved', [], 'users'));
+            $this->addFlash('success', $this->trans('userSaved', [], 'users'));
             return $this->redirectToRoute('backend.user.edit', [ 'id' => $id ]);
         }
 
@@ -132,11 +132,11 @@ class User extends AbstractController
                 ($removeUser)(new DeleteUserRequest($id));
             }
         } catch (CannotDeleteUserException $e) {
-            $this->setFlash('danger', $this->trans('cannotDeleteUserBecause', ['reason' => $e->reason->value], 'users'));
+            $this->addFlash('danger', $this->trans('cannotDeleteUserBecause', ['reason' => $e->reason->value], 'users'));
             return $this->redirectToRoute('backend.user');
         }
 
-        $this->setFlash('success', $this->trans('selectedUsersWereDeleted', [], 'users'));
+        $this->addFlash('success', $this->trans('selectedUsersWereDeleted', [], 'users'));
 
         return $this->redirectToRoute('backend.user');
     }

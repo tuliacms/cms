@@ -64,6 +64,11 @@ class Form extends AbstractController
      */
     public function create(Request $request, CreateForm $createForm, WebsiteInterface $website)
     {
+        if (!$website->isDefaultLocale()) {
+            $this->addFlash('info', $this->trans('youHaveBeenRedirectedToDefaultLocaleDueToCreationMultilingualElement'));
+            return $this->redirectToRoute('backend.contact_form.create', ['_locale' => $website->getDefaultLocale()->getCode()]);
+        }
+
         $formData = $this->getDefaultFormData();
         $form = $this->createForm(ContactFormForm::class, $formData);
         $form->handleRequest($request);
@@ -89,7 +94,7 @@ class Form extends AbstractController
                     $website->getLocaleCodes(),
                 ));
 
-                $this->setFlash('success', $this->trans('formSaved', [], 'contact-form'));
+                $this->addFlash('success', $this->trans('formSaved', [], 'contact-form'));
                 return $this->redirectToRoute('backend.contact_form.edit', [ 'id' => $result->id ]);
             } catch (InvalidFieldNameException $e) {
                 $error = new FormError($this->trans('formFieldNameContainsInvalidName', ['name' => $e->getName()], 'contact-form'));
@@ -119,7 +124,7 @@ class Form extends AbstractController
         try {
             $model = $this->repository->get($id);
         } catch (FormNotFoundException $e) {
-            $this->setFlash('danger', $this->trans('formNotFound', [], 'contact-form'));
+            $this->addFlash('danger', $this->trans('formNotFound', [], 'contact-form'));
             return $this->redirectToRoute('backend.contact_form.list');
         }
 
@@ -150,7 +155,7 @@ class Form extends AbstractController
                     $website->getDefaultLocale()->getCode(),
                 ));
 
-                $this->setFlash('success', $this->trans('formSaved', [], 'contact-form'));
+                $this->addFlash('success', $this->trans('formSaved', [], 'contact-form'));
                 return $this->redirectToRoute('backend.contact_form.edit', [ 'id' => $model->getId() ]);
             } catch (InvalidFieldNameException $e) {
                 $error = new FormError($this->trans('formFieldNameContainsInvalidName', ['name' => $e->getName()], 'contact-form'));
@@ -185,7 +190,7 @@ class Form extends AbstractController
             ($deleteForm)(new DeleteFormRequest($id));
         }
 
-        $this->setFlash('success', $this->trans('selectedFormsWereRemoved', [], 'contact-form'));
+        $this->addFlash('success', $this->trans('selectedFormsWereRemoved', [], 'contact-form'));
         return $this->redirectToRoute('backend.contact_form.list');
     }
 

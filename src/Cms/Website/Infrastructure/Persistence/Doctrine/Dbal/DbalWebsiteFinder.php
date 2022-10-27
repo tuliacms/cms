@@ -52,7 +52,7 @@ final class DbalWebsiteFinder implements WebsiteFinderInterface
                     'path_prefix' => $locale['path_prefix'],
                     'ssl_mode' => $locale['ssl_mode'],
                     'is_default' => (bool) $locale['is_default'],
-                    'active' => (bool) $locale['active'],
+                    'enabled' => (bool) $locale['enabled'],
                ]);
             }
 
@@ -61,7 +61,7 @@ final class DbalWebsiteFinder implements WebsiteFinderInterface
                 'locales' => $locales,
                 'backend_prefix' => $website['backend_prefix'],
                 'name' => $website['name'],
-                'active' => (bool) $website['active'],
+                'enabled' => (bool) $website['enabled'],
             ]);
         }
 

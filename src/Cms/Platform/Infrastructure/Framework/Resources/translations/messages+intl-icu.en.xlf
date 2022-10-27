@@ -835,6 +835,10 @@
                 <source>selectOption</source>
                 <target>Select option</target>
             </trans-unit>
+            <trans-unit id="tuliacms.messages.216">
+                <source>youHaveBeenRedirectedToDefaultLocaleDueToCreationMultilingualElement</source>
+                <target>You have been redirected to default locale. You can add new elements only in default locale.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

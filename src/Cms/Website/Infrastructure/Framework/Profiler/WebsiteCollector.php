@@ -24,7 +24,7 @@ final class WebsiteCollector extends AbstractDataCollector
         $this->data = [
             'id' => $this->website->getId(),
             'name' => $this->website->getName(),
-            'active' => $this->website->isActive(),
+            'active' => $this->website->isEnabled(),
             'backendPrefix' => $this->website->getBackendPrefix(),
             'isBackend' => $this->website->isBackend(),
             'locale' => [

@@ -52,19 +52,19 @@ class Form extends AbstractController
 
             try {
                 if ($this->sender->send($model, $data)) {
-                    $this->setFlash(
+                    $this->addFlash(
                         'cms.form.submit_success',
                         $this->trans('formHasBeenSentThankYou', [], 'contact-form')
                     );
                 } else {
-                    $this->setFlash(
+                    $this->addFlash(
                         'cms.form.submit_failed',
                         $this->trans('formNotHasBeenSentTryAgain', [], 'contact-form')
                     );
                 }
             } catch (MailerConfigurationEmptyException $e) {
                 dump($e);exit;
-                $this->setFlash(
+                $this->addFlash(
                     'cms.form.submit_failed',
                     $this->trans('formNotHasBeenSentTryAgain', [], 'contact-form')
                 );
@@ -72,8 +72,8 @@ class Form extends AbstractController
                 dump($e);exit;
             }
         } else {
-            $this->setFlash('cms.form.last_errors', json_encode($this->getErrorMessages($form)));
-            $this->setFlash('cms.form.last_data', json_encode($form->getData()));
+            $this->addFlash('cms.form.last_errors', json_encode($this->getErrorMessages($form)));
+            $this->addFlash('cms.form.last_data', json_encode($form->getData()));
         }
 
         return $this->redirect($request->headers->get('referer') . '#anchor_contact_form_' . $id);

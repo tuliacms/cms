@@ -18,6 +18,8 @@ class Locale implements LocaleInterface
         private readonly ?string $localePrefix = null,
         private readonly ?string $pathPrefix = null,
         private readonly SslModeEnum $sslMode = SslModeEnum::ALLOWED_BOTH,
+        private readonly bool $default = false,
+        private readonly bool $enabled = true,
         private readonly bool $active = true,
     ) {
         if (strpos($code, '_') !== false) {
@@ -70,5 +72,10 @@ class Locale implements LocaleInterface
     public function isActive(): bool
     {
         return $this->active;
+    }
+
+    public function isDefault(): bool
+    {
+        return $this->default;
     }
 }

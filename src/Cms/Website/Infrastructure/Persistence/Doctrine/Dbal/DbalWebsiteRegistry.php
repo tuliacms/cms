@@ -43,7 +43,7 @@ final class DbalWebsiteRegistry implements WebsiteRegistryInterface
                 locales: $websiteLocales,
                 defaultLocale: $defaultLocaleCode,
                 activeLocale: $defaultLocaleCode,
-                active: (bool) $website['active'],
+                enabled: (bool) $website['enabled'],
             );
         }
 

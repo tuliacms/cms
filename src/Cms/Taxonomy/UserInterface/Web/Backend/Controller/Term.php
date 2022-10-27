@@ -99,7 +99,7 @@ class Term extends AbstractController
             $taxonomy->addTerm($term);
             $this->repository->save($taxonomy);
 
-            $this->setFlash('success', $this->trans('termSaved', [], 'taxonomy'));
+            $this->addFlash('success', $this->trans('termSaved', [], 'taxonomy'));
             return $this->redirectToRoute('backend.term.edit', [ 'id' => $term->getId(), 'taxonomyType' => $taxonomyTypeObject->getCode() ]);
         }
 
@@ -125,7 +125,7 @@ class Term extends AbstractController
         try {
             $term = $taxonomy->getTerm(new TermId($id));
         } catch (TermNotFoundException $e) {
-            $this->setFlash('warning', $this->trans('termNotFound', [], 'categories'));
+            $this->addFlash('warning', $this->trans('termNotFound', [], 'categories'));
             return $this->redirectToRoute('backend.term.list', ['taxonomyType' => $taxonomyType]);
         }
 
@@ -136,7 +136,7 @@ class Term extends AbstractController
             $this->updateModel($formDescriptor, $term);
             $this->repository->save($taxonomy);
 
-            $this->setFlash('success', $this->trans('termSaved', [], 'taxonomy'));
+            $this->addFlash('success', $this->trans('termSaved', [], 'taxonomy'));
             return $this->redirectToRoute('backend.term.edit', [ 'id' => $term->getId(), 'taxonomyType' => $taxonomyTypeObject->getCode() ]);
         }
 
@@ -170,7 +170,7 @@ class Term extends AbstractController
 
         if ($removedNodes) {
             $this->repository->save($taxonomy);
-            $this->setFlash('success', $this->trans('selectedTermsWereDeleted', [], 'taxonomy'));
+            $this->addFlash('success', $this->trans('selectedTermsWereDeleted', [], 'taxonomy'));
         }
 
         return $this->redirectToRoute('backend.term', [ 'taxonomyType' => $taxonomy->getType()->getType() ]);

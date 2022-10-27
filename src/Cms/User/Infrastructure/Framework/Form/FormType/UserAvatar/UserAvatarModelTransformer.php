@@ -17,14 +17,14 @@ final class UserAvatarModelTransformer implements DataTransformerInterface
     ) {
     }
 
-    public function transform(mixed $value)
+    public function transform(mixed $value): mixed
     {
         return $value
             ? new UserAvatarFile($this->uploader->getFilepath($value), true, $value)
             : null;
     }
 
-    public function reverseTransform(mixed $value)
+    public function reverseTransform(mixed $value): mixed
     {
         return $value;
     }

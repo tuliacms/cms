@@ -13,7 +13,7 @@ use Tulia\Cms\Website\Domain\WriteModel\WebsiteRepositoryInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-final class ActivateLocale extends AbstractTransactionalUseCase
+final class DisableLocale extends AbstractTransactionalUseCase
 {
     public function __construct(
         private readonly WebsiteRepositoryInterface $repository,
@@ -22,12 +22,12 @@ final class ActivateLocale extends AbstractTransactionalUseCase
     }
 
     /**
-     * @param RequestInterface&ActivateLocaleRequest $request
+     * @param RequestInterface&DisableLocaleRequest $request
      */
     protected function execute(RequestInterface $request): ?ResultInterface
     {
         $website = $this->repository->get($request->websiteId);
-        $website->activateLocale($request->code);
+        $website->disableLocale($request->code);
 
         $this->repository->save($website);
         $this->eventBus->dispatchCollection($website->collectDomainEvents());

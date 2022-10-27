@@ -16,7 +16,7 @@ class Locale
     protected ?string $pathPrefix = null;
     protected string $sslMode;
     protected bool $isDefault = false;
-    protected bool $active = true;
+    protected bool $enabled = true;
 
     public function __construct(
         string $code,
@@ -25,7 +25,7 @@ class Locale
         ?string $localePrefix = null,
         ?string $pathPrefix = null,
         string $sslMode = 'ALLOWED_BOTH',
-        bool $active = true,
+        bool $enabled = true,
         bool $isDefault = false,
     ) {
         $this->code = $code;
@@ -34,7 +34,7 @@ class Locale
         $this->localePrefix = $localePrefix;
         $this->pathPrefix = $pathPrefix;
         $this->sslMode = $sslMode;
-        $this->active = $active;
+        $this->enabled = $enabled;
         $this->isDefault = $isDefault;
     }
 
@@ -47,7 +47,7 @@ class Locale
             $data['locale_prefix'] ?? null,
             $data['path_prefix'] ?? null,
             $data['ssl_mode'] ?? 'ALLOWED_BOTH',
-            (bool) ($data['active'] ?? true),
+            (bool) ($data['enabled'] ?? true),
             (bool) ($data['is_default'] ?? true),
         );
     }
@@ -61,7 +61,7 @@ class Locale
             'locale_prefix' => $this->localePrefix,
             'path_prefix' => $this->pathPrefix,
             'ssl_mode' => $this->sslMode,
-            'active' => $this->active,
+            'enabled' => $this->enabled,
             'is_default' => $this->isDefault,
         ];
     }
@@ -106,9 +106,9 @@ class Locale
         return $this->isDefault;
     }
 
-    public function isActive(): bool
+    public function isEnabled(): bool
     {
-        return $this->active;
+        return $this->enabled;
     }
 
     public function getDomainDevelopment(): string

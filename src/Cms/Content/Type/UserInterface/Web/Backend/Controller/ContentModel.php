@@ -65,7 +65,7 @@ class ContentModel extends AbstractController
 
             $this->contentTypeRepository->insert($contentTypeAggregate);
 
-            $this->setFlash('success', $this->trans('contentTypeCreatedSuccessfully', [], 'content_builder'));
+            $this->addFlash('success', $this->trans('contentTypeCreatedSuccessfully', [], 'content_builder'));
             return $this->redirectToRoute('backend.content.type.homepage');
         }
 
@@ -99,7 +99,7 @@ class ContentModel extends AbstractController
         $contentTypeAggregate = $this->contentTypeRepository->find($code);
 
         if ($contentTypeAggregate === null) {
-            $this->setFlash('danger', $this->trans('contentTypeNotExists', [], 'content_builder'));
+            $this->addFlash('danger', $this->trans('contentTypeNotExists', [], 'content_builder'));
             return $this->redirectToRoute('backend.content.type.homepage');
         }
 
@@ -111,7 +111,7 @@ class ContentModel extends AbstractController
 
             $this->contentTypeRepository->update($contentTypeAggregate);
 
-            $this->setFlash('success', $this->trans('contentTypeUpdatedSuccessfully', [], 'content_builder'));
+            $this->addFlash('success', $this->trans('contentTypeUpdatedSuccessfully', [], 'content_builder'));
             return $this->redirectToRoute('backend.content.type.content_type.edit', ['contentType' => $contentType, 'code' => $code]);
         }
 
@@ -135,13 +135,13 @@ class ContentModel extends AbstractController
         $contentType = $this->contentTypeRepository->find($code);
 
         if ($contentType === null) {
-            $this->setFlash('danger', $this->trans('contentTypeNotExists', [], 'content_builder'));
+            $this->addFlash('danger', $this->trans('contentTypeNotExists', [], 'content_builder'));
             return $this->redirectToRoute('backend.content.type.homepage');
         }
 
         $this->contentTypeRepository->delete($contentType);
 
-        $this->setFlash('success', $this->trans('contentTypeWasRemoved', [], 'content_builder'));
+        $this->addFlash('success', $this->trans('contentTypeWasRemoved', [], 'content_builder'));
         return $this->redirectToRoute('backend.content.type.homepage');
     }
 }

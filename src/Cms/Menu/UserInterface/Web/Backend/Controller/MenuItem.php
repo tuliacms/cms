@@ -54,7 +54,7 @@ class MenuItem extends AbstractController
         $menu = $this->repository->find($menuId);
 
         if (!$menu) {
-            $this->setFlash('danger', $this->trans('menuNotFound', [], 'menu'));
+            $this->addFlash('danger', $this->trans('menuNotFound', [], 'menu'));
             return $this->redirectToRoute('backend.menu');
         }
 
@@ -85,10 +85,15 @@ class MenuItem extends AbstractController
         WebsiteInterface $website,
         string $menuId,
     ) {
+        if (!$website->isDefaultLocale()) {
+            $this->addFlash('info', $this->trans('youHaveBeenRedirectedToDefaultLocaleDueToCreationMultilingualElement'));
+            return $this->redirectToRoute('backend.menu.item.create', ['menuId' => $menuId, '_locale' => $website->getDefaultLocale()->getCode()]);
+        }
+
         try {
             $menu = $this->repository->get($menuId);
         } catch (MenuNotExistsException $e) {
-            $this->setFlash('danger', $this->trans('menuNotFound', [], 'menu'));
+            $this->addFlash('danger', $this->trans('menuNotFound', [], 'menu'));
             return $this->redirectToRoute('backend.menu');
         }
 
@@ -127,7 +132,7 @@ class MenuItem extends AbstractController
                 $website->getLocaleCodes(),
             ));
 
-            $this->setFlash('success', $this->trans('itemSaved', [], 'menu'));
+            $this->addFlash('success', $this->trans('itemSaved', [], 'menu'));
             return $this->redirectToRoute('backend.menu.item', [ 'menuId' => $menu->getId() ]);
         }
 
@@ -152,10 +157,10 @@ class MenuItem extends AbstractController
             $menu = $this->repository->get($menuId);
             $item = $menu->getItem($id);
         } catch (MenuNotExistsException $e) {
-            $this->setFlash('danger', $this->trans('menuNotFound', [], 'menu'));
+            $this->addFlash('danger', $this->trans('menuNotFound', [], 'menu'));
             return $this->redirectToRoute('backend.menu');
         } catch (MenuItemDoesntExistsException $e) {
-            $this->setFlash('danger', $this->trans('menuItemNotFound', [], 'menu'));
+            $this->addFlash('danger', $this->trans('menuItemNotFound', [], 'menu'));
             return $this->redirectToRoute('backend.menu.item', ['menuId' => $menuId]);
         }
 
@@ -201,7 +206,7 @@ class MenuItem extends AbstractController
                 $website->getLocaleCodes()
             ));
 
-            $this->setFlash('success', $this->trans('itemSaved', [], 'menu'));
+            $this->addFlash('success', $this->trans('itemSaved', [], 'menu'));
             return $this->redirectToRoute('backend.menu.item', [ 'menuId' => $menu->getId() ]);
         }
 
@@ -221,12 +226,12 @@ class MenuItem extends AbstractController
             try {
                 ($deleteMenuItem)(new DeleteMenuItemRequest($menuId, $id));
             } catch (MenuNotExistsException $e) {
-                $this->setFlash('danger', $this->trans('menuNotFound', [], 'menu'));
+                $this->addFlash('danger', $this->trans('menuNotFound', [], 'menu'));
                 return $this->redirectToRoute('backend.menu');
             }
         }
 
-        $this->setFlash('success', $this->trans('selectedItemsWereDeleted', [], 'menu'));
+        $this->addFlash('success', $this->trans('selectedItemsWereDeleted', [], 'menu'));
         return $this->redirectToRoute('backend.menu.item.list', [ 'menuId' => $menuId ]);
     }
 

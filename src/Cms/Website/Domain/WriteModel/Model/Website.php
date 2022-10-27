@@ -8,10 +8,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Tulia\Cms\Shared\Domain\WriteModel\Exception\UnexpectedDomainException;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
-use Tulia\Cms\Website\Domain\WriteModel\Event\LocaleActivityChanged;
+use Tulia\Cms\Website\Domain\WriteModel\Event\LocaleDisabled;
+use Tulia\Cms\Website\Domain\WriteModel\Event\LocaleEnabled;
 use Tulia\Cms\Website\Domain\WriteModel\Event\LocaleAdded;
 use Tulia\Cms\Website\Domain\WriteModel\Event\LocaleDeleted;
-use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteActivityChanged;
+use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteDisabled;
+use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteEnabled;
 use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteCreated;
 use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteDeleted;
 use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteUpdated;
@@ -42,7 +44,7 @@ class Website extends AbstractAggregateRoot
         private string $id,
         private string $name,
         private string $backendPrefix = '/administrator',
-        private bool $active = true
+        private bool $enabled = true,
     ) {
         $this->locales = new ArrayCollection();
     }
@@ -56,50 +58,13 @@ class Website extends AbstractAggregateRoot
         ?string $domainDevelopment = null,
         ?string $pathPrefix = null,
         SslModeEnum $sslMode = SslModeEnum::ALLOWED_BOTH,
-        bool $active = true,
+        bool $enabled = true,
     ): self {
-        $self = new self($id, $name, $backendPrefix, $active);
+        $self = new self($id, $name, $backendPrefix, $enabled);
         $self->locales->add(new Locale($self, $localeCode, $domain, $domainDevelopment, '', $pathPrefix, $sslMode, true, true));
         $self->recordThat(new WebsiteCreated($self->id));
 
         return $self;
-    }
-
-    public static function buildFromArray(array $data): self
-    {
-        $website = new self(
-            $data['id'],
-            $data['name'] ?? '',
-            $data['backend_prefix'] ?? '/administrator'
-        );
-        $website->active = $data['active'] ?? true;
-
-        foreach ($data['locales'] ?? [] as $locale) {
-            $website->locales[] = new Locale(
-                $website,
-                $locale['code'] ?? 'en_US',
-                $locale['domain'] ?? 'localhost',
-                $locale['domain_development'] ?? 'localhost',
-                $locale['locale_prefix'] ?? null,
-                $locale['path_prefix'] ?? null,
-                SslModeEnum::tryFrom($locale['ssl_mode'] ?? SslModeEnum::ALLOWED_BOTH),
-                true,
-                (bool) ($locale['is_default'] ?? false),
-            );
-        }
-
-        return $website;
-    }
-
-    public function toArray(): array
-    {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'active' => $this->active,
-            'backend_prefix' => $this->backendPrefix,
-            'locales' => $this->localesToArray(),
-        ];
     }
 
     public function getId(): string
@@ -115,7 +80,7 @@ class Website extends AbstractAggregateRoot
         ?string $localePrefix = null,
         ?string $pathPrefix = null,
         SslModeEnum $sslMode = SslModeEnum::ALLOWED_BOTH,
-        bool $active = true,
+        bool $enabled = true,
     ): void {
         $reason = $rules->decide($code, $this->collectLocaleCodes());
 
@@ -133,27 +98,27 @@ class Website extends AbstractAggregateRoot
             $localePrefix,
             $pathPrefix,
             $sslMode,
-            $active,
+            $enabled,
         );
 
         $this->recordThat(new LocaleAdded($this->id, $code, $defaultLocale->code));
         $this->recordWebsiteChange();
     }
 
-    public function deactivate(): void
+    public function disable(): void
     {
-        if ($this->active) {
-            $this->active = false;
-            $this->recordThat(new WebsiteActivityChanged($this->id, $this->active));
+        if ($this->enabled) {
+            $this->enabled = false;
+            $this->recordThat(new WebsiteDisabled($this->id));
             $this->recordWebsiteChange();
         }
     }
 
-    public function activate(): void
+    public function enable(): void
     {
-        if (false === $this->active) {
-            $this->active = true;
-            $this->recordThat(new WebsiteActivityChanged($this->id, $this->active));
+        if (false === $this->enabled) {
+            $this->enabled = true;
+            $this->recordThat(new WebsiteEnabled($this->id));
             $this->recordWebsiteChange();
         }
     }
@@ -187,21 +152,21 @@ class Website extends AbstractAggregateRoot
         }
     }
 
-    public function activateLocale(string $code): void
+    public function enableLocale(string $code): void
     {
         foreach ($this->locales as $locale) {
-            if ($locale->isA($code) && $locale->activate()) {
-                $this->recordThat(new LocaleActivityChanged($this->id, $code, $locale->active));
+            if ($locale->isA($code) && $locale->enable()) {
+                $this->recordThat(new LocaleEnabled($this->id, $code));
                 $this->recordWebsiteChange();
             }
         }
     }
 
-    public function deactivateLocale(string $code): void
+    public function disableLocale(string $code): void
     {
         foreach ($this->locales as $locale) {
-            if ($locale->isA($code) && $locale->deactivate()) {
-                $this->recordThat(new LocaleActivityChanged($this->id, $code, $locale->active));
+            if ($locale->isA($code) && $locale->disable()) {
+                $this->recordThat(new LocaleDisabled($this->id, $code));
                 $this->recordWebsiteChange();
             }
         }
@@ -241,14 +206,6 @@ class Website extends AbstractAggregateRoot
                 throw new Exception\LocalePrefixInvalidException('LocalePrefix must contain slash at the beggining and only those signs after slash: [a-z, 0-9, -, _].');
             }
         }
-    }
-
-    private function localesToArray(): array
-    {
-        return array_map(
-            static fn($v) => $v->toArray(),
-            $this->locales->toArray()
-        );
     }
 
     private function recordWebsiteChange()

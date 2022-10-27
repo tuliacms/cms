@@ -13,7 +13,7 @@ use Tulia\Cms\Website\Domain\WriteModel\WebsiteRepositoryInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-final class ActivateWebsite extends AbstractTransactionalUseCase
+final class DisableWebsite extends AbstractTransactionalUseCase
 {
     public function __construct(
         private readonly WebsiteRepositoryInterface $repository,
@@ -22,12 +22,12 @@ final class ActivateWebsite extends AbstractTransactionalUseCase
     }
 
     /**
-     * @param RequestInterface&ActivateWebsiteRequest $request
+     * @param RequestInterface&DisableWebsiteRequest $request
      */
     protected function execute(RequestInterface $request): ?ResultInterface
     {
         $website = $this->repository->get($request->websiteId);
-        $website->activate();
+        $website->disable();
 
         $this->repository->save($website);
         $this->eventBus->dispatchCollection($website->collectDomainEvents());

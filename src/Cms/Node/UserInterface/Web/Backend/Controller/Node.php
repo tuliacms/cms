@@ -40,12 +40,12 @@ use Tulia\Component\Templating\ViewInterface;
 class Node extends AbstractController
 {
     public function __construct(
-        private ContentTypeRegistryInterface $typeRegistry,
-        private NodeRepositoryInterface $repository,
-        private DatatableFactory $factory,
-        private NodeDatatableFinderInterface $finder,
-        private ContentFormService $contentFormService,
-        private AuthenticatedUserProviderInterface $authenticatedUserProvider,
+        private readonly ContentTypeRegistryInterface $typeRegistry,
+        private readonly NodeRepositoryInterface $repository,
+        private readonly DatatableFactory $factory,
+        private readonly NodeDatatableFinderInterface $finder,
+        private readonly ContentFormService $contentFormService,
+        private readonly AuthenticatedUserProviderInterface $authenticatedUserProvider,
     ) {
     }
 
@@ -84,8 +84,13 @@ class Node extends AbstractController
         Request $request,
         CreateNode $createNode,
         string $node_type,
-        WebsiteInterface $website
+        WebsiteInterface $website,
     ) {
+        if (!$website->isDefaultLocale()) {
+            $this->addFlash('info', $this->trans('youHaveBeenRedirectedToDefaultLocaleDueToCreationMultilingualElement'));
+            return $this->redirectToRoute('backend.node.create', ['node_type' => $node_type, '_locale' => $website->getDefaultLocale()->getCode()]);
+        }
+
         $this->validateCsrfToken($request, $node_type);
 
         $nodeType = $this->typeRegistry->get($node_type);
@@ -128,7 +133,7 @@ class Node extends AbstractController
                     $website->getLocaleCodes(),
                 ));
 
-                $this->setFlash('success', $this->trans('nodeSaved', [], 'node'));
+                $this->addFlash('success', $this->trans('nodeSaved', [], 'node'));
                 return $this->redirectToRoute('backend.node.edit', [ 'id' => $result->id, 'node_type' => $nodeType->getCode() ]);
             }  catch (CannotImposePurposeToNodeException $e) {
                 $nodeDetailsForm->get('purposes')->addError(new FormError($this->trans($e->reason)));
@@ -157,7 +162,7 @@ class Node extends AbstractController
         try {
             $node = $this->repository->get($id);
         } catch (NodeDoesntExistsException $e) {
-            $this->setFlash('warning', $this->trans('nodeNotFound', [], 'node'));
+            $this->addFlash('warning', $this->trans('nodeNotFound', [], 'node'));
             return $this->redirectToRoute('backend.node.list');
         }
 
@@ -196,7 +201,7 @@ class Node extends AbstractController
                     $website->getDefaultLocale()->getCode(),
                     $website->getLocale()->getCode(),
                 ));
-                $this->setFlash('success', $this->trans('nodeSaved', [], 'node'));
+                $this->addFlash('success', $this->trans('nodeSaved', [], 'node'));
                 return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getCode() ]);
             } catch (CannotImposePurposeToNodeException $e) {
                 $nodeDetailsForm->get('purposes')->addError(new FormError($this->trans($e->reason)));
@@ -241,7 +246,7 @@ class Node extends AbstractController
             default         : $message = 'selectedNodesWereUpdated'; break;
         }
 
-        $this->setFlash('success', $this->trans($message, [], 'node'));
+        $this->addFlash('success', $this->trans($message, [], 'node'));
         return $this->redirectToRoute('backend.node', [ 'node_type' => $nodeType->getCode() ]);
     }
 
@@ -260,7 +265,7 @@ class Node extends AbstractController
                 ($deleteNode)(new IdRequest($id));
                 $deleted++;
             } catch (CannotDeleteNodeException $e) {
-                $this->setFlash('danger', $this->trans(
+                $this->addFlash('danger', $this->trans(
                     'cannotDeleteNodeReason',
                     [
                         'title' => $e->title,
@@ -272,7 +277,7 @@ class Node extends AbstractController
         }
 
         if ($pretenders !== 0 && $pretenders === $deleted) {
-            $this->setFlash('success', $this->trans('selectedElementsWereDeleted'));
+            $this->addFlash('success', $this->trans('selectedElementsWereDeleted'));
         }
 
         return $this->redirectToRoute('backend.node', [ 'node_type' => $request->query->get('node_type', 'page') ]);

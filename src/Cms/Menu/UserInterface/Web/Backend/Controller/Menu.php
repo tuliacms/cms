@@ -55,7 +55,7 @@ class Menu extends AbstractController
     ): RedirectResponse {
         ($createMenu)(new CreateMenuRequest($request->request->get('name'), $website->getId()));
 
-        $this->setFlash('success', $this->trans('menuCreated', [], 'menu'));
+        $this->addFlash('success', $this->trans('menuCreated', [], 'menu'));
         return $this->redirectToRoute('backend.menu');
     }
 
@@ -71,11 +71,11 @@ class Menu extends AbstractController
                 $request->request->get('name')
             ));
         } catch (MenuNotExistsException $e) {
-            $this->setFlash('success', $this->trans('menuNotFound', [], 'menu'));
+            $this->addFlash('success', $this->trans('menuNotFound', [], 'menu'));
             return $this->redirectToRoute('backend.menu');
         }
 
-        $this->setFlash('success', $this->trans('menuUpdated', [], 'menu'));
+        $this->addFlash('success', $this->trans('menuUpdated', [], 'menu'));
         return $this->redirectToRoute('backend.menu');
     }
 
@@ -93,7 +93,7 @@ class Menu extends AbstractController
             }
         }
 
-        $this->setFlash('success', $this->trans('selectedMenusWereDeleted', [], 'menu'));
+        $this->addFlash('success', $this->trans('selectedMenusWereDeleted', [], 'menu'));
         return $this->redirectToRoute('backend.menu');
     }
 }

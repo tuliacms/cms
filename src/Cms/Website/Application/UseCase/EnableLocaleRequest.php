@@ -9,7 +9,7 @@ use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-final class DeactivateLocaleRequest implements RequestInterface
+final class EnableLocaleRequest implements RequestInterface
 {
     public function __construct(
         public readonly string $websiteId,

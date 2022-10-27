@@ -3,14 +3,14 @@ backend.website.create:
     controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Website::create
     methods: POST
 
-backend.website.activate:
-    path: /website/activate
-    controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Website::activate
+backend.website.enable:
+    path: /website/enable
+    controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Website::enable
     methods: POST
 
-backend.website.deactivate:
-    path: /website/deactivate
-    controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Website::deactivate
+backend.website.disable:
+    path: /website/disable
+    controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Website::disable
     methods: POST
 
 backend.website.locale.add:
@@ -23,14 +23,14 @@ backend.website.locale.delete:
     controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Locale::delete
     methods: POST
 
-backend.website.locale.activate:
-    path: /website/locale/activate
-    controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Locale::activate
+backend.website.locale.enable:
+    path: /website/locale/enable
+    controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Locale::enable
     methods: POST
 
-backend.website.locale.deactivate:
-    path: /website/locale/deactivate
-    controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Locale::deactivate
+backend.website.locale.disable:
+    path: /website/locale/disable
+    controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Locale::disable
     methods: POST
 
 backend.website.delete:

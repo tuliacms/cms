@@ -79,6 +79,10 @@ class Widget extends AbstractController
      */
     public function create(Request $request, string $type, CreateWidget $createWidget, WebsiteInterface $website)
     {
+        if (!$website->isDefaultLocale()) {
+            $this->addFlash('info', $this->trans('youHaveBeenRedirectedToDefaultLocaleDueToCreationMultilingualElement'));
+            return $this->redirectToRoute('backend.widget.create', ['type' => $type, '_locale' => $website->getDefaultLocale()->getCode()]);
+        }
         $this->validateCsrfToken($request, $type);
 
         $widgetInfo = $this->widgetRegistry->get($type);
@@ -101,7 +105,7 @@ class Widget extends AbstractController
                 $website->getLocaleCodes(),
             ));
 
-            $this->setFlash('success', $this->trans('widgetSaved', [], 'widgets'));
+            $this->addFlash('success', $this->trans('widgetSaved', [], 'widgets'));
             return $this->redirectToRoute('backend.widget.edit', ['id' => $result->id]);
         }
 
@@ -121,7 +125,7 @@ class Widget extends AbstractController
         try {
             $widget = $this->repository->get($id);
         } catch (WidgetNotFoundException $e) {
-            $this->setFlash('danger', $this->trans('widgetNotFound', [], 'widgets'));
+            $this->addFlash('danger', $this->trans('widgetNotFound', [], 'widgets'));
             return $this->redirectToRoute('backend.widget');
         }
 
@@ -150,7 +154,7 @@ class Widget extends AbstractController
                 $website->getLocaleCodes(),
             ));
 
-            $this->setFlash('success', $this->trans('widgetSaved', [], 'widgets'));
+            $this->addFlash('success', $this->trans('widgetSaved', [], 'widgets'));
             return $this->redirectToRoute('backend.widget.edit', ['id' => $id]);
         }
 
@@ -180,7 +184,7 @@ class Widget extends AbstractController
         }
 
         if ($removedWidgets) {
-            $this->setFlash('success', $this->trans('selectedWidgetsWereDeleted', [], 'widgets'));
+            $this->addFlash('success', $this->trans('selectedWidgetsWereDeleted', [], 'widgets'));
         }
 
         return $this->redirectToRoute('backend.widget');

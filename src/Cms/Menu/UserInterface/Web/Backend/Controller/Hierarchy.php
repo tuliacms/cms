@@ -29,7 +29,7 @@ class Hierarchy extends AbstractController
         try {
             $menu = $this->repository->get($menuId);
         } catch (MenuNotExistsException $exception) {
-            $this->setFlash('success', $this->trans('menuNotFound', [], 'menu'));
+            $this->addFlash('success', $this->trans('menuNotFound', [], 'menu'));
             return $this->redirectToRoute('backend.menu');
         }
 
@@ -54,7 +54,7 @@ class Hierarchy extends AbstractController
         try {
             $menu = $this->repository->get($menuId);
         } catch (MenuNotExistsException $exception) {
-            $this->setFlash('success', $this->trans('menuNotFound', [], 'menu'));
+            $this->addFlash('success', $this->trans('menuNotFound', [], 'menu'));
             return $this->redirectToRoute('backend.menu');
         }
 
@@ -66,7 +66,7 @@ class Hierarchy extends AbstractController
 
         ($updateItemsHierarchy)(new UpdateItemsHierarchyRequest($menuId, $hierarchy));
 
-        $this->setFlash('success', $this->trans('hierarchyUpdated'));
+        $this->addFlash('success', $this->trans('hierarchyUpdated'));
         return $this->redirectToRoute('backend.menu.item.hierarchy', ['menuId' => $menuId]);
     }
 

@@ -9,7 +9,7 @@ use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-final class DeactivateWebsiteRequest implements RequestInterface
+final class DisableWebsiteRequest implements RequestInterface
 {
     public function __construct(
         public readonly string $websiteId,
