@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Widget\Infrastructure\Persistence\Domain\ReadModel\Datatable;
+namespace Tulia\Cms\Widget\Infrastructure\Persistence\Doctrine\Dbal;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;

@@ -20,12 +20,21 @@ final class WebsiteFactory
         NotFoundViewRenderer $render,
         string $environment,
     ): WebsiteInterface {
+        $websites = self::flattenWebsites($websiteFinder->all(), $environment === 'dev');
+
         if (php_sapi_name() === 'cli') {
             [$websiteId, $activeLocale] = ConsoleWebsiteProvider::provideWebsite();
+
+            if (!$activeLocale) {
+                foreach ($websites as $website) {
+                    if ($website['id'] === $websiteId && $website['is_default']) {
+                        $activeLocale = $website['locale_code'];
+                    }
+                }
+            }
             $isBackend = false;
         } else {
             $request = $requestStack->getMainRequest();
-            $websites = self::flattenWebsites($websiteFinder->all(), $environment === 'dev');
 
             $sourceWebsite = WebsiteMatcher::matchAgainstRequest(
                 $websites,

@@ -9,9 +9,11 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteRegistryInterface;
+use Tulia\Cms\Security\Application\Service\AuthenticatedUserPasswordValidator;
 use Tulia\Cms\Website\Application\UseCase\CopyMachineEnum;
 use Tulia\Cms\Website\Application\UseCase\DeleteLocale;
 use Tulia\Cms\Website\Application\UseCase\DeleteLocaleRequest;
@@ -30,13 +32,14 @@ final class DeleteLocaleCommand extends Command
         private readonly TranslationsCopyMachineFactory $copyMachineFactory,
         private readonly WebsiteRegistryInterface $websiteRegistry,
         private readonly Connection $connection,
+        private readonly AuthenticatedUserPasswordValidator $passwordValidator,
     ) {
         parent::__construct();
     }
 
     protected function configure(): void
     {
-        $this->addArgument('website', InputArgument::REQUIRED, 'Website ID');
+        $this->addOption('website', null, InputOption::VALUE_REQUIRED, 'Website ID');
         $this->addArgument('locale', InputArgument::REQUIRED, 'Locale CODE to delete');
     }
 
@@ -50,7 +53,7 @@ final class DeleteLocaleCommand extends Command
         try {
             ($this->deleteLocale)(
                 new DeleteLocaleRequest(
-                    $input->getArgument('website'),
+                    $input->getOption('website'),
                     $input->getArgument('locale'),
                     copyMachineMode: CopyMachineEnum::DISABLE_PROCESSING,
                 )
@@ -59,8 +62,8 @@ final class DeleteLocaleCommand extends Command
             $io->info('Locale has been deleted. Deleting translations in process, please be patient, this operation may took a while...');
 
             $copyMachine = $this->copyMachineFactory->create(
-                $input->getArgument('website'),
-                $this->websiteRegistry->get($input->getArgument('website'))->getDefaultLocale()->getCode(),
+                $input->getOption('website'),
+                $this->websiteRegistry->get($input->getOption('website'))->getDefaultLocale()->getCode(),
                 new TranslationsCopyStreamableProgressbar($input, $output),
             );
 

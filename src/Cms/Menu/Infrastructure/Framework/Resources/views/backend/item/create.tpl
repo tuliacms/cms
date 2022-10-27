@@ -16,8 +16,8 @@
     <div class="pane pane-lead">
         <div class="pane-header">
             <div class="pane-buttons">
-                {{ form_row(formDescriptor.formView.cancel) }}
-                {{ form_row(formDescriptor.formView.save) }}
+                <a href="{{ path('backend.menu.item.list', { menuId: menu.id }) }}" class="btn btn-secondary btn-icon-left"><i class="btn-icon fas fa-times"></i> {{ 'cancel'|trans({}, 'messages') }}</a>
+                <a href="#" data-submit-form="{{ formDescriptor.formView.vars.id }}" class="btn btn-success btn-icon-left"><i class="btn-icon fas fa-save"></i> {{ 'save'|trans({}, 'messages') }}</a>
             </div>
             <i class="pane-header-icon fas fa-palette"></i>
             <h1 class="pane-title">{{ block('title') }}</h1>

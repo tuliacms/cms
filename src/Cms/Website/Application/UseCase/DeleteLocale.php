@@ -19,7 +19,7 @@ use Tulia\Cms\Website\Domain\WriteModel\WebsiteRepositoryInterface;
  */
 final class DeleteLocale extends AbstractTransactionalUseCase
 {
-    private const TRANSLATIONS_THRESHOLD = 0;
+    private const TRANSLATIONS_THRESHOLD = 600;
 
     public function __construct(
         private readonly WebsiteRepositoryInterface $repository,

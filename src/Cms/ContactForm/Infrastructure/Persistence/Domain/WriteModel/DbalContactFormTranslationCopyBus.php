@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Infrastructure\Persistence\Doctrine\Dbal\WriteModel;
+namespace Tulia\Cms\ContactForm\Infrastructure\Persistence\Domain\WriteModel;
 
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Uid\Uuid;
@@ -13,7 +13,7 @@ use Tulia\Cms\Website\Domain\WriteModel\Service\TranslationCopyMachine\CopyBusIn
  * @final
  * @lazy
  */
-class DbalNodeTranslationCopyBus implements CopyBusInterface
+class DbalContactFormTranslationCopyBus implements CopyBusInterface
 {
     public function __construct(
         private readonly Connection $connection,
@@ -23,11 +23,11 @@ class DbalNodeTranslationCopyBus implements CopyBusInterface
     public function count(string $websiteId, string $defaultLocale): int
     {
         return (int) $this->connection->fetchOne('
-            SELECT COUNT(nt.id)
-            FROM #__node_translation AS nt
-            INNER JOIN #__node AS n
-                ON n.id = nt.node_id
-            WHERE n.website_id = :website AND nt.locale = :locale', [
+            SELECT COUNT(ft.id)
+            FROM #__form_translation AS ft
+            INNER JOIN #__form AS f
+                ON f.id = ft.form_id
+            WHERE f.website_id = :website AND ft.locale = :locale', [
             'website' => Uuid::fromString($websiteId)->toBinary(),
             'locale' => $defaultLocale,
         ]);
@@ -35,34 +35,33 @@ class DbalNodeTranslationCopyBus implements CopyBusInterface
 
     public function copy(string $websiteId, string $defaultLocale, string $targetLocale, int $offset, int $limit): int
     {
-        $idList = $this->getNodeIdListPart($websiteId, $offset, $limit);
+        $idList = $this->getFormIdListPart($websiteId, $offset, $limit);
         $source = $this->getTranslationsSource($idList, $defaultLocale);
 
-        $attributes = $this->collectAttributes(array_column($source, 'id'));
+        $fields = $this->collectFields(array_column($source, 'id'));
 
         foreach ($source as $item) {
             $id = Uuid::v4()->toBinary();
 
-            $this->connection->insert('#__node_translation', [
+            $this->connection->insert('#__form_translation', [
                 'id' => $id,
+                'form_id' => $item['form_id'],
                 'locale' => $targetLocale,
-                'node_id' => $item['node_id'],
-                'title' => $item['title'],
-                'slug' => $item['slug'],
+                'subject' => $item['subject'],
+                'message_template' => $item['message_template'],
+                'fields_view' => $item['fields_view'],
+                'fields_template' => $item['fields_template'],
                 'translated' => 0,
             ]);
 
-            foreach ($attributes[$item['id']] ?? [] as $attribute) {
-                $this->connection->insert('#__node_attribute', [
+            foreach ($fields[$item['id']] ?? [] as $field) {
+                $this->connection->insert('#__form_field_translation', [
                     'id' => Uuid::v4()->toBinary(),
-                    'node_translation_id' => $id,
+                    'translation_id' => $id,
                     'locale' => $targetLocale,
-                    'code' => $attribute['code'],
-                    'uri' => $attribute['uri'],
-                    'value' => $attribute['value'],
-                    'compiled_value' => $attribute['compiled_value'],
-                    'payload' => $attribute['payload'],
-                    'flags' => $attribute['flags'],
+                    'name' => $field['name'],
+                    'type' => $field['type'],
+                    'options' => $field['options'],
                 ]);
             }
         }
@@ -72,29 +71,29 @@ class DbalNodeTranslationCopyBus implements CopyBusInterface
 
     public function delete(string $websiteId, string $defaultLocale, string $targetLocale, int $offset, int $limit): int
     {
-        $idList = $this->getNodeIdListPart($websiteId, $offset, $limit);
+        $idList = $this->getFormIdListPart($websiteId, $offset, $limit);
         $translationsIdList = array_column($this->getTranslationsSource($idList, $targetLocale), 'id');
 
         $this->connection->executeStatement(
-            'DELETE FROM #__node_attribute WHERE node_translation_id IN (:id)',
+            'DELETE FROM #__form_field_translation WHERE translation_id IN (:id)',
             ['id' => $translationsIdList],
             ['id' => Connection::PARAM_STR_ARRAY]
         );
         $this->connection->executeStatement(
-            'DELETE FROM #__node_translation WHERE id IN (:id)',
+            'DELETE FROM #__form_translation WHERE id IN (:id)',
             ['id' => $translationsIdList],
             ['id' => Connection::PARAM_STR_ARRAY]
         );
 
-        return count($translationsIdList);
+        return count($idList);
     }
 
-    private function collectAttributes(array $idList): array
+    private function collectFields(array $idList): array
     {
         $source = $this->connection->fetchAllAssociative('
-            SELECT node_translation_id, code, uri, value, compiled_value, payload, flags
-            FROM #__node_attribute
-            WHERE node_translation_id IN (:idList)
+            SELECT translation_id, name, type, locale, options
+            FROM #__form_field_translation
+            WHERE translation_id IN (:idList)
         ', [
             'idList' => $idList,
         ], [
@@ -103,17 +102,17 @@ class DbalNodeTranslationCopyBus implements CopyBusInterface
         $result = [];
 
         foreach ($source as $item) {
-            $result[$item['node_translation_id']][] = $item;
+            $result[$item['translation_id']][] = $item;
         }
 
         return $result;
     }
 
-    private function getNodeIdListPart(string $websiteId, int $offset, int $limit): array
+    private function getFormIdListPart(string $websiteId, int $offset, int $limit): array
     {
         return $this->connection->fetchFirstColumn('
             SELECT id
-            FROM #__node
+            FROM #__form
             WHERE website_id = :website
             ORDER BY id ASC
             LIMIT :offset, :limit', [
@@ -126,14 +125,14 @@ class DbalNodeTranslationCopyBus implements CopyBusInterface
         ]);
     }
 
-    private function getTranslationsSource(array $nodeIdList, string $locale): array
+    private function getTranslationsSource(array $formIdList, string $locale): array
     {
         return $this->connection->fetchAllAssociative('
-            SELECT id, node_id, locale, title, slug
-            FROM #__node_translation
-            WHERE node_id IN (:ids) AND locale = :locale', [
+            SELECT id, form_id, locale, subject, message_template, fields_view, fields_template
+            FROM #__form_translation
+            WHERE form_id IN (:ids) AND locale = :locale', [
             'locale' => $locale,
-            'ids' => $nodeIdList,
+            'ids' => $formIdList,
         ], [
             'ids' => Connection::PARAM_STR_ARRAY,
         ]);

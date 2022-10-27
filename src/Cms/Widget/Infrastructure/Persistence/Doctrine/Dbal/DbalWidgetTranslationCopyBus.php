@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Infrastructure\Persistence\Doctrine\Dbal\WriteModel;
+namespace Tulia\Cms\Widget\Infrastructure\Persistence\Doctrine\Dbal;
 
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Uid\Uuid;
@@ -13,7 +13,7 @@ use Tulia\Cms\Website\Domain\WriteModel\Service\TranslationCopyMachine\CopyBusIn
  * @final
  * @lazy
  */
-class DbalNodeTranslationCopyBus implements CopyBusInterface
+class DbalWidgetTranslationCopyBus implements CopyBusInterface
 {
     public function __construct(
         private readonly Connection $connection,
@@ -23,11 +23,11 @@ class DbalNodeTranslationCopyBus implements CopyBusInterface
     public function count(string $websiteId, string $defaultLocale): int
     {
         return (int) $this->connection->fetchOne('
-            SELECT COUNT(nt.id)
-            FROM #__node_translation AS nt
-            INNER JOIN #__node AS n
-                ON n.id = nt.node_id
-            WHERE n.website_id = :website AND nt.locale = :locale', [
+            SELECT COUNT(wt.id)
+            FROM #__widget_translation AS wt
+            INNER JOIN #__widget AS w
+                ON w.id = wt.widget_id
+            WHERE w.website_id = :website AND wt.locale = :locale', [
             'website' => Uuid::fromString($websiteId)->toBinary(),
             'locale' => $defaultLocale,
         ]);
@@ -35,7 +35,7 @@ class DbalNodeTranslationCopyBus implements CopyBusInterface
 
     public function copy(string $websiteId, string $defaultLocale, string $targetLocale, int $offset, int $limit): int
     {
-        $idList = $this->getNodeIdListPart($websiteId, $offset, $limit);
+        $idList = $this->getWidgetIdListPart($websiteId, $offset, $limit);
         $source = $this->getTranslationsSource($idList, $defaultLocale);
 
         $attributes = $this->collectAttributes(array_column($source, 'id'));
@@ -43,19 +43,19 @@ class DbalNodeTranslationCopyBus implements CopyBusInterface
         foreach ($source as $item) {
             $id = Uuid::v4()->toBinary();
 
-            $this->connection->insert('#__node_translation', [
+            $this->connection->insert('#__widget_translation', [
                 'id' => $id,
                 'locale' => $targetLocale,
-                'node_id' => $item['node_id'],
+                'widget_id' => $item['widget_id'],
                 'title' => $item['title'],
-                'slug' => $item['slug'],
+                'visibility' => $item['visibility'],
                 'translated' => 0,
             ]);
 
             foreach ($attributes[$item['id']] ?? [] as $attribute) {
-                $this->connection->insert('#__node_attribute', [
+                $this->connection->insert('#__widget_attribute', [
                     'id' => Uuid::v4()->toBinary(),
-                    'node_translation_id' => $id,
+                    'widget_translation_id' => $id,
                     'locale' => $targetLocale,
                     'code' => $attribute['code'],
                     'uri' => $attribute['uri'],
@@ -72,16 +72,16 @@ class DbalNodeTranslationCopyBus implements CopyBusInterface
 
     public function delete(string $websiteId, string $defaultLocale, string $targetLocale, int $offset, int $limit): int
     {
-        $idList = $this->getNodeIdListPart($websiteId, $offset, $limit);
+        $idList = $this->getWidgetIdListPart($websiteId, $offset, $limit);
         $translationsIdList = array_column($this->getTranslationsSource($idList, $targetLocale), 'id');
 
         $this->connection->executeStatement(
-            'DELETE FROM #__node_attribute WHERE node_translation_id IN (:id)',
+            'DELETE FROM #__widget_attribute WHERE widget_translation_id IN (:id)',
             ['id' => $translationsIdList],
             ['id' => Connection::PARAM_STR_ARRAY]
         );
         $this->connection->executeStatement(
-            'DELETE FROM #__node_translation WHERE id IN (:id)',
+            'DELETE FROM #__widget_translation WHERE id IN (:id)',
             ['id' => $translationsIdList],
             ['id' => Connection::PARAM_STR_ARRAY]
         );
@@ -92,9 +92,9 @@ class DbalNodeTranslationCopyBus implements CopyBusInterface
     private function collectAttributes(array $idList): array
     {
         $source = $this->connection->fetchAllAssociative('
-            SELECT node_translation_id, code, uri, value, compiled_value, payload, flags
-            FROM #__node_attribute
-            WHERE node_translation_id IN (:idList)
+            SELECT widget_translation_id, code, uri, value, compiled_value, payload, flags
+            FROM #__widget_attribute
+            WHERE widget_translation_id IN (:idList)
         ', [
             'idList' => $idList,
         ], [
@@ -103,17 +103,17 @@ class DbalNodeTranslationCopyBus implements CopyBusInterface
         $result = [];
 
         foreach ($source as $item) {
-            $result[$item['node_translation_id']][] = $item;
+            $result[$item['widget_translation_id']][] = $item;
         }
 
         return $result;
     }
 
-    private function getNodeIdListPart(string $websiteId, int $offset, int $limit): array
+    private function getWidgetIdListPart(string $websiteId, int $offset, int $limit): array
     {
         return $this->connection->fetchFirstColumn('
             SELECT id
-            FROM #__node
+            FROM #__widget
             WHERE website_id = :website
             ORDER BY id ASC
             LIMIT :offset, :limit', [
@@ -129,9 +129,9 @@ class DbalNodeTranslationCopyBus implements CopyBusInterface
     private function getTranslationsSource(array $nodeIdList, string $locale): array
     {
         return $this->connection->fetchAllAssociative('
-            SELECT id, node_id, locale, title, slug
-            FROM #__node_translation
-            WHERE node_id IN (:ids) AND locale = :locale', [
+            SELECT id, widget_id, locale, title, visibility
+            FROM #__widget_translation
+            WHERE widget_id IN (:ids) AND locale = :locale', [
             'locale' => $locale,
             'ids' => $nodeIdList,
         ], [

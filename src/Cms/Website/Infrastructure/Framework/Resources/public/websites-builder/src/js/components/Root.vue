@@ -19,36 +19,40 @@
                                 :title="translations.websiteInactiveHint"
                                 class="badge badge-secondary mb-3"
                             >{{ translations.websiteInactive }}</span>
-                            <h4 class="card-title">{{ website.name }}</h4>
-                            <small class="text-muted">ID: {{ website.id }}</small>
+                            <h4 class="card-title mb-1">{{ website.name }}</h4>
+                            <a :href="website.address">{{ website.address }}</a>
+                            <small class="text-muted d-block mt-3">ID: {{ website.id }}</small>
                         </div>
                         <div class="list-group list-group-flush">
                             <div
                                 v-for="locale in website.locales"
-                                class="list-group-item d-flex justify-content-between align-items-center pe-1"
+                                class="list-group-item pe-1"
                             >
-                                <div>
-                                    <img :src="localeProperty(locale.code, 'flag')" alt="" class="website-locale-flag-icon" />
-                                    <span v-if="locale.is_default">
-                                        <b>{{ localeProperty(locale.code, 'name') }}</b>
-                                    </span>
-                                    <span v-else>
-                                        {{ localeProperty(locale.code, 'name') }}
-                                    </span>
-                                    <small v-if="locale.is_default" class="text-lowercase">&nbsp;({{ translations.defaultLocale }})</small>
-                                </div>
-                                <div>
-                                    <div v-if="locale.active" class="form-check form-switch d-inline">
-                                        <input class="form-check-input" type="checkbox" role="switch" @change="(e) => e.target.setAttribute('disabled', 'disabled') || deactivateLocale(website.id, locale.code)" :title="translations.deactivate" data-bs-toggle="tooltip" checked>
+                                <div class="locale-info d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <img :src="localeProperty(locale.code, 'flag')" alt="" class="website-locale-flag-icon" />
+                                        <span v-if="locale.is_default">
+                                            <b>{{ localeProperty(locale.code, 'name') }}</b>
+                                        </span>
+                                        <span v-else>
+                                            {{ localeProperty(locale.code, 'name') }}
+                                        </span>
+                                        <small v-if="locale.is_default" class="text-lowercase">&nbsp;({{ translations.defaultLocale }})</small>
                                     </div>
-                                    <div v-if="!locale.active" class="form-check form-switch d-inline">
-                                        <input class="form-check-input" type="checkbox" role="switch" @change="(e) => e.target.setAttribute('disabled', 'disabled') || activateLocale(website.id, locale.code)" :title="translations.activate" data-bs-toggle="tooltip">
+                                    <div>
+                                        <div v-if="locale.active" class="form-check form-switch d-inline">
+                                            <input class="form-check-input" type="checkbox" role="switch" @change="(e) => e.target.setAttribute('disabled', 'disabled') || deactivateLocale(website.id, locale.code)" :title="translations.deactivate" data-bs-toggle="tooltip" checked>
+                                        </div>
+                                        <div v-if="!locale.active" class="form-check form-switch d-inline">
+                                            <input class="form-check-input" type="checkbox" role="switch" @change="(e) => e.target.setAttribute('disabled', 'disabled') || activateLocale(website.id, locale.code)" :title="translations.activate" data-bs-toggle="tooltip">
+                                        </div>
+                                        <a v-if="!locale.is_default && !locale.is_current" href="#" @click="deleteLocale(website.id, locale.code)" :title="translations.deleteLocale" data-bs-toggle="tooltip" class="btn btn-sm btn-icon-only btn-outline-danger me-2"><i class="btn-icon fa fa-trash"></i></a>
+                                        <span v-if="locale.is_default || locale.is_current" class="d-inline-block">
+                                            <a href="#" disabled="disabled" class="btn btn-sm btn-icon-only btn-outline-danger disabled me-2"><i class="btn-icon fa fa-trash"></i></a>
+                                        </span>
                                     </div>
-                                    <a v-if="!locale.is_default && !locale.is_current" href="#" @click="deleteLocale(website.id, locale.code)" :title="translations.deleteLocale" data-bs-toggle="tooltip" class="btn btn-sm btn-icon-only btn-outline-danger me-2"><i class="btn-icon fa fa-trash"></i></a>
-                                    <span v-if="locale.is_default || locale.is_current" class="d-inline-block">
-                                        <a href="#" disabled="disabled" class="btn btn-sm btn-icon-only btn-outline-danger disabled me-2"><i class="btn-icon fa fa-trash"></i></a>
-                                    </span>
                                 </div>
+                                <a :href="locale.address" target="_blank" class="locale-address">{{ locale.address }}</a>
                             </div>
                             <a
                                 href="#"
@@ -179,8 +183,7 @@ const localeProperty = (code, property) => {
         .website-locale-flag-icon {
             position: absolute;
             left: 11px;
-            top: 50%;
-            transform: translateY(-50%);
+            top: 17px;
             max-width: 16px;
         }
     }

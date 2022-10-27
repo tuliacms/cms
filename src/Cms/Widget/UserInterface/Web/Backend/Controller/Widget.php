@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\ContentTypeFormDescriptor;
 use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Service\ContentFormService;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Exception\RequestCsrfTokenException;
@@ -24,10 +25,9 @@ use Tulia\Cms\Widget\Application\UseCase\UpdateWidgetRequest;
 use Tulia\Cms\Widget\Domain\Catalog\Registry\WidgetRegistryInterface;
 use Tulia\Cms\Widget\Domain\WriteModel\Exception\WidgetNotFoundException;
 use Tulia\Cms\Widget\Domain\WriteModel\WidgetRepositoryInterface;
-use Tulia\Cms\Widget\Infrastructure\Persistence\Domain\ReadModel\Datatable\DbalDatatableFinder;
+use Tulia\Cms\Widget\Infrastructure\Persistence\Doctrine\Dbal\DbalDatatableFinder;
 use Tulia\Cms\Widget\UserInterface\Web\Backend\Form\WidgetDetailsForm;
 use Tulia\Component\Datatable\DatatableFactory;
-use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
 
 /**

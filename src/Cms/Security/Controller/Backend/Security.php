@@ -7,13 +7,10 @@ namespace Tulia\Cms\Security\Controller\Backend;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
-use Tulia\Cms\User\Domain\ReadModel\Finder\UserFinderInterface;
-use Tulia\Cms\User\Domain\ReadModel\Finder\UserFinderScopeEnum;
+use Tulia\Cms\Security\Application\Service\AuthenticatedUserPasswordValidator;
 use Tulia\Component\Templating\ViewInterface;
 
 /**
@@ -62,16 +59,11 @@ class Security extends AbstractController
 
     public function verifyPassword(
         Request $request,
-        TokenStorageInterface $tokenStorage,
-        PasswordHasherFactoryInterface $hasherFactory,
-        UserFinderInterface $finder,
+        AuthenticatedUserPasswordValidator $passwordValidator,
     ): Response {
         $password = $request->query->get('password');
-        $coreUser = $this->getUser();
-        $user = $finder->find(['email' => $coreUser->getUserIdentifier()], UserFinderScopeEnum::INTERNAL)->first();
-        $hasher = $hasherFactory->getPasswordHasher($coreUser);
 
-        return new Response('', $hasher->verify($user->getPassword(), $password) ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
+        return new Response('', $passwordValidator->isValid($password) ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
     }
 
     public function getCollection(): array

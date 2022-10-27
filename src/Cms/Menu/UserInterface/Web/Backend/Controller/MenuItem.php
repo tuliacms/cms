@@ -34,11 +34,11 @@ use Tulia\Component\Templating\ViewInterface;
 class MenuItem extends AbstractController
 {
     public function __construct(
-        private MenuRepositoryInterface $repository,
-        private RegistryInterface $menuTypeRegistry,
-        private DatatableFactory $factory,
-        private ItemDatatableFinderInterface $finder,
-        private ContentFormService $contentFormService,
+        private readonly MenuRepositoryInterface $repository,
+        private readonly RegistryInterface $menuTypeRegistry,
+        private readonly DatatableFactory $factory,
+        private readonly ItemDatatableFinderInterface $finder,
+        private readonly ContentFormService $contentFormService,
     ) {
     }
 
@@ -118,7 +118,7 @@ class MenuItem extends AbstractController
         );
         $formDescriptor->handleRequest($request);
 
-        if ($formDescriptor->isFormValid()) {
+        if ($formDescriptor->isFormValid() && $itemDetailsForm->isValid()) {
             ($createMenuItem)(new CreateMenuItemRequest(
                 $menuId,
                 $itemDetailsForm->getData(),

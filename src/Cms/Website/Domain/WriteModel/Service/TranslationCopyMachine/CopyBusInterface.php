@@ -9,9 +9,9 @@ namespace Tulia\Cms\Website\Domain\WriteModel\Service\TranslationCopyMachine;
  */
 interface CopyBusInterface
 {
-    public function count(string $websiteId, string $from): int;
+    public function count(string $websiteId, string $defaultLocale): int;
 
-    public function copy(string $websiteId, string $from, string $to, int $offset, int $limit): int;
+    public function copy(string $websiteId, string $defaultLocale, string $targetLocale, int $offset, int $limit): int;
 
-    public function delete(string $websiteId, string $from, int $offset, int $limit): int;
+    public function delete(string $websiteId, string $defaultLocale, string $targetLocale, int $offset, int $limit): int;
 }

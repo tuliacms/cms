@@ -163,27 +163,36 @@ class Website extends AbstractController
         $this->setFlash('warning', $this->trans($message, ['reason' => $this->trans($reason, [], 'websites')], 'websites'));
     }
 
-    private function collectWebsites(WebsiteInterface $website): array
+    private function collectWebsites(WebsiteInterface $activeWebsite): array
     {
-        $websites = array_map(
-            static fn($w) => $w->toArray(),
-            $this->finder->all()
-        );
+        $websites = [];
 
-        foreach ($websites as $wk => $wv) {
-            if ($wv['id'] === $website->getId()) {
-                $websites[$wk]['is_current'] = true;
+        foreach ($this->finder->all() as $wk => $wv) {
+            $website = $wv->toArray();
+            $website['address'] = $wv->getBackendAddress();
+
+            if ($wv->getId() === $activeWebsite->getId()) {
+                $website['is_current'] = true;
             } else {
-                $websites[$wk]['is_current'] = false;
+                $website['is_current'] = false;
             }
 
-            foreach ($wv['locales'] as $lk => $lv) {
-                if ($lv['code'] === $website->getLocale()->getCode()) {
-                    $websites[$wk]['locales'][$lk]['is_current'] = true;
+            $website['locales'] = [];
+
+            foreach ($wv->getLocales() as $lk => $lv) {
+                $locale = $lv->toArray();
+                $locale['address'] = $wv->getAddress($lv->getCode());
+
+                if ($lv->getCode() === $activeWebsite->getLocale()->getCode()) {
+                    $locale['is_current'] = true;
                 } else {
-                    $websites[$wk]['locales'][$lk]['is_current'] = false;
+                    $locale['is_current'] = false;
                 }
+
+                $website['locales'][] = $locale;
             }
+
+            $websites[] = $website;
         }
 
         return $websites;

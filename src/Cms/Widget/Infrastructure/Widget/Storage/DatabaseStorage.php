@@ -7,7 +7,7 @@ namespace Tulia\Cms\Widget\Infrastructure\Widget\Storage;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Uid\Uuid;
 use Tulia\Cms\Widget\Domain\Catalog\Storage\StorageInterface;
-use Tulia\Cms\Widget\Infrastructure\Persistence\Domain\ReadModel\Finder\DbalWidgetAttributesFinder;
+use Tulia\Cms\Widget\Infrastructure\Persistence\Doctrine\Dbal\DbalWidgetAttributesFinder;
 
 /**
  * @author Adam Banaszkiewicz

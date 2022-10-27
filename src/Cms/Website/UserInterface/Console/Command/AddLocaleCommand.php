@@ -37,8 +37,8 @@ final class AddLocaleCommand extends Command
 
     protected function configure(): void
     {
-        $this->addArgument('website', InputArgument::REQUIRED, 'Website ID');
         $this->addArgument('locale', InputArgument::REQUIRED, 'New locale CODE');
+        $this->addOption('website', null, InputOption::VALUE_REQUIRED, 'Website ID');
         $this->addOption('domain', 'd', InputOption::VALUE_OPTIONAL, 'Domain of this locale, if should be different than of default locale');
         $this->addOption('domainDevelopment', 'ddev', InputOption::VALUE_OPTIONAL, 'Development domain of this locale, if should be different than of default locale');
         $this->addOption('localePrefix', 'lp', InputOption::VALUE_OPTIONAL, 'Locale prefix. Left empty to take care by system');
@@ -56,7 +56,7 @@ final class AddLocaleCommand extends Command
         try {
             ($this->addLocale)(
                 new AddLocaleRequest(
-                    $input->getArgument('website'),
+                    $input->getOption('website'),
                     $input->getArgument('locale'),
                     $input->getOption('domain'),
                     $input->getOption('domainDevelopment'),
@@ -70,8 +70,8 @@ final class AddLocaleCommand extends Command
             $io->info('Locale has been added. Copying translations in process, please be patient, this operation may took a while...');
 
             $copyMachine = $this->copyMachineFactory->create(
-                $input->getArgument('website'),
-                $this->websiteRegistry->get($input->getArgument('website'))->getDefaultLocale()->getCode(),
+                $input->getOption('website'),
+                $this->websiteRegistry->get($input->getOption('website'))->getDefaultLocale()->getCode(),
                 new TranslationsCopyStreamableProgressbar($input, $output),
             );
 

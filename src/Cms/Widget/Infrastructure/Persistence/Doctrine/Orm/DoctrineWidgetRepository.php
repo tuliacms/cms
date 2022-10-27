@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Widget\Infrastructure\Persistence\Doctrine\Repository;
+namespace Tulia\Cms\Widget\Infrastructure\Persistence\Doctrine\Orm;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;

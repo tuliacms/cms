@@ -41,10 +41,20 @@ final class TranslationsCopyMachine implements TranslationsCopyMachineInterface
 
     public function copyTo(string $locale): int
     {
+        return $this->process('copy', $locale);
+    }
+
+    public function deleteFrom(string $locale): int
+    {
+        return $this->process('delete', $locale);
+    }
+
+    private function process(string $action, string $locale): int
+    {
         $total = $this->count();
         $this->progressStream->start($total);
 
-        $copiedRows = 0;
+        $processedRows = 0;
 
         foreach ($this->buses as $bus) {
             $busTotal = $this->busesCountCache[get_class($bus)];
@@ -52,7 +62,7 @@ final class TranslationsCopyMachine implements TranslationsCopyMachineInterface
             $iterations = ceil($busTotal / $limit);
 
             for ($i = 0; $i < $iterations; $i++) {
-                $done = $bus->copy(
+                $done = $bus->{$action}(
                     $this->websiteId,
                     $this->sourceLocale,
                     $locale,
@@ -61,42 +71,12 @@ final class TranslationsCopyMachine implements TranslationsCopyMachineInterface
                 );
 
                 $this->progressStream->advance($done);
-                $copiedRows += $done;
+                $processedRows += $done;
             }
         }
 
         $this->progressStream->end();
 
-        return $copiedRows;
-    }
-
-    public function deleteFrom(string $locale): int
-    {
-        $total = $this->count();
-        $this->progressStream->start($total);
-
-        $deletedRows = 0;
-
-        foreach ($this->buses as $bus) {
-            $busTotal = $this->busesCountCache[get_class($bus)];
-            $limit = 10;
-            $iterations = ceil($busTotal / $limit);
-
-            for ($i = 0; $i < $iterations; $i++) {
-                $done = $bus->delete(
-                    $this->websiteId,
-                    $locale,
-                    offset: $i * $limit,
-                    limit: $limit,
-                );
-
-                $this->progressStream->advance($done);
-                $deletedRows += $done;
-            }
-        }
-
-        $this->progressStream->end();
-
-        return $deletedRows;
+        return $processedRows;
     }
 }
