@@ -22,7 +22,10 @@ class FormSelectorBuilder extends AbstractFieldTypeBuilder
 
     public function buildOptions(Field $field, array $options, ContentType $contentType): array
     {
-        $forms = $this->finder->find([], ContactFormFinderScopeEnum::SEARCH);
+        $forms = $this->finder->find([
+            'locale' => $options['locale'],
+            'website_id' => $options['website_id'],
+        ], ContactFormFinderScopeEnum::SEARCH);
 
         foreach ($forms as $form) {
             $options['choices'][$form->getName()] = $form->getId();
