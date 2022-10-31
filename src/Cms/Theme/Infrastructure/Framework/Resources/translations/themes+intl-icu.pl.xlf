@@ -91,6 +91,10 @@
                 <source>finish</source>
                 <target>Zakończ</target>
             </trans-unit>
+            <trans-unit id="tuliacms.themes.23">
+                <source>defaultThemeCannotBeCustomized</source>
+                <target>Domyśny motyw nie może zostać dostosowany.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -13,6 +13,7 @@ interface SlugGeneratorStrategyInterface
         string $nodeId,
         string $slug,
         string $title,
+        string $websiteId,
         ?string $locale = null
     ): string;
 }

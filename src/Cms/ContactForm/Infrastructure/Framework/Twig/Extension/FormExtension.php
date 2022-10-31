@@ -11,6 +11,7 @@ use Tulia\Cms\ContactForm\Domain\ReadModel\Finder\ContactFormFinderInterface;
 use Tulia\Cms\ContactForm\Domain\ReadModel\Finder\ContactFormFinderScopeEnum;
 use Tulia\Cms\ContactForm\Domain\ReadModel\Model\Form;
 use Tulia\Cms\ContactForm\Infrastructure\FormBuilder\ContactFormBuilderInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -23,6 +24,7 @@ class FormExtension extends AbstractExtension
     public function __construct(
         private readonly ContactFormBuilderInterface $builder,
         private readonly ContactFormFinderInterface $finder,
+        private readonly WebsiteInterface $website,
     ) {
     }
 
@@ -34,7 +36,12 @@ class FormExtension extends AbstractExtension
                     return '<!-- Please provide a ContactForm ID -->';
                 }
 
-                $model = $this->finder->findOne(['id' => $formId, 'fetch_fields' => true], ContactFormFinderScopeEnum::SINGLE);
+                $model = $this->finder->findOne([
+                    'id' => $formId,
+                    'fetch_fields' => true,
+                    'locale' => $this->website->getLocale()->getCode(),
+                    'website_id' => $this->website->getId(),
+                ], ContactFormFinderScopeEnum::SINGLE);
 
                 if ($model === null) {
                     return null;

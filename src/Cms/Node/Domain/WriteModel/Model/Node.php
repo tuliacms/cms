@@ -188,13 +188,13 @@ class Node extends AbstractAggregateRoot
         ?string $slug = null,
     ): void {
         $trans = $this->trans($locale);
-        $trans->changeTitle($slugGeneratorStrategy, $title, $slug);
+        $trans->changeTitle($slugGeneratorStrategy, $this->websiteId, $title, $slug);
         $trans->translated = true;
 
         if ($locale === $defaultLocale) {
             foreach ($this->translations as $translation) {
                 if (false === $translation->isTranslated()) {
-                    $translation->changeTitle($slugGeneratorStrategy, $title, $slug);
+                    $translation->changeTitle($slugGeneratorStrategy, $this->websiteId, $title, $slug);
                 }
             }
         }
@@ -278,7 +278,7 @@ class Node extends AbstractAggregateRoot
         foreach ($toAdd as $purposeCode) {
             $purpose = new Purpose($this, $purposeCode);
 
-            $reason = $rules->decide($this->id, $purpose, ...$this->purposes);
+            $reason = $rules->decide($this->id, $this->websiteId, $purpose, ...$this->purposes);
 
             if (CanImposePurposeReasonEnum::OK !== $reason) {
                 throw CannotImposePurposeToNodeException::fromReason($reason, (string) $purpose, $this->id);
@@ -304,7 +304,7 @@ class Node extends AbstractAggregateRoot
             return;
         }
 
-        $reason = $rules->decide($this->id, $purpose, ...$this->purposes);
+        $reason = $rules->decide($this->id, $this->websiteId, $purpose, ...$this->purposes);
 
         if (CanImposePurposeReasonEnum::OK !== $reason) {
             throw CannotImposePurposeToNodeException::fromReason($reason, (string) $purpose, $this->id);

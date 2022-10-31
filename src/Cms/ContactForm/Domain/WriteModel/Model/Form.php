@@ -165,6 +165,7 @@ class Form extends AbstractAggregateRoot
             foreach ($this->translations as $translation) {
                 if (false === $translation->translated) {
                     $translation->subject = $subject;
+                    $translation->translated = true;
                 }
             }
         }
@@ -200,6 +201,7 @@ class Form extends AbstractAggregateRoot
             $translation->fieldsTemplate = $fieldsTemplate;
             $translation->fieldsView = $stream->getResult();
             $translation->fields->clear();
+            $translation->translated = true;
 
             foreach (Field::createCollection($translation, $stream->allFields(), $locale) as $field) {
                 $translation->fields->add($field);

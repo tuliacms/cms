@@ -54,7 +54,8 @@ class ContactFormForm extends AbstractType
                 ],
             ])
             ->add('name', Type\TextType::class, [
-                'label' => 'name',
+                'label' => 'formName',
+                'translation_domain' => 'contact-form',
                 'constraints' => [
                     new Assert\NotBlank(),
                 ],

@@ -53,6 +53,7 @@ module.exports = {
         new FileManagerPlugin({
             events: {
                 onEnd: {
+                    delete: ['./dist/translations', './dist/images' ],
                     copy: [
                         { source: './src/js/translations', destination: './dist/translations' },
                         { source: './src/images', destination: './dist/images' },

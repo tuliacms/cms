@@ -66,10 +66,16 @@ class NodeTranslation
         return $this->node->getNodeType();
     }
 
-    public function changeTitle(SlugGeneratorStrategyInterface $slugGenerator, string $title, ?string $slug = null): void
+    public function changeTitle(SlugGeneratorStrategyInterface $slugGenerator, string $websiteId, string $title, ?string $slug = null): void
     {
         $this->title = $title;
-        $this->slug = $slugGenerator->generate($this->getId(), (string) $slug, $title, $this->locale);
+        $this->slug = $slugGenerator->generate(
+            $this->getId(),
+            (string) $slug,
+            $title,
+            $websiteId,
+            $this->locale,
+        );
     }
 
     protected function noticeThatAttributeHasBeenAdded(CoreAttribute $attribute): void {}

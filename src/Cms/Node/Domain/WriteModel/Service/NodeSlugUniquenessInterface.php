@@ -9,5 +9,5 @@ namespace Tulia\Cms\Node\Domain\WriteModel\Service;
  */
 interface NodeSlugUniquenessInterface
 {
-    public function isUnique(string $slug, ?string $locale, ?string $notInThisNode = null): bool;
+    public function isUnique(string $slug, string $websiteId, ?string $locale, ?string $notInThisNode = null): bool;
 }

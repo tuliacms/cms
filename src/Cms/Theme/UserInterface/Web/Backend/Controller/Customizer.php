@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Options\Domain\ReadModel\OptionsFinderInterface;
 use Tulia\Cms\Options\Domain\WriteModel\OptionsRepositoryInterface;
+use Tulia\Cms\Platform\Infrastructure\DefaultTheme\DefaultTheme;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\Settings\Domain\Event\SettingsUpdated;
@@ -59,6 +60,11 @@ class Customizer extends AbstractController
             return $this->redirectToRoute('backend.theme');
         }
 
+        if ($theme instanceof DefaultTheme) {
+            $this->addFlash('warning', $this->trans('defaultThemeCannotBeCustomized', [], 'themes'));
+            return $this->redirectToRoute('backend.theme');
+        }
+
         /** @var IdResult $result */
         $result = $newCustomization(new NewCustomizationRequest(
             $theme->getName(),
@@ -71,7 +77,7 @@ class Customizer extends AbstractController
 
         $parameters = [
             'mode'      => 'customizer',
-            '_locale'   => $request->getLocale(),
+            '_locale'   => $website->getLocale()->getCode(),
         ];
 
         if ($request->query->has('open')) {
@@ -146,10 +152,10 @@ class Customizer extends AbstractController
                 )
             );
 
-            return $this->responseJson(['status' => 'success', 'changeset' => $result->id]);
+            return $this->responseJson(['status' => 'success', 'changeset' => $result->id, 'message' => $this->trans('changsetPublished', [], 'customizer')]);
         }
 
-        return $this->responseJson(['status' => 'success']);
+        return $this->responseJson(['status' => 'success', 'message' => $this->trans('changsetPublished', [], 'customizer')]);
     }
 
     /**

@@ -99,8 +99,8 @@
                 <target>Website activity changed.</target>
             </trans-unit>
             <!--<trans-unit id="tuliacms.websites.25">
-                <source>areYouSureYouWantToDeleteFollowingWebsites</source>
-                <target>Are You sure You want to delete all selected websites?</target>
+                <source>addLocale</source>
+                <target>Add new locale</target>
             </trans-unit>-->
             <trans-unit id="tuliacms.websites.26">
                 <source>websiteWasDeleted</source>

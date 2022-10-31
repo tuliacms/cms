@@ -6,6 +6,8 @@ twig:
     paths:
         '%cms.core_dir%/Cms/Website/Infrastructure/Framework/Resources/views': 'website'
 cms:
+    public_paths:
+        - { source: '%cms.core_dir%/Cms/Website/Infrastructure/Framework/Resources/public/websites-builder/dist', target: '/core/tulia-websites-builder' }
     assetter:
         assets:
             tulia_websites_builder:

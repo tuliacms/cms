@@ -11,7 +11,7 @@ use Tulia\Cms\Node\Domain\WriteModel\Model\Purpose;
  */
 final class AlwaysTrueCanImposePurpose implements CanImposePurposeInterface
 {
-    public function decide(string $nodeId, Purpose $purpose, Purpose ...$purposes): CanImposePurposeReasonEnum
+    public function decide(string $nodeId, string $websiteId, Purpose $purpose, Purpose ...$purposes): CanImposePurposeReasonEnum
     {
         return CanImposePurposeReasonEnum::OK;
     }

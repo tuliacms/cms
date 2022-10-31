@@ -160,17 +160,22 @@
             </trans-unit>
             <trans-unit id="tuliacms.contact-form.40">
                 <source>senderName</source>
-                <target>Nadawca - Nazwa</target>
+                <target>Sender - Name</target>
                 <note>Field label</note>
             </trans-unit>
             <trans-unit id="tuliacms.contact-form.41">
                 <source>senderEmail</source>
-                <target>Nadawca - Adres e-mail</target>
+                <target>Sender - e-mail address</target>
                 <note>Field label</note>
             </trans-unit>
             <trans-unit id="tuliacms.contact-form.42">
                 <source>replyTo</source>
-                <target>Odpowiedź do - adres e-mail</target>
+                <target>Reply to - e-mail address</target>
+                <note>Field label</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.contact-form.43">
+                <source>formName</source>
+                <target>Form name</target>
                 <note>Field label</note>
             </trans-unit>
         </body>

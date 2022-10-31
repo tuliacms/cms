@@ -173,6 +173,11 @@
                 <target>Odpowiedź do - adres e-mail</target>
                 <note>Field label</note>
             </trans-unit>
+            <trans-unit id="tuliacms.contact-form.43">
+                <source>formName</source>
+                <target>Nazwa formularza</target>
+                <note>Field label</note>
+            </trans-unit>
         </body>
     </file>
 </xliff>

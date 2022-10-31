@@ -14,11 +14,11 @@ use Tulia\Cms\Node\Domain\WriteModel\Service\NodeByPurposeFinderInterface;
 class DbalNodeByPurposeFinder implements NodeByPurposeFinderInterface
 {
     public function __construct(
-        private Connection $connection
+        private readonly Connection $connection,
     ) {
     }
 
-    public function countOtherNodesWithPurpose(string $localNode, string $purpose): int
+    public function countOtherNodesWithPurpose(string $localNode, string $websiteId, string $purpose): int
     {
         return $this->connection->fetchOne('
             SELECT COUNT(tm.id) AS `count`
@@ -26,11 +26,13 @@ class DbalNodeByPurposeFinder implements NodeByPurposeFinderInterface
             INNER JOIN #__node_has_purpose AS tnhf
                 ON tm.id = tnhf.node_id AND tnhf.purpose = :purpose
             WHERE
-                tm.id != :nodeId', [
+                tm.id != :nodeId AND tm.website_id = :websiteId', [
+            'websiteId' => Uuid::fromString($websiteId)->toBinary(),
             'purpose' => $purpose,
             'nodeId' => Uuid::fromString($localNode)->toBinary(),
         ], [
             'flags' => Connection::PARAM_STR_ARRAY,
+            'websiteId' => \PDO::PARAM_STR,
             'nodeId' => \PDO::PARAM_STR,
         ]);
     }

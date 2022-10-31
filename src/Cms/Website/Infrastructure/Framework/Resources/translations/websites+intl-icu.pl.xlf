@@ -99,8 +99,8 @@
                 <target>Zmieniono aktywność witryny.</target>
             </trans-unit>
             <!--<trans-unit id="tuliacms.websites.25">
-                <source>areYouSureYouWantToDeleteFollowingWebsites</source>
-                <target>Czy na pewno chcesz usunąć wszystkie wybrane witryny?</target>
+                <source>addLocale</source>
+                <target>Dodaj nowy język</target>
             </trans-unit>-->
             <trans-unit id="tuliacms.websites.26">
                 <source>websiteWasDeleted</source>

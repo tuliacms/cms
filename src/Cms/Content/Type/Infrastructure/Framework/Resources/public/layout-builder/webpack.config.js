@@ -57,8 +57,7 @@ module.exports = {
       events: {
         onEnd: {
           copy: [
-            { source: './dist/css/*', destination: './../../../../../../../../../../public/assets/core/content-builder-layout-builder/css' },
-            { source: './dist/js/*', destination: './../../../../../../../../../../public/assets/core/content-builder-layout-builder/js' },
+            { source: './dist', destination: './../../../../../../../../../../public/assets/core/content-builder-layout-builder' },
           ],
         },
       },

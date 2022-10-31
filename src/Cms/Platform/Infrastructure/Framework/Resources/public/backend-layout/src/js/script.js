@@ -530,7 +530,7 @@ Tulia.Toasts = function () {
     this.init = function () {
         Tulia.Toasts.instance = this;
 
-        this.container = $('<div aria-live="polite" aria-atomic="true" style="position:fixed;top:65px;right:15px;z-index:1000;"></div>');
+        this.container = $('<div aria-live="polite" aria-atomic="true" style="position:fixed;top:15px;right:15px;z-index:1000;"></div>');
 
         $('body').append(this.container);
     };
@@ -539,9 +539,25 @@ Tulia.Toasts = function () {
         let toast = $(Tulia.Toasts.defaults.template);
         toast.find('.toast-body').text(parameters.content);
         toast.find('strong').text(parameters.headline);
+        toast.find('small.text-muted').text(Tulia.trans('justNow'));
+
+        switch (parameters.theme) {
+            case 'success':
+                toast.find('i').addClass('fa-solid fa-check bg-success');
+                break;
+            case 'danger':
+                toast.find('i').addClass('fa-solid fa-circle-exclamation bg-danger');
+                break;
+            case 'warning':
+                toast.find('i').addClass('fa-solid fa-triangle-exclamation bg-warning');
+                break;
+            case 'info':
+                toast.find('i').addClass('fa-solid fa-circle-info bg-info');
+                break;
+        }
 
         this.container.append(toast);
-        toast.toast({ delay: 3000 }).toast('show');
+        (new bootstrap.Toast(toast.get(0), {delay: 3000})).show();
     };
 
     this.init();
@@ -549,24 +565,23 @@ Tulia.Toasts = function () {
 
 Tulia.Toasts.defaults = {
     template: '<div class="toast" role="alert" aria-live="assertive" aria-atomic="true">\
-      <div class="toast-header">\
-        <strong class="mr-auto"></strong>\
-        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">\
-          <span aria-hidden="true">&times;</span>\
-        </button>\
-      </div>\
-      <div class="toast-body"></div>\
-    </div>'
+    <div class="toast-header">\
+        <i class="me-2 text-white rounded px-1 py-1"></i>\
+        <strong class="me-auto" style="font-size:14px;"></strong>\
+        <small class="text-muted text-lowercase">just now</small>\
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>\
+    </div>\
+    <div class="toast-body" style="font-size:14px;"></div>\
+</div>'
 };
 
 Tulia.Toasts.instance = null;
 
 Tulia.Toasts.success = function (parameters) {
-    if(typeof parameters == 'string')
-    {
+    if (typeof parameters == 'string') {
         parameters = {
             theme: 'success',
-            headline: 'Powodzenie',
+            headline: Tulia.trans('success'),
             content: parameters
         };
     }
@@ -575,11 +590,10 @@ Tulia.Toasts.success = function (parameters) {
 };
 
 Tulia.Toasts.danger = function (parameters) {
-    if(typeof parameters == 'string')
-    {
+    if (typeof parameters == 'string') {
         parameters = {
             theme: 'danger',
-            headline: 'Błąd',
+            headline: Tulia.trans('danger'),
             content: parameters
         };
     }
@@ -588,11 +602,10 @@ Tulia.Toasts.danger = function (parameters) {
 };
 
 Tulia.Toasts.warning = function (parameters) {
-    if(typeof parameters == 'string')
-    {
+    if (typeof parameters == 'string') {
         parameters = {
             theme: 'warning',
-            headline: 'Uwaga',
+            headline: Tulia.trans('warning'),
             content: parameters
         };
     }
@@ -601,17 +614,26 @@ Tulia.Toasts.warning = function (parameters) {
 };
 
 Tulia.Toasts.info = function (parameters) {
-    if(typeof parameters == 'string')
-    {
+    if (typeof parameters == 'string') {
         parameters = {
             theme: 'info',
-            headline: 'Informacja',
+            headline: Tulia.trans('info'),
             content: parameters
         };
     }
 
     Tulia.Toasts.instance.show(parameters);
 };
+
+
+
+
+
+
+
+
+
+
 
 Tulia.SearchAnything = function (selector, options) {
     this.selector  = selector;

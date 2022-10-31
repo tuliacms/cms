@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Modal :title="translations.createWebsite" ref="modalInstance" modificators="modal-lg modal-dialog-centered">
+        <Modal :title="translations.addLocale" ref="modalInstance" modificators="modal-lg modal-dialog-centered">
             <template #body>
                 <div class="row">
                     <div class="col">

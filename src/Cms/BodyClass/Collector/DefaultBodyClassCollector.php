@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\BodyClass\Collector;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Tulia\Component\Theme\Customizer\DetectorInterface;
 
 /**
@@ -12,16 +13,15 @@ use Tulia\Component\Theme\Customizer\DetectorInterface;
  */
 class DefaultBodyClassCollector implements BodyClassCollectorInterface
 {
-    private DetectorInterface $detector;
-
-    public function __construct(DetectorInterface $detector)
-    {
-        $this->detector = $detector;
+    public function __construct(
+        private readonly DetectorInterface $detector,
+        private readonly UrlGeneratorInterface $urlGenerator,
+    ) {
     }
 
     public function collect(Request $request, BodyClassCollection $collection): void
     {
-        if ($request->getPathInfo() === '/') {
+        if ($request->getPathInfo() === $this->urlGenerator->generate('frontend.homepage')) {
             $collection->add('is-homepage');
         }
 

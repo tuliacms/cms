@@ -72,7 +72,7 @@ let config = {
             events: {
                 onEnd: {
                     copy: [
-                        { source: './dist/**/*', destination: './../../../../../../../../../public/assets/core/tulia-editor' },
+                        { source: './dist', destination: './../../../../../../../../../public/assets/core/tulia-editor' },
                     ],
                 },
             },

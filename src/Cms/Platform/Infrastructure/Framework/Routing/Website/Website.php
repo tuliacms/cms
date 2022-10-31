@@ -153,8 +153,11 @@ class Website implements WebsiteInterface
         return $requestUri;
     }
 
-    public function generateTargetPath(string $path, string $locale): string
-    {
+    public function generateTargetPath(
+        string $path,
+        string $locale,
+        ?bool $backend = false,
+    ): string {
         $activeLocale = $this->getLocaleByCode($locale);
         $localePrefix = $activeLocale->getLocalePrefix();
 
@@ -171,7 +174,7 @@ class Website implements WebsiteInterface
             $parts['path'] = '/';
         }
 
-        if ($this->isBackend()) {
+        if ($backend ?? $this->isBackend()) {
             if ($localePrefix !== $this->getDefaultLocale()->getPathPrefix()) {
                 $parts['path'] = str_replace(
                     $this->getBackendPrefix(),

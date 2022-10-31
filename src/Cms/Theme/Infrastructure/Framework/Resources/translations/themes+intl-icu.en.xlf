@@ -91,6 +91,10 @@
                 <source>finish</source>
                 <target>Finish</target>
             </trans-unit>
+            <trans-unit id="tuliacms.themes.23">
+                <source>defaultThemeCannotBeCustomized</source>
+                <target>Default theme cannot be customized.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

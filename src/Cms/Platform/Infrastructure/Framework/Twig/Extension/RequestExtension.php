@@ -6,6 +6,7 @@ namespace Tulia\Cms\Platform\Infrastructure\Framework\Twig\Extension;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -14,18 +15,20 @@ use Twig\TwigFunction;
  */
 class RequestExtension extends AbstractExtension
 {
-    protected RequestStack $requestStack;
-
-    public function __construct(RequestStack $requestStack)
-    {
-        $this->requestStack = $requestStack;
+    public function __construct(
+        private readonly RequestStack $requestStack,
+        private readonly UrlGeneratorInterface $urlGenerator,
+    ) {
     }
 
     public function getFunctions(): array
     {
         return [
             new TwigFunction('is_homepage', function () {
-                return $this->getRequest()->getPathInfo() === '/';
+                // @todo Move checking homepage to separate class with cache.
+                // The same code sits in \Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController::isHomepage
+                // The same code sits in src/Cms/BodyClass/Collector/DefaultBodyClassCollector.php:24
+                return $this->getRequest()->getPathInfo() === $this->urlGenerator->generate('frontend.homepage');
             }, [
                 'is_safe' => [ 'html' ]
             ]),

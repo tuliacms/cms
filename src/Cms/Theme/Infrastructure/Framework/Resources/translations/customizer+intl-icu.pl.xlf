@@ -94,6 +94,10 @@
                 <source>faviconSizeDescription</source>
                 <target>Favikonka strony powinna być kwadratowa i wielkości co najmniej 512 × 512 pikseli.</target>
             </trans-unit>
+            <trans-unit id="tuliacms.customizer.24">
+                <source>changsetPublished</source>
+                <target>Zmiany zostały opublikowane.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -94,6 +94,10 @@
                 <source>faviconSizeDescription</source>
                 <target>The page faviconka should be square and at least 512 × 512 pixels in size.</target>
             </trans-unit>
+            <trans-unit id="tuliacms.customizer.24">
+                <source>changsetPublished</source>
+                <target>Changeset published.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

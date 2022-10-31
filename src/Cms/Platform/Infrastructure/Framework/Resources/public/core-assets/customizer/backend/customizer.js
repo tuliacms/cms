@@ -325,7 +325,7 @@ let Customizer = function (options) {
                         self.options.changeset = data.changeset;
                     }
 
-                    Tulia.Info.success('Zapisano.');
+                    Tulia.Toasts.success(data.message);
 
                     $('.customizer-form').trigger('tulia:form:submitted');
                     $('.customizer-save').addClass('disabled');

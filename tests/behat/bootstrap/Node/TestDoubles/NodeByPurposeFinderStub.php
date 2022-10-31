@@ -23,7 +23,7 @@ final class NodeByPurposeFinderStub implements NodeByPurposeFinderInterface
         unset($this->counts[$purpose]);
     }
 
-    public function countOtherNodesWithPurpose(string $localNode, string $purpose): int
+    public function countOtherNodesWithPurpose(string $localNode, string $websiteId, string $purpose): int
     {
         return $this->counts[$purpose] ?? 0;
     }

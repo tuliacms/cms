@@ -101,7 +101,11 @@ final class TuliaRouter implements WarmableInterface, ServiceSubscriberInterface
                 $path = $router->generate($name, $parameters, $referenceType);
 
                 if ($path !== null) {
-                    return $this->website->generateTargetPath($path, $parameters['_locale'] ?? $this->website->getLocale()->getCode());
+                    return $this->website->generateTargetPath(
+                        $path,
+                        $parameters['_locale'] ?? $this->website->getLocale()->getCode(),
+                        strncmp($name, 'backend.', 8) === 0,
+                    );
                 }
             } catch (RouteNotFoundException $e) {
                 continue;

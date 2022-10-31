@@ -63,13 +63,13 @@ class DbalQuery extends AbstractDbalQuery
             /**
              * Locale of the node to fetch.
              */
-            'locale' => 'en_US',
+            'locale' => null,
             /**
              * Search for rows in the website. Given null search in all websites.
              *
              * @param null|string
              */
-            'website' => null,
+            'website_id' => null,
             /**
              * Whether or not to fetch forms fields too.
              */
@@ -151,10 +151,19 @@ class DbalQuery extends AbstractDbalQuery
             ]);
         }
 
+        if (!$criteria['locale']) {
+            throw new \InvalidArgumentException('Please provide "locale" in query parameters.');
+        }
+        if (!$criteria['website_id']) {
+            throw new \InvalidArgumentException('Please provide "website_id" in query parameters.');
+        }
+
         $this->queryBuilder
             ->from('#__form', 'tm')
             ->leftJoin('tm', '#__form_translation', 'tl', 'tm.id = tl.form_id AND tl.locale = :tl_locale')
+            ->andWhere('tm.website_id = :tm_website')
             ->setParameter('tl_locale', $criteria['locale'], PDO::PARAM_STR)
+            ->setParameter('tm_website', Uuid::fromString($criteria['website_id'])->toBinary(), PDO::PARAM_STR)
         ;
     }
 
@@ -224,7 +233,8 @@ class DbalQuery extends AbstractDbalQuery
                 BIN_TO_UUID(ft.form_id) AS form_id
             FROM #__form_field_translation AS tm
             INNER JOIN #__form_translation AS ft
-                ON ft.form_id IN (:form_id) AND ft.id = tm.translation_id", [
+                ON ft.form_id IN (:form_id) AND ft.id = tm.translation_id
+            WHERE tm.locale = :locale", [
             'form_id' => $ids,
             'locale' => $criteria['locale'],
         ], [
