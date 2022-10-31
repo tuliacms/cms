@@ -20,13 +20,10 @@ use Tulia\Cms\Shared\Infrastructure\Utils\Annotations\AnnotationsReader;
  */
 class ControllerRequestTokenValidator implements EventSubscriberInterface
 {
-    protected CsrfTokenManagerInterface $csrfManager;
-    protected LoggerInterface $logger;
-
-    public function __construct(CsrfTokenManagerInterface $csrfManager, LoggerInterface $logger)
-    {
-        $this->csrfManager = $csrfManager;
-        $this->logger = $logger;
+    public function __construct(
+        private readonly CsrfTokenManagerInterface $csrfManager,
+        private readonly LoggerInterface $logger,
+    ) {
     }
 
     public static function getSubscribedEvents(): array

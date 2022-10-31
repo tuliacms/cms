@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\Theme\Infrastructure\Framework\Theme\Assetter;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
@@ -24,14 +26,19 @@ class ThemeConfigurationAssetsLoader implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            ViewEvent::class => ['handle', 2000],
-            KernelEvents::EXCEPTION => ['handle', 2000],
+            RequestEvent::class => ['handle', -999],
         ];
     }
 
-    public function handle($event): void
+    public function handle(RequestEvent $event): void
     {
-        if ($event instanceof ViewEvent && $this->website->isBackend()) {
+        $request = $event->getRequest();
+
+        if (
+            $this->website->isBackend()
+            || strncmp($request->getPathInfo(), '/_wdt', 5) === 0
+            || strncmp($request->getPathInfo(), '/_profiler', 10) === 0
+        ) {
             return;
         }
 

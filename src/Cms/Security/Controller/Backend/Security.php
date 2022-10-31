@@ -11,6 +11,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 use Tulia\Cms\Security\Application\Service\AuthenticatedUserPasswordValidator;
+use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
 use Tulia\Component\Templating\ViewInterface;
 
 /**
@@ -20,6 +21,7 @@ class Security extends AbstractController
 {
     /**
      * @return ViewInterface|RedirectResponse
+     * @IgnoreCsrfToken
      */
     public function login(
         Request $request,
