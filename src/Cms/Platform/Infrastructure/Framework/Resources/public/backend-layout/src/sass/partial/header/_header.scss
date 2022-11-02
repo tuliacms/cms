@@ -3,26 +3,26 @@
 
 $header-mobile-menu-button-width: 50px;
 
-header {height:50px;padding-left:$sidebar-width-base;position:fixed;left:0;top:0;right:0;z-index:500;background-color:transparent;transition:$transition-time all;border-bottom:1px solid rgba(255,255,255,.12);background-image:url($theme-header-bg);background-position:center top;background-repeat:no-repeat;background-attachment:fixed;}
-header .header-inner {display:flex;justify-content:space-between;background-color:transparent;transition:.12s all;}
-header .lead-section {display:flex;}
+header.backend-header {height:50px;padding-left:$sidebar-width-base;position:fixed;left:0;top:0;right:0;z-index:500;background-color:transparent;transition:$transition-time all;border-bottom:1px solid rgba(255,255,255,.12);background-image:url($theme-header-bg);background-position:center top;background-repeat:no-repeat;background-attachment:fixed;}
+header.backend-header .header-inner {display:flex;justify-content:space-between;background-color:transparent;transition:.12s all;}
+header.backend-header .lead-section {display:flex;}
 .mobile-menu-trigger {display: none;}
 
-.header-fixed header {box-shadow:0 0 8px rgba(0,0,0,.5)}
+.header-fixed header.backend-header {box-shadow:0 0 8px rgba(0,0,0,.5)}
 
 @media only screen and (min-width: 1920px) {
-    header {
+    header.backend-header {
         background-image:url($theme-header-bg-xl);
     }
 }
 @media only screen and (max-width: 1100px) {
-    header {
+    header.backend-header {
         padding-left: $sidebar-width-mini;
         background-image:url($theme-header-bg-md);
     }
 }
 @media only screen and (max-width: 500px) {
-    header {
+    header.backend-header {
         background-image:url($theme-header-bg-sm);
     }
 }

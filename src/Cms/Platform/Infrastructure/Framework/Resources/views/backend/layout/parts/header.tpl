@@ -2,7 +2,7 @@
 {% set previewLink = previewLink ?? null %}
 
 <div class="layout-top">
-    <header>
+    <header class="backend-header">
         <div class="mobile-menu-trigger">
             <button type="button" id="mobile-menu-trigger">
                 <span></span>

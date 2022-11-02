@@ -1,4 +1,4 @@
-<footer>
+<footer class="backend-footer">
     {#<div class="cms-status">
         <a href="https://tuliacms.org/intl/help" target="_blank" title="Need help?" rel="noopener">
             <i class="status-icon fas fa-question-circle"></i>

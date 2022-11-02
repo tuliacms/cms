@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="pl" datatype="plaintext" original="tulia-tour+intl-icu.en.xlf">
+        <body>
+            <trans-unit id="tuliacms.tulia-tour.1">
+                <source>tuliaVoyage</source>
+                <target>Podróż po Tulia CMS</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-tour.2">
+                <source>newInTuliaCMS</source>
+                <target>Nowy w Tulia CMS?</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-tour.3">
+                <source>youNeedTourThroughSystem</source>
+                <target>Potrzebujesz krótkiej podróży po systemie?</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-tour.4">
+                <source>startTour</source>
+                <target>Rozpocznij podróż</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-tour.5">
+                <source>next</source>
+                <target>Dalej</target>
+                <note>Button label</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-tour.6">
+                <source>back</source>
+                <target>Wróć</target>
+                <note>Button label</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-tour.7">
+                <source>finish</source>
+                <target>Zakończ</target>
+                <note>Button label</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-tour.8">
+                <source>tourStepSidebarHeadline</source>
+                <target>Menu boczne</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-tour.9">
+                <source>tourStepSidebarBody</source>
+                <target><![CDATA[<b>Treści</b> - poprowadzi Cię to tworzenia/edycji stron, formularzy, zakłądek menu itp. <br /><b>Administracja</b> - pozwala zarządzać systemem, witrynami, użytkownikami, dostosować wygląd strony itp.]]></target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-tour.10">
+                <source>tourStepSearchAnythingHeadline</source>
+                <target>Szukaj wszędzie</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-tour.11">
+                <source>tourStepSearchAnythingBody</source>
+                <target><![CDATA[Nie wiesz gdzie znaleźć jakiś element w systemie?<br />Wyszukaj go tutaj!]]></target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-tour.12">
+                <source>tourStepWebsitesLocalesHeadline</source>
+                <target>Witryny i Języki</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-tour.13">
+                <source>tourStepWebsitesLocalesBody</source>
+                <target><![CDATA[Tutaj możesz przełączyć się pomiędzy witrynami i językami... jeśli posiadasz jakieś <i class="fa-regular fa-face-smile-wink"></i>]]></target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-tour.14">
+                <source>tourStepFoundBugHeadline</source>
+                <target>Znalazłeś błąd?</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-tour.15">
+                <source>tourStepFoundBugBody</source>
+                <target><![CDATA[Możesz nam pomóc, wysyłając raport z błędem za pomocą tego formularza.]]></target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-tour.16">
+                <source>tourStepFinishHeadline</source>
+                <target>Dzięki za użycie Tulia CMS</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-tour.17">
+                <source>tourStepFinishBody</source>
+                <target><![CDATA[Teraz możesz rozpocząć tworzenie swojej nowej strony.]]></target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

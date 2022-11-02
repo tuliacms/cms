@@ -1,4 +1,4 @@
-footer {
+footer.backend-footer {
     height: 30px;
     line-height: 30px;
     position: fixed;
@@ -57,17 +57,17 @@ footer {
 }
 
 @media only screen and (max-width: 1100px) {
-    footer {
+    footer.backend-footer {
         left: $sidebar-width-mini;
     }
 }
 
 @media only screen and (max-width: 768px) {
-    footer {
+    footer.backend-footer {
         left: 0;
     }
     .main-menu-opened {
-        footer {
+        footer.backend-footer {
             z-index: 100;
         }
     }
