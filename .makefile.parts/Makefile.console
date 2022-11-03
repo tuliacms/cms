@@ -1,0 +1,9 @@
+ARGS = $(filter-out $@,$(MAKECMDGOALS))
+
+.PHONY: cc
+cc:
+	${PHPROOT} php bin/console cache:clear -vvv
+
+.PHONY: console
+console:
+	${PHPROOT} php bin/console "$(ARGS)"

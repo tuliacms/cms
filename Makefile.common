@@ -1,0 +1,4 @@
+include vendor/tuliacms/cms/.makefile.parts/Makefile.docker
+include vendor/tuliacms/cms/.makefile.parts/Makefile.console
+include vendor/tuliacms/cms/.makefile.parts/Makefile.setup
+include vendor/tuliacms/cms/.makefile.parts/Makefile.deploy
