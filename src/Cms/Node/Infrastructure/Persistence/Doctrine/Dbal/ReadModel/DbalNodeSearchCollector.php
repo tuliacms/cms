@@ -43,7 +43,7 @@ final class DbalNodeSearchCollector implements NodeSearchCollectorInterface
                 'limit' => $limit,
                 'offset' => $offset,
                 'locale' => $locale,
-                'websiteId' => $locale,
+                'websiteId' => Uuid::fromString($websiteId)->toBinary(),
             ],
             [
                 'limit' => \PDO::PARAM_INT,

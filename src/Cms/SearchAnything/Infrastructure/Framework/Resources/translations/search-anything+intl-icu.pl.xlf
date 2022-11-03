@@ -16,7 +16,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.search-anything.4">
                 <source>searchInContents</source>
-                <target>W typach treściach (strong, wiadomości, produkty itd.)</target>
+                <target>W typach treściach (strony, newsy, produkty itd.)</target>
             </trans-unit>
             <trans-unit id="tuliacms.search-anything.5">
                 <source>searchInTaxonomies</source>

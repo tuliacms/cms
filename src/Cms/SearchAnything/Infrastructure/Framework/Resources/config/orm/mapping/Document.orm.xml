@@ -10,17 +10,24 @@
         </id>
 
         <indexes>
-            <index name="fulltext" columns="title,description" flags="fulltext"/>
+            <index name="fulltext" columns="title_searchable,description_searchable" flags="fulltext"/>
+            <index name="localization_strategy" columns="localization_strategy" />
+            <index name="multisite_strategy" columns="multisite_strategy" />
+            <index name="locale" columns="locale,website_id" />
         </indexes>
 
-        <field name="websiteId" type="uuid" />
+        <field name="websiteId" type="uuid" nullable="true" />
+        <field name="locale" length="12" nullable="true" />
+        <field name="localizationStrategy" length="31" />
+        <field name="multisiteStrategy" length="31" />
         <field name="indexGroup" />
         <field name="sourceId" />
-        <field name="locale" length="12"/>
         <field name="title" length="127" />
+        <field name="titleSearchable" length="127" />
         <field name="route" nullable="true" />
         <field name="parameters" column="route_parameters" type="json" />
         <field name="description" nullable="true" />
+        <field name="descriptionSearchable" nullable="true" />
         <field name="poster" nullable="true" />
         <field name="createdAt" type="datetime_immutable" />
         <field name="updatedAt" type="datetime_immutable" nullable="true" />

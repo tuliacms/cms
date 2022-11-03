@@ -9,11 +9,7 @@ namespace Tulia\Cms\SearchAnything\Domain\WriteModel\Service;
  */
 interface DocumentCollectorInterface
 {
-    public function collect(IndexInterface $index, string $websiteId, string $locale, int $offset, int $limit): void;
+    public function collect(IndexInterface $index, ?string $websiteId, ?string $locale, int $offset, int $limit): void;
 
     public function countDocuments(string $websiteId, string $locale): int;
-
-    public function getIndex(): string;
-
-    public function isMultilingual(): bool;
 }

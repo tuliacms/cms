@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\User\Application\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Tulia\Cms\SearchAnything\Domain\WriteModel\Service\IndexerInterface;
+use Tulia\Cms\SearchAnything\Domain\WriteModel\Service\IndexRegistry;
 use Tulia\Cms\User\Domain\ReadModel\Query\UserSearchCollectorInterface;
 use Tulia\Cms\User\Domain\WriteModel\Event\UserCreated;
 use Tulia\Cms\User\Domain\WriteModel\Event\UserDeleted;
@@ -17,8 +17,8 @@ use Tulia\Cms\User\Domain\WriteModel\Event\UserUpdated;
 final class UpdateSearchAnythingWhenUserUpdates implements EventSubscriberInterface
 {
     public function __construct(
-        private readonly IndexerInterface $indexer,
-        private readonly UserSearchCollectorInterface $collector
+        private readonly IndexRegistry $indexRegistry,
+        private readonly UserSearchCollectorInterface $collector,
     ) {
     }
 
@@ -43,7 +43,7 @@ final class UpdateSearchAnythingWhenUserUpdates implements EventSubscriberInterf
 
     public function deleteDocument(UserDeleted $event): void
     {
-        $index = $this->indexer->index('user');
+        $index = $this->indexRegistry->get('user');
 
         $document = $index->document($event->id);
 
@@ -52,7 +52,7 @@ final class UpdateSearchAnythingWhenUserUpdates implements EventSubscriberInterf
 
     private function index(string $id, string $email, ?string $name): void
     {
-        $index = $this->indexer->index('user');
+        $index = $this->indexRegistry->get('user');
         $document = $index->document($id);
 
         if ($name) {

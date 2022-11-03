@@ -17,16 +17,20 @@ class Document extends AbstractAggregateRoot
     private ImmutableDateTime $createdAt;
     private ?ImmutableDateTime $updatedAt = null;
     private string $title = '';
+    private string $titleSearchable = '';
     private ?string $route = null;
     private array $parameters = [];
     private ?string $description = null;
+    private ?string $descriptionSearchable = null;
     private ?string $poster = null;
 
     public function __construct(
         private readonly string $indexGroup,
         private readonly string $sourceId,
-        private readonly string $websiteId,
-        private readonly string $locale,
+        private readonly string $localizationStrategy,
+        private readonly string $multisiteStrategy,
+        private readonly ?string $websiteId = null,
+        private readonly ?string $locale = null,
     ) {
         $this->createdAt = ImmutableDateTime::now();
     }
@@ -34,6 +38,7 @@ class Document extends AbstractAggregateRoot
     public function setTitle(string $title): void
     {
         $this->title = substr(strip_tags($title), 0, 127);
+        $this->titleSearchable = transliterator_transliterate('Any-Latin; Latin-ASCII; Lower()', $this->title);
         $this->updatedAt = ImmutableDateTime::now();
     }
 
@@ -47,6 +52,7 @@ class Document extends AbstractAggregateRoot
     public function setDescription(?string $description): void
     {
         $this->description = substr(strip_tags($description), 0, 255);
+        $this->descriptionSearchable = transliterator_transliterate('Any-Latin; Latin-ASCII; Lower()', $this->description);
         $this->updatedAt = ImmutableDateTime::now();
     }
 

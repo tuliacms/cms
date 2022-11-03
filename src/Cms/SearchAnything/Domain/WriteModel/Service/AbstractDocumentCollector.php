@@ -9,8 +9,4 @@ namespace Tulia\Cms\SearchAnything\Domain\WriteModel\Service;
  */
 abstract class AbstractDocumentCollector implements DocumentCollectorInterface
 {
-    public function isMultilingual(): bool
-    {
-        return true;
-    }
 }

@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\SearchAnything\Domain\ReadModel\Query\SearchEngineInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
+use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -17,8 +18,9 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface
 class Search extends AbstractController
 {
     public function __construct(
-        private SearchEngineInterface $searchEngine,
-        private UrlGeneratorInterface $urlGenerator
+        private readonly SearchEngineInterface $searchEngine,
+        private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly AuthenticatedUserProviderInterface $userProvider,
     ) {
     }
 
@@ -26,7 +28,14 @@ class Search extends AbstractController
     {
         $query = $request->query->get('q');
 
-        $result = $this->searchEngine->search($query, $website->getLocale()->getCode(), 0, 10);
+        $result = $this->searchEngine->search(
+            $query,
+            $website->getId(),
+            $website->getLocale()->getCode(),
+            $this->userProvider->getUser()->getLocale(),
+            0,
+            10
+        );
 
         foreach ($result as $key => $row) {
             $result[$key]['link'] = $this->urlGenerator->generate($row['route'], $row['route_parameters']);

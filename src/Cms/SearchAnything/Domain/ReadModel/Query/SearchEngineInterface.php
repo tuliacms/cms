@@ -9,5 +9,12 @@ namespace Tulia\Cms\SearchAnything\Domain\ReadModel\Query;
  */
 interface SearchEngineInterface
 {
-    public function search(string $query, string $locale, int $limit, int $offset): array;
+    public function search(
+        string $query,
+        string $websiteId,
+        string $contentLocale,
+        string $userLocale,
+        int $limit,
+        int $offset,
+    ): array;
 }

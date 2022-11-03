@@ -17,12 +17,12 @@ use Tulia\Cms\SearchAnything\Domain\WriteModel\Service\IndexInterface;
 class SystemToolsDocumentCollector extends AbstractDocumentCollector
 {
     public function __construct(
-        private DashboardTilesRegistryInterface $tilesRegistry,
-        private TranslatorInterface $translator
+        private readonly DashboardTilesRegistryInterface $tilesRegistry,
+        private readonly TranslatorInterface $translator,
     ) {
     }
 
-    public function collect(IndexInterface $index, string $websiteId, string $locale, int $offset, int $limit): void
+    public function collect(IndexInterface $index, ?string $websiteId, ?string $locale, int $offset, int $limit): void
     {
         // No pagination in this collector. Next pages should be empty.
         if ($offset !== 0) {
@@ -35,14 +35,14 @@ class SystemToolsDocumentCollector extends AbstractDocumentCollector
         );
 
         foreach ($tiles as $i => $tile) {
-            $document = $index->document(sprintf('tile_%d', $i));
+            $document = $index->document(sprintf('tile_%d', $i), $websiteId, $locale);
             $document->setTitle($tile['name']);
             $document->setLink($tile['route']);
 
             $index->save($document);
         }
 
-        $this->addSpecialPages($index);
+        $this->addSpecialPages($index, $websiteId, $locale);
     }
 
     public function countDocuments(string $websiteId, string $locale): int
@@ -53,28 +53,29 @@ class SystemToolsDocumentCollector extends AbstractDocumentCollector
         ));
     }
 
-    public function getIndex(): string
+    private function addSpecialPages(IndexInterface $index, string $websiteId, string $locale): void
     {
-        return 'tools';
-    }
-
-    private function addSpecialPages(IndexInterface $index): void
-    {
-        $document = $index->document('system_page_dashboard');
+        $document = $index->document('system_page_dashboard', $websiteId, $locale);
         $document->setTitle($this->translator->trans('dashboard'));
         $document->setLink('backend.homepage');
 
         $index->save($document);
 
-        $document = $index->document('system_page_tools');
+        $document = $index->document('system_page_tools', $websiteId, $locale);
         $document->setTitle($this->translator->trans('tools'));
         $document->setLink('backend.tools');
 
         $index->save($document);
 
-        $document = $index->document('system_page_system');
+        $document = $index->document('system_page_system', $websiteId, $locale);
         $document->setTitle($this->translator->trans('system'));
         $document->setLink('backend.system');
+
+        $index->save($document);
+
+        $document = $index->document('system_page_settings', $websiteId, $locale);
+        $document->setTitle($this->translator->trans('settings'));
+        $document->setLink('backend.settings');
 
         $index->save($document);
     }

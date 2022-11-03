@@ -9,7 +9,7 @@ use Tulia\Cms\Node\Domain\ReadModel\Query\NodeSearchCollectorInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeCreated;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeDeleted;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeUpdated;
-use Tulia\Cms\SearchAnything\Domain\WriteModel\Service\IndexerInterface;
+use Tulia\Cms\SearchAnything\Domain\WriteModel\Service\IndexRegistry;
 
 /**
  * @author Adam Banaszkiewicz
@@ -17,8 +17,8 @@ use Tulia\Cms\SearchAnything\Domain\WriteModel\Service\IndexerInterface;
 final class UpdateSearchAnythingWhenNodeUpdates implements EventSubscriberInterface
 {
     public function __construct(
-        private readonly IndexerInterface $indexer,
-        private readonly NodeSearchCollectorInterface $collector
+        private readonly IndexRegistry $indexRegistry,
+        private readonly NodeSearchCollectorInterface $collector,
     ) {
     }
 
@@ -34,8 +34,8 @@ final class UpdateSearchAnythingWhenNodeUpdates implements EventSubscriberInterf
     public function index(NodeUpdated|NodeCreated $event): void
     {
         foreach ($this->collector->collectTranslationsOfNode($event->id) as $node) {
-            $index = $this->indexer->index('node', $node['website_id'], $node['locale']);
-            $document = $index->document($node['id']);
+            $index = $this->indexRegistry->get('node');
+            $document = $index->document($node['id'], $node['website_id'], $node['locale']);
             $document->setTitle($node['title']);
             $document->setLink('backend.node.edit', ['node_type' => $node['type'], 'id' => $node['id']]);
 
@@ -46,9 +46,9 @@ final class UpdateSearchAnythingWhenNodeUpdates implements EventSubscriberInterf
     public function delete(NodeDeleted $event): void
     {
         foreach ($event->translatedTo as $locale) {
-            $index = $this->indexer->index('node', $event->websiteId, $locale);
+            $index = $this->indexRegistry->get('node');
 
-            $document = $index->document($event->id);
+            $document = $index->document($event->id, $event->websiteId, $locale);
 
             $index->delete($document);
         }

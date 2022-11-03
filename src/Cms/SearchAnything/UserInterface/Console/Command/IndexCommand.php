@@ -7,12 +7,11 @@ namespace Tulia\Cms\SearchAnything\UserInterface\Console\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Contracts\Translation\LocaleAwareInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\SearchAnything\Domain\WriteModel\Service\DocumentCollectorRegistryInterface;
-use Tulia\Cms\SearchAnything\Domain\WriteModel\Service\IndexerInterface;
-use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteRegistryInterface;
+use Tulia\Cms\SearchAnything\Application\UseCase\Index;
+use Tulia\Cms\SearchAnything\Application\UseCase\IndexRequest;
 
 /**
  * @author Adam Banaszkiewicz
@@ -21,52 +20,37 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface
 final class IndexCommand extends Command
 {
     public function __construct(
-        private DocumentCollectorRegistryInterface $indexersRegistry,
-        private IndexerInterface $indexer,
-        private WebsiteInterface $website,
-        private TranslatorInterface $translator
+        private readonly WebsiteRegistryInterface $websiteRegistry,
+        private readonly Index $index,
     ) {
-        parent::__construct(static::$defaultName);
+        parent::__construct(null);
+    }
+
+    protected function configure()
+    {
+        $this->addOption('website', null, InputOption::VALUE_OPTIONAL, 'Website ID');
+        $this->addOption('everything', null, InputOption::VALUE_NONE, 'Executes indexing for all existing websites');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $defaultLocale = $this->translator->getLocale();
+        $everything = $input->getOption('everything');
+        $website = $input->getOption('website');
 
-        foreach ($this->indexersRegistry->all() as $collector) {
-            if ($collector->isMultilingual()) {
-                foreach ($this->website->getLocales() as $locale) {
-                    if ($this->translator instanceof LocaleAwareInterface) {
-                        $this->translator->setLocale($locale->getCode());
-                    }
+        if (!$everything && !$website) {
+            throw new \InvalidArgumentException('You must specify one --website or --everything option.');
+        }
 
-                    $index = $this->indexer->index($collector->getIndex(), $this->website->getId(), $locale->getCode());
-                    $index->clear();
-                    $offset = 0;
-                    $limit = 100;
+        if ($everything) {
+            $websites = $this->websiteRegistry->all();
+        } else {
+            $websites = [$this->websiteRegistry->get($website)];
+        }
 
-                    do {
-                        $delta = $index->getDelta();
-                        $collector->collect($index, $this->website->getId(), $locale->getCode(), $offset, $limit);
-                        $offset += $limit;
-                    } while ($delta !== $index->getDelta());
-                }
-            } else {
-                if ($this->translator instanceof LocaleAwareInterface) {
-                    $this->translator->setLocale($defaultLocale);
-                }
+        foreach ($websites as $website) {
+            $output->writeln(sprintf('Indexing website %s', $website->getId()));
 
-                $index = $this->indexer->index($collector->getIndex(), $this->website->getId(), 'unilingual');
-                $index->clear();
-                $offset = 0;
-                $limit = 100;
-
-                do {
-                    $delta = $index->getDelta();
-                    $collector->collect($index, $this->website->getId(), 'unilingual', $offset, $limit);
-                    $offset += $limit;
-                } while ($delta !== $index->getDelta());
-            }
+            ($this->index)(new IndexRequest($website->getId()));
         }
 
         $output->writeln('Done.');
