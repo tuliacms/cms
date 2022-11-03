@@ -28,7 +28,6 @@ final class OrmIndexFactory implements IndexFactoryInterface
 
     public function create(
         string $name,
-        bool $multilingual,
         LocalizationStrategyEnum $localizationStrategy,
         MultisiteStrategyEnum $multisiteStrategy,
         string $collector,
@@ -41,7 +40,6 @@ final class OrmIndexFactory implements IndexFactoryInterface
             $this->repository,
             $this->connection,
             $name,
-            $multilingual,
             $localizationStrategy->value,
             $multisiteStrategy->value,
             $this->collectorRegistry->get($collector),

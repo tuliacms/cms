@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\SearchAnything\Infrastructure\Persistence\Doctrine\Orm;
 
 use Doctrine\DBAL\Connection;
+use Tulia\Cms\SearchAnything\Domain\WriteModel\Enum\LocalizationStrategyEnum;
 use Tulia\Cms\SearchAnything\Domain\WriteModel\Enum\MultisiteStrategyEnum;
 use Tulia\Cms\SearchAnything\Domain\WriteModel\Model\Document;
 use Tulia\Cms\SearchAnything\Domain\WriteModel\Service\DocumentCollectorInterface;
@@ -21,7 +22,6 @@ final class OrmIndex implements IndexInterface
         private readonly DocumentRepository $repository,
         private readonly Connection $connection,
         private readonly string $name,
-        private readonly bool $isMultilingual,
         private readonly string $localizationStrategy,
         private readonly string $multisiteStrategy,
         private readonly DocumentCollectorInterface $documentCollector,
@@ -30,7 +30,7 @@ final class OrmIndex implements IndexInterface
 
     public function document(string $sourceId, string $webisteId = null, string $locale = null): Document
     {
-        if ($this->isMultilingual && empty($locale)) {
+        if ($this->localizationStrategy !== LocalizationStrategyEnum::UNILINGUAL->value && empty($locale)) {
             throw new \InvalidArgumentException('A locale parameter is required for this index.');
         }
 
@@ -71,9 +71,9 @@ final class OrmIndex implements IndexInterface
     {
         $this->connection->createQueryBuilder()
             ->delete('#__search_anything_document')
-            ->where('website_id = :website_id')
-            ->where('locale = :locale')
             ->andWhere('index_group = :index')
+            ->andWhere('website_id = :website_id')
+            ->andWhere('locale = :locale')
             ->setParameter('website_id', $webisteId)
             ->setParameter('locale', $locale)
             ->setParameter('index', $this->name)
@@ -86,18 +86,23 @@ final class OrmIndex implements IndexInterface
         return $this->delta;
     }
 
-    public function isMultilingual(): bool
-    {
-        return $this->isMultilingual;
-    }
-
     public function getCollector(): DocumentCollectorInterface
     {
         return $this->documentCollector;
     }
 
-    public function isLocalizationStrategy(MultisiteStrategyEnum $type): bool
+    public function isMultisiteStrategy(MultisiteStrategyEnum $type): bool
     {
         return $this->multisiteStrategy === $type->value;
+    }
+
+    public function isLocalizationStrategy(LocalizationStrategyEnum $type): bool
+    {
+        return $this->localizationStrategy === $type->value;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
     }
 }

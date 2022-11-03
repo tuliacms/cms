@@ -13,14 +13,16 @@ use Tulia\Cms\User\Application\Service\Avatar\UploaderInterface;
 final class UserAvatarModelTransformer implements DataTransformerInterface
 {
     public function __construct(
-        private UploaderInterface $uploader
+        private readonly UploaderInterface $uploader,
     ) {
     }
 
     public function transform(mixed $value): mixed
     {
-        return $value
-            ? new UserAvatarFile($this->uploader->getFilepath($value), true, $value)
+        $filepath = $this->uploader->getFilepath($value);
+
+        return is_file($filepath)
+            ? new UserAvatarFile($filepath, true, $value)
             : null;
     }
 

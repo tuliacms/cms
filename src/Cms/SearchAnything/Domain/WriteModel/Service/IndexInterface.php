@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\SearchAnything\Domain\WriteModel\Service;
 
+use Tulia\Cms\SearchAnything\Domain\WriteModel\Enum\LocalizationStrategyEnum;
 use Tulia\Cms\SearchAnything\Domain\WriteModel\Enum\MultisiteStrategyEnum;
 use Tulia\Cms\SearchAnything\Domain\WriteModel\Model\Document;
 
@@ -17,7 +18,8 @@ interface IndexInterface
     public function clear(?string $webisteId = null, ?string $locale = null): void;
     public function delete(Document $document): void;
     public function getDelta(): int;
-    public function isMultilingual(): bool;
     public function getCollector(): DocumentCollectorInterface;
-    public function isLocalizationStrategy(MultisiteStrategyEnum $type): bool;
+    public function isMultisiteStrategy(MultisiteStrategyEnum $type): bool;
+    public function isLocalizationStrategy(LocalizationStrategyEnum $type): bool;
+    public function getName(): string;
 }

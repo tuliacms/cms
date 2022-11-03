@@ -7,6 +7,7 @@ namespace Tulia\Cms\SearchAnything\Application\UseCase;
 use Symfony\Contracts\Translation\LocaleAwareInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteRegistryInterface;
+use Tulia\Cms\SearchAnything\Domain\WriteModel\Enum\LocalizationStrategyEnum;
 use Tulia\Cms\SearchAnything\Domain\WriteModel\Enum\MultisiteStrategyEnum;
 use Tulia\Cms\SearchAnything\Domain\WriteModel\Service\IndexInterface;
 use Tulia\Cms\SearchAnything\Domain\WriteModel\Service\IndexRegistry;
@@ -35,15 +36,15 @@ final class Index extends AbstractTransactionalUseCase
         $website = $this->websiteRegistry->get($request->websiteId);
 
         foreach ($this->indexRegistry->all() as $index) {
-            if ($index->isLocalizationStrategy(MultisiteStrategyEnum::GLOBAL)) {
+            if ($index->isMultisiteStrategy(MultisiteStrategyEnum::GLOBAL)) {
                 $this->indexPartially($index, $defaultLocale);
             } else {
-                if ($index->isMultilingual()) {
+                if ($index->isLocalizationStrategy(LocalizationStrategyEnum::UNILINGUAL)) {
+                    $this->indexPartially($index, $defaultLocale, $website->getId());
+                } else {
                     foreach ($website->getLocales() as $locale) {
                         $this->indexPartially($index, $locale->getCode(), $website->getId(), $locale->getCode());
                     }
-                } else {
-                    $this->indexPartially($index, $defaultLocale, $website->getId());
                 }
             }
         }

@@ -14,7 +14,6 @@ interface IndexFactoryInterface
 {
     public function create(
         string $name,
-        bool $multilingual,
         LocalizationStrategyEnum $localizationStrategy,
         MultisiteStrategyEnum $multisiteStrategy,
         string $collector,

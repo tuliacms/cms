@@ -14,19 +14,16 @@ class IndexRegistry
 {
     private array $indexes = [
         'node' => [
-            'multilingual' => true,
             'localization_strategy' => 'content',
             'multisite_strategy' => 'website',
             'collector' => 'Tulia\Cms\Node\Infrastructure\SearchAnything\NodeDocumentCollector',
         ],
         'tools' => [
-            'multilingual' => true,
             'localization_strategy' => 'user',
             'multisite_strategy' => 'website',
             'collector' => 'Tulia\Cms\Homepage\Infrastructure\Cms\SearchAnything\SystemToolsDocumentCollector',
         ],
         'user' => [
-            'multilingual' => false,
             'localization_strategy' => 'unilingual',
             'multisite_strategy' => 'global',
             'collector' => 'Tulia\Cms\User\Infrastructure\Cms\SearchAnything\UsersDocumentCollector',
@@ -51,7 +48,6 @@ class IndexRegistry
 
         return $this->cache[$name] = $this->indexFactory->create(
             $name,
-            $index['multilingual'],
             LocalizationStrategyEnum::tryFrom($index['localization_strategy']),
             MultisiteStrategyEnum::tryFrom($index['multisite_strategy']),
             $index['collector'],
