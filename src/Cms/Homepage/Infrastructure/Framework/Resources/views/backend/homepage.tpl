@@ -71,36 +71,6 @@
                                                 <i class="btn-icon fas fa-ellipsis-v"></i>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right">
-                                                <a class="dropdown-item dropdown-item-with-icon" href="#"><i class="fas fa-cogs dropdown-icon"></i> Ustawienia</a>
-                                                <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item dropdown-item-with-icon" href="#"><i class="fas fa-clock dropdown-icon"></i> Stwórz kopię teraz</a>
-                                                <a class="dropdown-item dropdown-item-with-icon" href="#"><i class="fas fa-archive dropdown-icon"></i> Otwórz listę kopii</a>
-                                                <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item dropdown-item-with-icon" href="#"><i class="fas fa-eye-slash dropdown-icon"></i> Ukryj ten widget</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <i class="pane-header-icon fas fa-archive"></i>
-                                    <div class="pane-title">Backup</div>
-                                </div>
-                                <div class="pane-body">
-                                    <div class="backup-widget">
-                                        <p class="mb-0">Zaleca się wykonać kopię za: <b>2</b> dni</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="widget">
-                        <div class="widget-inner">
-                            <div class="pane">
-                                <div class="pane-header">
-                                    <div class="pane-buttons">
-                                        <div class="dropdown">
-                                            <button class="btn btn-icon-only" type="button" data-bs-toggle="dropdown">
-                                                <i class="btn-icon fas fa-ellipsis-v"></i>
-                                            </button>
-                                            <div class="dropdown-menu dropdown-menu-right">
                                                 <a class="dropdown-item dropdown-item-with-icon" href="#" data-bs-toggle="modal" data-bs-target="#widget-tulia-news-settings"><i class="fas fa-cogs dropdown-icon"></i> Ustawienia</a>
                                                 <div class="dropdown-divider"></div>
                                                 <a class="dropdown-item dropdown-item-with-icon" href="#"><i class="fas fa-eye-slash dropdown-icon"></i> Ukryj ten widget</a>
@@ -191,6 +161,36 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="widget">
+                        <div class="widget-inner">
+                            <div class="pane">
+                                <div class="pane-header">
+                                    <div class="pane-buttons">
+                                        <div class="dropdown">
+                                            <button class="btn btn-icon-only" type="button" data-bs-toggle="dropdown">
+                                                <i class="btn-icon fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item dropdown-item-with-icon" href="#"><i class="fas fa-cogs dropdown-icon"></i> Ustawienia</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item dropdown-item-with-icon" href="#"><i class="fas fa-clock dropdown-icon"></i> Stwórz kopię teraz</a>
+                                                <a class="dropdown-item dropdown-item-with-icon" href="#"><i class="fas fa-archive dropdown-icon"></i> Otwórz listę kopii</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item dropdown-item-with-icon" href="#"><i class="fas fa-eye-slash dropdown-icon"></i> Ukryj ten widget</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <i class="pane-header-icon fas fa-archive"></i>
+                                    <div class="pane-title">Backup</div>
+                                </div>
+                                <div class="pane-body">
+                                    <div class="backup-widget">
+                                        <p class="mb-0">Zaleca się wykonać kopię za: <b>2</b> dni</p>
                                     </div>
                                 </div>
                             </div>
