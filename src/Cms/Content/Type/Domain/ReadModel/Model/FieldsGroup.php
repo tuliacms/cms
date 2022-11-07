@@ -66,4 +66,13 @@ final class FieldsGroup
     {
         return $this->name;
     }
+
+    public function newField(string $code, string $type, string $name, array $options = []): Field
+    {
+        return $this->fields[$code] = new Field(array_merge($options, [
+            'code' => $code,
+            'type' => $type,
+            'name' => $name,
+        ]));
+    }
 }

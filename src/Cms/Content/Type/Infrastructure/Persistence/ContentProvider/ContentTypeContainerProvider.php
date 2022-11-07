@@ -15,7 +15,7 @@ class ContentTypeContainerProvider implements ContentTypeProviderInterface
     use SymfonyContainerStandarizableTrait;
 
     public function __construct(
-        private array $configuration
+        private readonly array $configuration,
     ) {
     }
 

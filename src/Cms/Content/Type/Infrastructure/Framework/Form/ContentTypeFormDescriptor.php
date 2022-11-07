@@ -155,7 +155,7 @@ class ContentTypeFormDescriptor
                 $flags = $field->getFlags();
 
                 $field->isMultilingual() ? $flags[] = 'multilingual' : null;
-                $field->isNonscalarValue() ? $flags[] = 'nonscalar_value' : null;
+                $field->hasNonscalarValue() ? $flags[] = 'nonscalar_value' : null;
 
                 $result[$uri] = new Attribute(
                     $prefix . $field->getCode(),

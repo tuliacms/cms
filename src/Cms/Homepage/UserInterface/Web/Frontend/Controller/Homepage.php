@@ -12,6 +12,7 @@ use Tulia\Cms\Node\Domain\WriteModel\Model\Enum\NodePurposeEnum;
 use Tulia\Cms\Node\UserInterface\Web\Frontend\Controller\Node;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Seo\Domain\Service\SeoDocumentProcessorInterface;
 use Tulia\Component\Templating\ViewInterface;
 
 /**
@@ -28,7 +29,7 @@ class Homepage extends AbstractController
     /**
      * @return Response|ViewInterface
      */
-    public function index(Request $request, WebsiteInterface $website)
+    public function index(Request $request, WebsiteInterface $website, SeoDocumentProcessorInterface $seo)
     {
         $homepage = $this->nodeFinder->findOne([
             'purpose' => NodePurposeEnum::PAGE_HOMEPAGE,
@@ -37,7 +38,7 @@ class Homepage extends AbstractController
         ], NodeFinderScopeEnum::SINGLE);
 
         if ($homepage) {
-            return $this->nodeController->show($homepage, $request);
+            return $this->nodeController->show($homepage, $request, $seo);
         }
 
         return $this->view('@cms/homepage/index.tpl');

@@ -1,0 +1,4 @@
+framework:
+    translator:
+        paths:
+            - '%cms.core_dir%/Cms/Seo/Infrastructure/Framework/Resources/translations'

@@ -101,6 +101,15 @@ final class ContentType
         return $this->fieldGroups;
     }
 
+    public function newFieldsGroup(string $code, string $section, string $name): FieldsGroup
+    {
+        $group = new FieldsGroup($code, $section, $name, []);
+
+        $this->fieldGroups[] = $group;
+
+        return $group;
+    }
+
     public function isRoutable(): bool
     {
         return $this->isRoutable;
@@ -193,14 +202,14 @@ final class ContentType
                 $result[$prefix.$field->getCode()] = [
                     'is_multilingual' => $field->isMultilingual(),
                     'is_compilable' => $field->is('compilable'),
-                    'has_nonscalar_value' => $field->isNonscalarValue(),
+                    'has_nonscalar_value' => $field->hasNonscalarValue(),
                 ];
 
                 if ($field->is('compilable')) {
                     $result[$prefix.$field->getCode().':compiled'] = [
                         'is_multilingual' => $field->isMultilingual(),
                         'is_compilable' => false,
-                        'has_nonscalar_value' => $field->isNonscalarValue(),
+                        'has_nonscalar_value' => $field->hasNonscalarValue(),
                     ];
                 }
             }

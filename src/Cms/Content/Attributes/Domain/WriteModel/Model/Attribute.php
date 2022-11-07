@@ -97,18 +97,12 @@ class Attribute implements \Stringable, \Traversable, \ArrayAccess, \IteratorAgg
         return $this->code;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getValue()
+    public function getValue(): mixed
     {
         return $this->value;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getCompiledValue()
+    public function getCompiledValue(): mixed
     {
         return $this->compiledValue;
     }

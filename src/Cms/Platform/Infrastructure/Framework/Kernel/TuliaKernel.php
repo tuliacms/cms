@@ -78,6 +78,7 @@ final class TuliaKernel extends Kernel
             $base . '/Content/Block/Infrastructure/Framework/Resources/config',
             $base . '/Content/Type/Infrastructure/Framework/Resources/config',
             $base . '/ImportExport/Infrastructure/Framework/Resources/config',
+            $base . '/Seo/Infrastructure/Framework/Resources/config',
         ];
 
         if ($this->environment === 'dev') {

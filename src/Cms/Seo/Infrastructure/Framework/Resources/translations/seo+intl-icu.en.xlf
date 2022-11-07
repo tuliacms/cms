@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="seo+intl-icu.en.xlf">
+        <body>
+            <trans-unit id="tuliacms.seo.1">
+                <source>Fill to overwrite default title</source>
+                <target>Fill to overwrite default title</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.seo.2">
+                <source>title</source>
+                <target>Title</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.seo.3">
+                <source>metaDescription</source>
+                <target>Description</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.seo.4">
+                <source>metaKeywords</source>
+                <target>Keywords</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.seo.5">
+                <source>metaOgImage</source>
+                <target>OpenGraph Image</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

@@ -61,7 +61,7 @@ final class Field
 
         foreach ($this->options['configuration'] as $configName => $configValue) {
             \assert(
-                \is_scalar($configValue),
+                \is_scalar($configValue) || \is_array($configValue),
                 sprintf('Value of configuration "%s" of field "%s" must be a scalar value.', $configName, $this->options['code'])
             );
         }
@@ -87,7 +87,7 @@ final class Field
         return $this->is('multilingual');
     }
 
-    public function isNonscalarValue(): bool
+    public function hasNonscalarValue(): bool
     {
         return $this->is('nonscalar_value');
     }

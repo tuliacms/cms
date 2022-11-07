@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Node\Domain\ReadModel\Model\Node as Model;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Enum\NodePurposeEnum;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
+use Tulia\Cms\Seo\Domain\Service\SeoDocumentProcessorInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderScopeEnum;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Model\Term;
@@ -27,7 +28,7 @@ class Node extends AbstractController
     /**
      * @return RedirectResponse|ViewInterface
      */
-    public function show(Model $node, Request $request)
+    public function show(Model $node, Request $request, SeoDocumentProcessorInterface $seo)
     {
         if (
             $node->hasPurpose(NodePurposeEnum::PAGE_HOMEPAGE)
@@ -36,7 +37,8 @@ class Node extends AbstractController
             return $this->redirectToRoute('frontend.homepage');
         }
 
-        $this->getDocument()->setTitle($node->getTitle());
+        $seo->aware($node, $node->getTitle());
+        //$this->getDocument()->setTitle($node->getTitle());
 
         $category = $this->findCategory($node);
 

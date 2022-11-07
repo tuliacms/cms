@@ -13,7 +13,7 @@ use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
 class ObjectDataToAttributesTransformer
 {
     public function __construct(
-        private ContentType $contentType
+        private readonly ContentType $contentType,
     ) {
     }
 
@@ -30,7 +30,7 @@ class ObjectDataToAttributesTransformer
             $flags = $field->getFlags();
 
             $field->isMultilingual() ? $flags[] = 'multilingual' : null;
-            $field->isNonscalarValue() ? $flags[] = 'nonscalar_value' : null;
+            $field->hasNonscalarValue() ? $flags[] = 'nonscalar_value' : null;
 
 
             if (isset($attribute['payload'])) {

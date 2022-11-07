@@ -10,124 +10,77 @@ namespace Tulia\Cms\Platform\Shared\Document;
 class Document implements DocumentInterface
 {
     protected $title;
-
     protected $description;
-
     protected $keywords;
-
     protected $attributes = [];
-
     protected $links = [];
-
     protected $metas = [];
 
-    /**
-     * {@inheritdoc}
-     */
     public function setTitle(?string $title): void
     {
         $this->title = $title;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setDescription(?string $description): void
     {
         $this->description = $description;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setKeywords(?string $keywords): void
     {
         $this->keywords = $keywords;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getKeywords(): ?string
     {
         return $this->keywords;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setAttribute(?string $name, ?string $value): void
     {
         $this->attributes[$name] = $value;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getAttribute(?string $name, ?string $default = null)
     {
         return $this->attributes[$name] ?? $default;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getAttributes(): array
     {
         return $this->attributes;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setAttributes(array $attributes): void
     {
         $this->attributes = $attributes;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addLink(array $attributes): void
     {
         $this->links[] = $attributes;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLinks(): array
     {
         return $this->links;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setLinks(array $links): void
     {
         $this->links = $links;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildLinks(): string
     {
         $links = $this->links;
@@ -141,33 +94,24 @@ class Document implements DocumentInterface
         return implode(PHP_EOL, $result);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addMeta(array $attributes): void
+    public function addMeta(string $name, string $value): void
     {
-        $this->metas[] = $attributes;
+        $this->metas[] = [
+            'name'  => $name,
+            'content' => $value,
+        ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getMetas(): array
     {
         return $this->metas;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setMetas(array $metas): void
     {
         $this->metas = $metas;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildMetas(): string
     {
         $metas = $this->metas;
@@ -182,6 +126,7 @@ class Document implements DocumentInterface
         ];
 
         $result = [];
+        $result[] = '<title>'.$this->title.'</title>';
 
         foreach ($metas as $meta) {
             $result[] = '<meta '.$this->buildAttributes($meta).' />';
@@ -190,15 +135,12 @@ class Document implements DocumentInterface
         return implode(PHP_EOL, $result);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function buildAttributes(array $attrs): string
+    private function buildAttributes(array $attrs): string
     {
         $prepared = [];
 
         foreach ($attrs as $name => $val) {
-            $prepared[] = $name.'="'.htmlspecialchars($val, ENT_QUOTES).'"';
+            $prepared[] = $name.'="'.($val ? htmlspecialchars($val, ENT_QUOTES) : null).'"';
         }
 
         return implode(' ', $prepared);

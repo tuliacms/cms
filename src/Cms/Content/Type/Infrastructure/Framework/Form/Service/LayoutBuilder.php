@@ -13,13 +13,10 @@ use Tulia\Component\Templating\View;
  */
 class LayoutBuilder
 {
-    private LayoutTypeBuilderRegistry $builderRegistry;
-    private Configuration $config;
-
-    public function __construct(LayoutTypeBuilderRegistry $builderRegistry, Configuration $config)
-    {
-        $this->builderRegistry = $builderRegistry;
-        $this->config = $config;
+    public function __construct(
+        private readonly LayoutTypeBuilderRegistry $builderRegistry,
+        private readonly Configuration $config,
+    ) {
     }
 
     public function build(ContentTypeFormDescriptor $formDescriptor): View

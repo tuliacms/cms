@@ -224,7 +224,7 @@ class TaxonomyRepository
             $result[$field->getCode()] = [
                 'is_multilingual' => $field->isMultilingual(),
                 'is_compilable' => $field->is('compilable'),
-                'has_nonscalar_value' => $field->isNonscalarValue(),
+                'has_nonscalar_value' => $field->hasNonscalarValue(),
                 'is_taxonomy' => $field->getType() === 'taxonomy',
             ];
         }

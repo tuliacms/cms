@@ -10,6 +10,7 @@ use Tulia\Cms\Filemanager\Domain\ReadModel\Model\File;
 
 /**
  * @author Adam Banaszkiewicz
+ * @todo Move this service do domain
  */
 class ImageUrlResolver
 {
@@ -31,7 +32,7 @@ class ImageUrlResolver
             'size' => $size,
             'id'   => $image->getId(),
             'filename' => $image->getFilename(),
-        ]);
+        ], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
     public function thumbnail(File $image): string
@@ -42,6 +43,6 @@ class ImageUrlResolver
             'size' => $size->getCode(),
             'id'   => $image->getId(),
             'filename' => $image->getFilename(),
-        ]);
+        ], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 }

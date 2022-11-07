@@ -38,7 +38,7 @@ class SymfonyFieldBuilder
         $typeBuilder = $this->mappingRegistry->getTypeBuilder($field->getType());
         $typeHandler = $this->mappingRegistry->getTypeHandler($field->getType());
 
-        $options = [
+        $options = array_merge($field->getConfiguration(), [
             'label' => $field->getName() === ''
                 ? false
                 : $field->getName(),
@@ -48,7 +48,7 @@ class SymfonyFieldBuilder
             'content_builder_field_handler' => $typeHandler,
             'locale' => $website->getLocale()->getCode(),
             'website_id' => $website->getId(),
-        ];
+        ]);
 
         if ($typeBuilder) {
             $options = $typeBuilder->buildOptions($field, $options, $contentType);

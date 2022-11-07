@@ -9,6 +9,7 @@ use Tulia\Cms\Filemanager\Domain\Generator\Html;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\FileFinderInterface;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\FileFinderScopeEnum;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Model\File;
+use Tulia\Cms\Filemanager\Domain\ReadModel\Service\ImageUrlGeneratorInterface;
 use Tulia\Cms\Filemanager\Domain\WriteModel\Model\FileTypeEnum;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -21,6 +22,7 @@ class FilemanagerExtension extends AbstractExtension
     public function __construct(
         private readonly FileFinderInterface $finder,
         private readonly ImageUrlResolver $urlResolver,
+        private readonly ImageUrlGeneratorInterface $urlGenerator,
         private readonly string $publicDir,
     ) {
     }
@@ -75,22 +77,10 @@ class FilemanagerExtension extends AbstractExtension
      */
     public function imageUrl($id, array $params = []): string
     {
-        if ($id instanceof File) {
-            $image = $id;
-        } else if (empty($id)) {
-            return $params['default'] ?? '';
-        } else {
-            $image = $this->finder->findOne([
-                'id' => $id,
-                'type' => FileTypeEnum::IMAGE,
-            ], FileFinderScopeEnum::SINGLE);
-
-            if ($image === null) {
-                return '';
-            }
-        }
-
-        return $this->urlResolver->size($image, $params['size'] ?? 'original');
+        return $this->urlGenerator->generate(
+            $id instanceof File ? $id->getId() : $id,
+            $params
+        );
     }
 
     public function gallery(array $ids, array $params = []): string

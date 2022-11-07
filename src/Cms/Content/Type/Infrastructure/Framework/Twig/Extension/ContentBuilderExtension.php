@@ -15,13 +15,10 @@ use Twig\TwigFunction;
  */
 class ContentBuilderExtension extends AbstractExtension
 {
-    private LayoutBuilder $layoutBuilder;
-    private Engine $engine;
-
-    public function __construct(LayoutBuilder $layoutBuilder, Engine $engine)
-    {
-        $this->layoutBuilder = $layoutBuilder;
-        $this->engine = $engine;
+    public function __construct(
+        private readonly LayoutBuilder $layoutBuilder,
+        private readonly Engine $engine,
+    ) {
     }
 
     public function getFunctions(): array

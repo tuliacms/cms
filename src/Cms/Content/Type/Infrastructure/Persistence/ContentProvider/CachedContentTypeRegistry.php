@@ -14,13 +14,11 @@ use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistry;
  */
 class CachedContentTypeRegistry extends ContentTypeRegistry
 {
-    private CacheInterface $contentBuilderCache;
-
-    public function __construct(ContentTypeDecorator $decorator, CacheInterface $contentBuilderCache)
-    {
+    public function __construct(
+        ContentTypeDecorator $decorator,
+        private readonly CacheInterface $contentBuilderCache,
+    ) {
         parent::__construct($decorator);
-
-        $this->contentBuilderCache = $contentBuilderCache;
     }
 
     protected function fetch(): array

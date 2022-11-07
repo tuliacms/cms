@@ -30,7 +30,7 @@ class ChoiceTypeBuilder extends AbstractFieldTypeBuilder
             if (is_array($data) && count($data) === 2) {
                 $options['choices'][trim($data[1])] = $data[0];
             } else {
-                $options['choices'][sprintf('--- option number "%s" is invalid ---', $choice)] = null;
+                $options['choices'][sprintf('--- option number "%s" is invalid ---', $line)] = null;
             }
         }
 

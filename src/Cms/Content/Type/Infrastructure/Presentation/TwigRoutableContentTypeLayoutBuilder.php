@@ -19,10 +19,10 @@ use Tulia\Component\Templating\View;
 class TwigRoutableContentTypeLayoutBuilder implements LayoutTypeBuilderInterface
 {
     public function __construct(
-        private FieldTypeMappingRegistry $fieldTypeMappingRegistry,
-        private ContentTypeRoutingStrategyRegistry $strategyRegistry,
-        private TranslatorInterface $translator,
-        private Configuration $configuration,
+        private readonly FieldTypeMappingRegistry $fieldTypeMappingRegistry,
+        private readonly ContentTypeRoutingStrategyRegistry $strategyRegistry,
+        private readonly TranslatorInterface $translator,
+        private readonly Configuration $configuration,
     ) {
     }
 
