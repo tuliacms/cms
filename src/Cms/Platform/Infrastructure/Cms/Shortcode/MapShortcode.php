@@ -18,7 +18,7 @@ final class MapShortcode implements ShortcodeCompilerInterface
 {% assets ['tulia.simplemap'] %}
 <div
     class="tulia-simplemap"
-    id="tulia-simplemap-{uniqid()}"
+    id="tulia-simplemap-{{uniqid()}}"
     data-zoom="{$shortcode->getParameter('zoom')}"
     data-lat="{$shortcode->getParameter('lat')}"
     data-lng="{$shortcode->getParameter('lng')}"

@@ -29,9 +29,9 @@
                 </div>
             </template>
         </draggable>
-        <div class="tued-structure-new-element" @click="blocksPicker.newAt(parent.id)">
+<!--        <div class="tued-structure-new-element" @click="blocksPicker.newAt(parent.id)">
             {{ translator.trans('newBlock') }}
-        </div>
+        </div>-->
     </div>
 </template>
 

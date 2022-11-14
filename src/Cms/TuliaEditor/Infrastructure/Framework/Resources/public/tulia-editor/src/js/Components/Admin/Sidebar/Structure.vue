@@ -36,7 +36,7 @@
                 </div>
             </template>
         </draggable>
-        <div class="tued-structure-new-element ml-0" @click="blockPicker.new()">
+        <div class="tued-structure-new-element" @click="blockPicker.new()">
             {{ translator.trans('newBlock') }}
         </div>
     </div>

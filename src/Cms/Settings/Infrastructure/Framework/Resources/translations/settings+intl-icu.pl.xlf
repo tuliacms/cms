@@ -124,7 +124,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.settings.34">
                 <source>websiteFavicon</source>
-                <target>Favikona strony</target>
+                <target>Favicon strony</target>
             </trans-unit>
             <trans-unit id="tuliacms.settings.35">
                 <source>settingsGroupNotFound</source>

@@ -1,4 +1,4 @@
-Tulia.Translator.register('en_US', 'messages', {
+window.Tulia && Tulia.Translator.register('en_US', 'messages', {
     yes: 'Yes',
     no: 'No',
     confirmationRequired: 'Confirmation required',
@@ -9,4 +9,7 @@ Tulia.Translator.register('en_US', 'messages', {
     warning: 'Warning',
     info: 'Info',
     justNow: 'Just now',
+    areYouSure: 'Are You sure?',
+    thisOperationCannotBeUndone: 'This operation cannot be undone!',
+    youReallyWantToDoThis: 'You really want to do this operation?',
 });

@@ -4,7 +4,7 @@
         <body>
             <trans-unit id="tuliacms.frontend_toolbar.1">
                 <source>frontendToolbar</source>
-                <target>Frontend Toolbar</target>
+                <target>Tulia Toolbar</target>
             </trans-unit>
         </body>
     </file>

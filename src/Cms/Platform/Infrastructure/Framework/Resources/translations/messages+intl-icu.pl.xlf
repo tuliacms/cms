@@ -596,7 +596,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.messages.149">
                 <source>switchWebsite</source>
-                <target>Zmień witrynę</target>
+                <target>Przełącz witrynę</target>
             </trans-unit>
             <trans-unit id="tuliacms.messages.150">
                 <source>websites</source>
@@ -807,10 +807,10 @@
                 <source>seeWhatsNewInThisVersion</source>
                 <target>Zobacz co nowego w tej wersji</target>
             </trans-unit>
-            <trans-unit id="tuliacms.messages.209">
+            <!--<trans-unit id="tuliacms.messages.209">
                 <source>previewNotAvailable</source>
                 <target>Podgląd niedostępny</target>
-            </trans-unit>
+            </trans-unit>-->
             <trans-unit id="tuliacms.messages.210">
                 <source>cannotDoThisOperationOnNotDevEnvironment</source>
                 <target>Nie można wykonać tej operacji, gdy nie jest w trybie programistycznym. Możesz to zrobić tylko na lokalnym komputerze deweloperskim.</target>

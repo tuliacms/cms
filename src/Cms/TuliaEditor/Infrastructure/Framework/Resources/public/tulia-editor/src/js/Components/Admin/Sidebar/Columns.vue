@@ -30,8 +30,8 @@
                                 <span>{{ breakpointSize }}</span>
                                 <input
                                     type="text"
-                                    :ref="'column-' + element.id"
-                                    :value="columnSizeByBreakpoint(element)"
+                                    data-vueref="'column-' + element.id"
+                                    :value="element.sizes[canvas.getBreakpointName()].size"
                                     @focus="$event.target.select()"
                                     @keyup="changeSize(element, $event)"
                                     @keydown="changeSizeWithArrows(element, $event)"
@@ -69,10 +69,6 @@ const structureManipulator = inject('structureManipulator');
 
 const columns = {};
 
-for (let i in props.columns) {
-    columns['column-' + props.columns[i].id] = ref('column-' + props.columns[i].id);
-}
-
 const breakpointSize = computed (() => {
     return canvas.getBreakpointName();
 });
@@ -81,11 +77,11 @@ const changeSizeWithArrows = (column, event) => {
     switch (event.key) {
         case '+':
         case 'ArrowUp':
-            columns['column-' + column.id].value = columnsSize.increment(column, canvas.getBreakpointName());
+            column.sizes[canvas.getBreakpointName()].size = columnsSize.increment(column, canvas.getBreakpointName());
             break;
         case '-':
         case 'ArrowDown':
-            columns['column-' + column.id].value = columnsSize.decrement(column, canvas.getBreakpointName());
+            column.sizes[canvas.getBreakpointName()].size = columnsSize.decrement(column, canvas.getBreakpointName());
             break;
         default:
             return;
@@ -104,28 +100,26 @@ const changeSize = (column, event) => {
         case '8':
         case '9':
         case '0':
+        case 'Backspace':
+        case 'Delete':
             break;
         case 'ArrowUp':
         case 'ArrowDown':
         case 'ArrowLeft':
         case 'ArrowRight':
-        case 'Backspace':
-        case 'Delete':
             return;
         default:
             event.preventDefault();
     }
 
-    let input = columns['column-' + column.id];
-
-    input.value = columnsSize.changeTo(column, canvas.getBreakpointName(), input.value);
-};
-
-const columnSizeByBreakpoint = (column) => {
-    return column.sizes[canvas.getBreakpointName()].size;
+    columnsSize.changeTo(column, canvas.getBreakpointName(), event.target.value);
 };
 
 onMounted(() => {
+    for (let i in props.columns) {
+        columns['column-' + props.columns[i].id] = ref('column-' + props.columns[i].id);
+    }
+
     contextmenu.items('columns', 'column', () => {
         return [
             {

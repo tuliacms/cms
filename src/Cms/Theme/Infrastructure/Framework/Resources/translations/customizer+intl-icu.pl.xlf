@@ -12,7 +12,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.customizer.3">
                 <source>websiteFavicon</source>
-                <target>Favikona strony</target>
+                <target>Favicon strony</target>
             </trans-unit>
             <trans-unit id="tuliacms.customizer.4">
                 <source>publish</source>
@@ -92,7 +92,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.customizer.23">
                 <source>faviconSizeDescription</source>
-                <target>Favikonka strony powinna być kwadratowa i wielkości co najmniej 512 × 512 pikseli.</target>
+                <target>Favicon strony powinien być kwadratowy i wielkości co najmniej 512 × 512 pikseli.</target>
             </trans-unit>
             <trans-unit id="tuliacms.customizer.24">
                 <source>changsetPublished</source>

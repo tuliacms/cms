@@ -2,7 +2,7 @@
     position: absolute;
     z-index: 200;
     width: 320px;
-    top: 0;
+    top: 38px;
     bottom: 0;
     right: 0;
     border-left: 1px solid #ddd;
@@ -18,7 +18,13 @@
 
         .tued-sidebar-toolbar {
             display: flex;
+            position: fixed;
+            z-index: 100;
+            width: 320px;
+            top: 0;
+            right: 0;
             border-bottom: 1px solid #dedede;
+            border-left: 1px solid #dedede;
 
             .tued-menu-holder {
                 flex-grow: 1;

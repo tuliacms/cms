@@ -1,5 +1,5 @@
 {# Store preview link, used in button in header. #}
-{% set previewLink = previewLink ?? null %}
+{% set previewLink = previewLink ?? path('frontend.homepage') %}
 
 <div class="layout-top">
     <header class="backend-header">
@@ -132,15 +132,9 @@
                         </div>
                     </div>
                 </div>#}
-                {% if previewLink %}
-                    <div class="action-box" data-bs-toggle="tooltip" data-bs-placement="left" title="{{ 'pagePreview'|trans }}">
-                        <a href="{{ previewLink }}" target="_blank" class="btn btn-icon-only action-btn"><i class="btn-icon fas fa-eye"></i></a>
-                    </div>
-                {% else %}
-                    <div class="action-box" data-bs-toggle="tooltip" data-bs-placement="left" title="{{ 'previewNotAvailable'|trans }}">
-                        <a href="#" disabled="disabled" class="btn btn-icon-only action-btn disabled"><i class="btn-icon fas fa-eye"></i></a>
-                    </div>
-                {% endif %}
+                <div class="action-box" data-bs-toggle="tooltip" data-bs-placement="left" title="{{ 'pagePreview'|trans }}">
+                    <a href="{{ previewLink }}" target="_blank" class="btn btn-icon-only action-btn"><i class="btn-icon fas fa-eye"></i></a>
+                </div>
                 <div class="action-box" data-bs-toggle="tooltip" data-bs-placement="left" title="{{ 'myAccount'|trans }}">
                     <div class="dropdown">
                         <button class="btn btn-icon-only action-btn" type="button" data-bs-toggle="dropdown">

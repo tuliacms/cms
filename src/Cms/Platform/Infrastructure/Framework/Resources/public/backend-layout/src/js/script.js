@@ -317,32 +317,32 @@ Tulia.Confirmation = {
     },
     warning: function (options) {
         options = $.extend(true, {}, {
-            title: 'Are You sure?',
-            text: 'This operation cannot be undone!',
+            title: Tulia.trans('areYouSure'),
+            text: Tulia.trans('thisOperationCannotBeUndone'),
             type: 'warning',
             customClass: {
                 confirmButton: 'btn btn-danger',
                 cancelButton: 'btn btn-secondary',
             },
             showCancelButton: true,
-            confirmButtonText: 'Yes',
-            cancelButtonText: 'No',
+            confirmButtonText: Tulia.trans('yes'),
+            cancelButtonText: Tulia.trans('no'),
         }, options);
 
         return Tulia.Confirmation.fire(options);
     },
     confirm: function (options) {
         options = $.extend(true, {}, {
-            title: 'Are You sure?',
-            text: 'You really want to do this operation?',
+            title: Tulia.trans('areYouSure'),
+            text: Tulia.trans('youReallyWantToDoThis'),
             type: 'warning',
             customClass: {
                 confirmButton: 'btn btn-danger',
                 cancelButton: 'btn btn-secondary',
             },
             showCancelButton: true,
-            confirmButtonText: 'Yes',
-            cancelButtonText: 'No',
+            confirmButtonText: Tulia.trans('yes'),
+            cancelButtonText: Tulia.trans('no'),
         }, options);
 
         return Tulia.Confirmation.fire(options);

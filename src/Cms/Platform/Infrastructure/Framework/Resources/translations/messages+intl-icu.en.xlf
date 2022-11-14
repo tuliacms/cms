@@ -650,7 +650,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.messages.170">
                 <source>editLinks</source>
-                <target>Edit links</target>
+                <target>Page Edit links</target>
             </trans-unit>
             <trans-unit id="tuliacms.messages.171">
                 <source>turnOn</source>
@@ -807,10 +807,10 @@
                 <source>seeWhatsNewInThisVersion</source>
                 <target>See what's new in this version</target>
             </trans-unit>
-            <trans-unit id="tuliacms.messages.209">
+            <!--<trans-unit id="tuliacms.messages.209">
                 <source>previewNotAvailable</source>
                 <target>Preview not available</target>
-            </trans-unit>
+            </trans-unit>-->
             <trans-unit id="tuliacms.messages.210">
                 <source>cannotDoThisOperationOnNotDevEnvironment</source>
                 <target>Cannot do this operation when is not development mode. You can do this only on local development computer.</target>
