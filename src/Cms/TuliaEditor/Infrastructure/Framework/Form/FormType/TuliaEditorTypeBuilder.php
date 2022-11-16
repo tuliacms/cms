@@ -16,18 +16,15 @@ class TuliaEditorTypeBuilder extends AbstractFieldTypeBuilder
     /**
      * @return array<string, string>
      */
-    public function buildValueFromAttribute(Field $field, Attribute $attribute)
+    public function buildValueFromAttribute(Field $field, Attribute $attribute): mixed
     {
         return [
             'tulia_editor_structure' => json_encode($attribute->getPayload()),
-            'tulia_editor_instance' => $attribute->getValue(),
+            'tulia_editor_instance' => (string) $attribute->getValue(),
         ];
     }
 
-    /**
-     * @param array $value
-     */
-    public function buildAttributeFromValue(Field $field, Attribute $attribute, $value): Attribute
+    public function buildAttributeFromValue(Field $field, Attribute $attribute, mixed $value): Attribute
     {
         $attribute = $attribute->withValue($value['tulia_editor_instance']);
 

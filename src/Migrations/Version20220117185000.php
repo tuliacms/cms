@@ -47,14 +47,13 @@ CREATE TABLE `#__content_type_field` (
   `type` varchar(127) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `is_multilingual` tinyint(1) NOT NULL DEFAULT '0',
-  `has_nonscalar_value` tinyint(1) NOT NULL DEFAULT '0',
   `position` smallint UNSIGNED DEFAULT '0',
   `parent` varchar(127) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `taxonomy` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `#__content_type_field` (`id`, `code`, `content_type_code`, `group_code`, `type`, `name`, `is_multilingual`, `has_nonscalar_value`, `position`, `parent`, `taxonomy`) VALUES
-('90125db0-0c18-48a4-bfd4-c76d6c303c8f', 'content', 'page', 'section_1653933292398_398_4', 'tulia_editor', 'Content', 1, 0, 1, NULL, NULL);
+INSERT INTO `#__content_type_field` (`id`, `code`, `content_type_code`, `group_code`, `type`, `name`, `is_multilingual`, `position`, `parent`, `taxonomy`) VALUES
+('90125db0-0c18-48a4-bfd4-c76d6c303c8f', 'content', 'page', 'section_1653933292398_398_4', 'tulia_editor', 'Content', 1, 1, NULL, NULL);
 EOF);
         $this->addSql(<<<EOF
 CREATE TABLE `#__content_type_field_configuration` (
@@ -153,7 +152,6 @@ CREATE TABLE `#__term_attribute` (
   `id` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `owner_id` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `is_renderable` tinyint(1) NOT NULL DEFAULT '0',
-  `has_nonscalar_value` tinyint(1) NOT NULL DEFAULT '0',
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `uri` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `value` longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci,

@@ -27,12 +27,12 @@ final class AttributesAwareSeoDocumentProcessor implements SeoDocumentProcessorI
         $description = (string) $document->attribute('seo_description');
         $keywords = (string) $document->attribute('seo_keywords');
         $ogImage = (string) $document->attribute('seo_og_image');
-        //$robots = $document->attribute('seo_robots');
+        $robots = $document->attribute('seo_robots');
 
         $this->document->setTitle($title);
         $this->document->setDescription($description);
         $this->document->setKeywords($keywords);
-        //$this->document->addMeta('robots', robots);
+        $this->document->addMeta('robots', (string) $robots);
         $this->document->addMeta('og:title', $title);
         //$this->document->addMeta('og:url', '....');
         $this->document->addMeta('og:description', $description);

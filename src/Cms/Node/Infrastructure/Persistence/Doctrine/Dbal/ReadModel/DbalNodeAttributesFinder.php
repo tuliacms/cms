@@ -21,7 +21,7 @@ final class DbalNodeAttributesFinder extends AbstractAttributesFinder
     public function __construct(
         UriToArrayTransformer $uriToArrayTransformer,
         AttributesValueRenderer $attributesValueRenderer,
-        private Connection $connection
+        private readonly Connection $connection,
     ) {
         parent::__construct($uriToArrayTransformer, $attributesValueRenderer);
     }

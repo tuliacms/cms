@@ -155,7 +155,7 @@ class Node extends AbstractController
         string $node_type,
         Request $request,
         UpdateNode $updateNode,
-        WebsiteInterface $website
+        WebsiteInterface $website,
     ) {
         $this->validateCsrfToken($request, $node_type);
 

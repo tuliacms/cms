@@ -12,10 +12,11 @@
         <field name="locale" length="12" />
         <field name="code" />
         <field name="uri" />
-        <field name="value" nullable="true" type="text" />
         <field name="compiledValue" nullable="true" type="text" />
         <field name="payload" type="array" nullable="true" />
         <field name="flags" type="array" nullable="true" />
+
+        <embedded name="value" class="Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\AttributeValue" />
 
         <many-to-one field="nodeTranslation" target-entity="Tulia\Cms\Node\Domain\WriteModel\Model\NodeTranslation" inversed-by="attributes"/>
     </entity>

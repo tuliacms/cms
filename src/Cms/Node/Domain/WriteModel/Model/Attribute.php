@@ -18,13 +18,14 @@ class Attribute extends BaseAttribute
 
     public static function fromCore(NodeTranslation $nodeTranslation, BaseAttribute $attribute, string $locale): self
     {
-        $self = new static(
+        $self = new self(
             $attribute->code,
             $attribute->uri,
             $attribute->value,
             $attribute->compiledValue,
             $attribute->payload,
-            $attribute->flags
+            $attribute->flags,
+            $attribute->isMultiple,
         );
         $self->nodeTranslation = $nodeTranslation;
         $self->locale = $locale;

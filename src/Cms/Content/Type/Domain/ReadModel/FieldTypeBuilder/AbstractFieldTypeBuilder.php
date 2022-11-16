@@ -18,19 +18,19 @@ abstract class AbstractFieldTypeBuilder implements FieldTypeBuilderInterface
         return $options;
     }
 
-    /**
-     * @return mixed
-     */
-    public function buildValueFromAttribute(Field $field, Attribute $attribute)
+    public function buildValueFromAttribute(Field $field, Attribute $attribute): mixed
     {
-        return $attribute->getValue();
+        $value = $attribute->getValue();
+
+        if ($attribute->isMultiple()) {
+            return $value;
+        }
+
+        return reset($value);
     }
 
-    /**
-     * @param mixed $value
-     */
-    public function buildAttributeFromValue(Field $field, Attribute $attribute, $value): Attribute
+    public function buildAttributeFromValue(Field $field, Attribute $attribute, mixed $value): Attribute
     {
-        return $attribute;
+        return $attribute->withValue($value);
     }
 }

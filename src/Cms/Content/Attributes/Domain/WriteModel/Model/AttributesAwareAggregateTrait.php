@@ -46,6 +46,8 @@ trait AttributesAwareAggregateTrait
                 $this->addAttribute($this->factoryAttributeFromCore($attributes[$uri]));
             }
         }
+
+        $this->removeEmptyAttributes();
     }
 
     public function hasAttribute(string $uri): bool
@@ -106,6 +108,10 @@ trait AttributesAwareAggregateTrait
         }
     }
 
+    /**
+     * @param Attribute[] $attributes
+     * @return Attribute[]
+     */
     protected function repackAttributes(array $attributes): array
     {
         $repackedAttributes = [];
@@ -126,5 +132,14 @@ trait AttributesAwareAggregateTrait
         }
 
         return $attributes;
+    }
+
+    private function removeEmptyAttributes(): void
+    {
+        foreach ($this->attributes->toArray() as $attribute) {
+            if ($attribute->isEmpty()) {
+                $this->attributes->removeElement($attribute);
+            }
+        }
     }
 }

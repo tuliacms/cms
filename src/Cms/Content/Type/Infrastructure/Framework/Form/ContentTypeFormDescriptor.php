@@ -154,22 +154,26 @@ class ContentTypeFormDescriptor
 
                 $flags = $field->getFlags();
 
-                $field->isMultilingual() ? $flags[] = 'multilingual' : null;
-                $field->hasNonscalarValue() ? $flags[] = 'nonscalar_value' : null;
+                if ($field->isMultilingual()) {
+                    $flags[] = 'multilingual';
+                }
 
                 $result[$uri] = new Attribute(
                     $prefix . $field->getCode(),
                     $uri,
-                    $rawData[$field->getCode()],
+                    null,
                     null,
                     [],
-                    $flags
+                    $flags,
+                    $this->fieldTypeMappingRegistry->get($field->getType())['is_multiple'],
                 );
 
                 $builder = $this->fieldTypeMappingRegistry->getTypeBuilder($field->getType());
 
                 if ($builder instanceof FieldTypeBuilderInterface) {
                     $result[$uri] = $builder->buildAttributeFromValue($field, $result[$uri], $rawData[$field->getCode()]);
+                } else {
+                    $result[$uri] = $result[$uri]->withValue($rawData[$field->getCode()]);
                 }
             }
         }

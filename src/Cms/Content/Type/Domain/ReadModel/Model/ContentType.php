@@ -202,14 +202,12 @@ final class ContentType
                 $result[$prefix.$field->getCode()] = [
                     'is_multilingual' => $field->isMultilingual(),
                     'is_compilable' => $field->is('compilable'),
-                    'has_nonscalar_value' => $field->hasNonscalarValue(),
                 ];
 
                 if ($field->is('compilable')) {
                     $result[$prefix.$field->getCode().':compiled'] = [
                         'is_multilingual' => $field->isMultilingual(),
                         'is_compilable' => false,
-                        'has_nonscalar_value' => $field->hasNonscalarValue(),
                     ];
                 }
             }

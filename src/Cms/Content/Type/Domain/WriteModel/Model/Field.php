@@ -9,37 +9,19 @@ namespace Tulia\Cms\Content\Type\Domain\WriteModel\Model;
  */
 final class Field
 {
-    private string $code;
-    private string $type;
-    private string $name;
-    private array $flags;
-    private array $constraints;
-    private array $configuration;
-    private ?string $parent;
-    private int $position = 0;
-
     public function __construct(
-        string $code,
-        string $type,
-        string $name,
-        array $flags = [],
-        array $constraints = [],
-        array $configuration = [],
-        ?string $parent = null,
-        int $position = 0
+        private string $code,
+        private string $type,
+        private string $name,
+        private array $flags = [],
+        private array $constraints = [],
+        private array $configuration = [],
+        private ?string $parent = null,
+        private int $position = 0,
     ) {
-        $this->validateFlags($flags);
-        $this->validateConstraints($constraints);
-        $this->validateConfiguration($configuration);
-
-        $this->code = $code;
-        $this->type = $type;
-        $this->name = $name;
-        $this->flags = $flags;
-        $this->constraints = $constraints;
-        $this->configuration = $configuration;
-        $this->parent = $parent;
-        $this->position = $position;
+        $this->validateFlags($this->flags);
+        $this->validateConstraints($this->constraints);
+        $this->validateConfiguration($this->configuration);
     }
 
     public function toArray(): array

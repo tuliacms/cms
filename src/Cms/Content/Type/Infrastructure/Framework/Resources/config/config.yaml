@@ -62,10 +62,6 @@ cms:
                         type: boolean
                         required: false
                         default_value: false
-                    has_nonscalar_value:
-                        type: boolean
-                        required: false
-                        default_value: false
                     parent:
                         required: false
                     configuration:
@@ -87,9 +83,9 @@ cms:
                     classname: 'Symfony\Component\Form\Extension\Core\Type\TextareaType'
                     constraints: [required, pattern, length]
                 select:
-                    label: Select
+                    label: Select (single)
                     classname: 'Symfony\Component\Form\Extension\Core\Type\ChoiceType'
-                    builder: 'Tulia\Cms\Content\Type\UserInterface\Web\Shared\Form\FormType\ChoiceTypeBuilder'
+                    builder: 'Tulia\Cms\Content\Type\Infrastructure\Framework\Form\FormType\ChoiceTypeBuilder'
                     constraints: [required]
                     configuration:
                         choices:
@@ -100,10 +96,24 @@ cms:
                             placeholder: |
                                 value-1: Option label 1
                                 value-2: Option label 2
-                        multiple:
+                        placeholder:
+                            label: Placeholder text
+                            help_text: Shows when no value selected.
+                multiselect:
+                    label: Multiselect
+                    classname: 'Symfony\Component\Form\Extension\Core\Type\ChoiceType'
+                    builder: 'Tulia\Cms\Content\Type\Infrastructure\Framework\Form\FormType\MultipleChoiceTypeBuilder'
+                    is_multiple: true
+                    constraints: [required]
+                    configuration:
+                        choices:
                             required: true
-                            type: yes_no
-                            label: Allows select multiple values at once
+                            type: textarea
+                            label: Enter the available choices for this select
+                            help_text: "Every entry in new line. Format: \"value: Option label\""
+                            placeholder: |
+                                value-1: Option label 1
+                                value-2: Option label 2
                         placeholder:
                             label: Placeholder text
                             help_text: Shows when no value selected.

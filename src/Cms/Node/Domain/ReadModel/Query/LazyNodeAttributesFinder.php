@@ -12,9 +12,9 @@ use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\AttributesFinderInterf
 final class LazyNodeAttributesFinder
 {
     public function __construct(
-        private string $nodeId,
-        private string $locale,
-        private AttributesFinderInterface $attributesFinder
+        private readonly string $nodeId,
+        private readonly string $locale,
+        private readonly AttributesFinderInterface $attributesFinder,
     ) {
     }
 

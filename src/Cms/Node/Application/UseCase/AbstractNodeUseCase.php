@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Application\UseCase;
 
+use Tulia\Cms\Node\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Cms\Node\Domain\WriteModel\Rules\CanAddPurpose\CanImposePurposeInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodeRepositoryInterface;
@@ -54,6 +55,10 @@ abstract class AbstractNodeUseCase extends AbstractTransactionalUseCase
         $node->changeTitle($request->locale, $request->defaultLocale, $this->slugGeneratorStrategy, $details['title'], $details['slug']);
     }
 
+    /**
+     * @param Attribute[] $attributes
+     * @return Attribute[]
+     */
     private function processAttributes(array $attributes): array
     {
         foreach ($attributes as $key => $attribute) {
@@ -65,7 +70,7 @@ abstract class AbstractNodeUseCase extends AbstractTransactionalUseCase
                 continue;
             }
 
-            $attributes[$key] = $attribute->withCompiledValue($this->processor->process($attribute->getValue()));
+            $attributes[$key] = $attribute->withCompiledValue($this->processor->process((string) $attribute));
         }
 
         return $attributes;

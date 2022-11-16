@@ -20,8 +20,7 @@ class SeoDecorator implements ContentTypeDecoratorInterface
         $group->newField('seo_keywords', 'text', 'metaKeywords', ['mutlilingual' => true, 'translation_domain' => 'seo']);
         $group->newField('seo_og_image', 'filepicker', 'metaOgImage', ['translation_domain' => 'seo']);
         // todo Finish Robots metatag
-        /*$group->newField('seo_robots', 'select', 'metaRobots', [
-            'flags' => ['nonscalar_value' => true],
+        $group->newField('seo_robots', 'multiselect', 'metaRobots', [
             'configuration' => [
                 'multiple' => true,
                 'choices' => [
@@ -37,6 +36,6 @@ class SeoDecorator implements ContentTypeDecoratorInterface
                     'noimageindex' => 'noimageindex',
                 ]
             ]
-        ]);*/
+        ]);
     }
 }

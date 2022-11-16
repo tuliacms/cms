@@ -117,6 +117,7 @@ class Configuration implements ConfigurationInterface
                                             ->arrayNode('constraints')->scalarPrototype()->defaultValue([])->end()->end()
                                             ->arrayNode('exclude_for_types')->scalarPrototype()->defaultValue([])->end()->end()
                                             ->arrayNode('only_for_types')->scalarPrototype()->defaultValue([])->end()->end()
+                                            ->scalarNode('is_multiple')->defaultFalse()->end()
                                             ->arrayNode('configuration')
                                                 ->arrayPrototype()
                                                     ->addDefaultsIfNotSet()

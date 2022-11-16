@@ -10,3 +10,16 @@ cms:
                     uri: ~
                     value:
                         type: string
+doctrine:
+    orm:
+        mappings:
+            Tulia\Cms\Content\Attributes\Domain\WriteModel\Model:
+                type: xml
+                dir: '%cms.core_dir%/Cms/Content/Attributes/Infrastructure/Framework/Resources/config/orm/mapping'
+                is_bundle: false
+                prefix: Tulia\Cms\Content\Attributes\Domain\WriteModel\Model
+                alias: CmsContentAttribute
+    dbal:
+        types:
+            cms_content_attribute_value: Tulia\Cms\Content\Attributes\Infrastructure\Persistence\Doctrine\DBAL\Type\ContentAttributeValueType
+

@@ -59,7 +59,7 @@ trait LazyMagickAttributesTrait
         return method_exists($this, $name) || isset($this->attributes[$name]) || isset($this->attributes["$name:compiled"]);
     }
 
-    public function attribute(string $name, $default = null)
+    public function attribute(string $name, mixed $default = null): mixed
     {
         $this->loadAttributes();
 
@@ -96,21 +96,21 @@ trait LazyMagickAttributesTrait
         $this->attributes += $attributes;
     }
 
-    public function offsetExists($offset): bool
+    public function offsetExists(mixed $offset): bool
     {
         $this->loadAttributes();
 
         return array_key_exists($offset, $this->attributes) || array_key_exists("$offset:compiled", $this->attributes);
     }
 
-    public function offsetGet($offset): ?AttributeValue
+    public function offsetGet(mixed $offset): ?AttributeValue
     {
         $this->loadAttributes();
 
         return $this->attributes["$offset:compiled"] ?? $this->attributes[$offset] ?? null;
     }
 
-    public function offsetSet($offset, $value): void
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         $this->loadAttributes();
 
@@ -121,7 +121,7 @@ trait LazyMagickAttributesTrait
         }
     }
 
-    public function offsetUnset($offset): void
+    public function offsetUnset(mixed $offset): void
     {
         $this->loadAttributes();
 

@@ -141,9 +141,6 @@ class DbalContentTypeStorage
         foreach ($fields as $field) {
             $flags = [];
 
-            if ((bool) $field['has_nonscalar_value']) {
-                $flags[] = 'nonscalar_value';
-            }
             if ((bool) $field['is_multilingual']) {
                 $flags[] = 'multilingual';
             }

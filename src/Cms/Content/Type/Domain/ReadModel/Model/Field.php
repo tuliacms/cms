@@ -87,11 +87,6 @@ final class Field
         return $this->is('multilingual');
     }
 
-    public function hasNonscalarValue(): bool
-    {
-        return $this->is('nonscalar_value');
-    }
-
     public function getName(): ?string
     {
         return $this->options['name'];

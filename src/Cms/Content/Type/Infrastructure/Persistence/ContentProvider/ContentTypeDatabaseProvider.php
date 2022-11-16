@@ -22,9 +22,9 @@ class ContentTypeDatabaseProvider implements ContentTypeProviderInterface
     private array $fieldConstraintsModificators = [];
 
     public function __construct(
-        private Connection $connection,
-        private Configuration $config,
-        private FieldTypeMappingRegistry $fieldTypeMappingRegistry
+        private readonly Connection $connection,
+        private readonly Configuration $config,
+        private readonly FieldTypeMappingRegistry $fieldTypeMappingRegistry,
     ) {
     }
 
@@ -72,7 +72,7 @@ class ContentTypeDatabaseProvider implements ContentTypeProviderInterface
         return $groups;
     }
 
-    private function getFields(string $groupCode, string $contentType): array
+    private function getFields(string $groupCode, string $contentType, ?string $parent = null): array
     {
         if ($this->fields === []) {
             $this->fields = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type_field ORDER BY `position`');
@@ -81,14 +81,18 @@ class ContentTypeDatabaseProvider implements ContentTypeProviderInterface
         $fields = [];
 
         foreach ($this->fields as $field) {
-            if ($field['content_type_code'] === $contentType && $field['group_code'] === $groupCode) {
-                $fields[] = [
+            if (
+                $field['content_type_code'] === $contentType
+                && $field['group_code'] === $groupCode
+                && $field['parent'] === $parent
+            ) {
+                $fields[$field['code']] = [
                     'code' => $field['code'],
                     'type' => $field['type'],
                     'name' => $field['name'],
                     'is_multilingual' => $field['is_multilingual'],
-                    'has_nonscalar_value' => $field['has_nonscalar_value'],
                     'parent' => $field['parent'],
+                    'children' => $this->getFields($groupCode, $contentType, $field['code']),
                     'configuration' => $this->getConfiguration($field['id']),
                     'constraints' => $this->getConstraints($field['id']),
                     'flags' => $this->fieldTypeMappingRegistry->getTypeFlags($field['type']),

@@ -14,8 +14,8 @@ use Tulia\Cms\Content\Attributes\Domain\WriteModel\Service\UriToArrayTransformer
 abstract class AbstractAttributesFinder implements AttributesFinderInterface
 {
     public function __construct(
-        private UriToArrayTransformer $uriToArrayTransformer,
-        private AttributesValueRenderer $attributesValueRenderer,
+        private readonly UriToArrayTransformer $uriToArrayTransformer,
+        private readonly AttributesValueRenderer $attributesValueRenderer,
     ) {
     }
 

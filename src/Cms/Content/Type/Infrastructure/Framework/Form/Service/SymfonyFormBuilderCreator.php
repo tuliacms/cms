@@ -138,11 +138,15 @@ class SymfonyFormBuilderCreator
                 if ($typeBuilder) {
                     $result[$code] = $typeBuilder->buildValueFromAttribute($field, $attribute);
                 } else {
-                    $result[$code] = $attribute->getValue();
+                    $result[$code] = $attribute->getValue()->toRaw();
+
+                    if (\is_array($result[$code]) && !$this->mappingRegistry->get($field->getType())['is_multiple']) {
+                        $result[$code] = reset($result[$code]);
+                    }
                 }
             }
 
-            if (is_array($attribute)) {
+            if (\is_array($attribute)) {
                 foreach ($attribute as $sk => $sv) {
                     $result[$code][$sk] = $this->flattenAttributesValues($field->getChildren(), $sv);
                 }

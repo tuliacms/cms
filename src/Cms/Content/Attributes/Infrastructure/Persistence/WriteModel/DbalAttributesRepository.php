@@ -52,9 +52,6 @@ class DbalAttributesRepository implements AttributesRepositoryInterface
                 if ($info[$element['name']]['is_multilingual']) {
                     $flags[] = 'multilingual';
                 }
-                if ($info[$element['name']]['has_nonscalar_value']) {
-                    $flags[] = 'nonscalar_value';
-                }
 
                 $result[$ownerId][$key] = new Attribute(
                     $element['name'],
@@ -96,7 +93,6 @@ class DbalAttributesRepository implements AttributesRepositoryInterface
                 'type' => $type,
                 'is_multilingual' => $attribute->isMultilingual(),
                 'is_renderable' => $attribute->is('renderable'),
-                'has_nonscalar_value' => $attribute->isNonscalarValue(),
             ];
         }
 

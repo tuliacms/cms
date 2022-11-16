@@ -29,7 +29,7 @@ class ContentModel extends AbstractController
         private readonly ContentTypeRegistryInterface $contentTypeRegistry,
         private readonly Configuration $configuration,
         private readonly LayoutTypeBuilderRegistry $layoutTypeBuilderRegistry,
-        private readonly ManagerInterface $themeManager
+        private readonly ManagerInterface $themeManager,
     ) {
     }
 

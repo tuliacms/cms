@@ -15,13 +15,7 @@ interface FieldTypeBuilderInterface
 {
     public function buildOptions(Field $field, array $options, ContentType $contentType): array;
 
-    /**
-     * @return mixed
-     */
-    public function buildValueFromAttribute(Field $field, Attribute $attribute);
+    public function buildValueFromAttribute(Field $field, Attribute $attribute): mixed;
 
-    /**
-     * @param mixed $value
-     */
-    public function buildAttributeFromValue(Field $field, Attribute $attribute, $value): Attribute;
+    public function buildAttributeFromValue(Field $field, Attribute $attribute, mixed $value): Attribute;
 }

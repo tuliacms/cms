@@ -12,7 +12,7 @@
         <field name="locale" length="12" />
         <field name="code" />
         <field name="uri" />
-        <field name="value" nullable="true" type="text" />
+        <field name="value" nullable="true" type="array" />
         <field name="compiledValue" nullable="true" type="text" />
         <field name="payload" type="array" nullable="true" />
         <field name="flags" type="array" nullable="true" />

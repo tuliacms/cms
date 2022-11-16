@@ -7,29 +7,22 @@ namespace Tulia\Cms\Content\Attributes\Domain\WriteModel\Model;
 /**
  * @author Adam Banaszkiewicz
  */
-class Attribute implements \Stringable, \Traversable, \ArrayAccess, \IteratorAggregate
+class Attribute implements \Stringable
 {
-    protected string $code;
-    protected string $uri;
-    protected mixed $value;
-    protected mixed $compiledValue;
-    protected array $payload;
-    protected array $flags;
+    protected AttributeValue $value;
+    protected bool $isMultiple = false;
 
     public function __construct(
-        string $code,
-        string $uri,
+        protected string $code,
+        protected string $uri,
         mixed $value,
-        mixed $compiledValue,
-        array $payload,
-        array $flags
+        protected ?string $compiledValue,
+        protected array $payload,
+        protected array $flags,
+        bool $isMultiple = false
     ) {
-        $this->code = $code;
-        $this->uri = $uri;
-        $this->value = $value;
-        $this->compiledValue = $compiledValue;
-        $this->payload = $payload;
-        $this->flags = $flags;
+        $this->isMultiple = $isMultiple;
+        $this->value = new AttributeValue($this->processValue($value), $this->isMultiple);
     }
 
     public static function fromArray(array $data): self
@@ -40,19 +33,23 @@ class Attribute implements \Stringable, \Traversable, \ArrayAccess, \IteratorAgg
             $data['value'],
             $data['compiled_value'],
             $data['payload'],
-            $data['flags']
+            $data['flags'],
+            $data['is_multiple'],
         );
     }
 
     public function toArray(): array
     {
+        $value = $this->value->toRaw();
+
         return [
             'code' => $this->code,
-            'value' => $this->value,
+            'value' => $this->isMultiple ? $value : reset($value),
             'compiled_value' => $this->compiledValue,
             'payload' => $this->payload,
             'uri' => $this->uri,
             'flags' => $this->flags,
+            'is_multiple' => $this->isMultiple,
         ];
     }
 
@@ -64,7 +61,7 @@ class Attribute implements \Stringable, \Traversable, \ArrayAccess, \IteratorAgg
         return self::fromArray($data);
     }
 
-    public function withCompiledValue(mixed $compiledValue): self
+    public function withCompiledValue(?string $compiledValue): self
     {
         $data = $this->toArray();
         $data['compiled_value'] = $compiledValue;
@@ -89,7 +86,7 @@ class Attribute implements \Stringable, \Traversable, \ArrayAccess, \IteratorAgg
 
     public function __toString(): string
     {
-        return (string) $this->compiledValue;
+        return $this->compiledValue ?: $this->value->__toString();
     }
 
     public function getCode(): string
@@ -97,12 +94,12 @@ class Attribute implements \Stringable, \Traversable, \ArrayAccess, \IteratorAgg
         return $this->code;
     }
 
-    public function getValue(): mixed
+    public function getValue(): AttributeValue
     {
         return $this->value;
     }
 
-    public function getCompiledValue(): mixed
+    public function getCompiledValue(): ?string
     {
         return $this->compiledValue;
     }
@@ -140,42 +137,43 @@ class Attribute implements \Stringable, \Traversable, \ArrayAccess, \IteratorAgg
         return $this->is('multilingual');
     }
 
-    public function isNonscalarValue(): bool
-    {
-        return $this->is('nonscalar_value');
-    }
-
     public function isEmpty(): bool
     {
-        return empty($this->value) && empty($this->compiledValue) && empty($this->payload);
+        return $this->value->isEmpty() && empty($this->compiledValue) && empty($this->payload);
     }
 
-    public function getIterator(): \Iterator
+    public function isMultiple(): bool
     {
-        if ($this->isNonscalarValue()) {
-            return new \ArrayIterator($this->value);
+        return $this->isMultiple;
+    }
+
+    private function processValue(mixed $values): array
+    {
+        if ($values instanceof AttributeValue) {
+            $values = $values->toRaw();
+
+            if (!$this->isMultiple) {
+                $values = reset($values);
+            }
         }
 
-        return new \ArrayIterator([$this->value]);
-    }
+        if ($this->isMultiple) {
+            if (!$values) {
+                $values = [];
+            } elseif (!\is_array($values)) {
+                $values = [$values];
+            }
+        } else {
+            // Validate source value, but further we pass it as an array!
+            if (\is_array($values)) {
+                throw new \InvalidArgumentException(
+                    sprintf('Array is not allowed in non multiple attribute %s', $this->code)
+                );
+            }
 
-    public function offsetExists(mixed $offset): bool
-    {
-        return $this->isNonscalarValue() && isset($this->value[$offset]);
-    }
+            $values = [$values];
+        }
 
-    public function offsetGet(mixed $offset): mixed
-    {
-        return $this->isNonscalarValue() ? $this->value[$offset] : $this->value;
-    }
-
-    public function offsetSet(mixed $offset, mixed $value): void
-    {
-        throw new \LogicException('Cannot change value of Value Object.');
-    }
-
-    public function offsetUnset(mixed $offset): void
-    {
-        throw new \LogicException('Cannot change value of Value Object.');
+        return $values;
     }
 }
