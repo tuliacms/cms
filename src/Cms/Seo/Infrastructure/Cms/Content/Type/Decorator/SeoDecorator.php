@@ -26,13 +26,14 @@ class SeoDecorator implements ContentTypeDecoratorInterface
 
     private function decorateDefinition(ContentTypeDefinition $definition): void
     {
-        $group = $definition->fieldsGroup('seo', 'main', 'SEO');
+        $group = $definition->fieldsGroup('seo', 'SEO', 'main');
         $group->field('seo_title', 'text', 'title', ['mutlilingual' => true, 'configuration' => ['help' => 'Fill to overwrite default title'], 'translation_domain' => 'seo']);
         $group->field('seo_description', 'text', 'metaDescription', ['mutlilingual' => true, 'translation_domain' => 'seo']);
         $group->field('seo_keywords', 'text', 'metaKeywords', ['mutlilingual' => true, 'translation_domain' => 'seo']);
         $group->field('seo_og_image', 'filepicker', 'metaOgImage', ['translation_domain' => 'seo']);
 
         $group->field('seo_robots', 'multiselect', 'metaRobots', [
+            'translation_domain' => 'seo',
             'configuration' => [
                 'multiple' => true,
                 'choices' => [

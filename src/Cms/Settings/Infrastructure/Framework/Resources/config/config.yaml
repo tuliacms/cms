@@ -46,3 +46,9 @@ cms:
             mail.sendmailpath:
             url_suffix:
                 autoload: true
+    search_anything:
+        indexes:
+            settings:
+                localization_strategy: user
+                multisite_strategy: website
+                collector: Tulia\Cms\Settings\Infrastructure\Cms\SearchAnything\SettingsDocumentCollector

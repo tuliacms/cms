@@ -33,6 +33,7 @@ class Configuration implements ConfigurationInterface
         $this->registerTemplatingConfiguration($root);
         $this->registerThemeConfiguration($root);
         $this->registerHooksConfiguration($root);
+        $this->registerSearchAnythingConfiguration($root);
 
         return $treeBuilder;
     }
@@ -656,6 +657,28 @@ class Configuration implements ConfigurationInterface
                                             ->scalarNode('service')->defaultNull()->end()
                                         ->end()
                                     ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
+    }
+
+    private function registerSearchAnythingConfiguration(ArrayNodeDefinition $root): void
+    {
+        $root
+            ->children()
+                ->arrayNode('search_anything')
+                    ->children()
+                        ->arrayNode('indexes')
+                            ->useAttributeAsKey('name')
+                            ->arrayPrototype()
+                                ->children()
+                                    ->enumNode('localization_strategy')->values(['content', 'user', 'unilingual'])->isRequired()->end()
+                                    ->enumNode('multisite_strategy')->values(['website', 'global'])->isRequired()->end()
+                                    ->scalarNode('collector')->isRequired()->end()
                                 ->end()
                             ->end()
                         ->end()

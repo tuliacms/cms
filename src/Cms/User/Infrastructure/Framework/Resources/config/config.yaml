@@ -64,3 +64,9 @@ cms:
                 is_hierarchical: false
                 routing_strategy: null
                 layout: ~
+    search_anything:
+        indexes:
+            user:
+                localization_strategy: unilingual
+                multisite_strategy: global
+                collector: Tulia\Cms\User\Infrastructure\Cms\SearchAnything\UsersDocumentCollector

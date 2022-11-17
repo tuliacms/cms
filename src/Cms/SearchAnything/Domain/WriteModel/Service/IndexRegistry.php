@@ -12,29 +12,12 @@ use Tulia\Cms\SearchAnything\Domain\WriteModel\Enum\MultisiteStrategyEnum;
  */
 class IndexRegistry
 {
-    private array $indexes = [
-        'node' => [
-            'localization_strategy' => 'content',
-            'multisite_strategy' => 'website',
-            'collector' => 'Tulia\Cms\Node\Infrastructure\SearchAnything\NodeDocumentCollector',
-        ],
-        'tools' => [
-            'localization_strategy' => 'user',
-            'multisite_strategy' => 'website',
-            'collector' => 'Tulia\Cms\Homepage\Infrastructure\Cms\SearchAnything\SystemToolsDocumentCollector',
-        ],
-        'user' => [
-            'localization_strategy' => 'unilingual',
-            'multisite_strategy' => 'global',
-            'collector' => 'Tulia\Cms\User\Infrastructure\Cms\SearchAnything\UsersDocumentCollector',
-        ],
-    ];
-
     /** @var IndexInterface[] */
     private array $cache = [];
 
     public function __construct(
         private readonly IndexFactoryInterface $indexFactory,
+        private readonly array $indexes,
     ) {
     }
 

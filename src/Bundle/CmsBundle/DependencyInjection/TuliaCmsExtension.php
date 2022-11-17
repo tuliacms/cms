@@ -46,6 +46,7 @@ class TuliaCmsExtension extends Extension
         $container->setParameter('cms.templating.paths', $this->prepareTemplatingPaths($config['templating']['paths'] ?? []));
         $container->setParameter('cms.themes.configuration', $config['theme']['configuration'] ?? []);
         $container->setParameter('cms.hooks.actions', $config['hooks']['actions'] ?? []);
+        $container->setParameter('cms.search_anything.indexes', $config['search_anything']['indexes'] ?? []);
 
         // Finders
         $container->registerForAutoconfiguration(\Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\AbstractFinder::class)

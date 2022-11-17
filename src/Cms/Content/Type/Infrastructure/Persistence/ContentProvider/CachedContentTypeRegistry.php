@@ -25,7 +25,6 @@ class CachedContentTypeRegistry extends ContentTypeRegistry
 
     protected function fetch(): array
     {
-        return parent::fetch();
         return $this->contentTypes = $this->contentBuilderCache->get('tulia.content_builder.content_types', function (ItemInterface $item) {
             return parent::fetch();
         });

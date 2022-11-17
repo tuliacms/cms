@@ -237,6 +237,12 @@ cms:
                     label: Locale selector
                     classname: 'Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\LocaleType'
                     constraints: [required]
+    search_anything:
+        indexes:
+            tools:
+                localization_strategy: user
+                multisite_strategy: website
+                collector: Tulia\Cms\Homepage\Infrastructure\Cms\SearchAnything\SystemToolsDocumentCollector
 when@prod:
     cms:
         assetter:

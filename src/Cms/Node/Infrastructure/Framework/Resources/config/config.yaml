@@ -59,3 +59,9 @@ cms:
                     classname: 'Tulia\Cms\Node\UserInterface\Web\Shared\Form\FormType\NodeTypeaheadType'
                     builder: 'Tulia\Cms\Node\UserInterface\Web\Shared\Form\FormType\NodeTypeaheadTypeBuilder'
                     constraints: [required]
+    search_anything:
+        indexes:
+            node:
+                localization_strategy: content
+                multisite_strategy: website
+                collector: Tulia\Cms\Node\Infrastructure\SearchAnything\NodeDocumentCollector

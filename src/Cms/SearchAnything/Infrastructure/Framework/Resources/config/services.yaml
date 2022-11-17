@@ -2,6 +2,8 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+        bind:
+            $indexes: '%cms.search_anything.indexes%'
 
     Tulia\Cms\SearchAnything\:
         resource: '../../../../**'
