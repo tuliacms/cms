@@ -708,7 +708,7 @@ Tulia.SearchAnything = function (selector, options) {
     this.render = function (results) {
         let html = '<div class="search-result-group">' +
             '<i class="section-icon fas fa-search"></i>' +
-            '   <div class="section-hl">Search results</div>' +
+            '   <div class="section-hl">' + Tulia.trans('searchResults', 'search_anything') + '</div>' +
             '   <div class="result-links">';
 
         for (let i in results) {

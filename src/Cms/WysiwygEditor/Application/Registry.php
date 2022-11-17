@@ -9,25 +9,31 @@ namespace Tulia\Cms\WysiwygEditor\Application;
  */
 class Registry implements RegistryInterface
 {
-    protected iterable $editors = [];
-
-    protected ?string $active = null;
-
-    public function __construct(iterable $editors, ?string $active = null)
-    {
-        $this->editors = $editors;
-        $this->active  = $active;
+    public function __construct(
+        private readonly iterable $editors,
+    ) {
     }
 
-    public function getActiveEditor(): WysiwygEditorInterface
+    public function has(string $id): bool
     {
         foreach ($this->editors as $editor) {
-            if ($editor->getId() === $this->active) {
+            if ($editor->getId() === $id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function get(string $id): WysiwygEditorInterface
+    {
+        foreach ($this->editors as $editor) {
+            if ($editor->getId() === $id) {
                 return $editor;
             }
         }
 
-        return new DefaultEditor();
+        throw new \OutOfBoundsException(sprintf('Editor %s does not exists.', $id));
     }
 
     public function getEditors(): iterable

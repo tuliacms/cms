@@ -26,9 +26,9 @@ use Tulia\Component\Templating\ViewInterface;
 class MyAccount extends AbstractController
 {
     public function __construct(
-        private AuthenticatedUserProviderInterface $authenticatedUserProvider,
-        private UserRepositoryInterface $userRepository,
-        private ContentFormService $contentFormService,
+        private readonly AuthenticatedUserProviderInterface $authenticatedUserProvider,
+        private readonly UserRepositoryInterface $userRepository,
+        private readonly ContentFormService $contentFormService,
     ) {
     }
 

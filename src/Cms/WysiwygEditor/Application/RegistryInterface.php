@@ -9,7 +9,9 @@ namespace Tulia\Cms\WysiwygEditor\Application;
  */
 interface RegistryInterface
 {
-    public function getActiveEditor(): WysiwygEditorInterface;
-
     public function getEditors(): iterable;
+
+    public function has(string $id): bool;
+
+    public function get(string $id): WysiwygEditorInterface;
 }

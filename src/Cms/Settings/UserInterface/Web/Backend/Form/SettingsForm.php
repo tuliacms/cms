@@ -26,9 +26,6 @@ class SettingsForm extends AbstractType
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $dateFormats = [

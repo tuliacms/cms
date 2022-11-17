@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\WysiwygEditor\Infrastructure\Framework\Twig\Extension;
 
-use Tulia\Cms\WysiwygEditor\Application\RegistryInterface;
+use Tulia\Cms\WysiwygEditor\Application\ActiveEditorProviderInterface;
 use Twig\Extension\RuntimeExtensionInterface;
 
 /**
@@ -12,15 +12,13 @@ use Twig\Extension\RuntimeExtensionInterface;
  */
 class WysiwygEditorRuntime implements RuntimeExtensionInterface
 {
-    protected RegistryInterface $registry;
-
-    public function __construct(RegistryInterface $registry)
-    {
-        $this->registry = $registry;
+    public function __construct(
+        private readonly ActiveEditorProviderInterface $provider,
+    ) {
     }
 
     public function wysiwygEditor(string $name, ?string $content, array $params = []): string
     {
-         return $this->registry->getActiveEditor()->render($name, $content, $params);
+         return $this->provider->get()->render($name, $content, $params);
     }
 }

@@ -9,7 +9,6 @@ services:
 
     Tulia\Cms\WysiwygEditor\Application\RegistryInterface:
         class: Tulia\Cms\WysiwygEditor\Application\Registry
-        factory: Tulia\Cms\WysiwygEditor\Application\RegistryFactory::create
         bind:
             $editors: !tagged_iterator wysiwyg_editor
 

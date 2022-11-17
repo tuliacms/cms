@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace Tulia\Cms\Settings\Infrastructure\Cms\SearchAnything;
 
 use Symfony\Component\Form\FormFactoryInterface;
-use Tulia\Cms\Options\Domain\WriteModel\OptionsRepositoryInterface;
-use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteRegistryInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\SearchAnything\Domain\WriteModel\Service\AbstractDocumentCollector;
 use Tulia\Cms\SearchAnything\Domain\WriteModel\Service\IndexInterface;
 use Tulia\Cms\Settings\Domain\Group\SettingsGroupRegistryInterface;
-use Tulia\Cms\Website\Domain\WriteModel\WebsiteRepositoryInterface;
+use Tulia\Cms\Settings\Domain\Group\SettingsStorage;
 
 /**
  * @author Adam Banaszkiewicz
@@ -20,35 +19,40 @@ use Tulia\Cms\Website\Domain\WriteModel\WebsiteRepositoryInterface;
 class SettingsDocumentCollector extends AbstractDocumentCollector
 {
     public function __construct(
-        /*private readonly SettingsGroupRegistryInterface $settings,
-        private readonly OptionsRepositoryInterface $optionsRepository,
+        private readonly SettingsGroupRegistryInterface $settings,
         private readonly FormFactoryInterface $formFactory,
-        private readonly WebsiteRegistryInterface $websiteRegistry,*/
+        private readonly TranslatorInterface $translator,
     ) {
     }
 
     public function collect(IndexInterface $index, ?string $websiteId, ?string $locale, int $offset, int $limit): void
     {
-        /*foreach ($this->settings->all() as $group) {
+        // No pagination in this collector. Next pages should be empty.
+        if ($offset !== 0) {
+            return;
+        }
+
+        foreach ($this->settings->all() as $group) {
             $group->setFormFactory($this->formFactory);
-            $group->setOptionsRepository($this->optionsRepository);
-            $group->setWebsite($this->websiteRegistry->get($websiteId));
-            $form = $group->buildForm();
+            $form = $group->buildForm(new SettingsStorage([]));
 
-            dump($form);
-        }*/
-        /*foreach ($this->collector->collectDocumentsOfLocale($websiteId, $locale, $offset, $limit) as $node) {
-            $document = $index->document($node['id'], $websiteId, $locale);
-            $document->setLink('backend.node.edit', ['id' => $node['id'], 'node_type' => $node['type']]);
-            $document->setTitle($node['title']);
+            /** @var \Symfony\Component\Form\Form $field */
+            foreach ($form as $field) {
+                $options = $field->getConfig()->getOptions();
 
-            $index->save($document);
-        }*/
+                $document = $index->document(sprintf('%s.%s', $group->getId(), $field->getName()), $websiteId, $locale);
+                $document->setLink('backend.settings', ['group' => $group->getId()]);
+                $document->setTitle($this->translator->trans($options['label'], [], $options['translation_domain']));
+
+                $index->save($document);
+            }
+        }
     }
 
     public function countDocuments(string $websiteId, string $locale): int
     {
-        /*dump($this->settings->all());exit;*/
-        /*return $this->collector->countDocumentsOfLocale($websiteId, $locale);*/
+        // Return hardcoded, because this method is used in langauges managing.
+        // In this case, settings from forms are not performance-weak.
+        return 1;
     }
 }

@@ -14,7 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 class UserAvatarType extends AbstractType
 {
     public function __construct(
-        private Packages $packages
+        private readonly Packages $packages,
     ) {
     }
 

@@ -19,6 +19,10 @@ final class UserAvatarModelTransformer implements DataTransformerInterface
 
     public function transform(mixed $value): mixed
     {
+        if (!$value) {
+            return null;
+        }
+
         $filepath = $this->uploader->getFilepath($value);
 
         return is_file($filepath)
