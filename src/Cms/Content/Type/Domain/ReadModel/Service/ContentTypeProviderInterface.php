@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Content\Type\Domain\ReadModel\Service;
 
-use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
+use Tulia\Cms\Content\Type\Domain\ReadModel\ContentTypeBuilder\ContentTypeCollector;
 
 /**
  * @author Adam Banaszkiewicz
  */
 interface ContentTypeProviderInterface
 {
-    /**
-     * @return ContentType[]
-     */
-    public function provide(): array;
+    public function provide(ContentTypeCollector $collector): void;
 }

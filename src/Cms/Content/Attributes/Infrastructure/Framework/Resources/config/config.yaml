@@ -19,7 +19,3 @@ doctrine:
                 is_bundle: false
                 prefix: Tulia\Cms\Content\Attributes\Domain\WriteModel\Model
                 alias: CmsContentAttribute
-    dbal:
-        types:
-            cms_content_attribute_value: Tulia\Cms\Content\Attributes\Infrastructure\Persistence\Doctrine\DBAL\Type\ContentAttributeValueType
-

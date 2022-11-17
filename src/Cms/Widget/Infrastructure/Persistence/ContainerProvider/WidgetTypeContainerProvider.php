@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Widget\Infrastructure\Persistence\ContainerProvider;
 
-use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
+use Tulia\Cms\Content\Type\Domain\ReadModel\ContentTypeBuilder\ContentTypeCollector;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeProviderInterface;
 use Tulia\Cms\Content\Type\Infrastructure\Persistence\ContentProvider\SymfonyContainerStandarizableTrait;
 
@@ -16,27 +16,30 @@ class WidgetTypeContainerProvider implements ContentTypeProviderInterface
     use SymfonyContainerStandarizableTrait;
 
     public function __construct(
-        private array $widgets,
-        private array $configuration
+        private readonly array $widgets,
+        private readonly array $configuration,
     ) {
-        $this->widgets = $widgets;
-        $this->configuration = $configuration;
     }
 
-    public function provide(): array
+    public function provide(ContentTypeCollector $collector): void
     {
-        $result = [];
-
         foreach ($this->widgets as $code => $widget) {
             $type = $this->configuration['widget'];
             $type['layout']['sections']['main']['groups']['widget_options']['fields'] = $widget['fields'];
             $type['code'] = 'widget_' . str_replace('.', '_', $code);
-            $type['internal'] = true;
             $type = $this->standarizeArray($type);
 
-            $result[] = ContentType::fromArray($type);
-        }
+            $typeDef = $collector->newOne($type['type'], $type['code'], $type['name']);
+            $typeDef->icon = $type['icon'];
+            $typeDef->isInternal = true;
 
-        return $result;
+            foreach ($type['fields_groups'] as $group) {
+                $groupDef = $typeDef->fieldsGroup($group['code'], $group['name'], $group['section']);
+
+                foreach ($group['fields'] as $fieldCode => $fieldArray) {
+                    $groupDef->fieldFromArray($fieldCode, $fieldArray);
+                }
+            }
+        }
     }
 }

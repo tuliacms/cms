@@ -21,11 +21,10 @@ class Attribute extends BaseAttribute
         $self = new self(
             $attribute->code,
             $attribute->uri,
-            $attribute->value,
+            $attribute->value->toRaw(),
             $attribute->compiledValue,
             $attribute->payload,
             $attribute->flags,
-            $attribute->isMultiple,
         );
         $self->nodeTranslation = $nodeTranslation;
         $self->locale = $locale;

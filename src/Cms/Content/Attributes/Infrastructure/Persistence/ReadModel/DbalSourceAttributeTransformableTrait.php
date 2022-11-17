@@ -14,12 +14,8 @@ trait DbalSourceAttributeTransformableTrait
         $result = [];
 
         foreach ($source as $row) {
-            if ($row['value_has_multiple_values']) {
-                $row['value_values'] = json_decode((string) $row['value_values'], true, 2, JSON_THROW_ON_ERROR);
-            }
-
             $result[$row['uri']] = [
-                'value' => $row['value_values'],
+                'value' => json_decode((string) $row['value_values'], true, 2, JSON_THROW_ON_ERROR),
                 'compiled_value' => $row['compiled_value'],
                 'payload' => $row['payload'] ? unserialize($row['payload'], ['allowed_classess' => []]) : [],
                 'flags' => $row['flags'] ? unserialize($row['flags'], ['allowed_classess' => []]) : [],

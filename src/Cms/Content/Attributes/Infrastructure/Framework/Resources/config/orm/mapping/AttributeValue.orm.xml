@@ -4,7 +4,6 @@
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
     <embeddable name="Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\AttributeValue">
-        <field name="hasMultipleValues" type="boolean" />
-        <field name="values" type="cms_content_attribute_value" nullable="true" length="" />
+        <field name="values" type="json" nullable="true" length="" />
     </embeddable>
 </doctrine-mapping>

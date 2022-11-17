@@ -12,10 +12,8 @@ class AttributeValue implements \Stringable, \Traversable, \ArrayAccess, \Iterat
 {
     private readonly array $values;
 
-    public function __construct(
-        array $values,
-        private readonly bool $hasMultipleValues,
-    ) {
+    public function __construct(array $values)
+    {
         // Remove empty values
         $values = array_filter($values);
         $this->values = $values;

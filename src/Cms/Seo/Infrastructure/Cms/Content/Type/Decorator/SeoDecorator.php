@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Seo\Infrastructure\Cms\Content\Type\Decorator;
 
-use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
+use Tulia\Cms\Content\Type\Domain\ReadModel\ContentTypeBuilder\ContentTypeCollector;
+use Tulia\Cms\Content\Type\Domain\ReadModel\ContentTypeBuilder\Definition\ContentTypeDefinition;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeDecoratorInterface;
 
 /**
@@ -12,15 +13,26 @@ use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeDecoratorInterfac
  */
 class SeoDecorator implements ContentTypeDecoratorInterface
 {
-    public function decorate(ContentType $contentType): void
+    public function decorate(ContentTypeCollector $collector): void
     {
-        $group = $contentType->newFieldsGroup('seo', 'main', 'SEO');
-        $group->newField('seo_title', 'text', 'title', ['mutlilingual' => true, 'configuration' => ['help' => 'Fill to overwrite default title'], 'translation_domain' => 'seo']);
-        $group->newField('seo_description', 'text', 'metaDescription', ['mutlilingual' => true, 'translation_domain' => 'seo']);
-        $group->newField('seo_keywords', 'text', 'metaKeywords', ['mutlilingual' => true, 'translation_domain' => 'seo']);
-        $group->newField('seo_og_image', 'filepicker', 'metaOgImage', ['translation_domain' => 'seo']);
-        // todo Finish Robots metatag
-        $group->newField('seo_robots', 'multiselect', 'metaRobots', [
+        foreach ($collector->all() as $type) {
+            if ($type->isRoutable === false) {
+                continue;
+            }
+
+            $this->decorateDefinition($type);
+        }
+    }
+
+    private function decorateDefinition(ContentTypeDefinition $definition): void
+    {
+        $group = $definition->fieldsGroup('seo', 'main', 'SEO');
+        $group->field('seo_title', 'text', 'title', ['mutlilingual' => true, 'configuration' => ['help' => 'Fill to overwrite default title'], 'translation_domain' => 'seo']);
+        $group->field('seo_description', 'text', 'metaDescription', ['mutlilingual' => true, 'translation_domain' => 'seo']);
+        $group->field('seo_keywords', 'text', 'metaKeywords', ['mutlilingual' => true, 'translation_domain' => 'seo']);
+        $group->field('seo_og_image', 'filepicker', 'metaOgImage', ['translation_domain' => 'seo']);
+
+        $group->field('seo_robots', 'multiselect', 'metaRobots', [
             'configuration' => [
                 'multiple' => true,
                 'choices' => [

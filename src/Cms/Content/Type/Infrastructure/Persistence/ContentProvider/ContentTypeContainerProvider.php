@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Content\Type\Infrastructure\Persistence\ContentProvider;
 
-use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
+use Tulia\Cms\Content\Type\Domain\ReadModel\ContentTypeBuilder\ContentTypeCollector;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeProviderInterface;
 
 /**
@@ -19,18 +19,28 @@ class ContentTypeContainerProvider implements ContentTypeProviderInterface
     ) {
     }
 
-    public function provide(): array
+    public function provide(ContentTypeCollector $collector): void
     {
-        $result = [];
-
         foreach ($this->configuration as $code => $type) {
             $type['code'] = $code;
             $type['internal'] = true;
             $type = $this->standarizeArray($type);
 
-            $result[] = ContentType::fromArray($type);
-        }
+            $typeDef = $collector->newOne($type['type'], $code, $type['name']);
+            $typeDef->icon = $type['icon'];
+            $typeDef->isRoutable = (bool) $type['is_routable'];
+            $typeDef->isHierarchical = (bool) $type['is_hierarchical'];
+            $typeDef->routingStrategy = $type['routing_strategy'];
+            $typeDef->controller = $type['controller'];
+            $typeDef->isInternal = $type['is_internal'] ?? false;
 
-        return $result;
+            foreach ($type['fields_groups'] as $group) {
+                $groupDef = $typeDef->fieldsGroup($group['code'], $group['name'], $group['section']);
+
+                foreach ($group['fields'] as $fieldCode => $fieldArray) {
+                    $groupDef->fieldFromArray($fieldCode, $fieldArray);
+                }
+            }
+        }
     }
 }

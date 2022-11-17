@@ -161,11 +161,10 @@ class ContentTypeFormDescriptor
                 $result[$uri] = new Attribute(
                     $prefix . $field->getCode(),
                     $uri,
-                    null,
+                    [],
                     null,
                     [],
                     $flags,
-                    $this->fieldTypeMappingRegistry->get($field->getType())['is_multiple'],
                 );
 
                 $builder = $this->fieldTypeMappingRegistry->getTypeBuilder($field->getType());

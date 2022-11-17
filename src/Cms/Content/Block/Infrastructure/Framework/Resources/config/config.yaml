@@ -39,11 +39,11 @@ cms:
                             required: false
                             label: Define icon of this block
 
-                ___content_block_icon:
-                    label: Content Block::Icon
-                    classname: 'Symfony\Component\Form\Extension\Core\Type\HiddenType'
-                    only_for_types: [ content_block ]
-                    configuration:
-                        icon:
-                            required: false
-                            label: Define icon of this block
+                #___content_block_icon:
+                #    label: Content Block::Icon
+                #    classname: 'Symfony\Component\Form\Extension\Core\Type\HiddenType'
+                #    only_for_types: [ content_block ]
+                #    configuration:
+                #        icon:
+                #            required: false
+                #            label: Define icon of this block

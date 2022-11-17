@@ -20,6 +20,7 @@ final class Field
         'constraints' => [],
         'children' => [],
         'position' => 0,
+        'is_multiple' => false,
     ];
 
     public function __construct(array $options) {
@@ -38,6 +39,7 @@ final class Field
         \assert(\is_array($this->options['constraints']), 'The "constraints" option must be an array.');
         \assert(\is_array($this->options['children']), 'The "children" option must be an array.');
         \assert(\is_int($this->options['position']), 'The "position" option must be an integer.');
+        \assert(\is_bool($this->options['is_multiple']), 'The "is_multiple" option must be a boolean.');
 
         foreach ($this->options['children'] as $code => $child) {
             \assert(\is_string($code), 'The children array must be associative. Please use field code as key.');
@@ -85,6 +87,11 @@ final class Field
     public function isMultilingual(): bool
     {
         return $this->is('multilingual');
+    }
+
+    public function isMultiple(): bool
+    {
+        return $this->options['is_multiple'];
     }
 
     public function getName(): ?string

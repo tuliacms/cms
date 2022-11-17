@@ -6,6 +6,7 @@ namespace Tulia\Cms\Content\Type\Infrastructure\Persistence\ContentProvider;
 
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
+use Tulia\Cms\Content\Type\Domain\ReadModel\ContentTypeBuilder\ContentTypeBuilder;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeDecorator;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistry;
 
@@ -16,9 +17,10 @@ class CachedContentTypeRegistry extends ContentTypeRegistry
 {
     public function __construct(
         ContentTypeDecorator $decorator,
+        ContentTypeBuilder $builder,
         private readonly CacheInterface $contentBuilderCache,
     ) {
-        parent::__construct($decorator);
+        parent::__construct($decorator, $builder);
     }
 
     protected function fetch(): array

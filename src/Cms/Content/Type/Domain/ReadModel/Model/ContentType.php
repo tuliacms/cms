@@ -35,7 +35,7 @@ final class ContentType
         $fieldGroups = [];
 
         foreach ($data['fields_groups'] as $group) {
-            $fieldGroups[] = FieldsGroup::fromArray($group);
+            $fieldGroups[$group['code']] = FieldsGroup::fromArray($group);
         }
 
         $self = new self($data['type'], $data['code'], $data['name']);
@@ -63,11 +63,6 @@ final class ContentType
     {
         return $this->icon;
     }
-
-    /*public function addField(Field $field): void
-    {
-        //throw new \Exception('Please implements this method.');
-    }*/
 
     public function getField(string $code): Field
     {

@@ -101,6 +101,9 @@ class FieldTypeMappingRegistry
             : null;
     }
 
+    /**
+     * @return array{ is_multiple: bool }
+     */
     public function get(string $type): array
     {
         $this->resolveMapping();

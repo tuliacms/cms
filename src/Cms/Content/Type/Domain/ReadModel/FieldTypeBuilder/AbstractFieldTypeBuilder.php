@@ -20,9 +20,9 @@ abstract class AbstractFieldTypeBuilder implements FieldTypeBuilderInterface
 
     public function buildValueFromAttribute(Field $field, Attribute $attribute): mixed
     {
-        $value = $attribute->getValue();
+        $value = $attribute->getValue()->toRaw();
 
-        if ($attribute->isMultiple()) {
+        if ($field->isMultiple()) {
             return $value;
         }
 

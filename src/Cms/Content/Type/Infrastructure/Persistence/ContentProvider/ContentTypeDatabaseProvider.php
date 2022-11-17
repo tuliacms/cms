@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Content\Type\Infrastructure\Persistence\ContentProvider;
 
 use Doctrine\DBAL\Connection;
-use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
+use Tulia\Cms\Content\Type\Domain\ReadModel\ContentTypeBuilder\ContentTypeCollector;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeProviderInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\FieldTypeMappingRegistry;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Service\Configuration;
@@ -28,12 +28,25 @@ class ContentTypeDatabaseProvider implements ContentTypeProviderInterface
     ) {
     }
 
-    public function provide(): array
+    public function provide(ContentTypeCollector $collector): void
     {
-        return array_map(
-            fn (array $type) => ContentType::fromArray($type),
-            $this->getTypes()
-        );
+        foreach ($this->getTypes() as $type) {
+            $typeDef = $collector->newOne($type['type'], $type['code'], $type['name']);
+            $typeDef->icon = $type['icon'];
+            $typeDef->isRoutable = (bool) $type['is_routable'];
+            $typeDef->isHierarchical = (bool) $type['is_hierarchical'];
+            $typeDef->routingStrategy = $type['routing_strategy'];
+            $typeDef->controller = $type['controller'];
+            $typeDef->isInternal = $type['is_internal'] ?? false;
+
+            foreach ($type['fields_groups'] as $group) {
+                $groupDef = $typeDef->fieldsGroup($group['code'], $group['name'], $group['section']);
+
+                foreach ($group['fields'] as $fieldCode => $fieldArray) {
+                    $groupDef->fieldFromArray($fieldCode, $fieldArray);
+                }
+            }
+        }
     }
 
     private function getTypes(): array
@@ -72,7 +85,7 @@ class ContentTypeDatabaseProvider implements ContentTypeProviderInterface
         return $groups;
     }
 
-    private function getFields(string $groupCode, string $contentType, ?string $parent = null): array
+    private function getFields(string $groupCode, string $contentType): array
     {
         if ($this->fields === []) {
             $this->fields = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type_field ORDER BY `position`');
@@ -84,7 +97,6 @@ class ContentTypeDatabaseProvider implements ContentTypeProviderInterface
             if (
                 $field['content_type_code'] === $contentType
                 && $field['group_code'] === $groupCode
-                && $field['parent'] === $parent
             ) {
                 $fields[$field['code']] = [
                     'code' => $field['code'],
@@ -92,7 +104,6 @@ class ContentTypeDatabaseProvider implements ContentTypeProviderInterface
                     'name' => $field['name'],
                     'is_multilingual' => $field['is_multilingual'],
                     'parent' => $field['parent'],
-                    'children' => $this->getFields($groupCode, $contentType, $field['code']),
                     'configuration' => $this->getConfiguration($field['id']),
                     'constraints' => $this->getConstraints($field['id']),
                     'flags' => $this->fieldTypeMappingRegistry->getTypeFlags($field['type']),

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Content\Type\Domain\ReadModel\Service;
 
+use Tulia\Cms\Content\Type\Domain\ReadModel\ContentTypeBuilder\ContentTypeBuilder;
+use Tulia\Cms\Content\Type\Domain\ReadModel\ContentTypeBuilder\ContentTypeCollector;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Exception\ContentTypeNotExistsException;
 
@@ -15,17 +17,17 @@ class ContentTypeRegistry implements ContentTypeRegistryInterface
     /** @var ContentType[] */
     protected array $contentTypes = [];
     /** @var ContentTypeProviderInterface[] */
-    private array $nodeTypeProviders = [];
-    private ContentTypeDecorator $decorator;
+    private array $contentTypeProviders = [];
 
-    public function __construct(ContentTypeDecorator $decorator)
-    {
-        $this->decorator = $decorator;
+    public function __construct(
+        private readonly ContentTypeDecorator $decorator,
+        private readonly ContentTypeBuilder $builder,
+    ) {
     }
 
-    public function addProvider(ContentTypeProviderInterface $nodeTypeProvider): void
+    public function addProvider(ContentTypeProviderInterface $contentTypeProvider): void
     {
-        $this->nodeTypeProviders[] = $nodeTypeProvider;
+        $this->contentTypeProviders[] = $contentTypeProvider;
     }
 
     /**
@@ -91,19 +93,16 @@ class ContentTypeRegistry implements ContentTypeRegistryInterface
             return [];
         }
 
-        $types = [];
+        $collector = new ContentTypeCollector();
 
-        foreach ($this->nodeTypeProviders as $provider) {
-            $types[] = $provider->provide();
+        foreach ($this->contentTypeProviders as $provider) {
+            $provider->provide($collector);
         }
 
-        $this->contentTypes = [];
+        $this->decorator->decorate($collector);
 
-        /** @var ContentType $type */
-        foreach (array_merge(...$types) as $type) {
-            $this->decorator->decorate($type);
-
-            $this->contentTypes[$type->getCode()] = $type;
+        foreach ($collector->all() as $definition) {
+            $this->contentTypes[$definition->code] = $this->builder->build($definition);
         }
 
         return $this->contentTypes;

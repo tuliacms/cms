@@ -10,19 +10,16 @@ namespace Tulia\Cms\Content\Attributes\Domain\WriteModel\Model;
 class Attribute implements \Stringable
 {
     protected AttributeValue $value;
-    protected bool $isMultiple = false;
 
     public function __construct(
         protected string $code,
         protected string $uri,
-        mixed $value,
+        array $value,
         protected ?string $compiledValue,
         protected array $payload,
         protected array $flags,
-        bool $isMultiple = false
     ) {
-        $this->isMultiple = $isMultiple;
-        $this->value = new AttributeValue($this->processValue($value), $this->isMultiple);
+        $this->value = new AttributeValue($this->processValue($value));
     }
 
     public static function fromArray(array $data): self
@@ -34,29 +31,25 @@ class Attribute implements \Stringable
             $data['compiled_value'],
             $data['payload'],
             $data['flags'],
-            $data['is_multiple'],
         );
     }
 
     public function toArray(): array
     {
-        $value = $this->value->toRaw();
-
         return [
             'code' => $this->code,
-            'value' => $this->isMultiple ? $value : reset($value),
+            'value' => $this->value->toRaw(),
             'compiled_value' => $this->compiledValue,
             'payload' => $this->payload,
             'uri' => $this->uri,
             'flags' => $this->flags,
-            'is_multiple' => $this->isMultiple,
         ];
     }
 
     public function withValue(mixed $value): self
     {
         $data = $this->toArray();
-        $data['value'] = $value;
+        $data['value'] = is_array($value) ? $value : [$value];
 
         return self::fromArray($data);
     }
@@ -139,38 +132,18 @@ class Attribute implements \Stringable
 
     public function isEmpty(): bool
     {
-        return $this->value->isEmpty() && empty($this->compiledValue) && empty($this->payload);
-    }
-
-    public function isMultiple(): bool
-    {
-        return $this->isMultiple;
+        return $this->value->isEmpty();
     }
 
     private function processValue(mixed $values): array
     {
         if ($values instanceof AttributeValue) {
             $values = $values->toRaw();
-
-            if (!$this->isMultiple) {
-                $values = reset($values);
-            }
         }
 
-        if ($this->isMultiple) {
-            if (!$values) {
-                $values = [];
-            } elseif (!\is_array($values)) {
-                $values = [$values];
-            }
-        } else {
-            // Validate source value, but further we pass it as an array!
-            if (\is_array($values)) {
-                throw new \InvalidArgumentException(
-                    sprintf('Array is not allowed in non multiple attribute %s', $this->code)
-                );
-            }
-
+        if (!$values) {
+            $values = [];
+        } elseif (!\is_array($values)) {
             $values = [$values];
         }
 
