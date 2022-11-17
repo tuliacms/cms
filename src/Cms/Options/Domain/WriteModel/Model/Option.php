@@ -28,6 +28,11 @@ class Option extends AbstractAggregateRoot
         $this->translations = new ArrayCollection();
     }
 
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
     public function getValue(string $locale): mixed
     {
         foreach ($this->translations as $pretendent) {
@@ -42,8 +47,8 @@ class Option extends AbstractAggregateRoot
     public function setValue(mixed $value, ?string $locale = null, ?string $defaultLocale = null): void
     {
         if ($this->multilingual) {
-            \assert(empty($locale), 'Please provide $locale for this multilingual option');
-            \assert(empty($defaultLocale), 'Please provide defaultLocale for this multilingual option');
+            \assert(!empty($locale), 'Please provide $locale for this multilingual option');
+            \assert(!empty($defaultLocale), 'Please provide defaultLocale for this multilingual option');
 
             if ($locale === $defaultLocale) {
                 $this->value = $value;

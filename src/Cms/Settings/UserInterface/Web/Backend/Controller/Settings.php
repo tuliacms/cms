@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Settings\UserInterface\Web\Backend\Controller;
 
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Swift_Plugins_LoggerPlugin;
 use Swift_Plugins_Loggers_ArrayLogger;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\Options\Domain\WriteModel\OptionsRepositoryInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
-use Tulia\Cms\Settings\Domain\Event\SettingsUpdated;
+use Tulia\Cms\Settings\Domain\Group\SettingsStorage;
 use Tulia\Cms\Settings\Domain\Group\SettingsGroupRegistryInterface;
+use Tulia\Cms\Settings\Domain\SettingsRepositoryInterface;
 use Tulia\Cms\Shared\Infrastructure\Mail\MailerInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
@@ -27,9 +26,8 @@ class Settings extends AbstractController
 {
     public function __construct(
         private readonly SettingsGroupRegistryInterface $settings,
-        private readonly OptionsRepositoryInterface $optionsRepository,
         private readonly FormFactoryInterface $formFactory,
-        private readonly EventDispatcherInterface $dispatcher,
+        private readonly SettingsRepositoryInterface $settingsRepository,
     ) {
     }
 
@@ -47,17 +45,21 @@ class Settings extends AbstractController
             throw $this->createNotFoundException($this->trans('settingsGroupNotFound', [], 'settings'));
         }
 
+        $settings = $this->settingsRepository->get(
+            $website->getId(),
+            $website->getLocale()->getCode(),
+            $website->getDefaultLocale()->getCode(),
+        );
+        $storage = new SettingsStorage($settings->export());
+
         $groupObj = $this->settings->getGroup($group);
         $groupObj->setFormFactory($this->formFactory);
-        $groupObj->setOptionsRepository($this->optionsRepository);
-        $groupObj->setWebsite($website);
-        $form = $groupObj->buildForm();
+        $form = $groupObj->buildForm($storage);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $groupObj->saveAction($form->getData());
-
-            $this->dispatcher->dispatch(new SettingsUpdated());
+            $settings->update($groupObj->export($form));
+            $this->settingsRepository->save($settings);
 
             $this->addFlash('success', $this->trans('settingsSaved', [], 'settings'));
             return $this->redirectToRoute('backend.settings', [ 'group' => $groupObj->getId() ]);

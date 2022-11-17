@@ -6,6 +6,7 @@ namespace Tulia\Cms\Settings\UserInterface\Web\Backend\Settings;
 
 use Symfony\Component\Form\FormInterface;
 use Tulia\Cms\Settings\Domain\Group\AbstractSettingsGroup;
+use Tulia\Cms\Settings\Domain\Group\SettingsStorage;
 use Tulia\Cms\Settings\UserInterface\Web\Backend\Form\SettingsForm;
 
 /**
@@ -23,27 +24,25 @@ class CmsSettingsGroup extends AbstractSettingsGroup
         return 'settings';
     }
 
-    public function buildForm(): FormInterface
+    public function buildForm(SettingsStorage $settings): FormInterface
     {
-        $data = [
-            'administrator_email' => $this->getOption('administrator_email'),
-            'maintenance_mode'    => $this->getOption('maintenance_mode'),
-            'maintenance_message' => $this->getOption('maintenance_message'),
-            'date_format'         => $this->getOption('date_format', 'j F, Y'),
-            'wysiwyg_editor'      => $this->getOption('wysiwyg_editor'),
-            'mail_transport'      => $this->getOption('mail.transport'),
-            'mail_from_email'     => $this->getOption('mail.from_email'),
-            'mail_from_name'      => $this->getOption('mail.from_name'),
-            'mail_host'           => $this->getOption('mail.host'),
-            'mail_port'           => $this->getOption('mail.port'),
-            'mail_username'       => $this->getOption('mail.username'),
-            'mail_password'       => $this->getOption('mail.password'),
-            'mail_encryption'     => $this->getOption('mail.encryption'),
-            'mail_sendmailpath'   => $this->getOption('mail.sendmailpath'),
-            'url_suffix'          => $this->getOption('url_suffix'),
-        ];
-
-        return $this->createForm(SettingsForm::class, $data);
+        return $this->createForm(SettingsForm::class, [
+            'administrator_email' => $settings->get('administrator_email'),
+            'maintenance_mode'    => $settings->get('maintenance_mode'),
+            'maintenance_message' => $settings->get('maintenance_message'),
+            'date_format'         => $settings->get('date_format', 'j F, Y'),
+            'wysiwyg_editor'      => $settings->get('wysiwyg_editor'),
+            'mail_transport'      => $settings->get('mail.transport'),
+            'mail_from_email'     => $settings->get('mail.from_email'),
+            'mail_from_name'      => $settings->get('mail.from_name'),
+            'mail_host'           => $settings->get('mail.host'),
+            'mail_port'           => $settings->get('mail.port'),
+            'mail_username'       => $settings->get('mail.username'),
+            'mail_password'       => $settings->get('mail.password'),
+            'mail_encryption'     => $settings->get('mail.encryption'),
+            'mail_sendmailpath'   => $settings->get('mail.sendmailpath'),
+            'url_suffix'          => $settings->get('url_suffix'),
+        ]);
     }
 
     public function buildView(): array
@@ -51,28 +50,32 @@ class CmsSettingsGroup extends AbstractSettingsGroup
         return $this->view('@backend/settings/main-settings.tpl');
     }
 
-    public function saveAction(array $data): bool
+    public function export(FormInterface $form): array
     {
-        $this->setOption('administrator_email', $data['administrator_email']);
-        $this->setOption('maintenance_mode', $data['maintenance_mode']);
-        $this->setOption('maintenance_message', $data['maintenance_message']);
-        $this->setOption('date_format', $data['date_format']);
-        $this->setOption('wysiwyg_editor', $data['wysiwyg_editor']);
-        $this->setOption('mail.transport', $data['mail_transport']);
-        $this->setOption('mail.from_email', $data['mail_from_email']);
-        $this->setOption('mail.from_name', $data['mail_from_name']);
-        $this->setOption('mail.host', $data['mail_host']);
-        $this->setOption('mail.port', $data['mail_port']);
-        $this->setOption('mail.username', $data['mail_username']);
+        $data = $form->getData();
 
-        if ($data['mail_password']) {
-            $this->setOption('mail.password', $data['mail_password']);
+        $result = [
+            'administrator_email' => $data['administrator_email'],
+            'maintenance_mode' => $data['maintenance_mode'],
+            'maintenance_message' => $data['maintenance_message'],
+            'date_format' => $data['date_format'],
+            'wysiwyg_editor' => $data['wysiwyg_editor'],
+            'mail.transport' => $data['mail_transport'],
+            'mail.from_email' => $data['mail_from_email'],
+            'mail.from_name' => $data['mail_from_name'],
+            'mail.host' => $data['mail_host'],
+            'mail.port' => $data['mail_port'],
+            'mail.username' => $data['mail_username'],
+            'mail.password' => $data['mail_password'],
+            'mail.encryption' => $data['mail_encryption'],
+            'mail.sendmailpath' => $data['mail_sendmailpath'],
+            'url_suffix' => $data['url_suffix'],
+        ];
+
+        if (!$result['mail.password']) {
+            unset($result['mail.password']);
         }
 
-        $this->setOption('mail.encryption', $data['mail_encryption']);
-        $this->setOption('mail.sendmailpath', $data['mail_sendmailpath']);
-        $this->setOption('url_suffix', $data['url_suffix']);
-
-        return true;
+        return $result;
     }
 }

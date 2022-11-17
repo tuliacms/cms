@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tulia\Cms\Settings\Domain\Group;
 
 use Symfony\Component\Form\FormInterface;
-use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -13,16 +12,10 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface
 interface SettingsGroupInterface
 {
     public function getId(): string;
-
     public function getName(): string;
-
     public function getIcon(): string;
-
-    public function buildForm(): FormInterface;
-
-    public function buildView(): array;
-
-    public function saveAction(array $data): bool;
-
     public function getTranslationDomain(): string;
+    public function buildForm(SettingsStorage $settings): FormInterface;
+    public function buildView(): array;
+    public function export(FormInterface $form): array;
 }
