@@ -20,7 +20,7 @@ class Attribute extends CoreAttribute
         $self = new static(
             $attribute->code,
             $attribute->uri,
-            $attribute->value,
+            $attribute->value->toRaw(),
             $attribute->compiledValue,
             $attribute->payload,
             $attribute->flags

@@ -40,7 +40,7 @@ class ObjectDataToAttributesTransformer
             $attributes[$attribute['code']] = new Attribute(
                 $attribute['code'],
                 $attribute['uri'],
-                $attribute['value'],
+                $attribute['values'] ?? [$attribute['value']],
                 null,
                 $attribute['payload'],
                 $flags,
