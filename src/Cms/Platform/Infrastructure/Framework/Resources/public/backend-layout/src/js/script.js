@@ -858,12 +858,28 @@ Tulia.SearchAnything.defaults = {
 Tulia.Translator = {
     translations: {},
     register: function (locale, domain = 'messages', messages = {}) {
-        Tulia.Translator.translations[locale] = {};
-        Tulia.Translator.translations[locale][domain] = messages;
+        if (!Tulia.Translator.translations.hasOwnProperty(locale)) {
+            Tulia.Translator.translations[locale] = {};
+        }
+
+        if (!Tulia.Translator.translations[locale].hasOwnProperty(domain)) {
+            Tulia.Translator.translations[locale][domain] = messages;
+            return;
+        }
+
+        for (let i in messages) {
+            Tulia.Translator.translations[locale][domain][i] = messages[i];
+        }
     }
 };
 Tulia.trans = function (name, domain = 'messages') {
-    return Tulia.Translator.translations[Tulia.Globals.user.locale][domain][name] ?? name;
+    const locale = Tulia.Globals.user.locale;
+
+    return Tulia.Translator.translations.hasOwnProperty(locale)
+        && Tulia.Translator.translations[locale].hasOwnProperty(domain)
+        && Tulia.Translator.translations[locale][domain].hasOwnProperty(name)
+            ? Tulia.Translator.translations[locale][domain][name]
+            : name;
 };
 
 export default Tulia;
