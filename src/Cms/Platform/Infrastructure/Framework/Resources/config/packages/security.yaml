@@ -30,6 +30,7 @@ security:
                 login_path: backend.login
                 check_path: backend.login
                 enable_csrf: true
+                default_target_path: backend.homepage
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 604800
@@ -46,6 +47,7 @@ security:
             form_login:
                 login_path: frontend.login
                 enable_csrf: true
+                default_target_path: frontend.homepage
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 604800
