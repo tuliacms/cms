@@ -16,17 +16,31 @@ export default {
 
         document.body.appendChild(tooltip);
 
-        Popper.createPopper(el, tooltip, {
-            placement: 'top',
-            modifiers: [
-                {
-                    name: 'offset',
-                    options: {
-                        offset: [0, 10],
+        if (Popper.createPopper) {
+            Popper.createPopper(el, tooltip, {
+                placement: 'top',
+                modifiers: [
+                    {
+                        name: 'offset',
+                        options: {
+                            offset: [0, 10],
+                        },
                     },
-                },
-            ],
-        });
+                ],
+            });
+        } else {
+            new Popper(el, tooltip, {
+                placement: 'top',
+                modifiers: [
+                    {
+                        name: 'offset',
+                        options: {
+                            offset: [0, 10],
+                        },
+                    },
+                ],
+            });
+        }
 
         tooltips.push({
             el: el,

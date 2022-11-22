@@ -178,6 +178,10 @@
                 <source>mapZoom</source>
                 <target>Map zoom</target>
             </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.45">
+                <source>noActiveThemeDetectedCannotEditContent</source>
+                <target>No active theme is detected in this website. Without active theme You cannot edit any contents. Go to {link} and activate theme.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

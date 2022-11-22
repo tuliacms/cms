@@ -1,11 +1,17 @@
 {% assets ['tulia_editor'] %}
 
-<div id="{{ params.id }}"></div>
-
 {% set themes = [theme().name] %}
 
 {% if theme().hasParent %}
     {% set themes = themes|merge([theme().parentName]) %}
+{% endif %}
+
+{% if 'Tulia/DefaultTheme' in themes %}
+    <div class="alert alert-warning">
+        <strong>Tulia Editor:</strong> {{ 'noActiveThemeDetectedCannotEditContent'|trans({link: '<a href="' ~ path('backend.theme') ~ '" style="font-weight: bold;">' ~ 'themes'|trans ~ '</a>'}, 'tulia-editor')|raw }}
+    </div>
+{% else %}
+    <div id="{{ params.id }}"></div>
 {% endif %}
 
 <script>

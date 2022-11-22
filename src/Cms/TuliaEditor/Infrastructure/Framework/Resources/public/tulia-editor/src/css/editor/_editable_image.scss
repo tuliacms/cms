@@ -15,6 +15,7 @@
         border: none;
         outline: none;
         transition: .12s all;
+        z-index: 1000;
 
         &:before {
             content: "\f304";

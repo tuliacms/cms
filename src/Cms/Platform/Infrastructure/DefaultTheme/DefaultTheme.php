@@ -12,6 +12,8 @@ use Tulia\Component\Theme\AbstractTheme;
  */
 class DefaultTheme extends AbstractTheme
 {
+    protected ?string $name = 'Tulia/DefaultTheme';
+
     public function getDirectory(): string
     {
         return __DIR__;

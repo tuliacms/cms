@@ -79,6 +79,7 @@
                                             <i class="fas fa-ellipsis-v"></i>
                                         </a>
                                         <div class="dropdown-menu">
+                                            <a href="{{ path('backend.theme.installator.importer', { theme: item.name }) }}" class="dropdown-item dropdown-item-with-icon" title="{{ 'themeImports'|trans({}, 'themes') }}"><i class="dropdown-icon fas fa-upload"></i>{{ 'themeImports'|trans({}, 'themes') }}</a>
                                             <a href="#" data-theme="{{ item.name }}" class="dropdown-item dropdown-item-danger dropdown-item-with-icon theme-delete-trigger" title="{{ 'uninstallTheme'|trans({}, 'themes') }}"><i class="dropdown-icon fas fa-times"></i>{{ 'uninstallTheme'|trans({}, 'themes') }}</a>
                                         </div>
                                     </div>

@@ -27,12 +27,12 @@
                             {% for key, item in imports %}
                                 <tr>
                                     <td>{{ item.name }}</td>
-                                    <td class="text-right">
-                                        <form action="{{ path('backend.theme.installator.importer.import') }}" method="POST">
+                                    <td class="text-end">
+                                        <form action="{{ path('backend.theme.installator.importer.import') }}" method="POST" class="text-end">
                                             <input type="hidden" name="_token" value="{{ csrf_token('theme.importer.import') }}" />
                                             <input type="hidden" name="theme" value="{{ theme }}" />
                                             <input type="hidden" name="collection" value="{{ key }}" />
-                                            <button type="submit" class="btn btn-success btn-sm">{{ 'doImport'|trans }}</button>
+                                            <button type="submit" class="btn btn-success btn-sm d-inline-block">{{ 'doImport'|trans }}</button>
                                         </form>
                                     </td>
                                 </tr>

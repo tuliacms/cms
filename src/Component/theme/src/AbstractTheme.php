@@ -13,12 +13,12 @@ use Tulia\Component\Theme\Resolver\ResolverAggregateInterface;
  */
 abstract class AbstractTheme implements ThemeInterface
 {
-    private $name;
-    private $directory;
+    protected ?string $name = null;
+    protected $directory;
     protected $parent;
-    private $config;
-    private \Closure $parentThemeLoader;
-    private ?ThemeInterface $parentInstance = null;
+    protected $config;
+    protected \Closure $parentThemeLoader;
+    protected ?ThemeInterface $parentInstance = null;
 
     public function getName(): string
     {
@@ -116,8 +116,8 @@ abstract class AbstractTheme implements ThemeInterface
 
     protected function resolveName(): void
     {
-        [, , $this->vendor, $name] = explode('\\', \get_class($this));
-        $this->name = $this->vendor . '/' . $name;
+        [, , $vendor, $name] = explode('\\', \get_class($this));
+        $this->name = $vendor . '/' . $name;
 
         if (empty($this->name)) {
             throw new \RuntimeException('Cannot resolve $name of the theme. Please provide $name property for Your theme.');
