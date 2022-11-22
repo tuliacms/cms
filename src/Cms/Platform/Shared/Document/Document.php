@@ -126,10 +126,15 @@ class Document implements DocumentInterface
         ];
 
         $result = [];
-        $result[] = '<title>'.$this->title.'</title>';
+
+        if ($this->title) {
+            $result[] = '<title>' . $this->title . '</title>';
+        }
 
         foreach ($metas as $meta) {
-            $result[] = '<meta '.$this->buildAttributes($meta).' />';
+            if ($meta['content']) {
+                $result[] = '<meta ' . $this->buildAttributes($meta) . ' />';
+            }
         }
 
         return implode(PHP_EOL, $result);

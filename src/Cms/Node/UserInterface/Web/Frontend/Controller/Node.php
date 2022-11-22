@@ -38,7 +38,6 @@ class Node extends AbstractController
         }
 
         $seo->aware($node, $node->getTitle());
-        //$this->getDocument()->setTitle($node->getTitle());
 
         $category = $this->findCategory($node);
 
