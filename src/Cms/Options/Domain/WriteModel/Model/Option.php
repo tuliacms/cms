@@ -23,7 +23,7 @@ class Option extends AbstractAggregateRoot
         private mixed $value,
         private string $websiteId,
         private bool $multilingual = false,
-        private bool $autoload = false
+        private bool $autoload = false,
     ) {
         $this->translations = new ArrayCollection();
     }

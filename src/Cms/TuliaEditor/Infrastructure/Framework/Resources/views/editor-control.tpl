@@ -61,6 +61,7 @@
             finishMapEditing: '{{ 'finishMapEditing'|trans({}, 'tulia-editor') }}',
             mapHeight: '{{ 'mapHeight'|trans({}, 'tulia-editor') }}',
             mapZoom: '{{ 'mapZoom'|trans({}, 'tulia-editor') }}',
+            imageSize: '{{ 'imageSize'|trans({}, 'tulia-editor') }}',
         });
 
         let structureSelector = '.tulia-editor-structure-field[data-tulia-editor-group-id="{{ params.group_id }}"]';
@@ -96,6 +97,7 @@
             filemanager: {
                 image_resolve_path: '{{ path('frontend.filemanager.resolve.image.size', { size: '{size}', id: '{id}', filename: '{filename}' }) }}',
                 endpoint: '{{ path('backend.filemanager.endpoint') }}',
+                image_sizes: {{ images_sizes()|json_encode|raw }},
             },
             //start_point: 'editor',
             locale: '{{ user().locale }}',

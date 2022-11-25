@@ -182,6 +182,10 @@
                 <source>noActiveThemeDetectedCannotEditContent</source>
                 <target>No active theme is detected in this website. Without active theme You cannot edit any contents. Go to {link} and activate theme.</target>
             </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.46">
+                <source>imageSize</source>
+                <target>Image size</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -22,9 +22,6 @@ services:
         class: Tulia\Cms\User\Infrastructure\Framework\Validator\UsernameValidator
         factory: Tulia\Cms\User\Infrastructure\Framework\Validator\UsernameValidatorFactory::factory
 
-    Tulia\Cms\User\Infrastructure\Cms\Settings\UsersSettingsGroup:
-        tags: [ settings.group ]
-
     Tulia\Cms\User\Application\Service\Avatar\UploaderInterface:
         class: Tulia\Cms\User\Application\Service\Avatar\Uploader
         bind:

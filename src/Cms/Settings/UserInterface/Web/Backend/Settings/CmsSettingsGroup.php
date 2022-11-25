@@ -11,6 +11,8 @@ use Tulia\Cms\Settings\UserInterface\Web\Backend\Form\SettingsForm;
 
 /**
  * @author Adam Banaszkiewicz
+ * @final
+ * @lazy
  */
 class CmsSettingsGroup extends AbstractSettingsGroup
 {

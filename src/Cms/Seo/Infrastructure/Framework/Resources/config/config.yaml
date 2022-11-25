@@ -2,3 +2,14 @@ framework:
     translator:
         paths:
             - '%cms.core_dir%/Cms/Seo/Infrastructure/Framework/Resources/translations'
+
+cms:
+    options:
+        definitions:
+            seo_global_robots:
+                autoload: true
+#                type: array
+
+    templating:
+        paths:
+            - { name: backend/seo, path: '%cms.core_dir%/Cms/Seo/Infrastructure/Framework/Resources/views/backend' }

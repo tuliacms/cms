@@ -10,6 +10,8 @@ use Tulia\Cms\Settings\Domain\Group\SettingsStorage;
 
 /**
  * @author Adam Banaszkiewicz
+ * @final
+ * @lazy
  */
 class UsersSettingsGroup extends AbstractSettingsGroup
 {

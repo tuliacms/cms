@@ -20,6 +20,7 @@ export default class Editor {
     editor = null;
     vue = null;
     container = {};
+    previewHeightWatcherInterval = null;
 
     constructor (selector, options) {
         this.selector = selector;
@@ -149,7 +150,8 @@ export default class Editor {
                 '<span class="tued-logo">Tulia Editor</span> - ' + this.container.translator.trans('contentPreview') +
                 '</div>' +
             '</div>' +
-            '<div class="">' +
+            '<div class="tued-preview-wrapper tued-preview-loading">' +
+                '<div class="tued-preview-loader"><div class="tued-preview-notch"><i class="fas fa-circle-notch fa-spin"></i><span>Loading preview...</span></div></div>' +
                 '<iframe class="tued-preview" src="' + this.options.editor.preview + '?tuliaEditorInstance=' + this.instanceId + '"></iframe>' +
             '</div>' +
         '</div>');
@@ -170,16 +172,23 @@ export default class Editor {
                 this.openEditor();
             });
 
-            this.updatePreview(this.options.structure.preview);
-            this.updatePreviewHeight();
+            if (!this.previewLoaded) {
+                this.updatePreview(this.options.structure.preview);
+            } else {
+                this.root.find('.tued-preview-wrapper').removeClass('tued-preview-loading');
+            }
+
+            this.previewLoaded = true;
             this.createPreviewHeightWatcher();
+            this.updatePreviewHeight();
         });
     }
 
     createPreviewHeightWatcher () {
-        setInterval(() => {
+        clearInterval(this.previewHeightWatcherInterval);
+        this.previewHeightWatcherInterval = setInterval(() => {
             this.updatePreviewHeight();
-        }, 300);
+        }, 2000);
     }
 
     updatePreviewHeight () {
@@ -192,11 +201,17 @@ export default class Editor {
     }
 
     updatePreview (preview) {
+        const form = this.previewRoot.querySelector('#tulia-editor-preview-form');
+        const input = form.querySelector('input');
+
         if (!preview) {
             preview = '<div class="tued-empty-content">' + this.container.translator.trans('startCreatingNewContent') + '</div>';
         }
 
-        this.previewRoot.querySelector('#tulia-editor-preview').innerHTML = preview;
+        this.root.find('.tued-preview-wrapper').addClass('tued-preview-loading');
+
+        input.value = preview;
+        form.submit();
     }
 
     createVueApp () {

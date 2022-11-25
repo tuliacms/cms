@@ -4,3 +4,4 @@ backend.tulia_editor.editor_view:
 backend.tulia_editor.editor_preview:
     path: /tulia-editor/editor-preview
     controller: Tulia\Cms\TuliaEditor\UserInterface\Web\Backend\Controller\Editor::preview
+    methods: GET|POST

@@ -60,6 +60,15 @@ class Configuration implements ConfigurationInterface
                                             ->end()
                                         ->end()
                                     ->end()
+                                    ->validate()
+                                        ->always(function (array $option) {
+                                            if ($option['type'] === 'array' && null === $option['value']) {
+                                                $option['value'] = [];
+                                            }
+
+                                            return $option;
+                                        })
+                                    ->end()
                                 ->end()
                             ->end()
                         ->end()

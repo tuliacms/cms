@@ -11,5 +11,10 @@ use Tulia\Cms\Content\Attributes\Domain\ReadModel\Model\AttributesAwareInterface
  */
 interface SeoDocumentProcessorInterface
 {
-    public function aware(AttributesAwareInterface $document, ?string $title = null): void;
+    public function aware(
+        AttributesAwareInterface $document,
+        string $websiteId,
+        string $locale,
+        ?string $title = null,
+    ): void;
 }

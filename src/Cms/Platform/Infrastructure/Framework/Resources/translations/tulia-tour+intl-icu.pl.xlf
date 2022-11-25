@@ -39,7 +39,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.tulia-tour.9">
                 <source>tourStepSidebarBody</source>
-                <target><![CDATA[<b>Treści</b> - poprowadzi Cię to tworzenia/edycji stron, formularzy, zakłądek menu itp. <br /><b>Administracja</b> - pozwala zarządzać systemem, witrynami, użytkownikami, dostosować wygląd strony itp.]]></target>
+                <target><![CDATA[<b>Treści</b> - poprowadzi Cię to tworzenia/edycji stron, formularzy, zakładek menu itp. <br /><b>Administracja</b> - pozwala zarządzać systemem, witrynami, użytkownikami, dostosować wygląd strony itp.]]></target>
             </trans-unit>
             <trans-unit id="tuliacms.tulia-tour.10">
                 <source>tourStepSearchAnythingHeadline</source>

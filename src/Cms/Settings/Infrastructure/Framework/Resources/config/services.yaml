@@ -12,7 +12,3 @@ services:
         bind:
             $factories: !tagged_iterator settings.group_factory
             $groups: !tagged_iterator settings.group
-
-    Tulia\Cms\Settings\UserInterface\Web\Backend\Settings\CmsSettingsGroup:
-        tags:
-            - { name: settings.group, priority: 1000 }

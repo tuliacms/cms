@@ -1,5 +1,5 @@
 <template>
-    <div>[image id="{{ block.data.image.id }}" size="thumbnail"]</div>
+    <div>[image id="{{ block.data.image.id }}" size="{{ block.data.image.size }}"]</div>
 </template>
 
 <script setup>

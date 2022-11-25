@@ -1,0 +1,44 @@
+.tued-preview-wrapper {
+    position: relative;
+    min-height: 300px;
+
+    .tued-preview-loader {
+        display: none;
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        background-color: #fff;
+        justify-content: center;
+
+        &:hover {
+            cursor: wait;
+        }
+
+        .tued-preview-notch {
+            margin: 50px 0;
+            display: block;
+            text-align: center;
+
+            i {
+                display: block;
+                font-size: 50px;
+                color: #ddd;
+                margin-bottom: 15px;
+            }
+
+            span {
+                display: block;
+                font-size: 20px;
+                color: #777;
+            }
+        }
+    }
+
+    &.tued-preview-loading {
+        .tued-preview-loader {
+            display: flex;
+        }
+    }
+}

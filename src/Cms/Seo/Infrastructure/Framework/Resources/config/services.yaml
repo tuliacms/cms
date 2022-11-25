@@ -1,7 +1,23 @@
+parameters:
+    cms.seo.robots.options_list:
+        '': '---'
+        all: all
+        noindex: noindex
+        nofollow: nofollow
+        none: none
+        noarchive: noarchive
+        nositelinkssearchbox: nositelinkssearchbox
+        nosnippet: nosnippet
+        indexifembedded: indexifembedded
+        notranslate: notranslate
+        noimageindex: noimageindex
+
 services:
     _defaults:
         autowire: true
         autoconfigure: true
+        bind:
+            $robotsOptionsList: '%cms.seo.robots.options_list%'
 
     Tulia\Cms\Seo\:
         resource: '../../../../**'

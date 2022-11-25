@@ -1,5 +1,5 @@
 <template>
-    <div class="tued-dynamic-block">[map height="{{ block.data.height }}" lat="{{ block.data.position.lat }}" lng="{{ block.data.position.lng }}" zoom="{{ block.data.zoom }}"]</div>
+    <div>[map height="{{ block.data.height }}" lat="{{ block.data.position.lat }}" lng="{{ block.data.position.lng }}" zoom="{{ block.data.zoom }}"]</div>
 </template>
 
 <script setup>

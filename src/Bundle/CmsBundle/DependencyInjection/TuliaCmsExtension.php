@@ -152,6 +152,9 @@ class TuliaCmsExtension extends Extension
         $container->registerForAutoconfiguration(\Tulia\Cms\Website\Domain\WriteModel\Service\TranslationCopyMachine\CopyBusInterface::class)
             ->setLazy(true)
             ->addTag('translations.copy_machine.bus');
+        $container->registerForAutoconfiguration(\Tulia\Cms\Settings\Domain\Group\SettingsGroupInterface::class)
+            ->setLazy(true)
+            ->addTag('settings.group');
     }
 
     protected function validateOptionsValues(array $definitions): array

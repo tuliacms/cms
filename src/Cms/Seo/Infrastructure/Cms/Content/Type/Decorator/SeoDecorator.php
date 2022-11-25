@@ -13,6 +13,11 @@ use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeDecoratorInterfac
  */
 class SeoDecorator implements ContentTypeDecoratorInterface
 {
+    public function __construct(
+        private readonly array $robotsOptionsList,
+    ) {
+    }
+
     public function decorate(ContentTypeCollector $collector): void
     {
         foreach ($collector->all() as $type) {
@@ -36,18 +41,7 @@ class SeoDecorator implements ContentTypeDecoratorInterface
             'translation_domain' => 'seo',
             'configuration' => [
                 'multiple' => true,
-                'choices' => [
-                    'all' => 'all',
-                    'noindex' => 'noindex',
-                    'nofollow' => 'nofollow',
-                    'none' => 'none',
-                    'noarchive' => 'noarchive',
-                    'nositelinkssearchbox' => 'nositelinkssearchbox',
-                    'nosnippet' => 'nosnippet',
-                    'indexifembedded' => 'indexifembedded',
-                    'notranslate' => 'notranslate',
-                    'noimageindex' => 'noimageindex',
-                ]
+                'choices' => $this->robotsOptionsList,
             ]
         ]);
     }

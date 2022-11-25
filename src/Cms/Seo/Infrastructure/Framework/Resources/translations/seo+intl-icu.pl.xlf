@@ -26,6 +26,10 @@
                 <source>metaRobots</source>
                 <target>Robots</target>
             </trans-unit>
+            <trans-unit id="tuliacms.seo.7">
+                <source>metaRobotsGlobalHelp</source>
+                <target>Tutaj ustawisz metatag Robots dla całej strony. To ustawienie nadpisze ustawienia poszczególnych wpisów.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

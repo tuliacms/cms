@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum;
+use Tulia\Cms\Node\Domain\ReadModel\Model\Node as Model;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Enum\NodePurposeEnum;
 use Tulia\Cms\Node\UserInterface\Web\Frontend\Controller\Node;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
@@ -29,8 +30,11 @@ class Homepage extends AbstractController
     /**
      * @return Response|ViewInterface
      */
-    public function index(Request $request, WebsiteInterface $website, SeoDocumentProcessorInterface $seo)
-    {
+    public function index(
+        Request $request,
+        SeoDocumentProcessorInterface $seo,
+        WebsiteInterface $website,
+    ) {
         $homepage = $this->nodeFinder->findOne([
             'purpose' => NodePurposeEnum::PAGE_HOMEPAGE,
             'locale' => $website->getLocale()->getCode(),
@@ -38,7 +42,7 @@ class Homepage extends AbstractController
         ], NodeFinderScopeEnum::SINGLE);
 
         if ($homepage) {
-            return $this->nodeController->show($homepage, $request, $seo);
+            return $this->nodeController->show($homepage, $request, $seo, $website);
         }
 
         return $this->view('@cms/homepage/index.tpl');

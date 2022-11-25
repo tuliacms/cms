@@ -14,11 +14,9 @@ use Twig\TwigFunction;
  */
 class TuliaEditorExtension extends AbstractExtension
 {
-    protected EngineInterface $engine;
-
-    public function __construct(EngineInterface $engine)
-    {
-        $this->engine = $engine;
+    public function __construct(
+        private readonly EngineInterface $engine,
+    ) {
     }
 
     public function getFunctions(): array

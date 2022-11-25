@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Filemanager\Infrastructure\Framework\Twig\Extension;
 
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Filemanager\Application\Service\ImageUrlResolver;
 use Tulia\Cms\Filemanager\Domain\Generator\Html;
+use Tulia\Cms\Filemanager\Domain\ImageSize\ImageSizeRegistryInterface;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\FileFinderInterface;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\FileFinderScopeEnum;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Model\File;
@@ -23,6 +25,8 @@ class FilemanagerExtension extends AbstractExtension
         private readonly FileFinderInterface $finder,
         private readonly ImageUrlResolver $urlResolver,
         private readonly ImageUrlGeneratorInterface $urlGenerator,
+        private readonly ImageSizeRegistryInterface $imageSizeRegistry,
+        private readonly TranslatorInterface $translator,
         private readonly string $publicDir,
     ) {
     }
@@ -39,6 +43,7 @@ class FilemanagerExtension extends AbstractExtension
             new TwigFunction('svg_url',      [$this, 'svgUrl'],   ['is_safe' => [ 'html' ]]),
             new TwigFunction('gallery',      [$this, 'gallery'],  ['is_safe' => [ 'html' ]]),
             new TwigFunction('is_file_type', [$this, 'isFileType'],  ['is_safe' => [ 'html' ]]),
+            new TwigFunction('images_sizes', [$this, 'imagesSizes'],  ['is_safe' => [ 'html' ]]),
         ];
     }
 
@@ -157,5 +162,19 @@ class FilemanagerExtension extends AbstractExtension
             'id' => $id,
             'type' => $type,
         ], FileFinderScopeEnum::SINGLE);
+    }
+
+    public function imagesSizes(): array
+    {
+        return array_map(
+            fn($s) => [
+                'name' => $s->getName(),
+                'label' => $this->translator->trans($s->getLabel(), [], $s->getTranslationDOmain()),
+                'width' => $s->getWidth(),
+                'height' => $s->getHeight(),
+                'mode' => $s->getMode(),
+            ],
+            $this->imageSizeRegistry->all()
+        );
     }
 }

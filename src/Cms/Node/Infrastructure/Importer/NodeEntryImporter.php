@@ -11,9 +11,9 @@ use Tulia\Cms\Node\Application\UseCase\CreateNodeRequest;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodeRepositoryInterface;
 use Tulia\Cms\Shared\Application\UseCase\IdResult;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
+use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
 use Tulia\Component\Importer\ObjectImporter\ObjectImporterInterface;
 use Tulia\Component\Importer\ObjectImporter\Traits\WebsiteAwareTrait;
-use Tulia\Component\Importer\ObjectImporter\Traits\AuthorAwareTrait;
 use Tulia\Component\Importer\Structure\ObjectData;
 
 /**
@@ -22,12 +22,12 @@ use Tulia\Component\Importer\Structure\ObjectData;
 class NodeEntryImporter implements ObjectImporterInterface
 {
     use WebsiteAwareTrait;
-    use AuthorAwareTrait;
 
     public function __construct(
         private readonly NodeRepositoryInterface $repository,
         private readonly CreateNode $createNode,
         private readonly ContentTypeRegistryInterface $contentTypeRegistry,
+        private readonly AuthenticatedUserProviderInterface $userProvider,
     ) {
     }
 
@@ -44,7 +44,7 @@ class NodeEntryImporter implements ObjectImporterInterface
         /** @var IdResult $result */
         $result = ($this->createNode)(new CreateNodeRequest(
             $objectData['type'],
-            $this->getAuthorId(),
+            $this->userProvider->getUser()->getId(),
             $details,
             $this->transformObjectDataToAttributes($objectData),
             $this->getWebsite()->getId(),

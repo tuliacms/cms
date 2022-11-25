@@ -26,6 +26,10 @@
                 <source>metaRobots</source>
                 <target>Robots</target>
             </trans-unit>
+            <trans-unit id="tuliacms.seo.7">
+                <source>metaRobotsGlobalHelp</source>
+                <target>Here you will set the Robots metatag for the entire page. This setting will override the individual entry settings.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

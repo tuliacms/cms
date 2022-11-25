@@ -182,6 +182,10 @@
                 <source>noActiveThemeDetectedCannotEditContent</source>
                 <target>Nie wykryto aktywnego motywu dla tej witryny. Nie można edytować żadnych treści bez aktywnego motywu. Przejdź do {link} i aktywuj motyw.</target>
             </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.46">
+                <source>imageSize</source>
+                <target>Rozmiar zdjęcia</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
