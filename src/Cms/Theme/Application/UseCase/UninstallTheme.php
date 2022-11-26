@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Theme\Application\UseCase;
 
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpKernel\KernelEvents;
 use Tulia\Cms\Platform\Application\Service\FrameworkCacheService;
+use Tulia\Cms\Platform\Infrastructure\Composer\Extensions\ExtensionsStorage;
 use Tulia\Cms\Shared\Application\UseCase\AbstractTransactionalUseCase;
 use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
 use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
@@ -20,6 +23,8 @@ final class UninstallTheme extends AbstractTransactionalUseCase
         private readonly string $projectDir,
         private readonly FrameworkCacheService $frameworkCacheService,
         private readonly StorageInterface $storage,
+        private readonly ExtensionsStorage $extensionsStorage,
+        private readonly EventDispatcherInterface $dispatcher,
     ) {
     }
 
@@ -39,10 +44,14 @@ final class UninstallTheme extends AbstractTransactionalUseCase
         $theme = $this->storage->get($request->theme);
 
         if ($theme->isLocal()) {
-            $filesystem = new Filesystem();
-            $filesystem->remove($themeDirectory);
+            $this->extensionsStorage->removeTheme($request->theme);
 
-            $this->frameworkCacheService->clear();
+            $this->dispatcher->addListener(KernelEvents::TERMINATE, function () use ($themeDirectory) {
+                $filesystem = new Filesystem();
+                $filesystem->remove($themeDirectory);
+
+                $this->frameworkCacheService->clear();
+            });
         }
 
         return null;
