@@ -9,6 +9,8 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Tulia\Cms\Platform\Infrastructure\Composer\Extensions\ExtensionSourceEnum;
+use Tulia\Cms\Platform\Infrastructure\Composer\Extensions\ExtensionsStorage;
 use Tulia\Cms\Platform\Version;
 use Tulia\Cms\Theme\UserInterface\Console\Command\Traits\MakerFilesManagementTrait;
 use Tulia\Cms\Theme\UserInterface\Console\Command\Traits\ThemeQuestionableTrait;
@@ -28,6 +30,7 @@ final class MakeTheme extends Command
         private readonly ManagerInterface $themeManager,
         private readonly string $filesTemplates,
         private readonly string $themesDir,
+        private readonly ExtensionsStorage $extensionsStorage,
     ){
         parent::__construct();
     }
@@ -58,6 +61,7 @@ final class MakeTheme extends Command
 
         $io->writeln('<fg=gray>Generating files...</>');
         $this->writeFiles($filesList, $this->themesDir.'/'.$themeName);
+        $this->appendToComposerExtensions($themeName, $this->themesDir.'/'.$themeName);
 
         // @todo Refresh cache, when new Theme was added
 
@@ -89,7 +93,16 @@ final class MakeTheme extends Command
             '{{ theme.code }}' => $code,
             '{{ theme.vendor.lc }}' => strtolower($vendor),
             '{{ theme.code.lc }}' => strtolower($code),
-            '{{ system.version }}' => Version::VERSION,
         ];
+    }
+
+    private function appendToComposerExtensions(string $themeName, string $directory): void
+    {
+        $this->extensionsStorage->appendTheme(
+            $themeName,
+            '0.0.1',
+            ExtensionSourceEnum::LOCAL,
+            $directory,
+        );
     }
 }

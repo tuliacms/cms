@@ -1,7 +1,6 @@
 {
     "name": "{{ theme.name }}",
-    "version": "0.0.1",
-    "system_version": ">={{ system.version }}",
+    "type": "theme",
     "css_framework": "bootstrap-5",
     "supports": ["tulia-editor"],
     "translations": ["en_US"],

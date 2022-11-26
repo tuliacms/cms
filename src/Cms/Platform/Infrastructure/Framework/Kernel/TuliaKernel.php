@@ -142,8 +142,8 @@ final class TuliaKernel extends Kernel
         ];
         $result = [];
 
-        foreach ($extensionsSource['extra']['tuliacms']['themes'] as $name => $info) {
-            $result[] = $root.'/'.$info['path'].'/Resources/config';
+        foreach ($extensionsSource['extra']['tuliacms']['themes'] as $info) {
+            $result[] = $root.$info['path'].'/Resources/config';
         }
 
         return $result;

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\Platform\Infrastructure\Composer\Scripts;
 
 use Composer\Installer\PackageEvent;
+use Tulia\Cms\Platform\Infrastructure\Composer\Extensions\ExtensionSourceEnum;
+use Tulia\Cms\Platform\Infrastructure\Composer\Extensions\ExtensionsStorage;
 use Tulia\Cms\Platform\Infrastructure\Composer\Scripts\Exception\ManifestStructureInvalidException;
 
 /**
@@ -27,33 +29,24 @@ final class Extensions
         }
 
         $manifest = json_decode(file_get_contents($manifestFilepath), true, JSON_THROW_ON_ERROR);
-
         self::validateManifest($manifest);
 
-        $extensionsFilepath = realpath(dirname($vendors).'/composer.extensions.json');
-        $extensions = json_decode(file_get_contents($extensionsFilepath), true, JSON_THROW_ON_ERROR);
+        $extensions = new ExtensionsStorage(dirname($vendors));
 
         if ($manifest['type'] === 'theme') {
-            $extensions['extra']['tuliacms']['themes'][$package] = [
-                'source' => 'vendor',
-                'name' => $manifest['name'],
-                'version' => $event->getOperation()->getPackage()->getVersion(),
-                'path' => "vendor/$package",
-                'vendor-package-name' => $package,
-                'entrypoint' => self::resolveEntrypoint($packageDir),
-                'manifest' => "vendor/$package/manifest.json",
-            ];
+            $extensions->appendTheme(
+                $package,
+                $event->getOperation()->getPackage()->getVersion(),
+                ExtensionSourceEnum::VENDOR,
+                $packageDir,
+            );
         }
-
-        file_put_contents($extensionsFilepath, json_encode($extensions, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT));
 
         $event->getIO()->write("# Tulia CMS: \e[1;92mPackage $package is installed as a Extension\e[0m");
     }
 
     public static function update(PackageEvent $event): void
     {
-        //var_dump($event);exit;
-        $event->getComposer()->getPackage()->getExtra();
     }
 
     public static function preuninstall(PackageEvent $event): void
@@ -84,14 +77,11 @@ final class Extensions
         $manifest = self::$uninstalledPackage['manifest'];
         $package = self::$uninstalledPackage['name'];
 
-        $extensionsFilepath = realpath(dirname($vendors).'/composer.extensions.json');
-        $extensions = json_decode(file_get_contents($extensionsFilepath), true, JSON_THROW_ON_ERROR);
+        $extensions = new ExtensionsStorage(dirname($vendors));
 
         if ($manifest['type'] === 'theme') {
-            unset($extensions['extra']['tuliacms']['themes'][$package]);
+            $extensions->removeTheme($package);
         }
-
-        file_put_contents($extensionsFilepath, json_encode($extensions, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT));
 
         $event->getIO()->write("# Tulia CMS: \e[1;92mPackage $package was uninstalled from system\e[0m");
     }
@@ -110,12 +100,5 @@ final class Extensions
         if (!isset($manifest['name'])) {
             throw ManifestStructureInvalidException::missingField('name');
         }
-    }
-
-    private static function resolveEntrypoint(string $packageDir): string
-    {
-        preg_match('#namespace ([a-zA-Z0-9\\\\]+);#i', file_get_contents($packageDir.'/Theme.php'), $matches);
-
-        return $matches[1].'\\Theme';
     }
 }
