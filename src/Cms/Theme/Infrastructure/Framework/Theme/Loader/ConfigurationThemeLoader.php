@@ -31,6 +31,6 @@ class ConfigurationThemeLoader implements ThemeLoaderInterface
             return $this->storage->get($theme);
         }
 
-        return new DefaultTheme();
+        return new DefaultTheme('DefaultTheme', 'local', '');
     }
 }

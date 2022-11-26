@@ -35,9 +35,13 @@ final class Extensions
 
         if ($manifest['type'] === 'theme') {
             $extensions['extra']['tuliacms']['themes'][$package] = [
-                'placement' => 'vendor',
+                'source' => 'vendor',
+                'name' => $manifest['name'],
+                'version' => $event->getOperation()->getPackage()->getVersion(),
                 'path' => "vendor/$package",
                 'vendor-package-name' => $package,
+                'entrypoint' => self::resolveEntrypoint($packageDir),
+                'manifest' => "vendor/$package/manifest.json",
             ];
         }
 
@@ -103,5 +107,15 @@ final class Extensions
         if (!in_array($manifest['type'], ['theme', 'module'])) {
             throw ManifestStructureInvalidException::invalidValue('type', $manifest['type'], ['theme', 'module']);
         }
+        if (!isset($manifest['name'])) {
+            throw ManifestStructureInvalidException::missingField('name');
+        }
+    }
+
+    private static function resolveEntrypoint(string $packageDir): string
+    {
+        preg_match('#namespace ([a-zA-Z0-9\\\\]+);#i', file_get_contents($packageDir.'/Theme.php'), $matches);
+
+        return $matches[1].'\\Theme';
     }
 }

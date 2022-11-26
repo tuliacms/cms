@@ -13,21 +13,22 @@ use Tulia\Component\Theme\Resolver\ResolverAggregateInterface;
  */
 abstract class AbstractTheme implements ThemeInterface
 {
-    protected ?string $name = null;
     protected $directory;
     protected $parent;
     protected $config;
     protected \Closure $parentThemeLoader;
     protected ?ThemeInterface $parentInstance = null;
+    private array $manifestSource = [];
+
+    public function __construct(
+        protected string $name,
+        protected string $source,
+        protected string $manifest,
+    ) {
+    }
 
     public function getName(): string
     {
-        if ($this->name) {
-            return $this->name;
-        }
-
-        $this->resolveName();
-
         return $this->name;
     }
 
@@ -97,13 +98,15 @@ abstract class AbstractTheme implements ThemeInterface
 
     public function getManifest(): array
     {
-        $manifest = $this->getDirectory().'/manifest.json';
+        if ([] !== $this->manifestSource) {
+            return $this->manifestSource;
+        }
 
-        if (!is_file($manifest)) {
+        if (!is_file($this->manifest)) {
             return [];
         }
 
-        return json_decode(file_get_contents($this->getDirectory().'/manifest.json'), true);
+        return $this->manifestSource = json_decode(file_get_contents($this->manifest), true);
     }
 
     public function setConfigurationLoader(
@@ -112,15 +115,5 @@ abstract class AbstractTheme implements ThemeInterface
     ): void {
         $this->configurationLoader = $configurationLoader;
         $this->resolverAggregate = $resolverAggregate;
-    }
-
-    protected function resolveName(): void
-    {
-        [, , $vendor, $name] = explode('\\', \get_class($this));
-        $this->name = $vendor . '/' . $name;
-
-        if (empty($this->name)) {
-            throw new \RuntimeException('Cannot resolve $name of the theme. Please provide $name property for Your theme.');
-        }
     }
 }

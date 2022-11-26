@@ -12,12 +12,13 @@ use Tulia\Component\Theme\ThemeInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-class DirectoryDiscoveryStorage implements StorageInterface
+final class ComposerExtensionsStorage implements StorageInterface
 {
     private array $themes = [];
 
     public function __construct(
-        private readonly array $extensionsDirectories,
+        private readonly array $themesInfo,
+        private readonly string $rootDir,
         private readonly LoggerInterface $appLogger,
     ) {
     }
@@ -67,31 +68,12 @@ class DirectoryDiscoveryStorage implements StorageInterface
 
     private function resolveThemes(): void
     {
-        foreach ($this->extensionsDirectories as $directory => $prefix) {
-            if (!is_dir($directory)) {
-                continue;
-            }
-
-            foreach (new \DirectoryIterator($directory) as $namespace) {
-                if ($namespace->isDot() || !$namespace->isDir()) {
-                    continue;
-                }
-
-                $themes = new \DirectoryIterator($directory . '/' . $namespace->getFilename());
-
-                foreach ($themes as $theme) {
-                    if ($theme->isDot()) {
-                        continue;
-                    }
-
-                    $themeClassname = $prefix . '\\' . $namespace->getFilename() . '\\' .  $theme->getFilename() . '\\Theme';
-
-                    /** @var ThemeInterface $themeObject */
-                    $themeObject = new $themeClassname();
-
-                    $this->themes[$themeObject->getName()] = $themeObject;
-                }
-            }
+        foreach ($this->themesInfo as $info) {
+            $this->themes[$info['name']] = new $info['entrypoint'](
+                name: $info['name'],
+                source: $info['source'],
+                manifest: $this->rootDir.'/'.$info['manifest'],
+            );
         }
     }
 }

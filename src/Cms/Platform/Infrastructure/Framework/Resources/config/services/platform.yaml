@@ -9,6 +9,7 @@ services:
             $assetsPublicPaths: '%cms.assets.public_paths%'
             $environment: '%kernel.environment%'
             $availableTranslations: '%cms.available_translations%'
+            $themesInfo: '%cms.extensions.themes%'
 
     Tulia\Cms\Platform\:
         resource: '../../../../../**'
@@ -35,12 +36,8 @@ services:
         tags:
             - { name: console.command, command: 'assets:publish' }
 
-    Tulia\Cms\Platform\Infrastructure\Framework\Theme\Storage\DirectoryDiscoveryStorage:
-        bind:
-            $extensionsDirectories:
-                '%kernel.project_dir%/extension/theme': 'Tulia\Theme'
-
-    Tulia\Component\Theme\Storage\StorageInterface: '@Tulia\Cms\Platform\Infrastructure\Framework\Theme\Storage\DirectoryDiscoveryStorage'
+    Tulia\Component\Theme\Storage\StorageInterface:
+        '@Tulia\Cms\Platform\Infrastructure\Framework\Theme\Storage\ComposerExtensionsStorage'
 
     Tulia\Cms\Platform\Application\Service\FrameworkCacheService:
         bind:

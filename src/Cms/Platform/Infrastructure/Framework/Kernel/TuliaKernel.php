@@ -17,6 +17,8 @@ final class TuliaKernel extends Kernel
 {
     use MicroKernelTrait;
 
+    private array $extenions = [];
+
     public function getProjectDir(): string
     {
         return __TULIA_PROJECT_DIR;
@@ -114,6 +116,7 @@ final class TuliaKernel extends Kernel
 
         $container->parameters()->set('kernel.public_dir', $this->getPublicDir());
         $container->parameters()->set('kernel.cache_file', $cache->getPath());
+        $container->parameters()->set('cms.extensions.themes', $this->extenions['themes']);
     }
 
     protected function configureRoutes(RoutingConfigurator $routes): void
@@ -134,6 +137,9 @@ final class TuliaKernel extends Kernel
     {
         $root = $this->getProjectDir();
         $extensionsSource = json_decode(file_get_contents($root.'/composer.extensions.json'), true, JSON_THROW_ON_ERROR);
+        $this->extenions = [
+            'themes' => $extensionsSource['extra']['tuliacms']['themes'],
+        ];
         $result = [];
 
         foreach ($extensionsSource['extra']['tuliacms']['themes'] as $name => $info) {
