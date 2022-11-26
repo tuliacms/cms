@@ -21,6 +21,7 @@ use Tulia\Cms\Theme\Domain\WriteModel\Service\ThemeImportCollectionRegistry;
 use Tulia\Cms\Theme\UserInterface\Web\Backend\Form\ThemeInstallatorForm;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
+use Tulia\Component\Importer\Exception\ObjectImportFailedContextAwareException;
 use Tulia\Component\Templating\ViewInterface;
 use Tulia\Component\Theme\ManagerInterface;
 
@@ -106,14 +107,21 @@ final class Installator extends AbstractController
     ): RedirectResponse {
         $this->denyIfNotDevelopmentEnvironment();
 
-        ($importThemeCollection)(new ImportThemeCollectionRequest(
-            $request->request->get('theme'),
-            $request->request->get('collection'),
-            $website->getId(),
-            $this->authenticatedUserProvider->getUser()->getId()
-        ));
+        try {
+            ($importThemeCollection)(
+                new ImportThemeCollectionRequest(
+                    $request->request->get('theme'),
+                    $request->request->get('collection'),
+                    $website->getId(),
+                    $this->authenticatedUserProvider->getUser()->getId()
+                )
+            );
 
-        $this->addFlash('success', $this->trans('collectionHasBeenImported', [], 'themes'));
+            $this->addFlash('success', $this->trans('collectionHasBeenImported', [], 'themes'));
+        } catch (ObjectImportFailedContextAwareException $e) {
+            $this->addFlash('danger', $e->getMessage());
+        }
+
         return $this->redirectToRoute('backend.theme.installator.importer', [
             'theme' => $request->request->get('theme'),
         ]);

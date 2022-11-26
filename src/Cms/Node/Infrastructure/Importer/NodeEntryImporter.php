@@ -8,10 +8,12 @@ use Tulia\Cms\Content\Attributes\Infrastructure\Importer\ObjectDataToAttributesT
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Node\Application\UseCase\CreateNode;
 use Tulia\Cms\Node\Application\UseCase\CreateNodeRequest;
+use Tulia\Cms\Node\Domain\WriteModel\Exception\CannotImposePurposeToNodeException;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodeRepositoryInterface;
 use Tulia\Cms\Shared\Application\UseCase\IdResult;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
+use Tulia\Component\Importer\Exception\ObjectImportFailedContextAwareException;
 use Tulia\Component\Importer\ObjectImporter\ObjectImporterInterface;
 use Tulia\Component\Importer\ObjectImporter\Traits\WebsiteAwareTrait;
 use Tulia\Component\Importer\Structure\ObjectData;
@@ -41,17 +43,30 @@ class NodeEntryImporter implements ObjectImporterInterface
             'published_at' => $objectData['published_at'] ?? ImmutableDateTime::now(),
             'published_to' => $objectData['published_to'] ?? null,
         ];
-        /** @var IdResult $result */
-        $result = ($this->createNode)(new CreateNodeRequest(
-            $objectData['type'],
-            $this->userProvider->getUser()->getId(),
-            $details,
-            $this->transformObjectDataToAttributes($objectData),
-            $this->getWebsite()->getId(),
-            $this->getWebsite()->getLocale()->getCode(),
-            $this->getWebsite()->getDefaultLocale()->getCode(),
-            $this->getWebsite()->getLocaleCodes(),
-        ));
+        try {
+            /** @var IdResult $result */
+            $result = ($this->createNode)(
+                new CreateNodeRequest(
+                    $objectData['type'],
+                    $this->userProvider->getUser()->getId(),
+                    $details,
+                    $this->transformObjectDataToAttributes($objectData),
+                    $this->getWebsite()->getId(),
+                    $this->getWebsite()->getLocale()->getCode(),
+                    $this->getWebsite()->getDefaultLocale()->getCode(),
+                    $this->getWebsite()->getLocaleCodes(),
+                )
+            );
+        } catch (CannotImposePurposeToNodeException $e) {
+            throw ObjectImportFailedContextAwareException::fromContext(
+                sprintf(
+                    'Imported object "%s" has singular purpose "%s" imposed to another node in this website. Plase make sure You don\'t have any nodes with purpose "%s" in website before importing.',
+                    $objectData['title'],
+                    $e->purpose,
+                    $e->purpose,
+                )
+            );
+        }
 
         return $result->id;
     }
