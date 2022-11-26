@@ -85,8 +85,7 @@ final class TuliaKernel extends Kernel
             $dirs[] = $base . '/Deployment/Infrastructure/Framework/Resources/config';
         }
 
-        $dirs = array_merge($dirs, $this->getExtensionConfigDirs('module'));
-        $dirs = array_merge($dirs, $this->getExtensionConfigDirs('theme'));
+        $dirs = array_merge($dirs, $this->getComposerExtensionConfigDirs());
 
         return $dirs;
     }
@@ -131,34 +130,16 @@ final class TuliaKernel extends Kernel
         }
     }
 
-    private function getExtensionConfigDirs(string $type): array
+    private function getComposerExtensionConfigDirs(): array
     {
-        $configDirs = [];
+        $root = $this->getProjectDir();
+        $extensionsSource = json_decode(file_get_contents($root.'/composer.extensions.json'), true, JSON_THROW_ON_ERROR);
+        $result = [];
 
-        foreach (['extension', 'extension.local'] as $dir) {
-            if (is_dir($this->getProjectDir().'/'.$dir.'/'.$type) === false) {
-                continue;
-            }
-
-            foreach (new \DirectoryIterator($this->getProjectDir().'/'.$dir.'/'.$type) as $vendor) {
-                if ($vendor->isDot() || !$vendor->isDir()) {
-                    continue;
-                }
-
-                foreach (new \DirectoryIterator($this->getProjectDir().'/'.$dir.'/'.$type.'/'.$vendor->getFilename()) as $ext) {
-                    if ($ext->isDot() || !$ext->isDir()) {
-                        continue;
-                    }
-
-                    $path = $this->getProjectDir().'/'.$dir.'/'.$type.'/'.$vendor->getFilename().'/'.$ext->getFilename().'/Resources/config';
-
-                    if (is_dir($path)) {
-                        $configDirs[] = $path;
-                    }
-                }
-            }
+        foreach ($extensionsSource['extra']['tuliacms']['themes'] as $name => $info) {
+            $result[] = $root.'/'.$info['path'].'/Resources/config';
         }
 
-        return $configDirs;
+        return $result;
     }
 }
