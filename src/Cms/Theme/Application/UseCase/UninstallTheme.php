@@ -9,6 +9,7 @@ use Tulia\Cms\Platform\Application\Service\FrameworkCacheService;
 use Tulia\Cms\Shared\Application\UseCase\AbstractTransactionalUseCase;
 use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
 use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
+use Tulia\Component\Theme\Storage\StorageInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -17,7 +18,8 @@ final class UninstallTheme extends AbstractTransactionalUseCase
 {
     public function __construct(
         private readonly string $projectDir,
-        private readonly FrameworkCacheService $frameworkCacheService
+        private readonly FrameworkCacheService $frameworkCacheService,
+        private readonly StorageInterface $storage,
     ) {
     }
 
@@ -34,10 +36,14 @@ final class UninstallTheme extends AbstractTransactionalUseCase
             throw new \Exception('Theme does not exists');
         }
 
-        $filesystem = new Filesystem();
-        $filesystem->remove($themeDirectory);
+        $theme = $this->storage->get($request->theme);
 
-        $this->frameworkCacheService->clear();
+        if ($theme->isLocal()) {
+            $filesystem = new Filesystem();
+            $filesystem->remove($themeDirectory);
+
+            $this->frameworkCacheService->clear();
+        }
 
         return null;
     }

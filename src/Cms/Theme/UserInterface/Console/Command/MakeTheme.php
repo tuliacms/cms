@@ -9,6 +9,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Tulia\Cms\Platform\Application\Service\FrameworkCacheService;
 use Tulia\Cms\Platform\Infrastructure\Composer\Extensions\ExtensionSourceEnum;
 use Tulia\Cms\Platform\Infrastructure\Composer\Extensions\ExtensionsStorage;
 use Tulia\Cms\Platform\Version;
@@ -31,6 +32,7 @@ final class MakeTheme extends Command
         private readonly string $filesTemplates,
         private readonly string $themesDir,
         private readonly ExtensionsStorage $extensionsStorage,
+        private readonly FrameworkCacheService $frameworkCacheService,
     ){
         parent::__construct();
     }
@@ -63,7 +65,7 @@ final class MakeTheme extends Command
         $this->writeFiles($filesList, $this->themesDir.'/'.$themeName);
         $this->appendToComposerExtensions($themeName, $this->themesDir.'/'.$themeName);
 
-        // @todo Refresh cache, when new Theme was added
+        $this->frameworkCacheService->clear();
 
         $io->writeln('<info>Theme generated. Next steps:</info>');
         $io->writeln('   1. Activate Your theme in Administration Panel');

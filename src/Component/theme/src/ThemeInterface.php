@@ -30,4 +30,6 @@ interface ThemeInterface
     public function getViewsDirectory(): string;
 
     public function getManifest(): array;
+
+    public function isLocal(): bool;
 }

@@ -7,6 +7,8 @@ namespace Tulia\Cms\Theme\Application\UseCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Tulia\Cms\Platform\Application\Service\AssetsPublisher;
 use Tulia\Cms\Platform\Application\Service\FrameworkCacheService;
+use Tulia\Cms\Platform\Infrastructure\Composer\Extensions\ExtensionSourceEnum;
+use Tulia\Cms\Platform\Infrastructure\Composer\Extensions\ExtensionsStorage;
 use Tulia\Cms\Shared\Application\UseCase\AbstractTransactionalUseCase;
 use Tulia\Cms\Shared\Application\UseCase\IdResult;
 use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
@@ -21,7 +23,8 @@ final class InstallTheme extends AbstractTransactionalUseCase
     public function __construct(
         private readonly string $projectDir,
         private readonly AssetsPublisher $assetsPublisher,
-        private readonly FrameworkCacheService $frameworkCacheService
+        private readonly FrameworkCacheService $frameworkCacheService,
+        private readonly ExtensionsStorage $extensionsStorage,
     ) {
     }
 
@@ -71,6 +74,13 @@ final class InstallTheme extends AbstractTransactionalUseCase
             $filesystem->remove($destination);
 
             $this->frameworkCacheService->clear();
+
+            $this->extensionsStorage->appendTheme(
+                sprintf('%s/%s', $matches[1], $matches[2]),
+                '0.0.1',
+                ExtensionSourceEnum::LOCAL,
+                $themeDestination,
+            );
 
             return new IdResult(sprintf('%s/%s', $matches[1], $matches[2]));
         } catch (\Throwable $e) {

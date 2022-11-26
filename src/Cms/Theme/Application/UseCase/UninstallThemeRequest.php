@@ -12,7 +12,7 @@ use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
 final class UninstallThemeRequest implements RequestInterface
 {
     public function __construct(
-        public readonly string $theme
+        public readonly string $theme,
     ) {
     }
 }

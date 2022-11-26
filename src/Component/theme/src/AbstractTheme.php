@@ -109,6 +109,11 @@ abstract class AbstractTheme implements ThemeInterface
         return $this->manifestSource = json_decode(file_get_contents($this->manifest), true);
     }
 
+    public function isLocal(): bool
+    {
+        return $this->source === 'local';
+    }
+
     public function setConfigurationLoader(
         ConfigurationLoaderInterface $configurationLoader,
         ResolverAggregateInterface $resolverAggregate,
