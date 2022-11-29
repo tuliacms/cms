@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Theme\{{ theme.vendor }}\{{ theme.code }};
+namespace Tulia\Local\Theme\{{ theme.vendor }}\{{ theme.code }};
 
 use Tulia\Component\Theme\AbstractTheme;
 

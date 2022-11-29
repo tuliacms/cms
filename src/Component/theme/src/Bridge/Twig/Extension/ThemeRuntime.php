@@ -43,11 +43,7 @@ class ThemeRuntime implements RuntimeExtensionInterface
         return $theme->getViewsDirectory().'/'.$template;
     }
 
-    /**
-     * @param mixed $default
-     * @return mixed
-     */
-    public function customizerGet(string $name, $default = null)
+    public function customizerGet(string $name, mixed $default = null): mixed
     {
         return $this->manager->getTheme()->getConfig()->getCustomizerVariable($name, $default);
     }

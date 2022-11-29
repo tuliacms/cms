@@ -9,9 +9,14 @@ namespace Tulia\Cms\Platform\Infrastructure\Composer\Extensions;
  */
 final class ExtensionsStorage
 {
+    private string $extensionsFilepath;
+    private array $extensions;
+
     public function __construct(
         private readonly string $rootDir,
     ) {
+        $this->extensionsFilepath = realpath($this->rootDir.'/composer.extensions.json');
+        $this->extensions = json_decode(file_get_contents($this->extensionsFilepath), true, JSON_THROW_ON_ERROR);
     }
 
     public function appendTheme(
@@ -20,8 +25,6 @@ final class ExtensionsStorage
         ExtensionSourceEnum $source,
         string $sourcePath,
     ): void {
-        $extensionsFilepath = realpath($this->rootDir.'/composer.extensions.json');
-        $extensions = json_decode(file_get_contents($extensionsFilepath), true, JSON_THROW_ON_ERROR);
         $manifest = json_decode(file_get_contents($sourcePath.'/manifest.json'), true, JSON_THROW_ON_ERROR);
 
         if ($source === ExtensionSourceEnum::VENDOR) {
@@ -31,7 +34,7 @@ final class ExtensionsStorage
                 'version' => $version,
                 'path' => "/vendor/$package",
                 'vendor-package-name' => $package,
-                'entrypoint' => $this->resolveEntrypoint($sourcePath),
+                'entrypoint' => $this->resolveThemeEntrypoint($sourcePath),
                 'manifest' => str_replace($this->rootDir, '', $sourcePath).'/manifest.json',
             ];
         } else {
@@ -40,17 +43,56 @@ final class ExtensionsStorage
                 'name' => $manifest['name'],
                 'version' => $version,
                 'path' => "/extension/theme/$package",
-                'entrypoint' => $this->resolveEntrypoint($sourcePath),
+                'entrypoint' => $this->resolveThemeEntrypoint($sourcePath),
                 'manifest' => str_replace($this->rootDir, '', $sourcePath).'/manifest.json',
             ];
         }
 
-        $extensions['extra']['tuliacms']['themes'][$package] = $info;
-
-        file_put_contents($extensionsFilepath, json_encode($extensions, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT));
+        $this->extensions['extra']['tuliacms']['themes'][$package] = $info;
     }
 
-    private function resolveEntrypoint(string $packageDir): string
+    public function appendModule(
+        string $package,
+        string $version,
+        ExtensionSourceEnum $source,
+        string $sourcePath,
+    ): void {
+        $manifest = json_decode(file_get_contents($sourcePath.'/manifest.json'), true, JSON_THROW_ON_ERROR);
+        $entrypoint = $manifest['entrypoint'] ?? '';
+
+        if ($source === ExtensionSourceEnum::VENDOR) {
+            $info = [
+                'source' => $source->value,
+                'name' => $manifest['name'],
+                'version' => $version,
+                'path' => "/vendor/$package$entrypoint",
+                'vendor-package-name' => $package,
+                'manifest' => str_replace($this->rootDir, '', $sourcePath).'/manifest.json',
+            ];
+        } else {
+            $info = [
+                'source' => $source->value,
+                'name' => $manifest['name'],
+                'version' => $version,
+                'path' => "/extension/module/$package$entrypoint",
+                'manifest' => str_replace($this->rootDir, '', $sourcePath).'/manifest.json',
+            ];
+        }
+
+        $this->extensions['extra']['tuliacms']['modules'][$package] = $info;
+    }
+
+    public function clearCollection(): void
+    {
+        $this->extensions = [];
+    }
+
+    public function write(): void
+    {
+        file_put_contents($this->extensionsFilepath, json_encode($this->extensions, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT));
+    }
+
+    private function resolveThemeEntrypoint(string $packageDir): string
     {
         preg_match('#namespace ([a-zA-Z0-9\\\\]+);#i', file_get_contents($packageDir.'/Theme.php'), $matches);
 
@@ -63,6 +105,16 @@ final class ExtensionsStorage
         $extensions = json_decode(file_get_contents($extensionsFilepath), true, JSON_THROW_ON_ERROR);
 
         unset($extensions['extra']['tuliacms']['themes'][$package]);
+
+        file_put_contents($extensionsFilepath, json_encode($extensions, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT));
+    }
+
+    public function removeModule(mixed $package)
+    {
+        $extensionsFilepath = realpath($this->rootDir.'/composer.extensions.json');
+        $extensions = json_decode(file_get_contents($extensionsFilepath), true, JSON_THROW_ON_ERROR);
+
+        unset($extensions['extra']['tuliacms']['modules'][$package]);
 
         file_put_contents($extensionsFilepath, json_encode($extensions, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT));
     }

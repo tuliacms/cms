@@ -47,7 +47,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.tulia-tour.11">
                 <source>tourStepSearchAnythingBody</source>
-                <target><![CDATA[You don't know where to find element?<br />Just search for it here.]]></target>
+                <target><![CDATA[You don&apos;t know where to find element?<br />Just search for it here.]]></target>
             </trans-unit>
             <trans-unit id="tuliacms.tulia-tour.12">
                 <source>tourStepWebsitesLocalesHeadline</source>

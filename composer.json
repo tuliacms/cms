@@ -1,5 +1,5 @@
 {
-    "type": "package",
+    "type": "library",
     "name": "tuliacms/cms",
     "license": "MIT",
     "minimum-stability": "stable",
