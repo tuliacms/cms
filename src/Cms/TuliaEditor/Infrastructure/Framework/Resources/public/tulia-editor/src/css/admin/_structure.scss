@@ -13,12 +13,12 @@
         .tued-label {
             position: relative;
             margin: 0 0 6px 0;
-            border: 1px solid #dedede;
+            border: 1px solid $gray;
             padding: 6px 10px 6px 0;
             display: flex;
             align-items: center;
             border-radius: 4px;
-            transition: .12s all;
+            transition: $transition;
             font-size: 13px;
 
             &.tued-element-selected {
@@ -51,7 +51,7 @@
                     line-height: 33px;
                     text-align: center;
                     color: rgba(0,0,0,.3);
-                    transition: .12s all;
+                    transition: $transition;
                 }
             }
 
@@ -105,11 +105,11 @@
     }
 
     .tued-structure-new-element {
-        border: 2px dashed #dedede;
+        border: 2px dashed $gray;
         border-radius: 5px;
         padding: 5px;
         text-align: center;
-        transition: .12s all;
+        transition: $transition;
         margin: 5px 0 5px 0;
         color: #bbbbbb;
 

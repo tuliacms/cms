@@ -1,12 +1,23 @@
 <template>
     <div class="tued-block_editable-image">
-        <img :src="imageLink" @load="$emit('updated')" />
-        <button type="button" @click="extension.execute('chose-image')"></button>
+        <img :src="imageLink" @load="$emit('updated')" style="max-width: 100%" ref="image" />
+        <button class="tued-btn" type="button" v-tooltip :title="translator.trans('selectImage')" @click="extension.execute('chose-image')"><i class="fa-solid fa-pen"></i></button>
+        <button class="tued-btn" v-if="props.modelValue.id" type="button" v-tooltip :title="translator.trans('clearImage')" @click="extension.execute('remove-image')" style="left: initial; right: 5px;"><i class="fa-solid fa-close"></i></button>
     </div>
 </template>
 
+<style scoped lang="scss">
+    .tued-block_editable-image {
+        outline: none;
+
+        &:hover {
+            outline: 1px dotted #555 !important;
+        }
+    }
+</style>
+
 <script setup>
-const { defineProps, defineEmits, computed, inject, onMounted, onUnmounted } = require('vue');
+const { defineProps, defineEmits, computed, inject, onMounted, onUnmounted, ref } = require('vue');
 const props = defineProps({
     modelValue: {
         required: true,
@@ -20,8 +31,11 @@ const props = defineProps({
 });
 const options = inject('options');
 const filemanager = inject('filemanager');
+const selection = inject('selection');
+const translator = inject('translator');
 const extension = inject('extension.instance').editor('Image');
 const emit = defineEmits(['update:modelValue', 'updated']);
+const image = ref(null);
 
 const imageLink = computed(() => {
     if (props.modelValue.id) {
@@ -41,6 +55,9 @@ extension.operation('image-chosen', (data, success, fail) => {
     success();
 });
 
+onMounted(() => {
+    image.value.addEventListener('load', () => selection.update());
+});
 onUnmounted(() => {
     extension.unmount();
 });

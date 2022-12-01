@@ -23,7 +23,7 @@ class BreadcrumbsExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('breadcrumbs', function ($context) {
+            new TwigFunction('breadcrumbs', function ($context, ?string $classlist = null) {
                 $breadcrumbs = $this->generator->generateFromRequest($context['app']->getRequest());
 
                 // Append current page placeholder if at least
@@ -31,6 +31,8 @@ class BreadcrumbsExtension extends AbstractExtension
                 /*if ($breadcrumbs->count() <= 1) {
                     $breadcrumbs->push('#', $this->document->getTitle());
                 }*/
+
+                $breadcrumbs->setClasslist($classlist);
 
                 return $breadcrumbs;
             }, [

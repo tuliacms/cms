@@ -186,6 +186,10 @@
                 <source>imageSize</source>
                 <target>Image size</target>
             </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.47">
+                <source>clearImage</source>
+                <target>Clear image</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

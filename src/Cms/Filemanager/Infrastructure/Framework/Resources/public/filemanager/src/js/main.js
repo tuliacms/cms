@@ -46,6 +46,10 @@ class Instance {
         this.services.commandBus.execute('close');
     }
 
+    clearSelection () {
+        this.services.selection.clear();
+    }
+
     createServices (options) {
         const eventDispatcher = new EventDispatcher();
         const commandBus = new CommandBus();

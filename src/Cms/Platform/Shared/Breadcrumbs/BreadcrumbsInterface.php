@@ -24,4 +24,6 @@ interface BreadcrumbsInterface extends \IteratorAggregate
     public function shift(): array;
 
     public function render(): string;
+
+    public function setClasslist(?string $classlist = null): void;
 }

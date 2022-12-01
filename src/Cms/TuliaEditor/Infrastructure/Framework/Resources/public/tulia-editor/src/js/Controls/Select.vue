@@ -1,24 +1,69 @@
 <template>
     <div class="mb-3">
         <label class="form-label">{{ props.label }}</label>
-        <div v-for="(label, value) in props.choices" :key="value">
-            <label><input type="radio" :value="value" v-model="model" /> {{ label }}</label>
+        <div class="tued-control-select tued-closed" ref="control">
+            <div class="tued-label" @click="toggleOptions">{{ selected }}</div>
+            <div class="tued-options">
+                <div class="tued-option" v-for="(label, value) in props.choices" :key="value">
+                    <input type="radio" :value="value" v-model="model" :id="'tued-select-' + value" />
+                    <label :for="'tued-select-' + value" @click="closeOptions">
+                        {{ label }}
+                    </label>
+                </div>
+            </div>
         </div>
+        <div class="form-text" v-if="help">{{ help }}</div>
     </div>
 </template>
 
 <script setup>
-const { defineProps, inject, defineEmits, ref, watch, computed } = require('vue');
+const { defineProps, inject, defineEmits, ref, watch, computed, onMounted, onUnmounted } = require('vue');
 const emit = defineEmits(['update:modelValue']);
 const props = defineProps({
     multiple: { require: false, default: false },
     choices: { require: true },
     modelValue: { require: true },
     label: { require: true },
+    help: { require: false },
 });
+const messenger = inject('messenger');
 
+const control = ref(null);
+const toggleOptions = () => {
+    control.value.classList.toggle('tued-opened');
+    control.value.classList.toggle('tued-closed');
+};
+const closeOptions = () => {
+    control.value.classList.remove('tued-opened');
+    control.value.classList.add('tued-closed');
+};
+const selected = computed(() => {
+    let selected = [];
+
+    for (let i in props.choices) {
+        if (i === model.value) {
+            selected.push(props.choices[i]);
+        }
+    }
+
+    return selected.join(', ');
+});
 const model = computed({
     get: () => props.modelValue,
     set: (value) => emit('update:modelValue', value)
+});
+const deletectIfCanCloseOptions = function (e) {
+    if (control.value.classList.contains('tued-opened') && !control.value.contains(e.target)) {
+        closeOptions();
+    }
+};
+
+onMounted(() => {
+    document.body.addEventListener('click', deletectIfCanCloseOptions);
+    messenger.on('structure.selection.selected', closeOptions);
+});
+onUnmounted(() => {
+    document.body.removeEventListener('click', deletectIfCanCloseOptions);
+    messenger.off('structure.selection.selected', closeOptions);
 });
 </script>

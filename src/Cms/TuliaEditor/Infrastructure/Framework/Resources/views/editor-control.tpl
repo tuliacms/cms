@@ -19,6 +19,8 @@
         TuliaEditor.trans('{{ user().locale }}', 'default', {
             save: '{{ 'save'|trans }}',
             cancel: '{{ 'cancel'|trans }}',
+            yes: '{{ 'yes'|trans }}',
+            no: '{{ 'no'|trans }}',
             section: '{{ 'section'|trans({}, 'tulia-editor') }}',
             column: '{{ 'column'|trans({}, 'tulia-editor') }}',
             row: '{{ 'row'|trans({}, 'tulia-editor') }}',
@@ -62,6 +64,7 @@
             mapHeight: '{{ 'mapHeight'|trans({}, 'tulia-editor') }}',
             mapZoom: '{{ 'mapZoom'|trans({}, 'tulia-editor') }}',
             imageSize: '{{ 'imageSize'|trans({}, 'tulia-editor') }}',
+            clearImage: '{{ 'clearImage'|trans({}, 'tulia-editor') }}',
         });
 
         let structureSelector = '.tulia-editor-structure-field[data-tulia-editor-group-id="{{ params.group_id }}"]';

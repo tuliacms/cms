@@ -29,7 +29,7 @@ const getFilemanager = () => {
 
             extension.execute('image-chosen', {
                 id: files[0].id,
-                filename: files[0].name
+                filename: files[0].name,
             });
         }
     });
@@ -37,6 +37,14 @@ const getFilemanager = () => {
 
 extension.operation('chose-image', (data, success, fail) => {
     getFilemanager().open();
+    success();
+});
+extension.operation('remove-image', (data, success, fail) => {
+    getFilemanager().clearSelection();
+    extension.execute('image-chosen', {
+        id: null,
+        filename: null,
+    });
     success();
 });
 </script>

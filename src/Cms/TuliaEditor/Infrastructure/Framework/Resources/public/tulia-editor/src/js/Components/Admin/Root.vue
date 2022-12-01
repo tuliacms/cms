@@ -62,7 +62,6 @@ provide('options', props.options);
 
 const saveEditor = function () {
     props.container.messenger.execute('structure.fetch').then((data) => {
-        console.log(1);
         selection.resetHovered();
         selection.resetSelection();
         data.structure.assets = assets.collect();

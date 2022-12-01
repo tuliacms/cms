@@ -204,6 +204,12 @@ export default {
         this.messenger.on('structure.selection.deselect', () => {
             this.selectable.boundaries.clearSelectionHighlight();
         });
+        this.messenger.on('structure.selection.update', () => {
+            this.selectable.boundaries.update();
+        });
+        this.messenger.on('structure.hovering.update', () => {
+            this.hoverable.boundaries.update();
+        });
         this.messenger.on('structure.selection.hover', (type, id) => {
             let node = this.getElement(type, id);
 

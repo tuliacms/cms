@@ -2,6 +2,9 @@ $primary: #0088cc;
 $primary-hovered: #0071a5;
 $success: #088170;
 $success-hovered: darken($success, 7);
+$gray: #dedede;
 
-$btn-primary-bg: #0069d9;
-$btn-primary-border: #0062cc;
+$btn-primary-bg: $primary;
+$btn-primary-border: $primary;
+
+$transition: .12s all;

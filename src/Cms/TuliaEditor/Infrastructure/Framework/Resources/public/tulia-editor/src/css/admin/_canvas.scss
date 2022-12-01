@@ -35,7 +35,7 @@
                 top: 0;
                 height: 17px;
                 transform: translateX(-50%);
-                transition: .12s all;
+                transition: $transition;
                 border-bottom: 1px solid #ddd;
 
                 &:before,

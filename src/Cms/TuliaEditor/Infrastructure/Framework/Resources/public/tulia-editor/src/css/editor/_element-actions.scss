@@ -16,7 +16,7 @@
         text-align: center;
         border-left: 1px solid #ddd;
         background-color: $primary;
-        transition: .12s all;
+        transition: $transition;
 
         &:first-child {
             border: none;

@@ -1,6 +1,7 @@
 <template>
     <div :class="classlist" :style="{ 'background-image': `url(${imageUrl})` }">
-        <button type="button" @click="extension.execute('chose-image')" :title="translator.trans('selectImage')" v-tooltip></button>
+        <button class="tued-btn" type="button" @click="extension.execute('chose-image')" v-tooltip :title="translator.trans('selectImage')"><i class="fa-solid fa-pen"></i></button>
+        <button class="tued-btn" v-if="props.modelValue.id" type="button" @click="extension.execute('remove-image')" v-tooltip :title="translator.trans('clearImage')" style="left: initial; right: 5px;"><i class="fa-solid fa-close"></i></button>
         <slot />
     </div>
 </template>

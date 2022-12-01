@@ -10,9 +10,9 @@
 
         .tued-block-item-inner {
             padding: 5px;
-            border: 1px solid #dedede;
+            border: 1px solid $gray;
             border-radius: 5px;
-            transition: .12s all;
+            transition: $transition;
             box-shadow: 0 0 0 0 rgba(0,0,0,.1);
 
             &:hover {

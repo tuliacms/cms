@@ -23,12 +23,12 @@
             width: 320px;
             top: 0;
             right: 0;
-            border-bottom: 1px solid #dedede;
-            border-left: 1px solid #dedede;
+            border-bottom: 1px solid $gray;
+            border-left: 1px solid $gray;
 
             .tued-menu-holder {
                 flex-grow: 1;
-                border-right: 1px solid #dedede;
+                border-right: 1px solid $gray;
 
                 .tued-menu-hamburger {
                     display: block;

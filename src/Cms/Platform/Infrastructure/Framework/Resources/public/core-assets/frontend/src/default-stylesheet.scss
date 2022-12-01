@@ -1,3 +1,14 @@
+:root {
+    --tulia-navbar-horizontal-link-height: 42px;
+    --tulia-navbar-horizontal-sumbenu-bg: #fff;
+    --tulia-navbar-horizontal-sumbenu-padding-x: 4px;
+    --tulia-navbar-horizontal-sumbenu-padding-y: 0;
+    --tulia-navbar-horizontal-sumbenu-width: 200px;
+    --tulia-navbar-horizontal-sumbenu-link-padding-x: 12px;
+    --tulia-navbar-horizontal-sumbenu-link-padding-y: 8px;
+    --tulia-navbar-horizontal-sumbenu-link-line-height: 1.3;
+}
+
 .tulia-navbar {
     .navbar-nav,
     .navbar-nav .nav-item {
@@ -36,8 +47,8 @@
      */
     &.tulia-navbar-layout-horizontal {
         .nav-link {
-            height: 42px;
-            line-height: 42px;
+            height: var(--tulia-navbar-horizontal-link-height);
+            line-height: var(--tulia-navbar-horizontal-link-height);
         }
         .nav-item.has-children {
             position: relative;
@@ -53,17 +64,17 @@
             left: 0;
             top: 100%;
             z-index: 10;
-            background-color: #fff;
+            background-color: var(--tulia-navbar-horizontal-sumbenu-bg);
             list-style: none;
-            padding: 4px 0;
+            padding: var(--tulia-navbar-horizontal-sumbenu-padding-y) var(--tulia-navbar-horizontal-sumbenu-padding-x);
             margin: 0;
 
             .nav-link {
                 display: block;
                 height: auto;
-                padding: 8px 12px;
-                width: 200px;
-                line-height: 1.3;
+                padding: var(--tulia-navbar-horizontal-sumbenu-link-padding-y) var(--tulia-navbar-horizontal-sumbenu-link-padding-x);
+                width: var(--tulia-navbar-horizontal-sumbenu-width);
+                line-height: var(--tulia-navbar-horizontal-sumbenu-link-line-height);
             }
             .submenu {
                 left: 100%;

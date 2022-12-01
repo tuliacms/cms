@@ -30,12 +30,8 @@ export default class Selection {
     }
 
     update () {
-        if (this.selected) {
-            this.select(this.selected.type, this.selected.id);
-        }
-        if (this.hovered) {
-            this.hover(this.hovered.type, this.hovered.id);
-        }
+        this.messenger.notify('structure.selection.update');
+        this.messenger.notify('structure.hovering.update');
     }
 
     select (type, id, trigger) {

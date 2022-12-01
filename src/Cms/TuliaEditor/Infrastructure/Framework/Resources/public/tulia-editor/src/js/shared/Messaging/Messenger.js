@@ -93,6 +93,18 @@ export default class Messenger {
         });
     }
 
+    off (notification, listener) {
+        if (!this.notificationListeners[notification]) {
+            return;
+        }
+
+        for (let i in this.notificationListeners[notification]) {
+            if (this.notificationListeners[notification][i].listener === listener) {
+                delete this.notificationListeners[notification][i];
+            }
+        }
+    }
+
     operation (operation, listener) {
         if (!this.operationListeners[operation]) {
             this.operationListeners[operation] = [];

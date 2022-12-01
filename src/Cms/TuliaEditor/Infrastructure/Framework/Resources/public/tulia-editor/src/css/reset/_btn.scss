@@ -1,19 +1,18 @@
 .tued-btn {
     display: inline-block;
-    background-color: #fff;
+    background-color: $primary;
     padding: 8px 12px;
     font-size: 14px;
     line-height: 1;
-    color: #000;
-    border: 1px solid $primary;
-    outline: none !important;
+    color: #fff;
     border-radius: 3px;
-    transition: .12s all;
+    transition: $transition;
+    border: none;
+    outline: none;
 
     &:hover {
-        color: #fff;
-        background-color: #0069d9;
-        border-color: #0062cc;
+        cursor: pointer;
+        background-color: $primary-hovered;
     }
 
     &:focus {
