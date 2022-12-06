@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Platform\UserInterface\Web\Controller;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 use Tulia\Component\Templating\EngineInterface;
+use Tulia\Component\Templating\Exception\ViewNotFoundException;
 use Tulia\Component\Templating\View;
 use Tulia\Component\Theme\ManagerInterface;
 
@@ -25,10 +27,13 @@ final class ErrorController extends AbstractController
     ) {
     }
 
-    public function handle(\Throwable $exception, DebugLoggerInterface $logger, WebsiteInterface $website)
+    public function handle(\Throwable $exception, LoggerInterface $appLogger, WebsiteInterface $website)
     {
         try {
-            if ($exception instanceof NotFoundHttpException) {
+            if (
+                $exception instanceof NotFoundHttpException
+                || ($exception instanceof HttpException && $exception->getStatusCode() >= 400 && $exception->getStatusCode() <= 499)
+            ) {
                 if ($website->isBackend()) {
                     $view = '@backend/error-404.tpl';
                     $code = Response::HTTP_NOT_FOUND;
@@ -42,6 +47,10 @@ final class ErrorController extends AbstractController
         } catch (\Throwable $e) {
             if ($this->environment === 'prod') {
                 return $this->createProduction500Error();
+            }
+
+            if ($e instanceof ViewNotFoundException) {
+                throw new \Exception('Cannot render error page. Maybe You forgot to implement the 404.tpl view in Your theme?', 0, $e);
             }
 
             throw new \Exception('Cannot render error page. Reason of this error You can find below, in previous exception.', 0, $e);

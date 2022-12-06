@@ -9,7 +9,7 @@ export default class Filemanager {
         const imageResolvePath =  decodeURIComponent(this.config.image_resolve_path);
 
         return imageResolvePath
-                .replace('{size}', size ?? 'original')
+                .replace('{size}', size ?? image.size ?? 'original')
                 .replace('{id}', image.id)
                 .replace('{filename}', image.filename);
     }

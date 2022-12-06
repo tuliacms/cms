@@ -29,11 +29,6 @@ export default class Selection {
         this.messenger.notify('structure.selection.selecting.enable');
     }
 
-    update () {
-        this.messenger.notify('structure.selection.update');
-        this.messenger.notify('structure.hovering.update');
-    }
-
     select (type, id, trigger) {
         if (this.selectingDisabled) {
             return;

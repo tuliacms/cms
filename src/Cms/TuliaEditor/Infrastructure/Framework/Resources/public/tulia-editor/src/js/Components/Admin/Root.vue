@@ -90,6 +90,23 @@ const cancelEditor = function () {
 
 
 
+/*********
+ * Canvas
+ *********/
+const canvasOptions = reactive(ObjectCloner.deepClone(props.canvas));
+const CanvasView = require("shared/Canvas/View.js").default;
+const Canvas = require("shared/Canvas.js").default;
+provide('canvas', new Canvas(
+    props.container.messenger,
+    canvasOptions.size.breakpoints,
+    canvasOptions.size.breakpoint
+));
+const canvasView = new CanvasView(props.container.messenger);
+provide('canvas.view', canvasView);
+
+
+
+
 /************
  * Structure
  ************/
@@ -114,7 +131,7 @@ provide('structureManipulator', structureManipulator);
 
 onMounted(() => {
     props.container.messenger.on('structure.updated', () => {
-        selection.update();
+        canvasView.update();
     });
 
     props.container.messenger.on('structure.synchronize.from.editor', (newStructure) => {
@@ -135,20 +152,6 @@ function useCurrentStructureAsPrevious() {
 }
 
 
-
-
-
-
-/**********
- * Canvas *
- **********/
-const canvasOptions = reactive(ObjectCloner.deepClone(props.canvas));
-const Canvas = require("shared/Canvas.js").default;
-provide('canvas', new Canvas(
-    props.container.messenger,
-    canvasOptions.size.breakpoints,
-    canvasOptions.size.breakpoint
-));
 
 
 

@@ -155,5 +155,7 @@ props.container.messenger.operation('editor.canvas.preview.toggle', (params, suc
 
     success();
 });
+const CanvasView = require("shared/Canvas/View.js").default;
+provide('canvas.view', new CanvasView(props.container.messenger));
 </script>
 

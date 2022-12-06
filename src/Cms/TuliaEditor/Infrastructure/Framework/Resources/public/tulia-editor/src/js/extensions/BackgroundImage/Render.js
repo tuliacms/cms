@@ -2,26 +2,37 @@ export default class Render {
     id;
     block;
     image;
-    size;
 
-    constructor (block, image, placement, size) {
+    constructor (block, image) {
         this.validateImage(image);
         let self = this;
 
         this.block = block;
         this.image = image;
-        this.placement = placement ?? 'default';
-        this.size = size ?? 'original';
         this.id = block.style({
             'background-image': () => {
-                if (!self.image().id) {
+                const img = self.image();
+
+                if (!img.id) {
                     return `url('#')`;
                 }
 
-                return `url('[image_url id="${self.image().id}" size="${this.size}"]')`;
+                img.size = img.size ?? 'original';
+
+                return `url('[image_url id="${img.id}" size="${img.size}"]')`;
             }
         });
     }
+
+    link = () => {
+        const img = this.image();
+
+        if (!img.id) {
+            return `#`;
+        }
+
+        return `[image_url id="${img.id}" size="${img.size}"]`;
+    };
 
     validateImage (image) {
         if (typeof image !== 'function') {

@@ -31,8 +31,8 @@ const props = defineProps({
 });
 const options = inject('options');
 const filemanager = inject('filemanager');
-const selection = inject('selection');
 const translator = inject('translator');
+const view = inject('canvas.view');
 const extension = inject('extension.instance').editor('Image');
 const emit = defineEmits(['update:modelValue', 'updated']);
 const image = ref(null);
@@ -56,7 +56,7 @@ extension.operation('image-chosen', (data, success, fail) => {
 });
 
 onMounted(() => {
-    image.value.addEventListener('load', () => selection.update());
+    image.value.addEventListener('load', () => view.updated());
 });
 onUnmounted(() => {
     extension.unmount();

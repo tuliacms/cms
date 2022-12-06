@@ -18,7 +18,11 @@ export default class Data {
 
         this.data = reactive(data);
 
-        this.propagateChangesInThisInstance();
+        // In 'render' we dont change anything, so we dont need to update other segments
+        if (this.segment !== 'render') {
+            this.propagateChangesInThisInstance();
+        }
+
         this.watchForChangesInOtherInstance();
     }
 
@@ -70,7 +74,7 @@ export default class Data {
                 this.lastUpdateFromOutside = true;
                 this.data[i] = newData.data[i];
             }
-            this.lastUpdateFromOutside = false;
+            this.lastUpdateFromOutside = true;
         }
     }
 }

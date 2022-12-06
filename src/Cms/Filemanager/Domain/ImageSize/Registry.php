@@ -43,6 +43,10 @@ class Registry implements ImageSizeRegistryInterface
     {
         $this->resolve();
 
+        if (!isset($this->sizes[$name])) {
+            throw new \Exception(sprintf('Image size "%s" not found.', $name));
+        }
+
         return $this->sizes[$name];
     }
 

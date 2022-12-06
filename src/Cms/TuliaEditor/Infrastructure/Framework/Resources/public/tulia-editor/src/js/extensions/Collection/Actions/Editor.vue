@@ -21,22 +21,26 @@ const props = defineProps({
     item: {},
 });
 const translator = inject('translator');
+const view = inject('canvas.view');
 const actions = props.actions.split(',');
 
 const moveBackward = () => {
     let newPosition = props.collection.moveBackward(props.item);
     if (newPosition !== undefined) {
         emits('movedTo', newPosition);
+        view.updated();
     }
 };
 const moveForward = () => {
     let newPosition = props.collection.moveForward(props.item);
     if (newPosition !== undefined) {
         emits('movedTo', newPosition);
+        view.updated();
     }
 };
 const addNew = () => {
     emits('added', props.collection.add());
+    view.updated();
 };
 
 onMounted(() => {

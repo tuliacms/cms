@@ -3,42 +3,23 @@ const Popper = require('Popper');
 const tooltips = [];
 
 export default {
-    /**
-     * @todo Update Popper element when position of target element has changed
-     * This happend when we move for example FAQ element up/down - the popper element
-     * has not change his position until we scroll the page.
-     * https://popper.js.org/docs/v2/lifecycle/#manual-update
-     */
     mounted(el, binding, vnode, prevVnode) {
         const tooltip = document.createElement('div');
         tooltip.innerHTML = el.getAttribute('title');
         tooltip.classList.add('tued-tooltip');
 
         document.body.appendChild(tooltip);
+        let popper;
 
         if (Popper.createPopper) {
-            Popper.createPopper(el, tooltip, {
+            popper = Popper.createPopper(el, tooltip, {
                 placement: 'top',
-                modifiers: [
-                    {
-                        name: 'offset',
-                        options: {
-                            offset: [0, 10],
-                        },
-                    },
-                ],
+                modifiers: [{name: 'offset', options: {offset: [0, 10]}}],
             });
         } else {
-            new Popper(el, tooltip, {
+            popper = new Popper(el, tooltip, {
                 placement: 'top',
-                modifiers: [
-                    {
-                        name: 'offset',
-                        options: {
-                            offset: [0, 10],
-                        },
-                    },
-                ],
+                modifiers: [{name: 'offset', options: {offset: [0, 10]}}],
             });
         }
 
@@ -54,6 +35,15 @@ export default {
         el.addEventListener('mouseleave', e => {
             tooltip.classList.remove('tued-showed');
         });
+
+        /**
+         * Getting provides from instance is a hack in vuejs. Little tricky
+         * and not safe, but painless solution to update popper position.
+         */
+        binding.instance._.provides.messenger.on(
+            'canvas.view.updated',
+            async () => await popper.update()
+        );
     },
     beforeUnmount(el, binding, vnode, prevVnode) {
         for (let i in tooltips) {

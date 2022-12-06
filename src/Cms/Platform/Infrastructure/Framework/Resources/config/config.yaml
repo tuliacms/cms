@@ -1,4 +1,5 @@
 parameters:
+    # Here we define available translations fo translations files defined in CMS.
     cms.available_translations: [en_US, pl_PL]
 
 cms:
@@ -38,6 +39,7 @@ cms:
         - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/leaflet', target: '/core/leaflet' }
         - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/lodash', target: '/core/lodash' }
         - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/masonry', target: '/core/masonry' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/parallax-js', target: '/core/parallax-js' }
         - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/momentjs', target: '/core/momentjs' }
         - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/popperjs', target: '/core/popperjs' }
         - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/quill', target: '/core/quill' }
@@ -141,6 +143,10 @@ cms:
                 styles: [ '/assets/core/shepherd/shepherd.css' ]
                 priority: 500
                 group: head
+            parallax.js:
+                scripts: [ '/assets/core/parallax-js/parallax.min.js' ]
+                priority: 500
+                require: [ jquery ]
             datatables_core:
                 scripts: [ '/assets/core/datatables/datatables.min.js' ]
                 styles: [ '/assets/core/datatables/datatables.min.css' ]

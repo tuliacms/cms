@@ -95,7 +95,7 @@ final class MakeTuliaEditorBlock extends Command
     private function generateBlockThumbnail(string $blockName): string
     {
         $width = 250;
-        $height = 110;
+        $height = 100;
 
         $image = new Imagick();
         $image->newImage($width, $height, new ImagickPixel('white'), 'png');
