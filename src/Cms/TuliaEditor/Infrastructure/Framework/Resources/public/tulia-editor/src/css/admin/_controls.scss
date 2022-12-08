@@ -55,6 +55,7 @@
         max-width: 100%;
         line-height: 1;
         padding: 9px 10px;
+        min-height: 31px;
     }
 
     .tued-options {
@@ -68,6 +69,7 @@
         border: 1px solid $primary;
         border-radius: 0 0 4px 4px;
         background-color: #fff;
+        z-index: 1;
 
         .tued-option {
             label {

@@ -12,13 +12,20 @@
             :block="block"
             @updated="messenger.notify('structure.element.updated', block.id)"
             :tued-contextmenu="contextmenu.register(`block-${block.id}`, block.id)"
+            :class="blockClass(block)"
         ></component>
     </div>
 </template>
 
-<script>
-export default {
-    props: ['block', 'parent'],
-    inject: ['selection', 'messenger', 'contextmenu'],
-};
+<script setup>
+const { defineProps, inject, computed } = require('vue');
+const Block = require('./Block.vue').default;
+const BlockSizingClassnameGenerator = require('shared/Structure/Blocks/SizingClassnameGenerator.js').default;
+
+const props = defineProps(['block', 'parent']);
+const selection = inject('selection');
+const messenger = inject('messenger');
+const contextmenu = inject('contextmenu');
+
+const blockClass = (block) => (new BlockSizingClassnameGenerator(block)).generate();
 </script>

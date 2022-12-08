@@ -15,7 +15,6 @@ export default class Render extends AbstractSegment {
     }
 
     require (asset) {
-        console.log(this);
         this.assets.require(asset);
     }
 }

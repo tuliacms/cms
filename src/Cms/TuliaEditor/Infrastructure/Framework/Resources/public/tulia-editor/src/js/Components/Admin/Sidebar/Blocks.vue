@@ -17,6 +17,7 @@
                     <div
                         :class="{ 'tued-label': true, 'tued-element-selected': element.metadata.selected, 'tued-element-hovered': element.metadata.hovered }"
                         @click.stop="selection.select('block', element.id, 'sidebar')"
+                        @dblclick.stop="emits('selected')"
                         @mouseenter="selection.hover('block', element.id, 'sidebar')"
                         @mouseleave="selection.resetHovered()"
                         :tued-contextmenu="contextmenu.register('block', element.id)"
@@ -36,10 +37,11 @@
 </template>
 
 <script setup>
-const { inject, defineProps, onMounted } = require('vue');
+const { inject, defineProps, defineEmits, onMounted } = require('vue');
 const draggable = require('vuedraggable');
 
 const props = defineProps(['parent', 'blocks']);
+const emits = defineEmits(['selected']);
 
 const selection = inject('selection');
 const structureDragOptions = inject('structureDragOptions');

@@ -2,11 +2,14 @@
     <div class="mb-3">
         <label class="form-label">{{ props.label }}</label>
         <div class="tued-control-select tued-closed" ref="control">
-            <div class="tued-label" @click="toggleOptions">{{ selected }}</div>
+            <div class="tued-label" @click="toggleOptions">
+                <span v-if="selected">{{ selected }}</span>
+                <span v-else class="text-muted">{{ translator.trans('selectSomeOptions') }}</span>
+            </div>
             <div class="tued-options">
                 <div class="tued-option" v-for="(label, value) in props.choices" :key="value">
-                    <input type="radio" :value="value" v-model="model" :id="'tued-select-' + value" />
-                    <label :for="'tued-select-' + value" @click="closeOptions">
+                    <input type="radio" :value="value" v-model="model" :id="`tued-select-${controlId}-${value}`" />
+                    <label :for="`tued-select-${controlId}-${value}`" @click="closeOptions">
                         {{ label }}
                     </label>
                 </div>
@@ -18,6 +21,7 @@
 
 <script setup>
 const { defineProps, inject, defineEmits, ref, watch, computed, onMounted, onUnmounted } = require('vue');
+const _ = require('lodash');
 const emit = defineEmits(['update:modelValue']);
 const props = defineProps({
     multiple: { require: false, default: false },
@@ -27,7 +31,9 @@ const props = defineProps({
     help: { require: false },
 });
 const messenger = inject('messenger');
+const translator = inject('translator');
 
+const controlId = ref(null);
 const control = ref(null);
 const toggleOptions = () => {
     control.value.classList.toggle('tued-opened');
@@ -59,6 +65,8 @@ const deletectIfCanCloseOptions = function (e) {
 };
 
 onMounted(() => {
+    controlId.value = _.uniqueId();
+
     document.body.addEventListener('click', deletectIfCanCloseOptions);
     messenger.on('structure.selection.selected', closeOptions);
 });

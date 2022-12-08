@@ -62,8 +62,9 @@ let Customizer = function (options) {
 
             Tulia.Confirmation.warning()
                 .then(function (result) {
-                    if(result.value)
+                    if (result.value) {
                         document.location.href = href;
+                    }
                 });
         });
     };
@@ -165,8 +166,9 @@ let Customizer = function (options) {
                     title: self.trans('cancelChangesQuestion'),
                     text: self.trans('areYouSureToCancelChanges'),
                 }).then(function (result) {
-                    if(result.value)
+                    if (result.value) {
                         document.location.href = $('.customizer-close').attr('href');
+                    }
                 });
             }
         });
@@ -209,7 +211,7 @@ let Customizer = function (options) {
             if (input.attr('data-transport') === 'postMessage') {
                 self.sendPostMessage('customized', {
                     name : input.attr('name'),
-                    value: input.val(),
+                    value: self.transformValueIfNeeded(input),
                 });
             } else {
                 callback = function () {
@@ -239,7 +241,7 @@ let Customizer = function (options) {
             if (input.attr('data-transport') === 'postMessage') {
                 self.sendPostMessage('customized', {
                     name : input.attr('name'),
-                    value: input.val(),
+                    value: self.transformValueIfNeeded(input),
                 });
             } else {
                 callback = function () {
@@ -378,7 +380,7 @@ let Customizer = function (options) {
         let source = $('.customizer-form').serializeArray();
 
         for (let i = 0; i < source.length; i++) {
-            data[source[i].name] = source[i].value;
+            data[source[i].name] = this.transformValueIfNeeded($('input[name="' + source[i].name + '"]'));
         }
 
         return data;
@@ -402,6 +404,25 @@ let Customizer = function (options) {
 
     this.trans = function (key) {
         return this.options.translations[key];
+    };
+
+    this.transformValueIfNeeded = function (input) {
+        const transformation = input.attr('data-transform-value');
+        const value = input.val();
+
+        if (!transformation) {
+            return value;
+        }
+
+        switch (transformation) {
+            case 'hex2rgb':
+                const r = parseInt(value.substring(1,3), 16);
+                const g = parseInt(value.substring(3,5), 16);
+                const b = parseInt(value.substring(5,7), 16);
+                return `${r}, ${g}, ${b}`;
+        }
+
+        return value;
     };
 };
 

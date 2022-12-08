@@ -17,6 +17,7 @@
                     <div
                         :class="{ 'tued-label': true, 'tued-element-selected': element.metadata.selected, 'tued-element-hovered': element.metadata.hovered }"
                         @click.stop="selection.select('column', element.id, 'sidebar')"
+                        @dblclick.stop="emits('selected')"
                         @mouseenter="selection.hover('column', element.id, 'sidebar')"
                         @mouseleave="selection.resetHovered()"
                         :tued-contextmenu="contextmenu.register('column', element.id)"
@@ -47,6 +48,7 @@
                         @draggable-start="(event) => $emit('draggable-start', event)"
                         @draggable-change="(event) => $emit('draggable-change', event)"
                         @draggable-end="(event) => $emit('draggable-end', event)"
+                        @selected="emits('selected')"
                     ></Blocks>
                 </div>
             </template>
@@ -55,9 +57,10 @@
 </template>
 
 <script setup>
-const { defineProps, computed, inject, ref, onMounted } = require('vue');
+const { defineProps, computed, inject, ref, onMounted, defineEmits } = require('vue');
 const draggable = require('vuedraggable');
 const Blocks = require('components/Admin/Sidebar/Blocks.vue').default;
+const emits = defineEmits(['selected']);
 const props = defineProps(['parent', 'columns']);
 const selection = inject('selection');
 const canvas = inject('canvas');

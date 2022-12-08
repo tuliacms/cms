@@ -17,6 +17,7 @@
                     <div
                         :class="{ 'tued-label': true, 'tued-element-selected': element.metadata.selected, 'tued-element-hovered': element.metadata.hovered }"
                         @click.stop="selection.select('row', element.id, 'sidebar')"
+                        @dblclick.stop="$emit('selected')"
                         @mouseenter="selection.hover('row', element.id, 'sidebar')"
                         @mouseleave="selection.resetHovered()"
                         :tued-contextmenu="contextmenu.register('row', element.id)"
@@ -32,6 +33,7 @@
                         @draggable-start="(event) => $emit('draggable-start', event)"
                         @draggable-change="(event) => $emit('draggable-change', event)"
                         @draggable-end="(event) => $emit('draggable-end', event)"
+                        @selected="$emit('selected')"
                     ></Columns>
                 </div>
             </template>

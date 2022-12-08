@@ -17,6 +17,7 @@
                     <div
                         :class="{ 'tued-label': true, 'tued-element-selected': element.metadata.selected, 'tued-element-hovered': element.metadata.hovered }"
                         @click.stop="selection.select('section', element.id, 'sidebar')"
+                        @dblclick.stop="emits('selected')"
                         @mouseenter="selection.hover('section', element.id, 'sidebar')"
                         @mouseleave="selection.resetHovered()"
                         :tued-contextmenu="contextmenu.register('section', element.id)"
@@ -32,6 +33,7 @@
                         @draggable-start="handleStart"
                         @draggable-change="handleChange"
                         @draggable-end="sendDelta"
+                        @selected="emits('selected')"
                     ></Rows>
                 </div>
             </template>
@@ -46,8 +48,9 @@
 const draggable = require('vuedraggable');
 const Rows = require('components/Admin/Sidebar/Rows.vue').default;
 const DraggableDeltaTranslator = require('shared/Structure/DraggableDeltaTranslator.js').default;
-const { inject, defineProps, onMounted } = require('vue');
+const { inject, defineProps, onMounted, defineEmits } = require('vue');
 
+const emits = defineEmits(['selected']);
 const props = defineProps(['structure']);
 const blockPicker = inject('blocks.picker');
 const messenger = inject('messenger');

@@ -34,6 +34,7 @@
             > span {
                 padding-left: 30px;
                 flex: 0 0 auto;
+                user-select: none;
             }
 
             .tued-structure-draggable-handler {
@@ -83,6 +84,7 @@
                 padding: 0 5px;
                 height: 20px;
                 line-height: 20px;
+                user-select: none;
             }
             input {
                 width: 25px;

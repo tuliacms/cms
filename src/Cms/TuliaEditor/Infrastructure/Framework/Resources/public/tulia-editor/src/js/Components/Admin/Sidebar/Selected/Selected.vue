@@ -39,6 +39,7 @@
                             'tued-structure-selected-active': selected.id === block.id && selected.type === 'block'
                         }">
                             <div :class="{ 'd-block': existingBlocks[block.code], 'd-none': !existingBlocks[block.code] }">
+                                <Block :block="block"></Block>
                                 <component
                                     :is="'block-' + block.code + '-manager'"
                                     :block="block"
@@ -60,6 +61,7 @@
 
 <script setup>
 const Section = require('components/Admin/Sidebar/Selected/Section.vue').default;
+const Block = require('components/Admin/Sidebar/Selected/Block.vue').default;
 const { defineProps, reactive, inject, computed, onMounted } = require('vue');
 
 const messenger = inject('messenger');

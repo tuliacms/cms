@@ -2,7 +2,8 @@
     position: absolute;
     z-index: 200;
     width: 320px;
-    top: 38px;
+    padding-top: 80px;
+    top: 0;
     bottom: 0;
     right: 0;
     border-left: 1px solid #ddd;
@@ -11,7 +12,7 @@
     .tued-sidebar-inner {
         position: absolute;
         bottom: 0;
-        top: 0;
+        top: 80px;
         left: 0;
         right: 0;
         overflow: auto;

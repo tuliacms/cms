@@ -19,17 +19,14 @@
                         :class="columnClass(column)"
                         :id="`tued-column-${column.id}`"
                     >
-                        <div
+                        <component
                             v-for="(block, key) in column.blocks"
                             :key="'block-' + key"
-                            class="tued-block"
+                            :is="'block-' + block.code + '-render'"
+                            :block="block"
                             :id="`tued-block-${block.id}`"
-                        >
-                            <component
-                                :is="'block-' + block.code + '-render'"
-                                :block="block"
-                            ></component>
-                        </div>
+                            :class="blockClass(block)"
+                        ></component>
                     </div>
                 </div>
             </div>
@@ -46,9 +43,11 @@ const messenger = inject('messenger');
 /**********
  * Columns
  **********/
-const SizesClassnameGenerator = require('shared/Structure/Columns/SizesClassnameGenerator.js').default;
+const ColumnSizesClassnameGenerator = require('shared/Structure/Columns/SizesClassnameGenerator.js').default;
+const BlockSizingClassnameGenerator = require('shared/Structure/Blocks/SizingClassnameGenerator.js').default;
+const blockClass = (block) => (new BlockSizingClassnameGenerator(block)).generate();
 const columnClass = (column) => {
-    return (new SizesClassnameGenerator(
+    return (new ColumnSizesClassnameGenerator(
         column,
         ['tued-column']
     )).generate();

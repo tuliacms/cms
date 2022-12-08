@@ -22,7 +22,7 @@
                 <div :class="{ 'tued-sidebar-type': true, 'tued-sidebar-type-active': sidebar === 'structure' }" @click="sidebar = 'structure'"><i class="fas fa-stream"></i><span>{{ translator.trans('structure') }}</span></div>
             </div>
             <div :class="{ 'd-block': sidebar === 'structure', 'd-none': sidebar !== 'structure' }">
-                <Structure :structure="structure"></Structure>
+                <Structure :structure="structure" @selected="sidebar = 'selected'"></Structure>
             </div>
             <div :class="{ 'd-block': sidebar === 'selected', 'd-none': sidebar !== 'selected' }">
                 <Selected :structure="structure"></Selected>
@@ -34,7 +34,7 @@
 <script setup>
 const Structure = require('components/Admin/Sidebar/Structure.vue').default;
 const Selected = require('components/Admin/Sidebar/Selected/Selected.vue').default;
-const { defineProps, ref, defineEmits, inject, provide, onMounted } = require('vue');
+const { defineProps, ref, inject, provide, onMounted } = require('vue');
 
 const props = defineProps(['structure']);
 const messenger = inject('messenger');
@@ -51,7 +51,7 @@ provide('structureDragOptions', {
 const sidebar = ref('structure');
 
 onMounted(() => {
-    messenger.on('structure.selection.selected', (id, type, trigger) => {
+    messenger.on('structure.selection.selected', (type, id, trigger) => {
         if (trigger !== 'sidebar' && type === 'block') {
             sidebar.value = 'selected';
         }

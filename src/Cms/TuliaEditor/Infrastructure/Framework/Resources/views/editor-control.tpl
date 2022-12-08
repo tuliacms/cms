@@ -21,6 +21,7 @@
             cancel: '{{ 'cancel'|trans }}',
             yes: '{{ 'yes'|trans }}',
             no: '{{ 'no'|trans }}',
+            selectSomeOptions: '{{ 'selectOption'|trans }}',
             section: '{{ 'section'|trans({}, 'tulia-editor') }}',
             column: '{{ 'column'|trans({}, 'tulia-editor') }}',
             row: '{{ 'row'|trans({}, 'tulia-editor') }}',

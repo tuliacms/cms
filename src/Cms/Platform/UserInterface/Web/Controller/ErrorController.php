@@ -34,16 +34,18 @@ final class ErrorController extends AbstractController
                 $exception instanceof NotFoundHttpException
                 || ($exception instanceof HttpException && $exception->getStatusCode() >= 400 && $exception->getStatusCode() <= 499)
             ) {
-                if ($website->isBackend()) {
-                    $view = '@backend/error-404.tpl';
-                    $code = Response::HTTP_NOT_FOUND;
-                } else {
-                    $view = $this->manager->getTheme()->getViewsDirectory().'/404.tpl';
-                    $code = Response::HTTP_NOT_FOUND;
-                }
-
-                return new Response($this->engine->render(new View($view)), $code);
+                $code = Response::HTTP_NOT_FOUND;
+            } else {
+                $code = Response::HTTP_INTERNAL_SERVER_ERROR;
             }
+
+            if ($website->isBackend()) {
+                $view = "@backend/error-{$code}.tpl";
+            } else {
+                $view = $this->manager->getTheme()->getViewsDirectory()."/{$code}.tpl";
+            }
+
+            return new Response($this->engine->render(new View($view)), $code);
         } catch (\Throwable $e) {
             if ($this->environment === 'prod') {
                 return $this->createProduction500Error();
@@ -55,12 +57,6 @@ final class ErrorController extends AbstractController
 
             throw new \Exception('Cannot render error page. Reason of this error You can find below, in previous exception.', 0, $e);
         }
-
-        if ($this->environment === 'prod') {
-            return $this->createProduction500Error();
-        }
-
-        throw $exception;
     }
 
     private function createProduction500Error(): Response
