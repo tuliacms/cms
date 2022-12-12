@@ -21,7 +21,12 @@
             cancel: '{{ 'cancel'|trans }}',
             yes: '{{ 'yes'|trans }}',
             no: '{{ 'no'|trans }}',
+            bottom: '{{ 'bottom'|trans }}',
+            left: '{{ 'left'|trans }}',
+            right: '{{ 'right'|trans }}',
+            top: '{{ 'top'|trans }}',
             selectSomeOptions: '{{ 'selectOption'|trans }}',
+            visibility: '{{ 'visibility'|trans }}',
             section: '{{ 'section'|trans({}, 'tulia-editor') }}',
             column: '{{ 'column'|trans({}, 'tulia-editor') }}',
             row: '{{ 'row'|trans({}, 'tulia-editor') }}',
@@ -66,6 +71,14 @@
             mapZoom: '{{ 'mapZoom'|trans({}, 'tulia-editor') }}',
             imageSize: '{{ 'imageSize'|trans({}, 'tulia-editor') }}',
             clearImage: '{{ 'clearImage'|trans({}, 'tulia-editor') }}',
+            containerSize: '{{ 'containerSize'|trans({}, 'tulia-editor') }}',
+            containerSizeDefaultWidth: '{{ 'containerSizeDefaultWidth'|trans({}, 'tulia-editor') }}',
+            containerSizeFullWidth: '{{ 'containerSizeFullWidth'|trans({}, 'tulia-editor') }}',
+            containerSizeFullWidthNoPadding: '{{ 'containerSizeFullWidthNoPadding'|trans({}, 'tulia-editor') }}',
+            margin: '{{ 'margin'|trans({}, 'tulia-editor') }}',
+            padding: '{{ 'padding'|trans({}, 'tulia-editor') }}',
+            sizingDefault: '{{ 'sizingDefault'|trans({}, 'tulia-editor') }}',
+            inheritValue: '{{ 'inheritValue'|trans({}, 'tulia-editor') }}',
         });
 
         let structureSelector = '.tulia-editor-structure-field[data-tulia-editor-group-id="{{ params.group_id }}"]';

@@ -38,15 +38,12 @@
                             'tued-structure-selected-options': true,
                             'tued-structure-selected-active': selected.id === block.id && selected.type === 'block'
                         }">
+                            <Block :block="block"></Block>
                             <div :class="{ 'd-block': existingBlocks[block.code], 'd-none': !existingBlocks[block.code] }">
-                                <Block :block="block"></Block>
                                 <component
                                     :is="'block-' + block.code + '-manager'"
                                     :block="block"
                                 ></component>
-                            </div>
-                            <div :class="{ 'd-block': !existingBlocks[block.code], 'd-none': existingBlocks[block.code] }">
-                                <div class="text-muted text-uppercase">{{ translator.trans('noEditOptionsForThisElement') }}</div>
                             </div>
                         </div>
                     </div>

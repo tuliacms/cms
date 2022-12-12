@@ -69,6 +69,68 @@ export default class AbstractSegment {
         this.messenger.operation(this.generateBlockPrefix(operation), listener);
     }
 
+    get (key) {
+        const parts = key.split('.');
+
+        let workingObject = this.data;
+
+        for (let i in parts) {
+            i = parseInt(i);
+
+            if (parts.length - 1 === i) {
+                return workingObject[parts[i]];
+            }
+
+            if (!workingObject.hasOwnProperty(parts[i])) {
+                workingObject[parts[i]] = {};
+            }
+
+            workingObject = workingObject[parts[i]];
+        }
+
+        return undefined;
+    }
+
+    set (key, value) {
+        const parts = key.split('.');
+
+        let workingObject = this.data;
+
+        for (let i in parts) {
+            i = parseInt(i);
+
+            if (parts.length - 1 === i) {
+                workingObject[parts[i]] = value;
+            }
+
+            if (!workingObject.hasOwnProperty(parts[i])) {
+                workingObject[parts[i]] = {};
+            }
+
+            workingObject = workingObject[parts[i]];
+        }
+    }
+
+    remove (key) {
+        const parts = key.split('.');
+
+        let workingObject = this.data;
+
+        for (let i in parts) {
+            i = parseInt(i);
+
+            if (parts.length - 1 === i) {
+                delete workingObject[parts[i]];
+            }
+
+            if (!workingObject.hasOwnProperty(parts[i])) {
+                break;
+            }
+
+            workingObject = workingObject[parts[i]];
+        }
+    }
+
     get data () {
         return this.dataSynchronizer.reactiveData;
     }

@@ -1,8 +1,4 @@
-<template>
-    <div class="text-muted text-uppercase">
-        {{ translator.trans('noEditOptionsForThisElement') }}
-    </div>
-</template>
+<template></template>
 
 <script setup>
 const { defineProps, inject } = require('vue');

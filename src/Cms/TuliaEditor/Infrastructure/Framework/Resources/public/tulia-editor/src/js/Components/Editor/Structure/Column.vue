@@ -36,10 +36,5 @@ const selection = inject('selection');
 const translator = inject('translator');
 const contextmenu = inject('contextmenu');
 
-const columnClass = computed(() => {
-    return (new SizesClassnameGenerator(
-        props.column,
-        ['tued-structure-column', 'tued-structure-element-selectable']
-    )).generate();
-});
+const columnClass = computed(() => (new SizesClassnameGenerator(props.column, ['tued-structure-column', 'tued-structure-element-selectable'])).generate());
 </script>

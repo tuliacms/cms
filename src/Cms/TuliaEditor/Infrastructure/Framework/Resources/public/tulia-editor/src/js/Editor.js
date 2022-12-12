@@ -32,7 +32,7 @@ export default class Editor {
     init () {
         this.root = $(this.selector);
         this.instanceId = ++instances;
-        this.options = $.extend({}, TuliaEditor.defaults, this.options);
+        this.options = $.extend({}, TuliaEditor.config.defaults, TuliaEditor.config.dynamic, this.options);
         this.options.translations = TuliaEditor.translations;
 
         this.options.structure.source = (new Fixer())

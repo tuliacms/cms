@@ -158,4 +158,8 @@ props.container.messenger.operation('editor.canvas.preview.toggle', (params, suc
 const CanvasView = require("shared/Canvas/View.js").default;
 provide('canvas.view', new CanvasView(props.container.messenger));
 </script>
-
+<script>
+export default {
+    name: 'Canvas/Editor'
+}
+</script>

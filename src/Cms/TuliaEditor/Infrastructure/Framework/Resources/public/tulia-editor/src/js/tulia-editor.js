@@ -48,54 +48,84 @@ export default {
     directives: require("directives/directives.js").default,
     translations: {},
     instances: {},
-    defaults: {
-        structure: {},
-        editor: {
-            view: null,
-            preview: null,
-        },
-        show_preview_in_canvas: false,
-        /**
-         * 'default' - Default view, only preview.
-         * 'editor' - Opens editor immediately.
-         */
-        start_point: 'default',
-        sink: {
-            // HTML input/textarea selector, where to store the structure.
-            structure: null,
-            // HTML input/textarea selector, where to store the rendered content.
-            content: null
-        },
-        canvas: {
-            size: {
-                default: 'xl',
-                breakpoints: [
-                    { name: 'xxl', width: 1440 },
-                    { name: 'xl', width: 1220 },
-                    { name: 'lg', width: 1000 },
-                    { name: 'md', width: 770 },
-                    { name: 'sm', width: 580 },
-                    { name: 'xs', width: 320 },
-                ]
+    config: {
+        set: function (key, value) {
+            const parts = key.split('.');
+
+            let workingObject = this.dynamic;
+
+            for (let i in parts) {
+                i = parseInt(i);
+
+                if (parts.length - 1 === i) {
+                    workingObject[parts[i]] = value;
+                }
+
+                if (!workingObject.hasOwnProperty(parts[i])) {
+                    workingObject[parts[i]] = {};
+                }
+
+                workingObject = workingObject[parts[i]];
             }
         },
-        locale: 'en_en',
-        fallback_locales: ['en'],
-        // Blocks options
-        blocks: {},
-        // Columns options
-        columns: {},
-        // Rows options
-        rows: {},
-        // Sections options
-        sections: {},
-        filemanager: {
-            image_resolve_path: null,
-            endpoint: null
-        },
-        // Themes supported by this instance of Editor
-        themes: [],
-        // CSS framework, supported by Theme(s).
-        css_framework: '',
-    }
+        dynamic: {},
+        defaults: {
+            structure: {},
+            editor: {
+                view: null,
+                preview: null,
+            },
+            show_preview_in_canvas: false,
+            /**
+             * 'default' - Default view, only preview.
+             * 'editor' - Opens editor immediately.
+             */
+            start_point: 'default',
+            sink: {
+                // HTML input/textarea selector, where to store the structure.
+                structure: null,
+                // HTML input/textarea selector, where to store the rendered content.
+                content: null
+            },
+            canvas: {
+                size: {
+                    default: 'xl',
+                    breakpoints: [
+                        { name: 'xxl', width: 1440 },
+                        { name: 'xl', width: 1220 },
+                        { name: 'lg', width: 1000 },
+                        { name: 'md', width: 770 },
+                        { name: 'sm', width: 580 },
+                        { name: 'xs', width: 320 },
+                    ]
+                }
+            },
+            elements: {
+                style: {
+                    spacers: {
+                        // Maximum implemented spacers in Bootstrap
+                        max: 5,
+                    }
+                }
+            },
+            locale: 'en_en',
+            fallback_locales: ['en'],
+            // Blocks options
+            blocks: {},
+            // Columns options
+            columns: {},
+            // Rows options
+            rows: {},
+            // Sections options
+            sections: {},
+            filemanager: {
+                image_resolve_path: null,
+                endpoint: null
+            },
+            // Themes supported by this instance of Editor
+            themes: [],
+            // CSS framework, supported by Theme(s).
+            css_framework: '',
+        }
+    },
 }

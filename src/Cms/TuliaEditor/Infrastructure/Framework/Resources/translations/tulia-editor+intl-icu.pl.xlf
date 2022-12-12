@@ -190,6 +190,38 @@
                 <source>clearImage</source>
                 <target>Usuń zdjęcie</target>
             </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.48">
+                <source>containerSize</source>
+                <target>Szerokość kontenera</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.49">
+                <source>containerSizeDefaultWidth</source>
+                <target>Domyślna szerokość</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.50">
+                <source>containerSizeFullWidth</source>
+                <target>Pełna szerokość (płynna)</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.51">
+                <source>containerSizeFullWidthNoPadding</source>
+                <target>Pełna szerokość (płynna) + brak marginesów</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.52">
+                <source>margin</source>
+                <target>Margines</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.53">
+                <source>padding</source>
+                <target>Padding</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.54">
+                <source>sizingDefault</source>
+                <target>Domyślnie</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.55">
+                <source>inheritValue</source>
+                <target>Dziedzicz</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

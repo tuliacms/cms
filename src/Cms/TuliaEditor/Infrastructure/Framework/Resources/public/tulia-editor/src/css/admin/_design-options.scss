@@ -1,0 +1,38 @@
+.tued-sizing-whirl {
+    position: relative;
+    height: 170px;
+    z-index: 10;
+
+    [class*='tued-control-position--'] {
+        position: absolute;
+        width: 110px;
+        margin: 0 !important;
+    }
+    .tued-control-position--top {
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .tued-control-position--bottom {
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .tued-control-position--right {
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    .tued-control-position--left {
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    .form-label {
+        text-align: center;
+        display: block;
+        font-size: 11px;
+        text-transform: uppercase;
+        margin-bottom: 2px;
+    }
+}

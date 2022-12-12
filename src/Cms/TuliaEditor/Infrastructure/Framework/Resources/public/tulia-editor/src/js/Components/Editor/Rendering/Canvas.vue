@@ -46,12 +46,7 @@ const messenger = inject('messenger');
 const ColumnSizesClassnameGenerator = require('shared/Structure/Columns/SizesClassnameGenerator.js').default;
 const BlockSizingClassnameGenerator = require('shared/Structure/Blocks/SizingClassnameGenerator.js').default;
 const blockClass = (block) => (new BlockSizingClassnameGenerator(block)).generate();
-const columnClass = (column) => {
-    return (new ColumnSizesClassnameGenerator(
-        column,
-        ['tued-column']
-    )).generate();
-};
+const columnClass = (column) => (new ColumnSizesClassnameGenerator(column, ['tued-column'])).generate();
 const rowClass = (row, section) => {
     let classname = 'tued-row row';
 

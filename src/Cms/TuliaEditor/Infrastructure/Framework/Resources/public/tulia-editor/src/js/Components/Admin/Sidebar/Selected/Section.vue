@@ -3,7 +3,7 @@
         <Select
             v-model="section.data.containerWidth"
             :choices="containerWidthList"
-            label="Container width"
+            :label="translator.trans('containerSize')"
         ></Select>
     </div>
 </template>
@@ -12,10 +12,11 @@ const Select = require('controls/Select.vue').default;
 const { defineProps, inject, reactive, watch } = require('vue');
 const props = defineProps(['section']);
 const section = inject('sections.instance').manager(props);
+const translator = inject('translator');
 
 const containerWidthList = {
-    'default': 'Default width',
-    'full-width': 'Full width (fluid)',
-    'full-width-no-padding': 'Full width (fluid) with no padding',
+    'default': translator.trans('containerSizeDefaultWidth'),
+    'full-width': translator.trans('containerSizeFullWidth'),
+    'full-width-no-padding': translator.trans('containerSizeFullWidthNoPadding'),
 };
 </script>

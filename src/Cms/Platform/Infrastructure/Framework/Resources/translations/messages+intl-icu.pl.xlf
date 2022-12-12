@@ -839,6 +839,22 @@
                 <source>youHaveBeenRedirectedToDefaultLocaleDueToCreationMultilingualElement</source>
                 <target>Zostałeś przekierowany na domyślny język. Tylko w domyślnym języku można dodawać nowe treści.</target>
             </trans-unit>
+            <trans-unit id="tuliacms.messages.217">
+                <source>bottom</source>
+                <target>Dół</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.218">
+                <source>left</source>
+                <target>Lewo</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.219">
+                <source>right</source>
+                <target>Prawo</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.220">
+                <source>top</source>
+                <target>Góra</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -335,3 +335,8 @@ onMounted(() => {
     });
 });
 </script>
+<script>
+export default {
+    name: 'Tulia Editor'
+}
+</script>

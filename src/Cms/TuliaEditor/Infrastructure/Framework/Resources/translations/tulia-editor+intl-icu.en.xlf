@@ -190,6 +190,38 @@
                 <source>clearImage</source>
                 <target>Clear image</target>
             </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.48">
+                <source>containerSize</source>
+                <target>Container width</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.49">
+                <source>containerSizeDefaultWidth</source>
+                <target>Default width</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.50">
+                <source>containerSizeFullWidth</source>
+                <target>Full width (fluid)</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.51">
+                <source>containerSizeFullWidthNoPadding</source>
+                <target>Full width (fluid) with no padding</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.52">
+                <source>margin</source>
+                <target>Margin</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.53">
+                <source>padding</source>
+                <target>Padding</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.54">
+                <source>sizingDefault</source>
+                <target>Default</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.55">
+                <source>inheritValue</source>
+                <target>Inherit</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

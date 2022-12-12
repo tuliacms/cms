@@ -165,6 +165,9 @@ export default class Fixer {
         if (!block.data) {
             block.data = {};
         }
+        if (!block.data._internal) {
+            block.data._internal = {};
+        }
 
         return block;
     }

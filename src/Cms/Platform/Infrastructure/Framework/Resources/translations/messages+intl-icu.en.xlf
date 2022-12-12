@@ -839,6 +839,22 @@
                 <source>youHaveBeenRedirectedToDefaultLocaleDueToCreationMultilingualElement</source>
                 <target>You have been redirected to default locale. You can add new elements only in default locale.</target>
             </trans-unit>
+            <trans-unit id="tuliacms.messages.217">
+                <source>bottom</source>
+                <target>Bottom</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.218">
+                <source>left</source>
+                <target>Left</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.219">
+                <source>right</source>
+                <target>Right</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.220">
+                <source>top</source>
+                <target>Top</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

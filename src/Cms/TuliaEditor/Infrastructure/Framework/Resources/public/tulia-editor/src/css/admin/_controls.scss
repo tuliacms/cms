@@ -3,6 +3,8 @@
     border-radius: 4px;
     position: relative;
     transition: $transition;
+    background-color: #fff;
+    z-index: 1;
 
     &:before {
         font-family: "Font Awesome 5 Free", serif;
@@ -20,12 +22,13 @@
         top: 48%;
         transform: translateY(-50%);
         transition: $transition;
+        pointer-events: none;
     }
 
     &:hover {
         border: 1px solid $primary;
         cursor: pointer;
-        background-color: rgba($primary, .1);
+        background-color: lighten($primary, 57%);
 
         &:before {
             color: $primary;
@@ -34,8 +37,9 @@
 
     &.tued-opened {
         border-radius: 4px 4px 0 0;
-        background-color: rgba($primary, .1);
+        background-color: lighten($primary, 57%);
         border: 1px solid $primary;
+        z-index: 100;
 
         &:before {
             content: "\f077";
@@ -44,6 +48,7 @@
 
         .tued-options {
             display: block;
+            z-index: 100;
         }
     }
 

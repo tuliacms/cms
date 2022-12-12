@@ -1,6 +1,6 @@
 <template>
     <div class="mb-3">
-        <label class="form-label">{{ props.label }}</label>
+        <label v-if="props.label" class="form-label">{{ props.label }}</label>
         <div class="tued-control-select tued-closed" ref="control">
             <div class="tued-label" @click="toggleOptions">
                 <span v-if="selected">{{ selected }}</span>
