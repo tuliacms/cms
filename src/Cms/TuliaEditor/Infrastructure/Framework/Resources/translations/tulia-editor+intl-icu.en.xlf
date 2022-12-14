@@ -222,6 +222,14 @@
                 <source>inheritValue</source>
                 <target>Inherit</target>
             </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.56">
+                <source>calculatedVisibilityVisible</source>
+                <target>Calculated: Visible</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.57">
+                <source>calculatedVisibilityInvisible</source>
+                <target>Calculated: Invisible</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -31,6 +31,14 @@
                 cursor: pointer;
             }
 
+            &.tued-element-state--is-invisible {
+                opacity: .3;
+
+                &:hover {
+                    opacity: 1;
+                }
+            }
+
             > span {
                 padding-left: 30px;
                 flex: 0 0 auto;

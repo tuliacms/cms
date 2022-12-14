@@ -96,11 +96,12 @@ const cancelEditor = function () {
 const canvasOptions = reactive(ObjectCloner.deepClone(props.canvas));
 const CanvasView = require("shared/Canvas/View.js").default;
 const Canvas = require("shared/Canvas.js").default;
-provide('canvas', new Canvas(
+const canvasService = new Canvas(
     props.container.messenger,
     canvasOptions.size.breakpoints,
     canvasOptions.size.breakpoint
-));
+);
+provide('canvas', canvasService);
 const canvasView = new CanvasView(props.container.messenger);
 provide('canvas.view', canvasView);
 
@@ -289,7 +290,8 @@ const instantiator = new ElementsInstantiator(
     assets,
 );
 
-provide('blocks.instance', instantiator.instantiator('block'));
+const blocksInstantiator = instantiator.instantiator('block');
+provide('blocks.instance', blocksInstantiator);
 provide('columns.instance', instantiator.instantiator('column'));
 provide('rows.instance', instantiator.instantiator('row'));
 provide('sections.instance', instantiator.instantiator('section'));
@@ -316,6 +318,15 @@ provide('blocks.picker', new BlocksPicker(blockPickerData, blocksRegistry, struc
  **********/
 const ColumnSize = require("shared/Structure/Columns/ColumnSize.js").default;
 provide('columns.size', new ColumnSize(structureManipulator));
+
+
+
+
+/*******************
+ * State Calculator
+ ******************/
+const StateCalculator = require("shared/Structure/Element/StateCalculator.js").default;
+provide('stateCalculator', new StateCalculator(canvasService, blocksInstantiator, props.options));
 
 
 

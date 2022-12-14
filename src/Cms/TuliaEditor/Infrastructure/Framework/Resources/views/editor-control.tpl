@@ -79,6 +79,8 @@
             padding: '{{ 'padding'|trans({}, 'tulia-editor') }}',
             sizingDefault: '{{ 'sizingDefault'|trans({}, 'tulia-editor') }}',
             inheritValue: '{{ 'inheritValue'|trans({}, 'tulia-editor') }}',
+            calculatedVisibilityVisible: '{{ 'calculatedVisibilityVisible'|trans({}, 'tulia-editor') }}',
+            calculatedVisibilityInvisible: '{{ 'calculatedVisibilityInvisible'|trans({}, 'tulia-editor') }}',
         });
 
         let structureSelector = '.tulia-editor-structure-field[data-tulia-editor-group-id="{{ params.group_id }}"]';

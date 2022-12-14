@@ -15,7 +15,12 @@
             <template #item="{element}">
                 <div class="tued-structure-element tued-structure-element-block">
                     <div
-                        :class="{ 'tued-label': true, 'tued-element-selected': element.metadata.selected, 'tued-element-hovered': element.metadata.hovered }"
+                        :class="{
+                            'tued-label': true,
+                            'tued-element-selected': element.metadata.selected,
+                            'tued-element-hovered': element.metadata.hovered,
+                            'tued-element-state--is-invisible': stateCalculator.calculateState(element, '_internal.visibility') === '0'
+                    }"
                         @click.stop="selection.select('block', element.id, 'sidebar')"
                         @dblclick.stop="emits('selected')"
                         @mouseenter="selection.hover('block', element.id, 'sidebar')"
@@ -51,6 +56,7 @@ const blocksRegistry = inject('blocks.registry');
 const blocksPicker = inject('blocks.picker');
 const contextmenu = inject('contextmenu');
 const structureManipulator = inject('structureManipulator');
+const stateCalculator = inject('stateCalculator');
 
 onMounted(() => {
     contextmenu.items('blocks', 'column', () => {
