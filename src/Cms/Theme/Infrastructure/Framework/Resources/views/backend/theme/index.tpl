@@ -8,6 +8,8 @@
     <li class="breadcrumb-item active" aria-current="page">{{ 'themes'|trans }}</li>
 {% endblock %}
 
+{% import '@backend/theme/_parts/showreel.tpl' as showreel %}
+
 {% block content %}
     <div class="pane pane-lead">
         <div class="pane-header">
@@ -38,9 +40,7 @@
                                 <div class="ribbon"><span>{{ 'activeTheme'|trans({}, 'themes') }}</span></div>
                             {% endif %}
                             {% if item.manifest.showreel is defined %}
-                                <div class="theme-image scroll-image-on-hover">
-                                    <img src="{{ path('backend.theme.internal_image', { theme: item.name, filepath: item.manifest.showreel }) }}" alt="{{ item.name }} theme thumbnail">
-                                </div>
+                                {{ showreel.showreel(item.name, item.manifest.showreel) }}
                             {% elseif item.manifest.thumbnail is defined %}
                                 <img src="{{ path('backend.theme.internal_image', { theme: item.name, filepath: item.manifest.thumbnail }) }}" class="card-img-top" alt="{{ item.name }} theme thumbnail">
                             {% else %}
@@ -116,6 +116,7 @@
             </div>
         </div>
     </div>
+    {{ showreel.javascript() }}
     <script nonce="{{ csp_nonce() }}">
         $(function () {
             $('.theme-delete-trigger').click(function () {
@@ -130,18 +131,6 @@
                         form.submit();
                     }
                 });
-            });
-
-            $('.scroll-image-on-hover').hover(function () {
-                const image = $(this).find('img');
-                const imageHeight = parseInt(image.css('height'));
-                const viewHeight = parseInt($(this).css('height'));
-
-                image.stop().animate({
-                    top: - (imageHeight - viewHeight)
-                }, (imageHeight / 200) * 1000, 'linear');
-            }, function () {
-                $(this).find('img').stop().animate({top: 0}, 200);
             });
         });
     </script>
@@ -197,24 +186,6 @@
             border-right: 3px solid #1e5799;
             border-bottom: 3px solid transparent;
             border-top: 3px solid #1e5799;
-        }
-
-        .theme-image {
-            position: relative;
-            overflow: hidden;
-            border-bottom: 1px solid rgba(0,0,0,.176);
-        }
-        .theme-image:before {
-             content: "";
-             display: block;
-             padding-bottom: 55.5%;
-             background-color: rgba(0,0,0,.3);
-         }
-        .theme-image img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
         }
 
         .no-theme-image {

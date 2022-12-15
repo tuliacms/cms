@@ -33,15 +33,15 @@ class Importer implements ImporterInterface
             ->getSupportingReader($realFilename ?? $filepath)
             ->read($filepath);
 
-        $this->import($data, $parameters);
+        $this->import($data, dirname($filepath), $parameters);
     }
 
-    public function import(array $data, array $parameters = []): void
+    private function import(array $data, string $importRootPath, array $parameters = []): void
     {
         $data['objects'] = (new ParametersCompiler($this->parametersProvider))
             ->compileParametersInValues($data['objects']);
 
-        $objects = $this->schemaValidator->validate($data['objects']);
+        $objects = $this->schemaValidator->validate($data['objects'], $importRootPath);
         $objects = (new ObjectsIdGenerator())->generateMissingIds($objects);
         $objects = (new Dependencies())->fetchDependencies($objects);
         $objects = (new StructureSorter())->sortObjects($objects);

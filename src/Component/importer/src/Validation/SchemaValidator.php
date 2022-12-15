@@ -21,14 +21,14 @@ use function is_string;
 class SchemaValidator implements SchemaValidatorInterface
 {
     public function __construct(
-        private Schema $schema
+        private readonly Schema $schema,
     ) {
     }
 
-    public function validate(array $objects): array
+    public function validate(array $objects, string $importRootPath): array
     {
         foreach ($objects as $key => $object) {
-            $objects[$key] = $this->validateObject($object, 'objects.'.$key);
+            $objects[$key] = $this->validateObject($object, 'objects.'.$key, $importRootPath);
         }
 
         return array_filter($objects);
@@ -38,7 +38,7 @@ class SchemaValidator implements SchemaValidatorInterface
      * @throws InvalidFieldDataTypeException
      * @throws EmptyValueOfRequiredFieldException
      */
-    private function validateObject(array $objectData, string $path): ?ObjectData
+    private function validateObject(array $objectData, string $path, string $importRootPath): ?ObjectData
     {
         \assert(isset($objectData['@type']), 'Missing @type key of imported Object data at path "'.$path.'".');
 
@@ -62,7 +62,8 @@ class SchemaValidator implements SchemaValidatorInterface
                 $object,
                 $object->getField($key),
                 $objectData[$key],
-                $path.'.'.$key
+                $path.'.'.$key,
+                $importRootPath
             );
         }
 
@@ -75,18 +76,19 @@ class SchemaValidator implements SchemaValidatorInterface
                 $object,
                 $field,
                 $field->getDefaultValue(),
-                $path.'.'.$field->getName()
+                $path.'.'.$field->getName(),
+                $importRootPath
             );
         }
 
-        return new ObjectData($objectData, $object);
+        return new ObjectData($objectData, $object, $importRootPath);
     }
 
     /**
      * @throws InvalidFieldDataTypeException
      * @throws EmptyValueOfRequiredFieldException
      */
-    private function validateField(ObjectDefinition $object, Field $field, mixed $data, string $path): mixed
+    private function validateField(ObjectDefinition $object, Field $field, mixed $data, string $path, string $importRootPath): mixed
     {
         if ($this->isEmpty($data)) {
             if ($field->isRequired()) {
@@ -157,7 +159,7 @@ class SchemaValidator implements SchemaValidatorInterface
                 }
 
                 foreach ($data as $key => $val) {
-                    $data[$key] = $this->validateObject($val, $path.'.'.$key);
+                    $data[$key] = $this->validateObject($val, $path.'.'.$key, $importRootPath);
                 }
         }
 

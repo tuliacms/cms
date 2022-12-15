@@ -26,7 +26,7 @@ final class FileImporter implements ObjectImporterInterface
         /** @var IdResult $result */
         $result = ($this->uploadFile)(new UploadFileRequest(
             Directory::ROOT,
-            $objectData['filepath'],
+            $objectData->getFilepathOf('filepath'),
         ));
 
         return $result->id;

@@ -530,6 +530,7 @@ class Configuration implements ConfigurationInterface
                                                     ->children()
                                                         ->scalarNode('name')->isRequired()->end()
                                                         ->scalarNode('filepath')->isRequired()->end()
+                                                        ->scalarNode('showreel')->isRequired()->end()
                                                     ->end()
                                                 ->end()
                                             ->end()
