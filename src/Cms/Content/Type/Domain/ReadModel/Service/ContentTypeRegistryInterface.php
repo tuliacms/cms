@@ -14,11 +14,16 @@ interface ContentTypeRegistryInterface
     public function addProvider(ContentTypeProviderInterface $nodeTypeProvider): void;
     public function get(string $type): ContentType;
     public function has(string $type): bool;
+    /**
+     * @return ContentType[]|\Traversable
+     */
     public function getTypes(): array;
-
     /**
      * @return ContentType[]|\Traversable
      */
     public function all(): \Traversable;
+    /**
+     * @return ContentType[]|\Traversable
+     */
     public function allByType(string $type): \Traversable;
 }

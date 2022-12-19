@@ -4,52 +4,38 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Domain\WriteModel\Model;
 
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermCreated;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermDeleted;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermTranslated;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermUpdated;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Exception\TermNotFoundException;
-use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Helper\TermsChangelog;
-use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\AttributeInfo;
-use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\TermId;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class Taxonomy extends AbstractAggregateRoot
 {
-    private string $type;
+    private readonly string $id;
+    private readonly string $type;
+    private readonly string $websiteId;
 
-    private string $websiteId;
+    /** @var ArrayCollection<int, Term>|Term[] */
+    public Collection $terms;
 
-    /**
-     * @var Term[]
-     */
-    private array $terms = [];
-
-    private TermsChangelog $changelog;
-
-    /**
-     * @var AttributeInfo[]
-     */
-    protected array $attributesInfo = [];
-
-    private function __construct(string $type, string $websiteId, array $terms = [])
+    private function __construct(string $type, string $websiteId, array $locales, string $locale)
     {
         $this->type = $type;
         $this->websiteId = $websiteId;
-
-        foreach ($terms as $term) {
-            $term['taxonomy'] = $this;
-            $this->terms[$term['id']] = Term::buildFromArray($term);
-            $this->terms[$term['id']]->setTaxonomy($this, $this->produceTermChangeCallback());
-        }
-
-        $this->changelog = new TermsChangelog();
+        $this->terms = new ArrayCollection();
+        $this->terms->add(Term::createRoot($this, $locales, $locale));
     }
 
-    public static function create(string $type, string $websiteId, array $terms = []): self
+    public static function create(string $type, string $websiteId, array $locales, string $locale): self
     {
-        return new self($type, $websiteId, $terms);
+        return new self($type, $websiteId, $locales, $locale);
     }
 
     public function getType(): string
@@ -57,139 +43,71 @@ class Taxonomy extends AbstractAggregateRoot
         return $this->type;
     }
 
-    public function getWebsiteId(): string
+    public function termToArray(string $id, string $locale): array
     {
-        return $this->websiteId;
+        return $this->getTerm($id)->toArray($locale);
     }
 
-    /**
-     * @return Term[]
-     */
-    public function terms(): iterable
+    public function addTerm(
+        string $id,
+        string $name,
+        array $locales,
+        string $locale,
+        string $defaultLocale,
+        array $attributes = [],
+        ?string $parent = null,
+    ): void {
+        if ($parent) {
+            $parentTerm = $this->getTerm($parent);
+        } else {
+            $parentTerm = $this->getTerm(Term::ROOT_ID);
+        }
+
+        $term = Term::create($id, $this, $name, $locales, $locale, parent: $parentTerm);
+        $term->persistAttributes($locale, $defaultLocale, $attributes);
+
+        $this->terms->add($term);
+        $this->recordThat(new TermCreated($id, $this->type, $this->websiteId, $parent));
+    }
+
+    public function updateTerm(
+        string $id,
+        string $locale,
+        string $name,
+        string $defaultLocale,
+        array $attributes = [],
+    ): void {
+        $term = $this->getTerm($id);
+        $term->persistAttributes($locale, $defaultLocale, $attributes);
+        $translation = $term->getTranslation($locale);
+        $translation->rename($name);
+
+        $this->recordThat(new TermUpdated($id, $this->type, $this->websiteId));
+
+        if ($translation->hasBeenTranslatedRightNow()) {
+            $this->recordThat(new TermTranslated($id, $this->type, $this->websiteId, $locale));
+        }
+    }
+
+    public function deleteTerm(string $id): void
     {
         foreach ($this->terms as $term) {
-            yield $term;
-        }
-    }
-
-    /**
-     * @throws TermNotFoundException
-     */
-    public function getTerm(TermId $id): Term
-    {
-        if (isset($this->terms[$id->getValue()])) {
-            return $this->terms[$id->getValue()];
-        }
-
-        throw new TermNotFoundException(sprintf('Term %s not found.', $id->getValue()));
-    }
-
-    public function addTerm(Term $term): void
-    {
-        $this->terms[$term->getId()->getValue()] = $term;
-        $term->setTaxonomy($this, $this->produceTermChangeCallback());
-
-        if ($term->isRoot() === false) {
-            $this->resolveItemParent($term);
-            $this->calculateItemLevel($term);
-            $this->calculateItemPosition($term);
-        }
-
-        $this->changelog->insert($term);
-
-        $this->recordThat(TermCreated::fromTerm($term));
-    }
-
-    public function removeTerm(Term $term): void
-    {
-        if (isset($this->terms[$term->getId()->getValue()]) === false) {
-            return;
-        }
-
-        $this->removeTermChildren($term);
-
-        unset($this->terms[$term->getId()->getValue()]);
-        $term->setTaxonomy($this, null);
-
-        $this->changelog->delete($term);
-
-        $this->recordThat(TermDeleted::fromTerm($term));
-    }
-
-    public function collectChangedTerms(): array
-    {
-        return $this->changelog->collectChangedTerms();
-    }
-
-    public function clearTermsChangelog(): void
-    {
-        $this->changelog->clearTermsChangelog();
-    }
-
-    public function hasAttributeInfo(string $name): bool
-    {
-        return isset($this->attributesInfo[$name]);
-    }
-
-    public function getAttributeInfo(string $name): AttributeInfo
-    {
-        return $this->attributesInfo[$name];
-    }
-
-    public function addAttributeInfo(string $name, AttributeInfo $info): void
-    {
-        $this->attributesInfo[$name] = $info;
-    }
-
-    private function produceTermChangeCallback(): callable
-    {
-        return function (Term $term) {
-            $this->changelog->update($term);
-        };
-    }
-
-    private function calculateItemLevel(Term $term): void
-    {
-        $parent = $this->getTerm($term->getParentId());
-        $term->setLevel($parent->getLevel() + 1);
-    }
-
-    private function calculateItemPosition(Term $term): void
-    {
-        if ($term->getPosition() === 0) {
-            $position = 0;
-
-            foreach ($this->terms as $existingItem) {
-                if ($existingItem->getParentId() === null) {
-                    continue;
-                }
-
-                if ($existingItem->getParentId()->equals($term->getParentId())) {
-                    $position = max($position, $existingItem->getPosition());
-                }
-            }
-
-            $term->setPosition($position + 1);
-        }
-    }
-
-    private function resolveItemParent(Term $term): void
-    {
-        if ($term->getParentId() === null) {
-            $term->setParentId(new TermId(Term::ROOT_ID));
-        }
-    }
-
-    private function removeTermChildren(Term $term): void
-    {
-        foreach ($this->terms as $existingTerm) {
-            if ($existingTerm->getParentId() === null) {
-                continue;
-            }
-
-            if ($existingTerm->getParentId()->equals($term->getId())) {
-                $this->removeTerm($existingTerm);
+            if ($term->getId() === $id) {
+                $this->terms->removeElement($term);
+                $term->detach();
+                $this->recordThat(new TermDeleted($term->getId(), $this->type, $this->websiteId));
             }
         }
+    }
+
+    private function getTerm(string $parent): Term
+    {
+        foreach ($this->terms as $term) {
+            if ($term->getId() === $parent) {
+                return $term;
+            }
+        }
+
+        throw TermNotFoundException::fromId($parent);
     }
 }

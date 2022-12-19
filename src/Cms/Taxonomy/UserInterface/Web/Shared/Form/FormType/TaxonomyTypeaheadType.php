@@ -18,19 +18,12 @@ use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderScopeEnum;
  */
 class TaxonomyTypeaheadType extends AbstractType
 {
-    protected TermFinderInterface $termFinder;
-
-    protected RouterInterface $router;
-
-    public function __construct(TermFinderInterface $termFinder, RouterInterface $router)
-    {
-        $this->termFinder = $termFinder;
-        $this->router = $router;
+    public function __construct(
+        private readonly TermFinderInterface $termFinder,
+        private readonly RouterInterface $router,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -46,9 +39,6 @@ class TaxonomyTypeaheadType extends AbstractType
         $resolver->setRequired(['taxonomy_type']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getParent(): string
     {
         return TypeaheadType::class;

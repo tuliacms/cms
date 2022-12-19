@@ -25,7 +25,7 @@ final class MenuItemDetailsForm extends AbstractType
 {
     public function __construct(
         private readonly RegistryInterface $registry,
-        private readonly TranslatorInterface $translator
+        private readonly TranslatorInterface $translator,
     ) {
     }
 

@@ -32,6 +32,8 @@ class TaxonomyTypeaheadTypeBuilder extends AbstractFieldTypeBuilder
             }
         });
 
+        unset($options['taxonomy']);
+
         return $options;
     }
 }

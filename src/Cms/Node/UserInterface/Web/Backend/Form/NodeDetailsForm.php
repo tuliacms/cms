@@ -11,14 +11,10 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodePurpose\NodePurposeRegistryInterface;
-use Tulia\Cms\Node\UserInterface\Web\Shared\Form\FormType\NodeTypeaheadType;
-use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\CancelType;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\DateTimeType;
-use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\SubmitType;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
 use Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserTypeahead\UserTypeaheadType;
 

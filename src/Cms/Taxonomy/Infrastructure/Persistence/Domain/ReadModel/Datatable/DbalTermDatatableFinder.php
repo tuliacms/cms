@@ -18,39 +18,28 @@ use Tulia\Component\Datatable\Finder\FinderContext;
  */
 class DbalTermDatatableFinder extends AbstractDatatableFinder implements TermDatatableFinderInterface
 {
-    private TranslatorInterface $translator;
-
-    private ?string $taxonomyType = null;
-
     public function __construct(
         Connection $connection,
-        TranslatorInterface $translator
+        private readonly TranslatorInterface $translator,
     ) {
         parent::__construct($connection);
-
-        $this->translator = $translator;
-    }
-
-    public function setTaxonomyType(string $taxonomyType): void
-    {
-        $this->taxonomyType = $taxonomyType;
     }
 
     public function getColumns(FinderContext $context): array
     {
         return [
             'id' => [
-                'selector' => 'tm.id',
+                'selector' => 'BIN_TO_UUID(tm.id)',
                 'type' => 'uuid',
                 'label' => 'ID',
             ],
-            'title' => [
-                'selector' => 'COALESCE(tl.title, tm.title)',
+            'name' => [
+                'selector' => 'tl.name',
                 'label' => 'title',
                 'view' => '@backend/taxonomy/term/parts/datatable/title.tpl',
             ],
             'visibility' => [
-                'selector' => 'COALESCE(tl.visibility, tm.visibility)',
+                'selector' => 'tl.visibility',
                 'label' => 'visibility',
                 'value_translation' => [
                     '1' => $this->translator->trans('visible'),
@@ -67,13 +56,12 @@ class DbalTermDatatableFinder extends AbstractDatatableFinder implements TermDat
     public function prepareQueryBuilder(QueryBuilder $queryBuilder, FinderContext $context): QueryBuilder
     {
         $queryBuilder
-            ->from('#__term', 'tm')
-            ->addSelect('tm.type, tm.level, tm.parent_id')
-            ->leftJoin('tm', '#__term_lang', 'tl', 'tm.id = tl.term_id AND tl.locale = :locale')
-            ->where('tm.type = :type')
-            ->andWhere('tm.is_root = 0')
-            ->setParameter('type', $this->taxonomyType, PDO::PARAM_STR)
-            ->setParameter('locale', $context->locale, PDO::PARAM_STR)
+            ->from('#__taxonomy_term', 'tm')
+            ->addSelect('t.type, tm.level, BIN_TO_UUID(tm.parent_id) AS parent_id, tl.translated')
+            ->innerJoin('tm', '#__taxonomy_term_translation', 'tl', 'tm.id = tl.term_id AND tl.locale = :locale')
+            ->innerJoin('tm', '#__taxonomy', 't', 't.type = :type AND t.id = tm.taxonomy_id')
+            ->setParameter('type', $context['taxonomyType'], PDO::PARAM_STR)
+            ->setParameter('locale', $context['website']->getLocale()->getCode(), PDO::PARAM_STR)
             ->addOrderBy('tm.level', 'ASC')
             ->addOrderBy('tm.position', 'ASC')
         ;

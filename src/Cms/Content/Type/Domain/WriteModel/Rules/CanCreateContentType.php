@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Content\Type\Domain\WriteModel\Rules;
 
-use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
+use Tulia\Cms\Content\Type\Domain\WriteModel\Service\Configuration;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Service\ContentTypeExistanceDetectorInterface;
 
 /**
@@ -13,8 +13,8 @@ use Tulia\Cms\Content\Type\Domain\WriteModel\Service\ContentTypeExistanceDetecto
 final class CanCreateContentType implements CanCreateContentTypeInterface
 {
     public function __construct(
-        private ContentTypeRegistryInterface $contentTypeRegistry,
-        private ContentTypeExistanceDetectorInterface $detector
+        private readonly ContentTypeExistanceDetectorInterface $detector,
+        private readonly Configuration $configuration,
     ) {
     }
 
@@ -37,7 +37,7 @@ final class CanCreateContentType implements CanCreateContentTypeInterface
 
     public function typeOfContentTypeNotExists(string $type): bool
     {
-        return ! $this->contentTypeRegistry->has($type);
+        return ! $this->configuration->typeExists($type);
     }
 
     public function codeContainsNotAllowedCharacters(string $code): bool

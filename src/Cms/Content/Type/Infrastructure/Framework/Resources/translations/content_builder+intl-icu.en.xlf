@@ -226,7 +226,7 @@
                 <target>Simple - URL is created only from slug field</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.62">
-                <source>contentTypeStrategy_full_path</source>
+                <source>contentTypeStrategy_full-path</source>
                 <target>Full path - All hierarchical parent elements are used to create URL</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.63">

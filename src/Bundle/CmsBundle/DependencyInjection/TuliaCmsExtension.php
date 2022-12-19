@@ -120,6 +120,10 @@ class TuliaCmsExtension extends Extension
             ->addTag('content_builder.data_types.handler')
             ->setShared(false)
             ->setLazy(true);
+        $container->registerForAutoconfiguration(\Tulia\Cms\Content\Type\Domain\ReadModel\FieldChoicesProvider\FieldChoicesProviderInterface::class)
+            ->addTag('content_builder.data_types.configuration.choices_provider')
+            ->setShared(false)
+            ->setLazy(true);
 
         // Shortcode
         $container->registerForAutoconfiguration(\Tulia\Component\Shortcode\Compiler\ShortcodeCompilerInterface::class)

@@ -115,7 +115,10 @@ class Node extends AbstractController
             $website,
             $nodeType->getCode(),
             [],
-            ['nodeDetailsForm' => $nodeDetailsForm]
+            [
+                'partialView' => '@backend/node/parts/content-type-node-details.tpl',
+                'nodeDetailsForm' => $nodeDetailsForm,
+            ]
         );
         $formDescriptor->handleRequest($request);
         $nodeType = $formDescriptor->getContentType();
@@ -296,7 +299,6 @@ class Node extends AbstractController
 
     private function collectTaxonomies(ContentType $nodeType): array
     {
-        return [];
         $result = [];
 
         foreach ($nodeType->getFields() as $field) {

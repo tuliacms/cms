@@ -2,7 +2,15 @@ framework:
     translator:
         paths:
             - '%cms.core_dir%/Cms/Taxonomy/Infrastructure/Framework/Resources/translations'
-
+doctrine:
+    orm:
+        mappings:
+            Tulia\Cms\Taxonomy\Domain\WriteModel\Model:
+                type: xml
+                dir: '%cms.core_dir%/Cms/Taxonomy/Infrastructure/Framework/Resources/config/orm/mapping'
+                is_bundle: false
+                prefix: Tulia\Cms\Taxonomy\Domain\WriteModel\Model
+                alias: CmsTaxonomy
 cms:
     templating:
         paths:
@@ -19,13 +27,10 @@ cms:
                     label: Taxonomy
                     classname: 'Tulia\Cms\Taxonomy\UserInterface\Web\Shared\Form\FormType\TaxonomyTypeaheadType'
                     builder: 'Tulia\Cms\Taxonomy\UserInterface\Web\Shared\Form\FormType\TaxonomyTypeaheadTypeBuilder'
-                    constraints: [required]
+                    constraints: [ required ]
                     configuration:
                         taxonomy:
                             type: choice
                             label: Select type of taxonomy
                             required: true
-                            # Todo Create dynamic builder for choices.
-                            choices:
-                                - { value: category, label: Category }
-                                - { value: tag, label: Tag }
+                            choices_provider: 'Tulia\Cms\Taxonomy\UserInterface\Web\Shared\Form\FormType\TaxonomyTypeaheadTypeChoicesProvider'

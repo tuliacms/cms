@@ -36,7 +36,8 @@ CREATE TABLE `#__content_type` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `#__content_type` (`code`, `type`, `name`, `icon`, `controller`, `is_routable`, `is_hierarchical`, `routing_strategy`) VALUES
-('page', 'node', 'Page', 'fas fa-boxes', NULL, 1, 1, 'simple');
+('page', 'node', 'Page', 'fas fa-boxes', NULL, 1, 1, 'simple'),
+('category', 'taxonomy', 'Category', 'fas fa-folder', NULL, 1, 1, 'full-path');
 EOF);
         $this->addSql(<<<EOF
 CREATE TABLE `#__content_type_field` (
@@ -53,7 +54,8 @@ CREATE TABLE `#__content_type_field` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `#__content_type_field` (`id`, `code`, `content_type_code`, `group_code`, `type`, `name`, `is_multilingual`, `position`, `parent`, `taxonomy`) VALUES
-('90125db0-0c18-48a4-bfd4-c76d6c303c8f', 'content', 'page', 'section_1653933292398_398_4', 'tulia_editor', 'Content', 1, 1, NULL, NULL);
+('90125db0-0c18-48a4-bfd4-c76d6c303c8f', 'content', 'page', 'section_1653933292398_398_1', 'tulia_editor', 'Content', 1, 1, NULL, NULL),
+('b35cff30-f325-49c1-acef-f6e0dbd9107f', 'category', 'page', 'section_1653933292398_398_2', 'taxonomy', 'Category', 0, 1, NULL, NULL);
 EOF);
         $this->addSql(<<<EOF
 CREATE TABLE `#__content_type_field_configuration` (
@@ -61,6 +63,10 @@ CREATE TABLE `#__content_type_field_configuration` (
   `code` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `value` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
+EOF);
+        $this->addSql(<<<EOF
+INSERT INTO `#__content_type_field_configuration` (`field_id`, `code`, `value`) VALUES
+('b35cff30-f325-49c1-acef-f6e0dbd9107f', 'taxonomy', 'category');
 EOF);
         $this->addSql(<<<EOF
 CREATE TABLE `#__content_type_field_constraint` (
@@ -96,7 +102,8 @@ CREATE TABLE `#__content_type_field_group` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `#__content_type_field_group` (`content_type_code`, `code`, `name`, `section`, `interior`, `active`, `position`) VALUES
-('page', 'section_1653933292398_398_4', 'Content', 'main', NULL, 0, 1);
+('page', 'section_1653933292398_398_1', 'Content', 'main', NULL, 0, 1),
+('page', 'section_1653933292398_398_2', 'Category', 'sidebar', NULL, 0, 2);
 EOF);
        /* $this->addSql(<<<EOF
 CREATE TABLE `#__model_change_history` (
@@ -114,7 +121,7 @@ CREATE TABLE `#__model_change_history` (
   `value_after` text CHARACTER SET utf8 COLLATE utf8_unicode_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
 EOF);*/
-        $this->addSql(<<<EOF
+        /*$this->addSql(<<<EOF
 CREATE TABLE `#__node_term_relationship` (
   `node_id` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `term_id` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
@@ -193,7 +200,7 @@ INSERT INTO `#__term_path` (`term_id`, `locale`, `path`) VALUES
 ('9a4c4ca3-4c83-46c0-8471-f2d5f8b9ef2c', 'en_US', '/kategoria'),
 ('a94d7e88-001a-45c1-99eb-c9dff24620b2', 'en_US', '/level-1/level-2/level-3/level-4/level-5'),
 ('b89c2db5-2675-4268-8fef-aa30099ab871', 'en_US', '/kategoria/kolejna-kategoria');
-EOF);
+EOF);*/
         $this->addSql(<<<EOF
 ALTER TABLE `#__activity`
   ADD PRIMARY KEY (`id`);
@@ -236,26 +243,6 @@ ALTER TABLE `#__node_term_relationship`
   ADD KEY `node_id` (`node_id`) USING BTREE,
   ADD KEY `term_id` (`term_id`) USING BTREE;
 
-ALTER TABLE `#__term`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `website_id` (`type`),
-  ADD KEY `fk_term_parent_id` (`parent_id`);
-
-ALTER TABLE `#__term_attribute`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `IDX_88CBC8F8E2C35FC` (`owner_id`);
-
-ALTER TABLE `#__term_attribute_lang`
-  ADD KEY `IDX_C93142EEDC9EE959` (`attribute_id`);
-
-ALTER TABLE `#__term_lang`
-  ADD PRIMARY KEY (`term_id`,`locale`) USING BTREE,
-  ADD KEY `search_slug` (`slug`(191),`locale`,`visibility`) USING BTREE;
-
-ALTER TABLE `#__term_path`
-  ADD PRIMARY KEY (`path`,`locale`) USING BTREE,
-  ADD KEY `fk_term_path_term_id` (`term_id`);
-
 ALTER TABLE `#__content_type_field`
   ADD CONSTRAINT `fk_content_type_field_content_type_code` FOREIGN KEY (`content_type_code`) REFERENCES `#__content_type` (`code`) ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -277,21 +264,6 @@ ALTER TABLE `#__customizer_changeset_lang`
 ALTER TABLE `#__node_term_relationship`
   ADD CONSTRAINT `fk_node_term_relationship_node_id` FOREIGN KEY (`node_id`) REFERENCES `#__node` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_node_term_relationship_term_id` FOREIGN KEY (`term_id`) REFERENCES `#__term` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `#__term`
-  ADD CONSTRAINT `fk_term_parent_id` FOREIGN KEY (`parent_id`) REFERENCES `#__term` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `#__term_attribute`
-  ADD CONSTRAINT `fk_term_attribute_term_id` FOREIGN KEY (`owner_id`) REFERENCES `#__term` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `#__term_attribute_lang`
-  ADD CONSTRAINT `fk_term_attribute_lang_term_attribute_id` FOREIGN KEY (`attribute_id`) REFERENCES `#__term_attribute` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `#__term_lang`
-  ADD CONSTRAINT `fk_term_lang_term_id` FOREIGN KEY (`term_id`) REFERENCES `#__term` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `#__term_path`
-  ADD CONSTRAINT `fk_term_path_term_id` FOREIGN KEY (`term_id`) REFERENCES `#__term` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 EOF
 );
     }

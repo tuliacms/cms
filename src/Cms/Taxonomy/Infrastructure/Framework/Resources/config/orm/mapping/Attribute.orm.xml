@@ -1,0 +1,23 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Attribute" table="#__taxonomy_term_translation_attribute">
+        <id name="id" type="uuid">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+
+        <field name="locale" length="12" />
+        <field name="code" />
+        <field name="uri" />
+        <field name="compiledValue" nullable="true" type="text" />
+        <field name="payload" type="array" nullable="true" />
+        <field name="flags" type="array" nullable="true" />
+
+        <embedded name="value" class="Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\AttributeValue" />
+
+        <many-to-one field="termTranslation" target-entity="Tulia\Cms\Taxonomy\Domain\WriteModel\Model\TermTranslation" inversed-by="attributes"/>
+    </entity>
+</doctrine-mapping>

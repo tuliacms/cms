@@ -63,7 +63,16 @@ class User extends AbstractController
         $userDetailsForm = $this->createForm(UserDetailsForm::class, [], ['csrf_protection' => false]);
         $userDetailsForm->handleRequest($request);
 
-        $formDescriptor = $this->contentFormService->buildFormDescriptor($website, 'user', [], ['userDetailsForm' => $userDetailsForm, 'layout' => 'admin']);
+        $formDescriptor = $this->contentFormService->buildFormDescriptor(
+            $website,
+            'user',
+            [],
+            [
+                'userDetailsForm' => $userDetailsForm,
+                'layout' => 'admin',
+                'partialView' => '@backend/user/parts/content-type-user-details.tpl',
+            ]
+        );
         $formDescriptor->handleRequest($request);
 
         if ($formDescriptor->isFormValid() && $userDetailsForm->isSubmitted() && $userDetailsForm->isValid()) {
@@ -102,7 +111,16 @@ class User extends AbstractController
         );
         $userDetailsForm->handleRequest($request);
 
-        $formDescriptor = $this->contentFormService->buildFormDescriptor($website, 'user', $userData['attributes'], ['userDetailsForm' => $userDetailsForm, 'layout' => 'admin']);
+        $formDescriptor = $this->contentFormService->buildFormDescriptor(
+            $website,
+            'user',
+            $userData['attributes'],
+            [
+                'userDetailsForm' => $userDetailsForm,
+                'layout' => 'admin',
+                'partialView' => '@backend/user/parts/content-type-user-details.tpl',
+            ]
+        );
         $formDescriptor->handleRequest($request);
 
         if ($formDescriptor->isFormValid()) {

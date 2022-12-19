@@ -1,0 +1,25 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Tulia\Cms\Taxonomy\Domain\WriteModel\Model\TermTranslation" table="#__taxonomy_term_translation">
+        <id name="id" type="uuid">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+
+        <field name="name" />
+        <field name="locale" length="12"/>
+        <field name="visibility" type="boolean" />
+        <field name="translated" type="boolean" />
+
+        <many-to-one field="term" target-entity="Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term"  inversed-by="translations"/>
+        <one-to-many field="attributes" orphan-removal="true" target-entity="Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Attribute" mapped-by="termTranslation">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
+    </entity>
+</doctrine-mapping>

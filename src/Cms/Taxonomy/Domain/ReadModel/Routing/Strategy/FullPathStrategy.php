@@ -49,6 +49,6 @@ class FullPathStrategy extends AbstractRoutingStrategy
 
     public function getId(): string
     {
-        return 'full_path';
+        return 'full-path';
     }
 }

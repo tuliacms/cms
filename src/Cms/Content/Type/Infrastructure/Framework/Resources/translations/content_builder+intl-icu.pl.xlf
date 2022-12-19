@@ -226,7 +226,7 @@
                 <target>Prosty - URL jest tworzony tylko z pola slug</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.62">
-                <source>contentTypeStrategy_full_path</source>
+                <source>contentTypeStrategy_full-path</source>
                 <target>Pełna ścieżka — wszystkie hierarchiczne elementy nadrzędne są używane do tworzenia adresu URL</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.63">

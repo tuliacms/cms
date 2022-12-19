@@ -22,3 +22,8 @@ default:
                 features: '%paths.base%/tests/behat/features/website'
             contexts:
                 - Tulia\Cms\Tests\Behat\Website\WebsiteContext
+        taxonomy_features:
+            paths:
+                features: '%paths.base%/tests/behat/features/taxonomy'
+            contexts:
+                - Tulia\Cms\Tests\Behat\Taxonomy\TaxonomyContext

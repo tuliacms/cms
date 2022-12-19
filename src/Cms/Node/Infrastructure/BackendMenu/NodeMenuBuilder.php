@@ -48,19 +48,18 @@ final class NodeMenuBuilder implements BuilderInterface
             'parent' => $root,
         ]);
 
-        // TODO Finish listing of taxonomies attached to Type
-        /*foreach ($type->getFields() as $field) {
+        foreach ($type->getFields() as $field) {
             if ($field->getType() !== 'taxonomy') {
                 continue;
             }
 
-            $taxonomy = $this->contentTypeRegistry->get($field->getTaxonomy());
+            $taxonomy = $this->contentTypeRegistry->get($field->getConfig('taxonomy'));
 
             $registry->add($root . '_' . $taxonomy->getCode(), [
                 'label'  => $this->helper->trans('termsListOfTaxonomy', ['taxonomy' => $this->helper->trans($taxonomy->getName(), [], 'taxonomy')], 'taxonomy'),
                 'link'   => $this->helper->generateUrl('backend.term', [ 'taxonomyType' => $taxonomy->getCode() ]),
                 'parent' => $root,
             ]);
-        }*/
+        }
     }
 }

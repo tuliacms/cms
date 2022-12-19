@@ -11,7 +11,7 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\Taxonomy\Domain\Service\TaxonomyHierarchy;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term;
-use Tulia\Cms\Taxonomy\Domain\WriteModel\TaxonomyRepository;
+use Tulia\Cms\Taxonomy\Infrastructure\Persistence\Doctrine\Orm\DoctrineTaxonomyRepository;
 use Tulia\Component\Templating\ViewInterface;
 
 /**
@@ -19,12 +19,12 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class Hierarchy extends AbstractController
 {
-    private TaxonomyRepository $repository;
+    private DoctrineTaxonomyRepository $repository;
     private TaxonomyHierarchy $hierarchy;
     private ContentTypeRegistryInterface $typeRegistry;
 
     public function __construct(
-        TaxonomyRepository $repository,
+        DoctrineTaxonomyRepository $repository,
         TaxonomyHierarchy $hierarchy,
         ContentTypeRegistryInterface $typeRegistry
     ) {

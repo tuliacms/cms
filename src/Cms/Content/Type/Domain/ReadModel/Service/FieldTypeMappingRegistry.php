@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Content\Type\Domain\ReadModel\Service;
 
 use Tulia\Cms\Content\Type\Domain\ReadModel\Exception\FieldTypeNotExistsException;
+use Tulia\Cms\Content\Type\Domain\ReadModel\FieldChoicesProvider\FieldChoicesProviderRegistry;
 use Tulia\Cms\Content\Type\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderRegistry;
 use Tulia\Cms\Content\Type\Domain\ReadModel\FieldTypeHandler\FieldTypeHandlerInterface;
@@ -21,7 +22,8 @@ class FieldTypeMappingRegistry
     public function __construct(
         private readonly ConstraintsResolverInterface $constraintsResolver,
         private readonly FieldTypeBuilderRegistry $builderRegistry,
-        private readonly FieldTypeHandlerRegistry $handlerRegistry
+        private readonly FieldTypeHandlerRegistry $handlerRegistry,
+        private readonly FieldChoicesProviderRegistry $choicesProviderRegistry,
     ) {
     }
 
@@ -131,10 +133,29 @@ class FieldTypeMappingRegistry
             return;
         }
 
+        /**
+         * @todo Must be a better way to deal with it.
+         *
+         * Setting this here, before loop is a hacky hack for choices_provider.
+         * When TaxonomyTypeaheadTypeChoicesProvider provides choices, it uses the ContentTypeRegistryInterface
+         * to get types by type. And ContentTypeRegistryInterface rounds around to here to
+         * retrieve field mapping and wants to resolve it again.
+         *
+         * For now it must be like this, but maybe there is a better way to prevent this problem.
+         */
+        $this->mappingResolved = true;
+
         foreach ($this->mapping as $typeKey => $val) {
             $this->mapping[$typeKey] = $this->constraintsResolver->resolve($this->mapping[$typeKey]);
-        }
 
-        $this->mappingResolved = true;
+            foreach ($this->mapping[$typeKey]['configuration'] as $key => $config) {
+                if ($config['choices_provider']) {
+                    $this->mapping[$typeKey]['configuration'][$key]['choices']
+                        = $this->choicesProviderRegistry->has($config['choices_provider'])
+                        ? $this->choicesProviderRegistry->get($config['choices_provider'])->provide()
+                        : $config['choices'];
+                }
+            }
+        }
     }
 }

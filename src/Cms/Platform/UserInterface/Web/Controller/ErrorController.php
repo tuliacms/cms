@@ -29,6 +29,8 @@ final class ErrorController extends AbstractController
 
     public function handle(\Throwable $exception, LoggerInterface $appLogger, WebsiteInterface $website)
     {
+        $allowOriginalException = false;
+
         try {
             if (
                 $exception instanceof NotFoundHttpException
@@ -37,6 +39,11 @@ final class ErrorController extends AbstractController
                 $code = Response::HTTP_NOT_FOUND;
             } else {
                 $code = Response::HTTP_INTERNAL_SERVER_ERROR;
+            }
+
+            if ($this->environment !== 'prod') {
+                $allowOriginalException = true;
+                throw $exception;
             }
 
             if ($website->isBackend()) {
@@ -49,6 +56,10 @@ final class ErrorController extends AbstractController
         } catch (\Throwable $e) {
             if ($this->environment === 'prod') {
                 return $this->createProduction500Error();
+            }
+
+            if ($allowOriginalException) {
+                throw $e;
             }
 
             if ($e instanceof ViewNotFoundException) {
