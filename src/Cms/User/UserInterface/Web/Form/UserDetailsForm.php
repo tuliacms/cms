@@ -12,6 +12,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
+use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormType\AttributesAwareFormTypeTrait;
+use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormType\AttributesType;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\LocaleType;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\PasswordType;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\YesNoType;
@@ -25,6 +27,10 @@ use Tulia\Cms\User\Infrastructure\Framework\Validator\Constraints\EmailUnique;
  */
 final class UserDetailsForm extends AbstractType
 {
+    use AttributesAwareFormTypeTrait {
+        AttributesAwareFormTypeTrait::configureOptions as traitConfigureOptions;
+    }
+
     public function __construct(
         private readonly UserAvatarModelTransformer $userAvatarTransformer,
     ) {
@@ -75,6 +81,12 @@ final class UserDetailsForm extends AbstractType
                 ])
             ],
         ]);
+        $builder->add('attributes', AttributesType::class, [
+            'partial_view' => $options['partial_view'],
+            'website' => $options['website'],
+            'content_type' => $options['content_type'],
+            'context' => $options['context'],
+        ]);
         $builder->get('avatar')->addModelTransformer($this->userAvatarTransformer);
         $builder->add('remove_avatar', CheckboxType::class, [
             'label' => 'removeAvatar',
@@ -101,6 +113,8 @@ final class UserDetailsForm extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
+        $this->traitConfigureOptions($resolver);
+
         $resolver->setDefault('edit_form', false);
     }
 }

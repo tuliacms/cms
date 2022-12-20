@@ -14,13 +14,13 @@
         <div class="pane-header">
             <div class="pane-buttons">
                 <a href="{{ path('backend.user') }}" class="btn btn-secondary btn-icon-left"><i class="btn-icon fas fa-times"></i> {{ 'cancel'|trans({}, 'messages') }}</a>
-                <a href="#" data-submit-form="{{ formDescriptor.formView.vars.id }}" class="btn btn-success btn-icon-left"><i class="btn-icon fas fa-save"></i> {{ 'save'|trans({}, 'messages') }}</a>
+                <a href="#" data-submit-form="{{ form.vars.id }}" class="btn btn-success btn-icon-left"><i class="btn-icon fas fa-save"></i> {{ 'save'|trans({}, 'messages') }}</a>
             </div>
             <i class="pane-header-icon fas fa-users"></i>
             <h1 class="pane-title">{{ block('title') }}</h1>
         </div>
         <div class="pane-body p-0">
-            {{ render_content_builder_form_layout(formDescriptor) }}
+            {{ render_content_builder_form_layout_new(form.attributes) }}
         </div>
     </div>
 {% endblock %}

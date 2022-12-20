@@ -22,5 +22,8 @@ trait AttributesAwareFormTypeTrait
 
         $resolver->setDefault('partial_view', null);
         $resolver->setAllowedTypes('partial_view', ['null', 'string']);
+
+        $resolver->setDefault('context', null);
+        $resolver->setAllowedTypes('context', ['null', 'array']);
     }
 }

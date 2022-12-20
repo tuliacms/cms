@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
-use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Service\ContentFormService;
 use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormAttributesExtractor;
 use Tulia\Cms\Node\Application\UseCase\CreateNode;
 use Tulia\Cms\Node\Application\UseCase\CreateNodeRequest;
@@ -44,7 +43,6 @@ class Node extends AbstractController
         private readonly NodeRepositoryInterface $repository,
         private readonly DatatableFactory $factory,
         private readonly NodeDatatableFinderInterface $finder,
-        private readonly ContentFormService $contentFormService,
         private readonly AuthenticatedUserProviderInterface $authenticatedUserProvider,
     ) {
     }

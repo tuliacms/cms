@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
-use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Service\ContentFormService;
 use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormAttributesExtractor;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
@@ -38,7 +37,6 @@ class Term extends AbstractController
         private readonly TaxonomyRepositoryInterface $repository,
         private readonly DatatableFactory $factory,
         private readonly TermDatatableFinderInterface $finder,
-        private readonly ContentFormService $contentFormService,
         private readonly ContentTypeRegistryInterface $typeRegistry,
     ) {
     }

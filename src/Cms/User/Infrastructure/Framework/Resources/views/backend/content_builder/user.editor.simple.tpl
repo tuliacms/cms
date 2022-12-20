@@ -1,10 +1,8 @@
 {% embed '@backend/content_builder/layout/_parts/editor/form_layout.simple.tpl' %}
     {% block content_before %}
-        {% set userDetailsForm = context.userDetailsForm.createView %}
-
-        {{ form_row(userDetailsForm.name) }}
-        {{ form_row(userDetailsForm.locale) }}
-        {{ form_row(userDetailsForm.avatar) }}
-        {{ form_row(userDetailsForm.remove_avatar) }}
+        {{ form_row(context.form.name) }}
+        {{ form_row(context.form.locale) }}
+        {{ form_row(context.form.avatar) }}
+        {{ form_row(context.form.remove_avatar) }}
     {% endblock %}
 {% endembed %}

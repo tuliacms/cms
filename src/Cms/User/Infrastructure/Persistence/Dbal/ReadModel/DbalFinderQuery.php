@@ -6,6 +6,7 @@ namespace Tulia\Cms\User\Infrastructure\Persistence\Dbal\ReadModel;
 
 use Doctrine\DBAL\Query\QueryBuilder;
 use PDO;
+use Symfony\Component\Uid\Uuid;
 use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\AttributesFinder;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Connection;
@@ -201,7 +202,7 @@ class DbalFinderQuery extends AbstractDbalQuery
         if ($query['id']) {
             $this->queryBuilder
                 ->andWhere('tm.id = :tm_id')
-                ->setParameter('tm_id', $query['id'], PDO::PARAM_STR)
+                ->setParameter('tm_id', Uuid::fromString($query['id'])->toBinary(), PDO::PARAM_STR)
                 ->setMaxResults(1);
         }
 
@@ -211,6 +212,11 @@ class DbalFinderQuery extends AbstractDbalQuery
             } else {
                 $ids = $query['id__not_in'];
             }
+
+            $ids = array_map(
+                static fn ($v) => Uuid::fromString($v)->toBinary(),
+                $ids
+            );
 
             $this->queryBuilder
                 ->andWhere('tm.id NOT IN (:tm_id__not_in)')

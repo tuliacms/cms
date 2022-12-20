@@ -7,7 +7,6 @@ namespace Tulia\Cms\Widget\UserInterface\Web\Backend\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Service\ContentFormService;
 use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormAttributesExtractor;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
@@ -36,7 +35,6 @@ class Widget extends AbstractController
     public function __construct(
         private readonly WidgetRegistryInterface $widgetRegistry,
         private readonly WidgetRepositoryInterface $repository,
-        private readonly ContentFormService $contentFormService,
     ) {
     }
 

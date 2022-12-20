@@ -6,7 +6,7 @@ namespace Tulia\Cms\User\UserInterface\Web\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Service\ContentFormService;
+use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormAttributesExtractor;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
@@ -28,7 +28,6 @@ class MyAccount extends AbstractController
     public function __construct(
         private readonly AuthenticatedUserProviderInterface $authenticatedUserProvider,
         private readonly UserRepositoryInterface $userRepository,
-        private readonly ContentFormService $contentFormService,
     ) {
     }
 
@@ -49,29 +48,34 @@ class MyAccount extends AbstractController
     /**
      * @param Request $request
      * @return RedirectResponse|ViewInterface
-     * @CsrfToken(id="content_builder_form_user")
+     * @CsrfToken(id="my_account_details_form")
      */
-    public function edit(Request $request, UpdateMyAccount $updateMyAccount, WebsiteInterface $website)
-    {
+    public function edit(
+        Request $request,
+        UpdateMyAccount $updateMyAccount,
+        WebsiteInterface $website,
+        FormAttributesExtractor $extractor,
+    ) {
         $user = $this->userRepository->get($this->authenticatedUserProvider->getUser()->getId());
 
         if (!$user) {
             return $this->redirectToRoute('backend.homepage');
         }
 
-        $userData = $user->toArray();
+        $form = $this->createForm(
+            MyAccountDetailsForm::class,
+            $user->toArray(),
+            [
+                'website' => $website,
+                'content_type' => 'user',
+            ]
+        );
+        $form->handleRequest($request);
 
-        $userDetailsForm = $this->createForm(MyAccountDetailsForm::class, $userData, ['csrf_protection' => false]);
-        $userDetailsForm->handleRequest($request);
-
-        $formDescriptor = $this->contentFormService->buildFormDescriptor($website, 'user', $userData['attributes'], ['userDetailsForm' => $userDetailsForm]);
-        $formDescriptor->handleRequest($request);
-
-        if ($formDescriptor->isFormValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             ($updateMyAccount)(UpdateMyAccountRequest::fromArray(
                 array_merge(
-                    $userDetailsForm->getData(),
-                    ['attributes' => $formDescriptor->getData()],
+                    $extractor->extractData($form, 'user'),
                     ['id' => $user->getId()],
                 )
             ));
@@ -82,7 +86,7 @@ class MyAccount extends AbstractController
 
         return $this->view('@backend/user/me/edit.tpl', [
             'user' => $this->authenticatedUserProvider->getUser(),
-            'formDescriptor' => $formDescriptor,
+            'form' => $form->createView(),
         ]);
     }
 

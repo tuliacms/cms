@@ -9,6 +9,8 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormType\AttributesAwareFormTypeTrait;
+use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormType\AttributesType;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\LocaleType;
 use Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserAvatar\UserAvatarModelTransformer;
 use Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserAvatar\UserAvatarType;
@@ -18,6 +20,8 @@ use Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserAvatar\UserAvatarT
  */
 final class MyAccountDetailsForm extends AbstractType
 {
+    use AttributesAwareFormTypeTrait;
+
     public function __construct(
         private UserAvatarModelTransformer $userAvatarTransformer
     ) {
@@ -49,6 +53,10 @@ final class MyAccountDetailsForm extends AbstractType
         $builder->get('avatar')->addModelTransformer($this->userAvatarTransformer);
         $builder->add('remove_avatar', CheckboxType::class, [
             'label' => 'Remove avatar'
+        ]);
+        $builder->add('attributes', AttributesType::class, [
+            'website' => $options['website'],
+            'content_type' => $options['content_type'],
         ]);
     }
 }

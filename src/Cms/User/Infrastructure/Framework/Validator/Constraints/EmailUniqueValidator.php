@@ -51,7 +51,11 @@ class EmailUniqueValidator extends ConstraintValidator
             $criteria['id__not_in'] = [$root->get('id')->getData()];
         }
 
-        if ($constraint->id_not_in_fields !== []) {
+        if ($constraint->id_not_in_fields) {
+            if (!is_array($constraint->id_not_in_fields)) {
+                $constraint->id_not_in_fields = [$constraint->id_not_in_fields];
+            }
+
             foreach ($constraint->id_not_in_fields as $field) {
                 $value = $root->get($field)->getData();
 

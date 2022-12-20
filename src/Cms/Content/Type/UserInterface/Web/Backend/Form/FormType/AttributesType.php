@@ -53,20 +53,27 @@ final class AttributesType extends AbstractType
 
         $resolver->setDefault('partial_view', null);
         $resolver->setAllowedTypes('partial_view', ['null', 'string']);
+
+        $resolver->setDefault('context', null);
+        $resolver->setAllowedTypes('context', ['null', 'array']);
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $type = $this->contentTypeRegistry->get($options['content_type']);
+        $context = [
+            'partial_view' => $options['partial_view'],
+            'form' => $view->parent,
+        ];
+
+        if (is_array($options['context'])) {
+            $context += $options['context'];
+        }
 
         $view->vars['content_type_view'] = $this->builderRegistry
             ->get($this->config->getLayoutBuilder($type->getType()))
-            ->editorView($type, $view, [
-                'partial_view' => $options['partial_view'],
-                'form' => $view->parent,
-            ]);
+            ->editorView($type, $view, $context);
 
         $view->vars['content_type'] = $type;
-        $view->vars['root_form'] = $view->parent;
     }
 }

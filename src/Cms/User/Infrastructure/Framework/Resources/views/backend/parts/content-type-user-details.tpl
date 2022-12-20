@@ -1,12 +1,10 @@
 {% macro page_header(context) %}
-    {% set userDetailsForm = context.userDetailsForm.createView %}
-
-    {{ form_row(userDetailsForm.id) }}
+    {{ form_row(context.form.id) }}
     <div class="page-form-header">
         <div class="container-fluid">
             <div class="row">
                 <div class="col">
-                    {{ form_row(userDetailsForm.email, { attr: { autocomplete: 'off' } }) }}
+                    {{ form_row(context.form.email, { attr: { autocomplete: 'off' } }) }}
                 </div>
             </div>
         </div>
@@ -14,16 +12,14 @@
 {% endmacro %}
 
 {% macro sidebar_accordion(context) %}
-    {% set userDetailsForm = context.userDetailsForm.createView %}
-
     <div class="accordion-section">
         <div class="accordion-section-button" data-bs-toggle="collapse" data-bs-target="#form-collapse-sidebar-details">
             {{ 'details'|trans({}, 'users') }}
         </div>
         <div id="form-collapse-sidebar-details" class="accordion-collapse collapse show">
             <div class="accordion-section-body">
-                {{ form_row(userDetailsForm.name) }}
-                {{ form_row(userDetailsForm.locale) }}
+                {{ form_row(context.form.name) }}
+                {{ form_row(context.form.locale) }}
             </div>
         </div>
     </div>
@@ -33,9 +29,9 @@
         </div>
         <div id="form-collapse-sidebar-avatar" class="accordion-collapse collapse show">
             <div class="accordion-section-body">
-                {{ form_row(userDetailsForm.avatar) }}
-                {% if userDetailsForm.avatar.vars.data %}
-                    {{ form_row(userDetailsForm.remove_avatar) }}
+                {{ form_row(context.form.avatar) }}
+                {% if context.form.avatar.vars.data %}
+                    {{ form_row(context.form.remove_avatar) }}
                 {% endif %}
             </div>
         </div>
@@ -49,16 +45,14 @@
 {% endmacro %}
 
 {% macro page_tabs_content(context) %}
-    {% set userDetailsForm = context.userDetailsForm.createView %}
-
     <div class="tab-pane fade show active" id="tab-security">
         <div class="container-fluid">
             <div class="row">
                 <div class="col">
-                    {{ form_row(userDetailsForm.password) }}
+                    {{ form_row(context.form.password) }}
                     {% include '@backend/user/user/parts/password-complexity.tpl' %}
-                    {{ form_row(userDetailsForm.enabled) }}
-                    {{ form_row(userDetailsForm.roles) }}
+                    {{ form_row(context.form.enabled) }}
+                    {{ form_row(context.form.roles) }}
                 </div>
             </div>
         </div>

@@ -7,8 +7,8 @@ namespace Tulia\Cms\User\UserInterface\Web\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Service\ContentFormService;
 use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Service\SymfonyFieldBuilder;
+use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormAttributesExtractor;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\Shared\Application\UseCase\IdResult;
@@ -32,7 +32,6 @@ use Tulia\Component\Templating\ViewInterface;
 class User extends AbstractController
 {
     public function __construct(
-        private readonly ContentFormService $contentFormService,
         private readonly UserRepositoryInterface $repository,
         private readonly SymfonyFieldBuilder $fieldBuilder,
     ) {
@@ -56,29 +55,32 @@ class User extends AbstractController
     }
 
     /**
-     * @CsrfToken(id="content_builder_form_user")
+     * @CsrfToken(id="user_details_form")
      */
-    public function create(Request $request, CreateUser $createUser, WebsiteInterface $website)
-    {
-        $userDetailsForm = $this->createForm(UserDetailsForm::class, [], ['csrf_protection' => false]);
-        $userDetailsForm->handleRequest($request);
-
-        $formDescriptor = $this->contentFormService->buildFormDescriptor(
-            $website,
-            'user',
+    public function create(
+        Request $request,
+        CreateUser $createUser,
+        WebsiteInterface $website,
+        FormAttributesExtractor $extractor,
+    ) {
+        $form = $this->createForm(
+            UserDetailsForm::class,
             [],
             [
-                'userDetailsForm' => $userDetailsForm,
-                'layout' => 'admin',
-                'partialView' => '@backend/user/parts/content-type-user-details.tpl',
-            ]
+                'partial_view' => '@backend/user/parts/content-type-user-details.tpl',
+                'website' => $website,
+                'content_type' => 'user',
+                'context' => [
+                    'layout' => 'admin',
+                ],
+            ],
         );
-        $formDescriptor->handleRequest($request);
+        $form->handleRequest($request);
 
-        if ($formDescriptor->isFormValid() && $userDetailsForm->isSubmitted() && $userDetailsForm->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             /** @var IdResult $result */
             $result = ($createUser)(CreateUserRequest::fromArray(
-                $userDetailsForm->getData() + ['attributes' => $formDescriptor->getData()]
+                $extractor->extractData($form, 'user'),
             ));
 
             $this->addFlash('success', $this->trans('userSaved', [], 'users'));
@@ -86,15 +88,20 @@ class User extends AbstractController
         }
 
         return $this->view('@backend/user/user/create.tpl', [
-            'formDescriptor' => $formDescriptor,
+            'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @CsrfToken(id="content_builder_form_user")
+     * @CsrfToken(id="user_details_form")
      */
-    public function edit(Request $request, string $id, UpdateUser $updateUser, WebsiteInterface $website)
-    {
+    public function edit(
+        Request $request,
+        string $id,
+        UpdateUser $updateUser,
+        WebsiteInterface $website,
+        FormAttributesExtractor $extractor,
+    ) {
         $user = $this->repository->get($id);
 
         if (! $user) {
@@ -102,33 +109,24 @@ class User extends AbstractController
             return $this->redirectToRoute('backend.user.list');
         }
 
-        $userData = $user->toArray();
-
-        $userDetailsForm = $this->createForm(
+        $form = $this->createForm(
             UserDetailsForm::class,
-            $userData,
-            ['csrf_protection' => false, 'edit_form' => true]
-        );
-        $userDetailsForm->handleRequest($request);
-
-        $formDescriptor = $this->contentFormService->buildFormDescriptor(
-            $website,
-            'user',
-            $userData['attributes'],
+            $user->toArray(),
             [
-                'userDetailsForm' => $userDetailsForm,
-                'layout' => 'admin',
-                'partialView' => '@backend/user/parts/content-type-user-details.tpl',
-            ]
+                'edit_form' => true,
+                'partial_view' => '@backend/user/parts/content-type-user-details.tpl',
+                'website' => $website,
+                'content_type' => 'user',
+                'context' => [
+                    'layout' => 'admin',
+                ],
+            ],
         );
-        $formDescriptor->handleRequest($request);
+        $form->handleRequest($request);
 
-        if ($formDescriptor->isFormValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             ($updateUser)(UpdateUserRequest::fromArray(
-                array_merge(
-                    $userDetailsForm->getData(),
-                    ['attributes' => $formDescriptor->getData()]
-                )
+                $extractor->extractData($form, 'user'),
             ));
 
             $this->addFlash('success', $this->trans('userSaved', [], 'users'));
@@ -136,7 +134,7 @@ class User extends AbstractController
         }
 
         return $this->view('@backend/user/user/edit.tpl', [
-            'formDescriptor' => $formDescriptor,
+            'form' => $form->createView(),
         ]);
     }
 
