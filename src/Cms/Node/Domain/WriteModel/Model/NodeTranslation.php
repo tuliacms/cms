@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\Attribute as CoreAttribute;
 use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\AttributesAwareAggregateTrait;
-use Tulia\Cms\Node\Domain\WriteModel\Service\SlugGeneratorStrategy\SlugGeneratorStrategyInterface;
+use Tulia\Cms\Shared\Domain\WriteModel\Service\SlugGeneratorStrategy\SlugGeneratorStrategyInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -69,7 +69,7 @@ class NodeTranslation
     public function changeTitle(SlugGeneratorStrategyInterface $slugGenerator, string $websiteId, string $title, ?string $slug = null): void
     {
         $this->title = $title;
-        $this->slug = $slugGenerator->generate(
+        $this->slug = $slugGenerator->generateGloballyUnique(
             $this->getId(),
             (string) $slug,
             $title,
