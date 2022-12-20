@@ -13,6 +13,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
+use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
+use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormType\AttributesAwareFormTypeTrait;
+use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormType\AttributesType;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodePurpose\NodePurposeRegistryInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\DateTimeType;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
@@ -23,18 +26,18 @@ use Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserTypeahead\UserType
  */
 final class NodeDetailsForm extends AbstractType
 {
+    use AttributesAwareFormTypeTrait;
+
     public function __construct(
         private readonly NodePurposeRegistryInterface $flagRegistry,
         private readonly TranslatorInterface $translator,
-        private readonly AuthenticatedUserProviderInterface $authenticatedUserProvider
+        private readonly AuthenticatedUserProviderInterface $authenticatedUserProvider,
+        private readonly ContentTypeRegistryInterface $contentTypeRegistry,
     ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        /** @var ContentType $contentType */
-        $contentType = $options['content_type'];
-
         $builder->add('id', HiddenType::class);
         $builder->add('title', TextType::class, [
             'label' => 'title',
@@ -73,8 +76,8 @@ final class NodeDetailsForm extends AbstractType
                 new Assert\NotBlank()
             ],
             'empty_data' => $this->authenticatedUserProvider->getUser()->getId(),
-            'website_id' => $options['website_id'],
-            'locale' => $options['locale'],
+            'website_id' => $options['website']->getId(),
+            'locale' => $options['website']->getLocale()->getCode(),
         ]);
         $builder->add('purposes', ChoiceType::class, [
             'label' => 'nodePurpose',
@@ -83,6 +86,11 @@ final class NodeDetailsForm extends AbstractType
             'choices' => $this->buildPurposes(),
             'choice_translation_domain' => false,
             'multiple' => true,
+        ]);
+        $builder->add('attributes', AttributesType::class, [
+            'partial_view' => $options['partial_view'],
+            'website' => $options['website'],
+            'content_type' => $options['content_type'],
         ]);
 
         /*if ($contentType->isHierarchical()) {
@@ -105,18 +113,13 @@ final class NodeDetailsForm extends AbstractType
             ]);
         }*/
 
-        if ($contentType->isRoutable()) {
+        if ($this->contentTypeRegistry->get($options['content_type'])->isRoutable()) {
             $builder->add('slug', TextType::class, [
                 'constraints' => [
                     // new UniqueSlug()
                 ]
             ]);
         }
-    }
-
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setRequired(['content_type', 'website_id', 'locale']);
     }
 
     private function buildPurposes(): array

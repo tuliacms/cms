@@ -1,15 +1,13 @@
 {% macro page_header(context) %}
-    {% set nodeDetailsForm = context.nodeDetailsForm.createView %}
-
     <div class="page-form-header">
         <div class="container-fluid">
             <div class="row">
                 <div class="col">
-                    {{ form_row(nodeDetailsForm.title) }}
+                    {{ form_row(context.form.title) }}
                 </div>
-                {% if nodeDetailsForm.slug is defined %}
+                {% if context.form.slug is defined %}
                     <div class="col">
-                        {{ form_row(nodeDetailsForm.slug) }}
+                        {{ form_row(context.form.slug) }}
                     </div>
                 {% endif %}
             </div>
@@ -18,20 +16,18 @@
 {% endmacro %}
 
 {% macro sidebar_accordion(context) %}
-    {% set nodeDetailsForm = context.nodeDetailsForm.createView %}
-
     <div class="accordion-section">
         <div class="accordion-section-button" data-bs-toggle="collapse" data-bs-target="#form-collapse-sidebar-status">
             {{ 'publicationStatus'|trans }}
         </div>
         <div id="form-collapse-sidebar-status" class="accordion-collapse collapse show">
             <div class="accordion-section-body">
-                {{ form_row(nodeDetailsForm.published_at) }}
+                {{ form_row(context.form.published_at) }}
 
-                {% set publishedToManually = nodeDetailsForm.published_to.vars.value != '' %}
+                {% set publishedToManually = context.form.published_to.vars.value != '' %}
                 <div class="node-published-to-selector mb-4">
                     <div class="published-to-date-selector{{ publishedToManually ? '' : ' d-none' }}">
-                        {{ form_row(nodeDetailsForm.published_to) }}
+                        {{ form_row(context.form.published_to) }}
                     </div>
                     <div class="published-to-checkbox">
                         <div class="custom-control custom-checkbox">
@@ -41,10 +37,10 @@
                     </div>
                 </div>
 
-                {{ form_row(nodeDetailsForm.status) }}
-                {{ form_row(nodeDetailsForm.author_id) }}
-                {{ form_row(nodeDetailsForm.purposes) }}
-                {#{{ form_row(nodeDetailsForm.parent_id) }}#}
+                {{ form_row(context.form.status) }}
+                {{ form_row(context.form.author_id) }}
+                {{ form_row(context.form.purposes) }}
+                {#{{ form_row(context.form.parent_id) }}#}
             </div>
         </div>
     </div>

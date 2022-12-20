@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Service\ContentFormService;
+use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormAttributesExtractor;
 use Tulia\Cms\Node\Application\UseCase\CreateNode;
 use Tulia\Cms\Node\Application\UseCase\CreateNodeRequest;
 use Tulia\Cms\Node\Application\UseCase\DeleteNode;
@@ -24,9 +25,8 @@ use Tulia\Cms\Node\Domain\WriteModel\Service\NodeRepositoryInterface;
 use Tulia\Cms\Node\UserInterface\Web\Backend\Form\NodeDetailsForm;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
-use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
-use Tulia\Cms\Security\Framework\Security\Http\Csrf\Exception\RequestCsrfTokenException;
 use Tulia\Cms\Shared\Application\UseCase\IdRequest;
+use Tulia\Cms\Shared\Application\UseCase\IdResult;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
 use Tulia\Component\Datatable\DatatableFactory;
@@ -78,24 +78,23 @@ class Node extends AbstractController
 
     /**
      * @return RedirectResponse|ViewInterface
-     * @IgnoreCsrfToken()
+     * @CsrfToken(id="node_details_form")
      */
     public function create(
         Request $request,
         CreateNode $createNode,
         string $node_type,
         WebsiteInterface $website,
+        FormAttributesExtractor $extractor,
     ) {
         if (!$website->isDefaultLocale()) {
             $this->addFlash('info', $this->trans('youHaveBeenRedirectedToDefaultLocaleDueToCreationMultilingualElement'));
             return $this->redirectToRoute('backend.node.create', ['node_type' => $node_type, '_locale' => $website->getDefaultLocale()->getCode()]);
         }
 
-        $this->validateCsrfToken($request, $node_type);
-
         $nodeType = $this->typeRegistry->get($node_type);
 
-        $nodeDetailsForm = $this->createForm(
+        $form = $this->createForm(
             NodeDetailsForm::class,
             [
                 'author' => $this->authenticatedUserProvider->getUser()->getId(),
@@ -103,33 +102,20 @@ class Node extends AbstractController
                 'status' => 'published',
             ],
             [
-                'content_type' => $nodeType,
-                'csrf_protection' => false,
-                'website_id' => $website->getId(),
-                'locale' => $website->getLocale()->getCode(),
+                'partial_view' => '@backend/node/parts/content-type-node-details.tpl',
+                'website' => $website,
+                'content_type' => $node_type,
             ]
         );
-        $nodeDetailsForm->handleRequest($request);
+        $form->handleRequest($request);
 
-        $formDescriptor = $this->contentFormService->buildFormDescriptor(
-            $website,
-            $nodeType->getCode(),
-            [],
-            [
-                'partialView' => '@backend/node/parts/content-type-node-details.tpl',
-                'nodeDetailsForm' => $nodeDetailsForm,
-            ]
-        );
-        $formDescriptor->handleRequest($request);
-        $nodeType = $formDescriptor->getContentType();
-
-        if ($formDescriptor->isFormValid() && $nodeDetailsForm->isSubmitted() && $nodeDetailsForm->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             try {
+                /** @var IdResult $result */
                 $result = $createNode(new CreateNodeRequest(
                     $node_type,
                     $this->authenticatedUserProvider->getUser()->getId(),
-                    $nodeDetailsForm->getData(),
-                    $formDescriptor->getData(),
+                    $extractor->extractData($form, $node_type),
                     $website->getId(),
                     $website->getLocale()->getCode(),
                     $website->getDefaultLocale()->getCode(),
@@ -139,19 +125,19 @@ class Node extends AbstractController
                 $this->addFlash('success', $this->trans('nodeSaved', [], 'node'));
                 return $this->redirectToRoute('backend.node.edit', [ 'id' => $result->id, 'node_type' => $nodeType->getCode() ]);
             }  catch (CannotImposePurposeToNodeException $e) {
-                $nodeDetailsForm->get('purposes')->addError(new FormError($this->trans($e->reason)));
+                $form->get('purposes')->addError(new FormError($this->trans($e->reason)));
             }
         }
 
         return $this->view('@backend/node/create.tpl', [
             'nodeType' => $nodeType,
-            'formDescriptor' => $formDescriptor,
+            'form' => $form->createView(),
         ]);
     }
 
     /**
      * @return RedirectResponse|ViewInterface
-     * @IgnoreCsrfToken()
+     * @CsrfToken(id="node_details_form")
      */
     public function edit(
         string $id,
@@ -159,9 +145,8 @@ class Node extends AbstractController
         Request $request,
         UpdateNode $updateNode,
         WebsiteInterface $website,
+        FormAttributesExtractor $extractor,
     ) {
-        $this->validateCsrfToken($request, $node_type);
-
         try {
             $node = $this->repository->get($id);
         } catch (NodeDoesntExistsException $e) {
@@ -175,46 +160,36 @@ class Node extends AbstractController
             $website->getDefaultLocale()->getCode(),
         );
 
-        $nodeDetailsForm = $this->createForm(
+        $form = $this->createForm(
             NodeDetailsForm::class,
             $nodeArray,
             [
-                'content_type' => $nodeType,
-                'csrf_protection' => false,
-                'website_id' => $website->getId(),
-                'locale' => $website->getLocale()->getCode(),
+                'partial_view' => '@backend/node/parts/content-type-node-details.tpl',
+                'website' => $website,
+                'content_type' => $node_type,
             ]
         );
-        $nodeDetailsForm->handleRequest($request);
+        $form->handleRequest($request);
 
-        $formDescriptor = $this->contentFormService->buildFormDescriptor(
-            $website,
-            $node_type,
-            $nodeArray['attributes'],
-            ['nodeDetailsForm' => $nodeDetailsForm]
-        );
-        $formDescriptor->handleRequest($request);
-
-        if ($formDescriptor->isFormValid() && $nodeDetailsForm->isSubmitted() && $nodeDetailsForm->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $updateNode(new UpdateNodeRequest(
                     $node->getId(),
-                    $nodeDetailsForm->getData(),
-                    $formDescriptor->getData(),
+                    $extractor->extractData($form, $node_type),
                     $website->getDefaultLocale()->getCode(),
                     $website->getLocale()->getCode(),
                 ));
                 $this->addFlash('success', $this->trans('nodeSaved', [], 'node'));
                 return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getCode() ]);
             } catch (CannotImposePurposeToNodeException $e) {
-                $nodeDetailsForm->get('purposes')->addError(new FormError($this->trans($e->reason)));
+                $form->get('purposes')->addError(new FormError($this->trans($e->reason)));
             }
         }
 
         return $this->view('@backend/node/edit.tpl', [
             'nodeType' => $nodeType,
-            'node'     => $node,
-            'formDescriptor' => $formDescriptor,
+            'node' => $node,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -310,23 +285,5 @@ class Node extends AbstractController
         }
 
         return $result;
-    }
-
-    /**
-     * @throws RequestCsrfTokenException
-     */
-    private function validateCsrfToken(Request $request, string $node_type): void
-    {
-        /**
-         * We must detect token validness manually, cause form name changes for every content type.
-         */
-        if ($request->isMethod('POST')) {
-            $tokenId = 'content_builder_form_' . $node_type;
-            $csrfToken = $request->request->all()[$tokenId]['_token'] ?? '';
-
-            if ($this->isCsrfTokenValid($tokenId, $csrfToken) === false) {
-                throw new RequestCsrfTokenException('CSRF token is invalid. Operation stopped.');
-            }
-        }
     }
 }

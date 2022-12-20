@@ -32,8 +32,8 @@ abstract class AbstractNodeUseCase extends AbstractTransactionalUseCase
         CreateNodeRequest|UpdateNodeRequest $request,
         Node $node,
     ): void {
-        $details = $request->details;
-        $attributes = $request->attributes;
+        $details = $request->data;
+        $attributes = $request->data['attributes'];
 
         $node->setStatus($details['status']);
         $node->persistPurposes($this->canImposePurpose, ...$details['purposes']);

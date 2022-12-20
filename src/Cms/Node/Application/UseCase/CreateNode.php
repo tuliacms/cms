@@ -21,7 +21,7 @@ class CreateNode extends AbstractNodeUseCase
         $node = $this->repository->create(
             $request->nodeType,
             $request->author,
-            $request->details['title'],
+            $request->data['title'],
             $request->websiteId,
             $request->availableLocales,
         );
