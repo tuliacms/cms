@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Widget\UserInterface\Web\Backend\Controller;
 
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\ContentTypeFormDescriptor;
 use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Service\ContentFormService;
+use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormAttributesExtractor;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
-use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Exception\RequestCsrfTokenException;
 use Tulia\Cms\Shared\Application\UseCase\IdResult;
 use Tulia\Cms\Widget\Application\UseCase\CreateWidget;
@@ -74,31 +72,38 @@ class Widget extends AbstractController
 
     /**
      * @return RedirectResponse|ViewInterface
-     * @IgnoreCsrfToken()
      * @throws RequestCsrfTokenException
+     * @CsrfToken(id="widget_details_form")
      */
-    public function create(Request $request, string $type, CreateWidget $createWidget, WebsiteInterface $website)
-    {
+    public function create(
+        Request $request,
+        string $type,
+        CreateWidget $createWidget,
+        WebsiteInterface $website,
+        FormAttributesExtractor $extractor,
+    ) {
         if (!$website->isDefaultLocale()) {
             $this->addFlash('info', $this->trans('youHaveBeenRedirectedToDefaultLocaleDueToCreationMultilingualElement'));
             return $this->redirectToRoute('backend.widget.create', ['type' => $type, '_locale' => $website->getDefaultLocale()->getCode()]);
         }
-        $this->validateCsrfToken($request, $type);
 
-        $widgetInfo = $this->widgetRegistry->get($type);
+        $contentType = $this->produceContentType($type);
+        $form = $this->createForm(
+            WidgetDetailsForm::class,
+            [],
+            [
+                'partial_view' => '@backend/widget/parts/content-type-widget-details.tpl',
+                'website' => $website,
+                'content_type' => $contentType,
+            ]
+        );
+        $form->handleRequest($request);
 
-        $widgetDetailsForm = $this->createForm(WidgetDetailsForm::class, [], ['csrf_protection' => false]);
-        $widgetDetailsForm->handleRequest($request);
-
-        $formDescriptor = $this->produceFormDescriptor($type, [], $widgetDetailsForm, $website);
-        $formDescriptor->handleRequest($request);
-
-        if ($formDescriptor->isFormValid() && $widgetDetailsForm->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             /** @var IdResult $result */
             $result = ($createWidget)(new CreateWidgetRequest(
                 $type,
-                $widgetDetailsForm->getData(),
-                $formDescriptor->getData(),
+                $extractor->extractData($form, $contentType),
                 $website->getId(),
                 $website->getLocale()->getCode(),
                 $website->getDefaultLocale()->getCode(),
@@ -110,18 +115,23 @@ class Widget extends AbstractController
         }
 
         return $this->view('@backend/widget/create.tpl', [
-            'widgetInfo' => $widgetInfo,
-            'formDescriptor' => $formDescriptor,
+            'widgetInfo' => $this->widgetRegistry->get($type),
+            'form' => $form->createView(),
         ]);
     }
 
     /**
      * @return RedirectResponse|ViewInterface
-     * @IgnoreCsrfToken()
      * @throws RequestCsrfTokenException
+     * @CsrfToken(id="widget_details_form")
      */
-    public function edit(Request $request, string $id, UpdateWidget $updateWidget, WebsiteInterface $website)
-    {
+    public function edit(
+        Request $request,
+        string $id,
+        UpdateWidget $updateWidget,
+        WebsiteInterface $website,
+        FormAttributesExtractor $extractor,
+    ) {
         try {
             $widget = $this->repository->get($id);
         } catch (WidgetNotFoundException $e) {
@@ -129,26 +139,26 @@ class Widget extends AbstractController
             return $this->redirectToRoute('backend.widget');
         }
 
-        $this->validateCsrfToken($request, $widget->getType());
-
+        $contentType = $this->produceContentType($widget->getType());
         $widgetInfo = $this->widgetRegistry->get($widget->getType());
         $widgetData = $widget->toArray($website->getLocale()->getCode(), $website->getDefaultLocale()->getCode());
 
-        $widgetDetailsForm = $this->createForm(
+        $form = $this->createForm(
             WidgetDetailsForm::class,
             $widgetData,
-            ['csrf_protection' => false]
+            [
+                'partial_view' => '@backend/widget/parts/content-type-widget-details.tpl',
+                'website' => $website,
+                'content_type' => $contentType,
+            ]
         );
-        $widgetDetailsForm->handleRequest($request);
+        $form->handleRequest($request);
 
-        $formDescriptor = $this->produceFormDescriptor($widget->getType(), $widgetData['attributes'], $widgetDetailsForm, $website);
-        $formDescriptor->handleRequest($request);
 
-        if ($formDescriptor->isFormValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             ($updateWidget)(new UpdateWidgetRequest(
                 $id,
-                $widgetDetailsForm->getData(),
-                $formDescriptor->getData(),
+                $extractor->extractData($form, $contentType),
                 $website->getLocale()->getCode(),
                 $website->getDefaultLocale()->getCode(),
                 $website->getLocaleCodes(),
@@ -161,7 +171,7 @@ class Widget extends AbstractController
         return $this->view('@backend/widget/edit.tpl', [
             'widgetTranslated' => $widget->isTranslatedTo($website->getLocale()->getCode()),
             'widgetInfo' => $widgetInfo,
-            'formDescriptor' => $formDescriptor,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -190,35 +200,8 @@ class Widget extends AbstractController
         return $this->redirectToRoute('backend.widget');
     }
 
-    private function produceFormDescriptor(
-        string $type,
-        array $attributes,
-        FormInterface $widgetDetailsForm,
-        WebsiteInterface $website,
-    ): ContentTypeFormDescriptor {
-        return $this->contentFormService->buildFormDescriptor(
-            $website,
-            str_replace('.', '_', 'widget_'.$type),
-            $attributes,
-            ['widgetDetailsForm' => $widgetDetailsForm]
-        );
-    }
-
-    /**
-     * @throws RequestCsrfTokenException
-     */
-    private function validateCsrfToken(Request $request, string $type): void
+    private function produceContentType(string $type): string
     {
-        /**
-         * We must detect token validness manually, cause form name changes for every content type.
-         */
-        if ($request->isMethod('POST')) {
-            $tokenId = 'content_builder_form_widget_' . str_replace('.', '_', $type);
-            $csrfToken = $request->request->all()[$tokenId]['_token'] ?? '';
-
-            if ($this->isCsrfTokenValid($tokenId, $csrfToken) === false) {
-                throw new RequestCsrfTokenException('CSRF token is invalid. Operation stopped.');
-            }
-        }
+        return str_replace('.', '_', 'widget_'.$type);
     }
 }

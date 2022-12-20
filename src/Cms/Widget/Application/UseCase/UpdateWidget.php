@@ -29,20 +29,20 @@ final class UpdateWidget extends AbstractTransactionalUseCase
     {
         $widget = $this->repository->get($request->id);
 
-        $widget->rename($request->details['name']);
-        $widget->setHtmlId($request->details['htmlId']);
-        $widget->setHtmlClass($request->details['htmlClass']);
-        $widget->updateStyles($request->details['styles']);
+        $widget->rename($request->data['name']);
+        $widget->setHtmlId($request->data['htmlId']);
+        $widget->setHtmlClass($request->data['htmlClass']);
+        $widget->updateStyles($request->data['styles']);
 
-        if ($request->details['visibility']) {
+        if ($request->data['visibility']) {
             $widget->turnVisibilityOn($request->locale, $request->defaultLocale);
         } else {
             $widget->turnVisibilityOff($request->locale, $request->defaultLocale);
         }
 
-        $widget->changeTitle($request->locale, $request->defaultLocale, $request->details['title']);
-        $widget->persistAttributes($request->locale, $request->defaultLocale, $request->attributes);
-        $widget->moveToSpace($request->details['space']);
+        $widget->changeTitle($request->locale, $request->defaultLocale, $request->data['title']);
+        $widget->persistAttributes($request->locale, $request->defaultLocale, $request->data['attributes']);
+        $widget->moveToSpace($request->data['space']);
 
         $this->repository->save($widget);
         $this->eventBus->dispatchCollection($widget->collectDomainEvents());

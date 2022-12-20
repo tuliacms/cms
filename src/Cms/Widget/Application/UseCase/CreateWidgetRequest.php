@@ -13,8 +13,7 @@ final class CreateWidgetRequest implements RequestInterface
 {
     public function __construct(
         public readonly string $type,
-        public readonly array $details,
-        public readonly array $attributes,
+        public readonly array $data,
         public readonly string $websiteId,
         public readonly string $locale,
         public readonly string $defaultLocale,

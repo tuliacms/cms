@@ -10,6 +10,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormType\AttributesAwareFormTypeTrait;
+use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormType\AttributesType;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\YesNoType;
 use Tulia\Component\Theme\ManagerInterface;
 
@@ -18,6 +20,8 @@ use Tulia\Component\Theme\ManagerInterface;
  */
 final class WidgetDetailsForm extends AbstractType
 {
+    use AttributesAwareFormTypeTrait;
+
     public function __construct(
         private readonly ManagerInterface $themeManager,
         private readonly TranslatorInterface $translator
@@ -47,6 +51,11 @@ final class WidgetDetailsForm extends AbstractType
         $builder->add('htmlId', TextType::class, [
             'label' => 'htmlId',
             'translation_domain' => 'widgets',
+        ]);
+        $builder->add('attributes', AttributesType::class, [
+            'partial_view' => $options['partial_view'],
+            'website' => $options['website'],
+            'content_type' => $options['content_type'],
         ]);
     }
 

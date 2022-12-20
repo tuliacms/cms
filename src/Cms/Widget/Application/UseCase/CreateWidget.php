@@ -32,20 +32,20 @@ final class CreateWidget extends AbstractTransactionalUseCase
             $this->repository->getNextId(),
             $request->websiteId,
             $request->type,
-            $request->details['space'],
-            $request->details['name'],
+            $request->data['space'],
+            $request->data['name'],
             $request->locale,
             $request->localeCodes
         );
 
-        if ($request->details['visibility']) {
+        if ($request->data['visibility']) {
             $widget->turnVisibilityOn($request->locale, $request->defaultLocale);
         } else {
             $widget->turnVisibilityOff($request->locale, $request->defaultLocale);
         }
 
-        $widget->changeTitle($request->locale, $request->defaultLocale, $request->details['title']);
-        $widget->persistAttributes($request->locale, $request->defaultLocale, $request->attributes);
+        $widget->changeTitle($request->locale, $request->defaultLocale, $request->data['title']);
+        $widget->persistAttributes($request->locale, $request->defaultLocale, $request->data['attributes']);
 
         $this->repository->save($widget);
         $this->eventBus->dispatchCollection($widget->collectDomainEvents());

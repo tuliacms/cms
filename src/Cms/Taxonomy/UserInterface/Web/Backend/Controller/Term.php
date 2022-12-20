@@ -89,6 +89,11 @@ class Term extends AbstractController
         WebsiteInterface $website,
         FormAttributesExtractor $extractor,
     ) {
+        if (!$website->isDefaultLocale()) {
+            $this->addFlash('info', $this->trans('youHaveBeenRedirectedToDefaultLocaleDueToCreationMultilingualElement'));
+            return $this->redirectToRoute('backend.term.create', ['taxonomyType' => $taxonomyType, '_locale' => $website->getDefaultLocale()->getCode()]);
+        }
+
         $taxonomy = $this->repository->get(
             $taxonomyType,
             $website->getId(),

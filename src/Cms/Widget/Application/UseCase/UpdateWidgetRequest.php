@@ -13,8 +13,7 @@ final class UpdateWidgetRequest implements RequestInterface
 {
     public function __construct(
         public readonly string $id,
-        public readonly array $details,
-        public readonly array $attributes,
+        public readonly array $data,
         public readonly string $locale,
         public readonly string $defaultLocale,
         public readonly array $localeCodes,

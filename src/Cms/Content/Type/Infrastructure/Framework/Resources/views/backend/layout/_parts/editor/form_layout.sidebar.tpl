@@ -66,7 +66,7 @@
     </div>
 {% endmacro %}
 
-{% if context.partial_view is defined %}
+{% if context.partial_view is defined and context.partial_view is not empty %}
     {% import context.partial_view as partial_view %}
     {% set hasPartialView = true %}
 {% else %}
