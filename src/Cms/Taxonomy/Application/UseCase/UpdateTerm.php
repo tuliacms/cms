@@ -39,10 +39,10 @@ final class UpdateTerm extends AbstractTransactionalUseCase
             $this->slugGeneratorStrategy,
             $request->termId,
             $request->locale,
-            $request->details['name'],
-            $request->details['slug'],
+            $request->data['name'],
+            $request->data['slug'],
             $request->defaultLocale,
-            $request->attributes,
+            $request->data['attributes'],
             //$request->details['parent'],
         );
 

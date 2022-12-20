@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Service\ContentFormService;
+use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormAttributesExtractor;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
@@ -79,10 +80,15 @@ class Term extends AbstractController
 
     /**
      * @return RedirectResponse|ViewInterface
-     * @CsrfToken(id="content_builder_form_category")
+     * @CsrfToken(id="taxonomy_term_details_form")
      */
-    public function create(Request $request, string $taxonomyType, CreateTerm $createTerm, WebsiteInterface $website)
-    {
+    public function create(
+        Request $request,
+        string $taxonomyType,
+        CreateTerm $createTerm,
+        WebsiteInterface $website,
+        FormAttributesExtractor $extractor,
+    ) {
         $taxonomy = $this->repository->get(
             $taxonomyType,
             $website->getId(),
@@ -90,28 +96,22 @@ class Term extends AbstractController
             $website->getLocale()->getCode(),
         );
 
-        $detailsForm = $this->createForm(TaxonomyTermDetailsForm::class, [], ['csrf_protection' => false]);
-        $detailsForm->handleRequest($request);
-
-        $formDescriptor = $this->contentFormService->buildFormDescriptor(
-            $website,
-            $taxonomy->getType(),
+        $form = $this->createForm(
+            TaxonomyTermDetailsForm::class,
             [],
             [
-                'partialView' => '@backend/taxonomy/term/parts/content-type-term-details.tpl',
-                'termDetailsForm' => $detailsForm->createView(),
-                'website_id' => $website->getId(),
-                'locale' => $website->getLocale()->getCode(),
+                'partial_view' => '@backend/taxonomy/term/parts/content-type-term-details.tpl',
+                'website' => $website,
+                'content_type' => $taxonomy->getType(),
             ]
         );
-        $formDescriptor->handleRequest($request);
+        $form->handleRequest($request);
 
-        if ($formDescriptor->isFormValid() && $detailsForm->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             /** @var IdResult $result */
             $result = ($createTerm)(new CreateTermRequest(
                 $taxonomy->getType(),
-                $detailsForm->getData(),
-                $formDescriptor->getData(),
+                $extractor->extractData($form, $taxonomyType),
                 $website->getId(),
                 $website->getLocale()->getCode(),
                 $website->getDefaultLocale()->getCode(),
@@ -123,7 +123,7 @@ class Term extends AbstractController
         }
 
         return $this->view('@backend/taxonomy/term/create.tpl', [
-            'formDescriptor' => $formDescriptor,
+            'form' => $form->createView(),
             'taxonomyType' => $taxonomy->getType(),
         ]);
     }
@@ -131,10 +131,16 @@ class Term extends AbstractController
     /**
      * @return RedirectResponse|ViewInterface
      * @throws NotFoundHttpException
-     * @CsrfToken(id="content_builder_form_category")
+     * @CsrfToken(id="taxonomy_term_details_form")
      */
-    public function edit(Request $request, string $taxonomyType, string $id, UpdateTerm $updateTerm, WebsiteInterface $website)
-    {
+    public function edit(
+        Request $request,
+        string $taxonomyType,
+        string $id,
+        UpdateTerm $updateTerm,
+        WebsiteInterface $website,
+        FormAttributesExtractor $extractor,
+    ) {
         $taxonomy = $this->repository->get(
             $taxonomyType,
             $website->getId(),
@@ -149,28 +155,22 @@ class Term extends AbstractController
             return $this->redirectToRoute('backend.term.list', ['taxonomyType' => $taxonomyType]);
         }
 
-        $detailsForm = $this->createForm(TaxonomyTermDetailsForm::class, $term, ['csrf_protection' => false]);
-        $detailsForm->handleRequest($request);
-
-        $formDescriptor = $this->contentFormService->buildFormDescriptor(
-            $website,
-            $taxonomy->getType(),
-            $term['attributes'],
+        $form = $this->createForm(
+            TaxonomyTermDetailsForm::class,
+            $term,
             [
-                'partialView' => '@backend/taxonomy/term/parts/content-type-term-details.tpl',
-                'termDetailsForm' => $detailsForm->createView(),
-                'website_id' => $website->getId(),
-                'locale' => $website->getLocale()->getCode(),
+                'partial_view' => '@backend/taxonomy/term/parts/content-type-term-details.tpl',
+                'website' => $website,
+                'content_type' => $taxonomy->getType(),
             ]
         );
-        $formDescriptor->handleRequest($request);
+        $form->handleRequest($request);
 
-        if ($formDescriptor->isFormValid() && $detailsForm->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             ($updateTerm)(new UpdateTermRequest(
                 $taxonomy->getType(),
                 $id,
-                $detailsForm->getData(),
-                $formDescriptor->getData(),
+                $extractor->extractData($form, $taxonomyType),
                 $website->getId(),
                 $website->getLocale()->getCode(),
                 $website->getDefaultLocale()->getCode(),
@@ -183,7 +183,7 @@ class Term extends AbstractController
 
         return $this->view('@backend/taxonomy/term/edit.tpl', [
             'term' => $term,
-            'formDescriptor' => $formDescriptor,
+            'form' => $form->createView(),
             'taxonomyType' => $this->typeRegistry->get($taxonomy->getType()),
         ]);
     }

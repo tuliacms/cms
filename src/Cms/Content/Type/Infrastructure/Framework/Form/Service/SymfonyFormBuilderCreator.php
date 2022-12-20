@@ -63,6 +63,16 @@ class SymfonyFormBuilderCreator
         return $builder;
     }
 
+    public function buildUsingBuilder(
+        FormBuilderInterface $builder,
+        WebsiteInterface $website,
+        ContentType $contentType,
+        array $attributes,
+    ): void {
+        $fields = $contentType->getFields();
+        $this->buildFieldsWithBuilder($builder, $contentType, $fields, $website);
+    }
+
     private function createFormBuilder(string $type, array $data, bool $expectCqrsToken = true): FormBuilderInterface
     {
         return $this->formFactory->createNamedBuilder(

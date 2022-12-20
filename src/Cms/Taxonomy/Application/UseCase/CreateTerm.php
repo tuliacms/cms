@@ -39,12 +39,12 @@ final class CreateTerm extends AbstractTransactionalUseCase
         $taxonomy->addTerm(
             $this->slugGeneratorStrategy,
             $termId = $this->repository->getNextId(),
-            $request->details['name'],
-            $request->details['slug'],
+            $request->data['name'],
+            $request->data['slug'],
             $request->locales,
             $request->locale,
             $request->defaultLocale,
-            $request->attributes,
+            $request->data['attributes'],
             //$request->details['parent'],
         );
 

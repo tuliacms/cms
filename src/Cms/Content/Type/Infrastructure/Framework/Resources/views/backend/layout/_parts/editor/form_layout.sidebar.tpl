@@ -66,8 +66,8 @@
     </div>
 {% endmacro %}
 
-{% if context.partialView is defined %}
-    {% import context.partialView as partialView %}
+{% if context.partial_view is defined %}
+    {% import context.partial_view as partial_view %}
     {% set hasPartialView = true %}
 {% else %}
     {% set hasPartialView = false %}
@@ -75,14 +75,15 @@
 
 {% block layout %}
     {% import '@backend/content_builder/layout/_parts/editor/form_render.tpl' as form_render %}
+    {% set contentType = form.vars.content_type %}
 
-    {{ form_render.form_begin(form) }}
+    {{ form_render.form_begin(context.form) }}
 
     <div class="page-form"> {# id="node-form" #}
         <div class="page-form-sidebar">
             <div class="accordion">
-                {% if hasPartialView and partialView.sidebar_accordion is defined %}
-                    {{ partialView.sidebar_accordion(context) }}
+                {% if hasPartialView and partial_view.sidebar_accordion is defined %}
+                    {{ partial_view.sidebar_accordion(context) }}
                 {% endif %}
                 {% for group in contentType.fieldGroups %}
                     {% if group.section == 'sidebar' %}
@@ -92,12 +93,12 @@
             </div>
         </div>
         <div class="page-form-content">
-            {% if hasPartialView and partialView.page_header is defined %}
-                {{ partialView.page_header(context) }}
+            {% if hasPartialView and partial_view.page_header is defined %}
+                {{ partial_view.page_header(context) }}
             {% endif %}
             <ul class="nav nav-tabs page-form-tabs" role="tablist">
-                {% if hasPartialView and partialView.page_tabs is defined %}
-                    {% set pageTabsBlock = partialView.page_tabs(context) %}
+                {% if hasPartialView and partial_view.page_tabs is defined %}
+                    {% set pageTabsBlock = partial_view.page_tabs(context) %}
                 {% else %}
                     {% set pageTabsBlock = null %}
                 {% endif %}
@@ -122,8 +123,8 @@
                 }, form) }}
             </ul>
             <div class="tab-content">
-                {% if hasPartialView and partialView.page_tabs_content is defined %}
-                    {% set pageTabsContentBlock = partialView.page_tabs_content(context) %}
+                {% if hasPartialView and partial_view.page_tabs_content is defined %}
+                    {% set pageTabsContentBlock = partial_view.page_tabs_content(context) %}
                 {% else %}
                     {% set pageTabsContentBlock = null %}
                 {% endif %}
@@ -148,9 +149,9 @@
         </div>
     </div>
 
-    {{ form_render.form_end(form) }}
+    {{ form_render.form_end(context.form) }}
 
-    {% if hasPartialView and partialView.javascripts is defined %}
-        {{ partialView.javascripts(context) }}
+    {% if hasPartialView and partial_view.javascripts is defined %}
+        {{ partial_view.javascripts(context) }}
     {% endif %}
 {% endblock %}
