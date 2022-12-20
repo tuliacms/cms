@@ -20,8 +20,8 @@ class TwigMenuItemContentTypeLayoutBuilder implements LayoutTypeBuilderInterface
             'contentType' => $contentType,
             'form' => $formView,
             'context' => $viewContext,
-            'locale' => $viewContext['locale'],
-            'websiteId' => $viewContext['website_id'],
+            'locale' => $viewContext['website']->getLocale()->getCode(),
+            'websiteId' => $viewContext['website']->getId(),
         ]);
     }
 

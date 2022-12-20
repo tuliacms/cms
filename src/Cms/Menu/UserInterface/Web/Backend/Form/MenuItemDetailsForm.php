@@ -13,6 +13,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormType\AttributesAwareFormTypeTrait;
+use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormType\AttributesType;
 use Tulia\Cms\Menu\Domain\Builder\Type\RegistryInterface;
 use Tulia\Cms\Menu\Domain\Builder\Type\TypeInterface;
 use Tulia\Cms\Menu\UserInterface\Web\Shared\Form\FormType\MenuItemChoiceType;
@@ -23,6 +25,10 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\YesNoType;
  */
 final class MenuItemDetailsForm extends AbstractType
 {
+    use AttributesAwareFormTypeTrait {
+        AttributesAwareFormTypeTrait::configureOptions as traitConfigureOptions;
+    }
+
     public function __construct(
         private readonly RegistryInterface $registry,
         private readonly TranslatorInterface $translator,
@@ -71,18 +77,23 @@ final class MenuItemDetailsForm extends AbstractType
             'label' => 'parentItem',
             'translation_domain' => 'menu',
             'menu_id' => $options['menu_id'],
-            'locale' => $options['locale'],
-            'website_id' => $options['website_id'],
+            'locale' => $options['website']->getLocale()->getCode(),
+            'website_id' => $options['website']->getId(),
+        ]);
+        $builder->add('attributes', AttributesType::class, [
+            'website' => $options['website'],
+            'content_type' => $options['content_type'],
+            'context' => $options['context'],
         ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
+        $this->traitConfigureOptions($resolver);
+
         $resolver->setDefault('menu_id', null);
-        $resolver->setRequired(['menu_id', 'locale', 'website_id']);
+        $resolver->setRequired(['menu_id']);
         $resolver->setAllowedTypes('menu_id', 'string');
-        $resolver->setAllowedTypes('locale', 'string');
-        $resolver->setAllowedTypes('website_id', 'string');
     }
 
     private function buildItemTypesChoices(): array

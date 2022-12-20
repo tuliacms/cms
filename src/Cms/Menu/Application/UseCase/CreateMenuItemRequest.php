@@ -13,8 +13,7 @@ final class CreateMenuItemRequest implements RequestInterface
 {
     public function __construct(
         public readonly string $menuId,
-        public readonly array $details,
-        public readonly array $attributes,
+        public readonly array $data,
         public readonly string $locale,
         public readonly array $availableLocales,
     ) {

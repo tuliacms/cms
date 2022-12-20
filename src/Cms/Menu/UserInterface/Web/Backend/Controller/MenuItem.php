@@ -7,13 +7,12 @@ namespace Tulia\Cms\Menu\UserInterface\Web\Backend\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\ContentTypeFormDescriptor;
 use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Service\ContentFormService;
+use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormAttributesExtractor;
 use Tulia\Cms\Menu\Application\UseCase\CreateMenuItem;
 use Tulia\Cms\Menu\Application\UseCase\CreateMenuItemRequest;
 use Tulia\Cms\Menu\Application\UseCase\DeleteMenuItem;
 use Tulia\Cms\Menu\Application\UseCase\DeleteMenuItemRequest;
-use Tulia\Cms\Menu\Application\UseCase\UpdateMenu;
 use Tulia\Cms\Menu\Application\UseCase\UpdateMenuItem;
 use Tulia\Cms\Menu\Application\UseCase\UpdateMenuItemRequest;
 use Tulia\Cms\Menu\Domain\Builder\Type\RegistryInterface;
@@ -77,13 +76,14 @@ class MenuItem extends AbstractController
 
     /**
      * @return RedirectResponse|ViewInterface
-     * @CsrfToken(id="content_builder_form_menu_item")
+     * @CsrfToken(id="menu_item_details_form")
      */
     public function create(
         Request $request,
+        string $menuId,
         CreateMenuItem $createMenuItem,
         WebsiteInterface $website,
-        string $menuId,
+        FormAttributesExtractor $extractor,
     ) {
         if (!$website->isDefaultLocale()) {
             $this->addFlash('info', $this->trans('youHaveBeenRedirectedToDefaultLocaleDueToCreationMultilingualElement'));
@@ -97,37 +97,26 @@ class MenuItem extends AbstractController
             return $this->redirectToRoute('backend.menu');
         }
 
-        $itemDetailsForm = $this->createForm(
+        $form = $this->createForm(
             MenuItemDetailsForm::class,
             [],
             [
-                'csrf_protection' => false,
                 'menu_id' => $menuId,
-                'locale' => $website->getLocale()->getCode(),
-                'website_id' => $website->getId(),
+                'website' => $website,
+                'content_type' => 'menu_item',
+                'context' => [
+                    'types' => $this->collectMenuTypes(),
+                    'item' => $this->getEmptyItem(),
+                    'website' => $website,
+                ],
             ]
         );
-        $itemDetailsForm->handleRequest($request);
+        $form->handleRequest($request);
 
-        $formDescriptor = $this->contentFormService->buildFormDescriptor(
-            $website,
-            'menu_item',
-            [],
-            [
-                'itemDetailsForm' => $itemDetailsForm->createView(),
-                'item' => $this->getEmptyItem(),
-                'types' => $this->collectMenuTypes(),
-                'website_id' => $website->getId(),
-                'locale' => $website->getLocale()->getCode(),
-            ]
-        );
-        $formDescriptor->handleRequest($request);
-
-        if ($formDescriptor->isFormValid() && $itemDetailsForm->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             ($createMenuItem)(new CreateMenuItemRequest(
                 $menuId,
-                $itemDetailsForm->getData(),
-                $formDescriptor->getData(),
+                $extractor->extractData($form, 'menu_item'),
                 $website->getLocale()->getCode(),
                 $website->getLocaleCodes(),
             ));
@@ -138,20 +127,21 @@ class MenuItem extends AbstractController
 
         return $this->view('@backend/menu/item/create.tpl', [
             'menu'  => $menu,
-            'formDescriptor' => $formDescriptor,
+            'form' => $form->createView(),
         ]);
     }
 
     /**
      * @return RedirectResponse|ViewInterface
-     * @CsrfToken(id="content_builder_form_menu_item")
+     * @CsrfToken(id="menu_item_details_form")
      */
     public function edit(
         Request $request,
+        string $menuId,
+        string $id,
         UpdateMenuItem $updateMenuItem,
         WebsiteInterface $website,
-        string $menuId,
-        string $id
+        FormAttributesExtractor $extractor,
     ) {
         try {
             $menu = $this->repository->get($menuId);
@@ -169,38 +159,27 @@ class MenuItem extends AbstractController
             $website->getDefaultLocale()->getCode(),
         );
 
-        $itemDetailsForm = $this->createForm(
+        $form = $this->createForm(
             MenuItemDetailsForm::class,
             $item,
             [
-                'csrf_protection' => false,
                 'menu_id' => $menuId,
-                'locale' => $website->getLocale()->getCode(),
-                'website_id' => $website->getId(),
+                'website' => $website,
+                'content_type' => 'menu_item',
+                'context' => [
+                    'types' => $this->collectMenuTypes(),
+                    'item' => $item,
+                    'website' => $website,
+                ],
             ]
         );
-        $itemDetailsForm->handleRequest($request);
+        $form->handleRequest($request);
 
-        $formDescriptor = $this->contentFormService->buildFormDescriptor(
-            $website,
-            'menu_item',
-            $item,
-            [
-                'itemDetailsForm' => $itemDetailsForm->createView(),
-                'item' => $item,
-                'types' => $this->collectMenuTypes(),
-                'website_id' => $website->getId(),
-                'locale' => $website->getLocale()->getCode(),
-            ]
-        );
-        $formDescriptor->handleRequest($request);
-
-        if ($formDescriptor->isFormValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             ($updateMenuItem)(new UpdateMenuItemRequest(
                 $menuId,
                 $id,
-                $itemDetailsForm->getData(),
-                $formDescriptor->getData(),
+                $extractor->extractData($form, 'menu_item'),
                 $website->getLocale()->getCode(),
                 $website->getDefaultLocale()->getCode(),
                 $website->getLocaleCodes()
@@ -213,7 +192,7 @@ class MenuItem extends AbstractController
         return $this->view('@backend/menu/item/edit.tpl', [
             'menu'  => $menu,
             'item'  => $item,
-            'formDescriptor' => $formDescriptor,
+            'form' => $form->createView(),
         ]);
     }
 

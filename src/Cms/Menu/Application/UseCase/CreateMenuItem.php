@@ -28,19 +28,19 @@ class CreateMenuItem extends AbstractTransactionalUseCase
     {
         $menu = $this->repository->get($request->menuId);
 
-        if ($request->details['parent']) {
-            $item = $menu->createChildItem($request->details['parent'], $request->availableLocales, $request->locale, $request->details['name']);
+        if ($request->data['parent']) {
+            $item = $menu->createChildItem($request->data['parent'], $request->availableLocales, $request->locale, $request->data['name']);
         } else {
-            $item = $menu->createItem($request->availableLocales, $request->locale, $request->details['name']);
+            $item = $menu->createItem($request->availableLocales, $request->locale, $request->data['name']);
         }
 
         $item->linksTo(
-            (string) $request->details['type'],
-            (string) $request->details['identity'],
-            (string) $request->details['hash']
+            (string) $request->data['type'],
+            (string) $request->data['identity'],
+            (string) $request->data['hash']
         );
 
-        if ($request->details['target'] === '_blank') {
+        if ($request->data['target'] === '_blank') {
             $item->openInNewTab();
         } else {
             $item->openInSelfTab();

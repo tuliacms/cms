@@ -30,23 +30,23 @@ final class UpdateMenuItem extends AbstractTransactionalUseCase
 
         $item = $menu->getItem($request->itemId);
         $item->linksTo(
-            (string) $request->details['type'],
-            (string) $request->details['identity'],
-            (string) $request->details['hash']
+            (string) $request->data['type'],
+            (string) $request->data['identity'],
+            (string) $request->data['hash']
         );
 
-        if ($request->details['target'] === '_blank') {
+        if ($request->data['target'] === '_blank') {
             $item->openInNewTab();
         } else {
             $item->openInSelfTab();
         }
-        if ($request->details['visibility']) {
+        if ($request->data['visibility']) {
             $item->turnVisibilityOn($request->locale, $request->defaultLocale);
         } else {
             $item->turnVisibilityOff($request->locale, $request->defaultLocale);
         }
 
-        $item->renameTo($request->locale, $request->defaultLocale, $request->details['name']);
+        $item->renameTo($request->locale, $request->defaultLocale, $request->data['name']);
 
         $this->repository->save($menu);
         $this->eventBus->dispatchCollection($menu->collectDomainEvents());
