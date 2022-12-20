@@ -9,7 +9,9 @@ use Exception;
 use PDO;
 use Symfony\Component\Uid\Uuid;
 use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\AttributesFinder;
+use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\LazyAttributesFinder;
 use Tulia\Cms\Menu\Domain\ReadModel\Model\Menu;
+use Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\DbalMenuItemAttributesFinder;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\AbstractDbalQuery;
@@ -19,12 +21,11 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\Ab
  */
 class DbalQuery extends AbstractDbalQuery
 {
-    private AttributesFinder $metadataFinder;
-
-    public function __construct(QueryBuilder $queryBuilder, AttributesFinder $metadataFinder)
-    {
+    public function __construct(
+        QueryBuilder $queryBuilder,
+        private readonly DbalMenuItemAttributesFinder $attributesFinder,
+    ) {
         parent::__construct($queryBuilder);
-        $this->metadataFinder = $metadataFinder;
     }
 
     public function getBaseQueryArray(): array
@@ -84,28 +85,18 @@ class DbalQuery extends AbstractDbalQuery
         }
 
         $items = [];
-        $metadata = [];
 
         if ($criteria['fetch_items']) {
             $items = $this->fetchMenuItems($criteria);
-            /*$metadata = $this->metadataFinder->findAllAggregated(
-                'menu_item',
-                $scope,
-                array_column($items, 'id'),
-                $criteria['locale']
-            );*/
+
+            foreach ($items as $key => $row) {
+                $items[$key]['lazy_attributes'] = new LazyAttributesFinder($row['id'], $criteria['locale'], $this->attributesFinder);
+            }
         }
 
         try {
             foreach ($result as $row) {
                 $row['items'] = $items;
-
-                /*foreach ($items as $item) {
-                    if ($item['menu_id'] === $row['id'] && ! $item['is_root']) {
-                        $item['metadata'] = $metadata[$item['id']] ?? [];
-                        $row['items'][] = $item;
-                    }
-                }*/
 
                 $collection->append(Menu::buildFromArray($row));
             }
@@ -126,7 +117,7 @@ class DbalQuery extends AbstractDbalQuery
         }
 
         $qb = $this->queryBuilder
-            ->select('tm.*, BIN_TO_UUID(tm.id) AS id')
+            ->select('tm.*, BIN_TO_UUID(tm.id) AS id, BIN_TO_UUID(tm.website_id) AS website_id')
             ->from('#__menu', 'tm')
             ->where('tm.website_id = :tm_website_id')
             ->setParameter('tm_website_id', Uuid::fromString($criteria['website_id'])->toBinary(), PDO::PARAM_STR);

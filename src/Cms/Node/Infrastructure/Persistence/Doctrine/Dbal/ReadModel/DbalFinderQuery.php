@@ -9,8 +9,8 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use Exception;
 use PDO;
 use Symfony\Component\Uid\Uuid;
+use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\LazyAttributesFinder;
 use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
-use Tulia\Cms\Node\Domain\ReadModel\Query\LazyNodeAttributesFinder;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Enum\TermTypeEnum;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
@@ -26,7 +26,7 @@ class DbalFinderQuery extends AbstractDbalQuery
 
     public function __construct(
         QueryBuilder $queryBuilder,
-        private DbalNodeAttributesFinder $attributesFinder
+        private readonly DbalNodeAttributesFinder $attributesFinder,
     ) {
         parent::__construct($queryBuilder);
     }
@@ -181,13 +181,12 @@ class DbalFinderQuery extends AbstractDbalQuery
         $terms = [];//$this->fetchTerms(array_column($result, 'id'));
 
         try {
-            $result = $this->fetchAttributes($result);
-
             foreach ($result as $row) {
                 if (isset($terms[$row['id']][TermTypeEnum::MAIN][0])) {
                     $row['category'] = $terms[$row['id']][TermTypeEnum::MAIN][0];
                 }
 
+                $row['lazy_attributes'] = new LazyAttributesFinder($row['id'], $row['locale'], $this->attributesFinder);
                 $row['purposes'] = array_filter(explode(',', (string) $row['purposes']));
 
                 $collection->append(Node::buildFromArray($row));
@@ -197,15 +196,6 @@ class DbalFinderQuery extends AbstractDbalQuery
         }
 
         return $collection;
-    }
-
-    protected function fetchAttributes(array $nodes): array
-    {
-        foreach ($nodes as $key => $node) {
-            $nodes[$key]['lazy_attributes'] = new LazyNodeAttributesFinder($node['id'], $node['locale'], $this->attributesFinder);
-        }
-
-        return $nodes;
     }
 
     protected function fetchTerms(array $nodeIdList): array

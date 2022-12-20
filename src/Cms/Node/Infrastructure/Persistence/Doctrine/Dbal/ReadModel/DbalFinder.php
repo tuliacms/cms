@@ -15,8 +15,8 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\Qu
 class DbalFinder extends AbstractFinder implements NodeFinderInterface
 {
     public function __construct(
-        private Connection $connection,
-        private DbalNodeAttributesFinder $attributesFinder
+        private readonly Connection $connection,
+        private readonly DbalNodeAttributesFinder $attributesFinder,
     ) {
     }
 

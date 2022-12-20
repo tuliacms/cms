@@ -15,11 +15,9 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface
  */
 class TypeaheadSearch extends TypeaheadFormTypeSearch
 {
-    private TermFinderInterface $termFinder;
-
-    public function __construct(TermFinderInterface $termFinder)
-    {
-        $this->termFinder = $termFinder;
+    public function __construct(
+        private readonly TermFinderInterface $termFinder,
+    ) {
     }
 
     protected function findCollection(Request $request, WebsiteInterface $website): array
@@ -28,6 +26,8 @@ class TypeaheadSearch extends TypeaheadFormTypeSearch
             'search'        => $request->query->get('q'),
             'taxonomy_type' => $request->query->get('taxonomy_type'),
             'per_page'      => 10,
+            'locale'        => $website->getLocale()->getCode(),
+            'website_id'    => $website->getId(),
         ], TermFinderScopeEnum::INTERNAL);
 
         $result = [];
@@ -35,7 +35,7 @@ class TypeaheadSearch extends TypeaheadFormTypeSearch
         foreach ($terms as $term) {
             $result[] = [
                 'id' => $term->getId(),
-                'name' => $term->getTitle(),
+                'name' => $term->getName(),
             ];
         }
 

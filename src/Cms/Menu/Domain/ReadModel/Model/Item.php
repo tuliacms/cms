@@ -50,7 +50,9 @@ class Item implements AttributesAwareInterface
         $item->setVisibility((int) ($data['visibility'] ?? 1));
         $item->setTranslated((bool) ($data['translated'] ?? true));
 
-        $item->attributes = $data['metadata'] ?? [];
+        if (isset($data['lazy_attributes'])) {
+            $item->attributesLazyStorage = $data['lazy_attributes'];
+        }
 
         return $item;
     }

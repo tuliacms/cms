@@ -59,7 +59,7 @@ class CrumbsResolver implements BreadcrumbsResolverInterface
                         '_term_instance' => $part,
                     ]
                 ),
-                $part->getTitle()
+                $part->getName()
             );
         }
 

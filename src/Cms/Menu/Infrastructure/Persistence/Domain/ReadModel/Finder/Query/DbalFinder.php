@@ -7,6 +7,7 @@ namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\Finder\Quer
 use Doctrine\DBAL\Connection;
 use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\AttributesFinder;
 use Tulia\Cms\Menu\Domain\ReadModel\Finder\MenuFinderInterface;
+use Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\DbalMenuItemAttributesFinder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\AbstractFinder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\QueryInterface;
 
@@ -16,8 +17,8 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\Qu
 class DbalFinder extends AbstractFinder implements MenuFinderInterface
 {
     public function __construct(
-        private Connection $connection,
-        private AttributesFinder $metadataFinder
+        private readonly Connection $connection,
+        private readonly DbalMenuItemAttributesFinder $attributesFinder,
     ) {
     }
 
@@ -28,6 +29,6 @@ class DbalFinder extends AbstractFinder implements MenuFinderInterface
 
     public function createQuery(): QueryInterface
     {
-        return new DbalQuery($this->connection->createQueryBuilder(), $this->metadataFinder);
+        return new DbalQuery($this->connection->createQueryBuilder(), $this->attributesFinder);
     }
 }

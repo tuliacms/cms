@@ -28,7 +28,7 @@ class Term extends AbstractController
     {
         $perPage = 9;
         $page = $request->query->getInt('page', 1);
-        $this->getDocument()->setTitle($term->getTitle());
+        $this->getDocument()->setTitle($term->getName());
 
         $nodes = $this->nodeFinder->find([
             'category'  => $term->getId(),

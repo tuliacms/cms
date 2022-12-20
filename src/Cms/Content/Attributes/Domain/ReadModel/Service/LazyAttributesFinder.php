@@ -2,14 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Domain\ReadModel\Query;
-
-use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\AttributesFinderInterface;
+namespace Tulia\Cms\Content\Attributes\Domain\ReadModel\Service;
 
 /**
  * @author Adam Banaszkiewicz
  */
-final class LazyNodeAttributesFinder
+final class LazyAttributesFinder
 {
     public function __construct(
         private readonly string $nodeId,

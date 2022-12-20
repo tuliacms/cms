@@ -15,11 +15,6 @@ abstract class TypeaheadFormTypeSearch extends AbstractController
 {
     abstract protected function findCollection(Request $request, WebsiteInterface $website): array;
 
-    /**
-     * @param Request $request
-     *
-     * @return JsonResponse
-     */
     public function handleSearch(Request $request, WebsiteInterface $website): JsonResponse
     {
         return $this->responseJson([

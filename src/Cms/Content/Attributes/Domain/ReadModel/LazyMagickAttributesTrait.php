@@ -5,15 +5,16 @@ declare(strict_types=1);
 namespace Tulia\Cms\Content\Attributes\Domain\ReadModel;
 
 use Tulia\Cms\Content\Attributes\Domain\ReadModel\Model\AttributeValue;
+use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\LazyAttributesFinder;
 
 /**
  * @property array $attributes
- * @method array loadAttributes()
  * @author Adam Banaszkiewicz
  */
 trait LazyMagickAttributesTrait
 {
     protected array $attributes = [];
+    protected ?LazyAttributesFinder $attributesLazyStorage = null;
 
     /**
      * @param string $name
@@ -126,5 +127,12 @@ trait LazyMagickAttributesTrait
         $this->loadAttributes();
 
         unset($this->attributes[$offset], $this->attributes["$offset:compiled"]);
+    }
+
+    protected function loadAttributes(): void
+    {
+        if ($this->attributes === []) {
+            $this->attributes = $this->attributesLazyStorage->find();
+        }
     }
 }

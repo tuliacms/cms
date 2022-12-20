@@ -30,9 +30,13 @@ class TaxonomyTypeaheadType extends AbstractType
             'search_route'  => 'backend.term.search.typeahead',
             'display_prop'  => 'name',
             'data_provider_single' => function (array $criteria): ?array {
-                $term = $this->termFinder->findOne(['id' => $criteria['value']], TermFinderScopeEnum::INTERNAL);
+                $term = $this->termFinder->findOne([
+                    'id' => $criteria['value'],
+                    'locale' => $criteria['locale'],
+                    'website_id' => $criteria['website_id'],
+                ], TermFinderScopeEnum::INTERNAL);
 
-                return $term ? ['name' => $term->getTitle()] : null;
+                return $term ? ['name' => $term->getName()] : null;
             },
         ]);
 

@@ -7,7 +7,6 @@ namespace Tulia\Cms\Node\Domain\ReadModel\Model;
 use InvalidArgumentException;
 use Tulia\Cms\Content\Attributes\Domain\ReadModel\LazyMagickAttributesTrait;
 use Tulia\Cms\Content\Attributes\Domain\ReadModel\Model\AttributesAwareInterface;
-use Tulia\Cms\Node\Domain\ReadModel\Query\LazyNodeAttributesFinder;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 
 /**
@@ -33,7 +32,6 @@ class Node implements AttributesAwareInterface
     protected ?string $slug;
     protected bool $visibility;
     protected array $purposes = [];
-    protected ?LazyNodeAttributesFinder $attributesLazyStorage = null;
 
     public static function buildFromArray(array $data): self
     {
@@ -86,13 +84,6 @@ class Node implements AttributesAwareInterface
         }
 
         return $data;
-    }
-
-    public function loadAttributes(): void
-    {
-        if ($this->attributes === []) {
-            $this->attributes = $this->attributesLazyStorage->find();
-        }
     }
 
     public function getId(): string

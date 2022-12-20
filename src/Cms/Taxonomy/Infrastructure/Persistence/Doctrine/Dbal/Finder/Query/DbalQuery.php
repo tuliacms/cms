@@ -2,31 +2,31 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\Infrastructure\Persistence\Domain\ReadModel\Finder\Query;
+namespace Tulia\Cms\Taxonomy\Infrastructure\Persistence\Doctrine\Dbal\Finder\Query;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Exception;
 use PDO;
-use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\AttributesFinder;
+use Symfony\Component\Uid\Uuid;
+use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\LazyAttributesFinder;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\AbstractDbalQuery;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Model\Term;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term as WriteModelTerm;
+use Tulia\Cms\Taxonomy\Infrastructure\Persistence\Doctrine\Dbal\DbalTermAttributesFinder;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DbalQuery extends AbstractDbalQuery
 {
-    private AttributesFinder $metadataFinder;
-
-    public function __construct(QueryBuilder $queryBuilder, AttributesFinder $metadataFinder)
-    {
+    public function __construct(
+        QueryBuilder $queryBuilder,
+        private readonly DbalTermAttributesFinder $attributesFinder,
+    ) {
         parent::__construct($queryBuilder);
-
-        $this->metadataFinder = $metadataFinder;
     }
 
     public function getBaseQueryArray(): array
@@ -110,6 +110,10 @@ class DbalQuery extends AbstractDbalQuery
              */
             'locale' => null,
             /**
+             * Website ID to fetch.
+             */
+            'website_id' => null,
+            /**
              * Is fet to true, result will be sorted hierarchical after fetching.
              * It will works only for full, complete fetched tree.
              */
@@ -124,7 +128,7 @@ class DbalQuery extends AbstractDbalQuery
 
         $this->searchById($criteria);
         $this->searchBySlug($criteria);
-        $this->searchByTitle($criteria);
+        $this->searchByName($criteria);
         $this->setDefaults($criteria);
         $this->buildTaxonomyType($criteria);
         $this->buildVisibility($criteria);
@@ -153,16 +157,14 @@ class DbalQuery extends AbstractDbalQuery
             $result = $this->sortHierarchical($result, WriteModelTerm::ROOT_LEVEL + 1);
         }
 
-        $metadata = $this->metadataFinder->findAllAggregated('term', $scope, array_column($result, 'id'), $criteria['locale']);
-
         try {
             foreach ($result as $row) {
-                $row['metadata'] = $metadata[$row['id']] ?? [];
+                $row['lazy_attributes'] = new LazyAttributesFinder($row['id'], $row['locale'], $this->attributesFinder);
 
                 $collection->append(Term::buildFromArray($row));
             }
         } catch (Exception $e) {
-            throw new QueryException('Exception during create colection of found nodes: ' . $e->getMessage(), 0, $e);
+            throw new QueryException('Exception during create colection of found menu items: ' . $e->getMessage(), 0, $e);
         }
 
         return $collection;
@@ -177,16 +179,25 @@ class DbalQuery extends AbstractDbalQuery
         } else {
             $this->queryBuilder->select('
                 tm.*,
-                COALESCE(tl.title, tm.title) AS title,
-                COALESCE(tl.slug, tm.slug) AS slug,
-                COALESCE(tl.visibility, tm.visibility) AS visibility,
-                COALESCE(tl.locale, :tl_locale) AS locale
+                tl.*,
+                tt.type,
+                BIN_TO_UUID(tm.id) AS id,
+                BIN_TO_UUID(tm.taxonomy_id) AS taxonomy_id
             ');
         }
 
+        if (!$criteria['locale']) {
+            throw new \InvalidArgumentException('Please provide "locale" in query parameters.');
+        }
+        if (!$criteria['website_id']) {
+            throw new \InvalidArgumentException('Please provide "website_id" in query parameters.');
+        }
+
         $this->queryBuilder
-            ->from('#__term', 'tm')
-            ->leftJoin('tm', '#__term_lang', 'tl', 'tm.id = tl.term_id AND tl.locale = :tl_locale')
+            ->from('#__taxonomy_term', 'tm')
+            ->innerJoin('tm', '#__taxonomy', 'tt', 'tt.website_id = :tt_website_id')
+            ->innerJoin('tm', '#__taxonomy_term_translation', 'tl', 'tm.id = tl.term_id AND tl.locale = :tl_locale')
+            ->setParameter('tt_website_id', Uuid::fromString($criteria['website_id'])->toBinary(), PDO::PARAM_STR)
             ->setParameter('tl_locale', $criteria['locale'], PDO::PARAM_STR);
     }
 
@@ -195,7 +206,7 @@ class DbalQuery extends AbstractDbalQuery
         if ($criteria['id']) {
             $this->queryBuilder
                 ->andWhere('tm.id = :tm_id')
-                ->setParameter('tm_id', $criteria['id'], PDO::PARAM_STR)
+                ->setParameter('tm_id', Uuid::fromString($criteria['id'])->toBinary(), PDO::PARAM_STR)
                 ->setMaxResults(1);
         }
 
@@ -205,6 +216,8 @@ class DbalQuery extends AbstractDbalQuery
             } else {
                 $ids = $criteria['children_of'];
             }
+
+            $ids = array_map(static fn(string $v) => Uuid::fromString($v)->toBinary(), $ids);
 
             $this->queryBuilder
                 ->andWhere('tm.parent_id IN (:tm_children_of)')
@@ -218,6 +231,8 @@ class DbalQuery extends AbstractDbalQuery
                 $ids = $criteria['id__not_in'];
             }
 
+            $ids = array_map(static fn(string $v) => Uuid::fromString($v)->toBinary(), $ids);
+
             $this->queryBuilder
                 ->andWhere('tm.id NOT IN (:tm_id__not_in)')
                 ->setParameter('tm_id__not_in', $ids, Connection::PARAM_STR_ARRAY);
@@ -229,6 +244,8 @@ class DbalQuery extends AbstractDbalQuery
             } else {
                 $ids = $criteria['id__in'];
             }
+
+            $ids = array_map(static fn(string $v) => Uuid::fromString($v)->toBinary(), $ids);
 
             $this->queryBuilder
                 ->andWhere('tm.id IN (:tm_id__in)')
@@ -243,20 +260,20 @@ class DbalQuery extends AbstractDbalQuery
         }
 
         $this->queryBuilder
-            ->andWhere('tl.slug = :tl_slug OR tm.slug = :tl_slug')
+            ->andWhere('tl.slug = :tl_slug')
             ->setParameter('tl_slug', $criteria['slug'], PDO::PARAM_STR)
             ->setMaxResults(1);
     }
 
-    protected function searchByTitle(array $criteria): void
+    protected function searchByName(array $criteria): void
     {
         if (! $criteria['search']) {
             return;
         }
 
         $this->queryBuilder
-            ->andWhere('tl.title LIKE :tl_title OR tm.title LIKE :tl_title')
-            ->setParameter('tl_title', '%' . $criteria['search'] . '%', PDO::PARAM_STR);
+            ->andWhere('tl.name LIKE :tl_name')
+            ->setParameter('tl_name', '%' . $criteria['search'] . '%', PDO::PARAM_STR);
     }
 
     protected function buildTaxonomyType(array $criteria): void
@@ -266,14 +283,14 @@ class DbalQuery extends AbstractDbalQuery
 
         if ($criteria['taxonomy_type'] !== null && $criteria['taxonomy_type'] !== 'any' && $types !== []) {
             $this->queryBuilder
-                ->andWhere('tm.type IN (:tm_type_in)')
-                ->setParameter('tm_type_in', $types, Connection::PARAM_STR_ARRAY);
+                ->andWhere('tt.type IN (:tt_type_in)')
+                ->setParameter('tt_type_in', $types, Connection::PARAM_STR_ARRAY);
         }
 
         if ($criteria['taxonomy_type__not'] !== null && $typesNot !== []) {
             $this->queryBuilder
-                ->andWhere('tm.type NOT IN (:tm_type_not_in)')
-                ->setParameter('tm_type_not_in', $typesNot, Connection::PARAM_STR_ARRAY);
+                ->andWhere('tt.type NOT IN (:tt_type_not_in)')
+                ->setParameter('tt_type_not_in', $typesNot, Connection::PARAM_STR_ARRAY);
         }
     }
 
@@ -284,7 +301,7 @@ class DbalQuery extends AbstractDbalQuery
         }
 
         $this->queryBuilder
-            ->andWhere('COALESCE(tl.visibility, tm.visibility) = :tl_visibility')
+            ->andWhere('tl.visibility = :tl_visibility')
             ->setParameter('tl_visibility', $criteria['visibility'], PDO::PARAM_INT);
     }
 

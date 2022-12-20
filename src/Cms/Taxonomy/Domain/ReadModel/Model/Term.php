@@ -22,7 +22,7 @@ class Term implements AttributesAwareInterface
     protected int $position = 1;
     protected int $count = 0;
     protected string $locale;
-    protected ?string $title = null;
+    protected ?string $name = null;
     protected ?string $slug = null;
     protected bool $isRoot = false;
     protected bool $visibility = true;
@@ -50,10 +50,13 @@ class Term implements AttributesAwareInterface
         $term->setPosition((int) ($data['position'] ?? 0));
         $term->setCount((int) ($data['count'] ?? 0));
         $term->setLocale($data['locale']);
-        $term->setTitle($data['title'] ?? '');
+        $term->setName($data['name'] ?? '');
         $term->setSlug($data['slug'] ?? '');
         $term->isRoot = (bool) ($data['is_root'] ?? true);
-        $term->replaceAttributes($data['metadata'] ?? []);
+
+        if (isset($data['lazy_attributes'])) {
+            $term->attributesLazyStorage = $data['lazy_attributes'];
+        }
 
         return $term;
     }
@@ -128,14 +131,14 @@ class Term implements AttributesAwareInterface
         $this->locale = $locale;
     }
 
-    public function getTitle(): ?string
+    public function getName(): ?string
     {
-        return $this->title;
+        return $this->name;
     }
 
-    public function setTitle(?string $title): void
+    public function setName(?string $name): void
     {
-        $this->title = $title;
+        $this->name = $name;
     }
 
     public function getSlug(): ?string
