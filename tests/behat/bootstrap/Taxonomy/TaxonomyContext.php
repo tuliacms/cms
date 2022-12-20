@@ -6,6 +6,7 @@ namespace Tulia\Cms\Tests\Behat\Taxonomy;
 
 use Behat\Behat\Context\Context;
 use Behat\Behat\Tester\Exception\PendingException;
+use Tulia\Cms\Shared\Domain\WriteModel\Service\SlugGeneratorStrategy\SlugGeneratorStrategyInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermCreated;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermDeleted;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermTranslated;
@@ -13,6 +14,7 @@ use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermUpdated;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Taxonomy;
 use Tulia\Cms\Tests\Behat\AggregateRootSpy;
 use Tulia\Cms\Tests\Behat\Assert;
+use Tulia\Cms\Tests\Helper\TestDoubles\Shared\Domain\WriteModel\Service\SlugGeneratorStrategy\PassthroughSluggeneratorStrategy;
 
 /**
  * @author Adam Banaszkiewicz
@@ -22,12 +24,15 @@ final class TaxonomyContext implements Context
     private const WEBSITE_ID = 'a6eb5605-b37f-4c02-b684-9bc6614df31c';
     private Taxonomy $taxonomy;
     private AggregateRootSpy $taxonomySpy;
+    private SlugGeneratorStrategyInterface $slugGeneratorStrategy;
     private array $locales = ['en_US'];
     private string $locale = 'en_US';
+    private string $defaultLocale = 'en_US';
     private string $term;
 
     public function __construct()
     {
+        $this->slugGeneratorStrategy = new PassthroughSluggeneratorStrategy();
     }
 
     /**
@@ -44,7 +49,7 @@ final class TaxonomyContext implements Context
      */
     public function iAddNewTermToThisTaxonomy(string $term): void
     {
-        $this->taxonomy->addTerm($term, $term, $this->locales, $this->locale);
+        $this->taxonomy->addTerm($this->slugGeneratorStrategy, $term, $term, $term, $this->locales, $this->locale, $this->defaultLocale);
     }
 
     /**
@@ -73,7 +78,7 @@ final class TaxonomyContext implements Context
     public function thereIsATerm(string $term): void
     {
         $this->term = $term;
-        $this->taxonomy->addTerm($term, $term, $this->locales, $this->locale);
+        $this->taxonomy->addTerm($this->slugGeneratorStrategy, $term, $term, $term, $this->locales, $this->locale, $this->defaultLocale);
         $this->taxonomy->collectDomainEvents();
     }
 
@@ -82,7 +87,7 @@ final class TaxonomyContext implements Context
      */
     public function iAddNewTermToThisTaxonomyAsChildOf(string $term, string $parent): void
     {
-        $this->taxonomy->addTerm($term, $term, $this->locales, $this->locale, parent: $parent);
+        $this->taxonomy->addTerm($this->slugGeneratorStrategy, $term, $term, $term, $this->locales, $this->locale, $this->defaultLocale, parent: $parent);
     }
 
     /**
@@ -142,7 +147,7 @@ final class TaxonomyContext implements Context
      */
     public function iUpdateTermWithNewName(string $term, string $newName): void
     {
-        $this->taxonomy->updateTerm($term, $this->locale, $newName);
+        $this->taxonomy->updateTerm($term, $this->locale, $newName, $this->defaultLocale);
     }
 
     /**
@@ -170,7 +175,7 @@ final class TaxonomyContext implements Context
      */
     public function iUpdateTermWithNewNameInLocale(string $term, string $newName, string $locale): void
     {
-        $this->taxonomy->updateTerm($term, $locale, $newName);
+        $this->taxonomy->updateTerm($term, $locale, $newName, $this->defaultLocale);
     }
 
     /**
@@ -191,7 +196,7 @@ final class TaxonomyContext implements Context
      */
     public function thisTermIsTranslatedToWithName(string $locale, string $name): void
     {
-        $this->taxonomy->updateTerm($this->term, $locale, $name);
+        $this->taxonomy->updateTerm($this->term, $locale, $name, $this->defaultLocale);
         $this->taxonomy->collectDomainEvents();
     }
 

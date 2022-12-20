@@ -23,7 +23,7 @@ final class DefaultSlugGeneratorStrategy implements SlugGeneratorStrategyInterfa
         string $slug,
         string $title,
         string $websiteId,
-        ?string $locale = null
+        ?string $locale = null,
     ): string {
         if (! trim($slug) && ! trim($title)) {
             return uniqid('temporary-slug-', true);

@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\Attribute as CoreAttribute;
 use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\AttributesAwareAggregateTrait;
+use Tulia\Cms\Shared\Domain\WriteModel\Service\SlugGeneratorStrategy\SlugGeneratorStrategyInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -19,7 +20,7 @@ class TermTranslation
 
     private string $id;
     public bool $visibility = true;
-    public string $name = '';
+    public bool $translated = false;
     /** @var Attribute[] */
     private Collection $attributes;
     private bool $hasBeenTranslatedRightNow = false;
@@ -27,21 +28,21 @@ class TermTranslation
     public function __construct(
         private Term $term,
         public readonly string $locale,
-        public bool $translated,
-        string $name,
+        private string $name,
+        private string $slug,
         string $creatingLocale,
     ) {
         $this->attributes = new ArrayCollection();
-        $this->name = $name;
 
         if ($this->locale === $creatingLocale) {
             $this->translated = true;
         }
     }
 
-    public function rename(string $name): void
+    public function rename(string $name, ?string $slug): void
     {
         $this->name = $name;
+        $this->slug = $slug;
 
         if (false === $this->translated) {
             $this->translated = true;
@@ -66,6 +67,7 @@ class TermTranslation
     {
         return [
             'name' => $this->name,
+            'slug' => $this->slug,
             'visibility' => $this->visibility,
             'translated' => $this->translated,
             'attributes' => $this->attributesToArray(),

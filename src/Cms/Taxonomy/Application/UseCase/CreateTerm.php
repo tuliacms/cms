@@ -8,6 +8,7 @@ use Tulia\Cms\Shared\Application\UseCase\AbstractTransactionalUseCase;
 use Tulia\Cms\Shared\Application\UseCase\IdResult;
 use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
 use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
+use Tulia\Cms\Shared\Domain\WriteModel\Service\SlugGeneratorStrategy\SlugGeneratorStrategyInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Service\TaxonomyRepositoryInterface;
 
@@ -17,6 +18,7 @@ use Tulia\Cms\Taxonomy\Domain\WriteModel\Service\TaxonomyRepositoryInterface;
 final class CreateTerm extends AbstractTransactionalUseCase
 {
     public function __construct(
+        private readonly SlugGeneratorStrategyInterface $slugGeneratorStrategy,
         private readonly TaxonomyRepositoryInterface $repository,
         private readonly EventBusInterface $bus,
     ) {
@@ -35,8 +37,10 @@ final class CreateTerm extends AbstractTransactionalUseCase
         );
 
         $taxonomy->addTerm(
+            $this->slugGeneratorStrategy,
             $termId = $this->repository->getNextId(),
             $request->details['name'],
+            $request->details['slug'],
             $request->locales,
             $request->locale,
             $request->defaultLocale,

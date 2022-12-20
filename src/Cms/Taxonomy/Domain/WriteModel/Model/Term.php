@@ -6,6 +6,7 @@ namespace Tulia\Cms\Taxonomy\Domain\WriteModel\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Tulia\Cms\Shared\Domain\WriteModel\Service\SlugGeneratorStrategy\SlugGeneratorStrategyInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Exception\TermNotFoundException;
 
 /**
@@ -18,7 +19,6 @@ class Term
 
     private int $position = 0;
     private int $level = 0;
-    private bool $isRoot = false;
     /** @var ArrayCollection<int, TermTranslation> */
     private Collection $translations;
     /** @var ArrayCollection<int, Term> */
@@ -26,36 +26,54 @@ class Term
 
     private function __construct(
         private string $id,
+        private bool $isRoot = false,
         private ?Taxonomy $taxonomy,
-        string $name,
-        array $locales,
-        string $creatingLocale,
         private ?Term $parent = null,
     ) {
-        if ($this->id === self::ROOT_ID) {
-            $this->isRoot = true;
-        }
-
-        $this->level = $this->parent ? $this->parent->level + 1 : 0;
-
-        $translations = [];
-
-        foreach ($locales as $locale) {
-            $translations[] = new TermTranslation($this, $locale, false, $name, $creatingLocale);
-        }
-
         $this->terms = new ArrayCollection();
-        $this->translations = new ArrayCollection($translations);
     }
 
     public static function createRoot(Taxonomy $taxonomy, array $locales, string $creatingLocale): self
     {
-        return new self(self::ROOT_ID, $taxonomy, 'root', $locales, $creatingLocale);
+        $self = new self(self::ROOT_ID, true, $taxonomy);
+
+        $translations = [];
+
+        foreach ($locales as $locale) {
+            $translations[] = new TermTranslation($self, $locale, 'root', 'root', $creatingLocale);
+        }
+
+        $self->translations = new ArrayCollection($translations);
+
+        return $self;
     }
 
-    public static function create(string $id, Taxonomy $taxonomy, string $name, array $locales, string $creatingLocale, ?Term $parent = null): self
-    {
-        return new self($id, $taxonomy, $name, $locales, $creatingLocale, $parent);
+    public static function create(
+        SlugGeneratorStrategyInterface $slugGeneratorStrategy,
+        string $id,
+        Taxonomy $taxonomy,
+        string $name,
+        ?string $slug,
+        array $locales,
+        string $creatingLocale,
+        string $websiteId,
+        ?Term $parent = null,
+    ): self {
+        $self = new self($id, false, $taxonomy, $parent);
+        $self->level = $self->parent
+            ? $self->parent->level + 1
+            : 0;
+
+        $translations = [];
+
+        foreach ($locales as $locale) {
+            $slug = $slugGeneratorStrategy->generateGloballyUnique($self->getId(), $slug, $name, $websiteId, $locale);
+            $translations[] = new TermTranslation($self, $locale, $name, $slug, $creatingLocale);
+        }
+
+        $self->translations = new ArrayCollection($translations);
+
+        return $self;
     }
 
     public function getId(): string

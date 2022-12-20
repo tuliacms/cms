@@ -7,15 +7,21 @@ namespace Tulia\Cms\Node\Infrastructure\Persistence\Doctrine\Dbal\WriteModel;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Uid\Uuid;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodeSlugUniquenessInterface;
+use Tulia\Cms\Shared\Domain\WriteModel\Service\SlugGeneratorStrategy\SlugExistenceCheckerInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-final class DbalNodeSlugUniqueness implements NodeSlugUniquenessInterface
+final class DbalNodeSlugUniquenessChecker implements NodeSlugUniquenessInterface, SlugExistenceCheckerInterface
 {
     public function __construct(
         private readonly Connection $connection,
     ) {
+    }
+
+    public function exists(string $slug, string $elementId, string $websiteId, string $locale): bool
+    {
+        return !$this->isUniqueInLocale($slug, $websiteId, $locale, $elementId);
     }
 
     public function isUnique(string $slug, string $websiteId, ?string $locale, ?string $notInThisNode = null): bool

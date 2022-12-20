@@ -7,6 +7,7 @@ namespace Tulia\Cms\Taxonomy\Application\UseCase;
 use Tulia\Cms\Shared\Application\UseCase\AbstractTransactionalUseCase;
 use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
 use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
+use Tulia\Cms\Shared\Domain\WriteModel\Service\SlugGeneratorStrategy\SlugGeneratorStrategyInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Service\TaxonomyRepositoryInterface;
 
@@ -16,6 +17,7 @@ use Tulia\Cms\Taxonomy\Domain\WriteModel\Service\TaxonomyRepositoryInterface;
 final class UpdateTerm extends AbstractTransactionalUseCase
 {
     public function __construct(
+        private readonly SlugGeneratorStrategyInterface $slugGeneratorStrategy,
         private readonly TaxonomyRepositoryInterface $repository,
         private readonly EventBusInterface $bus,
     ) {
@@ -34,9 +36,11 @@ final class UpdateTerm extends AbstractTransactionalUseCase
         );
 
         $taxonomy->updateTerm(
+            $this->slugGeneratorStrategy,
             $request->termId,
             $request->locale,
             $request->details['name'],
+            $request->details['slug'],
             $request->defaultLocale,
             $request->attributes,
             //$request->details['parent'],

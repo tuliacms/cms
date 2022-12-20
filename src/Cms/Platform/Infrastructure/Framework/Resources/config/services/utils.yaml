@@ -17,3 +17,8 @@ services:
 
     Tulia\Cms\Shared\Application\UseCase\TransactionalSessionInterface:
         class: Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DoctrineTransactionalSession
+
+    Tulia\Cms\Shared\Domain\WriteModel\Service\SlugGeneratorStrategy\SlugGeneratorStrategyInterface:
+        class: Tulia\Cms\Shared\Domain\WriteModel\Service\SlugGeneratorStrategy\DefaultSlugGeneratorStrategy
+        arguments:
+            - !tagged_iterator slugs.generator.existence_checker

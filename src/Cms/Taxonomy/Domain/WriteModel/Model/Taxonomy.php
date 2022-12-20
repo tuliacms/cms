@@ -7,6 +7,7 @@ namespace Tulia\Cms\Taxonomy\Domain\WriteModel\Model;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
+use Tulia\Cms\Shared\Domain\WriteModel\Service\SlugGeneratorStrategy\SlugGeneratorStrategyInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermCreated;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermDeleted;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermTranslated;
@@ -49,8 +50,10 @@ class Taxonomy extends AbstractAggregateRoot
     }
 
     public function addTerm(
+        SlugGeneratorStrategyInterface $slugGeneratorStrategy,
         string $id,
         string $name,
+        ?string $slug,
         array $locales,
         string $locale,
         string $defaultLocale,
@@ -63,24 +66,35 @@ class Taxonomy extends AbstractAggregateRoot
             $parentTerm = $this->getTerm(Term::ROOT_ID);
         }
 
-        $term = Term::create($id, $this, $name, $locales, $locale, parent: $parentTerm);
-        $term->persistAttributes($locale, $defaultLocale, $attributes);
+        $term = Term::create($slugGeneratorStrategy, $id, $this, $name, $slug, $locales, $locale, $this->websiteId, parent: $parentTerm);
+
+        if ($attributes !== []) {
+            $term->persistAttributes($locale, $defaultLocale, $attributes);
+        }
 
         $this->terms->add($term);
         $this->recordThat(new TermCreated($id, $this->type, $this->websiteId, $parent));
     }
 
     public function updateTerm(
+        SlugGeneratorStrategyInterface $slugGeneratorStrategy,
         string $id,
         string $locale,
         string $name,
+        ?string $slug,
         string $defaultLocale,
         array $attributes = [],
     ): void {
         $term = $this->getTerm($id);
-        $term->persistAttributes($locale, $defaultLocale, $attributes);
+
+        if ($attributes !== []) {
+            $term->persistAttributes($locale, $defaultLocale, $attributes);
+        }
+
+        $slug = $slugGeneratorStrategy->generateGloballyUnique($term->getId(), $slug, $name, $this->websiteId, $locale);
+
         $translation = $term->getTranslation($locale);
-        $translation->rename($name);
+        $translation->rename($name, $slug);
 
         $this->recordThat(new TermUpdated($id, $this->type, $this->websiteId));
 

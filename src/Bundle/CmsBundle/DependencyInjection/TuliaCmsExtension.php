@@ -159,6 +159,8 @@ class TuliaCmsExtension extends Extension
         $container->registerForAutoconfiguration(\Tulia\Cms\Settings\Domain\Group\SettingsGroupInterface::class)
             ->setLazy(true)
             ->addTag('settings.group');
+        $container->registerForAutoconfiguration(\Tulia\Cms\Shared\Domain\WriteModel\Service\SlugGeneratorStrategy\SlugExistenceCheckerInterface::class)
+            ->addTag('slugs.generator.existence_checker');
     }
 
     protected function validateOptionsValues(array $definitions): array
