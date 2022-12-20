@@ -1,13 +1,13 @@
-{% macro page_header(context) %}
+{% macro page_header(form, context) %}
     <div class="page-form-header">
         <div class="container-fluid">
             <div class="row">
                 <div class="col">
-                    {{ form_row(context.form.name) }}
+                    {{ form_row(form.name) }}
                 </div>
-                {% if context.form.slug is defined %}
+                {% if form.slug is defined %}
                     <div class="col">
-                        {{ form_row(context.form.slug) }}
+                        {{ form_row(form.slug) }}
                     </div>
                 {% endif %}
             </div>

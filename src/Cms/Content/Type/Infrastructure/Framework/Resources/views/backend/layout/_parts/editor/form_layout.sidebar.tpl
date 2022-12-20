@@ -75,30 +75,30 @@
 
 {% block layout %}
     {% import '@backend/content_builder/layout/_parts/editor/form_render.tpl' as form_render %}
-    {% set contentType = form.vars.content_type %}
+    {% set contentType = attributesForm.vars.content_type %}
 
-    {{ form_render.form_begin(context.form) }}
+    {{ form_render.form_begin(form) }}
 
     <div class="page-form"> {# id="node-form" #}
         <div class="page-form-sidebar">
             <div class="accordion">
                 {% if hasPartialView and partial_view.sidebar_accordion is defined %}
-                    {{ partial_view.sidebar_accordion(context) }}
+                    {{ partial_view.sidebar_accordion(form, context) }}
                 {% endif %}
                 {% for group in contentType.fieldGroups %}
                     {% if group.section == 'sidebar' %}
-                        {{ _self.section(group.code, group, form, null, contentType) }}
+                        {{ _self.section(group.code, group, attributesForm, null, contentType) }}
                     {% endif %}
                 {% endfor %}
             </div>
         </div>
         <div class="page-form-content">
             {% if hasPartialView and partial_view.page_header is defined %}
-                {{ partial_view.page_header(context) }}
+                {{ partial_view.page_header(form, context) }}
             {% endif %}
             <ul class="nav nav-tabs page-form-tabs" role="tablist">
                 {% if hasPartialView and partial_view.page_tabs is defined %}
-                    {% set pageTabsBlock = partial_view.page_tabs(context) %}
+                    {% set pageTabsBlock = partial_view.page_tabs(form, context) %}
                 {% else %}
                     {% set pageTabsBlock = null %}
                 {% endif %}
@@ -111,7 +111,7 @@
                             active: pageTabsBlock is empty and loopIndex == 0,
                             name: group.name|trans,
                             fields: group.fields
-                        }, form) }}
+                        }, attributesForm) }}
                         {% set loopIndex = loopIndex + 1 %}
                     {% endif %}
                 {% endfor %}
@@ -120,11 +120,11 @@
                     active: false,
                     name: 'otherSettings'|trans({}, 'messages'),
                     fields: []
-                }, form) }}
+                }, attributesForm) }}
             </ul>
             <div class="tab-content">
                 {% if hasPartialView and partial_view.page_tabs_content is defined %}
-                    {% set pageTabsContentBlock = partial_view.page_tabs_content(context) %}
+                    {% set pageTabsContentBlock = partial_view.page_tabs_content(form, context) %}
                 {% else %}
                     {% set pageTabsContentBlock = null %}
                 {% endif %}
@@ -137,21 +137,21 @@
                             group.code,
                             pageTabsContentBlock is empty and loopIndex == 0,
                             group,
-                            form,
+                            attributesForm,
                             contentType
                         ) }}
                         {% set loopIndex = loopIndex + 1 %}
                     {% endif %}
                 {% endfor %}
 
-                {{ _self.tab_rest_content('rest', form) }}
+                {{ _self.tab_rest_content('rest', attributesForm) }}
             </div>
         </div>
     </div>
 
-    {{ form_render.form_end(context.form) }}
+    {{ form_render.form_end(form) }}
 
     {% if hasPartialView and partial_view.javascripts is defined %}
-        {{ partial_view.javascripts(context) }}
+        {{ partial_view.javascripts(form, context) }}
     {% endif %}
 {% endblock %}

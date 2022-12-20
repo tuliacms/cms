@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Tulia\Cms\Content\Type\Infrastructure\Framework\Twig\Extension;
 
 use Symfony\Component\Form\FormView;
-use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\ContentTypeFormDescriptor;
-use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Service\LayoutBuilder;
 use Tulia\Component\Templating\Engine;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -17,7 +15,6 @@ use Twig\TwigFunction;
 class ContentBuilderExtension extends AbstractExtension
 {
     public function __construct(
-        private readonly LayoutBuilder $layoutBuilder,
         private readonly Engine $engine,
     ) {
     }
@@ -25,13 +22,24 @@ class ContentBuilderExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('render_content_builder_form_layout', function (ContentTypeFormDescriptor $formDescriptor) {
-                return $this->engine->render($this->layoutBuilder->build($formDescriptor));
-            }, [
-                'is_safe' => [ 'html' ],
-            ]),
-            new TwigFunction('render_content_builder_form_layout_new', function (FormView $form) {
-                return $this->engine->render($form->vars['content_type_view']);
+            new TwigFunction('render_content_builder_form_layout', function (FormView $form) {
+                $rootForm = $form;
+                $attributesForm = null;
+
+                foreach ($form as $child) {
+                    if (isset($child->vars['content_type_view'])) {
+                        $attributesForm = $child;
+                    }
+                }
+
+                if (!$attributesForm) {
+                    throw new \LogicException('Cannot find AttributesType form in children of this form. So cannot render this form using this method.');
+                }
+
+                $attributesForm->vars['content_type_view']->addData(['form' => $rootForm]);
+                $attributesForm->vars['content_type_view']->addData(['attributesForm' => $attributesForm]);
+
+                return $this->engine->render($attributesForm->vars['content_type_view']);
             }, [
                 'is_safe' => [ 'html' ],
             ]),

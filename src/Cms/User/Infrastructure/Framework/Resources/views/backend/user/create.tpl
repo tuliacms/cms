@@ -20,7 +20,7 @@
             <h1 class="pane-title">{{ block('title') }}</h1>
         </div>
         <div class="pane-body p-0">
-            {{ render_content_builder_form_layout_new(form.attributes) }}
+            {{ render_content_builder_form_layout(form) }}
         </div>
     </div>
 {% endblock %}

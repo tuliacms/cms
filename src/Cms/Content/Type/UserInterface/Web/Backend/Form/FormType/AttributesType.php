@@ -63,7 +63,6 @@ final class AttributesType extends AbstractType
         $type = $this->contentTypeRegistry->get($options['content_type']);
         $context = [
             'partial_view' => $options['partial_view'],
-            'form' => $view->parent,
         ];
 
         if (is_array($options['context'])) {

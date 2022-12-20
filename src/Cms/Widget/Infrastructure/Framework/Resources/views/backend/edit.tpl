@@ -23,7 +23,7 @@
         </div>
         <div class="pane-body p-0">
             {{ alerts.translation_missing_info(widgetTranslated) }}
-            {{ render_content_builder_form_layout_new(form.attributes) }}
+            {{ render_content_builder_form_layout(form) }}
         </div>
     </div>
 {% endblock %}

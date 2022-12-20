@@ -1,7 +1,7 @@
 {% import '@backend/content_builder/layout/_parts/editor/form_render.tpl' as form_render %}
 {% trans_default_domain 'menu' %}
 
-{{ form_render.form_begin(context.form) }}
+{{ form_render.form_begin(form) }}
 
 <div class="row">
     <div class="col">
@@ -10,10 +10,10 @@
                 <i class="fas fa-asterisk"></i> {{ 'basics'|trans }}
             </div>
             <div class="card-body">
-                {{ form_row(context.form.name) }}
-                {{ form_row(context.form.visibility) }}
-                {{ form_row(context.form.type) }}
-                {{ form_row(context.form.parent) }}
+                {{ form_row(form.name) }}
+                {{ form_row(form.visibility) }}
+                {{ form_row(form.type) }}
+                {{ form_row(form.parent) }}
                 {% for group in contentType.fieldGroups %}
                     {% if group.section == 'basics' %}
                         {% for field in group.fields %}
@@ -53,9 +53,9 @@
                 <i class="fas fa-border-style"></i> {{ 'options'|trans }}
             </div>
             <div class="card-body">
-                {{ form_row(context.form.hash) }}
-                {{ form_row(context.form.identity) }}
-                {{ form_row(context.form.target) }}
+                {{ form_row(form.hash) }}
+                {{ form_row(form.identity) }}
+                {{ form_row(form.target) }}
                 {% for group in contentType.fieldGroups %}
                     {% if group.section == 'options' %}
                         {% for field in group.fields %}
