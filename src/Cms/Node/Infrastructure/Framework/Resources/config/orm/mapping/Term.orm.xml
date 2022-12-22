@@ -3,14 +3,16 @@
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="Tulia\Cms\Node\Domain\WriteModel\Model\Purpose" table="#__node_has_purpose">
+    <entity name="Tulia\Cms\Node\Domain\WriteModel\Model\Term" table="#__node_in_term">
         <id name="id" type="uuid">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
 
-        <field name="purpose" />
+        <field name="term" type="uuid" />
+        <field name="taxonomy" />
+        <field name="type" />
 
-        <many-to-one field="node" target-entity="Tulia\Cms\Node\Domain\WriteModel\Model\Node" inversed-by="purposes"/>
+        <many-to-one field="node" target-entity="Tulia\Cms\Node\Domain\WriteModel\Model\Node" inversed-by="terms"/>
     </entity>
 </doctrine-mapping>

@@ -11,12 +11,17 @@ use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
  */
 final class NodePublished extends AbstractNodeDomainEvent
 {
-    public readonly ImmutableDateTime $publishedAt;
-
-    public function __construct(string $id, string $type, ImmutableDateTime $publishedAt)
-    {
+    public function __construct(
+        string $id,
+        string $type,
+        public readonly ImmutableDateTime $publishedAt,
+        public readonly ?ImmutableDateTime $publishedTo,
+    ) {
         parent::__construct($id, $type);
+    }
 
-        $this->publishedAt = $publishedAt;
+    public function isPublishedToForever(): bool
+    {
+        return $this->publishedTo === null;
     }
 }

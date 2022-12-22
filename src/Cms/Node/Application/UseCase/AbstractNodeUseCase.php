@@ -37,19 +37,16 @@ abstract class AbstractNodeUseCase extends AbstractTransactionalUseCase
 
         $node->setStatus($details['status']);
         $node->persistPurposes($this->canImposePurpose, ...$details['purposes']);
-        $node->publishNodeAt(new ImmutableDateTime($details['published_at']));
+        $node->publish(
+            new ImmutableDateTime($details['published_at']),
+            $details['published_to'] ? new ImmutableDateTime($details['published_to']) : null
+        );
 
         /*if ($details['parent_id']) {
             $node->moveAsChildOf($this->repository->referenceTo($details['parent_id']));
         } else {*/
         $node->moveAsRootNode();
         //}
-
-        if ($details['published_to']) {
-            $node->publishNodeTo(new ImmutableDateTime($details['published_to']));
-        } else {
-            $node->publishNodeForever();
-        }
 
         $node->persistAttributes($request->locale, $request->defaultLocale, $this->processAttributes($attributes));
         $node->changeTitle($request->locale, $request->defaultLocale, $this->slugGeneratorStrategy, $details['title'], $details['slug']);

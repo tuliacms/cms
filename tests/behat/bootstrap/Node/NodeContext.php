@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Tests\Behat\Node;
 
+use Tulia\Cms\Node\Domain\WriteModel\Event\NodePublished;
+use Tulia\Cms\Node\Domain\WriteModel\Event\TermsAssignationChanged;
+use Tulia\Cms\Node\Domain\WriteModel\Service\ParentTermsResolverInterface;
 use Tulia\Cms\Tests\Behat\Assert;
 use Behat\Behat\Context\Context;
-use Tulia\Cms\Content\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeDeleted;
 use Tulia\Cms\Node\Domain\WriteModel\Event\PurposesUpdated;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\CannotDeleteNodeException;
@@ -23,150 +25,101 @@ use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 use Tulia\Cms\Tests\Behat\AggregateRootSpy;
 use Tulia\Cms\Tests\Behat\Node\TestDoubles\NodeByPurposeFinderStub;
 use Tulia\Cms\Tests\Behat\Node\TestDoubles\NodeChildrenDetectorStub;
+use Tulia\Cms\Tests\Behat\Node\TestDoubles\ParentTermsResolverStub;
 
 /**
  * @author Adam Banaszkiewicz
  */
 final class NodeContext implements Context
 {
+    use NodeBuildableTrait;
+
     private const WEBSITE_ID = 'ceb7a799-9491-4880-a50e-0c7f0dcba7f5';
     private const AUTHOR_ID = '9e8dc655-f476-4838-8c80-b22b1d401aab';
     private const DATE_FORMAT = 'Y-m-d H:i:s';
 
-    private Node $node;
     private AggregateRootSpy $nodeSpy;
     private ?string $exceptionReason = null;
+    private array $availableLocales = ['en_US', 'pl_PL'];
 
     private NodeChildrenDetectorInterface $nodeChildrenDetector;
     private NodePurposeRegistryInterface $nodePurposeRegistry;
     private NodeByPurposeFinderInterface $nodeByPurposeFinder;
+    private ParentTermsResolverInterface $parentTermsResolver;
 
     public function __construct()
     {
         $this->nodeChildrenDetector = new NodeChildrenDetectorStub();
         $this->nodePurposeRegistry = new NodePurposeRegistry([]);
         $this->nodeByPurposeFinder = new NodeByPurposeFinderStub();
+        $this->parentTermsResolver = new ParentTermsResolverStub();
     }
 
     /**
-     * @Given there is a node :node
+     * @Given now is :datetime
      */
-    public function thereIsANode(string $node): void
+    public function nowIs(string $datetime): void
     {
-        $this->node = Node::createNew($node, 'page', self::WEBSITE_ID, 'en_US', new Author(self::AUTHOR_ID));
+        ImmutableDateTime::setTestNow($datetime);
+    }
+
+    /**
+     * @When I create node :node
+     */
+    public function iCreateNode(string $node): void
+    {
+        $this->node = Node::create($node, 'page', self::WEBSITE_ID, self::AUTHOR_ID, $node, $this->availableLocales);
         $this->nodeSpy = new AggregateRootSpy($this->node);
     }
 
     /**
-     * @Given this node has attribute :uri with value :value
-     */
-    public function nodeHasAttributeWithValue(string $uri, string $value): void
-    {
-        $this->node->addAttribute($this->attribute($uri, $value));
-    }
-
-    /**
-     * @When admin removes attribute :uri from this node
-     */
-    public function adminRemovesAttribute(string $uri): void
-    {
-        $this->node->removeAttribute($uri);
-    }
-
-    /**
-     * @Then this node don't have attribute :uri
-     */
-    public function nodeDontHaveAttribute(string $uri): void
-    {
-        $this->node->removeAttribute($uri);
-        $this->node->collectDomainEvents();
-    }
-
-    /**
-     * @When admin adds attribute :uri with value :value to this node
-     */
-    public function adminAddsAttributeWithValue(string $uri, string $value): void
-    {
-        $this->node->addAttribute($this->attribute($uri, $value));
-    }
-
-    /**
-     * @Then node should have attribute :uri with value :value
-     */
-    public function nodeShouldHaveAttributeWithValue(string $uri, string $value): void
-    {
-        Assert::assertTrue($this->node->hasAttribute($uri));
-        Assert::assertSame($value, $this->node->getAttribute($uri)->getValue());
-    }
-
-    /**
-     * @Then this node should not have attribute :uri
-     */
-    public function thisNodeShouldNotHaveAttribute(string $uri): void
-    {
-        Assert::assertFalse($this->node->hasAttribute($uri));
-    }
-
-    /**
-     * @Then node have attribute :uri
-     */
-    public function nodeHaveAttribute(string $uri): void
-    {
-        Assert::assertTrue($this->node->hasAttribute($uri));
-    }
-
-    /**
-     * @Then node should be published at :when
+     * @Then node should be published to forever at :when
      */
     public function nodeShouldBePublishedAt(string $when): void
     {
+        $event = $this->nodeSpy->findEvent(NodePublished::class);
+
+        Assert::assertInstanceOf(NodePublished::class, $event, 'Node should be published');
         Assert::assertSame(
             date(self::DATE_FORMAT, strtotime($when)),
-            $this->node->getPublishedAt()->format(self::DATE_FORMAT)
+            $event->publishedAt->format(self::DATE_FORMAT)
         );
+        Assert::assertTrue($event->isPublishedToForever());
     }
 
     /**
-     * @When admin change published date to :date
+     * @When I publish this node at :when
      */
-    public function adminChangePublishedDateTo(string $date): void
+    public function iPublishThisNodeAt(string $when): void
     {
-        $this->node->publishNodeAt(new ImmutableDateTime($date));
+        $this->node->publish(new ImmutableDateTime($when));
     }
 
     /**
-     * @Then node should be published forever
+     * @When I publish this node at :from, to :to
      */
-    public function nodeShouldBePublishedForever(): void
+    public function iPublishThisNodeAtTo(string $from, string $to): void
     {
-        Assert::assertNull($this->node->getPublishedTo());
+        $this->node->publish(new ImmutableDateTime($from), new ImmutableDateTime($to));
     }
 
     /**
-     * @When admin change published end date to :date
+     * @Then node should be published at :from to :to
      */
-    public function adminChangePublishedEndDateTo(string $date): void
+    public function nodeShouldBePublishedAtTo(string $from, string $to): void
     {
-        $this->node->publishNodeTo(new ImmutableDateTime($date));
-    }
+        $event = $this->nodeSpy->findEvent(NodePublished::class);
 
-    /**
-     * @Then node is published to :when
-     */
-    public function nodeIsPublishedTo(string $when): void
-    {
+        Assert::assertInstanceOf(NodePublished::class, $event, 'Node should be published');
         Assert::assertSame(
-            date(self::DATE_FORMAT, strtotime($when)),
-            $this->node->getPublishedTo()->format(self::DATE_FORMAT)
+            date(self::DATE_FORMAT, strtotime($from)),
+            $event->publishedAt->format(self::DATE_FORMAT)
         );
-    }
-
-    /**
-     * @When admin change node to published forever
-     */
-    public function adminChangeNodeToPublishedForever(): void
-    {
-        $this->node->publishNodeForever();
+        Assert::assertSame(
+            date(self::DATE_FORMAT, strtotime($to)),
+            $event->publishedTo->format(self::DATE_FORMAT)
+        );
+        Assert::assertFalse($event->isPublishedToForever());
     }
 
     /**
@@ -223,7 +176,7 @@ final class NodeContext implements Context
      */
     public function thereIsANodeWithPurpose(string $purpose): void
     {
-        $this->nodeByPurposeFinder->makeOtherNodeHasSpecificPurpose($purpose, self::WEBSITE_ID);
+        $this->nodeByPurposeFinder->makeOtherNodeHasSpecificPurpose($purpose);
     }
 
     /**
@@ -316,8 +269,69 @@ final class NodeContext implements Context
         Assert::assertSame($purposes, implode(',', $event->purposes), 'Expected to has exactly purposes in collection');
     }
 
-    private function attribute(string $uri, string $value): Attribute
+    /**
+     * @Given the term :term of taxonomy :taxonomy has parents of :parents
+     */
+    public function theTermOfTaxonomyHasParentsOf(string $taxonomy, string $term, string $parents): void
     {
-        return new Attribute($uri, $uri, $value, $value, [], []);
+        $this->parentTermsResolver->store($term, $taxonomy, $parents);
+    }
+
+    /**
+     * @When I assign this node to term :term of taxonomy :taxonomy
+     */
+    public function iAssignThisNodeToTermOfTaxonomy(string $term, string $taxonomy): void
+    {
+        $this->node->assignToTermOf($this->parentTermsResolver, $term, $taxonomy);
+    }
+
+    /**
+     * @Then this node should be assigned to term :term of taxonomy :taxonomy
+     */
+    public function thisNodeShouldBeAssignedToTermOfTaxonomy(string $term, string $taxonomy): void
+    {
+        /** @var TermsAssignationChanged $event */
+        $event = $this->nodeSpy->findEvent(TermsAssignationChanged::class);
+
+        Assert::assertInstanceOf(TermsAssignationChanged::class, $event, 'Terms assignation should be changed');
+        Assert::assertTrue($event->isAssignedTo($term, $taxonomy));
+    }
+
+    /**
+     * @When I unassign this node from term :term of taxonomy :taxonomy
+     */
+    public function iUnassignThisNodeFromTermOfTaxonomy(string $term, string $taxonomy): void
+    {
+        $this->node->unassignFromTermOf($this->parentTermsResolver, $term, $taxonomy);
+    }
+
+    /**
+     * @Then this node should not be assigned to term :term of taxonomy :taxonomy
+     */
+    public function thisNodeShouldNotBeAssignedToTermOfTaxonomy(string $term, string $taxonomy): void
+    {
+        /** @var TermsAssignationChanged $event */
+        $event = $this->nodeSpy->findEvent(TermsAssignationChanged::class);
+
+        Assert::assertInstanceOf(TermsAssignationChanged::class, $event, 'Terms assignation should be changed');
+        Assert::assertFalse($event->isAssignedTo($term, $taxonomy));
+    }
+
+    /**
+     * @Then assignation to terms for this node should not be changed
+     */
+    public function assignationToTermsForThisNodeShouldNotBeChanged(): void
+    {
+        $event = $this->nodeSpy->findEvent(TermsAssignationChanged::class);
+
+        Assert::assertNull($event, 'Assignation to terms should not be changed');
+    }
+
+    /**
+     * @When I replace terms assignations in this node to term :term of taxonomy :taxonomy
+     */
+    public function iReplaceTermsAssignationsInThisNodeToTermOfTaxonomy(string $term, string $taxonomy): void
+    {
+        $this->node->persistTermsAssignations($this->parentTermsResolver, [$term, $taxonomy]);
     }
 }

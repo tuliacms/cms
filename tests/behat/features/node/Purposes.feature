@@ -19,7 +19,7 @@ Feature: Purposes
     When I impose purpose "Homepage" to this node
     Then purpose "Homepage" should be imposed to this node
 
-  Scenario: I cannot add multiple times same flag to one node
+  Scenario: I cannot add multiple times same purpose to one node
     Given this node has purpose named "Homepage"
     When I impose purpose "Homepage" to this node
     Then purpose should not be imposed to this node

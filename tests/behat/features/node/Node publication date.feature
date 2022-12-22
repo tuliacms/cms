@@ -1,21 +1,18 @@
 Feature: Node publication date
 
-    Scenario: New node has published date set to "now"
-        Given there is a node "My root node"
-        Then node should be published at "now"
+    Background:
+        Given now is "2022-12-01 01:00:00"
 
-    Scenario: Admin can change published date
-        Given there is a node "My root node"
-        When admin change published date to "2030-01-01 01:00:00"
-        Then node should be published at "2030-01-01 01:00:00"
+    Scenario: New node is published at "now"
+        When I create node "My node"
+        Then node should be published to forever at "2022-12-01 01:00:00"
 
-    Scenario: New node has timeless publication end date
-        Given there is a node "My root node"
-        Then node should be published forever
+    Scenario: I can publish existing node again overwriting existing date
+        Given there is a node "My node"
+        When I publish this node at "2023-02-13 01:00:00"
+        Then node should be published to forever at "2023-02-13 01:00:00"
 
-    Scenario: Admin can change published end date
-        Given there is a node "My root node"
-        When admin change published end date to "2030-01-01 01:00:00"
-        Then node is published to "2030-01-01 01:00:00"
-        When admin change node to published forever
-        Then node should be published forever
+    Scenario: I can publis node only for hour in some point of future
+        Given there is a node "My node"
+        When I publish this node at "2023-03-03 01:00:00", to "2023-03-03 02:00:00"
+        Then node should be published at "2023-03-03 01:00:00" to "2023-03-03 02:00:00"

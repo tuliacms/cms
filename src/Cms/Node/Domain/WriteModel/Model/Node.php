@@ -8,13 +8,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Tulia\Cms\Node\Domain\WriteModel\Event;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeUpdated;
+use Tulia\Cms\Node\Domain\WriteModel\Event\TermsAssignationChanged;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\CannotDeleteNodeException;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\CannotImposePurposeToNodeException;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeTranslationDoesntExists;
+use Tulia\Cms\Node\Domain\WriteModel\Model\NodeFeatures\TermsFeature;
 use Tulia\Cms\Node\Domain\WriteModel\Rules\CanAddPurpose\CanImposePurposeInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Rules\CanAddPurpose\CanImposePurposeReasonEnum;
 use Tulia\Cms\Node\Domain\WriteModel\Rules\CanDeleteNode\CanDeleteNodeInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Rules\CanDeleteNode\CanDeleteNodeReasonEnum;
+use Tulia\Cms\Node\Domain\WriteModel\Service\ParentTermsResolverInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 use Tulia\Cms\Shared\Domain\WriteModel\Service\SlugGeneratorStrategy\SlugGeneratorStrategyInterface;
@@ -36,6 +39,8 @@ class Node extends AbstractAggregateRoot
     private int $level = 0;
     /** @var Purpose[] */
     private Collection $purposes;
+    /** @var Term[] */
+    private Collection $terms;
 
     private function __construct(
         private string $id,
@@ -58,7 +63,9 @@ class Node extends AbstractAggregateRoot
         $self->publishedAt = new ImmutableDateTime();
         $self->translations = self::createTranslations($self, $title, $availableLocales);
         $self->purposes = new ArrayCollection();
+        $self->terms = new ArrayCollection();
         $self->recordThat(new Event\NodeCreated($id, $type));
+        $self->recordThat(new Event\NodePublished($self->id, $self->type, $self->publishedAt, $self->publishedTo));
 
         return $self;
     }
@@ -219,12 +226,13 @@ class Node extends AbstractAggregateRoot
         $this->markAsUpdated();
     }
 
-    public function publish(ImmutableDateTime $publishedAt): void
+    public function publish(ImmutableDateTime $publishedAt, ?ImmutableDateTime $publishedTo = null): void
     {
         $this->publishedAt = $publishedAt;
+        $this->publishedTo = $publishedTo;
         $this->status = 'published';
 
-        $this->recordThat(new Event\NodePublished($this->id, $this->type, $this->publishedAt));
+        $this->recordThat(new Event\NodePublished($this->id, $this->type, $this->publishedAt, $this->publishedTo));
         $this->markAsUpdated();
     }
 
@@ -276,15 +284,7 @@ class Node extends AbstractAggregateRoot
         }
 
         foreach ($toAdd as $purposeCode) {
-            $purpose = new Purpose($this, $purposeCode);
-
-            $reason = $rules->decide($this->id, $this->websiteId, $purpose, ...$this->purposes);
-
-            if (CanImposePurposeReasonEnum::OK !== $reason) {
-                throw CannotImposePurposeToNodeException::fromReason($reason, (string) $purpose, $this->id);
-            }
-
-            $this->purposes->add($purpose);
+            $this->importSinglePurpose($rules, $purposeCode);
         }
 
         $this->recordThat(new Event\PurposesUpdated(
@@ -298,45 +298,79 @@ class Node extends AbstractAggregateRoot
         $this->markAsUpdated();
     }
 
-    public function imposePurpose(CanImposePurposeInterface $rules, Purpose $purpose): void
+    public function imposePurpose(CanImposePurposeInterface $rules, string $purposeCode): void
     {
-        if (\in_array($purpose, $this->purposes, true)) {
+        $imposed = $this->importSinglePurpose($rules, $purposeCode);
+
+        if (!$imposed) {
             return;
         }
 
-        $reason = $rules->decide($this->id, $this->websiteId, $purpose, ...$this->purposes);
-
-        if (CanImposePurposeReasonEnum::OK !== $reason) {
-            throw CannotImposePurposeToNodeException::fromReason($reason, (string) $purpose, $this->id);
-        }
-
-        $this->purposes->add($purpose);
         $this->recordThat(new Event\PurposesUpdated(
             $this->id,
             $this->type,
-            $this->purposes
+            array_map(
+                static fn(Purpose $v) => (string) $v,
+                $this->purposes->toArray()
+            )
         ));
         $this->markAsUpdated();
     }
 
-    public function publishNodeAt(ImmutableDateTime $publishedAt): void
+    public function assignToTermOf(ParentTermsResolverInterface $resolver, string $term, string $taxonomy): void
     {
-        $this->publishedAt = $publishedAt;
+        $feature = new TermsFeature($this, $this->terms);
 
+        if (!$feature->assignToTermOf($resolver, $term, $taxonomy)) {
+            return;
+        }
+
+        $this->recordThat(new TermsAssignationChanged(
+            $this->id,
+            $this->type,
+            $feature->collectTermsAssignations()
+        ));
         $this->markAsUpdated();
     }
 
-    public function publishNodeTo(ImmutableDateTime $publishedTo): void
+    public function unassignFromTermOf(ParentTermsResolverInterface $resolver, string $term, string $taxonomy): void
     {
-        $this->publishedTo = $publishedTo;
+        $feature = new TermsFeature($this, $this->terms);
 
+        if (!$feature->unassignFromTermOf($resolver, $term, $taxonomy)) {
+            return;
+        }
+
+        $this->recordThat(new TermsAssignationChanged(
+            $this->id,
+            $this->type,
+            $feature->collectTermsAssignations()
+        ));
         $this->markAsUpdated();
     }
 
-    public function publishNodeForever(): void
-    {
-        $this->publishedTo = null;
+    public function persistTermsAssignations(
+        ParentTermsResolverInterface $parentTermsResolver,
+        array ...$terms
+    ): void {
+        $feature = new TermsFeature($this, $this->terms);
 
+        if (empty($terms)) {
+            $feature->unassignFromAllTerms();
+            $changed = true;
+        } else {
+            $changed = $feature->persistTermsAssignations($parentTermsResolver, ...$terms);
+        }
+
+        if (! $changed) {
+            return;
+        }
+
+        $this->recordThat(new TermsAssignationChanged(
+            $this->id,
+            $this->type,
+            $feature->collectTermsAssignations()
+        ));
         $this->markAsUpdated();
     }
 
@@ -365,5 +399,27 @@ class Node extends AbstractAggregateRoot
             static fn ($v) => $v->getLocale(),
             $this->translations->toArray()
         );
+    }
+
+    private function importSinglePurpose(CanImposePurposeInterface $rules, string $purposeCode): bool
+    {
+        /** @var Purpose $pretendent */
+        foreach ($this->purposes->toArray() as $pretendent) {
+            if ($pretendent->is($purposeCode)) {
+                return false;
+            }
+        }
+
+        $purpose = new Purpose($this, $purposeCode);
+
+        $reason = $rules->decide($this->id, $this->websiteId, $purpose, ...$this->purposes);
+
+        if (CanImposePurposeReasonEnum::OK !== $reason) {
+            throw CannotImposePurposeToNodeException::fromReason($reason, $purposeCode, $this->id);
+        }
+
+        $this->purposes->add($purpose);
+
+        return true;
     }
 }
