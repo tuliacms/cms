@@ -192,10 +192,13 @@ class DbalQuery extends AbstractDbalQuery
         if (!$criteria['website_id']) {
             throw new \InvalidArgumentException('Please provide "website_id" in query parameters.');
         }
+        if (!$criteria['id'] && !$criteria['taxonomy_type']) {
+            throw new \InvalidArgumentException('Please provide "taxonomy_type" in query parameters, when "id" is not set.');
+        }
 
         $this->queryBuilder
             ->from('#__taxonomy_term', 'tm')
-            ->innerJoin('tm', '#__taxonomy', 'tt', 'tt.website_id = :tt_website_id')
+            ->innerJoin('tm', '#__taxonomy', 'tt', 'tt.id = tm.taxonomy_id AND tt.website_id = :tt_website_id')
             ->innerJoin('tm', '#__taxonomy_term_translation', 'tl', 'tm.id = tl.term_id AND tl.locale = :tl_locale')
             ->setParameter('tt_website_id', Uuid::fromString($criteria['website_id'])->toBinary(), PDO::PARAM_STR)
             ->setParameter('tl_locale', $criteria['locale'], PDO::PARAM_STR);

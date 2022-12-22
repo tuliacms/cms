@@ -88,6 +88,10 @@ final class TermsFeature
 
     public function persistTermsAssignations(ParentTermsResolverInterface $resolver, array ...$terms): bool
     {
+        if (!$terms) {
+            return false;
+        }
+
         $newTermsByTaxonomy = [];
         foreach ($terms as $term) {
             $newTermsByTaxonomy[$term[1]][$term[0]] = $term[0];

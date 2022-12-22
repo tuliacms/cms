@@ -34,5 +34,11 @@
                 <cascade-remove/>
             </cascade>
         </one-to-many>
+        <one-to-many field="terms" orphan-removal="true" target-entity="Tulia\Cms\Node\Domain\WriteModel\Model\Term" mapped-by="node">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
     </entity>
 </doctrine-mapping>

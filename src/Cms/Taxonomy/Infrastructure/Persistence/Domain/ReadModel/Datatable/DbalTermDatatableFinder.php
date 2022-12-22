@@ -57,7 +57,7 @@ class DbalTermDatatableFinder extends AbstractDatatableFinder implements TermDat
     {
         $queryBuilder
             ->from('#__taxonomy_term', 'tm')
-            ->addSelect('t.type, tm.level, BIN_TO_UUID(tm.parent_id) AS parent_id, tl.translated')
+            ->addSelect('t.type, tm.level, BIN_TO_UUID(tm.parent_id) AS parent_id, tl.translated, tm.is_root')
             ->innerJoin('tm', '#__taxonomy_term_translation', 'tl', 'tm.id = tl.term_id AND tl.locale = :locale')
             ->innerJoin('tm', '#__taxonomy', 't', 't.type = :type AND t.id = tm.taxonomy_id')
             ->setParameter('type', $context['taxonomyType'], PDO::PARAM_STR)
@@ -71,7 +71,11 @@ class DbalTermDatatableFinder extends AbstractDatatableFinder implements TermDat
 
     public function prepareResult(array $result): array
     {
-        return $this->sort($result);
+        if (empty($result)) {
+            return $result;
+        }
+
+        return $this->sort($result, $this->findRootId($result));
     }
 
     public function buildActions(FinderContext $context, array $row): array
@@ -82,7 +86,7 @@ class DbalTermDatatableFinder extends AbstractDatatableFinder implements TermDat
         ];
     }
 
-    private function sort(array $items, int $level = 1, string $parent = Term::ROOT_ID): array
+    private function sort(array $items, string $parent, int $level = 1): array
     {
         $result = [];
 
@@ -90,7 +94,7 @@ class DbalTermDatatableFinder extends AbstractDatatableFinder implements TermDat
             $item['level'] = (int) $item['level'];
             if ($item['level'] === $level && $item['parent_id'] === $parent) {
                 $result[] = [$item];
-                $result[] = $this->sort($items, $level + 1, $item['id']);
+                $result[] = $this->sort($items, $item['id'], $level + 1);
             }
         }
 
@@ -99,5 +103,16 @@ class DbalTermDatatableFinder extends AbstractDatatableFinder implements TermDat
         }
 
         return array_merge(...$result);
+    }
+
+    private function findRootId(array $result): string
+    {
+        foreach ($result as $row) {
+            if ($row['is_root']) {
+                return $row['id'];
+            }
+        }
+
+        throw new \Exception('Cannot find Root item. I think the Root item does not exists in database for this menu.');
     }
 }

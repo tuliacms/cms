@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Application\UseCase;
 
+use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Cms\Node\Domain\WriteModel\Rules\CanAddPurpose\CanImposePurposeInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodeRepositoryInterface;
+use Tulia\Cms\Node\Domain\WriteModel\Service\ParentTermsResolverInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Service\ShortcodeProcessorInterface;
 use Tulia\Cms\Shared\Application\UseCase\AbstractTransactionalUseCase;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
@@ -25,6 +27,8 @@ abstract class AbstractNodeUseCase extends AbstractTransactionalUseCase
         protected readonly CanImposePurposeInterface $canImposePurpose,
         protected readonly SlugGeneratorStrategyInterface $slugGeneratorStrategy,
         protected readonly ShortcodeProcessorInterface $processor,
+        protected readonly ContentTypeRegistryInterface $contentTypeRegistry,
+        protected readonly ParentTermsResolverInterface $parentTermsResolver,
     ) {
     }
 
@@ -47,6 +51,10 @@ abstract class AbstractNodeUseCase extends AbstractTransactionalUseCase
         } else {*/
         $node->moveAsRootNode();
         //}
+
+        $attributes = $this->processAttributes($attributes);
+
+        $node->persistTermsAssignations($this->parentTermsResolver, ...$this->collectTaxonomiesTerms($node->getNodeType(), $attributes));
 
         $node->persistAttributes($request->locale, $request->defaultLocale, $this->processAttributes($attributes));
         $node->changeTitle($request->locale, $request->defaultLocale, $this->slugGeneratorStrategy, $details['title'], $details['slug']);
@@ -71,5 +79,30 @@ abstract class AbstractNodeUseCase extends AbstractTransactionalUseCase
         }
 
         return $attributes;
+    }
+
+    /**
+     * @param Attribute[] $attributes
+     */
+    private function collectTaxonomiesTerms(string $nodeType, array $attributes): array
+    {
+        $contentType = $this->contentTypeRegistry->get($nodeType);
+        $result = [];
+
+        foreach ($contentType->getFields() as $field) {
+            if ($field->getType() !== 'taxonomy') {
+                continue;
+            }
+
+            $taxonomy = $field->getConfig('taxonomy');
+
+            $terms = iterator_to_array($attributes[$field->getCode()]->getValue());
+
+            foreach ($terms as $term) {
+                $result[] = [$term, $taxonomy];
+            }
+        }
+
+        return $result;
     }
 }

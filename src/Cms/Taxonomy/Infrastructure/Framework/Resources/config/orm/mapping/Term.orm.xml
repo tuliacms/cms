@@ -5,7 +5,8 @@
 
     <entity name="Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term" table="#__taxonomy_term">
         <id name="id" type="uuid">
-            <generator strategy="NONE"/>
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
 
         <field name="position" type="integer" />
