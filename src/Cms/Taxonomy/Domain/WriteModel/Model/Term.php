@@ -14,9 +14,9 @@ use Tulia\Cms\Taxonomy\Domain\WriteModel\Exception\TermNotFoundException;
  */
 class Term
 {
-    public const ROOT_ID = '00000000-0000-0000-0000-000000000000';
     public const ROOT_LEVEL = 0;
 
+    private string $id;
     private int $position = 0;
     private int $level = 0;
     /** @var ArrayCollection<int, TermTranslation> */
@@ -25,17 +25,24 @@ class Term
     private Collection $terms;
 
     private function __construct(
-        private string $id,
-        private bool $isRoot = false,
+        ?string $id,
         private ?Taxonomy $taxonomy,
+        private bool $isRoot = false,
         private ?Term $parent = null,
     ) {
+        if (!$this->isRoot) {
+            $this->id = $id;
+        }
+
         $this->terms = new ArrayCollection();
     }
 
-    public static function createRoot(Taxonomy $taxonomy, array $locales, string $creatingLocale): self
-    {
-        $self = new self(self::ROOT_ID, true, $taxonomy);
+    public static function createRoot(
+        Taxonomy $taxonomy,
+        array $locales,
+        string $creatingLocale,
+    ): self {
+        $self = new self(null, $taxonomy, true);
 
         $translations = [];
 
@@ -59,7 +66,7 @@ class Term
         string $websiteId,
         ?Term $parent = null,
     ): self {
-        $self = new self($id, false, $taxonomy, $parent);
+        $self = new self($id, $taxonomy, false, $parent);
         $self->level = $self->parent
             ? $self->parent->level + 1
             : 0;
@@ -79,6 +86,11 @@ class Term
     public function getId(): string
     {
         return $this->id;
+    }
+
+    public function isRoot(): bool
+    {
+        return $this->isRoot;
     }
 
     public function detach(): void

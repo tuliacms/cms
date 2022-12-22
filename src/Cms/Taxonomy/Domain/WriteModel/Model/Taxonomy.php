@@ -63,7 +63,7 @@ class Taxonomy extends AbstractAggregateRoot
         if ($parent) {
             $parentTerm = $this->getTerm($parent);
         } else {
-            $parentTerm = $this->getTerm(Term::ROOT_ID);
+            $parentTerm = $this->getRootTerm();
         }
 
         $term = Term::create($slugGeneratorStrategy, $id, $this, $name, $slug, $locales, $locale, $this->websiteId, parent: $parentTerm);
@@ -106,7 +106,7 @@ class Taxonomy extends AbstractAggregateRoot
     public function deleteTerm(string $id): void
     {
         foreach ($this->terms as $term) {
-            if ($term->getId() === $id) {
+            if (!$term->isRoot() && $term->getId() === $id) {
                 $this->terms->removeElement($term);
                 $term->detach();
                 $this->recordThat(new TermDeleted($term->getId(), $this->type, $this->websiteId));
@@ -117,11 +117,22 @@ class Taxonomy extends AbstractAggregateRoot
     private function getTerm(string $parent): Term
     {
         foreach ($this->terms as $term) {
-            if ($term->getId() === $parent) {
+            if (!$term->isRoot() && $term->getId() === $parent) {
                 return $term;
             }
         }
 
         throw TermNotFoundException::fromId($parent);
+    }
+
+    private function getRootTerm(): Term
+    {
+        foreach ($this->terms as $term) {
+            if ($term->isRoot()) {
+                return $term;
+            }
+        }
+
+        throw TermNotFoundException::fromName('root');
     }
 }

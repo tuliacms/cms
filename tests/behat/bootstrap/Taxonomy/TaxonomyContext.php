@@ -147,7 +147,7 @@ final class TaxonomyContext implements Context
      */
     public function iUpdateTermWithNewName(string $term, string $newName): void
     {
-        $this->taxonomy->updateTerm($term, $this->locale, $newName, $this->defaultLocale);
+        $this->taxonomy->updateTerm($this->slugGeneratorStrategy, $term, $this->locale, $newName, null, $this->defaultLocale);
     }
 
     /**
@@ -175,7 +175,7 @@ final class TaxonomyContext implements Context
      */
     public function iUpdateTermWithNewNameInLocale(string $term, string $newName, string $locale): void
     {
-        $this->taxonomy->updateTerm($term, $locale, $newName, $this->defaultLocale);
+        $this->taxonomy->updateTerm($this->slugGeneratorStrategy, $term, $locale, $newName, null, $this->defaultLocale);
     }
 
     /**
@@ -196,7 +196,7 @@ final class TaxonomyContext implements Context
      */
     public function thisTermIsTranslatedToWithName(string $locale, string $name): void
     {
-        $this->taxonomy->updateTerm($this->term, $locale, $name, $this->defaultLocale);
+        $this->taxonomy->updateTerm($this->slugGeneratorStrategy, $this->term, $locale, $name, null, $this->defaultLocale);
         $this->taxonomy->collectDomainEvents();
     }
 
