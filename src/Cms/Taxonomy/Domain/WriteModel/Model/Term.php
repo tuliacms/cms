@@ -22,7 +22,7 @@ class Term
     /** @var ArrayCollection<int, TermTranslation> */
     private Collection $translations;
     /** @var ArrayCollection<int, Term> */
-    private Collection $terms;
+    public Collection $terms;
 
     private function __construct(
         ?string $id,
@@ -132,5 +132,15 @@ class Term
         }
 
         throw TermNotFoundException::fromId($this->id);
+    }
+
+    public function moveToNewParent(Term $newParent): void
+    {
+        $oldParent = $this->parent;
+
+        $oldParent->terms->removeElement($this);
+        $newParent->terms->add($this);
+
+        $this->parent = $newParent;
     }
 }

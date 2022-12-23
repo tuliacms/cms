@@ -13,11 +13,11 @@ class TermNotFoundException extends AbstractDomainException
 {
     public static function fromId(string $id): self
     {
-        return new self(sprintf('Term %s does not exists.', $id));
+        return new self(sprintf('Term "%s" does not exists.', $id));
     }
 
     public static function fromName(string $name): self
     {
-        return new self(sprintf('Term %s does not exists.', $name));
+        return new self(sprintf('Term "%s" does not exists.', $name));
     }
 }

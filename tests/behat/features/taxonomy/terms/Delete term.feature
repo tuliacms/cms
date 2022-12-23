@@ -2,7 +2,7 @@ Feature: Delete term
 
     Scenario: I can delete term
         Given there is a taxonomy "category"
-        And there is a term "My term"
+        And which has term "My term"
         When I delete term "My term"
         Then term "My term" should be deleted
 

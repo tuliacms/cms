@@ -10,6 +10,7 @@ use Tulia\Cms\Shared\Domain\WriteModel\Model\AbstractAggregateRoot;
 use Tulia\Cms\Shared\Domain\WriteModel\Service\SlugGeneratorStrategy\SlugGeneratorStrategyInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermCreated;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermDeleted;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermsHierarchyChanged;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermTranslated;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermUpdated;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Exception\TermNotFoundException;
@@ -103,6 +104,43 @@ class Taxonomy extends AbstractAggregateRoot
         }
     }
 
+    public function moveTermAsChildOf(string $childId, string $parentId): void
+    {
+        $this->getTerm($childId)->moveToNewParent($this->getTerm($parentId));
+
+        $this->recordThat(new TermsHierarchyChanged($this->type, $this->websiteId, $this->collectTermsHierarchy()));
+    }
+
+    public function updateHierarchy(array $hierarchy): void
+    {
+        $root = $this->getRootTerm();
+        $rebuildedHierarchy = [];
+
+        foreach ($hierarchy as $child => $parentId) {
+            $rebuildedHierarchy[$parentId ?: $root->getId()][] = $child;
+        }
+
+        // Reset all elements to be sure, when some of terms are not in new hierarchy,
+        // those will be moved as roots.
+        /** @var Term $term */
+        foreach ($this->terms->toArray() as $term) {
+            if (false === $term->isRoot()) {
+                $term->moveToNewParent($root);
+            }
+        }
+
+        foreach ($rebuildedHierarchy as $parentId => $items) {
+            foreach ($items as $level => $id) {
+                $this->getTerm($id)->moveToNewParent($this->getTerm($parentId));
+                /*$this->moveToParent($item, $this->getItem($parentId));
+                $item->moveToPosition($level + 1);
+                $this->detectParentReccurency($item);*/
+            }
+        }
+
+        $this->recordThat(new TermsHierarchyChanged($this->type, $this->websiteId, $this->collectTermsHierarchy()));
+    }
+
     public function deleteTerm(string $id): void
     {
         foreach ($this->terms as $term) {
@@ -134,5 +172,24 @@ class Taxonomy extends AbstractAggregateRoot
         }
 
         throw TermNotFoundException::fromName('root');
+    }
+
+    private function collectTermsHierarchy(): array
+    {
+        $hierarchy = [];
+
+        foreach ($this->terms->toArray() as $term) {
+            if ($term->isRoot()) {
+                continue;
+            }
+
+            $hierarchy[$term->getId()] = [];
+
+            foreach ($term->terms->toArray() as $child) {
+                $hierarchy[$term->getId()][] = $child->getId();
+            }
+        }
+
+        return $hierarchy;
     }
 }

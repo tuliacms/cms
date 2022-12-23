@@ -9,6 +9,7 @@ use Behat\Behat\Tester\Exception\PendingException;
 use Tulia\Cms\Shared\Domain\WriteModel\Service\SlugGeneratorStrategy\SlugGeneratorStrategyInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermCreated;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermDeleted;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermsHierarchyChanged;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermTranslated;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermUpdated;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Taxonomy;
@@ -21,11 +22,9 @@ use Tulia\Cms\Tests\Helper\TestDoubles\Shared\Domain\WriteModel\Service\SlugGene
  */
 final class TaxonomyContext implements Context
 {
-    private const WEBSITE_ID = 'a6eb5605-b37f-4c02-b684-9bc6614df31c';
-    private Taxonomy $taxonomy;
-    private AggregateRootSpy $taxonomySpy;
+    use TaxonomyBuildableTrait;
+
     private SlugGeneratorStrategyInterface $slugGeneratorStrategy;
-    private array $locales = ['en_US'];
     private string $locale = 'en_US';
     private string $defaultLocale = 'en_US';
     private string $term;
@@ -33,15 +32,6 @@ final class TaxonomyContext implements Context
     public function __construct()
     {
         $this->slugGeneratorStrategy = new PassthroughSluggeneratorStrategy();
-    }
-
-    /**
-     * @Given there is a taxonomy :type
-     */
-    public function thereIsATaxonomy(string $type): void
-    {
-        $this->taxonomy = Taxonomy::create($type, self::WEBSITE_ID, $this->locales, $this->locale);
-        $this->taxonomySpy = new AggregateRootSpy($this->taxonomy);
     }
 
     /**
@@ -78,8 +68,6 @@ final class TaxonomyContext implements Context
     public function thereIsATerm(string $term): void
     {
         $this->term = $term;
-        $this->taxonomy->addTerm($this->slugGeneratorStrategy, $term, $term, $term, $this->locales, $this->locale, $this->defaultLocale);
-        $this->taxonomy->collectDomainEvents();
     }
 
     /**
@@ -163,14 +151,6 @@ final class TaxonomyContext implements Context
     }
 
     /**
-     * @Given there are available locales :locales
-     */
-    public function thereAreAvailableLocales(string $locales): void
-    {
-        $this->locales = explode(',', $locales);
-    }
-
-    /**
      * @When I update term :term with new name :newName, in :locale locale
      */
     public function iUpdateTermWithNewNameInLocale(string $term, string $newName, string $locale): void
@@ -192,15 +172,6 @@ final class TaxonomyContext implements Context
     }
 
     /**
-     * @Given this term is translated to :locale with name :name
-     */
-    public function thisTermIsTranslatedToWithName(string $locale, string $name): void
-    {
-        $this->taxonomy->updateTerm($this->slugGeneratorStrategy, $this->term, $locale, $name, null, $this->defaultLocale);
-        $this->taxonomy->collectDomainEvents();
-    }
-
-    /**
      * @Then term :locale should not be translated
      */
     public function termShouldNotBeTranslated(string $locale): void
@@ -208,5 +179,53 @@ final class TaxonomyContext implements Context
         $event = $this->taxonomySpy->findEvent(TermTranslated::class);
 
         Assert::assertNull($event, 'Term should be not translated');
+    }
+
+    /**
+     * @When I move term :term as child of :parent
+     */
+    public function iMoveTermAsChildOf(string $term, string $parent): void
+    {
+        $this->taxonomy->moveTermAsChildOf($term, $parent);
+    }
+
+    /**
+     * @Then term :term should be moved as child of :parent
+     */
+    public function termShouldBeMovedAsChildOf(string $term, string $parent): void
+    {
+        /** @var TermsHierarchyChanged $event */
+        $event = $this->taxonomySpy->findEvent(TermsHierarchyChanged::class);
+
+        Assert::assertInstanceOf(TermsHierarchyChanged::class, $event, 'Terms hierarchy should be changed');
+        Assert::assertTrue($event->isChildOf($term, $parent));
+    }
+
+    /**
+     * @Then term :term should be a root
+     */
+    public function termShouldBeARoot(string $term): void
+    {
+        /** @var TermsHierarchyChanged $event */
+        $event = $this->taxonomySpy->findEvent(TermsHierarchyChanged::class);
+
+        Assert::assertInstanceOf(TermsHierarchyChanged::class, $event, 'Terms hierarchy should be changed');
+        Assert::assertTrue($event->isRoot($term));
+    }
+
+    /**
+     * @When I update terms hierarchy as the following :hierarchy
+     */
+    public function iUpdateTermsHierarchyAsTheFollowing(string $hierarchy): void
+    {
+        $parsedHierarchy = [];
+
+        foreach (explode(';', $hierarchy) as $pair) {
+            [$parent, $child] = explode(':', $pair);
+
+            $parsedHierarchy[$child] = $parent;
+        }
+
+        $this->taxonomy->updateHierarchy($parsedHierarchy);
     }
 }

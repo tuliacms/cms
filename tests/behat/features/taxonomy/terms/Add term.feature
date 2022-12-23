@@ -8,7 +8,7 @@ Feature: Add term
 
     Scenario: I can add term as child of another term
         Given there is a taxonomy "category"
-        And there is a term "Parent term"
+        And which has term "Parent term"
         When I add new term "My term" to this taxonomy, as child of "Parent term"
         Then new term "My term" should be added
         And new term should be child of "Parent term"

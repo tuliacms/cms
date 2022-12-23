@@ -6,8 +6,6 @@ namespace Tulia\Cms\Tests\Helper\ObjectMother;
 
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Cms\Node\Domain\WriteModel\Service\ParentTermsResolverInterface;
-use Tulia\Cms\Website\Domain\WriteModel\Model\Website;
-use Tulia\Cms\Website\Domain\WriteModel\Rules\CanAddLocale\CanAddLocale;
 
 /**
  * @author Adam Banaszkiewicz
