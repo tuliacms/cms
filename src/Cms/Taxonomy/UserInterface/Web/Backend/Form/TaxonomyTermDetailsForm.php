@@ -13,13 +13,16 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormType\AttributesAwareFormTypeTrait;
 use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormType\AttributesType;
+use Tulia\Cms\Taxonomy\UserInterface\Web\Shared\Form\FormType\TaxonomyTypeaheadType;
 
 /**
  * @author Adam Banaszkiewicz
  */
 final class TaxonomyTermDetailsForm extends AbstractType
 {
-    use AttributesAwareFormTypeTrait;
+    use AttributesAwareFormTypeTrait {
+        AttributesAwareFormTypeTrait::configureOptions as traitsConfigureOptions;
+    }
 
     public function __construct(
         private readonly ContentTypeRegistryInterface $contentTypeRegistry,
@@ -28,6 +31,8 @@ final class TaxonomyTermDetailsForm extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $contentType = $this->contentTypeRegistry->get($options['content_type']);
+
         $builder->add('id', HiddenType::class);
         $builder->add('name', TextType::class, [
             'label' => 'name',
@@ -41,10 +46,27 @@ final class TaxonomyTermDetailsForm extends AbstractType
             'content_type' => $options['content_type'],
         ]);
 
-        if ($this->contentTypeRegistry->get($options['content_type'])->isRoutable()) {
+        if ($contentType->isRoutable()) {
             $builder->add('slug', TextType::class, [
                 'label' => 'slug'
             ]);
         }
+        if ($options['form_mode'] === 'create' && $contentType->isHierarchical()) {
+            $builder->add('parent', TaxonomyTypeaheadType::class, [
+                'label' => 'parentTerm',
+                'taxonomy_type' => $options['content_type'],
+                'search_route_params' => [
+                    'taxonomy_type' => $options['content_type'],
+                ],
+            ]);
+        }
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $this->traitsConfigureOptions($resolver);
+
+        $resolver->setRequired('form_mode');
+        $resolver->setAllowedTypes('form_mode', 'string');
     }
 }

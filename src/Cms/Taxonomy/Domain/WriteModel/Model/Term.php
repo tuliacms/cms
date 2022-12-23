@@ -79,6 +79,7 @@ class Term
         }
 
         $self->translations = new ArrayCollection($translations);
+        $self->position = $self->parent->calculateNextPosition();
 
         return $self;
     }
@@ -142,5 +143,23 @@ class Term
         $newParent->terms->add($this);
 
         $this->parent = $newParent;
+        $this->level = $this->parent->level + 1;
+        $this->position = $this->parent->calculateNextPosition();
+    }
+
+    public function moveToPosition(int $position): void
+    {
+        $this->position = $position;
+    }
+
+    private function calculateNextPosition(): int
+    {
+        $positions = [];
+
+        foreach ($this->terms->toArray() as $term) {
+            $positions[] = $term->position;
+        }
+
+        return max($positions) + 1;
     }
 }

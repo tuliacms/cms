@@ -11,7 +11,7 @@ use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Taxonomy;
  */
 interface TaxonomyRepositoryInterface
 {
-    public function get(string $type, string $websiteId, array $locales, string $locale): Taxonomy;
+    public function get(string $type, string $websiteId): Taxonomy;
 
     public function save(Taxonomy $taxonomy): void;
 

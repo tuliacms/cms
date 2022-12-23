@@ -5,11 +5,16 @@
                 <div class="col">
                     {{ form_row(form.name) }}
                 </div>
-                {% if form.slug is defined %}
+                {% if form.slug %}
                     <div class="col">
                         {{ form_row(form.slug) }}
                     </div>
                 {% endif %}
+                <div class="col-12">
+                    {% if form.parent %}
+                        {{ form_row(form.parent) }}
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>

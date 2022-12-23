@@ -8,6 +8,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Exception\TaxonomyNotExistsException;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Taxonomy;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Service\TaxonomyRepositoryInterface;
 
@@ -23,12 +24,12 @@ class DoctrineTaxonomyRepository extends ServiceEntityRepository implements Taxo
         parent::__construct($registry, Taxonomy::class);
     }
 
-    public function get(string $type, string $websiteId, array $locales, string $locale): Taxonomy
+    public function get(string $type, string $websiteId): Taxonomy
     {
-        $taxonomy = $this->findOneByType($type);
+        $taxonomy = $this->findOneBy(['type' => $type, 'websiteId' => $websiteId]);
 
         if (!$taxonomy) {
-            $taxonomy = Taxonomy::create($type, $websiteId, $locales, $locale);
+            throw TaxonomyNotExistsException::fromType($type);
         }
 
         return $taxonomy;

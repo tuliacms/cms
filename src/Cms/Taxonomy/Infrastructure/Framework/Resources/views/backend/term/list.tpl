@@ -24,7 +24,9 @@
                         <a class="dropdown-item dropdown-item-with-icon" href="{{ path('backend.settings', { group: 'taxonomy.' ~ taxonomyType.code }) }}"><i class="dropdown-icon fas fa-cogs"></i> {{ 'settings'|trans }}</a>
                     </div>
                 </div>#}
-                <a href="{{ path('backend.term.hierarchy', { taxonomyType: taxonomyType.code }) }}" class="btn btn-secondary btn-icon-only" title="{{ 'hierarchy'|trans({}, 'taxonomy') }}" data-bs-toggle="tooltip"><i class="btn-icon fas fa-sitemap"></i></a>
+                {% if taxonomyType.isHierarchical %}
+                    <a href="{{ path('backend.term.hierarchy', { taxonomyType: taxonomyType.code }) }}" class="btn btn-secondary btn-icon-only" title="{{ 'hierarchy'|trans({}, 'taxonomy') }}" data-bs-toggle="tooltip"><i class="btn-icon fas fa-sitemap"></i></a>
+                {% endif %}
                 <a href="{{ path('backend.term.create', { taxonomyType: taxonomyType.code }) }}" class="btn btn-success btn-icon-left"><i class="btn-icon fas fa-plus"></i> {{ 'create'|trans }}</a>
             </div>
             <i class="pane-header-icon fas fa-file-powerpoint"></i>

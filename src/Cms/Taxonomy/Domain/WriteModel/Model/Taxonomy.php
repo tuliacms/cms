@@ -88,6 +88,10 @@ class Taxonomy extends AbstractAggregateRoot
     ): void {
         $term = $this->getTerm($id);
 
+        if ($term->isRoot()) {
+            throw new \LogicException('Cannot update root term.');
+        }
+
         if ($attributes !== []) {
             $term->persistAttributes($locale, $defaultLocale, $attributes);
         }
@@ -130,11 +134,16 @@ class Taxonomy extends AbstractAggregateRoot
         }
 
         foreach ($rebuildedHierarchy as $parentId => $items) {
-            foreach ($items as $level => $id) {
-                $this->getTerm($id)->moveToNewParent($this->getTerm($parentId));
-                /*$this->moveToParent($item, $this->getItem($parentId));
-                $item->moveToPosition($level + 1);
-                $this->detectParentReccurency($item);*/
+            foreach ($items as $position => $id) {
+                // We dont want to move a root element
+                if ($root->getId() === $id) {
+                    continue;
+                }
+
+                $term = $this->getTerm($id);
+                $term->moveToNewParent($this->getTerm($parentId));
+                $term->moveToPosition($position + 1);
+                $this->detectParentReccurency($term);
             }
         }
 
@@ -152,15 +161,15 @@ class Taxonomy extends AbstractAggregateRoot
         }
     }
 
-    private function getTerm(string $parent): Term
+    private function getTerm(string $id): Term
     {
         foreach ($this->terms as $term) {
-            if (!$term->isRoot() && $term->getId() === $parent) {
+            if ($term->getId() === $id) {
                 return $term;
             }
         }
 
-        throw TermNotFoundException::fromId($parent);
+        throw TermNotFoundException::fromId($id);
     }
 
     private function getRootTerm(): Term
@@ -191,5 +200,13 @@ class Taxonomy extends AbstractAggregateRoot
         }
 
         return $hierarchy;
+    }
+
+    /**
+     * @throws ParentItemReccurencyException
+     */
+    private function detectParentReccurency(Term $term): void
+    {
+        // @todo Implement recurrency detection.
     }
 }

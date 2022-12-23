@@ -52,15 +52,8 @@ class Term extends AbstractController
      */
     public function list(Request $request, string $taxonomyType, WebsiteInterface $website)
     {
-        $taxonomy = $this->repository->get(
-            $taxonomyType,
-            $website->getId(),
-            $website->getLocaleCodes(),
-            $website->getLocale()->getCode(),
-        );
-
         return $this->view('@backend/taxonomy/term/list.tpl', [
-            'taxonomyType' => $this->typeRegistry->get($taxonomy->getType()),
+            'taxonomyType' => $this->typeRegistry->get($taxonomyType),
             'datatable' => $this->factory->create($this->finder, $request)->generateFront([
                 'taxonomyType' => $taxonomyType,
                 'website' => $website
@@ -92,28 +85,21 @@ class Term extends AbstractController
             return $this->redirectToRoute('backend.term.create', ['taxonomyType' => $taxonomyType, '_locale' => $website->getDefaultLocale()->getCode()]);
         }
 
-        $taxonomy = $this->repository->get(
-            $taxonomyType,
-            $website->getId(),
-            $website->getLocaleCodes(),
-            $website->getLocale()->getCode(),
-        );
-
         $form = $this->createForm(
             TaxonomyTermDetailsForm::class,
             [],
             [
                 'partial_view' => '@backend/taxonomy/term/parts/content-type-term-details.tpl',
                 'website' => $website,
-                'content_type' => $taxonomy->getType(),
+                'content_type' => $taxonomyType,
+                'form_mode' => 'create',
             ]
         );
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var IdResult $result */
-            $result = ($createTerm)(new CreateTermRequest(
-                $taxonomy->getType(),
+            ($createTerm)(new CreateTermRequest(
+                $taxonomyType,
                 $extractor->extractData($form, $taxonomyType),
                 $website->getId(),
                 $website->getLocale()->getCode(),
@@ -122,12 +108,12 @@ class Term extends AbstractController
             ));
 
             $this->addFlash('success', $this->trans('termSaved', [], 'taxonomy'));
-            return $this->redirectToRoute('backend.term.edit', [ 'id' => $result->id, 'taxonomyType' => $taxonomy->getType() ]);
+            return $this->redirectToRoute('backend.term', [ 'taxonomyType' => $taxonomyType ]);
         }
 
         return $this->view('@backend/taxonomy/term/create.tpl', [
             'form' => $form->createView(),
-            'taxonomyType' => $taxonomy->getType(),
+            'taxonomyType' => $taxonomyType,
         ]);
     }
 
@@ -165,6 +151,7 @@ class Term extends AbstractController
                 'partial_view' => '@backend/taxonomy/term/parts/content-type-term-details.tpl',
                 'website' => $website,
                 'content_type' => $taxonomy->getType(),
+                'form_mode' => 'edit',
             ]
         );
         $form->handleRequest($request);
