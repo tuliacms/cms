@@ -61,7 +61,7 @@ final class ContentTypeRouter implements RouterInterface, RequestMatcherInterfac
 
     public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string
     {
-        preg_match('#^frontend\.([a-z0-9_]+)\.([a-z0-9_]+)\.([0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12})$#', $name, $matches);
+        preg_match('#^frontend\.(?<type>[a-z0-9_]+)\.(?<code>[a-z0-9_]+)\.(?<id>[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12})$#', $name, $matches);
 
         if (count($matches) !== 4) {
             return '';
@@ -70,7 +70,7 @@ final class ContentTypeRouter implements RouterInterface, RequestMatcherInterfac
         $parameters['_locale'] = $this->context->getParameter('_locale');
         $parameters['_website'] = $this->context->getParameter('_website');
 
-        $path = $this->contentTypeRouter->generate($matches[2], $matches[3], $parameters);
+        $path = $this->contentTypeRouter->generate($matches['code'], $matches['id'], $parameters);
 
         return $this->frontendRouteSuffixResolver->appendSuffix($path);
     }

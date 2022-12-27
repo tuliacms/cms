@@ -201,7 +201,8 @@ class DbalQuery extends AbstractDbalQuery
             ->innerJoin('tm', '#__taxonomy', 'tt', 'tt.id = tm.taxonomy_id AND tt.website_id = :tt_website_id')
             ->innerJoin('tm', '#__taxonomy_term_translation', 'tl', 'tm.id = tl.term_id AND tl.locale = :tl_locale')
             ->setParameter('tt_website_id', Uuid::fromString($criteria['website_id'])->toBinary(), PDO::PARAM_STR)
-            ->setParameter('tl_locale', $criteria['locale'], PDO::PARAM_STR);
+            ->setParameter('tl_locale', $criteria['locale'], PDO::PARAM_STR)
+            ->andWhere('tm.is_root = 0');
     }
 
     protected function searchById(array $criteria): void

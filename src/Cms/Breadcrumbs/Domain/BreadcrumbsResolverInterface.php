@@ -12,16 +12,7 @@ use Tulia\Cms\Platform\Shared\Breadcrumbs\BreadcrumbsInterface;
  */
 interface BreadcrumbsResolverInterface
 {
-    /**
-     * Based on Request, resolver finds a root crumb. That means this is a current page
-     * crumb, ie. node, term etc. Returning this crumb identity starts
-     * breadcrumbs generating process. If resolver
-     *
-     * @param Request $request
-     *
-     * @return object|null
-     */
-    public function findRootCrumb(Request $request): ?Crumb;
-    public function fillBreadcrumbs(Crumb $crumb, BreadcrumbsInterface $breadcrumbs): ?Crumb;
-    public function supports(Crumb $crumb): bool;
+    public function findRootIdentity(Request $request): ?string;
+    public function fillBreadcrumbs(string $identity, string $websiteId, string $locale, BreadcrumbsInterface $breadcrumbs): ?string;
+    public function supports(string $identity): bool;
 }

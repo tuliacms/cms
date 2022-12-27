@@ -20,48 +20,48 @@ class BreadcrumbsGenerator implements BreadcrumbsGeneratorInterface
 
     public function generateFromRequest(Request $request): BreadcrumbsInterface
     {
-        $root = null;
+        $identity = null;
 
         foreach ($this->registry->all() as $resolver) {
-            if ($root = $resolver->findRootCrumb($request)) {
+            if ($identity = $resolver->findRootIdentity($request)) {
                 break;
             }
         }
 
-        if (!$root) {
+        if (!$identity) {
             return new Breadcrumbs();
         }
 
-        return $this->generateFromIdentity($root);
+        return $this->generateFromIdentity($identity, $request->attributes->get('_website'), $request->attributes->get('_locale'));
     }
 
-    public function generateFromIdentity(Crumb $crumb): BreadcrumbsInterface
+    private function generateFromIdentity(string $identity, string $websiteId, string $locale): BreadcrumbsInterface
     {
         $breadcrumbs = new Breadcrumbs();
-        $homepageAdded = $crumb->getCode() === 'frontend.homepage';
-        $parent = null;
-        $securityLooper = 10;
+        $homepageAdded = $identity === 'frontend.homepage';
+        $securityLooper = 20;
 
         do {
+            $parent = null;
             $resolverCalled = false;
 
             foreach ($this->registry->all() as $resolver) {
-                if ($resolver->supports($crumb) === false) {
+                if ($resolver->supports($identity) === false) {
                     continue;
                 }
 
-                $parent = $resolver->fillBreadcrumbs($crumb, $breadcrumbs);
+                $parent = $resolver->fillBreadcrumbs($identity, $websiteId, $locale, $breadcrumbs);
                 $resolverCalled = true;
             }
 
             if ($parent === null && $homepageAdded === false) {
-                $parent = new Crumb('frontend.homepage', []);
+                $parent = 'frontend.homepage';
                 $homepageAdded = true;
             }
 
-            $crumb = $parent;
+            $identity = $parent;
             $securityLooper--;
-        } while ($crumb && $resolverCalled && $securityLooper);
+        } while ($parent && $resolverCalled && $securityLooper);
 
         return $breadcrumbs;
     }

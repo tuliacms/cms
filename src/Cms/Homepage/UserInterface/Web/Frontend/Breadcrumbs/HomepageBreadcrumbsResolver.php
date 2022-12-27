@@ -9,28 +9,24 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Breadcrumbs\Domain\BreadcrumbsResolverInterface;
 use Tulia\Cms\Platform\Shared\Breadcrumbs\BreadcrumbsInterface;
-use Tulia\Cms\Breadcrumbs\Domain\Crumb;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class HomepageBreadcrumbsResolver implements BreadcrumbsResolverInterface
 {
-    protected TranslatorInterface $translator;
-    protected RouterInterface $router;
-
-    public function __construct(TranslatorInterface $translator, RouterInterface $router)
-    {
-        $this->translator = $translator;
-        $this->router = $router;
+    public function __construct(
+        private readonly TranslatorInterface $translator,
+        private readonly RouterInterface $router,
+    ) {
     }
 
-    public function findRootCrumb(Request $request): ?Crumb
+    public function findRootIdentity(Request $request): ?string
     {
         return null;
     }
 
-    public function fillBreadcrumbs(Crumb $crumb, BreadcrumbsInterface $breadcrumbs): ?Crumb
+    public function fillBreadcrumbs(string $identity, string $websiteId, string $locale, BreadcrumbsInterface $breadcrumbs): ?string
     {
         $breadcrumbs->unshift(
             $this->router->generate('frontend.homepage'),
@@ -40,8 +36,8 @@ class HomepageBreadcrumbsResolver implements BreadcrumbsResolverInterface
         return null;
     }
 
-    public function supports(Crumb $crumb): bool
+    public function supports(string $identity): bool
     {
-        return $crumb->getCode() === 'frontend.homepage';
+        return $identity === 'frontend.homepage';
     }
 }

@@ -36,7 +36,7 @@ CREATE TABLE `#__content_type` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `#__content_type` (`code`, `type`, `name`, `icon`, `controller`, `is_routable`, `is_hierarchical`, `routing_strategy`) VALUES
-('page', 'node', 'Page', 'fas fa-boxes', NULL, 1, 1, 'simple'),
+('page', 'node', 'Page', 'fas fa-boxes', NULL, 1, 0, 'simple'),
 ('category', 'taxonomy', 'Category', 'fas fa-folder', NULL, 1, 1, 'full-path');
 EOF);
         $this->addSql(<<<EOF

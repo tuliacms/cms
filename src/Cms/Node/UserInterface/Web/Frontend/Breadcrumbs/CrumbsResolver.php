@@ -7,13 +7,11 @@ namespace Tulia\Cms\Node\UserInterface\Web\Frontend\Breadcrumbs;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Breadcrumbs\Domain\BreadcrumbsResolverInterface;
-use Tulia\Cms\Breadcrumbs\Domain\Crumb;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum;
 use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
 use Tulia\Cms\Platform\Shared\Breadcrumbs\BreadcrumbsInterface;
-use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -24,11 +22,10 @@ class CrumbsResolver implements BreadcrumbsResolverInterface
         private readonly RouterInterface $router,
         private readonly ContentTypeRegistryInterface $contentTypeRegistry,
         private readonly NodeFinderInterface $nodeFinder,
-        private readonly TermFinderInterface $termFinder,
     ) {
     }
 
-    public function findRootCrumb(Request $request): ?Crumb
+    public function findRootIdentity(Request $request): ?string
     {
         $route = $request->attributes->get('_route');
         $node  = $request->attributes->get('node');
@@ -37,70 +34,92 @@ class CrumbsResolver implements BreadcrumbsResolverInterface
             return null;
         }
 
-        return strncmp($route, 'frontend.node.', 14) === 0
-            && $node instanceof Node
-            ? new Crumb($route, [ $this->generateRoute($node->getType(), $node->getId()) ], $node)
-            : null;
+        return $this->supports($route) && $node instanceof Node ? $route : null;
     }
 
-    public function fillBreadcrumbs(Crumb $crumb, BreadcrumbsInterface $breadcrumbs): ?Crumb
+    public function fillBreadcrumbs(string $identity, string $websiteId, string $locale, BreadcrumbsInterface $breadcrumbs): ?string
     {
-        /** @var Node $node */
-        $node = $crumb->getContext();
+        [, , $type, $id] = explode('.', $identity);
 
-        $breadcrumbs->unshift($this->router->generate($this->generateRoute($node->getType(), $node->getId())), $node->getTitle());
+        if ($this->contentTypeRegistry->has($type)) {
+            $type = $this->contentTypeRegistry->get($type);
 
-        if ($this->contentTypeRegistry->has($node->getType())) {
-            $type = $this->contentTypeRegistry->get($node->getType());
-
-            if ($type->isHierarchical() && $node->getParentId()) {
-                $this->resolveHierarchyCrumbs($node, $breadcrumbs);
-                // @todo Implement when node is in taxonomy
-            }/* elseif ($type->getRoutableTaxonomyField() && $node->getCategory()) {
-                return $this->termFinder->findOne(['id' => $node->getCategory()], TermFinderScopeEnum::BREADCRUMBS);
-            }*/
+            if ($type->isHierarchical()) {
+                $this->resolveHierarchyCrumbs($id, $websiteId, $locale, $breadcrumbs);
+            } else {
+                return $this->resolveCrumb($id, $websiteId, $locale, $breadcrumbs);
+            }
         }
 
         return null;
     }
 
-    public function supports(Crumb $crumb): bool
+    public function supports(string $identity): bool
     {
-        return $crumb->getContext() instanceof Node;
+        return strncmp($identity, 'frontend.node.', 14) === 0;
     }
 
-    private function resolveHierarchyCrumbs(Node $node, BreadcrumbsInterface $breadcrumbs): void
+    private function resolveHierarchyCrumbs(?string $nodeId, string $websiteId, string $locale, BreadcrumbsInterface $breadcrumbs): void
     {
-        $parentId = $node->getParentId();
         $nodes = [];
         $securityLooper = 10;
 
-        while ($parentId && $securityLooper) {
-            $parent = $this->nodeFinder->findOne(['id' => $parentId], NodeFinderScopeEnum::BREADCRUMBS);
+        while ($nodeId && $securityLooper) {
+            $node = $this->nodeFinder->findOne([
+                'id' => $nodeId,
+                'website_id' => $websiteId,
+                'locale' => $locale,
+            ], NodeFinderScopeEnum::BREADCRUMBS);
 
-            if ($parent) {
-                $nodes[]  = $parent;
-                $parentId = $parent->getParentId();
+            if ($node) {
+                $nodes[]  = $node;
+                $nodeId = $node->getParentId();
             } else {
-                $parentId = null;
+                $nodeId = null;
             }
 
             $securityLooper--;
         }
 
-        /** @var Node $parent */
-        foreach ($nodes as $parent) {
+        /** @var Node $node */
+        foreach ($nodes as $node) {
             $breadcrumbs->unshift(
-                $this->router->generate(
-                    $this->generateRoute($parent->getType(), $parent->getId())
-                ),
-                $parent->getTitle()
+                $this->generateRoute($node->getType(), $node->getId()),
+                $node->getTitle()
             );
         }
     }
 
+    private function resolveCrumb(
+        string $id,
+        string $websiteId,
+        string $locale,
+        BreadcrumbsInterface $breadcrumbs,
+    ): ?string {
+        $node = $this->nodeFinder->findOne([
+            'id' => $id,
+            'website_id' => $websiteId,
+            'locale' => $locale,
+        ], NodeFinderScopeEnum::BREADCRUMBS);
+
+        if (!$node) {
+            return null;
+        }
+
+        $breadcrumbs->unshift(
+            $this->generateRoute($node->getType(), $node->getId()),
+            $node->getTitle()
+        );
+
+        if ($node->getCategory()) {
+            return sprintf('frontend.taxonomy.%s.%s', 'category', $node->getCategory());
+        }
+
+        return null;
+    }
+
     private function generateRoute(string $type, string $id): string
     {
-        return sprintf('frontend.node.%s.%s', $type, $id);
+        return $this->router->generate(sprintf('frontend.node.%s.%s', $type, $id));
     }
 }

@@ -13,6 +13,4 @@ use Tulia\Cms\Platform\Shared\Breadcrumbs\BreadcrumbsInterface;
 interface BreadcrumbsGeneratorInterface
 {
     public function generateFromRequest(Request $request): BreadcrumbsInterface;
-
-    public function generateFromIdentity(Crumb $crumb): BreadcrumbsInterface;
 }

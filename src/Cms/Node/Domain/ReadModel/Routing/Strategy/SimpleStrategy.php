@@ -17,9 +17,9 @@ use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
 class SimpleStrategy implements ContentTypeRoutingStrategyInterface
 {
     public function __construct(
-        private NodeFinderInterface $nodeFinder,
-        private ContentTypeRegistryInterface $contentTypeRegistry,
-        private Router $contentTypeRouter,
+        private readonly NodeFinderInterface $nodeFinder,
+        private readonly ContentTypeRegistryInterface $contentTypeRegistry,
+        private readonly Router $contentTypeRouter,
     ) {
     }
 

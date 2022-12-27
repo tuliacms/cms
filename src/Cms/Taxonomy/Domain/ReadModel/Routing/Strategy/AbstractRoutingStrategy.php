@@ -65,7 +65,7 @@ abstract class AbstractRoutingStrategy implements ContentTypeRoutingStrategyInte
         return [
             'term' => $term,
             'slug' => $term->getSlug(),
-            '_route' => sprintf('frontend.term.%s.%s', 'category', $term->getId()),
+            '_route' => sprintf('frontend.taxonomy.%s.%s', 'category', $term->getId()),
             '_controller' => $termType->getController(),
         ];
     }

@@ -28,7 +28,7 @@ class FullPathStrategy extends AbstractRoutingStrategy
 
     public function collectVisibleTermsGrouppedByTaxonomy(string $websiteId, string $locale): array
     {
-        $terms = $this->storage->collectVisibleTermsGrouppedByTaxonomy($websiteId, $locale);
+        $terms = $this->storage->collectVisibleTerms($websiteId, $locale);
         $result = [];
 
         foreach ($terms as $key => $term) {

@@ -18,7 +18,7 @@ class DbalTermPathReadStorage implements TermPathReadStorageInterface
     ) {
     }
 
-    public function collectVisibleTermsGrouppedByTaxonomy(string $websiteId, string $locale): array
+    public function collectVisibleTerms(string $websiteId, string $locale): array
     {
         return $this->connection->fetchAllAssociative("
 WITH RECURSIVE tree_path (
