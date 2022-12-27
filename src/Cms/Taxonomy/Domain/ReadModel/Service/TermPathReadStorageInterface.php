@@ -11,7 +11,5 @@ interface TermPathReadStorageInterface
 {
     public function findTermToPathGeneration(string $termId, string $locale): array;
 
-    public function findPathByTermId(string $termId, string $locale): array;
-
-    public function findTermIdByPath(string $path, string $locale): ?string;
+    public function collectVisibleTermsGrouppedByTaxonomy(string $websiteId, string $locale): array;
 }

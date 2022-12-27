@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\Infrastructure\Persistence\Domain\ReadModel\Datatable;
+namespace Tulia\Cms\Taxonomy\Infrastructure\Persistence\Doctrine\Dbal\Datatable;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use PDO;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Service\Datatable\TermDatatableFinderInterface;
-use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
 use Tulia\Component\Datatable\Finder\FinderContext;
 

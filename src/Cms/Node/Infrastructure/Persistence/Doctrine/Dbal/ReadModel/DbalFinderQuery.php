@@ -94,7 +94,7 @@ class DbalFinderQuery extends AbstractDbalQuery
              * Search for nodes in specified category or categories.
              * @param null|string|array
              */
-            'category' =>  null,
+            'term' =>  null,
             /**
              * @param null|int
              */
@@ -148,7 +148,7 @@ class DbalFinderQuery extends AbstractDbalQuery
         $this->searchBySlug($criteria);
         $this->searchByTitle($criteria);
         $this->setDefaults($criteria);
-        $this->buildCategory($criteria);
+        $this->buildTerm($criteria);
         $this->buildTaxonomy($criteria);
         $this->buildNodeType($criteria);
         $this->buildNodeStatus($criteria);
@@ -313,21 +313,23 @@ class DbalFinderQuery extends AbstractDbalQuery
             ->setParameter('tl_title', '%' . $criteria['search'] . '%', PDO::PARAM_STR);
     }
 
-    protected function buildCategory(array $criteria): void
+    protected function buildTerm(array $criteria): void
     {
-        if (empty($criteria['category'])) {
+        if (empty($criteria['term'])) {
             return;
         }
 
-        if (\is_array($criteria['category']) === false) {
-            $criteria['category'] = [$criteria['category']];
+        if (\is_array($criteria['term']) === false) {
+            $criteria['term'] = [$criteria['term']];
         }
 
-        $this->joinTable('node_term_relationship');
+        $criteria['term'] = array_map(static fn ($v) => Uuid::fromString($v)->toBinary(), $criteria['term']);
+
+        $this->joinTable('node_in_term');
 
         $this->queryBuilder
-            ->andWhere('ttr.term_id IN (:ttr_category)')
-            ->setParameter('ttr_category', $criteria['category'], Connection::PARAM_STR_ARRAY);
+            ->andWhere('ttr.term IN (:ttr_term)')
+            ->setParameter('ttr_term', $criteria['term'], Connection::PARAM_STR_ARRAY);
     }
 
     protected function buildTaxonomy(array $criteria): void
@@ -468,8 +470,8 @@ class DbalFinderQuery extends AbstractDbalQuery
         }
 
         switch ($table) {
-            case 'node_term_relationship':
-                $this->queryBuilder->innerJoin('tm', '#__node_term_relationship', 'ttr', 'ttr.node_id = tm.id');
+            case 'node_in_term':
+                $this->queryBuilder->innerJoin('tm', '#__node_in_term', 'ttr', 'ttr.node_id = tm.id');
                 $this->joinedTables[$table] = true;
                 break;
         }

@@ -133,8 +133,6 @@ class Term extends AbstractController
         $taxonomy = $this->repository->get(
             $taxonomyType,
             $website->getId(),
-            $website->getLocaleCodes(),
-            $website->getLocale()->getCode(),
         );
 
         try {
@@ -164,7 +162,6 @@ class Term extends AbstractController
                 $website->getId(),
                 $website->getLocale()->getCode(),
                 $website->getDefaultLocale()->getCode(),
-                $website->getLocaleCodes(),
             ));
 
             $this->addFlash('success', $this->trans('termSaved', [], 'taxonomy'));
@@ -187,8 +184,6 @@ class Term extends AbstractController
         $taxonomy = $this->repository->get(
             $taxonomyType,
             $website->getId(),
-            $website->getLocaleCodes(),
-            $website->getLocale()->getCode(),
         );
 
         $removedTerms = 0;

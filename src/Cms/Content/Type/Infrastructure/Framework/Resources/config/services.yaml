@@ -26,3 +26,5 @@ services:
     Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface:
         class: Tulia\Cms\Content\Type\Infrastructure\Persistence\ContentProvider\CachedContentTypeRegistry
 
+    Tulia\Cms\Content\Type\Infrastructure\Framework\Routing\ContentTypeRouter:
+        tags: [ routing_chain.router ]

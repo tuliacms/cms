@@ -31,8 +31,6 @@ final class UpdateTerm extends AbstractTransactionalUseCase
         $taxonomy = $this->repository->get(
             $request->taxonomyType,
             $request->websiteId,
-            $request->locales,
-            $request->locale,
         );
 
         $taxonomy->updateTerm(

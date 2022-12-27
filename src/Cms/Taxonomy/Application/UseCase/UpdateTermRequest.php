@@ -18,7 +18,6 @@ final class UpdateTermRequest implements RequestInterface
         public readonly string $websiteId,
         public readonly string $locale,
         public readonly string $defaultLocale,
-        public readonly array $locales,
     ) {
     }
 }

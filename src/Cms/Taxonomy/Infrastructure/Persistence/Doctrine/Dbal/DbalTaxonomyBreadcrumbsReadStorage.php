@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\Infrastructure\Persistence\Domain\ReadModel;
+namespace Tulia\Cms\Taxonomy\Infrastructure\Persistence\Doctrine\Dbal;
 
 use Doctrine\DBAL\Connection;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Service\TaxonomyBreadcrumbsReadStorageInterface;
@@ -13,7 +13,7 @@ use Tulia\Cms\Taxonomy\Domain\ReadModel\Service\TaxonomyBreadcrumbsReadStorageIn
 class DbalTaxonomyBreadcrumbsReadStorage implements TaxonomyBreadcrumbsReadStorageInterface
 {
     public function __construct(
-        private Connection $connection
+        private readonly Connection $connection,
     ) {
     }
 

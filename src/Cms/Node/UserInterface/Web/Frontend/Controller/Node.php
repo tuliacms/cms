@@ -49,7 +49,7 @@ class Node extends AbstractController
             $node->getTitle(),
         );
 
-        $category = $this->findCategory($node);
+        $category = $this->findTerm($node);
 
         return $this->view($this->createViews($node, $category), [
             'node'     => $node,
@@ -57,10 +57,14 @@ class Node extends AbstractController
         ]);
     }
 
-    private function findCategory(Model $node): ?Term
+    private function findTerm(Model $node): ?Term
     {
         if ($node->getCategory()) {
-            return $this->termFinder->findOne(['id' => $node->getCategory(), 'locale' => $node->getLocale()], TermFinderScopeEnum::SINGLE);
+            return $this->termFinder->findOne([
+                'id' => $node->getCategory(),
+                'locale' => $node->getLocale(),
+                'website_id' => $node->getWebsiteId(),
+            ], TermFinderScopeEnum::SINGLE);
         }
 
         return null;

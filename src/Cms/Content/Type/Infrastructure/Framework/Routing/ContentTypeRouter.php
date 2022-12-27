@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Infrastructure\Framework\Routing;
+namespace Tulia\Cms\Content\Type\Infrastructure\Framework\Routing;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -16,7 +16,7 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Routing\FrontendRouteSuffixResol
 /**
  * @author Adam Banaszkiewicz
  */
-class SymfonyRouter implements RouterInterface, RequestMatcherInterface
+final class ContentTypeRouter implements RouterInterface, RequestMatcherInterface
 {
     private ?RequestContext $context = null;
 
@@ -42,22 +42,6 @@ class SymfonyRouter implements RouterInterface, RequestMatcherInterface
         return new RouteCollection();
     }
 
-    public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string
-    {
-        if (strpos($name, 'frontend.node.') === false) {
-            return '';
-        }
-
-        [, , $type, $identity] = explode('.', $name);
-
-        $parameters['_locale'] = $this->context->getParameter('_locale');
-        $parameters['_website'] = $this->context->getParameter('_website');
-
-        $path = $this->contentTypeRouter->generate($type, $identity, $parameters);
-
-        return $this->frontendRouteSuffixResolver->appendSuffix($path);
-    }
-
     public function matchRequest(Request $request): array
     {
         $pathinfo = urldecode($request->getPathInfo());
@@ -73,6 +57,22 @@ class SymfonyRouter implements RouterInterface, RequestMatcherInterface
         }
 
         return $parameters;
+    }
+
+    public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string
+    {
+        preg_match('#^frontend\.([a-z0-9_]+)\.([a-z0-9_]+)\.([0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12})$#', $name, $matches);
+
+        if (count($matches) !== 4) {
+            return '';
+        }
+
+        $parameters['_locale'] = $this->context->getParameter('_locale');
+        $parameters['_website'] = $this->context->getParameter('_website');
+
+        $path = $this->contentTypeRouter->generate($matches[2], $matches[3], $parameters);
+
+        return $this->frontendRouteSuffixResolver->appendSuffix($path);
     }
 
     public function match(string $pathinfo): array

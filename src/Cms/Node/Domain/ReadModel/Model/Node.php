@@ -28,6 +28,7 @@ class Node implements AttributesAwareInterface
     protected int $level;
     //protected $category;
     protected string $locale;
+    protected string $websiteId;
     protected ?string $title;
     protected ?string $slug;
     protected bool $visibility;
@@ -62,6 +63,7 @@ class Node implements AttributesAwareInterface
         $node->setLevel((int) ($data['level'] ?? 0));
         //$node->setCategory($data['category'] ?? null);
         $node->setLocale($data['locale']);
+        $node->websiteId = $data['website_id'];
         $node->setTitle($data['title'] ?? '');
         $node->setSlug($data['slug'] ?? '');
         $node->setPurposes($data['purposes'] ?? []);
@@ -184,6 +186,11 @@ class Node implements AttributesAwareInterface
     public function setCategory(?string $category): void
     {
         $this->category = $category;
+    }
+
+    public function getWebsiteId(): ?string
+    {
+        return $this->websiteId;
     }
 
     public function getLocale(): ?string

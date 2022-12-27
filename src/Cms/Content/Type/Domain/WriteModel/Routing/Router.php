@@ -12,15 +12,10 @@ use Tulia\Cms\Content\Type\Domain\WriteModel\Routing\Strategy\ContentTypeRouting
  */
 class Router
 {
-    private ContentTypeRoutingStrategyRegistry $strategyRegistry;
-    private ContentTypeRegistryInterface $contentTypeRegistry;
-
     public function __construct(
-        ContentTypeRoutingStrategyRegistry $strategyRegistry,
-        ContentTypeRegistryInterface $contentTypeRegistry
+        private readonly ContentTypeRoutingStrategyRegistry $strategyRegistry,
+        private readonly ContentTypeRegistryInterface $contentTypeRegistry,
     ) {
-        $this->strategyRegistry = $strategyRegistry;
-        $this->contentTypeRegistry = $contentTypeRegistry;
     }
 
     public function generate(string $contentTypeCode, string $id, array $parameters = []): ?string
