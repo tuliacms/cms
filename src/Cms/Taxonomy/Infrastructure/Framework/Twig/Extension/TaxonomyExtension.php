@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Infrastructure\Framework\Twig\Extension;
 
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\RouterInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderInterface;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderScopeEnum;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Model\Term;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -15,11 +17,11 @@ use Twig\TwigFunction;
  */
 class TaxonomyExtension extends AbstractExtension
 {
-    protected RouterInterface $router;
-
-    public function __construct(RouterInterface $router)
-    {
-        $this->router = $router;
+    public function __construct(
+        private readonly RouterInterface $router,
+        private readonly TermFinderInterface $termFinder,
+        private readonly WebsiteInterface $website,
+    ) {
     }
 
     /**
@@ -28,38 +30,38 @@ class TaxonomyExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('term_path', function ($identity, array $parameters = []) {
+            new TwigFunction('term_path', function (Term $identity, array $parameters = []) {
                 return $this->generate($identity, $parameters, RouterInterface::ABSOLUTE_PATH);
             }, [
                 'is_safe' => [ 'html' ]
             ]),
-            new TwigFunction('term_url', function ($identity, array $parameters = []) {
+            new TwigFunction('term_url', function (Term $identity, array $parameters = []) {
                 return $this->generate($identity, $parameters, RouterInterface::ABSOLUTE_URL);
+            }, [
+                'is_safe' => [ 'html' ]
+            ]),
+            new TwigFunction('find_terms', function (array $criteria) {
+                if (!isset($parameters['locale'])) {
+                    $parameters['locale'] = $this->website->getLocale()->getCode();
+                }
+                if (!isset($parameters['website_id'])) {
+                    $parameters['website_id'] = $this->website->getLocale()->getCode();
+                }
+
+                return $this->termFinder->find($criteria, TermFinderScopeEnum::TAXONOMY_LISTING);
             }, [
                 'is_safe' => [ 'html' ]
             ]),
         ];
     }
 
-    private function generate($identity, array $parameters, int $type): string
+    private function generate(Term $identity, array $parameters, int $type): string
     {
-        try {
-            return $this->router->generate($this->getId($identity), $parameters, $type);
-        } catch (RouteNotFoundException $exception) {
-            return '';
-        }
+        return $this->router->generate($this->getId($identity), $parameters, $type);
     }
 
-    private function getId($identity): string
+    private function getId(Term $identity): string
     {
-        if ($identity instanceof Term) {
-            $id = $identity->getId();
-        } elseif (is_string($identity)) {
-            $id = $identity;
-        } else {
-            $id = '';
-        }
-
-        return 'term_' . $id;
+        return sprintf('frontent.term.%s.%s', $identity->getType(), $identity->getId());
     }
 }

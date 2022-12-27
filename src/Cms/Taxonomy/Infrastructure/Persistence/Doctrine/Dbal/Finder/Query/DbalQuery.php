@@ -182,7 +182,9 @@ class DbalQuery extends AbstractDbalQuery
                 tl.*,
                 tt.type,
                 BIN_TO_UUID(tm.id) AS id,
-                BIN_TO_UUID(tm.taxonomy_id) AS taxonomy_id
+                BIN_TO_UUID(tm.parent_id) AS parent_id,
+                BIN_TO_UUID(tm.taxonomy_id) AS taxonomy_id,
+                BIN_TO_UUID(tt.website_id) AS website_id
             ');
         }
 
@@ -192,7 +194,7 @@ class DbalQuery extends AbstractDbalQuery
         if (!$criteria['website_id']) {
             throw new \InvalidArgumentException('Please provide "website_id" in query parameters.');
         }
-        if (!$criteria['id'] && !$criteria['taxonomy_type']) {
+        if (!$criteria['id'] && !$criteria['children_of'] && !$criteria['taxonomy_type']) {
             throw new \InvalidArgumentException('Please provide "taxonomy_type" in query parameters, when "id" is not set.');
         }
 

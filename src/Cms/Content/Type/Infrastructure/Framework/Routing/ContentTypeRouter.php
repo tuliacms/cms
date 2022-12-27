@@ -63,7 +63,7 @@ final class ContentTypeRouter implements RouterInterface, RequestMatcherInterfac
     {
         preg_match('#^frontend\.(?<type>[a-z0-9_]+)\.(?<code>[a-z0-9_]+)\.(?<id>[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12})$#', $name, $matches);
 
-        if (count($matches) !== 4) {
+        if (!isset($matches['type'], $matches['code'], $matches['id'])) {
             return '';
         }
 

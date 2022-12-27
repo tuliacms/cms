@@ -5,10 +5,6 @@
 
     {{ edit_links(term) }}
 
-    {% if term.thumbnail %}
-        <p>{{ image(term.thumbnail, { size: 'node-thumbnail' }) }}</p>
-    {% endif %}
-
     <div class="row">
         {% for node in nodes %}
             <div class="col-4">

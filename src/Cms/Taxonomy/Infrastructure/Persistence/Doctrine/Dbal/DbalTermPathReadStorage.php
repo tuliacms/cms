@@ -71,24 +71,4 @@ ORDER BY position", [
             'website_id' => Uuid::fromString($websiteId)->toBinary(),
         ]);
     }
-
-    public function findTermToPathGeneration(string $termId, string $locale): array
-    {
-        $result = $this->connection->fetchAllAssociative('
-            SELECT
-                t.type,
-                t.parent_id,
-                COALESCE(tl.slug, t.slug) AS slug
-            FROM taxonomy_term AS t
-            LEFT JOIN #__term_lang AS tl
-                ON tl.locale = :locale
-            WHERE t.id = :term_id
-            LIMIT 1
-        ', [
-            'term_id' => $termId,
-            'locale'  => $locale,
-        ]);
-
-        return $result[0] ?? [];
-    }
 }

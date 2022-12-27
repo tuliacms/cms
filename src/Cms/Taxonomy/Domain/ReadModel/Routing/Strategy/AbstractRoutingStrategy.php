@@ -20,7 +20,7 @@ use Tulia\Cms\Taxonomy\Domain\ReadModel\Service\TermPathReadStorageInterface;
 abstract class AbstractRoutingStrategy implements ContentTypeRoutingStrategyInterface
 {
     public function __construct(
-        protected readonly TermPathReadStorageInterface $storage,
+        private readonly TermPathReadStorageInterface $storage,
         protected readonly TermFinderInterface $termFinder,
         protected readonly ContentTypeRegistryInterface $contentTypeRegistry,
         protected readonly LoggerInterface $logger,
@@ -34,8 +34,6 @@ abstract class AbstractRoutingStrategy implements ContentTypeRoutingStrategyInte
      * to flat table when new term is created or other updated.
      */
     abstract public function generate(string $id, array $parameters = []): string;
-
-    abstract public function collectVisibleTermsGrouppedByTaxonomy(string $websiteId, string $locale): array;
 
     /**
      * Matching is done by fetching data from flat cached view table (#__term_path).
@@ -70,6 +68,21 @@ abstract class AbstractRoutingStrategy implements ContentTypeRoutingStrategyInte
         ];
     }
 
+    protected function collectVisibleTermsGrouppedByTaxonomy(string $websiteId, string $locale): array
+    {
+        $terms = $this->storage->collectVisibleTerms($websiteId, $locale);
+        $result = [];
+
+        foreach ($terms as $key => $term) {
+            if ($term['is_root']) {
+                unset($terms[$key]);
+                $result += $this->createTermsPathsRecursive($terms, $term['id']);
+            }
+        }
+
+        return $result;
+    }
+
     private function findTermIdByPath(array $terms, string $path): ?string
     {
         foreach ($terms as $term) {
@@ -90,6 +103,19 @@ abstract class AbstractRoutingStrategy implements ContentTypeRoutingStrategyInte
         $contentType = $this->contentTypeRegistry->get($term->getType());
 
         return $contentType && $contentType->isRoutable();
+    }
+
+    private function createTermsPathsRecursive(array $terms, string $parentId, string $parentPath = ''): array
+    {
+        foreach ($terms as $key => $term) {
+            if ($term['parent_id'] === $parentId) {
+                $terms[$key]['path'] = $parentPath.sprintf('/%s', $term['slug']);
+
+                $terms = $this->createTermsPathsRecursive($terms, $terms[$key]['id'], $terms[$key]['path']);
+            }
+        }
+
+        return $terms;
     }
 
     private function getTerm(string $id, string $websiteId, string $locale): ?Term

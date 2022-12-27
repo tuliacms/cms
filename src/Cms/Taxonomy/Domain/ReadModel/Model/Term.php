@@ -21,6 +21,7 @@ class Term implements AttributesAwareInterface
     protected int $level = 1;
     protected int $position = 1;
     protected int $count = 0;
+    protected string $websiteId;
     protected string $locale;
     protected ?string $name = null;
     protected ?string $slug = null;
@@ -50,6 +51,7 @@ class Term implements AttributesAwareInterface
         $term->setPosition((int) ($data['position'] ?? 0));
         $term->setCount((int) ($data['count'] ?? 0));
         $term->setLocale($data['locale']);
+        $term->websiteId = $data['website_id'];
         $term->setName($data['name'] ?? '');
         $term->setSlug($data['slug'] ?? '');
         $term->isRoot = (bool) ($data['is_root'] ?? true);
@@ -124,6 +126,11 @@ class Term implements AttributesAwareInterface
     public function getLocale(): string
     {
         return $this->locale;
+    }
+
+    public function getWebsiteId(): string
+    {
+        return $this->websiteId;
     }
 
     public function setLocale(string $locale): void
