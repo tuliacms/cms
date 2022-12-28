@@ -278,11 +278,19 @@ final class NodeContext implements Context
     }
 
     /**
-     * @When I assign this node to :type category :term of taxonomy :taxonomy
+     * @When I assign this node to main category :term of taxonomy :taxonomy
      */
-    public function iAssignThisNodeToMainCategoryOfTaxonomy(string $term, string $taxonomy, string $type): void
+    public function iAssignThisNodeToMainCategoryOfTaxonomy(string $term, string $taxonomy): void
     {
         $this->node->assignToMainCategory($this->parentTermsResolver, $term, $taxonomy);
+    }
+
+    /**
+     * @When I assign this node to additional category :term of taxonomy :taxonomy
+     */
+    public function iAssignThisNodeToAdditionalCategoryOfTaxonomy(string $term, string $taxonomy): void
+    {
+        $this->node->assignToAdditionalCategory($this->parentTermsResolver, $term, $taxonomy);
     }
 
     /**
@@ -304,6 +312,15 @@ final class NodeContext implements Context
     {
         $this->node->unassignFromMainCategory($this->parentTermsResolver);
     }
+
+    /**
+     * @When I unassign this node from additional category :term of taxonomy :taxonomy
+     */
+    public function iUnassignThisNodeFromAdditionalCategoryOfTaxonomy(string $term, string $taxonomy): void
+    {
+        $this->node->unassignFromAdditionalCategory($this->parentTermsResolver, $term, $taxonomy);
+    }
+
 
     /**
      * @Then this node should not be assigned to :type category :term of taxonomy :taxonomy
@@ -332,6 +349,6 @@ final class NodeContext implements Context
      */
     public function iReplaceTermsAssignationsInThisNodeToTermOfTaxonomy(string $term, string $taxonomy): void
     {
-        $this->node->persistTermsAssignations($this->parentTermsResolver, [$term, $taxonomy]);
+        $this->node->persistAdditionalCategoriesAssignations($this->parentTermsResolver, [$term, $taxonomy]);
     }
 }

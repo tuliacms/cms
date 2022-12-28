@@ -29,7 +29,7 @@ final class TermsFeature
             return false;
         }
 
-        $this->terms->add(new Term($this->node, $term, $taxonomy, Term::TYPE_MAIN));
+        $this->terms->add(new Term($this->node, $term, $taxonomy, $type));
 
         $this->calculateParentTerms($resolver, $term, $taxonomy);
 
@@ -89,7 +89,7 @@ final class TermsFeature
         }
     }
 
-    public function persistTermsAssignations(ParentTermsResolverInterface $resolver, array ...$terms): bool
+    public function persistAdditionalCategoriesAssignations(ParentTermsResolverInterface $resolver, array ...$terms): bool
     {
         if (!$terms) {
             return false;
@@ -103,7 +103,7 @@ final class TermsFeature
         $oldTermsByTaxonomy = [];
         /** @var Term $term */
         foreach ($this->terms->toArray() as $term) {
-            if ($term->type !== Term::TYPE_ASSIGNED) {
+            if ($term->type !== Term::TYPE_ADDITIONAL) {
                 continue;
             }
 
@@ -146,14 +146,14 @@ final class TermsFeature
         // 3: Remove old terms
         foreach ($toRemove as $taxonomy => $termsToRemove) {
             foreach ($termsToRemove as $termToRemove) {
-                $this->unassignFromTermOf($resolver, $termToRemove, $taxonomy);
+                $this->unassignFromTermOf($resolver, $termToRemove, $taxonomy, Term::TYPE_ADDITIONAL);
             }
         }
 
         // 4: Add new terms
         foreach ($toAdd as $taxonomy => $termsToAdd) {
             foreach ($termsToAdd as $termToAdd) {
-                $this->assignToTermOf($resolver, $termToAdd, $taxonomy);
+                $this->assignToTermOf($resolver, $termToAdd, $taxonomy, Term::TYPE_ADDITIONAL);
             }
         }
 

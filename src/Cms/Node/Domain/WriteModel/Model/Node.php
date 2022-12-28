@@ -330,7 +330,7 @@ class Node extends AbstractAggregateRoot
     {
         $feature = new TermsFeature($this, $this->terms);
 
-        if (!$feature->assignToTermOf($resolver, $term, $taxonomy, 'main')) {
+        if (!$feature->assignToTermOf($resolver, $term, $taxonomy, Term::TYPE_MAIN)) {
             return;
         }
 
@@ -358,11 +358,11 @@ class Node extends AbstractAggregateRoot
         $this->markAsUpdated();
     }
 
-    public function unassignFromTermOf(ParentTermsResolverInterface $resolver, string $term, string $taxonomy): void
+    public function assignToAdditionalCategory(ParentTermsResolverInterface $resolver, string $term, string $taxonomy): void
     {
         $feature = new TermsFeature($this, $this->terms);
 
-        if (!$feature->unassignFromTermOf($resolver, $term, $taxonomy)) {
+        if (!$feature->assignToTermOf($resolver, $term, $taxonomy, Term::TYPE_ADDITIONAL)) {
             return;
         }
 
@@ -374,7 +374,23 @@ class Node extends AbstractAggregateRoot
         $this->markAsUpdated();
     }
 
-    public function persistTermsAssignations(
+    public function unassignFromAdditionalCategory(ParentTermsResolverInterface $resolver, string $term, string $taxonomy): void
+    {
+        $feature = new TermsFeature($this, $this->terms);
+
+        if (!$feature->unassignFromTermOf($resolver, $term, $taxonomy, Term::TYPE_ADDITIONAL)) {
+            return;
+        }
+
+        $this->recordThat(new TermsAssignationChanged(
+            $this->id,
+            $this->type,
+            $feature->collectTermsAssignations()
+        ));
+        $this->markAsUpdated();
+    }
+
+    public function persistAdditionalCategoriesAssignations(
         ParentTermsResolverInterface $parentTermsResolver,
         array ...$terms
     ): void {
@@ -384,7 +400,7 @@ class Node extends AbstractAggregateRoot
             $feature->unassignFromAllTerms();
             $changed = true;
         } else {
-            $changed = $feature->persistTermsAssignations($parentTermsResolver, ...$terms);
+            $changed = $feature->persistAdditionalCategoriesAssignations($parentTermsResolver, ...$terms);
         }
 
         if (! $changed) {

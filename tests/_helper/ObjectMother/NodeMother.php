@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Tests\Helper\ObjectMother;
 
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
+use Tulia\Cms\Node\Domain\WriteModel\Model\Term;
 use Tulia\Cms\Node\Domain\WriteModel\Service\ParentTermsResolverInterface;
 
 /**
@@ -48,8 +49,10 @@ final class NodeMother
 
         if ($this->assignedToTerms !== []) {
             foreach ($this->assignedToTerms as $assignation) {
-                if ($assignation[2] === 'main') {
+                if ($assignation[2] === Term::TYPE_MAIN) {
                     $node->assignToMainCategory($resolver, $assignation[0], $assignation[1]);
+                } elseif ($assignation[2] === Term::TYPE_ADDITIONAL) {
+                    $node->assignToAdditionalCategory($resolver, $assignation[0], $assignation[1]);
                 }
             }
         }
