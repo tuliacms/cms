@@ -26,7 +26,6 @@ class Node implements AttributesAwareInterface
     protected string $authorId;
     protected ?string $parentId;
     protected int $level;
-    //protected $category;
     protected string $locale;
     protected string $websiteId;
     protected ?string $title;
@@ -61,7 +60,6 @@ class Node implements AttributesAwareInterface
         $node->setAuthorId($data['author']);
         $node->setParentId($data['parent_id'] ?? null);
         $node->setLevel((int) ($data['level'] ?? 0));
-        //$node->setCategory($data['category'] ?? null);
         $node->setLocale($data['locale']);
         $node->websiteId = $data['website_id'];
         $node->setTitle($data['title'] ?? '');
@@ -176,16 +174,6 @@ class Node implements AttributesAwareInterface
     public function setLevel(int $level): void
     {
         $this->level = $level;
-    }
-
-    public function getCategory(): ?string
-    {
-        return (string) $this->category;
-    }
-
-    public function setCategory(?string $category): void
-    {
-        $this->category = $category;
     }
 
     public function getWebsiteId(): ?string

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Infrastructure\Menu;
+namespace Tulia\Cms\Node\Infrastructure\Cms\Menu;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Tulia\Cms\Menu\Domain\Builder\Identity\Identity;

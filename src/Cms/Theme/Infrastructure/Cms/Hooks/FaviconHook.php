@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Theme\Infrastructure\Hooks;
+namespace Tulia\Cms\Theme\Infrastructure\Cms\Hooks;
 
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
@@ -11,8 +11,8 @@ use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\FileFinderInterface;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\FileFinderScopeEnum;
 use Tulia\Cms\Filemanager\Domain\WriteModel\Model\FileTypeEnum;
 use Tulia\Cms\Options\Domain\ReadModel\OptionsFinderInterface;
-use Tulia\Component\Hooks\HooksSubscriberInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
+use Tulia\Component\Hooks\HooksSubscriberInterface;
 
 /**
  * @author Adam Banaszkiewicz

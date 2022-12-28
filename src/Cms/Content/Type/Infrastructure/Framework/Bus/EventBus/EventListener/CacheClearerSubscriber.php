@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Content\Type\Infrastructure\Bus\EventBus\EventListener;
+namespace Tulia\Cms\Content\Type\Infrastructure\Framework\Bus\EventBus\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Event\ContentTypeCreated;

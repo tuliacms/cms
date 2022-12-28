@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Content\Type\Infrastructure\Importer;
+namespace Tulia\Cms\Content\Type\Infrastructure\Cms\Importer;
 
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\FieldTypeMappingRegistry;
 use Tulia\Cms\Content\Type\Domain\WriteModel\ContentTypeRepositoryInterface;

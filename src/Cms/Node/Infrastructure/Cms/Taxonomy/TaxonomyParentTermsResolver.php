@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Infrastructure\Taxonomy;
+namespace Tulia\Cms\Node\Infrastructure\Cms\Taxonomy;
 
 use Tulia\Cms\Node\Domain\WriteModel\Service\ParentTermsResolverInterface;
 use Tulia\Cms\Taxonomy\UserInterface\OpenHost\Query\ParentTermsQueryService;

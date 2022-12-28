@@ -17,7 +17,7 @@ services:
         bind:
             $providers: !tagged_iterator node.purpose_provider
 
-    Tulia\Cms\Node\Infrastructure\Menu\IdentityProvider:
+    Tulia\Cms\Node\Infrastructure\Cms\Menu\IdentityProvider:
         tags: [ menu.identity_provider ]
 
     Tulia\Cms\Node\Domain\WriteModel\Rules\CanAddPurpose\CanImposePurposeInterface:

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Infrastructure\SearchAnything;
+namespace Tulia\Cms\Node\Infrastructure\Cms\SearchAnything;
 
 use Tulia\Cms\Node\Domain\ReadModel\Query\NodeSearchCollectorInterface;
 use Tulia\Cms\SearchAnything\Domain\WriteModel\Service\AbstractDocumentCollector;

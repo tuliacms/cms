@@ -14,12 +14,12 @@ services:
 
     Tulia\Cms\Widget\Infrastructure\Framework\Twig\Extension\WidgetExtension:
         bind:
-            $storage: '@Tulia\Cms\Widget\Infrastructure\Widget\Storage\DatabaseStorage'
+            $storage: '@Tulia\Cms\Widget\Infrastructure\Persistence\Doctrine\Dbal\DbalWidgetStorage'
 
     Tulia\Cms\Widget\Domain\Renderer\RendererInterface:
         class: Tulia\Cms\Widget\Domain\Renderer\Renderer
         bind:
-            $storage: '@Tulia\Cms\Widget\Infrastructure\Widget\Storage\DatabaseStorage'
+            $storage: '@Tulia\Cms\Widget\Infrastructure\Persistence\Doctrine\Dbal\DbalWidgetStorage'
 
     Tulia\Cms\Widget\Infrastructure\Persistence\ContainerProvider\WidgetTypeContainerProvider:
         bind:

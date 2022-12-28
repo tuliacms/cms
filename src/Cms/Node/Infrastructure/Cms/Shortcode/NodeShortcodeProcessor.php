@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Infrastructure\Shortcode;
+namespace Tulia\Cms\Node\Infrastructure\Cms\Shortcode;
 
 use Tulia\Cms\Node\Domain\WriteModel\Service\ShortcodeProcessorInterface;
 use Tulia\Component\Shortcode\ProcessorInterface;

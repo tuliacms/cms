@@ -21,7 +21,7 @@ cms:
     importer:
         objects:
             Node:
-                importer: 'Tulia\Cms\Node\Infrastructure\Importer\NodeEntryImporter'
+                importer: 'Tulia\Cms\Node\Infrastructure\Cms\Importer\NodeEntryImporter'
                 mapping:
                     parent_id:
                         type: uuid
@@ -64,4 +64,4 @@ cms:
             node:
                 localization_strategy: content
                 multisite_strategy: website
-                collector: Tulia\Cms\Node\Infrastructure\SearchAnything\NodeDocumentCollector
+                collector: Tulia\Cms\Node\Infrastructure\Cms\SearchAnything\NodeDocumentCollector

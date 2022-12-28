@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Infrastructure\Menu;
+namespace Tulia\Cms\Node\Infrastructure\Cms\Menu;
 
 use Symfony\Component\Form\FormFactoryInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Menu\Domain\Builder\Type\TypeInterface;
 use Tulia\Cms\Menu\UserInterface\Web\Backend\Selector\SelectorInterface;
-use Tulia\Cms\Node\Infrastructure\Menu\MenuItemSelectorForm;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Component\Templating\View;
 

@@ -2,23 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Widget\Infrastructure\Widget\Storage;
+namespace Tulia\Cms\Widget\Infrastructure\Persistence\Doctrine\Dbal;
 
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Uid\Uuid;
 use Tulia\Cms\Widget\Domain\Catalog\Storage\StorageInterface;
-use Tulia\Cms\Widget\Infrastructure\Persistence\Doctrine\Dbal\DbalWidgetAttributesFinder;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class DatabaseStorage implements StorageInterface
+class DbalWidgetStorage implements StorageInterface
 {
     private static array $cache = [];
 
     public function __construct(
         private readonly Connection $connection,
-        private readonly DbalWidgetAttributesFinder $attributesFinder
+        private readonly DbalWidgetAttributesFinder $attributesFinder,
     ) {
     }
 
