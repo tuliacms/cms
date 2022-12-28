@@ -7,7 +7,6 @@ namespace Tulia\Cms\Node\Infrastructure\Cms\Settings;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
@@ -27,7 +26,7 @@ final class SettingsForm extends AbstractType
     {
         $choices = [$this->translator->trans('noCategoryForThisNodeType', [], 'node') => ''];
 
-        foreach ($this->contentTypeRegistry->allByType('node') as $contentType) {
+        foreach ($this->contentTypeRegistry->allByType('taxonomy') as $contentType) {
             $choices[$contentType->getName()] = $contentType->getCode();
         }
 

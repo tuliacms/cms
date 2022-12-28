@@ -17,10 +17,10 @@ final class TermsAssignationChanged extends AbstractNodeDomainEvent
         parent::__construct($id, $type);
     }
 
-    public function isAssignedTo(string $term, string $taxonomy): bool
+    public function isAssignedTo(string $term, string $taxonomy, string $type): bool
     {
         foreach ($this->terms as $pretendent) {
-            if ($pretendent['term'] === $term && $pretendent['taxonomy'] === $taxonomy) {
+            if ($pretendent['term'] === $term && $pretendent['taxonomy'] === $taxonomy && $pretendent['type'] === $type) {
                 return true;
             }
         }

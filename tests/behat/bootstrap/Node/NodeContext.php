@@ -270,57 +270,57 @@ final class NodeContext implements Context
     }
 
     /**
-     * @Given the term :term of taxonomy :taxonomy has parents of :parents
+     * @Given the category :term of taxonomy :taxonomy has parents of :parents
      */
-    public function theTermOfTaxonomyHasParentsOf(string $taxonomy, string $term, string $parents): void
+    public function theCategoryOfTaxonomyHasParentsOf(string $taxonomy, string $term, string $parents): void
     {
         $this->parentTermsResolver->store($term, $taxonomy, $parents);
     }
 
     /**
-     * @When I assign this node to term :term of taxonomy :taxonomy
+     * @When I assign this node to :type category :term of taxonomy :taxonomy
      */
-    public function iAssignThisNodeToTermOfTaxonomy(string $term, string $taxonomy): void
+    public function iAssignThisNodeToMainCategoryOfTaxonomy(string $term, string $taxonomy, string $type): void
     {
-        $this->node->assignToTermOf($this->parentTermsResolver, $term, $taxonomy);
+        $this->node->assignToMainCategory($this->parentTermsResolver, $term, $taxonomy);
     }
 
     /**
-     * @Then this node should be assigned to term :term of taxonomy :taxonomy
+     * @Then this node should be assigned to :type category :term of taxonomy :taxonomy
      */
-    public function thisNodeShouldBeAssignedToTermOfTaxonomy(string $term, string $taxonomy): void
-    {
-        /** @var TermsAssignationChanged $event */
-        $event = $this->nodeSpy->findEvent(TermsAssignationChanged::class);
-
-        Assert::assertInstanceOf(TermsAssignationChanged::class, $event, 'Terms assignation should be changed');
-        Assert::assertTrue($event->isAssignedTo($term, $taxonomy));
-    }
-
-    /**
-     * @When I unassign this node from term :term of taxonomy :taxonomy
-     */
-    public function iUnassignThisNodeFromTermOfTaxonomy(string $term, string $taxonomy): void
-    {
-        $this->node->unassignFromTermOf($this->parentTermsResolver, $term, $taxonomy);
-    }
-
-    /**
-     * @Then this node should not be assigned to term :term of taxonomy :taxonomy
-     */
-    public function thisNodeShouldNotBeAssignedToTermOfTaxonomy(string $term, string $taxonomy): void
+    public function thisNodeShouldBeAssignedToCategoryOfTaxonomy(string $term, string $taxonomy, string $type): void
     {
         /** @var TermsAssignationChanged $event */
         $event = $this->nodeSpy->findEvent(TermsAssignationChanged::class);
 
         Assert::assertInstanceOf(TermsAssignationChanged::class, $event, 'Terms assignation should be changed');
-        Assert::assertFalse($event->isAssignedTo($term, $taxonomy));
+        Assert::assertTrue($event->isAssignedTo($term, $taxonomy, $type));
     }
 
     /**
-     * @Then assignation to terms for this node should not be changed
+     * @When I unassign this node from main category
      */
-    public function assignationToTermsForThisNodeShouldNotBeChanged(): void
+    public function iUnassignThisNodeFromMainCategory(): void
+    {
+        $this->node->unassignFromMainCategory($this->parentTermsResolver);
+    }
+
+    /**
+     * @Then this node should not be assigned to :type category :term of taxonomy :taxonomy
+     */
+    public function thisNodeShouldNotBeAssignedToTermOfTaxonomy(string $term, string $taxonomy, string $type): void
+    {
+        /** @var TermsAssignationChanged $event */
+        $event = $this->nodeSpy->findEvent(TermsAssignationChanged::class);
+
+        Assert::assertInstanceOf(TermsAssignationChanged::class, $event, 'Terms assignation should be changed');
+        Assert::assertFalse($event->isAssignedTo($term, $taxonomy, $type));
+    }
+
+    /**
+     * @Then assignation to categories for this node should not be changed
+     */
+    public function assignationToCategoriesForThisNodeShouldNotBeChanged(): void
     {
         $event = $this->nodeSpy->findEvent(TermsAssignationChanged::class);
 

@@ -163,6 +163,22 @@
                 <source>categoryTaxonomy</source>
                 <target>Category taxonomy type</target>
             </trans-unit>
+            <trans-unit id="tuliacms.node.42">
+                <source>mainCategory</source>
+                <target>Main category</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.43">
+                <source>mainCategoryHelp</source>
+                <target>Canonical link to this node will be generaten for this category.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.44">
+                <source>additionalCategories</source>
+                <target>Additional categories</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.45">
+                <source>additionalCategoriesHelp</source>
+                <target>Node can be categorized in additional categories.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -135,6 +135,14 @@ class Node extends AbstractAggregateRoot
             $purposes[] = (string) $purpose;
         }
 
+        $mainCategory = null;
+
+        foreach ($this->terms as $term) {
+            if ($term->type === Term::TYPE_MAIN) {
+                $mainCategory = $term->term;
+            }
+        }
+
         return [
             'id'            => $this->id,
             'type'          => $this->type,
@@ -152,6 +160,7 @@ class Node extends AbstractAggregateRoot
             'slug'          => $slug,
             'attributes'    => $attributes,
             'is_translated' => $isTranslated,
+            'main_category' => $mainCategory,
         ];
     }
 
@@ -317,11 +326,27 @@ class Node extends AbstractAggregateRoot
         $this->markAsUpdated();
     }
 
-    public function assignToTermOf(ParentTermsResolverInterface $resolver, string $term, string $taxonomy): void
+    public function assignToMainCategory(ParentTermsResolverInterface $resolver, string $term, string $taxonomy): void
     {
         $feature = new TermsFeature($this, $this->terms);
 
-        if (!$feature->assignToTermOf($resolver, $term, $taxonomy)) {
+        if (!$feature->assignToTermOf($resolver, $term, $taxonomy, 'main')) {
+            return;
+        }
+
+        $this->recordThat(new TermsAssignationChanged(
+            $this->id,
+            $this->type,
+            $feature->collectTermsAssignations()
+        ));
+        $this->markAsUpdated();
+    }
+
+    public function unassignFromMainCategory(ParentTermsResolverInterface $resolver): void
+    {
+        $feature = new TermsFeature($this, $this->terms);
+
+        if (!$feature->unassignFromMainCategory($resolver)) {
             return;
         }
 

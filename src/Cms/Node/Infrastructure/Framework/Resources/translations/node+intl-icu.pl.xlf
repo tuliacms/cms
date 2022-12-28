@@ -163,6 +163,22 @@
                 <source>categoryTaxonomy</source>
                 <target>Rodzaj kategorii treści</target>
             </trans-unit>
+            <trans-unit id="tuliacms.node.42">
+                <source>mainCategory</source>
+                <target>Główna kategoria</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.43">
+                <source>mainCategoryHelp</source>
+                <target>Z tej kategorii wygenerowany zostanie link kanoniczny do wpisu.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.44">
+                <source>additionalCategories</source>
+                <target>Dodatkowe kategorie</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.45">
+                <source>additionalCategoriesHelp</source>
+                <target>Wpis można umieścić w wielu kategoriach, oprócz głównej.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

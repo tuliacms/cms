@@ -6,10 +6,12 @@ namespace Tulia\Cms\Node\Domain\WriteModel\Model;
 
 /**
  * @author Adam Banaszkiewicz
+ * @final
  */
-final class Term
+class Term
 {
-    public const TYPE_ASSIGNED = 'assigned';
+    public const TYPE_MAIN = 'main';
+    public const TYPE_ADDITIONAL = 'additional';
     public const TYPE_CALCULATED = 'calculated';
 
     private string $id;

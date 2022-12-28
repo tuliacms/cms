@@ -42,10 +42,10 @@ trait NodeBuildableTrait
     }
 
     /**
-     * @Given which is assigned to term :term of taxonomy :taxonomy
+     * @Given which is assigned to :type category :term of taxonomy :taxonomy
      */
-    public function whichIsAssignedToTermOfTaxonomy(string $term, string $taxonomy): void
+    public function whichIsAssignedToMainCategoryOfTaxonomy(string $term, string $taxonomy, string $type): void
     {
-        $this->nodeMother->withAssignationToTermOfTaxonomy($term, $taxonomy);
+        $this->nodeMother->withAssignationToTermOfTaxonomy($term, $taxonomy, $type);
     }
 }

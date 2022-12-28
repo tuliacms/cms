@@ -9,6 +9,7 @@ use Tulia\Cms\BackendMenu\Builder\Helper\BuilderHelperInterface;
 use Tulia\Cms\BackendMenu\Builder\Registry\ItemRegistryInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
+use Tulia\Cms\Options\Domain\ReadModel\Options;
 
 /**
  * @author Adam Banaszkiewicz
@@ -18,6 +19,7 @@ final class NodeMenuBuilder implements BuilderInterface
     public function __construct(
         private readonly BuilderHelperInterface $helper,
         private readonly ContentTypeRegistryInterface $contentTypeRegistry,
+        private readonly Options $options,
     ) {
     }
 
@@ -25,12 +27,12 @@ final class NodeMenuBuilder implements BuilderInterface
     {
         foreach ($this->contentTypeRegistry->all() as $type) {
             if ($type->isType('node')) {
-                $this->registerContentType($registry, $type);
+                $this->registerContentType($registry, $type, $websiteId, $locale);
             }
         }
     }
 
-    private function registerContentType(ItemRegistryInterface $registry, ContentType $type): void
+    private function registerContentType(ItemRegistryInterface $registry, ContentType $type, string $websiteId, string $locale): void
     {
         $root = 'node_' . $type->getCode();
 
@@ -48,12 +50,10 @@ final class NodeMenuBuilder implements BuilderInterface
             'parent' => $root,
         ]);
 
-        foreach ($type->getFields() as $field) {
-            if ($field->getType() !== 'taxonomy') {
-                continue;
-            }
+        $categoryTaxonomy = $this->options->get(sprintf('node.%s.category_taxonomy', $type->getCode()));
 
-            $taxonomy = $this->contentTypeRegistry->get($field->getConfig('taxonomy'));
+        if ($categoryTaxonomy) {
+            $taxonomy = $this->contentTypeRegistry->get($categoryTaxonomy);
 
             $registry->add($root . '_' . $taxonomy->getCode(), [
                 'label'  => $this->helper->trans('termsListOfTaxonomy', ['taxonomy' => $this->helper->trans($taxonomy->getName(), [], 'taxonomy')], 'taxonomy'),

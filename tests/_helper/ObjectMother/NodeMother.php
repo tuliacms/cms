@@ -28,9 +28,9 @@ final class NodeMother
         return new self($title, $type);
     }
 
-    public function withAssignationToTermOfTaxonomy(string $term, string $taxonomy): self
+    public function withAssignationToTermOfTaxonomy(string $term, string $taxonomy, string $type): self
     {
-        $this->assignedToTerms[] = [$term, $taxonomy];
+        $this->assignedToTerms[] = [$term, $taxonomy, $type];
         return $this;
     }
 
@@ -48,7 +48,9 @@ final class NodeMother
 
         if ($this->assignedToTerms !== []) {
             foreach ($this->assignedToTerms as $assignation) {
-                $node->assignToTermOf($resolver, $assignation[0], $assignation[1]);
+                if ($assignation[2] === 'main') {
+                    $node->assignToMainCategory($resolver, $assignation[0], $assignation[1]);
+                }
             }
         }
 

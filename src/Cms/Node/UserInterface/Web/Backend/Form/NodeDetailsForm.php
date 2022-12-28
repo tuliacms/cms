@@ -17,6 +17,8 @@ use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface
 use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormType\AttributesAwareFormTypeTrait;
 use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormType\AttributesType;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodePurpose\NodePurposeRegistryInterface;
+use Tulia\Cms\Node\UserInterface\Web\Backend\Form\FormType\NodeCategoryTypeaheadType;
+use Tulia\Cms\Options\Domain\ReadModel\Options;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\DateTimeType;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
 use Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserTypeahead\UserTypeaheadType;
@@ -33,6 +35,7 @@ final class NodeDetailsForm extends AbstractType
         private readonly TranslatorInterface $translator,
         private readonly AuthenticatedUserProviderInterface $authenticatedUserProvider,
         private readonly ContentTypeRegistryInterface $contentTypeRegistry,
+        private readonly Options $options,
     ) {
     }
 
@@ -119,6 +122,28 @@ final class NodeDetailsForm extends AbstractType
                     // new UniqueSlug()
                 ]
             ]);
+        }
+
+        $categoryTaxonomy = $this->options->get(sprintf('node.%s.category_taxonomy', $options['content_type']));
+
+        if ($categoryTaxonomy) {
+            $builder->add('main_category', NodeCategoryTypeaheadType::class, [
+                'taxonomy_type' => $categoryTaxonomy,
+                'label' => 'mainCategory',
+                'help' => 'mainCategoryHelp',
+                'translation_domain' => 'node',
+                'website_id' => $options['website']->getId(),
+                'locale' => $options['website']->getLocale()->getCode(),
+            ]);
+            /*$builder->add('additional_categories', NodeCategoryTypeaheadType::class, [
+                'taxonomy_type' => $categoryTaxonomy,
+                'multiple' => true,
+                'label' => 'additionalCategories',
+                'help' => 'additionalCategoriesHelp',
+                'translation_domain' => 'node',
+                'website_id' => $options['website']->getId(),
+                'locale' => $options['website']->getLocale()->getCode(),
+            ]);*/
         }
     }
 

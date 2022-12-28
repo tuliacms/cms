@@ -14,28 +14,31 @@ use Tulia\Cms\Node\Domain\WriteModel\Service\ParentTermsResolverInterface;
  */
 final class TermsFeature
 {
+    /**
+     * @param Collection|Term[] $terms
+     */
     public function __construct(
         private readonly Node $node,
         private readonly Collection $terms,
     ) {
     }
 
-    public function assignToTermOf(ParentTermsResolverInterface $resolver, string $term, string $taxonomy): bool
+    public function assignToTermOf(ParentTermsResolverInterface $resolver, string $term, string $taxonomy, string $type): bool
     {
-        if ($this->findAssignedTerm($term, $taxonomy)) {
+        if ($this->findAssignedTerm($term, $taxonomy, $type)) {
             return false;
         }
 
-        $this->terms->add(new Term($this->node, $term, $taxonomy, Term::TYPE_ASSIGNED));
+        $this->terms->add(new Term($this->node, $term, $taxonomy, Term::TYPE_MAIN));
 
         $this->calculateParentTerms($resolver, $term, $taxonomy);
 
         return true;
     }
 
-    public function unassignFromTermOf(ParentTermsResolverInterface $resolver, string $term, string $taxonomy): bool
+    public function unassignFromTermOf(ParentTermsResolverInterface $resolver, string $term, string $taxonomy, string $type): bool
     {
-        $termEntity = $this->findAssignedTerm($term, $taxonomy);
+        $termEntity = $this->findAssignedTerm($term, $taxonomy, $type);
 
         if (!$termEntity) {
             return false;
@@ -157,11 +160,23 @@ final class TermsFeature
         return true;
     }
 
-    private function findAssignedTerm(string $term, string $taxonomy): ?Term
+    public function unassignFromMainCategory(ParentTermsResolverInterface $resolver): bool
+    {
+        foreach ($this->terms as $term) {
+            if ($term->type === Term::TYPE_MAIN) {
+                $this->unassignFromTermOf($resolver, $term->term, $term->taxonomy, Term::TYPE_MAIN);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function findAssignedTerm(string $term, string $taxonomy, string $type): ?Term
     {
         /** @var Term $pretendend */
         foreach ($this->terms->toArray() as $pretendend) {
-            if ($pretendend->term === $term && $pretendend->taxonomy === $taxonomy && $pretendend->type === Term::TYPE_ASSIGNED) {
+            if ($pretendend->term === $term && $pretendend->taxonomy === $taxonomy && $pretendend->type === $type) {
                 return $pretendend;
             }
         }
