@@ -14,7 +14,7 @@ final class MissingOptionsService
 {
     public function __construct(
         private readonly ExistingOptionsQueryInterface $existingOptionsQuery,
-        private readonly RegisteredOptionsRegistryInterface $optionsRegistry,
+        private readonly RegisteredOptionsRegistry $optionsRegistry,
     ) {
     }
 

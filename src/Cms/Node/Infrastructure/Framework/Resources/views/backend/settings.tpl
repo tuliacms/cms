@@ -1,3 +1,3 @@
 <div class="form-controls-terminator">
-    {{ form_row(form.per_page) }}
+    {{ form_row(form.category_taxonomy) }}
 </div>

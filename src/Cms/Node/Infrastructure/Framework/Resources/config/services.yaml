@@ -11,6 +11,7 @@ services:
             - '../../../../Domain/WriteModel/Exception'
             - '../../../../Domain/WriteModel/Event'
             - '../../../../Domain/ReadModel/Model'
+            - '../../../../Infrastructure/Cms/Settings/NodeTypeSettingsGroup.php'
 
     Tulia\Cms\Node\Domain\WriteModel\Service\NodePurpose\NodePurposeRegistryInterface:
         class: Tulia\Cms\Node\Domain\WriteModel\Service\NodePurpose\NodePurposeRegistry

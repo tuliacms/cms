@@ -7,7 +7,7 @@ namespace Tulia\Cms\Options\Domain\WriteModel\Service;
 /**
  * @author Adam Banaszkiewicz
  */
-interface RegisteredOptionsRegistryInterface
+interface OptionsProviderInterface
 {
-    public function all(): array;
+    public function provide(): array;
 }

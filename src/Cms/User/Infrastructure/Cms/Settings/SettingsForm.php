@@ -14,9 +14,6 @@ use Symfony\Component\Form\AbstractType;
  */
 class SettingsForm extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder

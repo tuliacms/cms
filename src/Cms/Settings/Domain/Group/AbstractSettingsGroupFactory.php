@@ -9,18 +9,11 @@ namespace Tulia\Cms\Settings\Domain\Group;
  */
 abstract class AbstractSettingsGroupFactory implements SettingsGroupFactoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     abstract public function factory(): iterable;
 
-    /**
-     * {@inheritdoc}
-     */
     public function doFactory(): iterable
     {
-        foreach($this->factory() as $group)
-        {
+        foreach($this->factory() as $group) {
             yield $group;
         }
     }

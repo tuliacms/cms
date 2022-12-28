@@ -10,7 +10,7 @@ services:
             - '../../../../Domain/WriteModel/Model'
             - '../../../../Domain/WriteModel/Exception'
 
-    Tulia\Cms\Options\Infrastructure\Framework\Config\YamlRegisteredOptionsRegistry:
+    Tulia\Cms\Options\Infrastructure\Framework\Config\YamlOptionsProvider:
         bind:
             $definitions: '%cms.options.definitions%'
 
@@ -19,3 +19,7 @@ services:
 
     Tulia\Cms\Options\Domain\ReadModel\Options:
         lazy: true
+
+    Tulia\Cms\Options\Domain\WriteModel\Service\RegisteredOptionsRegistry:
+        arguments:
+            $providers: !tagged_iterator options.provider

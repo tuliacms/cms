@@ -155,6 +155,14 @@
                 <target>Node has child subnodes. First, delete all child nodes, or move childs from this parent.</target>
                 <note>Translation of Tulia\Cms\Node\Domain\WriteModel\Rules\CanDeleteNode::NodeHasChildren</note>
             </trans-unit>
+            <trans-unit id="tuliacms.node.40">
+                <source>noCategoryForThisNodeType</source>
+                <target>No categories for this Node Type</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.41">
+                <source>categoryTaxonomy</source>
+                <target>Category taxonomy type</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

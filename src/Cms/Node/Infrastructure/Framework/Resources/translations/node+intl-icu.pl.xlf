@@ -155,6 +155,14 @@
                 <target>Wpis ma wpisy podrzędne. Najpierw usuń wszystkie wpisy podrzędne lub przenieś dzieci z tego rodzica.</target>
                 <note>Translation of Tulia\Cms\Node\Domain\WriteModel\Rules\CanDeleteNode::NodeHasChildren</note>
             </trans-unit>
+            <trans-unit id="tuliacms.node.40">
+                <source>noCategoryForThisNodeType</source>
+                <target>Nie używaj kategorii dla tego typu treści</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.41">
+                <source>categoryTaxonomy</source>
+                <target>Rodzaj kategorii treści</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
