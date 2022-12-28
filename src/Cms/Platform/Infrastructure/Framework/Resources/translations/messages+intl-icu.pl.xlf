@@ -855,6 +855,11 @@
                 <source>top</source>
                 <target>Góra</target>
             </trans-unit>
+            <trans-unit id="tuliacms.messages.221">
+                <source>doSearch</source>
+                <target>Szukaj</target>
+                <note>Button label</note>
+            </trans-unit>
         </body>
     </file>
 </xliff>

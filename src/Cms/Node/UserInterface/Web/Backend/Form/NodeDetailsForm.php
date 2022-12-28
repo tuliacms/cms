@@ -135,7 +135,7 @@ final class NodeDetailsForm extends AbstractType
                 'website_id' => $options['website']->getId(),
                 'locale' => $options['website']->getLocale()->getCode(),
             ]);
-            /*$builder->add('additional_categories', NodeCategoryTypeaheadType::class, [
+            $builder->add('additional_categories', NodeCategoryTypeaheadType::class, [
                 'taxonomy_type' => $categoryTaxonomy,
                 'multiple' => true,
                 'label' => 'additionalCategories',
@@ -143,7 +143,7 @@ final class NodeDetailsForm extends AbstractType
                 'translation_domain' => 'node',
                 'website_id' => $options['website']->getId(),
                 'locale' => $options['website']->getLocale()->getCode(),
-            ]);*/
+            ]);
         }
     }
 

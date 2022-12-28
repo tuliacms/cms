@@ -194,7 +194,7 @@ class DbalQuery extends AbstractDbalQuery
         if (!$criteria['website_id']) {
             throw new \InvalidArgumentException('Please provide "website_id" in query parameters.');
         }
-        if (!$criteria['id'] && !$criteria['children_of'] && !$criteria['taxonomy_type']) {
+        if (!$criteria['id'] && !$criteria['id__in'] && !$criteria['children_of'] && !$criteria['taxonomy_type']) {
             throw new \InvalidArgumentException('Please provide "taxonomy_type" in query parameters, when "id" is not set.');
         }
 

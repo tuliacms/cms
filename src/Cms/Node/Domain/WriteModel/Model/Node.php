@@ -136,10 +136,13 @@ class Node extends AbstractAggregateRoot
         }
 
         $mainCategory = null;
+        $additionalCategories = [];
 
         foreach ($this->terms as $term) {
             if ($term->type === Term::TYPE_MAIN) {
                 $mainCategory = $term->term;
+            } elseif ($term->type === Term::TYPE_ADDITIONAL) {
+                $additionalCategories[] = $term->term;
             }
         }
 
@@ -161,6 +164,7 @@ class Node extends AbstractAggregateRoot
             'attributes'    => $attributes,
             'is_translated' => $isTranslated,
             'main_category' => $mainCategory,
+            'additional_categories' => $additionalCategories,
         ];
     }
 
@@ -172,6 +176,11 @@ class Node extends AbstractAggregateRoot
     public function getNodeType(): string
     {
         return $this->type;
+    }
+
+    public function getWebsiteId(): string
+    {
+        return $this->websiteId;
     }
 
     public function isTranslatedTo(string $locale): bool
@@ -391,16 +400,22 @@ class Node extends AbstractAggregateRoot
     }
 
     public function persistAdditionalCategoriesAssignations(
-        ParentTermsResolverInterface $parentTermsResolver,
+        ParentTermsResolverInterface $resolver,
         array ...$terms
     ): void {
         $feature = new TermsFeature($this, $this->terms);
 
+        foreach ($terms as $key => $term) {
+            if (empty($term)) {
+                unset($terms[$key]);
+            }
+        }
+
         if (empty($terms)) {
-            $feature->unassignFromAllTerms();
+            $feature->unassignFromAllTerms($resolver, Term::TYPE_ADDITIONAL);
             $changed = true;
         } else {
-            $changed = $feature->persistAdditionalCategoriesAssignations($parentTermsResolver, ...$terms);
+            $changed = $feature->persistAdditionalCategoriesAssignations($resolver, ...$terms);
         }
 
         if (! $changed) {

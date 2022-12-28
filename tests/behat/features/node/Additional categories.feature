@@ -51,6 +51,18 @@ Feature: Main category
     Scenario: I can replace existing additional categories assignations to new one
         Given there is a node "My node"
         And which is assigned to additional category "Category 1" of taxonomy "category"
-        When I replace terms assignations in this node to term "Tag 1" of taxonomy "tag"
+        When I replace additional categories assignations in this node to term "Tag 1" of taxonomy "tag"
         Then this node should not be assigned to "additional" category "Category 1" of taxonomy "category"
         Then this node should be assigned to "additional" category "Tag 1" of taxonomy "tag"
+
+    Scenario: I cannot assign node to additional category when is already assigned to the same main category
+        Given there is a node "My node"
+        And which is assigned to main category "Category 1" of taxonomy "category"
+        When I assign this node to additional category "Category 1" of taxonomy "category"
+        Then assignation to categories for this node should not be changed
+
+    Scenario: Replacing additional categories with empty collection cannot unassign main category
+        Given there is a node "My node"
+        And which is assigned to main category "Category 1" of taxonomy "category"
+        When I replace additional categories assignations in this node with empty collection
+        Then this node should be assigned to "main" category "Category 1" of taxonomy "category"

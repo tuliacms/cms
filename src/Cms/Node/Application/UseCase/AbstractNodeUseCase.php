@@ -64,9 +64,9 @@ abstract class AbstractNodeUseCase extends AbstractTransactionalUseCase
             } else {
                 $node->unassignFromMainCategory($this->parentTermsResolver);
             }
-        }
 
-        //$node->persistTermsAssignations($this->parentTermsResolver, ...$this->collectTaxonomiesTerms($node->getNodeType(), $attributes));
+            $node->persistAdditionalCategoriesAssignations($this->parentTermsResolver, ...$this->collectTaxonomiesTerms($request->data['additional_categories'] ?? [], $categoryTaxonomy));
+        }
 
         $node->persistAttributes($request->locale, $request->defaultLocale, $this->processAttributes($attributes));
         $node->changeTitle($request->locale, $request->defaultLocale, $this->slugGeneratorStrategy, $details['title'], $details['slug']);
@@ -93,28 +93,14 @@ abstract class AbstractNodeUseCase extends AbstractTransactionalUseCase
         return $attributes;
     }
 
-    /**
-     * @param Attribute[] $attributes
-     */
-    /*private function collectTaxonomiesTerms(string $nodeType, array $attributes): array
+    private function collectTaxonomiesTerms(array $categories, string $taxonomy): array
     {
-        $contentType = $this->contentTypeRegistry->get($nodeType);
         $result = [];
 
-        foreach ($contentType->getFields() as $field) {
-            if ($field->getType() !== 'taxonomy') {
-                continue;
-            }
-
-            $taxonomy = $field->getConfig('taxonomy');
-
-            $terms = iterator_to_array($attributes[$field->getCode()]->getValue());
-
-            foreach ($terms as $term) {
-                $result[] = [$term, $taxonomy];
-            }
+        foreach ($categories as $term) {
+            $result[] = [$term, $taxonomy];
         }
 
         return $result;
-    }*/
+    }
 }

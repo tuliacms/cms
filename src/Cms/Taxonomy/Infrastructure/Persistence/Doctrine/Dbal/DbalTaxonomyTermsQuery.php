@@ -6,12 +6,12 @@ namespace Tulia\Cms\Taxonomy\Infrastructure\Persistence\Doctrine\Dbal;
 
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Uid\Uuid;
-use Tulia\Cms\Taxonomy\Domain\ReadModel\Service\TermPathReadStorageInterface;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Service\TaxonomyTermsQueryInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class DbalTermPathReadStorage implements TermPathReadStorageInterface
+class DbalTaxonomyTermsQuery implements TaxonomyTermsQueryInterface
 {
     public function __construct(
         private readonly Connection $connection,

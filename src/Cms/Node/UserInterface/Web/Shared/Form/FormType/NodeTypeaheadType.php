@@ -37,7 +37,7 @@ class NodeTypeaheadType extends AbstractType
                     'website_id' => $criteria['website_id'],
                 ], NodeFinderScopeEnum::INTERNAL);
 
-                return $node ? ['title' => $node->getTitle()] : null;
+                return $node ? ['id' => $node->getId(), 'title' => $node->getTitle()] : null;
             },
         ]);
     }

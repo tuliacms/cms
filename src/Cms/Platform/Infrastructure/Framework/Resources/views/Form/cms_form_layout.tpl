@@ -141,28 +141,25 @@
     <div class="typeahead__container">
         <div class="typeahead__field">
             <div class="typeahead__query">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                {#<input class="js-typeahead form-control {{ typeahead_attr.class|default('') }}" id="typeahead-entity-{{ fieldId }}" name="q" autocomplete="off" value="{{ display_value }}" />
+                {% if not multiple %}
+                    <div class="input-group-append{{ value ? '' : ' d-none' }} js_typeahead__remove_value">
+                        <button type="button" class="btn btn-default btn-icon-only" data-bs-toggle="tooltip" title="{{ 'delete'|trans }}"><i class="btn-icon fas fa-times"></i></button>
                     </div>
-                    <input class="js-typeahead form-control {{ typeahead_attr.class|default('') }}" id="typeahead-entity-{{ fieldId }}" name="q" autocomplete="off" value="{{ display_value }}" />
-                    {% if not multiple %}
-                        <div class="input-group-append{{ value ? '' : ' d-none' }} js_typeahead__remove_value">
-                            <button type="button" class="btn btn-default btn-icon-only" data-bs-toggle="tooltip" title="{{ 'delete'|trans }}"><i class="btn-icon fas fa-times"></i></button>
-                        </div>
-                    {% endif %}
+                {% endif %}#}
+                <div class="typeahead__query">
+                    <input class="js-typeahead {{ typeahead_attr.class|default('') }}" id="typeahead-entity-{{ fieldId }}" name="q" autocomplete="off" placeholder="{{ 'doSearch'|trans }}" value="{{ multiple ? '' : (display_value ? display_value[display_prop] : '') }}">
                 </div>
             </div>
         </div>
+        {% if multiple %}
+            {% for key, item in display_value %}
+                <input type="hidden" value="{{ item.id }}" name="{{ full_name }}[{{ key }}]" class="js-typeahead-result-input" />
+            {% endfor %}
+        {% else %}
+            <input type="hidden" value="{{ value }}" name="{{ full_name }}" class="js-typeahead-result-input" />
+        {% endif %}
     </div>
-    {{- block('form_widget_simple') -}}
-    {% if multiple %}
-        <div class="typeahead__multiple_list">
-            <div>Category <span>&times;</span></div>
-            <div>Archive <span>&times;</span></div>
-            <div>2019 <span>&times;</span></div>
-        </div>
-    {% endif %}
 
     {# TODO rewrite for Dynamic Form #}
     <script nonce="{{ csp_nonce() }}">
@@ -171,19 +168,22 @@
             let cont      = typeahead.closest('.typeahead__container');
             let target    = $('#{{ id }}');
 
-            let updateRemoveValueBtn = function () {
-                if (target.val()) {
-                    cont.find('.js_typeahead__remove_value').removeClass('d-none');
-                } else {
-                    cont.find('.js_typeahead__remove_value').addClass('d-none');
-                }
-            };
+            {% if multiple %}
+                const multiselect = {
+                    cancelOnBackspace: true,
+                    data: function () {
+                        const value = {{ display_value|json_encode|raw }};
 
-            let onClickSingular = function (node, a, item, event) {
-                target.val(item.id).trigger('change');
+                        if (!value) {
+                            return [];
+                        }
 
-                updateRemoveValueBtn();
-            };
+                        return value;
+                    }
+                };
+            {% else %}
+                const multiselect = null;
+            {% endif %}
 
             typeahead.typeahead({
                 minLength: 3,
@@ -194,11 +194,11 @@
                 href: function () {
                     return null;
                 },
+                display: '{{ display_prop }}',
                 filter: false,
                 emptyTemplate: '{{ 'noResultsForQuery'|trans({ query: '"<i>{{query}}</i>"' })|raw }}',
                 source: {
                     result: {
-                        display: '{{ display_prop }}',
                         ajax: function (query) {
                             return {
                                 path: 'result',
@@ -210,30 +210,29 @@
                     },
                 },
                 callback: {
-                    onClick: onClickSingular
+                    onSubmit: function (node, form, items, event) {
+                        {% if multiple %}
+                            cont.find('.js-typeahead-result-input').remove();
+
+                            for (let item in items) {
+                                cont.append(`<input type="hidden" value="${items[item].id}" name="{{ full_name }}[${item}]" class="js-typeahead-result-input" />`);
+                            }
+                        {% else %}
+                            if (!items) {
+                                if (! typeahead.val()) {
+                                    cont.find('.js-typeahead-result-input').remove();
+                                }
+
+                                return;
+                            }
+
+                            cont.find('.js-typeahead-result-input').remove();
+                            cont.append(`<input type="hidden" value="${items.id}" name="{{ full_name }}" class="js-typeahead-result-input" />`);
+                        {% endif %}
+                    }
                 },
-                debug: true
-            });
-
-            typeahead.change(function () {
-                if (! $(this).val()) {
-                    target.val('');
-                }
-
-                updateRemoveValueBtn();
-            }).on('keydown keypress', function (e) {
-                let enter = 27;
-                if (e.which === enter) {
-                    e.preventDefault();
-                    return false;
-                }
-            });
-
-            cont.find('.js_typeahead__remove_value button').click(function () {
-                typeahead.val('');
-                target.val('').trigger('change');
-                updateRemoveValueBtn();
-                typeahead.trigger('focus');
+                debug: true,
+                multiselect: multiselect,
             });
         });
     </script>

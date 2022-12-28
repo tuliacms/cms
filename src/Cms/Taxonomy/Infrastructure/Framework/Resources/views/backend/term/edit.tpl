@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block breadcrumbs %}
-    <li class="breadcrumb-item"><a href="{{ path('backend.term', { taxonomyType: taxonomyType.code }) }}">{{ 'termsListOfTaxonomy'|trans({ taxonomy: taxonomyType.type }) }}</a></li>
+    <li class="breadcrumb-item"><a href="{{ path('backend.term', { taxonomyType: taxonomyType.code }) }}">{{ 'termsListOfTaxonomy'|trans({ taxonomy: taxonomyType.name }) }}</a></li>
     <li class="breadcrumb-item active" aria-current="page">{{ block('title') }}</li>
 {% endblock %}
 

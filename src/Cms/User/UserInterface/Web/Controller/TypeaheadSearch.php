@@ -15,11 +15,9 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface
  */
 class TypeaheadSearch extends TypeaheadFormTypeSearch
 {
-    private UserFinderInterface $userFinder;
-
-    public function __construct(UserFinderInterface $userFinder)
-    {
-        $this->userFinder = $userFinder;
+    public function __construct(
+        private readonly UserFinderInterface $userFinder,
+    ) {
     }
 
     protected function findCollection(Request $request, WebsiteInterface $website): array
@@ -34,8 +32,8 @@ class TypeaheadSearch extends TypeaheadFormTypeSearch
         foreach ($users as $row) {
             $username = $row->getEmail();
 
-            if ($row->attribute('name')) {
-                $username = $row->attribute('name') . " ({$username})";
+            if ($row->getName()) {
+                $username = $row->getName() . " ({$username})";
             }
 
             $result[] = ['username' => $username];

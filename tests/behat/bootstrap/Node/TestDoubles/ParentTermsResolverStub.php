@@ -13,7 +13,7 @@ final class ParentTermsResolverStub implements ParentTermsResolverInterface
 {
     private array $terms = [];
 
-    public function fetchAllParents(string $term, string $taxonomy): array
+    public function fetchAllParents(string $term, string $taxonomy, string $websiteId): array
     {
         return $this->terms[$taxonomy][$term] ?? [];
     }

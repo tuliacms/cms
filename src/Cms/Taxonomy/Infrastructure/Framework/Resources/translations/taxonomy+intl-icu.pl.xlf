@@ -20,11 +20,11 @@
             </trans-unit>
             <trans-unit id="tuliacms.taxonomy.5">
                 <source>editTerm</source>
-                <target>Edit term</target>
+                <target>Edytuj element</target>
             </trans-unit>
             <trans-unit id="tuliacms.taxonomy.6">
                 <source>createTerm</source>
-                <target>Create term</target>
+                <target>Nowy element</target>
             </trans-unit>
             <trans-unit id="tuliacms.taxonomy.7">
                 <source>termSaved</source>

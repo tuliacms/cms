@@ -6,7 +6,7 @@ namespace Tulia\Cms\Taxonomy\Infrastructure\Persistence\Doctrine\Dbal;
 
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Uid\Uuid;
-use Tulia\Cms\Taxonomy\Domain\WriteModel\Service\TaxonomyTermsTreeQueryInterface;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Service\TaxonomyTermsTreeQueryInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -46,8 +46,6 @@ final class DbalTaxonomyTermsTreeQuery implements TaxonomyTermsTreeQueryInterfac
                 $root = $term['id'];
             }
         }
-
-        //dump($terms, $this->buildTree($root, $terms));exit;
 
         return $this->buildTree($root, $terms);
     }

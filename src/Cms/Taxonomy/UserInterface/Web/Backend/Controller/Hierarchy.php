@@ -12,7 +12,7 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\Taxonomy\Application\UseCase\UpdateTermsHierarchy;
 use Tulia\Cms\Taxonomy\Application\UseCase\UpdateTermsHierarchyRequest;
-use Tulia\Cms\Taxonomy\Domain\WriteModel\Service\TaxonomyTermsTreeQueryInterface;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Service\TaxonomyTermsTreeQueryInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -35,7 +35,7 @@ class Hierarchy extends AbstractController
 
         return $this->view('@backend/taxonomy/hierarchy/index.tpl', [
             'tree' => $this->termsTreeQuery->getTermsTreeFor($taxonomyType, $website->getId(), $website->getLocale()->getCode()),
-            'taxonomyType' => $taxonomyType,
+            'taxonomyType' => $contentType,
         ]);
     }
 

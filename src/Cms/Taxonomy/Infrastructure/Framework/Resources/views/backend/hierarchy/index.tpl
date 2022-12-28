@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block breadcrumbs %}
-    <li class="breadcrumb-item"><a href="{{ path('backend.term', { taxonomyType: taxonomyType }) }}">{{ 'termsListOfTaxonomy'|trans({ taxonomy: taxonomyType }) }}</a></li>
+    <li class="breadcrumb-item"><a href="{{ path('backend.term', { taxonomyType: taxonomyType.code }) }}">{{ 'termsListOfTaxonomy'|trans({ taxonomy: taxonomyType.name }) }}</a></li>
     <li class="breadcrumb-item active" aria-current="page">{{ 'hierarchy'|trans }}</li>
 {% endblock %}
 
@@ -16,14 +16,14 @@
     <div class="pane pane-lead">
         <div class="pane-header">
             <div class="pane-buttons">
-                <a href="{{ path('backend.term', { taxonomyType: taxonomyType }) }}" class="btn btn-secondary btn-icon-left"><i class="btn-icon fas fa-times"></i> {{ 'cancel'|trans({}, 'messages') }}</a>
+                <a href="{{ path('backend.term', { taxonomyType: taxonomyType.code }) }}" class="btn btn-secondary btn-icon-left"><i class="btn-icon fas fa-times"></i> {{ 'cancel'|trans({}, 'messages') }}</a>
                 <a href="#" data-submit-form="hierarchy-form" class="btn btn-success btn-icon-left"><i class="btn-icon fas fa-save"></i> {{ 'save'|trans({}, 'messages') }}</a>
             </div>
             <i class="pane-header-icon fas fa-sitemap"></i>
             <h1 class="pane-title">{{ block('title') }}</h1>
         </div>
         <div class="pane-body">
-            {{ hierarchy.change(tree, path('backend.term.hierarchy.save', { taxonomyType: taxonomyType }), 'taxonomy_hierarchy') }}
+            {{ hierarchy.change(tree, path('backend.term.hierarchy.save', { taxonomyType: taxonomyType.code }), 'taxonomy_hierarchy') }}
         </div>
     </div>
 {% endblock %}

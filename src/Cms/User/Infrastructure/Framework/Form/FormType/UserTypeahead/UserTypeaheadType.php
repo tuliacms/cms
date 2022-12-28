@@ -38,7 +38,7 @@ class UserTypeaheadType extends AbstractType
                     $username = $user->attribute('name') . " ({$username})";
                 }*/
 
-                return ['username' => $username];
+                return ['id' => $user->getId(), 'username' => $username];
             },
         ]);
     }

@@ -25,7 +25,7 @@ final class TermsFeature
 
     public function assignToTermOf(ParentTermsResolverInterface $resolver, string $term, string $taxonomy, string $type): bool
     {
-        if ($this->findAssignedTerm($term, $taxonomy, $type)) {
+        if ($this->findAssignedTerm($term, $taxonomy)) {
             return false;
         }
 
@@ -38,7 +38,7 @@ final class TermsFeature
 
     public function unassignFromTermOf(ParentTermsResolverInterface $resolver, string $term, string $taxonomy, string $type): bool
     {
-        $termEntity = $this->findAssignedTerm($term, $taxonomy, $type);
+        $termEntity = $this->findAssignedTerm($term, $taxonomy);
 
         if (!$termEntity) {
             return false;
@@ -81,23 +81,31 @@ final class TermsFeature
         return $result;
     }
 
-    public function unassignFromAllTerms(): void
+    public function unassignFromAllTerms(ParentTermsResolverInterface $resolver, string $type): void
     {
         foreach ($this->terms as $term) {
-            $term->detach();
-            $this->terms->removeElement($term);
+            if ($term->type === $type || $term->type === Term::TYPE_CALCULATED) {
+                $term->detach();
+                $this->terms->removeElement($term);
+            }
+        }
+
+        foreach ($this->terms->toArray() as $element) {
+            $this->calculateParentTerms($resolver, $element->term, $element->taxonomy);
         }
     }
 
     public function persistAdditionalCategoriesAssignations(ParentTermsResolverInterface $resolver, array ...$terms): bool
     {
-        if (!$terms) {
-            return false;
-        }
-
         $newTermsByTaxonomy = [];
         foreach ($terms as $term) {
-            $newTermsByTaxonomy[$term[1]][$term[0]] = $term[0];
+            if (count($term) === 2) {
+                $newTermsByTaxonomy[$term[1]][$term[0]] = $term[0];
+            }
+        }
+
+        if (empty($newTermsByTaxonomy)) {
+            return false;
         }
 
         $oldTermsByTaxonomy = [];
@@ -172,11 +180,11 @@ final class TermsFeature
         return false;
     }
 
-    private function findAssignedTerm(string $term, string $taxonomy, string $type): ?Term
+    private function findAssignedTerm(string $term, string $taxonomy): ?Term
     {
         /** @var Term $pretendend */
         foreach ($this->terms->toArray() as $pretendend) {
-            if ($pretendend->term === $term && $pretendend->taxonomy === $taxonomy && $pretendend->type === $type) {
+            if ($pretendend->term === $term && $pretendend->taxonomy === $taxonomy) {
                 return $pretendend;
             }
         }
@@ -186,7 +194,7 @@ final class TermsFeature
 
     private function calculateParentTerms(ParentTermsResolverInterface $resolver, string $term, string $taxonomy): void
     {
-        foreach ($resolver->fetchAllParents($term, $taxonomy) as $parentTerm) {
+        foreach ($resolver->fetchAllParents($term, $taxonomy, $this->node->getWebsiteId()) as $parentTerm) {
             $this->terms->add(new Term($this->node, $parentTerm, $taxonomy, Term::TYPE_CALCULATED));
         }
     }

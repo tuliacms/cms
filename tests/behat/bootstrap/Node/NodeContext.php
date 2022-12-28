@@ -345,10 +345,18 @@ final class NodeContext implements Context
     }
 
     /**
-     * @When I replace terms assignations in this node to term :term of taxonomy :taxonomy
+     * @When I replace additional categories assignations in this node to term :term of taxonomy :taxonomy
      */
-    public function iReplaceTermsAssignationsInThisNodeToTermOfTaxonomy(string $term, string $taxonomy): void
+    public function iReplaceAdditionalCategoriesAssignationsInThisNodeToTermOfTaxonomy(string $term, string $taxonomy): void
     {
         $this->node->persistAdditionalCategoriesAssignations($this->parentTermsResolver, [$term, $taxonomy]);
+    }
+
+    /**
+     * @When I replace additional categories assignations in this node with empty collection
+     */
+    public function iReplaceAdditionalCategoriesAssignationsInThisNodeWithEmptyCollection()
+    {
+        $this->node->persistAdditionalCategoriesAssignations($this->parentTermsResolver, []);
     }
 }

@@ -36,7 +36,16 @@ class TaxonomyTypeaheadType extends AbstractType
                     'website_id' => $criteria['website_id'],
                 ], TermFinderScopeEnum::INTERNAL);
 
-                return $term ? ['name' => $term->getName()] : null;
+                return $term ? ['id' => $term->getId(), 'name' => $term->getName()] : null;
+            },
+            'data_provider_multiple' => function (array $criteria): ?array {
+                $terms = $this->termFinder->find([
+                    'id__in' => $criteria['value'],
+                    'locale' => $criteria['locale'],
+                    'website_id' => $criteria['website_id'],
+                ], TermFinderScopeEnum::INTERNAL);
+
+                return array_map(static fn ($v) => ['id' => $v->getId(), 'name' => $v->getName()], $terms->toArray());
             },
         ]);
 

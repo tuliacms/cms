@@ -2,45 +2,16 @@
  * Wrap in body to force overwriting default styles.
  */
 body {
-    .typeahead__container {
-        .typeahead__field {
-            input {
-                font-size: $form-control-font-size;
-                min-height: $form-control-height;
-                line-height: $form-control-height;
-                padding: 0 $form-control-padding-side;
-                border: 1px solid $form-control-border-color;
-                border-radius: $form-control-border-radius;
-                transition: $form-control-transition;
-
-                &:focus {
-                    border-color: $form-control-focus-border-color;
-                    box-shadow: $form-control-focus-box-shadow;
-                }
-            }
-        }
-
-        &.result {
-            .typeahead__field {
-                input {
-                    border-radius: $form-control-border-radius $form-control-border-radius 0 0;
-                }
-            }
-        }
-    }
-
     .typeahead__label {
-        background-color: transparent;
-        padding: 5px 20px 4px 5px;
+        padding: 2px 20px 3px 5px;
         border: 1px solid $form-control-border-color;
         border-radius: $form-control-border-radius * 0.8;
         background-color: #eeeeee;
-        background: transparent;
         box-shadow: none;
         color: #333;
         line-height: 14px;
         font-family: $base-font-family;
-        font-size: 13px;
+        font-size: 12px;
         max-width: 100%;
 
         span {
@@ -57,9 +28,9 @@ body {
             right: 1px;
             transform: translateY(-50%);
             font-size: 0;
-            width: 18px;
-            height: 18px;
-            line-height: 18px;
+            width: 17px;
+            height: 17px;
+            line-height: 17px;
             text-align: center;
             padding: 0;
             margin: 0;
@@ -83,6 +54,35 @@ body {
 
                 &:before {
                     color: #222;
+                }
+            }
+        }
+    }
+}
+/*
+body {
+    .typeahead__container {
+        .typeahead__field {
+            input {
+                font-size: $form-control-font-size;
+                min-height: $form-control-height;
+                line-height: $form-control-height;
+                padding: 0 $form-control-padding-side;
+                border: 1px solid $form-control-border-color;
+                border-radius: $form-control-border-radius;
+                transition: $form-control-transition;
+
+                &:focus {
+                    border-color: $form-control-focus-border-color;
+                    box-shadow: $form-control-focus-box-shadow;
+                }
+            }
+        }
+
+        &.result {
+            .typeahead__field {
+                input {
+                    border-radius: $form-control-border-radius $form-control-border-radius 0 0;
                 }
             }
         }
@@ -134,3 +134,4 @@ body {
         font-family: $base-font-family;
     }
 }
+*/

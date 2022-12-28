@@ -31,7 +31,6 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class Term extends AbstractController
 {
-
     public function __construct(
         private readonly TermFinderInterface $termFinder,
         private readonly TaxonomyRepositoryInterface $repository,
@@ -113,7 +112,7 @@ class Term extends AbstractController
 
         return $this->view('@backend/taxonomy/term/create.tpl', [
             'form' => $form->createView(),
-            'taxonomyType' => $taxonomyType,
+            'taxonomyType' => $this->typeRegistry->get($taxonomyType),
         ]);
     }
 

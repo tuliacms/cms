@@ -120,7 +120,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.node.31">
                 <source>nodePurpose</source>
-                <target>Przeznaczenie wpisy</target>
+                <target>Przeznaczenie wpisu</target>
             </trans-unit>
             <trans-unit id="tuliacms.node.32">
                 <source>purposeWithName</source>

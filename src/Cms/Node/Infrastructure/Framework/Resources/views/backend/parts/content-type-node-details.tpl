@@ -41,7 +41,7 @@
                 {{ form_row(form.author_id) }}
                 {{ form_row(form.purposes) }}
                 {{ form_row(form.main_category) }}
-                {#{{ form_row(form.additional_categories) }}#}
+                {{ form_row(form.additional_categories) }}
                 {#{{ form_row(form.parent_id) }}#}
             </div>
         </div>

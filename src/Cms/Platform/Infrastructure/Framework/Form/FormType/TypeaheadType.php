@@ -7,7 +7,6 @@ namespace Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\RouterInterface;
@@ -22,10 +21,6 @@ class TypeaheadType extends AbstractType
     ) {
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-    }
-
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -34,6 +29,7 @@ class TypeaheadType extends AbstractType
              * Can be used to add more specific search criteria.
              */
             'data_provider_single' => null,
+            'data_provider_multiple' => null,
             /**
              * Search route. Used by typeahead to make AJAX request and search for
              * elements matched to search by this field.
@@ -61,6 +57,7 @@ class TypeaheadType extends AbstractType
         $resolver->setRequired([ 'search_route', 'data_provider_single', 'display_prop', 'locale', 'website_id' ]);
 
         $resolver->setAllowedTypes('data_provider_single', [ 'null', 'callable' ]);
+        $resolver->setAllowedTypes('data_provider_multiple', [ 'null', 'callable' ]);
         $resolver->setAllowedTypes('search_route', 'string');
         $resolver->setAllowedTypes('search_route_params', 'array');
     }
@@ -97,21 +94,60 @@ class TypeaheadType extends AbstractType
          * using repository and fill display_value to show it in HTML control.
          */
         if ($view->vars['value']) {
-            if (\is_callable($options['data_provider_single'])) {
-                $selected = \call_user_func(
-                    $options['data_provider_single'],
-                    [
-                        'value' => $view->vars['value'],
-                        'locale' => $options['locale'],
-                        'website_id' => $options['website_id']
-                    ]
-                );
+            if ($options['multiple']) {
+                $selected = [];
 
-                if ($selected) {
-                    $view->vars['display_value'] = $selected[$options['display_prop']];
+                if (\is_callable($options['data_provider_multiple'])) {
+                    $selected = \call_user_func(
+                        $options['data_provider_multiple'],
+                        [
+                            'value' => $view->vars['value'],
+                            'locale' => $options['locale'],
+                            'website_id' => $options['website_id']
+                        ]
+                    );
+                }
+
+                foreach ($view->vars['value'] as $value) {
+                    $resolvedValue = $value;
+
+                    foreach ($selected as $item) {
+                        if ($item['id'] === $value) {
+                            $resolvedValue = $item[$options['display_prop']];
+                        }
+                    }
+
+                    $view->vars['display_value'][] = [
+                        'matchedKey' => $options['display_prop'],
+                        'id' => $value,
+                        $options['display_prop'] => $resolvedValue,
+                    ];
                 }
             } else {
-                $view->vars['display_value'] = $view->vars['value'];
+                $selected = [];
+
+                if (\is_callable($options['data_provider_single'])) {
+                    $selected = \call_user_func(
+                        $options['data_provider_single'],
+                        [
+                            'value' => $view->vars['value'],
+                            'locale' => $options['locale'],
+                            'website_id' => $options['website_id']
+                        ]
+                    );
+                }
+
+                $resolvedValue = $view->vars['value'];
+
+                if ($selected['id'] === $view->vars['value']) {
+                    $resolvedValue = $selected[$options['display_prop']];
+                }
+
+                $view->vars['display_value'] = [
+                    'matchedKey' => $options['display_prop'],
+                    'id' => $view->vars['value'],
+                    $options['display_prop'] => $resolvedValue,
+                ];
             }
         }
     }

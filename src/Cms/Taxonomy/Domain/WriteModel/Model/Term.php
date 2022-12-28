@@ -160,6 +160,10 @@ class Term
             $positions[] = $term->position;
         }
 
+        if (empty($positions)) {
+            return 0;
+        }
+
         return max($positions) + 1;
     }
 }

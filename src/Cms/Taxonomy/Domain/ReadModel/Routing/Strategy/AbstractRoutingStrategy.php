@@ -12,7 +12,7 @@ use Tulia\Cms\Content\Type\Domain\WriteModel\Routing\Strategy\ContentTypeRouting
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderScopeEnum;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Model\Term;
-use Tulia\Cms\Taxonomy\Domain\ReadModel\Service\TermPathReadStorageInterface;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Service\TaxonomyTermsQueryInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -20,7 +20,7 @@ use Tulia\Cms\Taxonomy\Domain\ReadModel\Service\TermPathReadStorageInterface;
 abstract class AbstractRoutingStrategy implements ContentTypeRoutingStrategyInterface
 {
     public function __construct(
-        private readonly TermPathReadStorageInterface $storage,
+        protected readonly TaxonomyTermsQueryInterface $storage,
         protected readonly TermFinderInterface $termFinder,
         protected readonly ContentTypeRegistryInterface $contentTypeRegistry,
         protected readonly LoggerInterface $logger,
