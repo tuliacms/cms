@@ -7,7 +7,7 @@ namespace Tulia\Cms\Theme\UserInterface\Web\Backend\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\Options\Domain\ReadModel\OptionsFinderInterface;
+use Tulia\Cms\Options\Domain\ReadModel\Options;
 use Tulia\Cms\Platform\Infrastructure\DefaultTheme\DefaultTheme;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
@@ -50,7 +50,7 @@ class Customizer extends AbstractController
         PredefinedChangesetRegistry $predefinedChangesetRegistry,
         WebsiteInterface $website,
         NewCustomization $newCustomization,
-        OptionsFinderInterface $options,
+        Options $options,
     ) {
         $theme = $this->themeManager->getTheme();
 
@@ -96,7 +96,7 @@ class Customizer extends AbstractController
             'returnUrl'  => $request->query->get('returnUrl'),
             'predefinedChangesets' => $predefinedChangesetRegistry->get($theme),
             'settings' => [
-                'website_favicon' => $options->findByName('website_favicon', $website->getId(), $website->getLocale()->getCode()),
+                'website_favicon' => $options->get('website_favicon', null, $website->getId(), $website->getLocale()->getCode()),
             ],
         ]);
     }

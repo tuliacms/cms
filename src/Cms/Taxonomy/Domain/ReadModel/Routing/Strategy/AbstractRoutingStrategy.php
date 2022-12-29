@@ -19,6 +19,8 @@ use Tulia\Cms\Taxonomy\Domain\ReadModel\Service\TaxonomyTermsQueryInterface;
  */
 abstract class AbstractRoutingStrategy implements ContentTypeRoutingStrategyInterface
 {
+    private array $visibleTermsCache = [];
+
     public function __construct(
         protected readonly TaxonomyTermsQueryInterface $storage,
         protected readonly TermFinderInterface $termFinder,
@@ -70,6 +72,10 @@ abstract class AbstractRoutingStrategy implements ContentTypeRoutingStrategyInte
 
     protected function collectVisibleTermsGrouppedByTaxonomy(string $websiteId, string $locale): array
     {
+        if ($this->visibleTermsCache !== []) {
+            return $this->visibleTermsCache;
+        }
+
         $terms = $this->storage->collectVisibleTerms($websiteId, $locale);
         $result = [];
 
@@ -80,7 +86,7 @@ abstract class AbstractRoutingStrategy implements ContentTypeRoutingStrategyInte
             }
         }
 
-        return $result;
+        return $this->visibleTermsCache = $result;
     }
 
     private function findTermIdByPath(array $terms, string $path): ?string

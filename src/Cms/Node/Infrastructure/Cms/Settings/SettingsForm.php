@@ -37,7 +37,6 @@ final class SettingsForm extends AbstractType
                 'choices' => $choices,
                 'choice_translation_domain' => false,
                 'constraints' => [
-                    new Assert\NotBlank(),
                     new Assert\Choice(['choices' => $choices]),
                 ],
             ]);

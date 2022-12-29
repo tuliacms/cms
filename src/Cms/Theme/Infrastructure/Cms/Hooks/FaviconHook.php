@@ -10,7 +10,7 @@ use Tulia\Cms\Filemanager\Application\Service\ImageUrlResolver;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\FileFinderInterface;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\FileFinderScopeEnum;
 use Tulia\Cms\Filemanager\Domain\WriteModel\Model\FileTypeEnum;
-use Tulia\Cms\Options\Domain\ReadModel\OptionsFinderInterface;
+use Tulia\Cms\Options\Domain\ReadModel\Options;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 use Tulia\Component\Hooks\HooksSubscriberInterface;
 
@@ -21,7 +21,7 @@ use Tulia\Component\Hooks\HooksSubscriberInterface;
 class FaviconHook implements HooksSubscriberInterface
 {
     public function __construct(
-        private readonly OptionsFinderInterface $options,
+        private readonly Options $options,
         private readonly FileFinderInterface $fileFinder,
         private readonly ImageUrlResolver $imageUrlResolver,
         private readonly TagAwareCacheInterface $settingsCache,
@@ -46,7 +46,7 @@ class FaviconHook implements HooksSubscriberInterface
         return $this->settingsCache->get($key, function (ItemInterface $item) use ($website) {
             $item->tag('settings');
 
-            $fileId = $this->options->findByName('website_favicon', $website->getId(), $website->getLocale()->getCode());
+            $fileId = $this->options->get('website_favicon', null, $website->getId(), $website->getLocale()->getCode());
 
             if (!$fileId) {
                 return '';

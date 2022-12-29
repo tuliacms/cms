@@ -40,12 +40,23 @@
                 {{ form_row(form.status) }}
                 {{ form_row(form.author_id) }}
                 {{ form_row(form.purposes) }}
-                {{ form_row(form.main_category) }}
-                {{ form_row(form.additional_categories) }}
                 {#{{ form_row(form.parent_id) }}#}
             </div>
         </div>
     </div>
+    {% if form.main_category is defined %}
+        <div class="accordion-section">
+            <div class="accordion-section-button" data-bs-toggle="collapse" data-bs-target="#form-collapse-sidebar-category">
+                {{ 'category'|trans }}
+            </div>
+            <div id="form-collapse-sidebar-category" class="accordion-collapse collapse show">
+                <div class="accordion-section-body">
+                    {{ form_row(form.main_category) }}
+                    {{ form_row(form.additional_categories) }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% endmacro %}
 
 {% macro javascripts() %}

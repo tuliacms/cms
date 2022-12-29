@@ -9,6 +9,8 @@ namespace Tulia\Cms\Content\Attributes\Domain\ReadModel\Service;
  */
 final class LazyAttributesFinder
 {
+    private ?array $attributes = null;
+
     public function __construct(
         private readonly string $nodeId,
         private readonly string $locale,
@@ -18,6 +20,10 @@ final class LazyAttributesFinder
 
     public function find(): array
     {
-        return $this->attributesFinder->find($this->nodeId, $this->locale);
+        if (null !== $this->attributes) {
+            return $this->attributes;
+        }
+
+        return $this->attributes = $this->attributesFinder->find($this->nodeId, $this->locale);
     }
 }

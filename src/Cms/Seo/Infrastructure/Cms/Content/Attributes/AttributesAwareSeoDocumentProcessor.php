@@ -6,7 +6,7 @@ namespace Tulia\Cms\Seo\Infrastructure\Cms\Content\Attributes;
 
 use Tulia\Cms\Content\Attributes\Domain\ReadModel\Model\AttributesAwareInterface;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Service\ImageUrlGeneratorInterface;
-use Tulia\Cms\Options\Domain\ReadModel\OptionsFinderInterface;
+use Tulia\Cms\Options\Domain\ReadModel\Options;
 use Tulia\Cms\Platform\Shared\Document\DocumentInterface;
 use Tulia\Cms\Seo\Domain\Service\SeoDocumentProcessorInterface;
 
@@ -18,7 +18,7 @@ final class AttributesAwareSeoDocumentProcessor implements SeoDocumentProcessorI
     public function __construct(
         private readonly DocumentInterface $document,
         private readonly ImageUrlGeneratorInterface $urlGenerator,
-        private readonly OptionsFinderInterface $optionsFinder,
+        private readonly Options $options,
     ) {
     }
 
@@ -35,7 +35,7 @@ final class AttributesAwareSeoDocumentProcessor implements SeoDocumentProcessorI
         $keywords = (string) $document->attribute('seo_keywords');
         $ogImage = (string) $document->attribute('seo_og_image');
         $robots = (string) $document->attribute('seo_robots');
-        $globalRobots = $this->optionsFinder->findByName('seo_global_robots', $websiteId, $locale);
+        $globalRobots = $this->options->get('seo_global_robots', null, $websiteId, $locale);
 
         $this->document->setTitle($title);
         $this->document->setDescription($description);

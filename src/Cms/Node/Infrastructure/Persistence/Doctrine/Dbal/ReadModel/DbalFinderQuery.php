@@ -27,6 +27,7 @@ class DbalFinderQuery extends AbstractDbalQuery
     public function __construct(
         QueryBuilder $queryBuilder,
         private readonly DbalNodeAttributesFinder $attributesFinder,
+        private readonly NodeFinderCache $cache,
     ) {
         parent::__construct($queryBuilder);
     }
@@ -203,26 +204,27 @@ class DbalFinderQuery extends AbstractDbalQuery
 
     protected function fetchTerms(array $nodeIdList): array
     {
-        $source = $this->queryBuilder->getConnection()->fetchAllAssociative('
-            SELECT
-                type,
-                taxonomy,
-                BIN_TO_UUID(node_id) AS node_id,
-                BIN_TO_UUID(term) AS term
-            FROM #__node_in_term
-            WHERE node_id IN (:node_id)', [
-            'node_id' => array_map(static fn(string $v) => Uuid::fromString($v)->toBinary(), $nodeIdList),
-        ], [
-            'node_id' => Connection::PARAM_STR_ARRAY,
-        ]);
+        return $this->cache->fetchTermsUntilExists($nodeIdList, function ($nodeIdList) {
+            $source = $this->queryBuilder->getConnection()->fetchAllAssociative('
+                SELECT
+                    type,
+                    taxonomy,
+                    BIN_TO_UUID(node_id) AS node_id,
+                    BIN_TO_UUID(term) AS term
+                FROM #__node_in_term
+                WHERE node_id IN (:node_id)', [
+                'node_id' => array_map(static fn(string $v) => Uuid::fromString($v)->toBinary(), $nodeIdList),
+            ], [
+                'node_id' => Connection::PARAM_STR_ARRAY,
+            ]);
+            $result = [];
 
-        $result = [];
+            foreach ($source as $row) {
+                $result[$row['node_id']][$row['type']][] = $row['term'];
+            }
 
-        foreach ($source as $row) {
-            $result[$row['node_id']][$row['type']][] = $row['term'];
-        }
-
-        return $result;
+            return $result;
+        });
     }
 
     protected function setDefaults(array $criteria): void
