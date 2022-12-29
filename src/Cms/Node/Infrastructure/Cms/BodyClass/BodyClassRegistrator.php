@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\UserInterface\Web\Frontend\BodyClass;
+namespace Tulia\Cms\Node\Infrastructure\Cms\BodyClass;
 
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\BodyClass\Collector\BodyClassCollection;

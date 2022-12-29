@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\UserInterface\Web\Frontend\Breadcrumbs;
+namespace Tulia\Cms\Node\Infrastructure\Cms\Breadcrumbs;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
@@ -111,8 +111,8 @@ class CrumbsResolver implements BreadcrumbsResolverInterface
             $node->getTitle()
         );
 
-        if ($node->getCategory()) {
-            return sprintf('frontend.taxonomy.%s.%s', 'category', $node->getCategory());
+        if ($node->getMainCategory()) {
+            return sprintf('frontend.taxonomy.%s.%s', 'category', $node->getMainCategory());
         }
 
         return null;

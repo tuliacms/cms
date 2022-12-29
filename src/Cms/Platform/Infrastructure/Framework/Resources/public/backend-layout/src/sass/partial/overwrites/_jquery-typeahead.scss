@@ -2,11 +2,44 @@
  * Wrap in body to force overwriting default styles.
  */
 body {
+    .typeahead__container {
+        .typeahead__field {
+            input {
+                border: 1px solid $form-control-border-color;
+                border-radius: $form-control-border-radius;
+                transition: $form-control-transition;
+
+                &:focus {
+                    border-color: $form-control-focus-border-color;
+                    box-shadow: $form-control-focus-box-shadow;
+                }
+            }
+        }
+
+        &.typeahead__multiple {
+            .typeahead__field input {
+                padding-bottom: 11px;
+            }
+        }
+
+        &.result {
+            .typeahead__field {
+                input {
+                    border-radius: $form-control-border-radius $form-control-border-radius 0 0;
+                }
+            }
+        }
+    }
+
+    .typeahead__label-container {
+        padding-bottom: 6px;
+    }
+
     .typeahead__label {
-        padding: 2px 20px 3px 5px;
+        padding: 5px 20px 4px 5px;
         border: 1px solid $form-control-border-color;
         border-radius: $form-control-border-radius * 0.8;
-        background-color: #eeeeee;
+        background-color: transparent;
         box-shadow: none;
         color: #333;
         line-height: 14px;

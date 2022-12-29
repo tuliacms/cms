@@ -138,18 +138,10 @@
         {% set attr = attr|merge({ style: 'display:none;' }) -%}
     {% endif %}
 
-    <div class="typeahead__container">
+    <div class="typeahead__container {{ multiple ? 'typeahead__multiple' : 'typeahead__singular' }}">
         <div class="typeahead__field">
             <div class="typeahead__query">
-                {#<input class="js-typeahead form-control {{ typeahead_attr.class|default('') }}" id="typeahead-entity-{{ fieldId }}" name="q" autocomplete="off" value="{{ display_value }}" />
-                {% if not multiple %}
-                    <div class="input-group-append{{ value ? '' : ' d-none' }} js_typeahead__remove_value">
-                        <button type="button" class="btn btn-default btn-icon-only" data-bs-toggle="tooltip" title="{{ 'delete'|trans }}"><i class="btn-icon fas fa-times"></i></button>
-                    </div>
-                {% endif %}#}
-                <div class="typeahead__query">
-                    <input class="js-typeahead {{ typeahead_attr.class|default('') }}" id="typeahead-entity-{{ fieldId }}" name="q" autocomplete="off" placeholder="{{ 'doSearch'|trans }}" value="{{ multiple ? '' : (display_value ? display_value[display_prop] : '') }}">
-                </div>
+                <input class="js-typeahead {{ typeahead_attr.class|default('') }}" id="typeahead-entity-{{ fieldId }}" name="q" autocomplete="off" placeholder="{{ 'doSearch'|trans }}" value="{{ multiple ? '' : (display_value ? display_value[display_prop] : '') }}">
             </div>
         </div>
         {% if multiple %}

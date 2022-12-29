@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\UserInterface\Web\Frontend\EditLinks;
+namespace Tulia\Cms\Node\Infrastructure\Cms\EditLinks;
 
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -16,20 +16,11 @@ use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
  */
 class EditLinksRegistrator implements EditLinksCollectorInterface
 {
-    protected TranslatorInterface $translator;
-
-    protected RouterInterface $router;
-
-    protected ContentTypeRegistryInterface $registry;
-
     public function __construct(
-        TranslatorInterface $translator,
-        RouterInterface $router,
-        ContentTypeRegistryInterface $registry
+        private readonly TranslatorInterface $translator,
+        private readonly RouterInterface $router,
+        private readonly ContentTypeRegistryInterface $registry,
     ) {
-        $this->translator = $translator;
-        $this->router = $router;
-        $this->registry = $registry;
     }
 
     public function collect(Collection $collection, object $node, array $options = []): void

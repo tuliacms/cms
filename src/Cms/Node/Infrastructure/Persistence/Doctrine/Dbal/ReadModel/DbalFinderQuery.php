@@ -11,7 +11,7 @@ use PDO;
 use Symfony\Component\Uid\Uuid;
 use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\LazyAttributesFinder;
 use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
-use Tulia\Cms\Node\Domain\WriteModel\Model\Enum\TermTypeEnum;
+use Tulia\Cms\Node\Domain\WriteModel\Model\Term;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
@@ -178,12 +178,15 @@ class DbalFinderQuery extends AbstractDbalQuery
             return $collection;
         }
 
-        $terms = [];//$this->fetchTerms(array_column($result, 'id'));
+        $terms = $this->fetchTerms(array_column($result, 'id'));
 
         try {
             foreach ($result as $row) {
-                if (isset($terms[$row['id']][TermTypeEnum::MAIN][0])) {
-                    $row['category'] = $terms[$row['id']][TermTypeEnum::MAIN][0];
+                if (isset($terms[$row['id']][Term::TYPE_MAIN][0])) {
+                    $row['main_category'] = $terms[$row['id']][Term::TYPE_MAIN][0];
+                }
+                if (isset($terms[$row['id']][Term::TYPE_ADDITIONAL])) {
+                    $row['additional_categories'] = $terms[$row['id']][Term::TYPE_ADDITIONAL];
                 }
 
                 $row['lazy_attributes'] = new LazyAttributesFinder($row['id'], $row['locale'], $this->attributesFinder);
@@ -201,17 +204,22 @@ class DbalFinderQuery extends AbstractDbalQuery
     protected function fetchTerms(array $nodeIdList): array
     {
         $source = $this->queryBuilder->getConnection()->fetchAllAssociative('
-            SELECT *
-            FROM #__node_term_relationship
+            SELECT
+                type,
+                taxonomy,
+                BIN_TO_UUID(node_id) AS node_id,
+                BIN_TO_UUID(term) AS term
+            FROM #__node_in_term
             WHERE node_id IN (:node_id)', [
-            'node_id' => $nodeIdList,
+            'node_id' => array_map(static fn(string $v) => Uuid::fromString($v)->toBinary(), $nodeIdList),
         ], [
             'node_id' => Connection::PARAM_STR_ARRAY,
         ]);
+
         $result = [];
 
         foreach ($source as $row) {
-            $result[$row['node_id']][$row['type']][] = $row['term_id'];
+            $result[$row['node_id']][$row['type']][] = $row['term'];
         }
 
         return $result;

@@ -32,6 +32,8 @@ class Node implements AttributesAwareInterface
     protected ?string $slug;
     protected bool $visibility;
     protected array $purposes = [];
+    protected ?string $mainCategory = null;
+    protected array $additionalCategories = [];
 
     public static function buildFromArray(array $data): self
     {
@@ -65,6 +67,8 @@ class Node implements AttributesAwareInterface
         $node->setTitle($data['title'] ?? '');
         $node->setSlug($data['slug'] ?? '');
         $node->setPurposes($data['purposes'] ?? []);
+        $node->mainCategory = $data['main_category'] ?? null;
+        $node->additionalCategories = $data['additional_categories'] ?? [];
 
         if (isset($data['lazy_attributes'])) {
             $node->attributesLazyStorage = $data['lazy_attributes'];
@@ -224,5 +228,15 @@ class Node implements AttributesAwareInterface
     public function setPurposes(array $purposes): void
     {
         $this->purposes = $purposes;
+    }
+
+    public function getMainCategory(): ?string
+    {
+        return $this->mainCategory;
+    }
+
+    public function getAdditionalCategories(): array
+    {
+        return $this->additionalCategories;
     }
 }

@@ -100,6 +100,10 @@
     background-color: #fff;
     background: transparent;
     transition: $form-control-transition;
+
+    .search-choice {
+        font-size: 12px;
+    }
 }
 .chosen-container-multi .chosen-choices li.search-field input[type="text"] {
     height: 32px !important;
@@ -110,7 +114,6 @@
     border: 1px solid $form-control-border-color;
     border-radius: $form-control-border-radius * 0.8;
     margin: 5px 7px 5px 0;
-    background-color: #eeeeee;
     background: transparent;
     box-shadow: none;
     color: #333;
