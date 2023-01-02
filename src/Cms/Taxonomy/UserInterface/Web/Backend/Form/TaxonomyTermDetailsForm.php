@@ -13,6 +13,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormType\AttributesAwareFormTypeTrait;
 use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormType\AttributesType;
+use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\YesNoType;
 use Tulia\Cms\Taxonomy\UserInterface\Web\Shared\Form\FormType\TaxonomyTypeaheadType;
 
 /**
@@ -44,6 +45,9 @@ final class TaxonomyTermDetailsForm extends AbstractType
             'partial_view' => $options['partial_view'],
             'website' => $options['website'],
             'content_type' => $options['content_type'],
+        ]);
+        $builder->add('visibility', YesNoType::class, [
+            'label' => 'visibility',
         ]);
 
         if ($contentType->isRoutable()) {

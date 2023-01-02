@@ -3,8 +3,8 @@
     <file source-language="en" target-language="en" datatype="plaintext" original="seo+intl-icu.en.xlf">
         <body>
             <trans-unit id="tuliacms.seo.1">
-                <source>Fill to overwrite default title</source>
-                <target>Fill to overwrite default title</target>
+                <source>fillToOverwriteDefaultTitle</source>
+                <target>Fill to overwrite default title.</target>
             </trans-unit>
             <trans-unit id="tuliacms.seo.2">
                 <source>title</source>

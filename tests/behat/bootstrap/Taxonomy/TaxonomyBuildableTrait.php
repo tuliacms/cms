@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Tests\Behat\Taxonomy;
 
+use Behat\Behat\Tester\Exception\PendingException;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Taxonomy;
 use Tulia\Cms\Tests\Behat\AggregateRootSpy;
 use Tulia\Cms\Tests\Helper\ObjectMother\TaxonomyMother;
@@ -48,6 +49,14 @@ trait TaxonomyBuildableTrait
     public function whichHasTerm(string $term): void
     {
         $this->taxonomyBuilder->withTerm($term);
+    }
+
+    /**
+     * @Given which has not-visible term :term
+     */
+    public function whichHasNotVisibleTerm(string $term): void
+    {
+        $this->taxonomyBuilder->withInvisibleTerm($term);
     }
 
     /**

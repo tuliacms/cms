@@ -43,6 +43,12 @@ final class UpdateTerm extends AbstractTransactionalUseCase
             $request->data['attributes'],
         );
 
+        if ($request->data['visibility']) {
+            $taxonomy->turnTermVisibilityOn($request->termId, $request->locale, $request->defaultLocale);
+        } else {
+            $taxonomy->turnTermVisibilityOff($request->termId, $request->locale, $request->defaultLocale);
+        }
+
         $this->repository->save($taxonomy);
         $this->bus->dispatchCollection($taxonomy->collectDomainEvents());
 

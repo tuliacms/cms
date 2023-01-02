@@ -35,7 +35,7 @@ final class SettingsForm extends AbstractType
                 'label' => 'categoryTaxonomy',
                 'translation_domain' => 'node',
                 'choices' => $choices,
-                'choice_translation_domain' => false,
+                'choice_translation_domain' => 'taxonomy',
                 'constraints' => [
                     new Assert\Choice(['choices' => $choices]),
                 ],

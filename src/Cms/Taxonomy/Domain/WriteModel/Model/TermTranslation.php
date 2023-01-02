@@ -50,6 +50,28 @@ class TermTranslation
         }
     }
 
+    public function turnVisibilityOff(): bool
+    {
+        if (!$this->visibility) {
+            return false;
+        }
+
+        $this->visibility = false;
+
+        return true;
+    }
+
+    public function turnVisibilityOn(): bool
+    {
+        if ($this->visibility) {
+            return false;
+        }
+
+        $this->visibility = true;
+
+        return true;
+    }
+
     public function isTranslated(): bool
     {
         return $this->translated;

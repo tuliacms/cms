@@ -1,7 +1,7 @@
 {% extends 'backend' %}
 
 {% block title %}
-    {{ 'termsListOfTaxonomy'|trans({ taxonomy: taxonomyType.name }, 'taxonomy') }}
+    {{ 'termsListOfTaxonomy'|trans({ taxonomy: taxonomyType.name|trans({}, 'taxonomy') }, 'taxonomy') }}
 {% endblock %}
 
 {% block breadcrumbs %}

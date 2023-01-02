@@ -16,7 +16,6 @@ class Term
 {
     public const ROOT_LEVEL = 0;
 
-    private string $id;
     private int $position = 0;
     private int $level = 0;
     /** @var ArrayCollection<int, TermTranslation> */
@@ -25,15 +24,11 @@ class Term
     public Collection $terms;
 
     private function __construct(
-        ?string $id,
+        private string $id,
         private ?Taxonomy $taxonomy,
         private bool $isRoot = false,
         private ?Term $parent = null,
     ) {
-        if (!$this->isRoot) {
-            $this->id = $id;
-        }
-
         $this->terms = new ArrayCollection();
     }
 
@@ -42,7 +37,7 @@ class Term
         array $locales,
         string $creatingLocale,
     ): self {
-        $self = new self(null, $taxonomy, true);
+        $self = new self('root', $taxonomy, true);
 
         $translations = [];
 
@@ -124,6 +119,39 @@ class Term
         }
     }
 
+    public function turnVisibilityOff(string $locale, string $defaultLocale): bool
+    {
+        $trans = $this->getTranslation($locale);
+        $trans->translated = true;
+        $state = $trans->turnVisibilityOff();
+
+        if ($locale === $defaultLocale) {
+            foreach ($this->translations as $translation) {
+                if (false === $translation->isTranslated()) {
+                    $translation->turnVisibilityOff();
+                }
+            }
+        }
+
+        return $state;
+    }
+
+    public function turnVisibilityOn(string $locale, string $defaultLocale): bool
+    {
+        $trans = $this->getTranslation($locale);
+        $state = $trans->turnVisibilityOn();
+
+        if ($locale === $defaultLocale) {
+            foreach ($this->translations as $translation) {
+                if (false === $translation->isTranslated()) {
+                    $translation->turnVisibilityOn();
+                }
+            }
+        }
+
+        return $state;
+    }
+
     public function getTranslation(string $locale): TermTranslation
     {
         foreach ($this->translations as $translation) {
@@ -150,6 +178,17 @@ class Term
     public function moveToPosition(int $position): void
     {
         $this->position = $position;
+    }
+
+    public function getVisibilityInTranslations(): array
+    {
+        $result = [];
+
+        foreach ($this->translations as $trans) {
+            $result[$trans->locale] = $trans->visibility;
+        }
+
+        return $result;
     }
 
     private function calculateNextPosition(): int

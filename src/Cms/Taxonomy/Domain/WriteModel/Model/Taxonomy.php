@@ -13,6 +13,7 @@ use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermDeleted;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermsHierarchyChanged;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermTranslated;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermUpdated;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermVisibilityChanged;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Exception\TermNotFoundException;
 
 /**
@@ -148,6 +149,24 @@ class Taxonomy extends AbstractAggregateRoot
         }
 
         $this->recordThat(new TermsHierarchyChanged($this->type, $this->websiteId, $this->collectTermsHierarchy()));
+    }
+
+    public function turnTermVisibilityOff(string $id, string $locale, string $defaultLocale): void
+    {
+        $term = $this->getTerm($id);
+
+        if ($term->turnVisibilityOff($locale, $defaultLocale)) {
+            $this->recordThat(new TermVisibilityChanged($id, $this->type, $this->websiteId, $term->getVisibilityInTranslations()));
+        }
+    }
+
+    public function turnTermVisibilityOn(string $id, string $locale, string $defaultLocale): void
+    {
+        $term = $this->getTerm($id);
+
+        if ($term->turnVisibilityOn($locale, $defaultLocale)) {
+            $this->recordThat(new TermVisibilityChanged($id, $this->type, $this->websiteId, $term->getVisibilityInTranslations()));
+        }
     }
 
     public function deleteTerm(string $id): void

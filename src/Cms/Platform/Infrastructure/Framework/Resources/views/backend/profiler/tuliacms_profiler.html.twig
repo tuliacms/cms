@@ -1,0 +1,29 @@
+{% extends '@WebProfiler/Profiler/layout.html.twig' %}
+
+{% block toolbar %}
+    {% set icon %}
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 127.5 108.04" xml:space="preserve"><style type="text/css">.st0{fill:#fff;}</style><g><path class="st0" d="M118.89,0H8.67L0,14.95l54.58,93.09h18.39l54.58-93.09L118.89,0z M29.26,28.64h8.77l33.78,57.61l45.77-79.01 l4.47,7.7l-50.41,85.98L29.26,28.64z M43.55,28.64h41.01l-20.5,34.97L43.55,28.64z M11.41,4.76h102.11L71.79,76.8l-4.98-8.49 l32.69-55.75H6.88L11.41,4.76z M6.9,17.32h84.29l-3.85,6.56H20.96l46.56,79.4H57.31L6.9,17.32z"/></g></svg>
+        <span class="sf-toolbar-value">{{ collector.version }}</span>
+    {% endset %}
+
+    {% set text %}
+        <div class="sf-toolbar-info-group">
+            <div class="sf-toolbar-info-piece">
+                <b>Version</b>
+                <span>{{ collector.version }}</span>
+            </div>
+            <div class="sf-toolbar-info-piece">
+                <b>Released</b>
+                <span>{{ collector.releaseDate }}</span>
+            </div>
+        </div>
+        <div class="sf-toolbar-info-group">
+            <div class="sf-toolbar-info-piece">
+                <b>Documentation</b>
+                <span><a href="https://docs.tuliacms.org/" target="_blank">Read Tulia CMS {{ collector.version }} Docs</a></span>
+            </div>
+        </div>
+    {% endset %}
+
+    {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', { link: false, additional_classes: 'sf-toolbar-block-right' }) }}
+{% endblock %}

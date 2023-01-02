@@ -28,27 +28,23 @@
             </trans-unit>
             <trans-unit id="tuliacms.taxonomy.7">
                 <source>termSaved</source>
-                <target>Term saved</target>
+                <target>Element został zapisany</target>
             </trans-unit>
             <trans-unit id="tuliacms.taxonomy.8">
                 <source>deleteTerm</source>
-                <target>Delete category</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.taxonomy.9">
-                <source>deleteSelectedTerms</source>
-                <target>Delete selected categories</target>
+                <target>Usuń element</target>
             </trans-unit>
             <trans-unit id="tuliacms.taxonomy.10">
                 <source>parentTerm</source>
-                <target>Parent term</target>
+                <target>Element nadrzędny</target>
             </trans-unit>
             <trans-unit id="tuliacms.taxonomy.11">
                 <source>selectedTermsWereDeleted</source>
-                <target>Selected terms were deleted.</target>
+                <target>Elementy zostały usunięte.</target>
             </trans-unit>
             <trans-unit id="tuliacms.taxonomy.12">
                 <source>cannotAssignSelfTermParent</source>
-                <target>Cannot assign self taxonomy as parent.</target>
+                <target>Nie można przypisać samego siebie jako elementu nadrzędnego.</target>
             </trans-unit>
             <trans-unit id="tuliacms.taxonomy.13">
                 <source>Tag</source>
@@ -56,14 +52,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.taxonomy.14">
                 <source>Category</source>
-                <target>Category</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.taxonomy.15">
-                <source>areYouSureYouWantToDeleteFollowingTerms</source>
-                <target>{hierarchical, select,
-                    1 {Are You sure You want to delete following terms and their children?}
-                    other {Are You sure You want to delete following terms?}
-                }</target>
+                <target>Kategoria</target>
             </trans-unit>
         </body>
     </file>

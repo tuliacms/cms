@@ -19,6 +19,7 @@ final class TaxonomyMother
     private string $defaultLocale = 'en_US';
     private array $locales = ['en_US'];
     private array $terms = [];
+    private array $invisibleTerms = [];
     private array $termsTranslations = [];
 
     private function __construct(string $type)
@@ -34,6 +35,12 @@ final class TaxonomyMother
     public function withTerm(string $term): self
     {
         $this->terms[] = $term;
+        return $this;
+    }
+
+    public function withInvisibleTerm(string $term): self
+    {
+        $this->invisibleTerms[] = $term;
         return $this;
     }
 
@@ -70,6 +77,25 @@ final class TaxonomyMother
                 $this->locale,
                 $this->defaultLocale,
             );
+
+            if (isset($this->termsTranslations[$term])) {
+                foreach ($this->termsTranslations[$term] as $locale => $translation) {
+                    $taxonomy->updateTerm($slugStrategy, $term, $locale, $translation, null, $this->defaultLocale);
+                }
+            }
+        }
+
+        foreach ($this->invisibleTerms as $term) {
+            $taxonomy->addTerm(
+                $slugStrategy,
+                $term,
+                $term,
+                $term,
+                $this->locales,
+                $this->locale,
+                $this->defaultLocale,
+            );
+            $taxonomy->turnTermVisibilityOff($term, $this->locale, $this->defaultLocale);
 
             if (isset($this->termsTranslations[$term])) {
                 foreach ($this->termsTranslations[$term] as $locale => $translation) {

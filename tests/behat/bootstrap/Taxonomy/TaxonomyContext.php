@@ -12,6 +12,7 @@ use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermDeleted;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermsHierarchyChanged;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermTranslated;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermUpdated;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermVisibilityChanged;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Taxonomy;
 use Tulia\Cms\Tests\Behat\AggregateRootSpy;
 use Tulia\Cms\Tests\Behat\Assert;
@@ -227,5 +228,57 @@ final class TaxonomyContext implements Context
         }
 
         $this->taxonomy->updateHierarchy($parsedHierarchy);
+    }
+
+    /**
+     * @When I turn term :term visibility on, in :locale locale
+     */
+    public function iTurnTermVisibilityOnInLocale(string $term, string $locale): void
+    {
+        $this->taxonomy->turnTermVisibilityOn($term, $locale, $this->defaultLocale);
+    }
+
+    /**
+     * @Then term :term should be invisible in locale :locale
+     */
+    public function termShouldBeInvisibleInLocale(string $term, string $locale): void
+    {
+        /** @var TermVisibilityChanged $event */
+        $event = $this->taxonomySpy->findEvent(TermVisibilityChanged::class);
+
+        Assert::assertInstanceOf(TermVisibilityChanged::class, $event, 'Term visibility should be changed');
+        Assert::assertSame($term, $event->termId);
+        Assert::assertFalse($event->isVisibleIn($locale));
+    }
+
+    /**
+     * @When I turn term :term visibility off, in :arg2 locale
+     */
+    public function iTurnTermVisibilityOffInLocale(string $term, string $locale): void
+    {
+        $this->taxonomy->turnTermVisibilityOff($term, $locale, $this->defaultLocale);
+    }
+
+    /**
+     * @Then term :term should be visible in locale :locale
+     */
+    public function termShouldBeVisibleInLocale(string $term, string $locale): void
+    {
+        /** @var TermVisibilityChanged $event */
+        $event = $this->taxonomySpy->findEvent(TermVisibilityChanged::class);
+
+        Assert::assertInstanceOf(TermVisibilityChanged::class, $event, 'Term visibility should be changed');
+        Assert::assertSame($term, $event->termId);
+        Assert::assertTrue($event->isVisibleIn($locale));
+    }
+
+    /**
+     * @Then term :term visibility should not be changed
+     */
+    public function termVisibilityShouldNotBeChanged(string $term): void
+    {
+        $event = $this->taxonomySpy->findEvent(TermVisibilityChanged::class);
+
+        Assert::assertNull($event, 'Term visibility should not be changed');
     }
 }

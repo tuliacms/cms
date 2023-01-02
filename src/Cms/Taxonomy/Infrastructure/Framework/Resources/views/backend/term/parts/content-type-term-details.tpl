@@ -19,3 +19,16 @@
         </div>
     </div>
 {% endmacro %}
+
+{% macro sidebar_accordion(form, context) %}
+    <div class="accordion-section">
+        <div class="accordion-section-button" data-bs-toggle="collapse" data-bs-target="#form-collapse-sidebar-status">
+            {{ 'publicationStatus'|trans }}
+        </div>
+        <div id="form-collapse-sidebar-status" class="accordion-collapse collapse show">
+            <div class="accordion-section-body">
+                {{ form_row(form.visibility) }}
+            </div>
+        </div>
+    </div>
+{% endmacro %}
