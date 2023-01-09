@@ -37,6 +37,8 @@ final class WebsiteFixture extends Fixture implements FixtureGroupInterface
         $manager->persist($website);
         $manager->flush();
 
+        $this->addReference(ReferencesEnum::WEBSITE, $website);
+
         $this->eventBus->dispatchCollection($website->collectDomainEvents());
     }
 

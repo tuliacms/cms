@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
@@ -26,7 +27,9 @@ use Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserTypeahead\UserType
  */
 final class NodeDetailsForm extends AbstractType
 {
-    use AttributesAwareFormTypeTrait;
+    use AttributesAwareFormTypeTrait {
+        AttributesAwareFormTypeTrait::configureOptions as traitConfigureOptions;
+    }
 
     public function __construct(
         private readonly NodePurposeRegistryInterface $flagRegistry,
@@ -143,6 +146,13 @@ final class NodeDetailsForm extends AbstractType
                 'locale' => $options['website']->getLocale()->getCode(),
             ]);
         }
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $this->traitConfigureOptions($resolver);
+
+        $resolver->setDefault('attr', ['class' => 'tulia-dynamic-form']);
     }
 
     private function buildPurposes(): array

@@ -12,8 +12,6 @@ use Tulia\Cms\Content\Type\Domain\ReadModel\Exception\ConstraintNotExistsExcepti
 use Tulia\Cms\Content\Type\Domain\ReadModel\Exception\FieldTypeNotExistsException;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\Field;
-use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ConstraintsBuilder;
-use Tulia\Cms\Content\Type\Domain\ReadModel\Service\FieldTypeMappingRegistry;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 
 /**
@@ -21,24 +19,12 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface
  */
 class SymfonyFormBuilderCreator
 {
-    private FormFactoryInterface $formFactory;
-    private FieldTypeMappingRegistry $mappingRegistry;
-    private ConstraintsBuilder $constraintsBuilder;
-    private LoggerInterface $logger;
-    private SymfonyFieldBuilder $symfonyFieldBuilder;
-
     public function __construct(
-        FormFactoryInterface $formFactory,
-        FieldTypeMappingRegistry $mappingRegistry,
-        ConstraintsBuilder $constraintsBuilder,
-        LoggerInterface $contentBuilderLogger,
-        SymfonyFieldBuilder $symfonyFieldBuilder
+        private readonly FormFactoryInterface $formFactory,
+        private readonly LoggerInterface $logger,
+        private readonly SymfonyFieldBuilder $symfonyFieldBuilder,
+        private readonly AttributesDataFlattener $attributesDataFlattener,
     ) {
-        $this->formFactory = $formFactory;
-        $this->mappingRegistry = $mappingRegistry;
-        $this->constraintsBuilder = $constraintsBuilder;
-        $this->logger = $contentBuilderLogger;
-        $this->symfonyFieldBuilder = $symfonyFieldBuilder;
     }
 
     /**
@@ -50,15 +36,13 @@ class SymfonyFormBuilderCreator
         array $attributes,
         bool $expectCqrsToken = true
     ): FormBuilderInterface {
-        $fields = $contentType->getFields();
-
         $builder = $this->createFormBuilder(
             $contentType->getCode(),
-            $this->flattenAttributesValues($fields, $attributes),
+            $this->attributesDataFlattener->flattenAttributes($attributes, $contentType),
             $expectCqrsToken
         );
 
-        $this->buildFieldsWithBuilder($builder, $contentType, $fields, $website);
+        $this->buildFieldsWithBuilder($builder, $contentType, $contentType->getFields(), $website);
 
         return $builder;
     }
@@ -69,8 +53,7 @@ class SymfonyFormBuilderCreator
         ContentType $contentType,
         array $attributes,
     ): void {
-        $fields = $contentType->getFields();
-        $this->buildFieldsWithBuilder($builder, $contentType, $fields, $website);
+        $this->buildFieldsWithBuilder($builder, $contentType, $contentType->getFields(), $website);
     }
 
     private function createFormBuilder(string $type, array $data, bool $expectCqrsToken = true): FormBuilderInterface
@@ -125,44 +108,5 @@ class SymfonyFormBuilderCreator
                 );
             }
         }
-    }
-
-    /**
-     * @param Field[] $fields
-     * @param Attribute[]|array<string, Attribute[]> $attributes
-     */
-    private function flattenAttributesValues(array $fields, array $attributes): array
-    {
-        $result = [];
-
-        foreach ($fields as $code => $field) {
-            if (isset($attributes[$code]) === false) {
-                continue;
-            }
-
-            $attribute = $attributes[$code];
-
-            if ($attribute instanceof Attribute) {
-                $typeBuilder = $this->mappingRegistry->getTypeBuilder($field->getType());
-
-                if ($typeBuilder) {
-                    $result[$code] = $typeBuilder->buildValueFromAttribute($field, $attribute);
-                } else {
-                    $result[$code] = $attribute->getValue()->toRaw();
-
-                    if (\is_array($result[$code]) && !$this->mappingRegistry->get($field->getType())['is_multiple']) {
-                        $result[$code] = reset($result[$code]);
-                    }
-                }
-            }
-
-            if (\is_array($attribute)) {
-                foreach ($attribute as $sk => $sv) {
-                    $result[$code][$sk] = $this->flattenAttributesValues($field->getChildren(), $sv);
-                }
-            }
-        }
-
-        return $result;
     }
 }

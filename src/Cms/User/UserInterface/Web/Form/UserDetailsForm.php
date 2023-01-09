@@ -116,5 +116,6 @@ final class UserDetailsForm extends AbstractType
         $this->traitConfigureOptions($resolver);
 
         $resolver->setDefault('edit_form', false);
+        $resolver->setDefault('attr', ['class' => 'tulia-dynamic-form']);
     }
 }

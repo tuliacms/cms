@@ -66,11 +66,12 @@ final class TaxonomyTermDetailsForm extends AbstractType
         }
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $this->traitsConfigureOptions($resolver);
 
         $resolver->setRequired('form_mode');
         $resolver->setAllowedTypes('form_mode', 'string');
+        $resolver->setDefault('attr', ['class' => 'tulia-dynamic-form']);
     }
 }

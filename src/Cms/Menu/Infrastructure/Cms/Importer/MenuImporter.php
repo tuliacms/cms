@@ -47,7 +47,6 @@ class MenuImporter implements ObjectImporterInterface
             ($this->createMenuItem)(new CreateMenuItemRequest(
                 $id->id,
                 $details,
-                [],
                 $this->getWebsite()->getLocale()->getCode(),
                 $this->getWebsite()->getLocaleCodes()
             ));

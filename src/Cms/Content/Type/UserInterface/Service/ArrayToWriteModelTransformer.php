@@ -87,8 +87,9 @@ class ArrayToWriteModelTransformer
                         $newGroup['section']
                     );
 
-                    foreach ($newGroups['fields'] ?? [] as $field) {
+                    foreach ($newGroup['fields'] ?? [] as $field) {
                         $contentType->addFieldToGroup(
+                            $newGroup['code'],
                             $field['code'],
                             $field['type'],
                             $field['name'],

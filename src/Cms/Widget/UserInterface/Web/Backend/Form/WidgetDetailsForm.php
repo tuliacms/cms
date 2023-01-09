@@ -8,6 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormType\AttributesAwareFormTypeTrait;
@@ -20,7 +21,9 @@ use Tulia\Component\Theme\ManagerInterface;
  */
 final class WidgetDetailsForm extends AbstractType
 {
-    use AttributesAwareFormTypeTrait;
+    use AttributesAwareFormTypeTrait {
+        AttributesAwareFormTypeTrait::configureOptions as traitConfigureOptions;
+    }
 
     public function __construct(
         private readonly ManagerInterface $themeManager,
@@ -57,6 +60,13 @@ final class WidgetDetailsForm extends AbstractType
             'website' => $options['website'],
             'content_type' => $options['content_type'],
         ]);
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $this->traitConfigureOptions($resolver);
+
+        $resolver->setDefault('attr', ['class' => 'tulia-dynamic-form']);
     }
 
     private function buildStylesOptions(): array

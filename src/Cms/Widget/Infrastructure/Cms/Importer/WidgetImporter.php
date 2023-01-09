@@ -40,8 +40,7 @@ final class WidgetImporter implements ObjectImporterInterface
         /** @var IdResult $result */
         $result = ($this->createWidget)(new CreateWidgetRequest(
             $objectData['type'],
-            $details,
-            $this->transformObjectDataToAttributes($objectData),
+            $details + ['attributes' => $this->transformObjectDataToAttributes($objectData)],
             $this->getWebsite()->getId(),
             $this->getWebsite()->getLocale()->getCode(),
             $this->getWebsite()->getDefaultLocale()->getCode(),

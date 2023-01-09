@@ -25,22 +25,6 @@ class ContentFormService
     ) {
     }
 
-    /**
-     * @param Attribute[] $attributes
-     */
-    public function buildFormDescriptor(
-        WebsiteInterface $website,
-        string $typeCode,
-        array $attributes,
-        array $viewContext = []
-    ): ContentTypeFormDescriptor {
-        $contentType = $this->contentTypeRegistry->get($typeCode);
-        $flattened = $this->attributesToArrayTransformer->transform($attributes);
-        $form = $this->formBuilder->createBuilder($website, $contentType, $flattened);
-
-        return new ContentTypeFormDescriptor($this->fieldTypeMappingRegistry, $contentType, $form, $viewContext);
-    }
-
     public function buildUsingBuilder(
         FormBuilderInterface $builder,
         WebsiteInterface $website,

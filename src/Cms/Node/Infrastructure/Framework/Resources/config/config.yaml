@@ -44,6 +44,7 @@ cms:
                         type: array
                     attributes:
                         collection_of: Attribute
+                    main_category: ~
     filemanager:
         image_sizes:
             - { name: node-thumbnail, width: 450, height: 300 }

@@ -15,6 +15,8 @@ use Tulia\Component\Templating\Exception\ViewNotFoundException;
 use Tulia\Component\Templating\View;
 use Tulia\Component\Theme\ManagerInterface;
 
+use function PHPUnit\Framework\assertDirectoryDoesNotExist;
+
 /**
  * @author Adam Banaszkiewicz
  */
@@ -27,46 +29,45 @@ final class ErrorController extends AbstractController
     ) {
     }
 
-    public function handle(\Throwable $exception, LoggerInterface $appLogger, WebsiteInterface $website)
-    {
-        $allowOriginalException = false;
-
+    public function handle(
+        \Throwable $exception,
+        LoggerInterface $appLogger,
+        WebsiteInterface $website,
+    ): Response {
         try {
-            if (
-                $exception instanceof NotFoundHttpException
-                || ($exception instanceof HttpException && $exception->getStatusCode() >= 400 && $exception->getStatusCode() <= 499)
-            ) {
-                $code = Response::HTTP_NOT_FOUND;
-            } else {
-                $code = Response::HTTP_INTERNAL_SERVER_ERROR;
+            $code = $this->getErrorCode($exception);
+
+            if ($this->environment === 'prod') {
+                if ($website->isBackend()) {
+                    $view = "@backend/error-{$code}.tpl";
+                } else {
+                    $view = $this->manager->getTheme()->getViewsDirectory()."/{$code}.tpl";
+                }
+
+                return new Response($this->engine->render(new View($view)), $code);
             }
 
-            if ($this->environment !== 'prod') {
-                $allowOriginalException = true;
-                throw $exception;
+            if ($code === Response::HTTP_NOT_FOUND) {
+                if ($website->isBackend()) {
+                    $view = "@backend/error-{$code}.tpl";
+                    return new Response($this->engine->render(new View($view)), $code);
+                } else {
+                    $view = $this->manager->getTheme()->getViewsDirectory()."/{$code}.tpl";
+                    return new Response($this->engine->render(new View($view)), $code);
+                }
             }
 
-            if ($website->isBackend()) {
-                $view = "@backend/error-{$code}.tpl";
-            } else {
-                $view = $this->manager->getTheme()->getViewsDirectory()."/{$code}.tpl";
-            }
-
-            return new Response($this->engine->render(new View($view)), $code);
+            throw $exception;
         } catch (\Throwable $e) {
             if ($this->environment === 'prod') {
                 return $this->createProduction500Error();
             }
 
-            if ($allowOriginalException) {
-                throw $e;
-            }
-
-            if ($e instanceof ViewNotFoundException) {
+            if ($this->isSymfonyErrorPage($exception) && $e instanceof ViewNotFoundException) {
                 throw new \Exception('Cannot render error page. Maybe You forgot to implement the 404.tpl view in Your theme?', 0, $e);
             }
 
-            throw new \Exception('Cannot render error page. Reason of this error You can find below, in previous exception.', 0, $e);
+            throw $e;
         }
     }
 
@@ -76,5 +77,28 @@ final class ErrorController extends AbstractController
             file_get_contents(__DIR__.'/../../../Infrastructure/Framework/Resources/views/backend/error-500.prod.tpl'),
             Response::HTTP_INTERNAL_SERVER_ERROR
         );
+    }
+
+    private function isSymfonyErrorPage(\Throwable $exception): bool
+    {
+        return substr($exception->getFile(), -50) === 'symfony/http-kernel/Controller/ErrorController.php';
+    }
+
+    /**
+     * @param \Throwable $exception
+     * @return int
+     */
+    private function getErrorCode(\Throwable $exception): int
+    {
+        if (
+            $exception instanceof NotFoundHttpException
+            || ($exception instanceof HttpException && $exception->getStatusCode() >= 400 && $exception->getStatusCode(
+                ) <= 499)
+        ) {
+            $code = Response::HTTP_NOT_FOUND;
+        } else {
+            $code = Response::HTTP_INTERNAL_SERVER_ERROR;
+        }
+        return $code;
     }
 }

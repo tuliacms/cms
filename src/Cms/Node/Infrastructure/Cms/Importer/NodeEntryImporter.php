@@ -42,6 +42,8 @@ class NodeEntryImporter implements ObjectImporterInterface
             'purposes' => $objectData['purposes'] ?? [],
             'published_at' => $objectData['published_at'] ?? ImmutableDateTime::now(),
             'published_to' => $objectData['published_to'] ?? null,
+            'main_category' => $objectData['main_category'] ?? null,
+            'additional_categories' => $objectData['additional_categories'] ?? [],
         ];
         try {
             /** @var IdResult $result */
@@ -49,8 +51,7 @@ class NodeEntryImporter implements ObjectImporterInterface
                 new CreateNodeRequest(
                     $objectData['type'],
                     $this->userProvider->getUser()->getId(),
-                    $details,
-                    $this->transformObjectDataToAttributes($objectData),
+                    $details + ['attributes' => $this->transformObjectDataToAttributes($objectData)],
                     $this->getWebsite()->getId(),
                     $this->getWebsite()->getLocale()->getCode(),
                     $this->getWebsite()->getDefaultLocale()->getCode(),

@@ -23,7 +23,7 @@ final class MyAccountDetailsForm extends AbstractType
     use AttributesAwareFormTypeTrait;
 
     public function __construct(
-        private UserAvatarModelTransformer $userAvatarTransformer
+        private readonly UserAvatarModelTransformer $userAvatarTransformer,
     ) {
     }
 

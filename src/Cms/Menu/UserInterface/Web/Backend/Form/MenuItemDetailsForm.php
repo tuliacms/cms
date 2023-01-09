@@ -94,6 +94,7 @@ final class MenuItemDetailsForm extends AbstractType
         $resolver->setDefault('menu_id', null);
         $resolver->setRequired(['menu_id']);
         $resolver->setAllowedTypes('menu_id', 'string');
+        $resolver->setDefault('attr', ['class' => 'tulia-dynamic-form']);
     }
 
     private function buildItemTypesChoices(): array

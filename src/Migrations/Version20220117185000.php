@@ -54,8 +54,7 @@ CREATE TABLE `#__content_type_field` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `#__content_type_field` (`id`, `code`, `content_type_code`, `group_code`, `type`, `name`, `is_multilingual`, `position`, `parent`, `taxonomy`) VALUES
-('90125db0-0c18-48a4-bfd4-c76d6c303c8f', 'content', 'page', 'section_1653933292398_398_1', 'tulia_editor', 'Content', 1, 1, NULL, NULL),
-('b35cff30-f325-49c1-acef-f6e0dbd9107f', 'category', 'page', 'section_1653933292398_398_2', 'taxonomy', 'Category', 0, 1, NULL, NULL);
+('90125db0-0c18-48a4-bfd4-c76d6c303c8f', 'content', 'page', 'section_1653933292398_398_1', 'tulia_editor', 'Content', 1, 1, NULL, NULL);
 EOF);
         $this->addSql(<<<EOF
 CREATE TABLE `#__content_type_field_configuration` (
@@ -63,10 +62,6 @@ CREATE TABLE `#__content_type_field_configuration` (
   `code` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `value` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
-EOF);
-        $this->addSql(<<<EOF
-INSERT INTO `#__content_type_field_configuration` (`field_id`, `code`, `value`) VALUES
-('b35cff30-f325-49c1-acef-f6e0dbd9107f', 'taxonomy', 'category');
 EOF);
         $this->addSql(<<<EOF
 CREATE TABLE `#__content_type_field_constraint` (
@@ -102,8 +97,7 @@ CREATE TABLE `#__content_type_field_group` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `#__content_type_field_group` (`content_type_code`, `code`, `name`, `section`, `interior`, `active`, `position`) VALUES
-('page', 'section_1653933292398_398_1', 'Content', 'main', NULL, 0, 1),
-('page', 'section_1653933292398_398_2', 'Category', 'sidebar', NULL, 0, 2);
+('page', 'section_1653933292398_398_1', 'Content', 'main', NULL, 0, 1);
 EOF);
        /* $this->addSql(<<<EOF
 CREATE TABLE `#__model_change_history` (

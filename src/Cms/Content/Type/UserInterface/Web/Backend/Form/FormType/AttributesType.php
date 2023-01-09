@@ -13,6 +13,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Content\Type\Domain\WriteModel\Service\Configuration;
+use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Service\AttributesDataFlattener;
 use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Service\ContentFormService;
 use Tulia\Cms\Content\Type\Infrastructure\Framework\Form\Service\LayoutTypeBuilderRegistry;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
@@ -27,6 +28,7 @@ final class AttributesType extends AbstractType
         private readonly ContentFormService $contentFormService,
         private readonly LayoutTypeBuilderRegistry $builderRegistry,
         private readonly Configuration $config,
+        private readonly AttributesDataFlattener $attributesDataFlattener,
     ) {
     }
 
@@ -38,6 +40,19 @@ final class AttributesType extends AbstractType
             $options['content_type'],
             []
         );
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($options) {
+            if (!$event->getData()) {
+                return;
+            }
+
+            $event->setData(
+                $this->attributesDataFlattener->flattenAttributes(
+                    $event->getData(),
+                    $this->contentTypeRegistry->get($options['content_type'])
+                )
+            );
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver): void
