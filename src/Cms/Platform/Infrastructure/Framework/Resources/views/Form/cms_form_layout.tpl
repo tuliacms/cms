@@ -134,9 +134,7 @@
 
     {% set fieldId = uniqid() %}
 
-    {%  if not debug %}
-        {% set attr = attr|merge({ style: 'display:none;' }) -%}
-    {% endif %}
+    {% set attributes = block('widget_attributes') %}
 
     <div class="typeahead__container {{ multiple ? 'typeahead__multiple' : 'typeahead__singular' }}">
         <div class="typeahead__field">
@@ -146,10 +144,10 @@
         </div>
         {% if multiple %}
             {% for key, item in display_value %}
-                <input type="hidden" value="{{ item.id }}" name="{{ full_name }}[{{ key }}]" class="js-typeahead-result-input" />
+                <input type="hidden" value="{{ item.id }}" name="{{ full_name }}[{{ key }}]" class="js-typeahead-result-input" {{ attributes|raw }} />
             {% endfor %}
         {% else %}
-            <input type="hidden" value="{{ value }}" name="{{ full_name }}" class="js-typeahead-result-input" />
+            <input type="hidden" value="{{ value }}" name="{{ full_name }}" class="js-typeahead-result-input" {{ attributes|raw }} />
         {% endif %}
     </div>
 
@@ -202,24 +200,23 @@
                     },
                 },
                 callback: {
-                    onSubmit: function (node, form, items, event) {
+                    onClick: function (node, a, item, event) {
                         {% if multiple %}
                             cont.find('.js-typeahead-result-input').remove();
 
-                            for (let item in items) {
-                                cont.append(`<input type="hidden" value="${items[item].id}" name="{{ full_name }}[${item}]" class="js-typeahead-result-input" />`);
+                            for (let item in this.items) {
+                                cont.append(`<input type="hidden" value="${this.items[item].id}" name="{{ full_name }}[${item}]" class="js-typeahead-result-input" {{ attributes|raw }} />`);
                             }
                         {% else %}
-                            if (!items) {
+                            if (!this.item) {
                                 if (! typeahead.val()) {
-                                    cont.find('.js-typeahead-result-input').remove();
+                                    cont.find('.js-typeahead-result-input').val('');
                                 }
 
                                 return;
                             }
 
-                            cont.find('.js-typeahead-result-input').remove();
-                            cont.append(`<input type="hidden" value="${items.id}" name="{{ full_name }}" class="js-typeahead-result-input" />`);
+                            cont.find('.js-typeahead-result-input').val(this.item.id).trigger('change');
                         {% endif %}
                     }
                 },

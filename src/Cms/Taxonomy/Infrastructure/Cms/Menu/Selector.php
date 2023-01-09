@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Infrastructure\Cms\Menu;
+namespace Tulia\Cms\Taxonomy\Infrastructure\Cms\Menu;
 
 use Symfony\Component\Form\FormFactoryInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
@@ -29,20 +29,20 @@ class Selector implements SelectorInterface
     public function render(TypeInterface $type, ?string $identity, string $websiteId, string $locale): string
     {
         [, $name] = explode(':', $type->getType());
-        $field = 'node_search_' . $name;
+        $field = 'term_search_' . $name;
 
-        $nodeType = $this->contentTypeRegistry->get($name);
+        $contentType = $this->contentTypeRegistry->get($name);
         $form = $this->formFactory->create(MenuItemSelectorForm::class, [
             $field => $identity,
         ], [
-            'node_type' => $nodeType,
+            'taxonomy_type' => $contentType,
             'locale' => $locale,
             'website_id' => $websiteId,
         ]);
 
-        return $this->engine->render(new View('@backend/node/menu/selector.tpl', [
+        return $this->engine->render(new View('@backend/taxonomy/menu/selector.tpl', [
             'form' => $form->createView(),
-            'type' => $nodeType->getCode(),
+            'type' => $contentType->getCode(),
             'field' => $field,
             'identityType' => $type,
         ]));

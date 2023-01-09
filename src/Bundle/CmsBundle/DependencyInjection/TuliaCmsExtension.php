@@ -94,6 +94,8 @@ class TuliaCmsExtension extends Extension
         // Menus
         $container->registerForAutoconfiguration(\Tulia\Cms\Menu\Domain\Builder\Type\RegistratorInterface::class)
             ->addTag('menu.builder.type_registrator');
+        $container->registerForAutoconfiguration(\Tulia\Cms\Menu\Domain\Builder\Identity\IdentityProviderInterface::class)
+            ->addTag('menu.identity_provider');
 
         // Nodes
         $container->registerForAutoconfiguration(\Tulia\Cms\Node\Domain\WriteModel\Service\NodePurpose\NodePurposeProviderInterface::class)

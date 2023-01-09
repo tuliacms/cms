@@ -7,5 +7,3 @@ services:
         resource: '../../../../**'
         exclude: '../../../../{Infrastructure/Framework/Resources}'
 
-    Tulia\Cms\Taxonomy\Domain\Menu\IdentityProvider:
-        tags: [ menu.identity_provider ]
