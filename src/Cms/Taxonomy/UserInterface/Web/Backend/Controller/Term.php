@@ -20,6 +20,7 @@ use Tulia\Cms\Taxonomy\Application\UseCase\UpdateTerm;
 use Tulia\Cms\Taxonomy\Application\UseCase\UpdateTermRequest;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Service\Datatable\TermDatatableFinderInterface;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Service\TermsOfTaxonomiesQueryInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Exception\TermNotFoundException;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Service\TaxonomyRepositoryInterface;
 use Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Form\TaxonomyTermDetailsForm;
@@ -37,7 +38,13 @@ class Term extends AbstractController
         private readonly DatatableFactory $factory,
         private readonly TermDatatableFinderInterface $finder,
         private readonly ContentTypeRegistryInterface $typeRegistry,
+        private readonly TermsOfTaxonomiesQueryInterface $termsOfTaxonomiesQuery,
     ) {
+    }
+
+    public function listTermsOfTaxonomies(WebsiteInterface $website): JsonResponse
+    {
+        return new JsonResponse($this->termsOfTaxonomiesQuery->allTermsGrouppedByTaxonomy($website->getId(), $website->getLocale()->getCode()));
     }
 
     public function index(string $taxonomyType): RedirectResponse

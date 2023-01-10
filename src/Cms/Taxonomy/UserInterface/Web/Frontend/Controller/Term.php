@@ -7,6 +7,7 @@ namespace Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum;
+use Tulia\Cms\Options\Domain\ReadModel\Options;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 use Tulia\Cms\Platform\Shared\Pagination\Paginator;
@@ -21,6 +22,7 @@ class Term extends AbstractController
 {
     public function __construct(
         private readonly NodeFinderInterface $nodeFinder,
+        private readonly Options $options,
     ) {
     }
 
@@ -30,8 +32,13 @@ class Term extends AbstractController
         WebsiteInterface $website,
         SeoDocumentProcessorInterface $seo,
     ): ViewInterface {
-        $perPage = 9;
-        $page = $request->query->getInt('page', 1);
+        $page = max(1, $request->query->getInt('page', 1));
+        $perPage = (int) $this->options->get(
+            sprintf('taxonomy.%s.%s', $term->getType(), 'nodes_per_page'),
+            9,
+            $website->getId(),
+            $website->getLocale()->getCode(),
+        );
 
         $seo->aware(
             $term,

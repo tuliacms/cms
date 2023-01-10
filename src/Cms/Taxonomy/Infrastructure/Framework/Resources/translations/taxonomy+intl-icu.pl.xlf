@@ -54,6 +54,10 @@
                 <source>Category</source>
                 <target>Kategoria</target>
             </trans-unit>
+            <trans-unit id="tuliacms.taxonomy.15">
+                <source>nodesPerPage</source>
+                <target>Elementów na stronę</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

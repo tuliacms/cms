@@ -122,7 +122,8 @@
             locale: '{{ user().locale }}',
             cms_integration: {
                 endpoints: {
-                    form_list: '{{ path('backend.contact_form.list_forms') }}'
+                    form_list: '{{ path('backend.contact_form.list_forms') }}',
+                    taxonomy_term_list: '{{ path('backend.term.list_terms_of_taxonomies') }}',
                 }
             },
             themes: ['{{ themes|join("', '")|raw }}'],

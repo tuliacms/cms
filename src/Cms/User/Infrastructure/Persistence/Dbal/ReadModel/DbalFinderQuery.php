@@ -19,10 +19,9 @@ use Tulia\Cms\User\Domain\ReadModel\Model\User;
 class DbalFinderQuery extends AbstractDbalQuery
 {
     public function __construct(
-        protected QueryBuilder $queryBuilder,
-        protected AttributesFinder $attributesFinder
+        private readonly QueryBuilder $queryBuilder,
+        private readonly AttributesFinder $attributesFinder,
     ) {
-        parent::__construct($queryBuilder);
     }
 
     /**

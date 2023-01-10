@@ -20,13 +20,12 @@ use Tulia\Cms\Taxonomy\Infrastructure\Persistence\Doctrine\Dbal\DbalTermAttribut
 /**
  * @author Adam Banaszkiewicz
  */
-class DbalQuery extends AbstractDbalQuery
+class DbalFinderQuery extends AbstractDbalQuery
 {
     public function __construct(
-        QueryBuilder $queryBuilder,
+        private readonly QueryBuilder $queryBuilder,
         private readonly DbalTermAttributesFinder $attributesFinder,
     ) {
-        parent::__construct($queryBuilder);
     }
 
     public function getBaseQueryArray(): array
@@ -137,12 +136,21 @@ class DbalQuery extends AbstractDbalQuery
 
         $this->callPlugins($criteria);
 
-        return $this->createCollection($this->queryBuilder->execute()->fetchAllAssociative(), $criteria, $scope);
+        return $this->createCollection($criteria, $scope);
     }
 
-    protected function createCollection(array $result, array $criteria, string $scope): Collection
+    protected function createCollection(array $criteria, string $scope): Collection
     {
-        $collection = new Collection();
+        $result = $this->queryBuilder->fetchAllAssociative();
+        $collection = new Collection([], function () {
+            return (int) (clone $this->queryBuilder)
+                ->select('COUNT(tm.id) AS count')
+                ->resetQueryPart('orderBy')
+                ->setFirstResult(0)
+                ->setMaxResults(null)
+                ->executeQuery()
+                ->fetchOne();
+        });
 
         if ($result === []) {
             return $collection;

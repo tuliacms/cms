@@ -5,5 +5,6 @@ services:
 
     Tulia\Cms\Taxonomy\:
         resource: '../../../../**'
-        exclude: '../../../../{Infrastructure/Framework/Resources}'
-
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources'
+            - '../../../../Infrastructure/Cms/Settings/TaxonomyTypeSettingsGroup.php'

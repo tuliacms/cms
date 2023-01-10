@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContactForm\Infrastructure\Persistence\Domain\ReadModel\Finder;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Exception;
 use PDO;
 use Symfony\Component\Uid\Uuid;
@@ -19,6 +20,11 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\Ab
  */
 class DbalQuery extends AbstractDbalQuery
 {
+    public function __construct(
+        private readonly QueryBuilder $queryBuilder,
+    ) {
+    }
+
     public function getBaseQueryArray(): array
     {
         return [

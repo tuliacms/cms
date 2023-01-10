@@ -9,7 +9,7 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Abstract
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\QueryInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderInterface;
 use Tulia\Cms\Taxonomy\Infrastructure\Persistence\Doctrine\Dbal\DbalTermAttributesFinder;
-use Tulia\Cms\Taxonomy\Infrastructure\Persistence\Doctrine\Dbal\Finder\Query\DbalQuery;
+use Tulia\Cms\Taxonomy\Infrastructure\Persistence\Doctrine\Dbal\Finder\Query\DbalFinderQuery;
 
 /**
  * @author Adam Banaszkiewicz
@@ -29,6 +29,6 @@ class DbalFinder extends AbstractFinder implements TermFinderInterface
 
     public function createQuery(): QueryInterface
     {
-        return new DbalQuery($this->connection->createQueryBuilder(), $this->attributesFinder);
+        return new DbalFinderQuery($this->connection->createQueryBuilder(), $this->attributesFinder);
     }
 }

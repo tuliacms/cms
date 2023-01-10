@@ -22,10 +22,9 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\Ab
 class DbalQuery extends AbstractDbalQuery
 {
     public function __construct(
-        QueryBuilder $queryBuilder,
+        private readonly QueryBuilder $queryBuilder,
         private readonly DbalMenuItemAttributesFinder $attributesFinder,
     ) {
-        parent::__construct($queryBuilder);
     }
 
     public function getBaseQueryArray(): array

@@ -220,7 +220,7 @@
                         {% endif %}
                     }
                 },
-                debug: true,
+                debug: false,
                 multiselect: multiselect,
             });
         });

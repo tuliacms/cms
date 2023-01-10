@@ -38,6 +38,10 @@ backend.term.hierarchy.save:
         taxonomyType: category
     methods: POST
 
+backend.term.list_terms_of_taxonomies:
+    path: /term/list-terms-of-taxonomies
+    controller: Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Controller\Term::listTermsOfTaxonomies
+
 backend.term:
     path: /term/{taxonomyType}
     controller: Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Controller\Term::index

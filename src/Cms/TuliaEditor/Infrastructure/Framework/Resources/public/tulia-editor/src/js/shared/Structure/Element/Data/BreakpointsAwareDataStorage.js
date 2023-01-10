@@ -1,4 +1,4 @@
-const { inject, reactive, watch, toRaw, ref } = require('vue');
+const { inject, reactive, watch, toRaw } = require('vue');
 
 const canvas = inject('canvas');
 const breakpoints = inject('options').canvas.size.breakpoints;

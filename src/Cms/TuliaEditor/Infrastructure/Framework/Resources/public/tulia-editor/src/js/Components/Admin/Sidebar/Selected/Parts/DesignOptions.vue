@@ -41,17 +41,17 @@ const storage = BreakpointsAwareDataStorage.reactive(block, '_internal.sizing', 
 }, '');
 
 const activeTab = ref('margin');
-const choices = reactive({});
+const choices = reactive({
+    '': translator.trans('inheritValue'),
+});
 
-const createChoices = (choices, limit) => {
-    choices[''] = translator.trans('inheritValue');
-
-    for (let i = 0; i <= limit; i++) {
+const createChoices = () => {
+    for (let i = 0; i <= options.elements.style.spacers.max; i++) {
         choices[i] = i;
     }
 };
 
 onMounted(() => {
-    createChoices(choices, options.elements.style.spacers.max);
+    createChoices()
 });
 </script>

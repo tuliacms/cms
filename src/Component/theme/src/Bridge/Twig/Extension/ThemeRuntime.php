@@ -7,6 +7,7 @@ namespace Tulia\Component\Theme\Bridge\Twig\Extension;
 use Tulia\Component\Theme\Customizer\DetectorInterface;
 use Tulia\Component\Theme\ManagerInterface;
 use Tulia\Component\Theme\ThemeInterface;
+use Tulia\Component\Theme\ThemeTemplateProviderInterface;
 use Twig\Extension\RuntimeExtensionInterface;
 
 /**
@@ -17,6 +18,7 @@ class ThemeRuntime implements RuntimeExtensionInterface
     public function __construct(
         private readonly ManagerInterface $manager,
         private readonly DetectorInterface $detector,
+        private readonly ThemeTemplateProviderInterface $templateProvider,
     ) {
     }
 
@@ -27,20 +29,12 @@ class ThemeRuntime implements RuntimeExtensionInterface
 
     public function themeTemplate(string $template): string
     {
-        $theme = $this->manager->getTheme();
-
-        return $theme->getViewsDirectory().'/'.$template;
+        return $this->templateProvider->template($template);
     }
 
     public function parentThemeTemplate(string $template): string
     {
-        $theme = $this->manager->getTheme();
-
-        if ($theme->hasParent()) {
-            $theme = $theme->getParent();
-        }
-
-        return $theme->getViewsDirectory().'/'.$template;
+        return $this->templateProvider->parentTemplate($template);
     }
 
     public function customizerGet(string $name, mixed $default = null): mixed

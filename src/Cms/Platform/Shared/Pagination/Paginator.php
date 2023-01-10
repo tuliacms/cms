@@ -51,7 +51,7 @@ class Paginator extends \JasonGrimes\Paginator
      */
     public function getPageUrl($page): string
     {
-        return str_replace(self::NUM_PLACEHOLDER, $page, $this->urlPattern);
+        return str_replace(self::NUM_PLACEHOLDER, (string) $page, $this->urlPattern);
     }
 
     public function getUrlPattern(): string
@@ -74,7 +74,7 @@ class Paginator extends \JasonGrimes\Paginator
             return '';
         }
 
-        $html = '<ul class="' . implode(' ', $this->ulClasses) . '">';
+        $html = '<nav><ul class="' . implode(' ', $this->ulClasses) . '">';
 
         if ($this->getPrevUrl()) {
             $html .= '<li class="page-item page-prev"><a href="' . $this->getPrevUrl() . '" class="page-link">' . $this->previousText . '</a></li>';
@@ -92,7 +92,7 @@ class Paginator extends \JasonGrimes\Paginator
             $html .= '<li class="page-item page-next"><a href="' . $this->getNextUrl() . '" class="page-link">' . $this->nextText . '</a></li>';
         }
 
-        $html .= '</ul>';
+        $html .= '</ul></nav>';
 
         return $html;
     }

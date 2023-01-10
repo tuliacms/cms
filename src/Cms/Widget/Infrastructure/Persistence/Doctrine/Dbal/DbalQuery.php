@@ -19,10 +19,9 @@ use Tulia\Cms\Widget\Domain\ReadModel\Model\Widget;
 class DbalQuery extends AbstractDbalQuery
 {
     public function __construct(
-        QueryBuilder $queryBuilder,
-        private readonly DbalWidgetAttributesFinder $attributesFinder
+        private readonly QueryBuilder $queryBuilder,
+        private readonly DbalWidgetAttributesFinder $attributesFinder,
     ) {
-        parent::__construct($queryBuilder);
     }
 
     public function getBaseQueryArray(): array

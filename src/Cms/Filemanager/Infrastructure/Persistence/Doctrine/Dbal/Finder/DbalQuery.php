@@ -23,10 +23,9 @@ class DbalQuery extends AbstractDbalQuery
     protected array $joinedTables = [];
 
     public function __construct(
-        QueryBuilder $criteriaBuilder,
-        private readonly AttributesFinder $metadataFinder
+        private readonly QueryBuilder $queryBuilder,
+        private readonly AttributesFinder $attributesFilder,
     ) {
-        parent::__construct($criteriaBuilder);
     }
 
     public function getBaseQueryArray(): array

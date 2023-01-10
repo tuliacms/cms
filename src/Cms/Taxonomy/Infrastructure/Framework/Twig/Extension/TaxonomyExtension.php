@@ -41,14 +41,26 @@ class TaxonomyExtension extends AbstractExtension
                 'is_safe' => [ 'html' ]
             ]),
             new TwigFunction('find_terms', function (array $criteria) {
-                if (!isset($parameters['locale'])) {
-                    $parameters['locale'] = $this->website->getLocale()->getCode();
+                if (!isset($criteria['locale'])) {
+                    $criteria['locale'] = $this->website->getLocale()->getCode();
                 }
-                if (!isset($parameters['website_id'])) {
-                    $parameters['website_id'] = $this->website->getLocale()->getCode();
+                if (!isset($criteria['website_id'])) {
+                    $criteria['website_id'] = $this->website->getId();
                 }
 
                 return $this->termFinder->find($criteria, TermFinderScopeEnum::TAXONOMY_LISTING);
+            }, [
+                'is_safe' => [ 'html' ]
+            ]),
+            new TwigFunction('find_term', function (array $criteria) {
+                if (!isset($criteria['locale'])) {
+                    $criteria['locale'] = $this->website->getLocale()->getCode();
+                }
+                if (!isset($criteria['website_id'])) {
+                    $criteria['website_id'] = $this->website->getId();
+                }
+
+                return $this->termFinder->findOne($criteria, TermFinderScopeEnum::SINGLE);
             }, [
                 'is_safe' => [ 'html' ]
             ]),
@@ -62,6 +74,6 @@ class TaxonomyExtension extends AbstractExtension
 
     private function getId(Term $identity): string
     {
-        return sprintf('frontent.term.%s.%s', $identity->getType(), $identity->getId());
+        return sprintf('frontend.term.%s.%s', $identity->getType(), $identity->getId());
     }
 }

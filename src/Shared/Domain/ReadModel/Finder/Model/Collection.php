@@ -16,7 +16,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate
     public function __construct(array $elements = [], callable $totalFoundCallback = null)
     {
         $this->replace($elements);
-        $this->totalFoundCallback = $totalFoundCallback ?? function () {return 0;};
+        $this->totalFoundCallback = $totalFoundCallback ?? static fn () => 0;
     }
 
     public function toArray(): array

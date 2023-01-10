@@ -76,7 +76,7 @@ class NodeExtension extends AbstractExtension
                     $parameters['locale'] = $this->website->getLocale()->getCode();
                 }
                 if (!isset($parameters['website_id'])) {
-                    $parameters['website_id'] = $this->website->getLocale()->getCode();
+                    $parameters['website_id'] = $this->website->getId();
                 }
                 return $this->nodeFinder->find($parameters, NodeFinderScopeEnum::LISTING);
             }, [

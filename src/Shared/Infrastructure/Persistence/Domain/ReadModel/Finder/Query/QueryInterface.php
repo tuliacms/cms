@@ -18,8 +18,6 @@ interface QueryInterface
 
     public function query(array $criteria, string $scope): Collection;
 
-    public function countFoundRows(): int;
-
     public function setPluginsRegistry(PluginRegistry $pluginRegistry): void;
 
     public function callPlugins(array $criteria): void;

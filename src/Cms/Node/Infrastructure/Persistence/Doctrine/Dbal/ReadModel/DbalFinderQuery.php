@@ -25,11 +25,10 @@ class DbalFinderQuery extends AbstractDbalQuery
     protected array $joinedTables = [];
 
     public function __construct(
-        QueryBuilder $queryBuilder,
+        private readonly QueryBuilder $queryBuilder,
         private readonly DbalNodeAttributesFinder $attributesFinder,
         private readonly NodeFinderCache $cache,
     ) {
-        parent::__construct($queryBuilder);
     }
 
     public function getBaseQueryArray(): array
@@ -164,22 +163,29 @@ class DbalFinderQuery extends AbstractDbalQuery
 
         $this->callPlugins($criteria);
 
-        return $this->createCollection(
-            $this->queryBuilder->execute()->fetchAllAssociative(),
-            $scope,
-            $criteria
-        );
+        return $this->createCollection($scope, $criteria);
     }
 
-    protected function createCollection(array $result, string $scope, array $criteria): Collection
+    protected function createCollection(string $scope, array $criteria): Collection
     {
-        $collection = new Collection();
+        $result = $this->queryBuilder->fetchAllAssociative();
+        $collection = new Collection([], function () {
+            return (int) (clone $this->queryBuilder)
+                ->select('COUNT(tm.id) AS count')
+                ->resetQueryPart('orderBy')
+                ->setFirstResult(0)
+                ->setMaxResults(null)
+                ->executeQuery()
+                ->fetchOne();
+        });
 
         if ($result === []) {
             return $collection;
         }
 
-        $terms = $this->fetchTerms(array_column($result, 'id'));
+        $nodesId = array_column($result, 'id');
+        $terms = $this->fetchTerms($nodesId);
+        $purposes = $this->fetchPurposes($nodesId);
 
         try {
             foreach ($result as $row) {
@@ -191,7 +197,7 @@ class DbalFinderQuery extends AbstractDbalQuery
                 }
 
                 $row['lazy_attributes'] = new LazyAttributesFinder($row['id'], $row['locale'], $this->attributesFinder);
-                $row['purposes'] = array_filter(explode(',', (string) $row['purposes']));
+                $row['purposes'] = $purposes[$row['id']] ?? [];
 
                 $collection->append(Node::buildFromArray($row));
             }
@@ -202,7 +208,26 @@ class DbalFinderQuery extends AbstractDbalQuery
         return $collection;
     }
 
-    protected function fetchTerms(array $nodeIdList): array
+    private function fetchPurposes(array $nodeIdList): array
+    {
+        $source = $this->queryBuilder->getConnection()->fetchAllAssociative('
+            SELECT purpose, BIN_TO_UUID(node_id) AS node_id
+            FROM #__node_has_purpose
+            WHERE node_id IN (:node_id)', [
+            'node_id' => array_map(static fn(string $v) => Uuid::fromString($v)->toBinary(), $nodeIdList),
+        ], [
+            'node_id' => Connection::PARAM_STR_ARRAY,
+        ]);
+        $result = [];
+
+        foreach ($source as $row) {
+            $result[$row['node_id']][] = $row['purpose'];
+        }
+
+        return $result;
+    }
+
+    private function fetchTerms(array $nodeIdList): array
     {
         return $this->cache->fetchTermsUntilExists($nodeIdList, function ($nodeIdList) {
             $source = $this->queryBuilder->getConnection()->fetchAllAssociative('
@@ -240,8 +265,8 @@ class DbalFinderQuery extends AbstractDbalQuery
                 BIN_TO_UUID(tm.author) AS author,
                 tl.title,
                 tl.slug,
-                COALESCE(tl.locale, :tl_locale) AS locale,
-                GROUP_CONCAT(tnhf.purpose SEPARATOR \',\') AS purposes
+                COALESCE(tl.locale, :tl_locale) AS locale
+                -- GROUP_CONCAT(tnhf.purpose SEPARATOR \',\') AS purposes
             ');
         }
 
@@ -257,8 +282,8 @@ class DbalFinderQuery extends AbstractDbalQuery
             ->innerJoin('tm', '#__node_translation', 'tl', 'tm.id = tl.node_id AND tm.website_id = :tm_website_id AND tl.locale = :tl_locale')
             ->setParameter('tl_locale', $criteria['locale'], PDO::PARAM_STR)
             ->setParameter('tm_website_id', Uuid::fromString($criteria['website_id'])->toBinary(), PDO::PARAM_STR)
-            ->leftJoin('tm', '#__node_has_purpose', 'tnhf', 'tm.id = tnhf.node_id')
-            ->addGroupBy('tm.id')
+            //->leftJoin('tm', '#__node_has_purpose', 'tnhf', 'tm.id = tnhf.node_id')
+            //->addGroupBy('tm.id')
         ;
     }
 
