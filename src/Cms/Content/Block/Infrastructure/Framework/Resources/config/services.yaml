@@ -10,6 +10,7 @@ services:
             - '../../../../Infrastructure/Framework/Resources/**'
 
     Tulia\Cms\Content\Block\Infrastructure\Framework\Twig\TwigBlockRenderer:
+        lazy: true
         bind:
             $environment: '%kernel.environment%'
             $paths: '%cms.content_blocks.templating.paths%'

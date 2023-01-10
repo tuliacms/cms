@@ -46,13 +46,14 @@ class DbalContentTypeStorage
             'routing_strategy' => $contentType['routing_strategy'],
         ]);
 
+        $i = 0;
         foreach ($contentType['fields_groups'] as $groupIndex => $group) {
             $this->connection->insert('#__content_type_field_group', [
                 'content_type_code' => $contentType['code'],
                 'code' => $group['code'],
                 'name' => $group['name'],
                 'section' => $group['section'],
-                'position' => $groupIndex + 1,
+                'position' => ++$i,
             ]);
 
             $this->insertFields($group['fields'], $group['code'], $contentType['code']);

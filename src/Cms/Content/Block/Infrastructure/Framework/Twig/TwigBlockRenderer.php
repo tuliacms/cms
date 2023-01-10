@@ -13,8 +13,10 @@ use Tulia\Component\Theme\ThemeTemplateProviderInterface;
 
 /**
  * @author Adam Banaszkiewicz
+ * @final
+ * @lazy
  */
-final class TwigBlockRenderer implements BlockRendererInterface
+class TwigBlockRenderer implements BlockRendererInterface
 {
     private string $fallbackView;
 
