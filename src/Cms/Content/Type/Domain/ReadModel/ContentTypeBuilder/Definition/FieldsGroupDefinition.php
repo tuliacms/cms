@@ -15,6 +15,7 @@ final class FieldsGroupDefinition
         public readonly string $code,
         public readonly string $name,
         public readonly string $section = 'main',
+        public readonly bool $active = false,
     ) {
     }
 

@@ -53,6 +53,7 @@ class DbalContentTypeStorage
                 'code' => $group['code'],
                 'name' => $group['name'],
                 'section' => $group['section'],
+                'active' => $group['active'],
                 'position' => ++$i,
             ]);
 
@@ -80,6 +81,7 @@ class DbalContentTypeStorage
                 'content_type_code' => $contentType['code'],
                 'code' => $group['code'],
                 'name' => $group['name'],
+                'active' => (int) $group['active'],
                 'section' => $group['section'],
                 'position' => $groupIndex + 1,
             ]);
@@ -111,7 +113,7 @@ class DbalContentTypeStorage
     private function collectFieldGroups(string $contentType): array
     {
         $groups = $this->connection->fetchAllAssociative(
-            'SELECT code, name, `section`, position FROM #__content_type_field_group WHERE content_type_code = :content_type_code ORDER BY `position` ASC',
+            'SELECT * FROM #__content_type_field_group WHERE content_type_code = :content_type_code ORDER BY `position` ASC',
             ['content_type_code' => $contentType]
         );
 
@@ -121,6 +123,7 @@ class DbalContentTypeStorage
             $result[] = [
                 'code' => $group['code'],
                 'section' => $group['section'],
+                'active' => (bool) $group['active'],
                 'name' => $group['name'],
                 'position' => $group['position'],
                 'fields' => $this->collectFields($group['code'], $contentType),

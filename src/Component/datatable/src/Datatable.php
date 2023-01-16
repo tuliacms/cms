@@ -230,12 +230,16 @@ class Datatable
     private function countAll(FinderContext $context, array $filters = []): int
     {
         $qb = $this->getQueryBuilder($context);
-        $qb->select('COUNT(*) AS count');
         $this->applyFilters($qb, $filters);
+        $qb->setMaxResults(null)
+            ->setFirstResult(0)
+            ->resetQueryPart('orderBy');
 
-        $result = $qb->executeQuery()->fetchAllAssociative();
-
-        return (int) ($result[0]['count'] ?? 0);
+        return (int) $qb->getConnection()->fetchOne(
+            "SELECT COUNT(*) AS count FROM ({$qb->getSQL()}) AS count_table",
+            $qb->getParameters(),
+            $qb->getParameterTypes()
+        );
     }
 
     private function getFilters(FinderContext $context): array

@@ -84,7 +84,9 @@ class ArrayToWriteModelTransformer
                     $contentType->addFieldsGroup(
                         $newGroup['code'],
                         $newGroup['name'],
-                        $newGroup['section']
+                        $newGroup['section'],
+                        0,
+                        $newGroup['active']
                     );
 
                     foreach ($newGroup['fields'] ?? [] as $field) {
@@ -110,6 +112,7 @@ class ArrayToWriteModelTransformer
             foreach ($new as $updatedGroup) {
                 if ($updatedGroup['code'] === $groupCode) {
                     $contentType->renameFieldsGroup($updatedGroup['code'], $updatedGroup['name']);
+                    $contentType->changeFieldsGroupActivity($updatedGroup['code'], $updatedGroup['active']);
                     $newFields = $updatedGroup['fields'];
                 }
             }
@@ -183,6 +186,7 @@ class ArrayToWriteModelTransformer
                 $groups[] = [
                     'code' => $group['code'],
                     'name' => $group['name']['value'],
+                    'active' => $group['active'],
                     'section' => $section,
                     'fields' => $this->transformFields($group['fields']),
                 ];

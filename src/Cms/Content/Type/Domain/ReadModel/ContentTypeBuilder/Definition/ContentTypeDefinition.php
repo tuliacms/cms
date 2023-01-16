@@ -25,9 +25,9 @@ final class ContentTypeDefinition
     ) {
     }
 
-    public function fieldsGroup(string $code, string $name, string $section = 'main'): FieldsGroupDefinition
+    public function fieldsGroup(string $code, string $name, string $section = 'main', bool $active = false): FieldsGroupDefinition
     {
-        return $this->groups[$code] = new FieldsGroupDefinition($code, $name, $section);
+        return $this->groups[$code] = new FieldsGroupDefinition($code, $name, $section, $active);
     }
 
     /**

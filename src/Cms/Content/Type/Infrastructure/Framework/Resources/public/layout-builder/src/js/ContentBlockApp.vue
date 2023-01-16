@@ -119,6 +119,7 @@ if (sections.length === 0) {
             valid: true,
             message: null
         },
+        active: false,
         fields: []
     });
 }

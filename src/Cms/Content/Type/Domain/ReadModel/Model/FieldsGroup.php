@@ -9,18 +9,16 @@ namespace Tulia\Cms\Content\Type\Domain\ReadModel\Model;
  */
 final class FieldsGroup
 {
-    private string $code;
-    private string $section;
-    private string $name;
     /** @var Field[] */
     private array $fields = [];
 
-    public function __construct(string $code, string $section, string $name, array $fields)
-    {
-        $this->code = $code;
-        $this->section = $section;
-        $this->name = $name;
-
+    public function __construct(
+        private string $code,
+        private string $section,
+        private string $name,
+        private bool $active,
+        array $fields,
+    ) {
         foreach ($fields as $field) {
             $this->fields[$field['code']] = new Field($field);
         }
@@ -32,6 +30,7 @@ final class FieldsGroup
             $data['code'],
             $data['section'],
             $data['name'],
+            $data['active'],
             $data['fields']
         );
     }
@@ -65,6 +64,11 @@ final class FieldsGroup
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->active;
     }
 
     public function newField(string $code, string $type, string $name, array $options = []): Field

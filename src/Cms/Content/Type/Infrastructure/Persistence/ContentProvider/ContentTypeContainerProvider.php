@@ -35,7 +35,7 @@ class ContentTypeContainerProvider implements ContentTypeProviderInterface
             $typeDef->isInternal = $type['is_internal'] ?? false;
 
             foreach ($type['fields_groups'] as $group) {
-                $groupDef = $typeDef->fieldsGroup($group['code'], $group['name'], $group['section']);
+                $groupDef = $typeDef->fieldsGroup($group['code'], $group['name'], $group['section'], $group['active']);
 
                 foreach ($group['fields'] as $fieldCode => $fieldArray) {
                     $groupDef->fieldFromArray($fieldCode, $fieldArray);

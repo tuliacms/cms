@@ -88,11 +88,14 @@
     .ctb-section-options {
         position: absolute;
         top: 50%;
-        right: 5px;
+        right: 8px;
         transform: translateY(-50%);
 
         span {
-            padding: 5px 10px;
+            padding: 5px 0;
+            display: inline-block;
+            text-align: center;
+            width: 28px;
             font-size: 16px;
             border-radius: 5px;
             border: 1px solid transparent;
@@ -107,7 +110,7 @@
     .ctb-section-label {
         border-bottom: 1px solid #d6dce4;
         background-color: #f7f7f7;
-        padding: 8px 40px 8px 36px;
+        padding: 8px 80px 8px 36px;
         position: relative;
         .ctb-section-label-input {
             background-color: transparent;

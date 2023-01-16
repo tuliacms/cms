@@ -30,11 +30,12 @@ class Section extends AbstractType
                     new Callback([new CodenameValidator(), 'validateSectionCode']),
                 ],
             ])
-            ->add('name', TextType::class, [
+            ->add('name', TextType::class)
+            ->add('active', TextType::class/*, [
                 'constraints' => [
                     new NotBlank(),
                 ],
-            ])
+            ]*/)
             ->add('fields', CollectionType::class, [
                 'entry_type' => Field::class,
                 'allow_add' => true,

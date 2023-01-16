@@ -1,5 +1,9 @@
 <a href="{{ path('backend.node.edit', { node_type: row.type, id: row.id }) }}" class="link-title" title="{{ row.title }}">
+    {% set attributes = row.attributes.find() %}
     <span class="boxur-depth boxur-depth-{{ row.level }}">
+        {% if attributes.thumbnail is defined %}
+            <img src="{{ image_url(attributes.thumbnail.__toString, { size: 'thumbnail' }) }}" style="height:31px;float:left" class="me-2 d-inline-block" alt="" />
+        {% endif %}
         {% if row.translated is defined and row.translated != '1' %}
             <span class="badge badge-info" data-bs-toggle="tooltip" title="{{ 'missingTranslationInThisLocale'|trans }}"><i class="dropdown-icon fas fa-language"></i></span>
         {% endif %}

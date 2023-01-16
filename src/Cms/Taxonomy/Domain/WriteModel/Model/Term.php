@@ -14,8 +14,6 @@ use Tulia\Cms\Taxonomy\Domain\WriteModel\Exception\TermNotFoundException;
  */
 class Term
 {
-    public const ROOT_LEVEL = 0;
-
     private int $position = 0;
     private int $level = 0;
     /** @var ArrayCollection<int, TermTranslation> */

@@ -9,8 +9,10 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use PDO;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\LazyAttributesFinder;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\Node\Domain\ReadModel\Datatable\NodeDatatableFinderInterface;
+use Tulia\Cms\Node\Domain\WriteModel\Service\NodeOptionsInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderScopeEnum;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
@@ -25,6 +27,8 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
         Connection $connection,
         private readonly TermFinderInterface $termFinder,
         private readonly TranslatorInterface $translator,
+        private readonly NodeOptionsInterface $options,
+        private readonly DbalNodeAttributesFinder $attributesFinder,
     ) {
         parent::__construct($connection);
     }
@@ -56,9 +60,9 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
             ],
         ];
 
-        if ($this->supportsCategoryTaxonomy()) {
+        if ($this->supportsCategoryTaxonomy($context['node_type'])) {
             $columns['category'] = [
-                'selector' => 'COALESCE(nt.name, ntl.name)',
+                'selector' => 'ttt.name',
                 'html_attr' => ['class' => 'text-center'],
             ];
         }
@@ -73,24 +77,24 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
         $filters['title'] = [
             'label' => 'title',
             'type' => 'text',
-            'selector' => 'COALESCE(tl.title, tm.title)'
+            'selector' => 'tl.title'
         ];
 
-        if ($this->supportsCategoryTaxonomy()) {
+        if ($this->supportsCategoryTaxonomy($context['node_type'])) {
             $filters['category'] = [
                 'label' => 'category',
                 'type' => 'single_select',
-                'choices' => $this->createTaxonomyChoices(),
-                'selector' => 'nt.id'
+                'choices' => $this->createTaxonomyChoices($context),
+                'selector' => 'BIN_TO_UUID(nit.term)'
             ];
         }
 
-        $filters['status'] = [
+        /*$filters['status'] = [
             'label' => 'status',
             'type' => 'single_select',
             'choices' => $this->createStatusChoices(),
             'selector' => 'tm.status'
-        ];
+        ];*/
 
         return $filters;
     }
@@ -99,9 +103,8 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
     {
         $queryBuilder
             ->from('#__node', 'tm')
-            ->addSelect('tm.type, tm.level, tm.parent_id, tl.slug, tm.status, tl.translated, GROUP_CONCAT(tnhf.purpose SEPARATOR \',\') AS purposes')
-            ->leftJoin('tm', '#__node_translation', 'tl', 'tm.id = tl.node_id AND tl.locale = :locale')
-            ->leftJoin('tm', '#__node_has_purpose', 'tnhf', 'tm.id = tnhf.node_id')
+            ->addSelect('tm.type, tm.level, tm.parent_id, tl.slug, tm.status, tl.translated, tl.locale')
+            ->innerJoin('tm', '#__node_translation', 'tl', 'tm.id = tl.node_id AND tl.locale = :locale')
             ->where('tm.type = :type')
             ->andWhere('tm.website_id = :website_id')
             ->setParameter('type', $context['node_type']->getCode(), PDO::PARAM_STR)
@@ -111,12 +114,12 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
             ->addGroupBy('tm.id')
         ;
 
-        if ($this->supportsCategoryTaxonomy()) {
+        if ($this->supportsCategoryTaxonomy($context['node_type'])) {
             $queryBuilder
-                ->addSelect('nt.id AS term_id, nt.type AS taxonomy_type')
-                ->leftJoin('tm', '#__node_term_relationship', 'ntr', 'ntr.node_id = tm.id')
-                ->leftJoin('ntr', '#__term', 'nt', 'nt.id = ntr.term_id')
-                ->leftJoin('nt', '#__term_lang', 'ntl', 'ntl.term_id = nt.id AND ntl.locale = :locale');
+                ->addSelect('ttt.name')
+                ->leftJoin('tm', '#__node_in_term', 'nit', 'nit.node_id = tm.id')
+                ->leftJoin('nit', '#__taxonomy_term_translation', 'ttt', 'ttt.term_id = nit.term')
+            ;
         }
 
         return $queryBuilder;
@@ -124,8 +127,12 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
 
     public function prepareResult(array $result): array
     {
-        foreach ($result as $key => $row) {
-            $result[$key]['purposes'] = array_filter(explode(',', (string) $row['purposes']));
+        $nodesId = array_column($result, 'id');
+        $purposes = $this->fetchPurposes($nodesId);
+
+        foreach ($result as $key => $val) {
+            $result[$key]['purposes'] = $purposes[$val['id']] ?? [];
+            $result[$key]['attributes'] = new LazyAttributesFinder($val['id'], $val['locale'], $this->attributesFinder);
         }
 
         return $result;
@@ -153,10 +160,32 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
         ];
     }
 
-    private function createTaxonomyChoices(): array
+    private function fetchPurposes(array $nodeIdList): array
+    {
+        $source = $this->connection->fetchAllAssociative('
+            SELECT purpose, BIN_TO_UUID(node_id) AS node_id
+            FROM #__node_has_purpose
+            WHERE node_id IN (:node_id)', [
+            'node_id' => array_map(static fn(string $v) => Uuid::fromString($v)->toBinary(), $nodeIdList),
+        ], [
+            'node_id' => Connection::PARAM_STR_ARRAY,
+        ]);
+        $result = [];
+
+        foreach ($source as $row) {
+            $result[$row['node_id']][] = $row['purpose'];
+        }
+
+        return $result;
+    }
+
+    private function createTaxonomyChoices(FinderContext $context): array
     {
         $terms = $this->termFinder->find([
             'sort_hierarchical' => true,
+            'locale' => $context['website']->getLocale()->getCode(),
+            'website_id' => Uuid::fromString($context['website']->getId())->toBinary(),
+            'taxonomy_type' => $this->options->get('category_taxonomy', $context['node_type']),
         ], TermFinderScopeEnum::INTERNAL);
 
         $result = [];
@@ -168,17 +197,9 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
         return $result;
     }
 
-    private function supportsCategoryTaxonomy(): bool
+    private function supportsCategoryTaxonomy(ContentType $contentType): bool
     {
-        // @todo
-        return false;
-        foreach ($this->contentType->getTaxonomies() as $taxonomy) {
-            if ($taxonomy['taxonomy'] === 'category') {
-                return true;
-            }
-        }
-
-        return false;
+        return (bool) $this->options->get('category_taxonomy', $contentType);
     }
 
     private function createStatusChoices(): array

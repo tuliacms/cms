@@ -15,6 +15,7 @@
                     :section="element"
                     errors="ObjectUtils.get(errors, id, {})"
                     @section:remove="(code) => removeSection(code)"
+                    @section:toggleActiveness="(code) => toggleSectionActiveness(code)"
                 ></Section>
             </template>
         </draggable>
@@ -63,8 +64,9 @@ export default {
                 name: {
                     value: 'New section...',
                     valid: true,
-                    message: null
+                    message: null,
                 },
+                active: false,
                 fields: []
             });
         },
@@ -78,6 +80,13 @@ export default {
                     }
                 }
             });
+        },
+        toggleSectionActiveness: function (code) {
+            for (let i in this.sections) {
+                if (this.sections[i].code === code) {
+                    this.sections[i].active = !this.sections[i].active;
+                }
+            }
         }
     }
 }

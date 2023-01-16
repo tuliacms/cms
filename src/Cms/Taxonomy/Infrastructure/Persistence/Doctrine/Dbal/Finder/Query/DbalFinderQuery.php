@@ -114,7 +114,7 @@ class DbalFinderQuery extends AbstractDbalQuery
             'website_id' => null,
             /**
              * Is fet to true, result will be sorted hierarchical after fetching.
-             * It will works only for full, complete fetched tree.
+             * It will works only for full, complete fetched tree, with the root item.
              */
             'sort_hierarchical' => false,
         ];
@@ -162,8 +162,10 @@ class DbalFinderQuery extends AbstractDbalQuery
         }
 
         if ($criteria['sort_hierarchical']) {
-            $result = $this->sortHierarchical($result, WriteModelTerm::ROOT_LEVEL + 1);
+            $result = $this->sortHierarchical($result, $this->findRootId($result));
         }
+
+        $result = $this->removeRootItems($result);
 
         try {
             foreach ($result as $row) {
@@ -211,8 +213,7 @@ class DbalFinderQuery extends AbstractDbalQuery
             ->innerJoin('tm', '#__taxonomy', 'tt', 'tt.id = tm.taxonomy_id AND tt.website_id = :tt_website_id')
             ->innerJoin('tm', '#__taxonomy_term_translation', 'tl', 'tm.id = tl.term_id AND tl.locale = :tl_locale')
             ->setParameter('tt_website_id', Uuid::fromString($criteria['website_id'])->toBinary(), PDO::PARAM_STR)
-            ->setParameter('tl_locale', $criteria['locale'], PDO::PARAM_STR)
-            ->andWhere('tm.is_root = 0');
+            ->setParameter('tl_locale', $criteria['locale'], PDO::PARAM_STR);
     }
 
     protected function searchById(array $criteria): void
@@ -337,14 +338,14 @@ class DbalFinderQuery extends AbstractDbalQuery
         }
     }
 
-    private function sortHierarchical(array $items, int $level, string $parent = WriteModelTerm::ROOT_ID): array
+    private function sortHierarchical(array $items, string $parent, int $level = 1): array
     {
         $result = [];
 
         foreach ($items as $item) {
             if ($item['level'] === $level && $item['parent_id'] === $parent) {
                 $result[] = [$item];
-                $result[] = $this->sortHierarchical($items, $level + 1, $item['id']);
+                $result[] = $this->sortHierarchical($items, $item['id'], $level + 1);
             }
         }
 
@@ -353,5 +354,27 @@ class DbalFinderQuery extends AbstractDbalQuery
         }
 
         return array_merge(...$result);
+    }
+
+    private function findRootId(array $items): string
+    {
+        foreach ($items as $item) {
+            if ($item['is_root']) {
+                return $item['id'];
+            }
+        }
+
+        throw new \OutOfBoundsException('Cannot find root item.');
+    }
+
+    private function removeRootItems(array $items): array
+    {
+        foreach ($items as $key => $item) {
+            if ($item['is_root']) {
+                unset($items[$key]);
+            }
+        }
+
+        return $items;
     }
 }

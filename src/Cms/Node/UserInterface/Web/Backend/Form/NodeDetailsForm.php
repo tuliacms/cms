@@ -15,9 +15,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormType\AttributesAwareFormTypeTrait;
 use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormType\AttributesType;
+use Tulia\Cms\Node\Domain\WriteModel\Service\NodeOptionsInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodePurpose\NodePurposeRegistryInterface;
 use Tulia\Cms\Node\UserInterface\Web\Backend\Form\FormType\NodeCategoryTypeaheadType;
-use Tulia\Cms\Options\Domain\ReadModel\Options;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\DateTimeType;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
 use Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserTypeahead\UserTypeaheadType;
@@ -36,7 +36,7 @@ final class NodeDetailsForm extends AbstractType
         private readonly TranslatorInterface $translator,
         private readonly AuthenticatedUserProviderInterface $authenticatedUserProvider,
         private readonly ContentTypeRegistryInterface $contentTypeRegistry,
-        private readonly Options $options,
+        private readonly NodeOptionsInterface $options,
     ) {
     }
 
@@ -125,7 +125,7 @@ final class NodeDetailsForm extends AbstractType
             ]);
         }
 
-        $categoryTaxonomy = $this->options->get(sprintf('node.%s.category_taxonomy', $options['content_type']));
+        $categoryTaxonomy = $this->options->get('category_taxonomy', $options['content_type']);
 
         if ($categoryTaxonomy) {
             $builder->add('main_category', NodeCategoryTypeaheadType::class, [

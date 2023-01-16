@@ -253,6 +253,10 @@
                 <source>themeRequiresContentFieldToBeExistence</source>
                 <target><![CDATA[Motyw oczekuje pola o nazwie "<b>{name}</b>", które przechowuje główną zawartość węzła typu treści. Pamiętaj o utworzeniu takiego pola, jeśli chcesz wyświetlać treści z Edytora wizualnego Tulia.]]></target>
             </trans-unit>
+            <trans-unit id="tuliacms.content_builder.68">
+                <source>c</source>
+                <target>Przełącz widoczność</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

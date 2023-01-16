@@ -34,7 +34,7 @@ class WidgetTypeContainerProvider implements ContentTypeProviderInterface
             $typeDef->isInternal = true;
 
             foreach ($type['fields_groups'] as $group) {
-                $groupDef = $typeDef->fieldsGroup($group['code'], $group['name'], $group['section']);
+                $groupDef = $typeDef->fieldsGroup($group['code'], $group['name'], $group['section'], $group['active'] ?? false);
 
                 foreach ($group['fields'] as $fieldCode => $fieldArray) {
                     $groupDef->fieldFromArray($fieldCode, $fieldArray);

@@ -29,6 +29,7 @@ trait SymfonyContainerStandarizableTrait
                     'code' => $groupCode,
                     'section' => $sectionCode,
                     'name' => $group['name'] ?? $groupCode,
+                    'active' => $group['active'] ?? false,
                     'fields' => $this->standarizeFields($group['fields'])
                 ];
             }

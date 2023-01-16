@@ -49,6 +49,7 @@
             routingStrategy: '{{ 'routingStrategy'|trans }}',
             routingStrategyHelp: '{{ 'routingStrategyHelp'|trans }}',
             themeRequiresContentFieldToBeExistence: '{{ 'themeRequiresContentFieldToBeExistence'|trans|raw }}',
+            toggleActiveness: '{{ 'toggleActiveness'|trans }}',
         },
         fieldTypes: {{ fieldTypes|json_encode|raw }},
         routingStrategies: {{ routingStrategies|json_encode|raw }},

@@ -47,6 +47,7 @@ final class ContentTypeBuilder
                 'code' => $group->code,
                 'section' => $group->section,
                 'name' => $group->name,
+                'active' => $group->active,
                 'fields' => $this->buildFields($group->getFields()),
             ];
         }

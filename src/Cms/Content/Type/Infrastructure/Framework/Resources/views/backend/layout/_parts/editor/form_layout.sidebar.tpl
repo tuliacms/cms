@@ -4,7 +4,7 @@
     <li class="nav-item">
         <a
             href="#"
-            class="nav-link {{ (group.active ?? false) ? 'active' : '' }}"
+            class="nav-link {{ group.active ? 'active' : '' }}"
             data-bs-toggle="tab"
             data-bs-target="#tab-{{ id }}"
         >
@@ -48,7 +48,7 @@
 
     <div class="accordion-section">
         <div
-            class="accordion-section-button{{ (group.active ?? false) ? '' : ' collapsed' }}"
+            class="accordion-section-button{{ group.active ? '' : ' collapsed' }}"
             data-bs-toggle="collapse"
             data-bs-target="#form-collapse-sidebar-{{ id }}"
         >
@@ -57,7 +57,7 @@
         </div>
         <div
             id="form-collapse-sidebar-{{ id }}"
-            class="accordion-collapse collapse{{ (group.active ?? false) ? ' show' : '' }}"
+            class="accordion-collapse collapse{{ group.active ? ' show' : '' }}"
         >
             <div class="accordion-section-body">
                 {{ form_render.render_fields(form, group.fields, contentType) }}
@@ -77,6 +77,7 @@
     {% import '@backend/content_builder/layout/_parts/editor/form_render.tpl' as form_render %}
     {% set contentType = attributesForm.vars.content_type %}
 
+    {{ dump(contentType) }}
     {{ form_render.form_begin(form) }}
 
     <div class="page-form"> {# id="node-form" #}
@@ -108,7 +109,7 @@
                 {% for group in contentType.fieldGroups %}
                     {% if group.section == 'main' %}
                         {{ _self.tab(group.code, {
-                            active: pageTabsBlock is empty and loopIndex == 0,
+                            active: group.active,
                             name: group.name|trans,
                             fields: group.fields
                         }, attributesForm) }}
@@ -135,7 +136,7 @@
                     {% if group.section == 'main' %}
                         {{ _self.tab_content(
                             group.code,
-                            pageTabsContentBlock is empty and loopIndex == 0,
+                            group.active,
                             group,
                             attributesForm,
                             contentType

@@ -48,6 +48,7 @@ class ModelToArrayTransformer
 
             $groups[] = [
                 'code' => $group['code'],
+                'active' => $group['active'],
                 'name' => [
                     'value' => $group['name'],
                     'valid' => true,

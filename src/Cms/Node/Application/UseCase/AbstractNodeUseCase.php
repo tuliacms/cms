@@ -8,10 +8,10 @@ use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface
 use Tulia\Cms\Node\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Cms\Node\Domain\WriteModel\Rules\CanAddPurpose\CanImposePurposeInterface;
+use Tulia\Cms\Node\Domain\WriteModel\Service\NodeOptionsInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodeRepositoryInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Service\ParentTermsResolverInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Service\ShortcodeProcessorInterface;
-use Tulia\Cms\Options\Domain\ReadModel\Options;
 use Tulia\Cms\Shared\Application\UseCase\AbstractTransactionalUseCase;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 use Tulia\Cms\Shared\Domain\WriteModel\Service\SlugGeneratorStrategy\SlugGeneratorStrategyInterface;
@@ -30,7 +30,7 @@ abstract class AbstractNodeUseCase extends AbstractTransactionalUseCase
         protected readonly ShortcodeProcessorInterface $processor,
         protected readonly ContentTypeRegistryInterface $contentTypeRegistry,
         protected readonly ParentTermsResolverInterface $parentTermsResolver,
-        protected readonly Options $options,
+        protected readonly NodeOptionsInterface $options,
     ) {
     }
 
@@ -56,7 +56,7 @@ abstract class AbstractNodeUseCase extends AbstractTransactionalUseCase
 
         $attributes = $this->processAttributes($attributes);
 
-        $categoryTaxonomy = $this->options->get(sprintf('node.%s.category_taxonomy', $node->getNodeType()));
+        $categoryTaxonomy = $this->options->get('category_taxonomy', $node->getNodeType());
 
         if ($categoryTaxonomy) {
             if ($request->data['main_category']) {

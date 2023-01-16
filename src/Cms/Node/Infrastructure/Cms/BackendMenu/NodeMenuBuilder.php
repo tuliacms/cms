@@ -9,7 +9,7 @@ use Tulia\Cms\BackendMenu\Builder\Helper\BuilderHelperInterface;
 use Tulia\Cms\BackendMenu\Builder\Registry\ItemRegistryInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
-use Tulia\Cms\Options\Domain\ReadModel\Options;
+use Tulia\Cms\Node\Domain\WriteModel\Service\NodeOptionsInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -19,7 +19,7 @@ final class NodeMenuBuilder implements BuilderInterface
     public function __construct(
         private readonly BuilderHelperInterface $helper,
         private readonly ContentTypeRegistryInterface $contentTypeRegistry,
-        private readonly Options $options,
+        private readonly NodeOptionsInterface $options,
     ) {
     }
 
@@ -50,7 +50,7 @@ final class NodeMenuBuilder implements BuilderInterface
             'parent' => $root,
         ]);
 
-        $categoryTaxonomy = $this->options->get(sprintf('node.%s.category_taxonomy', $type->getCode()));
+        $categoryTaxonomy = $this->options->get('category_taxonomy', $type);
 
         if ($categoryTaxonomy) {
             $taxonomy = $this->contentTypeRegistry->get($categoryTaxonomy);

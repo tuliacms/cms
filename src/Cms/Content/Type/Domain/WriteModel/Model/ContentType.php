@@ -62,7 +62,7 @@ final class ContentType extends AbstractAggregateRoot
         }
 
         foreach ($fieldGroups as $group) {
-            $fieldsGroup = new FieldsGroup($group['code'], $group['section'], $group['name'], $group['position']);
+            $fieldsGroup = new FieldsGroup($group['code'], $group['section'], $group['name'], $group['position'], $group['active']);
             $this->fieldGroups[$group['code']] = $fieldsGroup;
 
             $position = 1;
@@ -188,7 +188,7 @@ final class ContentType extends AbstractAggregateRoot
         }
     }
 
-    public function addFieldsGroup(string $code, string $name, string $section, int $position = 0): void
+    public function addFieldsGroup(string $code, string $name, string $section, int $position = 0, bool $active = false): void
     {
         foreach ($this->fieldGroups as $group) {
             if ($group->getCode() === $code) {
@@ -196,7 +196,7 @@ final class ContentType extends AbstractAggregateRoot
             }
         }
 
-        $this->fieldGroups[$code] = new FieldsGroup($code, $section, $name, $position);
+        $this->fieldGroups[$code] = new FieldsGroup($code, $section, $name, $position, $active);
         $this->recordThat(new FieldsGroupAdded($this->code, $code, $section, $name));
         $this->recordUpdate();
     }
@@ -220,6 +220,17 @@ final class ContentType extends AbstractAggregateRoot
                     $this->recordThat(new FieldsGroupRenamed($this->code, $groupCode, $fieldsGroup->getName()));
                     $this->recordUpdate();
                 }
+            }
+        }
+    }
+
+    public function changeFieldsGroupActivity(string $groupCode, bool $active): void
+    {
+        foreach ($this->fieldGroups as $fieldsGroup) {
+            if ($fieldsGroup->getCode() === $groupCode) {
+                $fieldsGroup->changeActivity($active);
+                //$this->recordThat(new FieldsGroupRenamed($this->code, $groupCode, $fieldsGroup->getName()));
+                $this->recordUpdate();
             }
         }
     }

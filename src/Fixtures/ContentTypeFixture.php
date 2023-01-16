@@ -35,7 +35,7 @@ final class ContentTypeFixture extends Fixture implements FixtureGroupInterface
         $introduction = uniqid('section_');
         $type->addFieldsGroup($introduction, 'Introduction', 'main', 0);
         $content = uniqid('section_');
-        $type->addFieldsGroup($content, 'Content', 'main', 1);
+        $type->addFieldsGroup($content, 'Content', 'main', 1, true);
         $image = uniqid('section_');
         $type->addFieldsGroup($image, 'Image', 'sidebar', 0);
 

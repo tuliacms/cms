@@ -45,6 +45,7 @@ class ValidationRequestManipulator
         foreach ($sections as $sk => $section) {
             $newSections[$sk] = [
                 'code' => $section['code'],
+                'active' => $section['active'],
                 'name' => $section['name']['value'],
                 'fields' => $this->cleanFromFieldsCollection($section['fields']),
             ];

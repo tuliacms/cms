@@ -22,7 +22,7 @@ cms:
         assets:
             content_builder.layout_builder.routable_content_type:
                 scripts: [ '/assets/core/content-builder-layout-builder/js/build.js' ]
-                styles: [ '/assets/core/content-builder-layout-builder/css/styles.min.css' ]
+                styles: [ '/assets/core/content-builder-layout-builder/js/main.css' ]
                 require: [ vue, lodash ]
     importer:
         objects:

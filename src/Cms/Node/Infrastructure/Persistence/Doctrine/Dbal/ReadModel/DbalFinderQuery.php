@@ -170,13 +170,17 @@ class DbalFinderQuery extends AbstractDbalQuery
     {
         $result = $this->queryBuilder->fetchAllAssociative();
         $collection = new Collection([], function () {
-            return (int) (clone $this->queryBuilder)
+            $qb = (clone $this->queryBuilder)
                 ->select('COUNT(tm.id) AS count')
                 ->resetQueryPart('orderBy')
                 ->setFirstResult(0)
-                ->setMaxResults(null)
-                ->executeQuery()
-                ->fetchOne();
+                ->setMaxResults(null);
+
+            return (int) $qb->getConnection()->fetchOne(
+                "SELECT COUNT(*) AS count FROM ({$qb->getSQL()}) AS count_table",
+                $qb->getParameters(),
+                $qb->getParameterTypes()
+            );
         });
 
         if ($result === []) {
@@ -266,7 +270,6 @@ class DbalFinderQuery extends AbstractDbalQuery
                 tl.title,
                 tl.slug,
                 COALESCE(tl.locale, :tl_locale) AS locale
-                -- GROUP_CONCAT(tnhf.purpose SEPARATOR \',\') AS purposes
             ');
         }
 
@@ -282,8 +285,7 @@ class DbalFinderQuery extends AbstractDbalQuery
             ->innerJoin('tm', '#__node_translation', 'tl', 'tm.id = tl.node_id AND tm.website_id = :tm_website_id AND tl.locale = :tl_locale')
             ->setParameter('tl_locale', $criteria['locale'], PDO::PARAM_STR)
             ->setParameter('tm_website_id', Uuid::fromString($criteria['website_id'])->toBinary(), PDO::PARAM_STR)
-            //->leftJoin('tm', '#__node_has_purpose', 'tnhf', 'tm.id = tnhf.node_id')
-            //->addGroupBy('tm.id')
+            ->addGroupBy('tm.id')
         ;
     }
 

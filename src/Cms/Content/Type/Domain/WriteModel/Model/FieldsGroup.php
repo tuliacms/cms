@@ -12,19 +12,16 @@ use Tulia\Cms\Content\Type\Domain\WriteModel\Exception\ParentFieldNotExistsExcep
  */
 final class FieldsGroup
 {
-    private string $code;
-    private string $section;
-    private string $name;
-    private int $position;
     /** @var Field[] */
     private array $fields = [];
 
-    public function __construct(string $code, string $section, string $name, int $position = 0)
-    {
-        $this->code = $code;
-        $this->section = $section;
-        $this->name = $name;
-        $this->position = $position;
+    public function __construct(
+        private string $code,
+        private string $section,
+        private string $name,
+        private int $position = 0,
+        private bool $active = false,
+    ) {
     }
 
     public function toArray(): array
@@ -34,6 +31,7 @@ final class FieldsGroup
             'section' => $this->section,
             'name' => $this->name,
             'position' => $this->position,
+            'active' => $this->active,
             'fields' => array_map(
                 fn (Field $field) => $field->toArray(),
                 $this->fields
@@ -68,6 +66,16 @@ final class FieldsGroup
     {
         if ($this->name !== $name) {
             $this->name = $name;
+            return true;
+        }
+
+        return false;
+    }
+
+    public function changeActivity(bool $active): bool
+    {
+        if ($this->active !== $active) {
+            $this->active = $active;
             return true;
         }
 

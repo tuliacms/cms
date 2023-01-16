@@ -2,6 +2,8 @@ const RoutableContentTypeApp = require('./RoutableContentTypeApp.vue').default;
 const ContentBlockApp = require('./ContentBlockApp.vue').default;
 const Vue = require('vue');
 
+import '../sass/style.scss';
+
 /*
 Vue.directive('bs-tooltip', function(el) {
     let tooltip = new bootstrap.Tooltip(el);

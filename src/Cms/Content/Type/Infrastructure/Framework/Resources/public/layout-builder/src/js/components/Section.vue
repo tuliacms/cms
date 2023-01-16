@@ -10,6 +10,7 @@
                 :title="section.name.message"
             />
             <div class="ctb-section-options">
+                <span @click="$emit('section:toggleActiveness', section.code)" data-bs-tooltip :title="translations.toggleActiveness"><i :class="{ 'fas' : true, 'fa-eye text-success': section.active, 'fa-eye-slash text-secondary': !section.active }"></i></span>
                 <span @click="$emit('section:remove', section.code)" data-bs-tooltip :title="translations.removeSection"><i class="fas fa-trash"></i></span>
             </div>
         </div>
