@@ -3,3 +3,4 @@ parameters:
     tulia.cache.adapter: 'cache.adapter.doctrine_dbal'
     tulia.cache.provider: 'doctrine.dbal.default_connection'
     timezone: '%env(default:tulia.timezone_default:APP_TIMEZONE)%'
+    container.dumper.inline_factories: true

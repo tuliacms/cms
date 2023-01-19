@@ -75,6 +75,8 @@
             containerSizeDefaultWidth: '{{ 'containerSizeDefaultWidth'|trans({}, 'tulia-editor') }}',
             containerSizeFullWidth: '{{ 'containerSizeFullWidth'|trans({}, 'tulia-editor') }}',
             containerSizeFullWidthNoPadding: '{{ 'containerSizeFullWidthNoPadding'|trans({}, 'tulia-editor') }}',
+            anchorId: '{{ 'anchorId'|trans({}, 'tulia-editor') }}',
+            anchorIdHelp: '{{ 'anchorIdHelp'|trans({}, 'tulia-editor') }}',
             margin: '{{ 'margin'|trans({}, 'tulia-editor') }}',
             padding: '{{ 'padding'|trans({}, 'tulia-editor') }}',
             sizingDefault: '{{ 'sizingDefault'|trans({}, 'tulia-editor') }}',

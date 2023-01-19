@@ -34,8 +34,7 @@
             <h1 class="pane-title">{{ block('title') }}</h1>
         </div>
         {{ generator.generate(datatable, {
-            data_endpoint: path('backend.node.datatable', { node_type: nodeType.code }),
-            pagination: false
+            data_endpoint: path('backend.node.datatable', { node_type: nodeType.code })
         }) }}
     </div>
     <style>

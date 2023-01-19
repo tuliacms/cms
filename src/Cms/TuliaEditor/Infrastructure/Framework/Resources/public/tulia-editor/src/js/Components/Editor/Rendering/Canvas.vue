@@ -6,6 +6,7 @@
             class="tued-section"
             :id="`tued-section-${section.id}`"
         >
+            <div v-if="section.data.anchorId" :id="section.data.anchorId" class="tued-section-anchor"></div>
             <div :class="containerClass(section)">
                 <div
                     v-for="(row, key) in section.rows"

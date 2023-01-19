@@ -49,6 +49,7 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
                 'selector' => 'tl.title',
                 'label' => 'title',
                 'html_attr' => ['class' => 'col-title'],
+                'sortable' => true,
                 'view' => '@backend/node/parts/datatable/title.tpl',
                 'view_context' => $viewContext,
             ],
@@ -56,6 +57,7 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
                 'selector' => 'tm.published_at',
                 'label' => 'date',
                 'html_attr' => ['class' => 'col-date'],
+                'sortable' => true,
                 'view' => '@backend/node/parts/datatable/published.tpl',
             ],
         ];
@@ -77,7 +79,7 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
         $filters['title'] = [
             'label' => 'title',
             'type' => 'text',
-            'selector' => 'tl.title'
+            'selector' => 'tl.title',
         ];
 
         if ($this->supportsCategoryTaxonomy($context['node_type'])) {

@@ -47,7 +47,7 @@ class DatatableFinder extends AbstractDatatableFinder
     public function prepareQueryBuilder(QueryBuilder $queryBuilder, FinderContext $context): QueryBuilder
     {
         $queryBuilder
-            ->select('tm.name, BIN_TO_UUID(tm.id) AS id, tl.translated')
+            ->select('tl.translated')
             ->from('#__form', 'tm')
             ->leftJoin('tm', '#__form_translation', 'tl', 'tm.id = tl.form_id AND tl.locale = :locale')
             ->where('tm.website_id = :website_id')

@@ -39,6 +39,7 @@ export default class Fixer {
         if (!section.data) {
             section.data = {
                 containerWidth: 'default',
+                anchorId: null,
             };
         }
 

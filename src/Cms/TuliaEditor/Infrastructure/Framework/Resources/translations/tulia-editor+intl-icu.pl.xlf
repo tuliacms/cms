@@ -230,6 +230,14 @@
                 <source>calculatedVisibilityInvisible</source>
                 <target>Wyliczona widoczność: Niewidoczny</target>
             </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.58">
+                <source>anchorId</source>
+                <target>ID Kotwicy</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.59">
+                <source>anchorIdHelp</source>
+                <target>Może być użyty do stworzenia odnośników menu w stronie typu Singlepage.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

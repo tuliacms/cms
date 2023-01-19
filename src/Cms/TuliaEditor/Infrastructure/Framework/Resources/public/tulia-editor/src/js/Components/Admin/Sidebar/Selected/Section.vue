@@ -5,10 +5,16 @@
             :choices="containerWidthList"
             :label="translator.trans('containerSize')"
         ></Select>
+        <Input
+            v-model="section.data.anchorId"
+            :label="translator.trans('anchorId')"
+            :help="translator.trans('anchorIdHelp')"
+        ></Input>
     </div>
 </template>
 <script setup>
 const Select = require('controls/Select.vue').default;
+const Input = require('controls/Input.Text.vue').default;
 const { defineProps, inject, reactive, watch } = require('vue');
 const props = defineProps(['section']);
 const section = inject('sections.instance').manager(props);

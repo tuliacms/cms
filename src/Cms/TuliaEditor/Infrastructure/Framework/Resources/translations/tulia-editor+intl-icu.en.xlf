@@ -230,6 +230,14 @@
                 <source>calculatedVisibilityInvisible</source>
                 <target>Calculated: Invisible</target>
             </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.58">
+                <source>anchorId</source>
+                <target>Archor ID</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.59">
+                <source>anchorIdHelp</source>
+                <target>Can be used to create singlepage anchors from menu.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
