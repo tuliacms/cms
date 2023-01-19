@@ -38,4 +38,17 @@
             pagination: false
         }) }}
     </div>
+    <style>
+        .image-thumb {
+            height: 31px;
+            width: 50px;
+            float: left;
+            margin-right: 10px;
+            display: inline-block;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            border-radius: 3px;
+        }
+    </style>
 {% endblock %}

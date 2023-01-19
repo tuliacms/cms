@@ -53,7 +53,7 @@ class DbalContentTypeStorage
                 'code' => $group['code'],
                 'name' => $group['name'],
                 'section' => $group['section'],
-                'active' => $group['active'],
+                'active' => $group['active'] ? '1' : '0',
                 'position' => ++$i,
             ]);
 

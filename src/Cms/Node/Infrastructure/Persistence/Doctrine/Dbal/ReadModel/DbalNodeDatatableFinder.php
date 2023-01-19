@@ -117,7 +117,7 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
         if ($this->supportsCategoryTaxonomy($context['node_type'])) {
             $queryBuilder
                 ->addSelect('ttt.name')
-                ->leftJoin('tm', '#__node_in_term', 'nit', 'nit.node_id = tm.id')
+                ->leftJoin('tm', '#__node_in_term', 'nit', 'nit.node_id = tm.id AND nit.type = "main"')
                 ->leftJoin('nit', '#__taxonomy_term_translation', 'ttt', 'ttt.term_id = nit.term')
             ;
         }

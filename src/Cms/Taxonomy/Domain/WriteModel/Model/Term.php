@@ -6,6 +6,7 @@ namespace Tulia\Cms\Taxonomy\Domain\WriteModel\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Uid\Uuid;
 use Tulia\Cms\Shared\Domain\WriteModel\Service\SlugGeneratorStrategy\SlugGeneratorStrategyInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Exception\TermNotFoundException;
 
@@ -35,7 +36,8 @@ class Term
         array $locales,
         string $creatingLocale,
     ): self {
-        $self = new self('root', $taxonomy, true);
+        /** @todo Move root ID generation to more apropriate place */
+        $self = new self((string) Uuid::v4(), $taxonomy, true);
 
         $translations = [];
 

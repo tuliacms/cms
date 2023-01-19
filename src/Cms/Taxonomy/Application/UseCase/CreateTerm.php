@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\Application\UseCase;
 
 use Tulia\Cms\Shared\Application\UseCase\AbstractTransactionalUseCase;
+use Tulia\Cms\Shared\Application\UseCase\IdResult;
 use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
 use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\Service\SlugGeneratorStrategy\SlugGeneratorStrategyInterface;
@@ -46,7 +47,7 @@ final class CreateTerm extends AbstractTransactionalUseCase
 
         $taxonomy->addTerm(
             $this->slugGeneratorStrategy,
-            $this->repository->getNextId(),
+            $termId = $this->repository->getNextId(),
             $request->data['name'],
             $request->data['slug'],
             $request->locales,
@@ -59,6 +60,6 @@ final class CreateTerm extends AbstractTransactionalUseCase
         $this->repository->save($taxonomy);
         $this->bus->dispatchCollection($taxonomy->collectDomainEvents());
 
-        return null;
+        return new IdResult($termId);
     }
 }

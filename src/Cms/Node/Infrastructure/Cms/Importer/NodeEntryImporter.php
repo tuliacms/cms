@@ -9,7 +9,6 @@ use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface
 use Tulia\Cms\Node\Application\UseCase\CreateNode;
 use Tulia\Cms\Node\Application\UseCase\CreateNodeRequest;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\CannotImposePurposeToNodeException;
-use Tulia\Cms\Node\Domain\WriteModel\Service\NodeRepositoryInterface;
 use Tulia\Cms\Shared\Application\UseCase\IdResult;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
@@ -26,7 +25,6 @@ class NodeEntryImporter implements ObjectImporterInterface
     use WebsiteAwareTrait;
 
     public function __construct(
-        private readonly NodeRepositoryInterface $repository,
         private readonly CreateNode $createNode,
         private readonly ContentTypeRegistryInterface $contentTypeRegistry,
         private readonly AuthenticatedUserProviderInterface $userProvider,
