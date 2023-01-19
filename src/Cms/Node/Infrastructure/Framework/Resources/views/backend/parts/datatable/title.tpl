@@ -3,7 +3,6 @@
     <span class="boxur-depth boxur-depth-{{ row.level }}">
         {% if attributes.thumbnail is defined %}
             <div class="image-thumb" style="background-image:url('{{ image_url(attributes.thumbnail.__toString, { size: 'thumbnail' }) }}')"></div>
-            {#<img src="" style="" class="me-2 d-inline-block" alt="" />#}
         {% endif %}
         {% if row.translated is defined and row.translated != '1' %}
             <span class="badge badge-info" data-bs-toggle="tooltip" title="{{ 'missingTranslationInThisLocale'|trans }}"><i class="dropdown-icon fas fa-language"></i></span>

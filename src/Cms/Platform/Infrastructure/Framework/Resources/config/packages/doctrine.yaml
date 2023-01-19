@@ -11,3 +11,9 @@ doctrine:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         auto_mapping: true
+        metadata_cache_driver:
+            type: pool
+            pool: cache.doctrine.metadata
+        query_cache_driver:
+            type: pool
+            pool: cache.doctrine.query

@@ -16,11 +16,11 @@ use Tulia\Cms\Settings\Domain\Event\SettingsUpdated;
  */
 class MenuCacheClearer implements EventSubscriberInterface
 {
-    private TagAwareCacheInterface $menuCache;
+    private TagAwareCacheInterface $cacheMenu;
 
-    public function __construct(TagAwareCacheInterface $menuCache)
+    public function __construct(TagAwareCacheInterface $cacheMenu)
     {
-        $this->menuCache = $menuCache;
+        $this->cacheMenu = $cacheMenu;
     }
 
     public static function getSubscribedEvents(): array
@@ -35,11 +35,11 @@ class MenuCacheClearer implements EventSubscriberInterface
 
     public function clearMenuCache(MenuCreated|MenuUpdated|MenuDeleted $event): void
     {
-        $this->menuCache->invalidateTags([sprintf('menu_%s', $event->id), 'menu']);
+        $this->cacheMenu->invalidateTags([sprintf('menu_%s', $event->id), 'menu']);
     }
 
     public function clearAllMenuCache(): void
     {
-        $this->menuCache->invalidateTags(['menu']);
+        $this->cacheMenu->invalidateTags(['menu']);
     }
 }

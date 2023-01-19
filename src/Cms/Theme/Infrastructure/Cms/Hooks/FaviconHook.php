@@ -24,7 +24,7 @@ class FaviconHook implements HooksSubscriberInterface
         private readonly Options $options,
         private readonly FileFinderInterface $fileFinder,
         private readonly ImageUrlResolver $imageUrlResolver,
-        private readonly TagAwareCacheInterface $settingsCache,
+        private readonly TagAwareCacheInterface $cacheSettings,
     ) {
     }
 
@@ -43,7 +43,7 @@ class FaviconHook implements HooksSubscriberInterface
 
         $key = sprintf('website_favicon_%s_%s', $website->getId(), $website->getLocale()->getCode());
 
-        return $this->settingsCache->get($key, function (ItemInterface $item) use ($website) {
+        return $this->cacheSettings->get($key, function (ItemInterface $item) use ($website) {
             $item->tag('settings');
 
             $fileId = $this->options->get('website_favicon', null, $website->getId(), $website->getLocale()->getCode());

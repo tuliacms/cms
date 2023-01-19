@@ -4,7 +4,16 @@ framework:
         default_pdo_provider: 'doctrine.dbal.default_connection'
 
         pools:
-            doctrine.result_cache_pool:
-                adapter: cache.app
-            doctrine.system_cache_pool:
-                adapter: cache.system
+            cache.doctrine.query:
+                adapter: doctrine.cache.adapter.php_files
+            cache.doctrine.metadata:
+                adapter: doctrine.cache.adapter.php_files
+
+services:
+    doctrine.cache.adapter.php_files:
+        class: Symfony\Component\Cache\Adapter\PhpFilesAdapter
+        parent: cache.adapter.filesystem
+        arguments:
+            $appendOnly: true
+            $defaultLifetime: 604800 # 604800 = 1 week
+            $directory: '%kernel.cache_dir%/doctrine_cache'

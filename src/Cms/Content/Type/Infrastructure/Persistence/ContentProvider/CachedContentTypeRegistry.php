@@ -18,20 +18,20 @@ class CachedContentTypeRegistry extends ContentTypeRegistry
     public function __construct(
         ContentTypeDecorator $decorator,
         ContentTypeBuilder $builder,
-        private readonly CacheInterface $contentBuilderCache,
+        private readonly CacheInterface $cacheContentBuilder,
     ) {
         parent::__construct($decorator, $builder);
     }
 
     protected function fetch(): array
     {
-        return $this->contentTypes = $this->contentBuilderCache->get('tulia.content_builder.content_types', function (ItemInterface $item) {
+        return $this->contentTypes = $this->cacheContentBuilder->get('tulia.content_builder.content_types', function (ItemInterface $item) {
             return parent::fetch();
         });
     }
 
     public function clearCache(): void
     {
-        $this->contentBuilderCache->delete('tulia.content_builder.content_types');
+        $this->cacheContentBuilder->delete('tulia.content_builder.content_types');
     }
 }

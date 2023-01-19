@@ -26,7 +26,7 @@ abstract class AbstractRoutingStrategy implements ContentTypeRoutingStrategyInte
         protected readonly TermFinderInterface $termFinder,
         protected readonly ContentTypeRegistryInterface $contentTypeRegistry,
         protected readonly LoggerInterface $logger,
-        protected readonly TagAwareCacheInterface $taxonomyCache,
+        protected readonly TagAwareCacheInterface $cacheTaxonomy,
     ) {
     }
 

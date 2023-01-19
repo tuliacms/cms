@@ -14,7 +14,7 @@ use Tulia\Cms\Settings\Domain\Event\SettingsUpdated;
 final class ClearCacheWhenSettingsUpdated implements EventSubscriberInterface
 {
     public function __construct(
-        private readonly TagAwareCacheInterface $settingsCache,
+        private readonly TagAwareCacheInterface $cacheSettings,
     ) {
     }
 
@@ -27,6 +27,6 @@ final class ClearCacheWhenSettingsUpdated implements EventSubscriberInterface
 
     public function clearCache(): void
     {
-        $this->settingsCache->invalidateTags(['settings']);
+        $this->cacheSettings->invalidateTags(['settings']);
     }
 }

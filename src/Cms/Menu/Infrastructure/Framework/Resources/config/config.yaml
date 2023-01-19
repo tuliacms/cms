@@ -4,7 +4,7 @@ framework:
             - '%cms.core_dir%/Cms/Menu/Infrastructure/Framework/Resources/translations'
     cache:
         pools:
-            menu.cache:
+            cache.menu:
                 adapter: '%tulia.cache.adapter%'
                 provider: '%tulia.cache.provider%'
                 default_lifetime: 86400

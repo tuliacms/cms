@@ -16,13 +16,13 @@ class CachedHierarchyBuilder implements HierarchyBuilderInterface
 {
     public function __construct(
         private readonly HierarchyBuilderInterface $builder,
-        private readonly TagAwareCacheInterface $menuCache,
+        private readonly TagAwareCacheInterface $cacheMenu,
     ) {
     }
 
     public function build(string $id, string $websiteId, string $locale, array $collection = []): HierarchyInterface
     {
-        return $this->menuCache->get(sprintf('menu_hierarchy_%s_%s_%s', $websiteId, $locale, $id), function (ItemInterface $item) use ($id, $websiteId, $locale, $collection) {
+        return $this->cacheMenu->get(sprintf('menu_hierarchy_%s_%s_%s', $websiteId, $locale, $id), function (ItemInterface $item) use ($id, $websiteId, $locale, $collection) {
             $item->tag('menu');
             $item->tag('menu_hierarchy');
             $item->tag(sprintf('menu_%s', $id));

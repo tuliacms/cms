@@ -4,7 +4,7 @@ framework:
             - '%cms.core_dir%/Cms/Taxonomy/Infrastructure/Framework/Resources/translations'
     cache:
         pools:
-            taxonomy.cache:
+            cache.taxonomy:
                 adapter: '%tulia.cache.adapter%'
                 provider: '%tulia.cache.provider%'
                 default_lifetime: 2592000
