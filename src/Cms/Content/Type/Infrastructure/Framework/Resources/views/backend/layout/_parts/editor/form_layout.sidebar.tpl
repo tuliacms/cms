@@ -77,7 +77,6 @@
     {% import '@backend/content_builder/layout/_parts/editor/form_render.tpl' as form_render %}
     {% set contentType = attributesForm.vars.content_type %}
 
-    {{ dump(contentType) }}
     {{ form_render.form_begin(form) }}
 
     <div class="page-form"> {# id="node-form" #}
