@@ -111,6 +111,9 @@
 
                             $(this).attr('src', value);
                             break;
+                        case 'inner-html':
+                            $(this).html(value);
+                            break;
                         // default means case: 'inner-text'
                         default:
                             $(this).text(value);

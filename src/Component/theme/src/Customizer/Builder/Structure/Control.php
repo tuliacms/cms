@@ -12,6 +12,7 @@ class Control
     private string $code;
     private string $type;
     private ?string $label;
+    private ?string $help;
     private $defaultValue;
     private string $transport = 'refresh';
     private bool $isMultilingual = false;
@@ -28,6 +29,7 @@ class Control
     public static function fromArray(array $data): self
     {
         $self = new self($data['code'], $data['type'], $data['label'], $data['value']);
+        $self->help = $data['help'];
         $self->transport = $data['transport'];
         $self->isMultilingual = $data['multilingual'];
         $self->options = $data['options'];
@@ -41,6 +43,7 @@ class Control
             'code' => $this->code,
             'type' => $this->type,
             'label' => $this->label,
+            'help' => $this->help,
             'default_value' => $this->defaultValue,
             'transport' => $this->transport,
             'is_multilingual' => $this->isMultilingual,
@@ -52,6 +55,7 @@ class Control
         $this->code = $control->code;
         $this->type = $control->type;
         $this->label = $control->label;
+        $this->help = $control->help;
         $this->defaultValue = $control->defaultValue;
         $this->transport = $control->transport;
         $this->isMultilingual = $control->isMultilingual;

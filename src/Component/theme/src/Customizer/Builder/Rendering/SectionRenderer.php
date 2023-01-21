@@ -14,15 +14,10 @@ use Tulia\Component\Theme\Customizer\Changeset\ChangesetInterface;
  */
 class SectionRenderer implements SectionRendererInterface
 {
-    private TranslatorInterface $translator;
-    private ControlsRegistry $controlRegistry;
-
     public function __construct(
-        TranslatorInterface $translator,
-        ControlsRegistry $controlRegistry
+        private readonly TranslatorInterface $translator,
+        private readonly ControlsRegistry $controlRegistry,
     ) {
-        $this->translator = $translator;
-        $this->controlRegistry = $controlRegistry;
     }
 
     public function render(array $structure, Section $section, ChangesetInterface $changeset): string

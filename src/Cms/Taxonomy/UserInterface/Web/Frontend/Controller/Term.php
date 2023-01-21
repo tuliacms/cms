@@ -10,6 +10,7 @@ use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum;
 use Tulia\Cms\Options\Domain\ReadModel\Options;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Platform\Shared\Document\DocumentInterface;
 use Tulia\Cms\Platform\Shared\Pagination\Paginator;
 use Tulia\Cms\Seo\Domain\Service\SeoDocumentProcessorInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Model\Term as QueryModelTerm;
@@ -31,6 +32,7 @@ class Term extends AbstractController
         Request $request,
         WebsiteInterface $website,
         SeoDocumentProcessorInterface $seo,
+        DocumentInterface $document,
     ): ViewInterface {
         $page = max(1, $request->query->getInt('page', 1));
         $perPage = (int) $this->options->get(
@@ -46,6 +48,13 @@ class Term extends AbstractController
             $website->getLocale()->getCode(),
             $term->getName(),
         );
+
+        if ($page <= 1) {
+            $document->addLink([
+                'rel' => 'canonical',
+                'href' => $request->getUriForPath($this->generateUrl(sprintf('frontend.taxonomy.%s.%s', $term->getType(), $term->getId())))
+            ]);
+        }
 
         $nodes = $this->nodeFinder->find([
             'term' => $term->getId(),

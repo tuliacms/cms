@@ -629,6 +629,7 @@ class Configuration implements ConfigurationInterface
                                                                 ->children()
                                                                     ->scalarNode('type')->defaultValue('text')->end()
                                                                     ->scalarNode('label')->isRequired()->end()
+                                                                    ->scalarNode('help')->defaultNull()->end()
                                                                     ->variableNode('control_options')->defaultValue([])->end()
                                                                     ->variableNode('value')->defaultNull()->end()
                                                                     ->scalarNode('transport')->defaultValue('refresh')->end()

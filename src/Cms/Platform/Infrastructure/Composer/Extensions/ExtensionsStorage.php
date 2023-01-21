@@ -82,9 +82,15 @@ final class ExtensionsStorage
         $this->extensions['extra']['tuliacms']['modules'][$package] = $info;
     }
 
-    public function clearCollection(): void
+    public function clearCollectionOf(ExtensionSourceEnum $sourceEnum): void
     {
-        $this->extensions = [];
+        foreach ($this->extensions['extra']['tuliacms'] as $type => $elements) {
+            foreach ($elements as $key => $elm) {
+                if ($elm['source'] === $sourceEnum->value) {
+                    unset($this->extensions['extra']['tuliacms'][$type][$key]);
+                }
+            }
+        }
     }
 
     public function write(): void

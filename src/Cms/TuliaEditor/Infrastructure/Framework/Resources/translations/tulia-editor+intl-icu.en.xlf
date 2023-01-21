@@ -238,6 +238,14 @@
                 <source>anchorIdHelp</source>
                 <target>Can be used to create singlepage anchors from menu.</target>
             </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.60">
+                <source>youtubeVideoUrl</source>
+                <target>Youtube Video URL</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.61">
+                <source>aspectRatio</source>
+                <target>Aspect Ratio</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

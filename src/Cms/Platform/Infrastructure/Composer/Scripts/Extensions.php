@@ -19,7 +19,7 @@ final class Extensions
         $packages = $event->getComposer()->getRepositoryManager()->getLocalRepository()->getPackages();
         $vendors = $event->getComposer()->getConfig()->get('vendor-dir');
         $extensions = new ExtensionsStorage(dirname($vendors));
-        $extensions->clearCollection();
+        $extensions->clearCollectionOf(ExtensionSourceEnum::VENDOR);
 
         foreach ($packages as $package) {
             $packageDir = $vendors.'/'.$package->getName();

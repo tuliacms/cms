@@ -83,6 +83,8 @@
             inheritValue: '{{ 'inheritValue'|trans({}, 'tulia-editor') }}',
             calculatedVisibilityVisible: '{{ 'calculatedVisibilityVisible'|trans({}, 'tulia-editor') }}',
             calculatedVisibilityInvisible: '{{ 'calculatedVisibilityInvisible'|trans({}, 'tulia-editor') }}',
+            youtubeVideoUrl: '{{ 'youtubeVideoUrl'|trans({}, 'tulia-editor') }}',
+            aspectRatio: '{{ 'aspectRatio'|trans({}, 'tulia-editor') }}',
         });
 
         let structureSelector = '.tulia-editor-structure-field[data-tulia-editor-group-id="{{ params.group_id }}"]';

@@ -1,3 +1,4 @@
+{% assets ['filemanager'] %}
 <div class="control-pane control-pane-name-website-identity" data-section="website-identity">
     <div class="control-pane-headline">
         <button type="button" class="control-pane-back" data-show-pane="home">

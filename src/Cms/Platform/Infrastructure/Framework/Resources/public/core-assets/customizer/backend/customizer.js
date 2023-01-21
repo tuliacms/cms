@@ -380,7 +380,7 @@ let Customizer = function (options) {
         let source = $('.customizer-form').serializeArray();
 
         for (let i = 0; i < source.length; i++) {
-            data[source[i].name] = this.transformValueIfNeeded($('input[name="' + source[i].name + '"]'));
+            data[source[i].name] = this.transformValueIfNeeded($('[name="' + source[i].name + '"]'));
         }
 
         return data;
