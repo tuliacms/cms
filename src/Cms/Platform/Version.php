@@ -10,5 +10,5 @@ namespace Tulia\Cms\Platform;
 class Version
 {
     public const VERSION = '0.0.1-alpha.2';
-    public const RELEASED = '2023.01.19';
+    public const RELEASED = '2023.01.21';
 }
