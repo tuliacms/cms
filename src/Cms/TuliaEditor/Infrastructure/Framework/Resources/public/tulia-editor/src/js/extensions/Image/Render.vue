@@ -1,6 +1,6 @@
 <template>
     <div v-if="props.modelValue.id">
-        [image id="{{ props.modelValue.id }}" size="{{ props.modelValue.size }}"]
+        [image id="{{ props.modelValue.id }}" size="{{ props.size }}"]
     </div>
 </template>
 
@@ -12,9 +12,11 @@ const props = defineProps({
         type: Object,
         validator (value) {
             return value.hasOwnProperty('id')
-                && value.hasOwnProperty('filename')
-                && value.hasOwnProperty('size');
+                && value.hasOwnProperty('filename');
         }
+    },
+    size: {
+        required: true,
     }
 });
 </script>

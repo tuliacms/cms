@@ -50,7 +50,6 @@ export default class Messenger {
             if (event.data.header.type === 'operation-confirmation') {
                 this.confirmOperation(event.data);
             }
-
         }, false);
     }
 

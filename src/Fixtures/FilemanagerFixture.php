@@ -24,6 +24,6 @@ final class FilemanagerFixture extends Fixture implements FixtureGroupInterface
 
     public static function getGroups(): array
     {
-        return ['local-database', 'setup'];
+        return ['local-database'];
     }
 }

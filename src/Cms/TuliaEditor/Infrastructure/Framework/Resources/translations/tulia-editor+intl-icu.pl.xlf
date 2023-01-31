@@ -246,6 +246,14 @@
                 <source>aspectRatio</source>
                 <target>Proporcje filmu (Aspect Ratio)</target>
             </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.62">
+                <source>columnsNumber</source>
+                <target>Liczba kolumn</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.63">
+                <source>imagesBottomMargin</source>
+                <target>Margines pod zdjęciami</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

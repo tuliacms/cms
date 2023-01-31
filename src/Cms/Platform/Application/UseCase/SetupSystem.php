@@ -89,6 +89,13 @@ final class SetupSystem extends AbstractTransactionalUseCase
             domainDevelopment: $domainDevelopment,
         ));
 
+        /**
+         * Temporary fix for Options service that is aware of website.
+         * @todo Fix this withour modifying global variable
+         */
+        $_SERVER['argv'][] = '--website='.$result->id;
+        $_SERVER['argv'][] = '--locale='.$locale;
+
         return $result->id;
     }
 
@@ -121,7 +128,7 @@ final class SetupSystem extends AbstractTransactionalUseCase
     private function importSampleData(string $websiteId, string $authorId): void
     {
         $this->importer->importFromFile(
-            $this->rootDir.'/extension/theme/Tulia/Lisa/Resources/imports/sample-website-data.json',
+            $this->rootDir.'/vendor/tuliacms/theme.tulia.lisa/Resources/imports/multipage.json',
             parameters: [
                 'website' => $this->websiteRegistry->get($websiteId),
                 'author_id' => $authorId,

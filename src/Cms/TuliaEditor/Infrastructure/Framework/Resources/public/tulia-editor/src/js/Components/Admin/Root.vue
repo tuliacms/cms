@@ -12,7 +12,6 @@
                 @save="saveEditor"
                 @contextmenu="(event) => cx.open(event, 'sidebar')"
             ></SidebarComponent>
-            <Debugbar></Debugbar>
             <BlockPickerComponent
                 :availableBlocks="availableBlocks"
                 :blockPickerData="blockPickerData"
@@ -41,7 +40,6 @@
 const CanvasComponent = require("components/Admin/Canvas/Canvas.vue").default;
 const SidebarComponent = require("components/Admin/Sidebar/Sidebar.vue").default;
 const BlockPickerComponent = require("components/Admin/Block/PickerModal.vue").default;
-const Debugbar = require("components/Admin/Debugbar/Debugbar.vue").default;
 const ObjectCloner = require("shared/Utils/ObjectCloner.js").default;
 const TuliaEditor = require('TuliaEditor');
 const { defineProps, onMounted, provide, reactive, isProxy, toRaw, ref } = require('vue');

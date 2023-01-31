@@ -26,14 +26,14 @@ const actions = props.actions.split(',');
 
 const moveBackward = () => {
     let newPosition = props.collection.moveBackward(props.item);
-    if (newPosition !== undefined) {
+    if (!!newPosition) {
         emits('movedTo', newPosition);
         view.updated();
     }
 };
 const moveForward = () => {
     let newPosition = props.collection.moveForward(props.item);
-    if (newPosition !== undefined) {
+    if (!!newPosition) {
         emits('movedTo', newPosition);
         view.updated();
     }

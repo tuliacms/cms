@@ -246,6 +246,14 @@
                 <source>aspectRatio</source>
                 <target>Aspect Ratio</target>
             </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.62">
+                <source>columnsNumber</source>
+                <target>Columns number</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.63">
+                <source>imagesBottomMargin</source>
+                <target>Margin underneath images</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

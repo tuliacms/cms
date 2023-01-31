@@ -1,20 +1,24 @@
 const _ = require('lodash');
 
 export default class Collection {
-    collection;
+    _collection;
     prototype;
 
     constructor (collection, prototype) {
         this._assertThatAllElementsContainsId(collection);
 
-        this.collection = collection;
+        this._collection = collection;
         this.prototype = prototype;
     }
 
+    get collection () {
+        return this._collection;
+    }
+
     remove (element) {
-        for (let i in this.collection) {
-            if (this.collection[i].id === element.id) {
-                this.collection.splice(i, 1);
+        for (let i in this._collection) {
+            if (this._collection[i].id === element.id) {
+                this._collection.splice(i, 1);
             }
         }
     }
@@ -23,18 +27,20 @@ export default class Collection {
         let element = _.assign({}, this.prototype);
         element.id = this._generateId();
 
-        this.collection.push(element);
+        this._collection.push(element);
 
-        return this.collection.length - 1;
+        return this._collection.length - 1;
     }
 
     moveBackward (element) {
         let index = this._findIndex(element);
 
+        // Current element's index does not exists = try to move element that's not exists
         if (index === undefined) {
             return;
         }
 
+        // Cannot move forward very first element of collection
         if (index - 1 < 0) {
             return;
         }
@@ -47,11 +53,13 @@ export default class Collection {
     moveForward (element) {
         let index = this._findIndex(element);
 
+        // Current element's index does not exists = try to move element that's not exists
         if (index === undefined) {
             return;
         }
 
-        if (index + 1 > this.collection.length - 1) {
+        // Cannot move forward the last element of collection
+        if (index + 1 >= this._collection.length) {
             return;
         }
 
@@ -61,13 +69,13 @@ export default class Collection {
     }
 
     moveToIndex (element, oldIndex, newIndex) {
-        this.collection.splice(oldIndex, 1);
-        this.collection.splice(newIndex, 0, element);
+        this._collection.splice(oldIndex, 1);
+        this._collection.splice(newIndex, 0, element);
     }
 
     _findIndex (element) {
-        for (let i in this.collection) {
-            if (this.collection[i].id === element.id) {
+        for (let i in this._collection) {
+            if (this._collection[i].id === element.id) {
                 return parseInt(i);
             }
         }
@@ -79,9 +87,12 @@ export default class Collection {
 
     _assertThatAllElementsContainsId (collection) {
         for (let i in collection) {
-            if (!collection[i].id) {
+            if (!collection[i].hasOwnProperty('id')) {
                 console.log(collection[i]);
-                throw new Error('All elements of Collection must contains ID property.');
+                throw new Error(`All elements of Collection must contains "id" property.`);
+            } else if (!collection[i].id) {
+                console.log(collection[i]);
+                throw new Error(`All elements of Collection must contains filled "id" property with unique value across collection.`);
             }
         }
     }

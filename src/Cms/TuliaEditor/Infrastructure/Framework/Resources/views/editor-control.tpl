@@ -85,6 +85,8 @@
             calculatedVisibilityInvisible: '{{ 'calculatedVisibilityInvisible'|trans({}, 'tulia-editor') }}',
             youtubeVideoUrl: '{{ 'youtubeVideoUrl'|trans({}, 'tulia-editor') }}',
             aspectRatio: '{{ 'aspectRatio'|trans({}, 'tulia-editor') }}',
+            columnsNumber: '{{ 'columnsNumber'|trans({}, 'tulia-editor') }}',
+            imagesBottomMargin: '{{ 'imagesBottomMargin'|trans({}, 'tulia-editor') }}',
         });
 
         let structureSelector = '.tulia-editor-structure-field[data-tulia-editor-group-id="{{ params.group_id }}"]';
@@ -132,6 +134,7 @@
             },
             themes: ['{{ themes|join("', '")|raw }}'],
             css_framework: '{{ theme().config.cssFramework }}',
+            debug: {{ is_dev_env() ? 'true' : 'false' }},
         });
     });
 </script>

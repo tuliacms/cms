@@ -22,14 +22,14 @@
         transition: $transition;
 
         i {
-            display: inline-block;
+            display: inline;
             margin-right: 7px;
             font-size: 17px;
             vertical-align: middle;
         }
 
         span {
-            display: inline-block;
+            display: inline;
             vertical-align: middle;
         }
 
@@ -44,6 +44,15 @@
             background-color: $gray;
             border: 1px solid #c9c9c9;
             border-bottom: none;
+        }
+    }
+
+    &.tued-sidebar-selector-has-debug {
+        .tued-sidebar-type {
+            width: 33.3333%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     }
 }
