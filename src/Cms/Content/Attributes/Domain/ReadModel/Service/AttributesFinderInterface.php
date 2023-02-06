@@ -9,5 +9,7 @@ namespace Tulia\Cms\Content\Attributes\Domain\ReadModel\Service;
  */
 interface AttributesFinderInterface
 {
+    public function query(string $ownerId, string $locale): array;
+
     public function find(string $ownerId, string $locale): array;
 }

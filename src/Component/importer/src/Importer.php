@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Importer;
 
-use Tulia\Component\Importer\FileReader\FileReaderRegistryInterface;
+use Tulia\Component\Importer\FileIO\FileIORegistryInterface;
 use Tulia\Component\Importer\ObjectImporter\ObjectImporterRegistry;
 use Tulia\Component\Importer\Parameters\ParametersCompiler;
 use Tulia\Component\Importer\Parameters\ParametersProviderInterface;
@@ -20,7 +20,7 @@ use Tulia\Component\Importer\Validation\SchemaValidatorInterface;
 class Importer implements ImporterInterface
 {
     public function __construct(
-        private readonly FileReaderRegistryInterface $fileReaderRegistry,
+        private readonly FileIORegistryInterface $fileIORegistry,
         private readonly SchemaValidatorInterface $schemaValidator,
         private readonly ObjectImporterRegistry $importerRegistry,
         private readonly ParametersProviderInterface $parametersProvider,
@@ -29,8 +29,8 @@ class Importer implements ImporterInterface
 
     public function importFromFile(string $filepath, ?string $realFilename = null, array $parameters = []): void
     {
-        $data = $this->fileReaderRegistry
-            ->getSupportingReader($realFilename ?? $filepath)
+        $data = $this->fileIORegistry
+            ->getSupported($realFilename ?? $filepath)
             ->read($filepath);
 
         $this->import($data, dirname($filepath), $parameters);

@@ -10,7 +10,7 @@ namespace Tulia\Component\Importer\Parameters;
 final class ArrayParametersProvider implements ParametersProviderInterface
 {
     public function __construct(
-        private readonly array $parameters
+        private readonly array $parameters,
     ) {
     }
 

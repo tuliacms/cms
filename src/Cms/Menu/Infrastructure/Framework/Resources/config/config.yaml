@@ -23,6 +23,7 @@ cms:
         objects:
             Menu:
                 importer: 'Tulia\Cms\Menu\Infrastructure\Cms\Importer\MenuImporter'
+                exporter: 'Tulia\Cms\Menu\Infrastructure\Cms\Importer\MenuExporter'
                 mapping:
                     name:
                         required: true

@@ -16,6 +16,7 @@ cms:
         objects:
             ContactForm:
                 importer: 'Tulia\Cms\ContactForm\Infrastructure\Cms\Importer\ContactFormImporter'
+                exporter: 'Tulia\Cms\ContactForm\Infrastructure\Cms\Importer\ContactFormExporter'
                 mapping:
                     name: ~
                     receivers:

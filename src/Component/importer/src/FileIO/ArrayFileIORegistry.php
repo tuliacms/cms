@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Component\Importer\FileReader;
+namespace Tulia\Component\Importer\FileIO;
 
 use Tulia\Component\Importer\Exception\FileNotSupportedException;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class ArrayFileReaderRegistry implements FileReaderRegistryInterface
+class ArrayFileIORegistry implements FileIORegistryInterface
 {
-    /** @var FileReaderInterface[] */
+    /** @var FileIOInterface[] */
     private array $readers = [];
 
-    public function addReader(FileReaderInterface $reader)
+    public function addReader(FileIOInterface $reader)
     {
         $this->readers[] = $reader;
     }
@@ -24,7 +24,7 @@ class ArrayFileReaderRegistry implements FileReaderRegistryInterface
         return $this->readers;
     }
 
-    public function getSupportingReader(string $filepath): FileReaderInterface
+    public function getSupported(string $filepath): FileIOInterface
     {
         foreach ($this->readers as $reader) {
             if ($reader->supports($filepath)) {

@@ -8,6 +8,8 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Exception;
 use PDO;
+use Symfony\Component\Uid\Uuid;
+use Tulia\Cms\Content\Attributes\Domain\ReadModel\Service\LazyAttributesFinder;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\AbstractDbalQuery;
@@ -72,13 +74,13 @@ class DbalQuery extends AbstractDbalQuery
             /**
              * Locale of the node to fetch.
              */
-            'locale' => 'en_US',
+            'locale' => null,
             /**
              * Search for rows in the website. Given null search in all websites.
              *
              * @param null|string
              */
-            'website' => null,
+            'website_id' => null,
             /**
              * Search widgets by names and titles.
              *
@@ -117,9 +119,7 @@ class DbalQuery extends AbstractDbalQuery
         try {
             foreach ($result as $row) {
                 $row['styles'] = json_decode($row['styles'], true);
-                $row['payload'] = json_decode($row['payload'], true);
-                $row['payload_localized'] = json_decode($row['payload_localized'], true);
-                $row['attributes'] = $this->attributesFinder->find($row['id'], $row['locale']);
+                $row['lazy_attributes'] = new LazyAttributesFinder($row['id'], $row['locale'], $this->attributesFinder);
 
                 $collection->append(Widget::buildFromArray($row));
             }
@@ -140,6 +140,8 @@ class DbalQuery extends AbstractDbalQuery
             $this->queryBuilder->select('
                 tm.*,
                 tm.type,
+                BIN_TO_UUID(tm.id) AS id,
+                BIN_TO_UUID(tm.website_id) AS website_id,
                 tl.locale,
                 tl.translated,
                 tl.title,
@@ -147,11 +149,18 @@ class DbalQuery extends AbstractDbalQuery
             ');
         }
 
+        if (!$criteria['locale']) {
+            throw new \InvalidArgumentException('Please provide "locale" in query parameters.');
+        }
+        if (!$criteria['website_id']) {
+            throw new \InvalidArgumentException('Please provide "website_id" in query parameters.');
+        }
+
         $this->queryBuilder
             ->from('#__widget', 'tm')
             ->leftJoin('tm', '#__widget_translation', 'tl', 'tm.id = tl.widget_id AND tl.locale = :tl_locale')
             ->andWhere('tm.website_id = :tm_website_id')
-            ->setParameter('tm_website_id', $criteria['website'], PDO::PARAM_STR)
+            ->setParameter('tm_website_id', Uuid::fromString($criteria['website_id'])->toBinary(), PDO::PARAM_STR)
             ->setParameter('tl_locale', $criteria['locale'], PDO::PARAM_STR);
     }
 
@@ -171,7 +180,7 @@ class DbalQuery extends AbstractDbalQuery
         if ($criteria['id']) {
             $this->queryBuilder
                 ->andWhere('tm.id = :tm_id')
-                ->setParameter('tm_id', $criteria['id'], PDO::PARAM_STR)
+                ->setParameter('tm_id', Uuid::fromString($criteria['id'])->toBinary(), PDO::PARAM_STR)
                 ->setMaxResults(1);
         }
 
@@ -181,6 +190,8 @@ class DbalQuery extends AbstractDbalQuery
             } else {
                 $ids = $criteria['id__not_in'];
             }
+
+            $ids = array_map(static fn($v) => Uuid::fromString($v)->toBinary(), $ids);
 
             $this->queryBuilder
                 ->andWhere('tm.id NOT IN (:tm_id__not_in)')

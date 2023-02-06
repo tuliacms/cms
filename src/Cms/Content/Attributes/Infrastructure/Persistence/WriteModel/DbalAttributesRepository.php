@@ -13,15 +13,10 @@ use Tulia\Cms\Shared\Domain\WriteModel\UuidGeneratorInterface;
  */
 class DbalAttributesRepository implements AttributesRepositoryInterface
 {
-    private DbalWriteStorage $storage;
-    private UuidGeneratorInterface $uuidGenerator;
-
     public function __construct(
-        DbalWriteStorage $storage,
-        UuidGeneratorInterface $uuidGenerator
+        private readonly DbalWriteStorage $storage,
+        private readonly UuidGeneratorInterface $uuidGenerator,
     ) {
-        $this->storage = $storage;
-        $this->uuidGenerator = $uuidGenerator;
     }
 
     public function findAllAggregated(string $type, array $ownerIdList, array $info): array

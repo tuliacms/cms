@@ -14,7 +14,7 @@ use Tulia\Cms\Homepage\UserInterface\Web\Backend\Tiles\DashboardTilesCollector;
 class ToolsTilesCollector implements DashboardTilesCollector
 {
     public function __construct(
-        protected TranslatorInterface $translator
+        private readonly TranslatorInterface $translator,
     ) {
     }
 
@@ -25,6 +25,11 @@ class ToolsTilesCollector implements DashboardTilesCollector
                 'name' => $this->translator->trans('importer', [], 'import_export'),
                 'route' => 'backend.import_export.importer',
                 'icon' => 'fas fa-file-import',
+            ])
+            ->add('exporter', [
+                'name' => $this->translator->trans('exporter', [], 'import_export'),
+                'route' => 'backend.import_export.exporter',
+                'icon' => 'fas fa-file-export',
             ])
         ;
     }

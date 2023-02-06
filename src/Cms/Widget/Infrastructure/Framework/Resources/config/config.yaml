@@ -16,6 +16,7 @@ cms:
         objects:
             Widget:
                 importer: 'Tulia\Cms\Widget\Infrastructure\Cms\Importer\WidgetImporter'
+                exporter: 'Tulia\Cms\Widget\Infrastructure\Cms\Importer\WidgetExporter'
                 mapping:
                     type: ~
                     space: ~

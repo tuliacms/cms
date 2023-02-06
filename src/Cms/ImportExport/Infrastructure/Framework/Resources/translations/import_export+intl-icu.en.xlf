@@ -20,6 +20,19 @@
                 <target>Select file</target>
                 <note>Button label</note>
             </trans-unit>
+            <trans-unit id="tuliacms.import_export.5">
+                <source>exporter</source>
+                <target>Exporter</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.import_export.6">
+                <source>doExport</source>
+                <target>Export</target>
+                <note>Button label</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.import_export.7">
+                <source>exporterBasicInfo</source>
+                <target>Below You can find groups of objects and objects itself, that are able to export. Select objects You want to export.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

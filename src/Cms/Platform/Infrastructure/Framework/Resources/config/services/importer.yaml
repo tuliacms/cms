@@ -2,8 +2,10 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+        bind:
+            $projectDir: '%kernel.project_dir%'
     _instanceof:
-        Tulia\Component\Importer\FileReader\FileReaderInterface:
+        Tulia\Component\Importer\FileIO\FileIOInterface:
             tags: [ importer.file_reader ]
 
     Tulia\Component\Importer\:
@@ -18,10 +20,13 @@ services:
         factory: [ 'Tulia\Component\Importer\Implementation\Symfony\SchemaFromContainerFactory', 'build' ]
         bind:
             $objects: '%cms.importer.objects%'
-            
+
+    Tulia\Component\Importer\Structure\ObjectDataFactory: ~
+    Tulia\Component\Importer\Schema\ExportedObjectsIdProcessor: ~
+
     Tulia\Component\Importer\Parameters\ParametersProviderInterface:
         '@Tulia\Component\Importer\Parameters\ArrayParametersProvider'
-    
+
     Tulia\Component\Importer\Parameters\ArrayParametersProvider:
         bind:
             $parameters:

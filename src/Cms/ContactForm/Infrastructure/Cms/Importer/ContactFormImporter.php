@@ -19,7 +19,7 @@ final class ContactFormImporter implements ObjectImporterInterface
     use WebsiteAwareTrait;
 
     public function __construct(
-        private readonly CreateForm $createForm
+        private readonly CreateForm $createForm,
     ) {
     }
 

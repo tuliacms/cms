@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Importer\ObjectImporter\Decorator;
 
-use Tulia\Component\Importer\ObjectImporter\ObjectImporterInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
+use Tulia\Component\Importer\ObjectImporter\ObjectImporterInterface;
 use Tulia\Component\Importer\ObjectImporter\Traits\WebsiteAwareTrait;
 
 /**
  * @author Adam Banaszkiewicz
  */
-final class WebsiteDecorator implements ObjectImporterDecoratorInterface
+final class WebsiteDecorator implements ObjectExporterDecoratorInterface
 {
     public function __construct(
-        private readonly WebsiteInterface $website
+        private readonly WebsiteInterface $website,
     ) {
     }
 

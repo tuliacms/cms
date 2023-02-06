@@ -46,6 +46,7 @@ class HierarchyBuilder implements HierarchyBuilderInterface
             'id' => $id,
             'website_id' => $websiteId,
             'locale' => $locale,
+            'fetch_root' => true,
         ], MenuFinderScopeEnum::BUILD_MENU);
 
         return $menu ? $menu->getItems() : [];

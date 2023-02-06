@@ -26,7 +26,7 @@ final class DbalNodeAttributesFinder extends AbstractAttributesFinder
         parent::__construct($uriToArrayTransformer, $attributesValueRenderer);
     }
 
-    protected function query(string $ownerId, string $locale): array
+    public function query(string $ownerId, string $locale): array
     {
         $source = $this->connection->fetchAllAssociative('
             SELECT ta.* FROM #__node_attribute AS ta

@@ -4,11 +4,16 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Widget\Domain\ReadModel\Model;
 
+use Tulia\Cms\Content\Attributes\Domain\ReadModel\LazyMagickAttributesTrait;
+use Tulia\Cms\Content\Attributes\Domain\ReadModel\Model\AttributesAwareInterface;
+
 /**
  * @author Adam Banaszkiewicz
  */
-class Widget
+class Widget implements AttributesAwareInterface
 {
+    use LazyMagickAttributesTrait;
+
     protected string $id;
     protected string $websiteId;
     protected string $widgetType;
@@ -23,7 +28,6 @@ class Widget
     protected string $title;
     protected bool $visibility = true;
     protected bool $translated = true;
-    protected array $attributes = [];
 
     public static function buildFromArray(array $data): self
     {
@@ -55,7 +59,10 @@ class Widget
         $widget->setVisibility((bool) ($data['visibility'] ?? true));
         $widget->setPayloadLocalized($data['payload_localized'] ?? []);
         $widget->setTranslated((bool) ($data['translated'] ?? false));
-        $widget->attributes = $data['attributes'];
+
+        if (isset($data['lazy_attributes'])) {
+            $widget->attributesLazyStorage = $data['lazy_attributes'];
+        }
 
         return $widget;
     }

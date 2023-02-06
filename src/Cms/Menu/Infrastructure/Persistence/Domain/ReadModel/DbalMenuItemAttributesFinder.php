@@ -26,7 +26,7 @@ final class DbalMenuItemAttributesFinder extends AbstractAttributesFinder
         parent::__construct($uriToArrayTransformer, $attributesValueRenderer);
     }
 
-    protected function query(string $ownerId, string $locale): array
+    public function query(string $ownerId, string $locale): array
     {
         $source = $this->connection->fetchAllAssociative('
             SELECT ta.* FROM #__menu_item_translation_attribute AS ta

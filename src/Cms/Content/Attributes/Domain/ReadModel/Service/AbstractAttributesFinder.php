@@ -19,7 +19,7 @@ abstract class AbstractAttributesFinder implements AttributesFinderInterface
     ) {
     }
 
-    abstract protected function query(string $ownerId, string $locale): array;
+    abstract public function query(string $ownerId, string $locale): array;
 
     public function find(string $ownerId, string $locale): array
     {

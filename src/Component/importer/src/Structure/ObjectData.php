@@ -24,10 +24,6 @@ class ObjectData implements \ArrayAccess
         $result = [];
 
         foreach ($this->objectData as $field => $value) {
-            if ($field[0] === '@') {
-                continue;
-            }
-
             if (is_array($value) && $this->definition->getField($field)->isCollection()) {
                 foreach ($value as $k => $v) {
                     $value[$k] = $v->toArray();
@@ -48,6 +44,14 @@ class ObjectData implements \ArrayAccess
     public function getObjectId(): string
     {
         return $this->objectData['@id'] ?? '';
+    }
+
+    public function withNewId(string $id): self
+    {
+        $clone = clone $this;
+        $clone['@id'] = $id;
+
+        return $clone;
     }
 
     public function getDefinition(): ObjectDefinition

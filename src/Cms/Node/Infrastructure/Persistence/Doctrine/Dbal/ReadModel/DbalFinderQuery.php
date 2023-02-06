@@ -267,6 +267,7 @@ class DbalFinderQuery extends AbstractDbalQuery
                 tm.*,
                 BIN_TO_UUID(tm.id) AS id,
                 BIN_TO_UUID(tm.author) AS author,
+                BIN_TO_UUID(tm.website_id) AS website_id,
                 tl.title,
                 tl.slug,
                 COALESCE(tl.locale, :tl_locale) AS locale

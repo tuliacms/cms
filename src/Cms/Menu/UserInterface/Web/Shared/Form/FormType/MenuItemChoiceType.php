@@ -87,6 +87,7 @@ class MenuItemChoiceType extends ChoiceType
             'id' => $menuId,
             'locale' => $locale,
             'website_id' => $websiteId,
+            'fetch_root' => true,
         ], MenuFinderScopeEnum::INTERNAL);
 
         if (! $source) {

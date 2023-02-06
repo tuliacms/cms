@@ -20,6 +20,19 @@
                 <target>Wybierz plik</target>
                 <note>Button label</note>
             </trans-unit>
+            <trans-unit id="tuliacms.import_export.5">
+                <source>exporter</source>
+                <target>Eksporter</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.import_export.6">
+                <source>doExport</source>
+                <target>Eksportuj</target>
+                <note>Button label</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.import_export.7">
+                <source>exporterBasicInfo</source>
+                <target>Poniżej znajdują się grupy obiektów oraz same obiekty, które można eksportować. Wybierz obiekty, które chcesz wyeksportować.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

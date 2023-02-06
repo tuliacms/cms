@@ -56,6 +56,7 @@ class DbalQuery extends AbstractDbalQuery
              */
             'fetch_items' => true,
             'limit' => null,
+            'fetch_root' => false,
         ];
     }
 
@@ -89,6 +90,11 @@ class DbalQuery extends AbstractDbalQuery
             $items = $this->fetchMenuItems($criteria);
 
             foreach ($items as $key => $row) {
+                if (!$criteria['fetch_root'] && $row['is_root']) {
+                    unset($items[$key]);
+                    continue;
+                }
+
                 $items[$key]['lazy_attributes'] = new LazyAttributesFinder($row['id'], $criteria['locale'], $this->attributesFinder);
             }
         }

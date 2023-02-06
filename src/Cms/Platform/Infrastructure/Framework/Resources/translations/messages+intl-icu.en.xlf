@@ -860,6 +860,11 @@
                 <target>Search</target>
                 <note>Button label</note>
             </trans-unit>
+            <trans-unit id="tuliacms.messages.222">
+                <source>toggleAll</source>
+                <target>Toggle all</target>
+                <note>Action name</note>
+            </trans-unit>
         </body>
     </file>
 </xliff>

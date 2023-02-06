@@ -63,6 +63,10 @@ class TuliaCmsExtension extends Extension
             ->addTag('importer.object_importer');
         $container->registerForAutoconfiguration(\Tulia\Component\Importer\ObjectImporter\Decorator\ObjectImporterDecoratorInterface::class)
             ->addTag('importer.object_importer.decorator');
+        $container->registerForAutoconfiguration(\Tulia\Component\Importer\ObjectExporter\ObjectExporterInterface::class)
+            ->addTag('importer.object_exporter');
+        $container->registerForAutoconfiguration(\Tulia\Component\Importer\ObjectExporter\Decorator\ObjectExporterDecoratorInterface::class)
+            ->addTag('importer.object_exporter.decorator');
         // Usecases
         $container->registerForAutoconfiguration(\Tulia\Cms\Shared\Application\UseCase\TransactionalUseCaseInterface::class)
             ->addTag('usecase.transactional');

@@ -45,6 +45,7 @@ cms:
         objects:
             Term:
                 importer: 'Tulia\Cms\Taxonomy\Infrastructure\Cms\Import\TermImporter'
+                exporter: 'Tulia\Cms\Taxonomy\Infrastructure\Cms\Import\TermExporter'
                 mapping:
                     type:
                         required: true

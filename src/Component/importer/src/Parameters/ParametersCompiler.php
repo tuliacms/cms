@@ -14,7 +14,7 @@ final class ParametersCompiler
     private const PATTERN = '#\[\[%([a-z0-9\.\-\_]+)%]]#is';
 
     public function __construct(
-        private readonly ParametersProviderInterface $parametersProvider
+        private readonly ParametersProviderInterface $parametersProvider,
     ) {
     }
 

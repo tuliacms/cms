@@ -9,22 +9,15 @@ namespace Tulia\Component\Importer\Schema;
  */
 class ObjectDefinition
 {
-    private string $name;
-    /** @var Field[] */
-    private array $fields;
-    private ?string $importer;
-
     /**
      * @param Field[] $fields
      */
     public function __construct(
-        string $name,
-        array $fields,
-        ?string $importer = null
+        private string $name,
+        private array $fields,
+        private readonly ?string $importer,
+        private readonly ?string $exporter,
     ) {
-        $this->name = $name;
-        $this->fields = $fields;
-        $this->importer = $importer;
     }
 
     public function getName(): string
@@ -50,5 +43,10 @@ class ObjectDefinition
     public function getImporter(): ?string
     {
         return $this->importer;
+    }
+
+    public function getExporter(): ?string
+    {
+        return $this->exporter;
     }
 }

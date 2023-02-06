@@ -11,6 +11,7 @@ class Menu
 {
     protected string $id;
     protected string $name;
+    /** @var Item[] */
     protected array $items = [];
 
     public static function buildFromArray(array $data): Menu
@@ -33,6 +34,17 @@ class Menu
     public function hasId(): bool
     {
         return (bool) $this->id;
+    }
+
+    public function hasItem(string $id): bool
+    {
+        foreach ($this->items as $item) {
+            if ($item->getId() === $id) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function getId(): string

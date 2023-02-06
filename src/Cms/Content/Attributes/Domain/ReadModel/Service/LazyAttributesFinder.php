@@ -12,7 +12,7 @@ final class LazyAttributesFinder
     private ?array $attributes = null;
 
     public function __construct(
-        private readonly string $nodeId,
+        private readonly string $ownerId,
         private readonly string $locale,
         private readonly AttributesFinderInterface $attributesFinder,
     ) {
@@ -24,6 +24,6 @@ final class LazyAttributesFinder
             return $this->attributes;
         }
 
-        return $this->attributes = $this->attributesFinder->find($this->nodeId, $this->locale);
+        return $this->attributes = $this->attributesFinder->find($this->ownerId, $this->locale);
     }
 }

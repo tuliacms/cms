@@ -12,22 +12,35 @@ use Tulia\Component\Importer\Structure\ObjectData;
  */
 final class ObjectsIdGenerator
 {
+    private array $existingIdList = [];
+
     /**
      * @param ObjectData[] $objects
      * @return ObjectData[]
      */
     public function generateMissingIds(array $objects): array
     {
-        $existingIds = $this->collectExistingIds($objects);
+        $this->collectExistingIds($objects);
 
-        return $this->generateMissingIdsExceptExistingOnes($objects, $existingIds);
+        return $this->generateMissingIdsExceptExistingOnes($objects);
+    }
+
+    public function generateId(): string
+    {
+        do {
+            $id = (string) Uuid::v4();
+        } while (in_array($id, $this->existingIdList));
+
+        $this->existingIdList[] = $id;
+
+        return $id;
     }
 
     /**
      * @param ObjectData[] $objects
      * @return string[]
      */
-    private function collectExistingIds(array $objects): array
+    private function collectExistingIds(array $objects): void
     {
         $ids = [];
 
@@ -35,7 +48,7 @@ final class ObjectsIdGenerator
             $ids[] = $this->collectObjectIds($object);
         }
 
-        return array_filter(array_merge(...$ids));
+        $this->existingIdList += array_filter(array_merge(...$ids));
     }
 
     /**
@@ -47,7 +60,7 @@ final class ObjectsIdGenerator
 
         foreach ($object->getDefinition()->getFields() as $field) {
             if ($field->isCollection()) {
-                $ids[] = $this->collectExistingIds($object[$field->getName()]);
+                $this->collectExistingIds($object[$field->getName()]);
             }
         }
 
@@ -60,36 +73,26 @@ final class ObjectsIdGenerator
 
     /**
      * @param ObjectData[] $objects
-     * @param string[] $existingIds
      * @return ObjectData[]
      */
-    private function generateMissingIdsExceptExistingOnes(array $objects, array &$existingIds): array
+    private function generateMissingIdsExceptExistingOnes(array $objects): array
     {
         $newObjects = [];
 
         foreach ($objects as $object) {
             if (!isset($object['@id'])) {
-                $object['@id'] = $this->generateId($existingIds);
+                $object['@id'] = $this->generateId();
             }
 
             $newObjects[$object['@id']] = $object;
 
             foreach ($object->getDefinition()->getFields() as $field) {
                 if ($field->isCollection()) {
-                    $newObjects[$object['@id']][$field->getName()] = $this->generateMissingIdsExceptExistingOnes($object[$field->getName()], $existingIds);
+                    $newObjects[$object['@id']][$field->getName()] = $this->generateMissingIdsExceptExistingOnes($object[$field->getName()]);
                 }
             }
         }
 
-        return $newObjects;
-    }
-
-    private function generateId(array &$existingIds): string
-    {
-        do {
-            $id = (string)Uuid::v4();
-        } while (in_array($id, $existingIds));
-
-        return $id;
+        return array_values($newObjects);
     }
 }

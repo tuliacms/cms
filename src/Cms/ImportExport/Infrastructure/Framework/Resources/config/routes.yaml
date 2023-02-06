@@ -6,3 +6,12 @@ backend.import_export.importer.import:
     path: /import-export/importer/import-file
     controller: Tulia\Cms\ImportExport\UserInterface\Web\Controller\Backend\ImportController::importFile
     methods: POST
+
+backend.import_export.exporter:
+    path: /import-export/exporter
+    controller: Tulia\Cms\ImportExport\UserInterface\Web\Controller\Backend\ExportController::homepage
+
+backend.import_export.exporter.export:
+    path: /import-export/exporter/export-file
+    controller: Tulia\Cms\ImportExport\UserInterface\Web\Controller\Backend\ExportController::exportFile
+    methods: POST

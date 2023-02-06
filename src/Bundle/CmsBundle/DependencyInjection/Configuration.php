@@ -278,6 +278,7 @@ class Configuration implements ConfigurationInterface
                             ->arrayPrototype()
                                 ->children()
                                     ->scalarNode('importer')->defaultNull()->end()
+                                    ->scalarNode('exporter')->defaultNull()->end()
                                     ->arrayNode('mapping')
                                         ->arrayPrototype()
                                             ->children()
