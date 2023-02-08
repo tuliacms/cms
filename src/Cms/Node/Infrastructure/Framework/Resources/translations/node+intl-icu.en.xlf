@@ -179,6 +179,14 @@
                 <source>additionalCategoriesHelp</source>
                 <target>Node can be categorized in additional categories.</target>
             </trans-unit>
+            <trans-unit id="tuliacms.node.46">
+                <source>publishAndGoBack</source>
+                <target>Publish and back</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.47">
+                <source>publishAndCreateNew</source>
+                <target>Publish and create new</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

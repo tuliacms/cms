@@ -11,6 +11,8 @@ use Tulia\Component\Importer\Schema\Schema;
  */
 final class ObjectDataFactory
 {
+    private string $workdir;
+
     public function __construct(
         private readonly Schema $schema,
     ) {
@@ -24,13 +26,18 @@ final class ObjectDataFactory
             $data['@id'] = $id;
         }
 
-        return new ObjectData($data, $this->schema->get($type), '');
+        return new ObjectData($data, $this->schema->get($type), $this->workdir);
     }
 
     public function create(string $type, array $source): ObjectData
     {
         $source['@type'] = $type;
 
-        return new ObjectData($source, $this->schema->get($type), '');
+        return new ObjectData($source, $this->schema->get($type), $this->workdir);
+    }
+
+    public function setWorkdir(string $workdir): void
+    {
+        $this->workdir = $workdir;
     }
 }

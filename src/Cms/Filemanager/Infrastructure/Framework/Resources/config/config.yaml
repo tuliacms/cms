@@ -12,6 +12,7 @@ cms:
         objects:
             File:
                 importer: 'Tulia\Cms\Filemanager\Infrastructure\Cms\Importer\FileImporter'
+                exporter: 'Tulia\Cms\Filemanager\Infrastructure\Cms\Importer\FileExporter'
                 mapping:
                     filepath: ~
     templating:

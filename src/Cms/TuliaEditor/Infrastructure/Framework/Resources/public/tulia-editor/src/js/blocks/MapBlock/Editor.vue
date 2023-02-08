@@ -75,8 +75,6 @@
 </style>
 
 <script setup>
-import PickerModal from "components/Admin/Block/PickerModal.vue";
-
 const { defineProps, inject, onMounted, computed, reactive, watch } = require('vue');
 const L = require('leaflet');
 const _ = require('lodash');

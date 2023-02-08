@@ -7,7 +7,7 @@ export default {
     framework: '*',
     code: 'core-galleryblock',
     name: 'Images gallery',
-    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPoAAABkBAMAAABdrjA9AAAAJ1BMVEX///8AAAA/Pz+fn58vLy8PDw/v7++AgICvr69gYGC/v7+Pj49vb2+gyKB9AAABQUlEQVRo3u3ZPU7DQBDF8QFH+ZBS8EhcQAVISJS7NyBHMCdIR0FDhWg5gm/AEaioORqWtxgJodhKsjNy/H5d0vz14sRSvEJEREREZOx5g93Wb5LNvEKX8lNy+UC3a8lkWqFbuZU8ZujjS/KYoI9HyeMMfVxIkqP+2nFt8tZlN9ZbrB+/Xtw/Bbf6dAOst171id7RHOoRjZVX/RaNS317/m5Zr9Ao9e2I4FcvgJXfJx8BBK9vXaGvLH9xOr0RjO82Ol3Hm99pI5JgU1c6Xcdb1XV6EgzrOl3Hm9cjVDCrzx50uo63qtcIOl3H29QX7dI0Xd0Y1eu0NLrUF+kyF3Cp1+kyR5f6Eq0ruNTPkbDO+ljqy7v//YzhHzTrrP9x0s8q935OO/Bn1Ac9nx/42cRh5zIDP5OSl87zuG8hIiIiIhqTX04AaDze3mN2AAAAAElFTkSuQmCC',
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK8AAABGCAMAAACNBzQNAAAAM1BMVEX///8AAAA/Pz+/v7+AgIBgYGDv7+8PDw8vLy/Pz89vb2+fn5+Pj48fHx+vr6/f399PT09UL8YPAAABMklEQVRo3u3Yy27FIAxFUZsbnnnd///axk0bh0FVolbCSGePkVhiApgQQgghhFBLYXJNvReyUI7cmgvUvbBye566N/OT+h9wEUZyv7fy0Yt654RBDb3g/Zv35aJbxvFuLBWz3jAXl2/eyJ/lao0db15le/XufDaT5tlb8YbItTfw2XbnMnsj3okr71FiKe53roBteF3l1XfEXHMFbMabLvj3O63kivsFtuJ16tWUq2Cr3pBiVq7mbXpDYo5ZuZpJr3AFLNwBvMI9wZ5H8E7Kgxfe4byz+zmLXtv/IXjr4D28A81LLu8yxjzq8obI7b2pU+qlrR2cAvVKvbQXxw3J8KdP6h0neKv6eSc+ou6JN04NJRtezw+K1L2NH1Sof55HuCZuLYmbWosJLkIIIYQQ+vc+AGHcCn0/nuMCAAAAAElFTkSuQmCC',
     editor: Editor,
     render: Render,
     manager: Manager,
@@ -15,6 +15,7 @@ export default {
         marginBottom: '4',
         size: 'thumbnail',
         columns: '3',
+        onclickGallery: '1',
         images: [{
             id: '1',
             file: { id: null, filename: null }

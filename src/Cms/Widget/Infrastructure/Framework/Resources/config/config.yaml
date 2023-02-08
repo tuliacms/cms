@@ -95,5 +95,6 @@ cms:
                         main:
                             groups:
                                 widget_options:
+                                    active: true
                                     name: Widget options
                                     fields: [ ]

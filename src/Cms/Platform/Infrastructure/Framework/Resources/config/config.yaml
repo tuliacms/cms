@@ -38,6 +38,7 @@ cms:
         - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/jstree', target: '/core/jstree' }
         - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/leaflet', target: '/core/leaflet' }
         - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/lodash', target: '/core/lodash' }
+        - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/magnific-popup', target: '/core/magnific-popup' }
         - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/masonry', target: '/core/masonry' }
         - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/parallax-js', target: '/core/parallax-js' }
         - { source: '%cms.core_dir%/Cms/Platform/Infrastructure/Framework/Resources/public/core-assets/momentjs', target: '/core/momentjs' }
@@ -121,6 +122,10 @@ cms:
                 scripts: [ '/assets/core/bootstrap/js/bootstrap.min.js' ]
                 require: [ 'jquery', 'popperjs' ]
                 priority: 500
+            magnific_popup:
+                scripts: [ '/assets/core/magnific-popup/jquery.magnific-popup.min.js' ]
+                styles: [ '/assets/core/magnific-popup/magnific-popup.css' ]
+                priority: 500
             jstree:
                 scripts: [ '/assets/core/jstree/jstree.min.js' ]
                 styles: [ '/assets/core/jstree/themes/default/style.min.css' ]
@@ -180,8 +185,10 @@ cms:
             customizer.front:
                 scripts: [ '/assets/core/customizer/frontend/customizer.js' ]
             frontend:
-                styles: [ '/assets/core/frontend/default-stylesheet.css' ]
-                priority: 1000
+                styles: [ '/assets/core/frontend/default-frontend.css' ]
+                scripts: [ '/assets/core/frontend/default-frontend.js' ]
+                require: [ 'jquery' ]
+                priority: 500
                 group: head
             tulia_dynamic_form:
                 scripts: [ '/assets/core/tulia-dynamic-form/tulia-dynamic-form.js' ]

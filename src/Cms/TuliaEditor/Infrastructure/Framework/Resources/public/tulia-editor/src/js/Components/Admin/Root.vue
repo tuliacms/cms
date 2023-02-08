@@ -64,8 +64,8 @@ const saveEditor = function () {
         selection.resetSelection();
         data.structure.assets = assets.collect();
 
-        if (data.structure.assets.length) {
-            data.content += `[assets names="${data.structure.assets.join(',')}"]`;
+        if (assets.collectNames().length) {
+            data.content += `[assets names="${assets.collectNames().join(',')}"]`;
         }
 
         structure.sections = data.structure.sections;

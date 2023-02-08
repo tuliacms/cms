@@ -10,7 +10,7 @@ let config = {
     mode: 'development',
     entry: './src/script.js',
     output: {
-        filename: 'default-stylesheet.js',
+        filename: 'default-frontend.js',
         path: path.resolve(__dirname, 'dist'),
     },
     module: {
@@ -37,10 +37,13 @@ let config = {
     resolve: {
         extensions: ['.js', '.scss'],
     },
+    externals: {
+        $: '$',
+    },
     devtool: 'source-map',
     plugins: [
         new MiniCssExtractPlugin({
-            filename: 'default-stylesheet.css',
+            filename: 'default-frontend.css',
         }),
         new FileManagerPlugin({
             events: {

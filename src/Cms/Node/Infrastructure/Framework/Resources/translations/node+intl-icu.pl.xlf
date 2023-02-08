@@ -179,6 +179,14 @@
                 <source>additionalCategoriesHelp</source>
                 <target>Wpis można umieścić w wielu kategoriach, oprócz głównej.</target>
             </trans-unit>
+            <trans-unit id="tuliacms.node.46">
+                <source>publishAndGoBack</source>
+                <target>Opublikuj i wróć</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.47">
+                <source>publishAndCreateNew</source>
+                <target>Opublikuj i dodaj nowy</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

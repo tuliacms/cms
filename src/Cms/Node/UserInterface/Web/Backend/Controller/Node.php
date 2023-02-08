@@ -178,7 +178,15 @@ class Node extends AbstractController
                     $website->getLocale()->getCode(),
                 ));
                 $this->addFlash('success', $this->trans('nodeSaved', [], 'node'));
-                return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getCode() ]);
+
+                switch ($request->request->get('_return')) {
+                    case 'go-back':
+                        return $this->redirectToRoute('backend.node.list', [ 'node_type' => $nodeType->getCode() ]);
+                    case 'create-new':
+                        return $this->redirectToRoute('backend.node.create', [ 'node_type' => $nodeType->getCode() ]);
+                    default:
+                        return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getCode() ]);
+                }
             } catch (CannotImposePurposeToNodeException $e) {
                 $form->get('purposes')->addError(new FormError($this->trans($e->reason)));
             }

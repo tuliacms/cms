@@ -161,11 +161,12 @@ Tulia.Form = function (form, options) {
         $('[data-submit-form]').each(function () {
             let btnSelector = $(this).attr('data-submit-form');
 
-            if(btnSelector === selector || btnSelector === '#' + selector)
-            {
+            if (btnSelector === selector || btnSelector === '#' + selector) {
                 $(this).click(function (e) {
                     e.preventDefault();
                     Tulia.PageLoader.show();
+
+                    self.form.append('<input type="hidden" name="_return" value="' + $(this).attr('data-submit-form-return') + '" />');
 
                     // Set timeout (150ms) to wait until browser done page loader animation.
                     setTimeout(function () {

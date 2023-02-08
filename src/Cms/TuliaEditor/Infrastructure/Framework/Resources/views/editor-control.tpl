@@ -87,6 +87,7 @@
             aspectRatio: '{{ 'aspectRatio'|trans({}, 'tulia-editor') }}',
             columnsNumber: '{{ 'columnsNumber'|trans({}, 'tulia-editor') }}',
             imagesBottomMargin: '{{ 'imagesBottomMargin'|trans({}, 'tulia-editor') }}',
+            onclickGallery: '{{ 'onclickGallery'|trans({}, 'tulia-editor') }}',
         });
 
         let structureSelector = '.tulia-editor-structure-field[data-tulia-editor-group-id="{{ params.group_id }}"]';

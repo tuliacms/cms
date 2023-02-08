@@ -254,6 +254,10 @@
                 <source>imagesBottomMargin</source>
                 <target>Margin underneath images</target>
             </trans-unit>
+            <trans-unit id="tuliacms.tulia-editor.64">
+                <source>onclickGallery</source>
+                <target>Gallery on click</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

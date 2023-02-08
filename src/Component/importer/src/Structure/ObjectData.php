@@ -59,7 +59,7 @@ class ObjectData implements \ArrayAccess
         return $this->definition;
     }
 
-    public function getPathForRelative(): string
+    public function getImportRootPath(): string
     {
         return $this->importRootPath;
     }

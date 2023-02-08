@@ -14,4 +14,8 @@ interface FileIOInterface
     public function read(string $filepath): array;
 
     public function write(string $filepath, array $data): void;
+
+    public function ensureDirectoryExists(string $directory): void;
+
+    public function ensureDirectoryDoesNotExists(string $directory): void;
 }

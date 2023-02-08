@@ -37,6 +37,13 @@
     text-transform: uppercase;
 }
 
+.dropdown-toggle.dropdown-toggle-split {
+    padding: 0 13px;
+    &:after {
+        margin-left: 0;
+    }
+}
+
 @keyframes zoomInDropdown {
     0% {opacity:0;}
     100% {opacity:1;}

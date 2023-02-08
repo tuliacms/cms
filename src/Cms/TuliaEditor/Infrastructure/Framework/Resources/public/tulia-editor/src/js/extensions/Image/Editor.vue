@@ -60,7 +60,6 @@ extension.operation('image-chosen', (data, success, fail) => {
     emit('update:modelValue', {
         id: data.id,
         filename: data.filename,
-        //size: props.modelValue.size ?? props.size,
     });
 
     success();
@@ -73,7 +72,6 @@ const changeSize = (size) => {
     emit('update:modelValue', {
         id: props.modelValue.id,
         filename: props.modelValue.filename,
-        //size: size,
     });
 };
 
