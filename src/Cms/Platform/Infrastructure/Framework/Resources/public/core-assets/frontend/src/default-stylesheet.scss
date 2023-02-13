@@ -1,12 +1,14 @@
 :root {
     --tulia-navbar-horizontal-link-height: 42px;
-    --tulia-navbar-horizontal-sumbenu-bg: #fff;
-    --tulia-navbar-horizontal-sumbenu-padding-x: 4px;
-    --tulia-navbar-horizontal-sumbenu-padding-y: 0;
-    --tulia-navbar-horizontal-sumbenu-width: 200px;
-    --tulia-navbar-horizontal-sumbenu-link-padding-x: 12px;
-    --tulia-navbar-horizontal-sumbenu-link-padding-y: 8px;
-    --tulia-navbar-horizontal-sumbenu-link-line-height: 1.3;
+    --tulia-navbar-horizontal-link-color: #000;
+    --tulia-navbar-horizontal-submenu-bg: #fff;
+    --tulia-navbar-horizontal-submenu-link-color: #000;
+    --tulia-navbar-horizontal-submenu-padding-x: 4px;
+    --tulia-navbar-horizontal-submenu-padding-y: 0;
+    --tulia-navbar-horizontal-submenu-width: 200px;
+    --tulia-navbar-horizontal-submenu-link-padding-x: 12px;
+    --tulia-navbar-horizontal-submenu-link-padding-y: 8px;
+    --tulia-navbar-horizontal-submenu-link-line-height: 1.3;
 }
 
 .tulia-navbar {
@@ -19,10 +21,21 @@
     }
     .navbar-nav .nav-item {
         display: inline-block;
+
+        &:before,
+        &:after {
+            display: none;
+        }
     }
     .navbar-nav .nav-link {
         display: inline-block;
         padding: 0;
+        color: var(--tulia-navbar-horizontal-link-color);
+
+        &:hover,
+        &:focus {
+            color: var(--bs-primary);
+        }
     }
 
 
@@ -64,17 +77,18 @@
             left: 0;
             top: 100%;
             z-index: 10;
-            background-color: var(--tulia-navbar-horizontal-sumbenu-bg);
+            background-color: var(--tulia-navbar-horizontal-submenu-bg);
             list-style: none;
-            padding: var(--tulia-navbar-horizontal-sumbenu-padding-y) var(--tulia-navbar-horizontal-sumbenu-padding-x);
+            padding: var(--tulia-navbar-horizontal-submenu-padding-y) var(--tulia-navbar-horizontal-submenu-padding-x);
             margin: 0;
 
             .nav-link {
                 display: block;
                 height: auto;
-                padding: var(--tulia-navbar-horizontal-sumbenu-link-padding-y) var(--tulia-navbar-horizontal-sumbenu-link-padding-x);
-                width: var(--tulia-navbar-horizontal-sumbenu-width);
-                line-height: var(--tulia-navbar-horizontal-sumbenu-link-line-height);
+                padding: var(--tulia-navbar-horizontal-submenu-link-padding-y) var(--tulia-navbar-horizontal-submenu-link-padding-x);
+                width: var(--tulia-navbar-horizontal-submenu-width);
+                line-height: var(--tulia-navbar-horizontal-submenu-link-line-height);
+                color: var(--tulia-navbar-horizontal-submenu-link-color);
             }
             .submenu {
                 left: 100%;
@@ -85,6 +99,7 @@
                     list-style: none;
                     height: auto;
                     line-height: 1;
+                    padding: 0;
                 }
             }
         }

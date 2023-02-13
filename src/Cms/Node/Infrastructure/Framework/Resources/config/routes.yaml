@@ -13,6 +13,11 @@ backend.node.delete:
     controller: Tulia\Cms\Node\UserInterface\Web\Backend\Controller\Node::delete
     methods: POST
 
+backend.node.clone:
+    path: /node/{node_type}/clone/{id}
+    controller: Tulia\Cms\Node\UserInterface\Web\Backend\Controller\Node::clone
+    methods: GET
+
 backend.node.change_status:
     path: /node/change-status
     controller: Tulia\Cms\Node\UserInterface\Web\Backend\Controller\Node::changeStatus

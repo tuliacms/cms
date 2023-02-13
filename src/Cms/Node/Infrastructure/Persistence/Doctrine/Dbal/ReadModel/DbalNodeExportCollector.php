@@ -21,7 +21,7 @@ final class DbalNodeExportCollector implements NodeExportCollectorInterface
     public function collect(string $websiteId, string $locale): array
     {
         return $this->connection->fetchAllAssociative(
-            'SELECT BIN_TO_UUID(tm.id) AS id, tl.title
+            'SELECT BIN_TO_UUID(tm.id) AS id, tl.title, tm.type
             FROM #__node AS tm
             INNER JOIN #__node_translation AS tl
                 ON tm.id = tl.node_id AND tl.locale = :locale

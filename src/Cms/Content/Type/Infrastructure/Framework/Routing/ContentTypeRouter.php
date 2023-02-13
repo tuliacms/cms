@@ -72,6 +72,10 @@ final class ContentTypeRouter implements RouterInterface, RequestMatcherInterfac
 
         $path = $this->contentTypeRouter->generate($matches['code'], $matches['id'], $parameters);
 
+        if (!$path) {
+            return '';
+        }
+
         return $this->frontendRouteSuffixResolver->appendSuffix($path);
     }
 

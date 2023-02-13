@@ -47,7 +47,7 @@ class Widget implements AttributesAwareInterface
 
         $widget->setId($data['id']);
         $widget->setWebsiteId($data['website_id']);
-        $widget->setWidgetType($data['widget_type'] ?? '');
+        $widget->setWidgetType($data['type']);
         $widget->setSpace($data['space'] ?? '');
         $widget->setName($data['name'] ?? '');
         $widget->setHtmlClass($data['html_class'] ?? '');

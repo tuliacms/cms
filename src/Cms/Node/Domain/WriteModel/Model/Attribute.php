@@ -36,4 +36,20 @@ class Attribute extends BaseAttribute
     {
         $this->nodeTranslation = null;
     }
+
+    public function clone(NodeTranslation $nodeTranslation): self
+    {
+        $clone = new self(
+            $this->code,
+            $this->uri,
+            $this->value->toRaw(),
+            $this->compiledValue,
+            $this->payload,
+            $this->flags,
+        );
+        $clone->nodeTranslation = $nodeTranslation;
+        $clone->locale = $this->locale;
+
+        return $clone;
+    }
 }

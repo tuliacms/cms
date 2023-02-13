@@ -30,7 +30,13 @@ class SchemaFromContainerFactory
                 );
             }
 
-            $schema->addObject(new ObjectDefinition($name, $fields, $object['importer'], $object['exporter']));
+            $schema->addObject(new ObjectDefinition(
+                $name,
+                $fields,
+                $object['type'],
+                $object['importer'],
+                $object['exporter'],
+            ));
         }
 
         return $schema;

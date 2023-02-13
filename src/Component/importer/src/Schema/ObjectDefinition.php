@@ -15,6 +15,7 @@ class ObjectDefinition
     public function __construct(
         private string $name,
         private array $fields,
+        private string $type,
         private readonly ?string $importer,
         private readonly ?string $exporter,
     ) {
@@ -23,6 +24,11 @@ class ObjectDefinition
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function isRoot(): bool
+    {
+        return $this->type === 'root_item';
     }
 
     public function getFields(): array

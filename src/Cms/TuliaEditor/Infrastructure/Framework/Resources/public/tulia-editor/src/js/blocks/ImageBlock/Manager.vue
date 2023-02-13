@@ -1,5 +1,5 @@
 <template>
-    <Select v-model="block.data.image.size" :label="translator.trans('imageSize')" :choices="choices"></Select>
+    <Select v-model="block.data.size" :label="translator.trans('imageSize')" :choices="choices"></Select>
 </template>
 
 <script setup>

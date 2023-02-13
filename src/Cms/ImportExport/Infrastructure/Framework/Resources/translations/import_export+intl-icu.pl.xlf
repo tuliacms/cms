@@ -8,7 +8,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.import_export.2">
                 <source>importingOverwriteNotification</source>
-                <target>Każdy import tworzy nowe Obiekty i nadpisuje istniejące ze wszystkimi polami i konfiguracjami (usuwa bieżące dane i zastępuje je nowymi) identyfikatorami przypisanymi do tych obiektów w Importowanym pliku. Upewnij się, że naprawdę chcesz wykonać ten import w takim przypadku.</target>
+                <target>Każdy import tworzy nowe Obiekty i/lub nadpisuje istniejące ze wszystkimi polami i konfiguracjami (usuwa bieżące dane i zastępuje je nowymi) identyfikatorami przypisanymi do tych obiektów w Importowanym pliku. Upewnij się, że naprawdę chcesz wykonać ten import w takim przypadku.</target>
             </trans-unit>
             <trans-unit id="tuliacms.import_export.3">
                 <source>contentTypeFileImported</source>
@@ -32,6 +32,10 @@
             <trans-unit id="tuliacms.import_export.7">
                 <source>exporterBasicInfo</source>
                 <target>Poniżej znajdują się grupy obiektów oraz same obiekty, które można eksportować. Wybierz obiekty, które chcesz wyeksportować.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.import_export.8">
+                <source>acceptedFilesTypes</source>
+                <target>Możesz zaimportować pliki JSON lub ZIP z plikiem collection.json w środku.</target>
             </trans-unit>
         </body>
     </file>

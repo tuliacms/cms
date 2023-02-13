@@ -8,7 +8,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.import_export.2">
                 <source>importingOverwriteNotification</source>
-                <target>Every import creates new Objects, and overwrite existing with all fields and configurations (remove current data, and replace it with the new), by IDs assigned to those objects in Imported file. Please make sure You really want to do this import in case of that.</target>
+                <target>Every import creates new Objects, and/or overwrite existing with all fields and configurations (remove current data, and replace it with the new), by IDs assigned to those objects in Imported file. Please make sure You really want to do this import in case of that.</target>
             </trans-unit>
             <trans-unit id="tuliacms.import_export.3">
                 <source>contentTypeFileImported</source>
@@ -32,6 +32,10 @@
             <trans-unit id="tuliacms.import_export.7">
                 <source>exporterBasicInfo</source>
                 <target>Below You can find groups of objects and objects itself, that are able to export. Select objects You want to export.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.import_export.8">
+                <source>acceptedFilesTypes</source>
+                <target>You can import JSON files or ZIP with collection.json in it.</target>
             </trans-unit>
         </body>
     </file>

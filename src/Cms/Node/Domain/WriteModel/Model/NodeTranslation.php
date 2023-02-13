@@ -78,6 +78,24 @@ class NodeTranslation
         );
     }
 
+    public function clone(Node $node, SlugGeneratorStrategyInterface $slugGenerator): self
+    {
+        $clone = new self($node, $this->locale, $this->title.' (clone '.date('Y-m-d H:i:s').')', $this->translated);
+        $clone->slug = $slugGenerator->generateGloballyUnique(
+            $this->getId(),
+            null,
+            $clone->title,
+            $node->getWebsiteId(),
+            $this->locale,
+        );
+
+        foreach ($this->attributes as $attribute) {
+            $clone->attributes->add($attribute->clone($clone));
+        }
+
+        return $clone;
+    }
+
     protected function noticeThatAttributeHasBeenAdded(CoreAttribute $attribute): void {}
 
     protected function noticeThatAttributeHasBeenRemoved(CoreAttribute $attribute): void {}

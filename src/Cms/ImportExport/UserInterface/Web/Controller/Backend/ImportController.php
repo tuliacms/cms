@@ -48,7 +48,7 @@ class ImportController extends AbstractController
         $isValid = $this->validator->validate(
             $request->files->get('file'),
             [
-                new File(mimeTypes: ['application/json', 'application/javascript'],),
+                new File(mimeTypes: ['application/json', 'application/javascript', 'application/zip', 'application/x-zip-compressed', 'multipart/x-zip']),
                 new NotBlank()
             ]
         );

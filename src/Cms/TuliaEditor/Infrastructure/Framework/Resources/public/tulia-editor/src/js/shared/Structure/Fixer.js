@@ -129,6 +129,9 @@ export default class Fixer {
         if (!column.data) {
             column.data = {};
         }
+        if (!column.data._internal) {
+            column.data._internal = {};
+        }
 
         if (!column.blocks) {
             column.blocks = [];

@@ -11,6 +11,7 @@ class Configuration implements ConfigurationInterface
 {
     private array $assets = [];
     private array $imageSizeList = [];
+    private array $menuSpaceList = [];
     private array $widgetSpaceList = [];
     private array $widgetStyleList = [];
     private array $customizer = [];
@@ -28,6 +29,7 @@ class Configuration implements ConfigurationInterface
     {
         $this->assets = array_merge($this->assets, $configuration->assets);
         $this->imageSizeList = array_merge($this->imageSizeList, $configuration->imageSizeList);
+        $this->menuSpaceList = array_merge($this->menuSpaceList, $configuration->menuSpaceList);
         $this->widgetSpaceList = array_merge($this->widgetSpaceList, $configuration->widgetSpaceList);
         $this->widgetStyleList = array_merge($this->widgetStyleList, $configuration->widgetStyleList);
         $this->customizer = array_merge($this->customizer, $configuration->customizer);
@@ -56,6 +58,19 @@ class Configuration implements ConfigurationInterface
     public function getWidgetSpaces(): array
     {
         return $this->widgetSpaceList;
+    }
+
+    public function addMenuSpace(string $name, string $label): void
+    {
+        $this->menuSpaceList[$name] = [
+            'name' => $name,
+            'label' => $label,
+        ];
+    }
+
+    public function getMenuSpaces(): array
+    {
+        return $this->menuSpaceList;
     }
 
     public function addImageSize(string $name, ?int $width, ?int $height, string $mode): void

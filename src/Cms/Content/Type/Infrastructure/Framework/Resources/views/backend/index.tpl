@@ -144,8 +144,8 @@
 
                 Tulia.Confirmation
                     .warning({
-                        title: 'You want to remove this Content Type?',
-                        text: 'Removeing Content type won\'t remove contents, first remove all the contents from this type.',
+                        title: '{{ 'youSureYouWantToDeleteContentType'|trans({}, 'content_builder') }}',
+                        text: '{{ 'removingContentTypeWontRemoveContentsPleaseDoThatFirst'|trans({}, 'content_builder') }}',
                     })
                     .then(function (v) {
                         if (! v.value) {

@@ -25,11 +25,11 @@ const Collection = block.extension('Collection');
 const Actions = block.extension('Collection.Actions');
 
 const imageExtList = ref([]);
-function setRef(v){
+const setRef = function (v) {
     if (!imageExtList.value.includes(v)) {
         imageExtList.value.push(v);
     }
-}
+};
 
 const images = new Collection(block.data.images, {
     file: { id: null, filename: null }

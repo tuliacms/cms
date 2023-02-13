@@ -1,0 +1,1 @@
+<a class="dropdown-item dropdown-item-with-icon action-element-single-auto-form" href="{{ path('backend.node.clone', { node_type: row.type, id: row.id }) }}" title="{{ 'cloneNode'|trans({}, 'node') }}"><i class="dropdown-icon fas fa-clone"></i> {{ 'cloneNode'|trans({}, 'node') }}</a>

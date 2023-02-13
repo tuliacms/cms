@@ -257,6 +257,14 @@
                 <source>toggleActiveness</source>
                 <target>Toggle activeness</target>
             </trans-unit>
+            <trans-unit id="tuliacms.content_builder.69">
+                <source>youSureYouWantToDeleteContentType</source>
+                <target>You want to remove this Content Type?</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.70">
+                <source>removingContentTypeWontRemoveContentsPleaseDoThatFirst</source>
+                <target>Removing Content type will not remove contents, first remove all the contents from this type.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

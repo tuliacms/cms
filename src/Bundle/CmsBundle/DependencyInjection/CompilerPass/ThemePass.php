@@ -98,6 +98,11 @@ class ThemePass implements CompilerPassInterface
                 $service->addMethodCall('addWidgetSpace', [$space['name'], $space['label']]);
             }
         }
+        if (isset($config['menu_spaces'])) {
+            foreach ($config['menu_spaces'] as $space) {
+                $service->addMethodCall('addMenuSpace', [$space['name'], $space['label']]);
+            }
+        }
         if (isset($config['widget_styles'])) {
             foreach ($config['widget_styles'] as $style) {
                 $service->addMethodCall('addWidgetStyle', [$style['name'], $style['label']]);

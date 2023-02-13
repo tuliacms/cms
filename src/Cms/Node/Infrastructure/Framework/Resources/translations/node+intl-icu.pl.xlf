@@ -187,6 +187,15 @@
                 <source>publishAndCreateNew</source>
                 <target>Opublikuj i dodaj nowy</target>
             </trans-unit>
+            <trans-unit id="tuliacms.node.48">
+                <source>cloneNode</source>
+                <target>Klonuj</target>
+                <note>Action button label</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.49">
+                <source>nodeCloned</source>
+                <target>Wpis został sklonowany.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

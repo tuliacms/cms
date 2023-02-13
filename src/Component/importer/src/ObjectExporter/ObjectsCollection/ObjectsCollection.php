@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Importer\ObjectExporter\ObjectsCollection;
 
-use Traversable;
-
 /**
  * @author Adam Banaszkiewicz
  */
-final class ObjectsCollection implements \ArrayAccess, \IteratorAggregate
+final class ObjectsCollection
 {
+    /**
+     * @var ObjectToExport[]
+     */
     private array $objects = [];
 
     public function addObject(ObjectToExport $object): void
@@ -20,36 +21,22 @@ final class ObjectsCollection implements \ArrayAccess, \IteratorAggregate
 
     public function getTypes(): array
     {
-        return array_unique(array_map(static fn($v) => $v->type, $this->objects));
+        return array_values(array_unique(array_map(static fn($v) => $v->type, $this->objects)));
     }
 
-    public function ofType(string $type): array
+    public function getGroupsOfType(string $type): array
     {
-        return array_filter($this->objects, static fn($v) => $v->type === $type);
+        $ofType = array_filter($this->objects, static fn($v) => $v->type === $type);
+
+        return array_values(array_unique(array_map(static fn($v) => $v->group, $ofType)));
     }
 
-    public function offsetExists(mixed $offset): bool
+    public function of(string $group, ?string $type = null): array
     {
-        return isset($this->objects[$offset]);
-    }
+        if (!$type) {
+            $type = $group;
+        }
 
-    public function offsetGet(mixed $offset): mixed
-    {
-        return $this->objects[$offset];
-    }
-
-    public function offsetSet(mixed $offset, mixed $value): void
-    {
-        $this->objects[$offset] = $value;
-    }
-
-    public function offsetUnset(mixed $offset): void
-    {
-        unset($this->objects[$offset]);
-    }
-
-    public function getIterator(): Traversable
-    {
-        return new \ArrayIterator($this->objects);
+        return array_values(array_filter($this->objects, static fn($v) => $v->type === $type && $v->group === $group));
     }
 }

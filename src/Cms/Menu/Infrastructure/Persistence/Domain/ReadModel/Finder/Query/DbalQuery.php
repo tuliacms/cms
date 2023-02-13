@@ -85,14 +85,19 @@ class DbalQuery extends AbstractDbalQuery
         }
 
         $items = [];
+        $rootItemId = null;
 
         if ($criteria['fetch_items']) {
             $items = $this->fetchMenuItems($criteria);
 
             foreach ($items as $key => $row) {
-                if (!$criteria['fetch_root'] && $row['is_root']) {
-                    unset($items[$key]);
-                    continue;
+                if ($row['is_root']) {
+                    $rootItemId = $row['id'];
+
+                    if (!$criteria['fetch_root']) {
+                        unset($items[$key]);
+                        continue;
+                    }
                 }
 
                 $items[$key]['lazy_attributes'] = new LazyAttributesFinder($row['id'], $criteria['locale'], $this->attributesFinder);
@@ -102,6 +107,7 @@ class DbalQuery extends AbstractDbalQuery
         try {
             foreach ($result as $row) {
                 $row['items'] = $items;
+                $row['root_item_id'] = $rootItemId;
 
                 $collection->append(Menu::buildFromArray($row));
             }

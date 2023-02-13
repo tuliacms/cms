@@ -47,6 +47,7 @@ cms:
                     field_groups:
                         collection_of: ContentTypeEntryFieldGroup
             ContentTypeEntryFieldGroup:
+                type: collection_item
                 mapping:
                     code: ~
                     name: ~
@@ -54,6 +55,7 @@ cms:
                     fields:
                         collection_of: ContentTypeEntryField
             ContentTypeEntryField:
+                type: collection_item
                 mapping:
                     code: ~
                     type: ~

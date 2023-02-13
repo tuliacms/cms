@@ -441,6 +441,40 @@ class Node extends AbstractAggregateRoot
         $this->recordThat(new Event\NodeDeleted($this->id, $this->type, $this->websiteId, $this->getTranslationsLocales()));
     }
 
+    public function clone(
+        string $id,
+        SlugGeneratorStrategyInterface $slugGeneratorStrategy,
+    ): self {
+        $clone = new self($id, $this->type, $this->websiteId, $this->author);
+        $clone->publishedAt = ImmutableDateTime::now();
+        $clone->publishedTo = $this->publishedTo;
+        $clone->createdAt = ImmutableDateTime::now();
+        $clone->updatedAt = ImmutableDateTime::now();
+        $clone->status = $this->status;
+        $clone->parentNode = $this->parentNode;
+        $clone->level = $this->level;
+        $clone->translations = new ArrayCollection();
+        $clone->purposes = new ArrayCollection();
+        $clone->terms = new ArrayCollection();
+
+        foreach ($this->translations as  $translation) {
+            $clone->translations->add($translation->clone($clone, $slugGeneratorStrategy));
+        }
+
+        foreach ($this->purposes as $purpose) {
+            $clone->purposes->add($purpose->clone($clone));
+        }
+
+        foreach ($this->terms as $term) {
+            $clone->terms->add($term->clone($clone));
+        }
+
+        $clone->recordThat(new Event\NodeCreated($id, $clone->type));
+        $clone->recordThat(new Event\NodePublished($clone->id, $clone->type, $clone->publishedAt, $clone->publishedTo));
+
+        return $clone;
+    }
+
     private function markAsUpdated(): void
     {
         $this->updatedAt = new ImmutableDateTime();

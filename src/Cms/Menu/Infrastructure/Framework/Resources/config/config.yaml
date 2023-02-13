@@ -31,6 +31,7 @@ cms:
                     items:
                         collection_of: MenuItem
             MenuItem:
+                type: collection_item
                 mapping:
                     link_type:
                         required: true
@@ -40,7 +41,8 @@ cms:
                     hash: ~
                     position:
                         type: integer
-                    parent: ~
+                    children:
+                        collection_of: MenuItem
     templating:
         paths:
             - { name: backend/menu, path: '%cms.core_dir%/Cms/Menu/Infrastructure/Framework/Resources/views/backend' }

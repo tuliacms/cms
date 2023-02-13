@@ -22,6 +22,10 @@ class Router
     {
         $contentType = $this->contentTypeRegistry->get($contentTypeCode);
 
+        if ($contentType->isRoutable() === false) {
+            return null;
+        }
+
         return $this->strategyRegistry->getByContentType($contentType)->generate($id, $parameters);
     }
 

@@ -14,7 +14,7 @@ class Purpose
 
     public function __construct(
         private Node $node,
-        private string $purpose
+        private string $purpose,
     ) {
     }
 
@@ -26,5 +26,10 @@ class Purpose
     public function is(string $purposeCode): bool
     {
         return $this->purpose === $purposeCode;
+    }
+
+    public function clone(Node $clone): self
+    {
+        return new self($clone, $this->purpose);
     }
 }

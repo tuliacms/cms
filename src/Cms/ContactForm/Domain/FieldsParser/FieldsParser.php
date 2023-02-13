@@ -16,18 +16,13 @@ class FieldsParser implements FieldsParserInterface
 {
     private const REST_FIELDS_SEPARATOR = '<!--REST_FIELDS-->';
 
-    private FieldsTypeRegistryInterface $registry;
-
     private static array $cache = [];
 
-    public function __construct(FieldsTypeRegistryInterface $registry)
-    {
-        $this->registry = $registry;
+    public function __construct(
+        private readonly FieldsTypeRegistryInterface $registry,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function parse(string $fieldsContent, array $fields): FieldsStreamInterface
     {
         $key = md5($fieldsContent);

@@ -279,6 +279,7 @@ class Configuration implements ConfigurationInterface
                                 ->children()
                                     ->scalarNode('importer')->defaultNull()->end()
                                     ->scalarNode('exporter')->defaultNull()->end()
+                                    ->scalarNode('type')->defaultValue('root_item')->end()
                                     ->arrayNode('mapping')
                                         ->arrayPrototype()
                                             ->children()
@@ -311,6 +312,25 @@ class Configuration implements ConfigurationInterface
                                         ->end()
                                     ->end()
                                 ->end()
+                            ->end()
+                            ->validate()
+                                ->always(function (array $objects) {
+                                    foreach ($objects as $name => $object) {
+                                        if ($object['type'] === 'root_item') {
+                                            if (!isset($object['importer'])) {
+                                                throw new \InvalidArgumentException(sprintf('The "importer" must be configured for object "%s"', $name));
+                                            }
+                                        }
+
+                                        if ($object['type'] === 'collection_item') {
+                                            if (isset($object['importer']) || isset($object['exporter'])) {
+                                                throw new \InvalidArgumentException(sprintf('The object "%s" is a collection_item, so cannot be imported/exporter as root.', $name));
+                                            }
+                                        }
+                                    }
+
+                                    return $objects;
+                                })
                             ->end()
                         ->end()
                     ->end()
@@ -546,6 +566,15 @@ class Configuration implements ConfigurationInterface
                                                     ->arrayNode('assets')->scalarPrototype()->defaultValue([])->end()->end()
                                                     ->scalarNode('node_content_field')->defaultValue('content')->end()
                                                     ->arrayNode('widget_spaces')
+                                                        ->arrayPrototype()
+                                                            ->children()
+                                                                ->scalarNode('name')->isRequired()->end()
+                                                                ->scalarNode('label')->isRequired()->end()
+                                                            ->end()
+                                                        ->end()
+                                                        ->validate()->always($this->validateCollectionsNames(...))->end()
+                                                    ->end()
+                                                    ->arrayNode('menu_spaces')
                                                         ->arrayPrototype()
                                                             ->children()
                                                                 ->scalarNode('name')->isRequired()->end()

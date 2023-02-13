@@ -69,7 +69,7 @@ abstract class AbstractNodeUseCase extends AbstractTransactionalUseCase
         }
 
         $node->persistAttributes($request->locale, $request->defaultLocale, $this->processAttributes($attributes));
-        $node->changeTitle($request->locale, $request->defaultLocale, $this->slugGeneratorStrategy, $details['title'], $details['slug']);
+        $node->changeTitle($request->locale, $request->defaultLocale, $this->slugGeneratorStrategy, $details['title'], $details['slug'] ?? null);
     }
 
     /**

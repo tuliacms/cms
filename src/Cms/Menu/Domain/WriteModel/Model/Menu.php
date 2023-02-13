@@ -26,6 +26,8 @@ class Menu extends AbstractAggregateRoot
         private string $id,
         private string $websiteId,
         private string $name,
+        /** @var string[] */
+        private array $spaces,
     ) {
         $this->items = new ArrayCollection([Item::createRoot($this)]);
         $this->recordThat(new MenuCreated($this->id));
@@ -34,9 +36,10 @@ class Menu extends AbstractAggregateRoot
     public static function create(
         string $id,
         string $websiteId,
-        string $name
+        string $name,
+        array $spaces = [],
     ) : self {
-        return new self($id, $websiteId, $name);
+        return new self($id, $websiteId, $name, $spaces);
     }
 
     public function getId(): string
@@ -152,6 +155,11 @@ class Menu extends AbstractAggregateRoot
         $item->detachFromParent();
 
         $this->recordThat(new MenuUpdated($this->id));
+    }
+
+    public function placeIn(array $spaces): void
+    {
+        $this->spaces = array_filter($spaces);
     }
 
     /**

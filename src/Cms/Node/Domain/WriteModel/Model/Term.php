@@ -28,4 +28,9 @@ class Term
     {
         $this->node = null;
     }
+
+    public function clone(Node $clone): self
+    {
+        return new self($clone, $this->term, $this->taxonomy, $this->type);
+    }
 }

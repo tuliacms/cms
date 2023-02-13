@@ -13,6 +13,7 @@ use Tulia\Component\Importer\Structure\Dependencies;
 use Tulia\Component\Importer\Structure\ObjectData;
 use Tulia\Component\Importer\Structure\StructureSorter;
 use Tulia\Component\Importer\Validation\SchemaValidatorInterface;
+use Tulia\Component\Importer\ZipArchive\ZipArchive;
 
 /**
  * @author Adam Banaszkiewicz
@@ -24,11 +25,16 @@ class Importer implements ImporterInterface
         private readonly SchemaValidatorInterface $schemaValidator,
         private readonly ObjectImporterRegistry $importerRegistry,
         private readonly ParametersProviderInterface $parametersProvider,
+        private readonly string $projectDir,
     ) {
     }
 
     public function importFromFile(string $filepath, ?string $realFilename = null, array $parameters = []): void
     {
+        if (strtolower(pathinfo($realFilename ?? $filepath, PATHINFO_EXTENSION)) === 'zip') {
+            $realFilename = $filepath = $this->extractAndFindCollection($filepath);
+        }
+
         $data = $this->fileIORegistry
             ->getSupported($realFilename ?? $filepath)
             ->read($filepath);
@@ -75,7 +81,7 @@ class Importer implements ImporterInterface
     private function updateObjectsIdToRealId(
         array $objects,
         string $fakeObjectId,
-        ?string $realObjectId
+        ?string $realObjectId,
     ): void {
         if (!$realObjectId) {
             return;
@@ -88,5 +94,15 @@ class Importer implements ImporterInterface
                 }
             }
         }
+    }
+
+    private function extractAndFindCollection(string $filepath): string
+    {
+        $tempDir = $this->projectDir.'/var/import/import-'.date('Y-m-d_H-i-s');
+
+        $zip = ZipArchive::open($filepath);
+        $zip->extractTo($tempDir);
+
+        return $tempDir.'/collection.json';
     }
 }

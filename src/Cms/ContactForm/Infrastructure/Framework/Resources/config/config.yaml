@@ -30,6 +30,7 @@ cms:
                     fields:
                         collection_of: ContactFormField
             ContactFormField:
+                type: collection_item
                 mapping:
                     type: ~
                     name: ~

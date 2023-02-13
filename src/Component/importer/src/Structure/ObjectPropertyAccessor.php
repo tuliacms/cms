@@ -13,7 +13,7 @@ final class ObjectPropertyAccessor
     public function __construct(
         private readonly ObjectData $object,
         private readonly string $field,
-        private readonly string $pattern
+        private readonly string $pattern,
     ) {
     }
 

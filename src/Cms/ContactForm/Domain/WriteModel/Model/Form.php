@@ -26,7 +26,7 @@ class Form extends AbstractAggregateRoot
         private string $name,
         private Sender $sender,
         /** @var string[] $receivers */
-        private array $receivers,
+        private array $receivers = [],
         private ?string $replyTo = null,
     ) {
         $this->translations = new ArrayCollection();

@@ -254,8 +254,16 @@
                 <target><![CDATA[Motyw oczekuje pola o nazwie "<b>{name}</b>", które przechowuje główną zawartość węzła typu treści. Pamiętaj o utworzeniu takiego pola, jeśli chcesz wyświetlać treści z Edytora wizualnego Tulia.]]></target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.68">
-                <source>c</source>
+                <source>toggleActiveness</source>
                 <target>Przełącz widoczność</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.69">
+                <source>youSureYouWantToDeleteContentType</source>
+                <target>Chcesz usunąć ten Typ Treści?</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.70">
+                <source>removingContentTypeWontRemoveContentsPleaseDoThatFirst</source>
+                <target>Usunięcie typu treści nie spowoduje usunięcia samych wpisów. Należy usunąć najpierw wszystkie treści jeśli chcesz całkowicie usunąć ten typ treści.</target>
             </trans-unit>
         </body>
     </file>

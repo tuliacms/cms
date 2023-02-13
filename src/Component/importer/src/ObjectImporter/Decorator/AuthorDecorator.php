@@ -11,7 +11,7 @@ use Tulia\Component\Importer\ObjectImporter\Traits\AuthorAwareTrait;
 /**
  * @author Adam Banaszkiewicz
  */
-final class AuthorDecorator implements ObjectExporterDecoratorInterface
+final class AuthorDecorator implements ObjectImporterDecoratorInterface
 {
     public function decorate(ObjectImporterInterface $importer, array $parameters): ObjectImporterInterface
     {

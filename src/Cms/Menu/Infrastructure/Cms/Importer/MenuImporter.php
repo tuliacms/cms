@@ -35,23 +35,33 @@ class MenuImporter implements ObjectImporterInterface
         ));
 
         foreach ($objectData['items'] as $item) {
-            $details = [
-                'name' => $item['name'],
-                'type' => $item['link_type'],
-                'identity' => $item['link_identity'] ?? null,
-                'hash' => $item['hash'] ?? '',
-                'target' => $item['target'] ?? '_self',
-                'parent' => $item['parent'] ?? null,
-            ];
-
-            ($this->createMenuItem)(new CreateMenuItemRequest(
-                $id->id,
-                $details,
-                $this->getWebsite()->getLocale()->getCode(),
-                $this->getWebsite()->getLocaleCodes()
-            ));
+            $this->importItem($id->id, $item);
         }
 
         return $id->id;
+    }
+
+    private function importItem(string $menuId, ObjectData $item, ?string $parent = null): void
+    {
+        $details = [
+            'name' => $item['name'],
+            'type' => $item['link_type'],
+            'identity' => $item['link_identity'] ?? null,
+            'hash' => $item['hash'] ?? '',
+            'target' => $item['target'] ?? '_self',
+            'parent' => $parent ?? null,
+        ];
+
+        /** @var IdResult $id */
+        $id = ($this->createMenuItem)(new CreateMenuItemRequest(
+            $menuId,
+            $details,
+            $this->getWebsite()->getLocale()->getCode(),
+            $this->getWebsite()->getLocaleCodes()
+        ));
+
+        foreach ($item['children'] as $child) {
+            $this->importItem($menuId, $child, $id->id);
+        }
     }
 }

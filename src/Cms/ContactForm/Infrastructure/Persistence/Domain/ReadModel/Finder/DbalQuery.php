@@ -126,7 +126,7 @@ class DbalQuery extends AbstractDbalQuery
                     }
                 }
 
-                $row['receivers'] = @ (array) json_decode($row['receivers'], true);
+                $row['receivers'] = explode(',', $row['receivers']);
 
                 $collection->append(Form::buildFromArray($row));
             }

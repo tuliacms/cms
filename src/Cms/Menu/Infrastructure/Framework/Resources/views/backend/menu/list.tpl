@@ -35,9 +35,18 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <fieldset class="form-group">
+                        <fieldset class="form-group mb-4">
                             <label>{{ 'menuName'|trans({}, 'menu') }}</label>
                             <input type="text" class="form-control" name="name" />
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label>{{ 'menuSpace'|trans({}, 'menu') }}</label>
+                            <select name="spaces[]" class="form-select-custom form-select" multiple>
+                                <option></option>
+                                {% for space in spaces %}
+                                    <option value="{{ space.name }}">{{ space.label }}</option>
+                                {% endfor %}
+                            </select>
                         </fieldset>
                     </div>
                     <div class="modal-footer">
@@ -61,9 +70,18 @@
                     </div>
                     <div class="modal-body">
                         <input type="hidden" class="form-control" name="id" />
-                        <fieldset class="form-group">
+                        <fieldset class="form-group mb-4">
                             <label>{{ 'menuName'|trans({}, 'menu') }}</label>
                             <input type="text" class="form-control" name="name" />
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label>{{ 'menuSpace'|trans({}, 'menu') }}</label>
+                            <select name="spaces[]" class="form-select-custom form-select" multiple id="menu-spaces">
+                                <option></option>
+                                {% for space in spaces %}
+                                    <option value="{{ space.name }}">{{ space.label }}</option>
+                                {% endfor %}
+                            </select>
                         </fieldset>
                     </div>
                     <div class="modal-footer">
@@ -82,6 +100,7 @@
             $('#modal-menu-edit').on('show.bs.modal', function (e) {
                 $(this).find('input[name=id]').val($(e.relatedTarget).attr('data-element-id'));
                 $(this).find('input[name=name]').val($(e.relatedTarget).attr('data-element-name'));
+                $(this).find('#menu-spaces').val($(e.relatedTarget).attr('data-element-spaces').split(',')).trigger('chosen:updated');
             }).on('shown.bs.modal', function () {
                 $(this).find('input[name=name]').trigger('focus');
             });

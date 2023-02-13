@@ -45,6 +45,9 @@ final class ContactFormImporter implements ObjectImporterInterface
         return $result->id;
     }
 
+    /**
+     * @param ObjectData[] $source
+     */
     private function createFieldsCollection(array $source): array
     {
         $result = [];
@@ -54,6 +57,13 @@ final class ContactFormImporter implements ObjectImporterInterface
             $field['alias'] = $field['type'];
 
             unset($field['options'], $field['type']);
+
+            foreach ($field as $key => $val) {
+                // We have to remove internal fields
+                if (str_starts_with($key, '@')) {
+                    unset($field[$key]);
+                }
+            }
 
             $result[] = $field;
         }

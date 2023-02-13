@@ -21,6 +21,7 @@ use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
+use Tulia\Component\Theme\ManagerInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -30,6 +31,7 @@ class Menu extends AbstractController
     public function __construct(
         private readonly DatatableFactory $factory,
         private readonly MenuDatatableFinderInterface $finder,
+        private readonly ManagerInterface $manager,
     ) {
     }
 
@@ -37,6 +39,7 @@ class Menu extends AbstractController
     {
         return $this->view('@backend/menu/menu/list.tpl', [
             'datatable' => $this->factory->create($this->finder, $request)->generateFront(['website' => $website]),
+            'spaces' => $this->manager->getTheme()->getConfig()->getMenuSpaces(),
         ]);
     }
 
@@ -53,7 +56,11 @@ class Menu extends AbstractController
         CreateMenu $createMenu,
         WebsiteInterface $website,
     ): RedirectResponse {
-        ($createMenu)(new CreateMenuRequest($request->request->get('name'), $website->getId()));
+        ($createMenu)(new CreateMenuRequest(
+            $request->request->get('name'),
+            $website->getId(),
+            $request->request->all('spaces')
+        ));
 
         $this->addFlash('success', $this->trans('menuCreated', [], 'menu'));
         return $this->redirectToRoute('backend.menu');
@@ -68,7 +75,8 @@ class Menu extends AbstractController
         try {
             ($updateMenu)(new UpdateMenuRequest(
                 $request->request->get('id'),
-                $request->request->get('name')
+                $request->request->get('name'),
+                $request->request->all('spaces')
             ));
         } catch (MenuNotExistsException $e) {
             $this->addFlash('success', $this->trans('menuNotFound', [], 'menu'));

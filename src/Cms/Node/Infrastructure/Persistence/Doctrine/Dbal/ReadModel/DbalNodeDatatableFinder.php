@@ -113,6 +113,7 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
             ->setParameter('locale', $context['website']->getLocale()->getCode(), PDO::PARAM_STR)
             ->setParameter('website_id', Uuid::fromString($context['website']->getId())->toBinary(), PDO::PARAM_STR)
             ->addOrderBy('tm.level', 'ASC')
+            ->addOrderBy('tm.created_at', 'DESC')
             ->addGroupBy('tm.id')
         ;
 
@@ -153,6 +154,10 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
             ],
             'preview' => [
                 'view' => '@backend/node/parts/datatable/links/preview-link.tpl',
+                'view_context' => $viewContext,
+            ],
+            'clone' => [
+                'view' => '@backend/node/parts/datatable/links/clone-link.tpl',
                 'view_context' => $viewContext,
             ],
             'delete' => [

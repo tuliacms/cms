@@ -44,6 +44,10 @@ export default class SizingClassnameGenerator {
             }
         }
 
+        if (this.block.data._internal.hasOwnProperty('alignment')) {
+            classlist.push(this.block.data._internal.alignment);
+        }
+
         return classlist.join(' ');
     }
 }

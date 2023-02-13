@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Application\UseCase;
 
+use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Cms\Shared\Application\UseCase\IdResult;
 use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
 use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
@@ -18,11 +19,12 @@ class CreateNode extends AbstractNodeUseCase
      */
     protected function execute(RequestInterface $request): ?ResultInterface
     {
-        $node = $this->repository->create(
+        $node = Node::create(
+            $this->repository->getNextId(),
             $request->nodeType,
+            $request->websiteId,
             $request->author,
             $request->data['title'],
-            $request->websiteId,
             $request->availableLocales,
         );
 

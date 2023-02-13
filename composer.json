@@ -14,6 +14,7 @@
         "doctrine/orm": "^2.10",
         "intervention/image": "^2.7",
         "jasongrimes/paginator": "^1.0",
+        "marcj/topsort": "^2.0",
         "nesbot/carbon": "^2.59",
         "ocramius/generated-hydrator": "^4.1",
         "requtize/assetter": "^2.0",

@@ -15,7 +15,7 @@ final class UpdateNodeRequest implements RequestInterface
         public readonly string $id,
         public readonly array $data,
         public readonly string $defaultLocale,
-        public readonly string $locale
+        public readonly string $locale,
     ) {
     }
 

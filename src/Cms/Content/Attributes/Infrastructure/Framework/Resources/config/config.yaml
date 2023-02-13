@@ -2,6 +2,7 @@ cms:
     importer:
         objects:
             Attribute:
+                type: collection_item
                 mapping:
                     payload:
                         required: false

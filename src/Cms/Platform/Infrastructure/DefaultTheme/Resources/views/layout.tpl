@@ -13,7 +13,7 @@
             <a class="navbar-brand" href="{{ path('frontend.homepage') }}">{{ current_website().name }}</a>
         </nav>
         {{ breadcrumbs() }}
-        <div class="container">
+        <div class="container-xxl">
             <div class="row">
                 <div class="col">
                     {{ flashes() }}

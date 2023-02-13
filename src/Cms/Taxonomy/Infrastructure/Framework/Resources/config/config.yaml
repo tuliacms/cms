@@ -54,6 +54,6 @@ cms:
                     slug: ~
                     parent_id: ~
                     position:
-                        type: int
+                        type: integer
                     attributes:
                         collection_of: Attribute

@@ -23,7 +23,6 @@ final class Dependencies
     }
 
     /**
-     * @param ObjectData[] $objects
      * @return ObjectData[]
      */
     private function findDependencies(ObjectData $object, array $objects): array
@@ -34,7 +33,7 @@ final class Dependencies
         foreach ($object->getDefinition()->getFields() as $field) {
             if ($field->isCollection()) {
                 foreach ($object[$field->getName()] as $item) {
-                    $dependencies[] = $this->findDependencies($item, $objects);
+                    $item['@@dependencies'] = $dependencies[] = $this->findDependencies($item, $objects);
                 }
             } else {
                 if (false === is_string($object[$field->getName()])) {

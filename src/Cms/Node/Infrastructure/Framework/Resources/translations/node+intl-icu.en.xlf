@@ -187,6 +187,15 @@
                 <source>publishAndCreateNew</source>
                 <target>Publish and create new</target>
             </trans-unit>
+            <trans-unit id="tuliacms.node.48">
+                <source>cloneNode</source>
+                <target>Clone</target>
+                <note>Action button label</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.node.49">
+                <source>nodeCloned</source>
+                <target>Node has been cloned.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

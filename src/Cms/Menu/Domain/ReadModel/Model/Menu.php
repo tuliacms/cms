@@ -13,6 +13,7 @@ class Menu
     protected string $name;
     /** @var Item[] */
     protected array $items = [];
+    protected ?string $rootItemId = null;
 
     public static function buildFromArray(array $data): Menu
     {
@@ -21,6 +22,7 @@ class Menu
         }
 
         $menu = new self();
+        $menu->rootItemId = $data['root_item_id'] ?? null;
         $menu->setId($data['id']);
         $menu->setName($data['name'] ?? '');
 
@@ -78,5 +80,10 @@ class Menu
     public function setItems(array $items): void
     {
         $this->items = $items;
+    }
+
+    public function getRootItemId(): ?string
+    {
+        return $this->rootItemId;
     }
 }

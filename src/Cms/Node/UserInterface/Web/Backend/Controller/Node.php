@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Content\Type\UserInterface\Web\Backend\Form\FormAttributesExtractor;
+use Tulia\Cms\Node\Application\UseCase\CloneNode;
+use Tulia\Cms\Node\Application\UseCase\CloneNodeRequest;
 use Tulia\Cms\Node\Application\UseCase\CreateNode;
 use Tulia\Cms\Node\Application\UseCase\CreateNodeRequest;
 use Tulia\Cms\Node\Application\UseCase\DeleteNode;
@@ -121,7 +123,7 @@ class Node extends AbstractController
                 ));
 
                 $this->addFlash('success', $this->trans('nodeSaved', [], 'node'));
-                return $this->redirectToRoute('backend.node.edit', [ 'id' => $result->id, 'node_type' => $nodeType->getCode() ]);
+                return $this->decideWhereToReturn($request, $nodeType->getCode(), $result->id);
             }  catch (CannotImposePurposeToNodeException $e) {
                 $form->get('purposes')->addError(new FormError($this->trans($e->reason)));
             }
@@ -178,15 +180,7 @@ class Node extends AbstractController
                     $website->getLocale()->getCode(),
                 ));
                 $this->addFlash('success', $this->trans('nodeSaved', [], 'node'));
-
-                switch ($request->request->get('_return')) {
-                    case 'go-back':
-                        return $this->redirectToRoute('backend.node.list', [ 'node_type' => $nodeType->getCode() ]);
-                    case 'create-new':
-                        return $this->redirectToRoute('backend.node.create', [ 'node_type' => $nodeType->getCode() ]);
-                    default:
-                        return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getCode() ]);
-                }
+                return $this->decideWhereToReturn($request, $nodeType->getCode(), $node->getId());
             } catch (CannotImposePurposeToNodeException $e) {
                 $form->get('purposes')->addError(new FormError($this->trans($e->reason)));
             }
@@ -197,6 +191,16 @@ class Node extends AbstractController
             'node' => $node,
             'form' => $form->createView(),
         ]);
+    }
+
+    public function clone(
+        string $id,
+        CloneNode $cloneNode,
+    ): RedirectResponse {
+        ($cloneNode)(new CloneNodeRequest($id));
+
+        $this->addFlash('success', $this->trans('nodeCloned', [], 'node'));
+        return $this->redirectToRoute('backend.node.list');
     }
 
     /**
@@ -291,5 +295,17 @@ class Node extends AbstractController
         }
 
         return $result;
+    }
+
+    private function decideWhereToReturn(Request $request, string $type, string $id): RedirectResponse
+    {
+        switch ($request->request->get('_return')) {
+            case 'go-back':
+                return $this->redirectToRoute('backend.node.list', [ 'node_type' => $type ]);
+            case 'create-new':
+                return $this->redirectToRoute('backend.node.create', [ 'node_type' => $type ]);
+            default:
+                return $this->redirectToRoute('backend.node.edit', [ 'id' => $id, 'node_type' => $type ]);
+        }
     }
 }

@@ -16,8 +16,8 @@ use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 final class UpdateMenu extends AbstractTransactionalUseCase
 {
     public function __construct(
-        private MenuRepositoryInterface $repository,
-        private EventBusInterface $eventBus
+        private readonly MenuRepositoryInterface $repository,
+        private readonly EventBusInterface $eventBus,
     ) {
     }
 
@@ -28,6 +28,7 @@ final class UpdateMenu extends AbstractTransactionalUseCase
     {
         $menu = $this->repository->get($request->id);
         $menu->rename($request->name);
+        $menu->placeIn($request->spaces);
 
         $this->repository->save($menu);
         $this->eventBus->dispatchCollection($menu->collectDomainEvents());

@@ -11,7 +11,7 @@ use Tulia\Component\Importer\ObjectImporter\Traits\WebsiteAwareTrait;
 /**
  * @author Adam Banaszkiewicz
  */
-final class WebsiteDecorator implements ObjectExporterDecoratorInterface
+final class WebsiteDecorator implements ObjectImporterDecoratorInterface
 {
     public function __construct(
         private readonly WebsiteInterface $website,

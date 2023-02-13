@@ -41,24 +41,31 @@ class MenuExporter implements ObjectExporterInterface
             'id' => $objectData->getObjectId(),
             'website_id' => $this->getWebsite()->getId(),
             'locale' => $this->getWebsite()->getLocale()->getCode(),
-            'fetch_root' => false,
+            'fetch_root' => true,
         ], MenuFinderScopeEnum::BACKEND_SINGLE);
 
-        $items = [];
+        $objectData['name'] = $menu->getName();
+        $objectData['items'] = $this->collectItems($menu->getItems(), $menu->getRootItemId());
+    }
 
-        foreach ($menu->getItems() as $item) {
-            $items[] = $this->objectDataFactory->create('MenuItem', [
-                '@id' => $item->getId(),
-                'link_type' => $item->getType(),
-                'link_identity' => $item->getIdentity(),
-                'name' => $item->getName(),
-                'hash' => $item->getHash(),
-                'position' => $item->getPosition(),
-                'parent' => $menu->hasItem($item->getParentId()) ? $item->getParentId() : null,
-            ]);
+    private function collectItems(array $items, ?string $parent = null): array
+    {
+        $result = [];
+
+        foreach ($items as $item) {
+            if ($item->getParentId() === $parent) {
+                $result[] = $this->objectDataFactory->create('MenuItem', [
+                    '@id' => $item->getId(),
+                    'link_type' => $item->getType(),
+                    'link_identity' => $item->getIdentity(),
+                    'name' => $item->getName(),
+                    'hash' => $item->getHash(),
+                    'position' => $item->getPosition(),
+                    'children' => $item->getParentId() ? $this->collectItems($items, $item->getId()) : null,
+                ]);
+            }
         }
 
-        $objectData['name'] = $menu->getName();
-        $objectData['items'] = $items;
+        return $result;
     }
 }

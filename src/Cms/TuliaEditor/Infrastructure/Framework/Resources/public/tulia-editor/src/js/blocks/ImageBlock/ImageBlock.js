@@ -15,7 +15,7 @@ export default {
         image: {
             id: null,
             filename: null,
-            size: 'thumbnail',
         },
+        size: 'thumbnail',
     }
 };

@@ -8,6 +8,10 @@
             <generator strategy="NONE"/>
         </id>
 
+        <indexes>
+            <index columns="created_at"/>
+        </indexes>
+
         <field name="websiteId" type="uuid"/>
         <field name="publishedAt" type="datetime_immutable"/>
         <field name="type"/>

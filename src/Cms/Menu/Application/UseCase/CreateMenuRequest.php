@@ -14,6 +14,7 @@ final class CreateMenuRequest implements RequestInterface
     public function __construct(
         public readonly string $name,
         public readonly string $websiteId,
+        public readonly array $spaces,
     ) {
     }
 }

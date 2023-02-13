@@ -28,6 +28,7 @@
                         'tued-structure-selected-options': true,
                         'tued-structure-selected-active': selected.id === column.id && selected.type === 'column'
                     }">
+<!--                        <Column :column="column"></Column>-->
                         <div class="text-muted text-uppercase">{{ translator.trans('noEditOptionsForThisElement') }}</div>
                     </div>
                     <div
@@ -58,6 +59,7 @@
 
 <script setup>
 const Section = require('components/Admin/Sidebar/Selected/Section.vue').default;
+const Column = require('components/Admin/Sidebar/Selected/Column.vue').default;
 const Block = require('components/Admin/Sidebar/Selected/Block.vue').default;
 const { defineProps, reactive, inject, computed, onMounted } = require('vue');
 

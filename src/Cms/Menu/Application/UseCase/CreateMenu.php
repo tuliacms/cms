@@ -19,7 +19,7 @@ final class CreateMenu extends AbstractTransactionalUseCase
 {
     public function __construct(
         private readonly MenuRepositoryInterface $repository,
-        private readonly EventBusInterface $eventBus
+        private readonly EventBusInterface $eventBus,
     ) {
     }
 
@@ -31,7 +31,8 @@ final class CreateMenu extends AbstractTransactionalUseCase
         $menu = Menu::create(
             $this->repository->getNextId(),
             $request->websiteId,
-            $request->name
+            $request->name,
+            $request->spaces,
         );
 
         $this->repository->save($menu);

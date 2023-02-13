@@ -4,18 +4,27 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\Datatable;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use PDO;
 use Symfony\Component\Uid\Uuid;
 use Tulia\Cms\Menu\Domain\ReadModel\Datatable\MenuDatatableFinderInterface;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
 use Tulia\Component\Datatable\Finder\FinderContext;
+use Tulia\Component\Theme\ManagerInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DbalMenuDatatableFinder extends AbstractDatatableFinder implements MenuDatatableFinderInterface
 {
+    public function __construct(
+        private readonly ManagerInterface $manager,
+        Connection $connection,
+    ) {
+        parent::__construct($connection);
+    }
+
     public function getColumns(FinderContext $context): array
     {
         return [
@@ -29,6 +38,11 @@ class DbalMenuDatatableFinder extends AbstractDatatableFinder implements MenuDat
                 'label' => 'name',
                 'sortable' => true,
                 'view' => '@backend/menu/menu/parts/datatable/name.tpl',
+            ],
+            'spaces' => [
+                'selector' => 'tm.spaces',
+                'label' => 'menuSpace',
+                'translation_domain' => 'menu',
             ],
         ];
     }
@@ -52,6 +66,26 @@ class DbalMenuDatatableFinder extends AbstractDatatableFinder implements MenuDat
         ;
 
         return $queryBuilder;
+    }
+
+    public function prepareResult(array $result): array
+    {
+        $spaces = $this->manager->getTheme()->getConfig()->getMenuSpaces();
+
+        foreach ($result as $key => $value) {
+            $tmp = explode(',', (string) $value['spaces']);
+
+            foreach ($tmp as $k => $v) {
+                if (isset($spaces[$v])) {
+                    $tmp[$k] = $spaces[$v]['label'];
+                }
+            }
+
+            $result[$key]['spaces_raw'] = $result[$key]['spaces'];
+            $result[$key]['spaces'] = implode(', ', $tmp);
+        }
+
+        return $result;
     }
 
     public function buildActions(FinderContext $context, array $row): array

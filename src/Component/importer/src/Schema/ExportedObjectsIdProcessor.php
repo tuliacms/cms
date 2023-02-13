@@ -56,7 +56,7 @@ final class ExportedObjectsIdProcessor
 
             foreach ($object->getDefinition()->getFields() as $field) {
                 if ($field->isCollection()) {
-                    $object[$field->getName()] = $this->generateObjectsIdMap($object[$field->getName()]);
+                    $newOne[$field->getName()] = $this->generateObjectsIdMap($newOne[$field->getName()]);
                 }
             }
 

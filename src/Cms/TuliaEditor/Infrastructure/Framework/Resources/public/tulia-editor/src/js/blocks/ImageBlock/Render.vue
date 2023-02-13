@@ -1,11 +1,8 @@
 <template>
-    <Image v-model="block.data.image"></Image>
+    <Image v-model="block.data.image" :size="block.data.size"></Image>
 </template>
 
 <script setup>
-/****************
- * Prepare block
- ****************/
 const { defineProps, inject } = require('vue');
 const props = defineProps(['block']);
 const block = inject('blocks.instance').render(props);

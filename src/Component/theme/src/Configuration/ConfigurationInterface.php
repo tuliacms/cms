@@ -17,6 +17,8 @@ interface ConfigurationInterface
     public function getWidgetStyles(): array;
     public function addWidgetStyle(string $name, string $label): void;
     public function addWidgetSpace(string $name, string $label): void;
+    public function addMenuSpace(string $name, string $label): void;
+    public function getMenuSpaces(): array;
     public function addImageSize(string $name, ?int $width, ?int $height, string $mode): void;
     public function getImageSizes(): array;
     public function addAsset(string $name): void;

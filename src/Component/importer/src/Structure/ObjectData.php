@@ -24,7 +24,11 @@ class ObjectData implements \ArrayAccess
         $result = [];
 
         foreach ($this->objectData as $field => $value) {
-            if (is_array($value) && $this->definition->getField($field)->isCollection()) {
+            if (
+                $this->definition->hasField($field)
+                && is_array($value)
+                && $this->definition->getField($field)->isCollection()
+            ) {
                 foreach ($value as $k => $v) {
                     $value[$k] = $v->toArray();
                 }

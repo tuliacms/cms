@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Infrastructure\Cms\Importer;
 
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum;
 use Tulia\Cms\Node\Domain\ReadModel\Query\NodeExportCollectorInterface;
@@ -29,13 +31,17 @@ class NodeEntryExporter implements ObjectExporterInterface
         private readonly DbalNodeAttributesFinder $attributesFinder,
         private readonly ObjectDataFactory $objectDataFactory,
         private readonly NodeExportCollectorInterface $exportCollector,
+        private readonly ContentTypeRegistryInterface $contentTypeRegistry,
+        private readonly TranslatorInterface $translator,
     ) {
     }
 
     public function collectObjects(ObjectsCollection $collection): void
     {
         foreach ($this->exportCollector->collect($this->getWebsite()->getId(), $this->getWebsite()->getLocale()->getCode()) as $node) {
-            $collection->addObject(new ObjectToExport('Node', $node['id'], $node['title']));
+            $contentType = $this->contentTypeRegistry->get($node['type']);
+
+            $collection->addObject(new ObjectToExport('Node', $node['id'], $node['title'], $this->translator->trans($contentType->getName(), [], 'node')));
         }
     }
 

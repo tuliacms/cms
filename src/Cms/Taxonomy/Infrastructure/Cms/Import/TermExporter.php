@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Infrastructure\Cms\Import;
 
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Content\Type\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderScopeEnum;
@@ -30,6 +31,7 @@ final class TermExporter implements ObjectExporterInterface
         private readonly DbalTermAttributesFinder $attributesFinder,
         private readonly ObjectDataFactory $objectDataFactory,
         private readonly ContentTypeRegistryInterface $contentTypeRegistry,
+        private readonly TranslatorInterface $translator,
     ) {
     }
 
@@ -45,7 +47,12 @@ final class TermExporter implements ObjectExporterInterface
 
             /** @var Term $term */
             foreach ($terms->toArray() as $term) {
-                $collection->addObject(new ObjectToExport('Term', $term->getId(), '['.$contentType->getName().'] '.str_repeat(' - ', $term->getLevel() - 1).$term->getName()));
+                $collection->addObject(new ObjectToExport(
+                    'Term',
+                    $term->getId(),
+                    str_repeat(' - ', $term->getLevel() - 1).$term->getName(),
+                    $this->translator->trans($contentType->getName(), [], 'taxonomy')
+                ));
             }
         }
     }
@@ -61,7 +68,7 @@ final class TermExporter implements ObjectExporterInterface
         $objectData['type'] = $term->getType();
         $objectData['name'] = $term->getName();
         $objectData['slug'] = $term->getSlug();
-        $objectData['parent_id'] = $term->getParentId();
+        $objectData['parent_id'] = $term->getLevel() === 1 ? null : $term->getParentId();
         $objectData['position'] = $term->getPosition();
         $objectData['attributes'] = $this->buildAttributes(
             $this->attributesFinder,

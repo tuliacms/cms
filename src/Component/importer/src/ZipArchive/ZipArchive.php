@@ -29,6 +29,17 @@ final class ZipArchive
         return new self($filepath, $zip);
     }
 
+    public static function open(string $filepath): self
+    {
+        $zip = new \ZipArchive();
+
+        if ($zip->open($filepath) !== true) {
+            throw new \RuntimeException("cannot open <$filepath>\n");
+        }
+
+        return new self($filepath, $zip);
+    }
+
     public function addFilesFrom(string $directory): void
     {
         $files = new RecursiveIteratorIterator(
@@ -49,5 +60,16 @@ final class ZipArchive
     public function close(): void
     {
         $this->archive->close();
+    }
+
+    public function extractTo(string $directory): void
+    {
+        if (!is_dir($directory)) {
+            if (!mkdir($directory, 0777, true) && !is_dir($directory)) {
+                throw new \RuntimeException(sprintf('Directory "%s" was not created', $directory));
+            }
+        }
+
+        $this->archive->extractTo($directory);
     }
 }

@@ -166,6 +166,10 @@
                 <source>options</source>
                 <target>Opcje</target>
             </trans-unit>
+            <trans-unit id="tuliacms.menu.42">
+                <source>menuSpace</source>
+                <target>Miejsce wyświetlania</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
