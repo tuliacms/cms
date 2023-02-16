@@ -20,14 +20,14 @@ class CachedHtmlBuilder implements HtmlBuilderInterface
     ) {
     }
 
-    public function build(HierarchyInterface $hierarchy, string $websiteId, string $locale): string
+    public function buildUsingHierarchy(HierarchyInterface $hierarchy, string $layout): string
     {
-        return $this->cacheMenu->get(sprintf('menu_html_%s_%s_%s', $websiteId, $locale, $hierarchy->getId()), function (ItemInterface $item) use ($hierarchy, $websiteId, $locale) {
+        return $this->cacheMenu->get('menu_html_'.$layout.'_'.$hierarchy->getCacheKey(), function (ItemInterface $item) use ($hierarchy, $layout) {
             $item->tag('menu');
             $item->tag('menu_html');
             $item->tag(sprintf('menu_%s', $hierarchy->getId()));
 
-            return $this->builder->build($hierarchy, $websiteId, $locale);
+            return $this->builder->buildUsingHierarchy($hierarchy, $layout);
         });
     }
 }

@@ -13,5 +13,5 @@ interface HierarchyInterface extends \ArrayAccess, \IteratorAggregate
 
     public function append(Item $item): void;
 
-    public function flatten(): HierarchyInterface;
+    public function getCacheKey(): string;
 }

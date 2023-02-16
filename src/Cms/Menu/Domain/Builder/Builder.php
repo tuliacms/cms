@@ -19,19 +19,13 @@ class Builder implements BuilderInterface
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function buildHierarchy(string $id, string $websiteId, string $locale): HierarchyInterface
+    public function buildHierarchy(Criteria $criteria): HierarchyInterface
     {
-        return $this->hierarchyBuilder->build($id, $websiteId, $locale);
+        return $this->hierarchyBuilder->build($criteria);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function buildHtml(string $id, string $websiteId, string $locale): string
+    public function buildHtml(Criteria $criteria, string $layout): string
     {
-        return $this->htmlBuilder->build($this->buildHierarchy($id, $websiteId, $locale), $websiteId, $locale);
+        return $this->htmlBuilder->buildUsingHierarchy($this->buildHierarchy($criteria), $layout);
     }
 }

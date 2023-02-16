@@ -45,6 +45,7 @@ class MenuExporter implements ObjectExporterInterface
         ], MenuFinderScopeEnum::BACKEND_SINGLE);
 
         $objectData['name'] = $menu->getName();
+        $objectData['spaces'] = $menu->getSpaces();
         $objectData['items'] = $this->collectItems($menu->getItems(), $menu->getRootItemId());
     }
 

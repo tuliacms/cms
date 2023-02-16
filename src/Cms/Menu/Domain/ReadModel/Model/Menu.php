@@ -9,11 +9,12 @@ namespace Tulia\Cms\Menu\Domain\ReadModel\Model;
  */
 class Menu
 {
-    protected string $id;
-    protected string $name;
+    private string $id;
+    private string $name;
     /** @var Item[] */
-    protected array $items = [];
-    protected ?string $rootItemId = null;
+    private array $items = [];
+    private ?string $rootItemId = null;
+    private array $spaces = [];
 
     public static function buildFromArray(array $data): Menu
     {
@@ -23,6 +24,7 @@ class Menu
 
         $menu = new self();
         $menu->rootItemId = $data['root_item_id'] ?? null;
+        $menu->spaces = $data['spaces'] ?? [];
         $menu->setId($data['id']);
         $menu->setName($data['name'] ?? '');
 
@@ -85,5 +87,10 @@ class Menu
     public function getRootItemId(): ?string
     {
         return $this->rootItemId;
+    }
+
+    public function getSpaces(): array
+    {
+        return $this->spaces;
     }
 }

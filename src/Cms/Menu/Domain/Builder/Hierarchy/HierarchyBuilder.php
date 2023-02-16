@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Domain\Builder\Hierarchy;
 
+use Tulia\Cms\Menu\Domain\Builder\Criteria;
 use Tulia\Cms\Menu\Domain\Builder\Hierarchy\Item as BuilderItem;
 use Tulia\Cms\Menu\Domain\Builder\Identity\Identity;
 use Tulia\Cms\Menu\Domain\Builder\Identity\RegistryInterface;
 use Tulia\Cms\Menu\Domain\ReadModel\Finder\MenuFinderInterface;
 use Tulia\Cms\Menu\Domain\ReadModel\Finder\MenuFinderScopeEnum;
 use Tulia\Cms\Menu\Domain\ReadModel\Model\Item;
+use Tulia\Cms\Menu\Domain\ReadModel\Model\Menu;
 
 /**
  * @author Adam Banaszkiewicz
@@ -22,34 +24,34 @@ class HierarchyBuilder implements HierarchyBuilderInterface
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function build(string $id, string $websiteId, string $locale, array $collection = []): HierarchyInterface
+    public function build(Criteria $criteria): HierarchyInterface
     {
-        $hierarchy = new Hierarchy($id);
+        $menu = $this->getMenu($criteria);
 
-        $items = $collection === [] ? $this->getItems($id, $websiteId, $locale) : $collection;
+        if (!$menu) {
+            return new Hierarchy('', '');
+        }
+
+        $hierarchy = new Hierarchy($menu->getId(), Hierarchy::cacheKeyFromCriteria($criteria));
+        $items = $menu->getItems();
 
         foreach ($items as $item) {
             if ($item->getLevel() === 1) {
-                $hierarchy->append($this->buildFor($item, $items, $locale));
+                $hierarchy->append($this->buildFor($item, $items, $criteria->locale));
             }
         }
 
         return $hierarchy;
     }
 
-    private function getItems(string $id, string $websiteId, string $locale): array
+    private function getMenu(Criteria $criteria): ?Menu
     {
-        $menu = $this->menuFinder->findOne([
-            'id' => $id,
-            'website_id' => $websiteId,
-            'locale' => $locale,
+        return $this->menuFinder->findOne([
+            'website_id' => $criteria->websiteId,
+            'locale' => $criteria->locale,
             'fetch_root' => true,
+            $criteria->by => $criteria->value,
         ], MenuFinderScopeEnum::BUILD_MENU);
-
-        return $menu ? $menu->getItems() : [];
     }
 
     private function buildFor(Item $sourceItem, array $collection, string $locale): BuilderItem

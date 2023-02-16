@@ -1,4 +1,3 @@
-import './default-stylesheet.scss';
 const $ = require('$');
 
 $(function() {

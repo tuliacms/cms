@@ -6,6 +6,8 @@ namespace Tulia\Cms\Menu\Infrastructure\Builder\Hierarchy;
 
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
+use Tulia\Cms\Menu\Domain\Builder\Criteria;
+use Tulia\Cms\Menu\Domain\Builder\Hierarchy\Hierarchy;
 use Tulia\Cms\Menu\Domain\Builder\Hierarchy\HierarchyBuilderInterface;
 use Tulia\Cms\Menu\Domain\Builder\Hierarchy\HierarchyInterface;
 
@@ -20,14 +22,18 @@ class CachedHierarchyBuilder implements HierarchyBuilderInterface
     ) {
     }
 
-    public function build(string $id, string $websiteId, string $locale, array $collection = []): HierarchyInterface
+    public function build(Criteria $criteria): HierarchyInterface
     {
-        return $this->cacheMenu->get(sprintf('menu_hierarchy_%s_%s_%s', $websiteId, $locale, $id), function (ItemInterface $item) use ($id, $websiteId, $locale, $collection) {
+        $key = Hierarchy::cacheKeyFromCriteria($criteria);
+
+        return $this->cacheMenu->get($key, function (ItemInterface $item) use ($criteria) {
+            $hierarchy = $this->builder->build($criteria);
+
             $item->tag('menu');
             $item->tag('menu_hierarchy');
-            $item->tag(sprintf('menu_%s', $id));
+            $item->tag(sprintf('menu_%s', $hierarchy->getId()));
 
-            return $this->builder->build($id, $websiteId, $locale, $collection);
+            return $hierarchy;
         });
     }
 }

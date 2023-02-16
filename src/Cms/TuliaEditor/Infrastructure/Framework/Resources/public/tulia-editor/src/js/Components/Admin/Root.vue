@@ -130,7 +130,7 @@ provide('structureManipulator', structureManipulator);
 
 onMounted(() => {
     props.container.messenger.on('structure.updated', () => {
-        canvasView.update();
+        canvasView.updated();
     });
 
     props.container.messenger.on('structure.synchronize.from.editor', (newStructure) => {

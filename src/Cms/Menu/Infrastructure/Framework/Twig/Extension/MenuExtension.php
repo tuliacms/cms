@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\Menu\Infrastructure\Framework\Twig\Extension;
 
 use Tulia\Cms\Menu\Domain\Builder\BuilderInterface;
+use Tulia\Cms\Menu\Domain\Builder\Criteria;
+use Tulia\Cms\Menu\Domain\ReadModel\Finder\MenuFinderInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -17,20 +19,21 @@ class MenuExtension extends AbstractExtension
     public function __construct(
         private readonly BuilderInterface $builder,
         private readonly WebsiteInterface $website,
+        private readonly MenuFinderInterface $menuFinder,
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('show_menu', function (string $id) {
+            new TwigFunction('menu_space', function (string $space, string $layout) {
                 return $this->builder->buildHtml(
-                    $id,
-                    $this->website->getId(),
-                    $this->website->getLocale()->getCode(),
+                    Criteria::bySpace(
+                        $space,
+                        $this->website->getId(),
+                        $this->website->getLocale()->getCode(),
+                    ),
+                    $layout,
                 );
             }, [
                 'is_safe' => [ 'html' ]

@@ -8,7 +8,7 @@ const fs = require('fs');
 
 let config = {
     mode: 'development',
-    entry: './src/script.js',
+    entry: './src/default-script.js',
     output: {
         filename: 'default-frontend.js',
         path: path.resolve(__dirname, 'dist'),

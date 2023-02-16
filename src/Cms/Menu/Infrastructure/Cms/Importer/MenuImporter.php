@@ -32,6 +32,7 @@ class MenuImporter implements ObjectImporterInterface
         $id = ($this->createMenu)(new CreateMenuRequest(
             $objectData['name'],
             $this->getWebsite()->getId(),
+            $objectData['spaces'],
         ));
 
         foreach ($objectData['items'] as $item) {

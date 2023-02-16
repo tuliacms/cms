@@ -4,17 +4,24 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Domain\Builder\Hierarchy;
 
+use Tulia\Cms\Menu\Domain\Builder\Criteria;
+
 /**
  * @author Adam Banaszkiewicz
  */
 class Hierarchy implements HierarchyInterface
 {
-    protected string $id;
-    protected array $elements = [];
+    private array $elements = [];
 
-    public function __construct(string $id)
+    public function __construct(
+        private readonly string $id,
+        private readonly string $cacheKey,
+    ) {
+    }
+
+    public static function cacheKeyFromCriteria(Criteria $criteria): string
     {
-        $this->id = $id;
+        return sprintf('menu_hierarchy_%s_%s_%s_%s', $criteria->websiteId, $criteria->locale, $criteria->by, $criteria->value);
     }
 
     public function getId(): string
@@ -27,9 +34,9 @@ class Hierarchy implements HierarchyInterface
         $this->elements[] = $item;
     }
 
-    public function flatten(): HierarchyInterface
+    public function getCacheKey(): string
     {
-        $elements = [];
+        return $this->cacheKey;
     }
 
     public function getIterator(): \Traversable
@@ -37,17 +44,17 @@ class Hierarchy implements HierarchyInterface
         return new \ArrayIterator($this->elements);
     }
 
-    public function offsetExists($offset): bool
+    public function offsetExists(mixed $offset): bool
     {
         return isset($this->elements[$offset]);
     }
 
-    public function offsetGet($offset): mixed
+    public function offsetGet(mixed $offset): mixed
     {
         return $this->elements[$offset];
     }
 
-    public function offsetSet($offset, $value): void
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         if ($offset !== null) {
             $this->elements[$offset] = $value;
@@ -56,7 +63,7 @@ class Hierarchy implements HierarchyInterface
         }
     }
 
-    public function offsetUnset($offset): void
+    public function offsetUnset(mixed $offset): void
     {
         unset($this->elements[$offset]);
     }

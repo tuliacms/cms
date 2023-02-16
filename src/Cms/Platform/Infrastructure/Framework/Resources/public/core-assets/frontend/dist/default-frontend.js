@@ -75,6 +75,7 @@ __webpack_require__.r(__webpack_exports__);
 const $ = __webpack_require__(/*! $ */ "$");
 
 $(function() {
+    alert(1);
     if ($.magnificPopup) {
         $('.tulia-popup-gallery').magnificPopup({
             delegate: 'a',

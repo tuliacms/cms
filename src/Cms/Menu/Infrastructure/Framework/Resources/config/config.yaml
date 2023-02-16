@@ -28,6 +28,8 @@ cms:
                     name:
                         required: true
                         type: string
+                    spaces:
+                        type: array
                     items:
                         collection_of: MenuItem
             MenuItem:

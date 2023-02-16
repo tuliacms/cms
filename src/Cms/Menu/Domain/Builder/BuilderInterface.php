@@ -11,7 +11,7 @@ use Tulia\Cms\Menu\Domain\Builder\Hierarchy\HierarchyInterface;
  */
 interface BuilderInterface
 {
-    public function buildHierarchy(string $id, string $websiteId, string $locale): HierarchyInterface;
+    public function buildHierarchy(Criteria $criteria): HierarchyInterface;
 
-    public function buildHtml(string $id, string $websiteId, string $locale): string;
+    public function buildHtml(Criteria $criteria, string $layout): string;
 }

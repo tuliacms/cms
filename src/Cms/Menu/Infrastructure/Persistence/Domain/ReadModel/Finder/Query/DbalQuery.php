@@ -57,6 +57,10 @@ class DbalQuery extends AbstractDbalQuery
             'fetch_items' => true,
             'limit' => null,
             'fetch_root' => false,
+            /**
+             * @param null|string
+             */
+            'space' => null,
         ];
     }
 
@@ -88,6 +92,7 @@ class DbalQuery extends AbstractDbalQuery
         $rootItemId = null;
 
         if ($criteria['fetch_items']) {
+            $criteria['id'] = $result[0]['id'];
             $items = $this->fetchMenuItems($criteria);
 
             foreach ($items as $key => $row) {
@@ -108,6 +113,12 @@ class DbalQuery extends AbstractDbalQuery
             foreach ($result as $row) {
                 $row['items'] = $items;
                 $row['root_item_id'] = $rootItemId;
+                $row['spaces'] = explode(',', $row['spaces']);
+
+                // There are just few menus across website, so we can filter like that.
+                if ($criteria['space'] && !\in_array($criteria['space'], $row['spaces'], true)) {
+                    continue;
+                }
 
                 $collection->append(Menu::buildFromArray($row));
             }
