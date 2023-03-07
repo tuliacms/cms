@@ -2,19 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Theme\UserInterface\Console\Command;
+namespace Tulia\Cms\Extension\UserInterface\Console\Command;
 
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Tulia\Cms\Extension\UserInterface\Console\Command\Traits\MakerFilesManagementTrait;
+use Tulia\Cms\Extension\UserInterface\Console\Command\Traits\ThemeQuestionableTrait;
 use Tulia\Cms\Platform\Application\Service\FrameworkCacheService;
 use Tulia\Cms\Platform\Infrastructure\Composer\Extensions\ExtensionSourceEnum;
 use Tulia\Cms\Platform\Infrastructure\Composer\Extensions\ExtensionsStorage;
-use Tulia\Cms\Platform\Version;
-use Tulia\Cms\Theme\UserInterface\Console\Command\Traits\MakerFilesManagementTrait;
-use Tulia\Cms\Theme\UserInterface\Console\Command\Traits\ThemeQuestionableTrait;
 use Tulia\Component\Theme\ManagerInterface;
 use Tulia\Component\Theme\ThemeInterface;
 

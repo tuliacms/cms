@@ -5,7 +5,9 @@ services:
         public: false
         bind:
             $filesTemplates: '%cms.core_dir%/Cms/Extension/Infrastructure/Framework/Resources/maker/file-templates'
+            $fontsPath: '%cms.core_dir%/Cms/Extension/Infrastructure/Framework/Resources/fonts'
             $modulesDir: '%kernel.project_dir%/extension/module'
+            $themesDir: '%kernel.project_dir%/extension/theme'
 
     Tulia\Cms\Extension\:
         resource: '../../../../**'

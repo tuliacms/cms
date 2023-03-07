@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Theme\UserInterface\Console\Command;
+namespace Tulia\Cms\Extension\UserInterface\Console\Command;
 
 use Imagick;
 use ImagickDraw;
@@ -14,9 +14,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
-use Tulia\Cms\Theme\UserInterface\Console\Command\Traits\MakerFilesManagementTrait;
-use Tulia\Cms\Theme\UserInterface\Console\Command\Traits\ThemeQuestionableTrait;
+use Tulia\Cms\Extension\UserInterface\Console\Command\Traits\MakerFilesManagementTrait;
+use Tulia\Cms\Extension\UserInterface\Console\Command\Traits\ThemeQuestionableTrait;
 use Tulia\Component\Theme\ManagerInterface;
 
 /**

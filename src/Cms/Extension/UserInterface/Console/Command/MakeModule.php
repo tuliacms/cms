@@ -10,10 +10,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Tulia\Cms\Extension\UserInterface\Console\Command\Traits\MakerFilesManagementTrait;
+use Tulia\Cms\Extension\UserInterface\Console\Command\Traits\ThemeQuestionableTrait;
 use Tulia\Cms\Platform\Infrastructure\Composer\Extensions\ExtensionSourceEnum;
 use Tulia\Cms\Platform\Infrastructure\Composer\Extensions\ExtensionsStorage;
-use Tulia\Cms\Theme\UserInterface\Console\Command\Traits\MakerFilesManagementTrait;
-use Tulia\Cms\Theme\UserInterface\Console\Command\Traits\ThemeQuestionableTrait;
 use Tulia\Component\Theme\ManagerInterface;
 
 /**

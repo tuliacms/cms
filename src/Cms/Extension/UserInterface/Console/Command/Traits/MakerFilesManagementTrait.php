@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Theme\UserInterface\Console\Command\Traits;
+namespace Tulia\Cms\Extension\UserInterface\Console\Command\Traits;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
