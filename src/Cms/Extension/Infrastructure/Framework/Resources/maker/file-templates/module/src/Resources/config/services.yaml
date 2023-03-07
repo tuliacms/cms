@@ -3,7 +3,7 @@ services:
         autowire: true
         autoconfigure: true
 
-    Tulia\Module\{{ module.code.namespaced }}\:
+    Tulia\Local\Module\{{ module.code.namespaced }}\:
         resource: '../../'
         exclude:
             - '../../Resources'

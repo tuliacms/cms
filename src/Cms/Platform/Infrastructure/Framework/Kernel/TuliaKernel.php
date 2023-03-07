@@ -38,11 +38,19 @@ final class TuliaKernel extends Kernel
 
     public function registerBundles(): iterable
     {
-        $contents = require $this->getConfigDir() . '/bundles.php';
+        $this->resolveExtensions();
 
-        foreach ($contents as $class => $envs) {
+        $bundles = require $this->getConfigDir() . '/bundles.php';
+
+        foreach ($bundles as $class => $envs) {
             if ($envs[$this->environment] ?? $envs['all'] ?? false) {
                 yield new $class();
+            }
+        }
+
+        foreach ($this->extensions['modules'] as $module) {
+            if (isset($module['entrypoint'])) {
+                yield new $module['entrypoint']();
             }
         }
     }
@@ -95,8 +103,6 @@ final class TuliaKernel extends Kernel
 
     protected function configureContainer(ContainerConfigurator $container): void
     {
-        $this->resolveExtensions();
-
         foreach ($this->getConfigDirs() as $root) {
             if (is_file($root . '/config.yaml')) {
                 $container->import($root . '/config.yaml');
@@ -170,7 +176,7 @@ final class TuliaKernel extends Kernel
 
             $result[] = $root.$info['path'].'/Resources/config';
         }
-        foreach ($this->extensions['modules'] ?? [] as $code => $info) {
+        /*foreach ($this->extensions['modules'] ?? [] as $code => $info) {
             if (!is_dir($root.$info['path'].'/Resources/config')) {
                 throw new \RuntimeException(sprintf(
                     'The "%s" directory of module "%s" does not exists.',
@@ -180,7 +186,7 @@ final class TuliaKernel extends Kernel
             }
 
             $result[] = $root.$info['path'].'/Resources/config';
-        }
+        }*/
 
         return $result;
     }
