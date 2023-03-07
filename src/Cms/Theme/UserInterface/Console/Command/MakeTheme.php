@@ -106,5 +106,6 @@ final class MakeTheme extends Command
             ExtensionSourceEnum::LOCAL,
             $directory,
         );
+        $this->extensionsStorage->write();
     }
 }

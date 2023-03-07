@@ -1,0 +1,13 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+        bind:
+            $filesTemplates: '%cms.core_dir%/Cms/Extension/Infrastructure/Framework/Resources/maker/file-templates'
+            $modulesDir: '%kernel.project_dir%/extension/module'
+
+    Tulia\Cms\Extension\:
+        resource: '../../../../**'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources/**'

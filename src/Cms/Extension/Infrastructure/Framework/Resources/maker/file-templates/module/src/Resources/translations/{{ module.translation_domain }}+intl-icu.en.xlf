@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="{{ module.translation_domain }}+intl-icu.en.xlf">
+        <body>
+            <trans-unit id="{{ module.translation_domain }}.1">
+                <source>messageId</source>
+                <target>Message text</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

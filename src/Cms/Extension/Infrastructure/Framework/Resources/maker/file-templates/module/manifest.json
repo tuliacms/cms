@@ -1,0 +1,6 @@
+{
+    "name": "{{ module.name }}",
+    "type": "module",
+    "entrypoint": "/src",
+    "info": "{{ module.info }}"
+}

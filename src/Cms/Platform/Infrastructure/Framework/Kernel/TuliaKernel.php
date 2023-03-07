@@ -81,6 +81,7 @@ final class TuliaKernel extends Kernel
             $base . '/Content/Type/Infrastructure/Framework/Resources/config',
             $base . '/ImportExport/Infrastructure/Framework/Resources/config',
             $base . '/Seo/Infrastructure/Framework/Resources/config',
+            $base . '/Extension/Infrastructure/Framework/Resources/config',
         ];
 
         if ($this->environment === 'dev') {
@@ -119,6 +120,7 @@ final class TuliaKernel extends Kernel
         $container->parameters()->set('kernel.public_dir', $this->getPublicDir());
         $container->parameters()->set('kernel.cache_file', $cache->getPath());
         $container->parameters()->set('cms.extensions.themes', $this->extensions['themes']);
+        $container->parameters()->set('cms.extensions.modules', $this->extensions['modules']);
 
         $root = $this->getProjectDir();
         foreach ($this->extensions as $type => $packages) {
@@ -157,10 +159,26 @@ final class TuliaKernel extends Kernel
         $root = $this->getProjectDir();
         $result = [];
 
-        foreach ($this->extensions['themes'] ?? [] as $info) {
+        foreach ($this->extensions['themes'] ?? [] as $code => $info) {
+            if (!is_dir($root.$info['path'].'/Resources/config')) {
+                throw new \RuntimeException(sprintf(
+                    'The "%s" directory of theme "%s" does not exists.',
+                    $info['path'].'/Resources/config',
+                    $code,
+                ));
+            }
+
             $result[] = $root.$info['path'].'/Resources/config';
         }
-        foreach ($this->extensions['modules'] ?? [] as $info) {
+        foreach ($this->extensions['modules'] ?? [] as $code => $info) {
+            if (!is_dir($root.$info['path'].'/Resources/config')) {
+                throw new \RuntimeException(sprintf(
+                    'The "%s" directory of module "%s" does not exists.',
+                    $info['path'].'/Resources/config',
+                    $code,
+                ));
+            }
+
             $result[] = $root.$info['path'].'/Resources/config';
         }
 
