@@ -1,6 +1,6 @@
 {
     "name": "{{ module.name }}",
     "type": "module",
-    "entrypoint": "/src",
+    "entrypoint": "{{ module.entrypoint.escaped }}",
     "info": "{{ module.info }}"
 }

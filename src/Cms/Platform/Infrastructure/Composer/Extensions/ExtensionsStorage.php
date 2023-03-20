@@ -68,7 +68,8 @@ final class ExtensionsStorage
                 'name' => $manifest['name'],
                 'version' => $version,
                 'installed-at' => date('Y-m-d H:i:s'),
-                'path' => "/vendor/$package$entrypoint",
+                'path' => "/vendor/$package",
+                'entrypoint' => $entrypoint,
                 'vendor-package-name' => $package,
                 'manifest' => str_replace($this->rootDir, '', $sourcePath).'/manifest.json',
             ];
@@ -78,7 +79,8 @@ final class ExtensionsStorage
                 'name' => $manifest['name'],
                 'version' => $version,
                 'installed-at' => date('Y-m-d H:i:s'),
-                'path' => "/extension/module/$package$entrypoint",
+                'path' => "/extension/module/$package",
+                'entrypoint' => $entrypoint,
                 'manifest' => str_replace($this->rootDir, '', $sourcePath).'/manifest.json',
             ];
         }

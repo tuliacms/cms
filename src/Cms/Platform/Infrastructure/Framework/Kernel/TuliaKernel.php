@@ -9,6 +9,7 @@ use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
+use Tulia\Cms\Extension\Infrastructure\Framework\Module\AbstractModule;
 
 /**
  * @author Adam Banaszkiewicz
@@ -176,17 +177,32 @@ final class TuliaKernel extends Kernel
 
             $result[] = $root.$info['path'].'/Resources/config';
         }
-        /*foreach ($this->extensions['modules'] ?? [] as $code => $info) {
-            if (!is_dir($root.$info['path'].'/Resources/config')) {
+
+        foreach ($this->extensions['modules'] ?? [] as $code => $info) {
+            /** @var null|AbstractModule $found */
+            $found = null;
+
+            foreach ($this->bundles as $name => $bundle) {
+                if ($bundle instanceof $info['entrypoint']) {
+                    $found = $bundle;
+                    break;
+                }
+            }
+
+            if (!$found) {
+                continue;
+            }
+
+            if (!is_dir($found->getPath().'/config')) {
                 throw new \RuntimeException(sprintf(
                     'The "%s" directory of module "%s" does not exists.',
-                    $info['path'].'/Resources/config',
+                    $found->getPath().'/config',
                     $code,
                 ));
             }
 
-            $result[] = $root.$info['path'].'/Resources/config';
-        }*/
+            $result[] = $found->getPath().'/config';
+        }
 
         return $result;
     }

@@ -11,4 +11,8 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 abstract class AbstractModule extends Bundle
 {
+    public function getPath(): string
+    {
+        throw new \RuntimeException(sprintf('Please overwrite a %s method in %s module.', __METHOD__, get_class($this)));
+    }
 }

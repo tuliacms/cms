@@ -1,5 +1,6 @@
 {% extends 'backend' %}
 {% assets ['momentjs'] %}
+{% trans_default_domain 'extension' %}
 
 {% block title %}
     {{ 'modules'|trans({}, 'extension') }}
@@ -34,8 +35,8 @@
                                     {{ item.details.info|default }}
                                 </div>
                                 <div class="extension-details text-muted">
-                                    Installed <span data-date="{{ item['installed-at'] }}" title="{{ item['installed-at'] }}">{{ item['installed-at'] }}</span><br />
-                                    Version {{ item.version }}<br />
+                                    {{ 'installedAt'|trans }} <span data-date="{{ item['installed-at'] }}" title="{{ item['installed-at'] }}">{{ item['installed-at'] }}</span><br />
+                                    {{ 'version'|trans }} {{ item.version }}<br />
                                     <span class="badge bg-secondary">{{ item.source }}</span>
                                 </div>
                                 <div class="extension-action">

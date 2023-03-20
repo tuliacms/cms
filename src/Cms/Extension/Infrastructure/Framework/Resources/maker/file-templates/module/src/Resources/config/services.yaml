@@ -1,9 +1,0 @@
-services:
-    _defaults:
-        autowire: true
-        autoconfigure: true
-
-    Tulia\Local\Module\{{ module.code.namespaced }}\:
-        resource: '../../'
-        exclude:
-            - '../../Resources'

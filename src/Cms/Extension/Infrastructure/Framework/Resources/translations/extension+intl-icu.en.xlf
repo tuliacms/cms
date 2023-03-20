@@ -6,6 +6,15 @@
                 <source>modules</source>
                 <target>Modules</target>
             </trans-unit>
+            <trans-unit id="tuliacms.extension.2">
+                <source>version</source>
+                <target>Version</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.extension.3">
+                <source>installedAt</source>
+                <target>Installed</target>
+                <note>Label placed before a Moment.js time ago</note>
+            </trans-unit>
         </body>
     </file>
 </xliff>

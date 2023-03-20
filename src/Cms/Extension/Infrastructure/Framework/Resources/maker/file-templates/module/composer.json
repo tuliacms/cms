@@ -1,0 +1,19 @@
+{
+    "name": "{{ package.name }}",
+    "type": "library",
+    "description": "{{ module.info }}",
+    "version": "0.0.1",
+    "autoload": {
+        "psr-4": {
+            "{{ module.code.namespaced.escaped }}\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "{{ module.code.namespaced.escaped }}\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "tuliacms/cms": "*"
+    }
+}

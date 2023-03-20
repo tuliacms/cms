@@ -1,0 +1,7 @@
+# backend.module.page:
+#     path: /module/page
+#     controller: Module/BackendController::page
+
+# frontend.module.page:
+#     path: /module/page
+#     controller: Module/FrontendController::page
