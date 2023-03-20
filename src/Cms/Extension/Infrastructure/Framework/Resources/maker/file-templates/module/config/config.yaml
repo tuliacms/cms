@@ -1,0 +1,12 @@
+framework:
+    translator:
+        paths:
+            - '%{{ package.name }}%/translations'
+twig:
+    paths:
+        # We add this for cache warmup
+        '%{{ package.name }}%/templates': ~
+cms:
+    templating:
+        paths:
+            - { name: module/{{ package.name }}, path: '%{{ package.name }}%/templates' }

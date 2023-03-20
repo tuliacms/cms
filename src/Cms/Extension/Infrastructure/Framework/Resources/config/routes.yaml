@@ -1,0 +1,3 @@
+backend.extension.homepage:
+    path: /extension/module/list
+    controller: Tulia\Cms\Extension\UserInterface\Web\Controller\Modules::index

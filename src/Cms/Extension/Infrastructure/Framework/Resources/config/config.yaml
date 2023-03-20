@@ -1,0 +1,8 @@
+framework:
+    translator:
+        paths:
+            - '%cms.core_dir%/Cms/Extension/Infrastructure/Framework/Resources/translations'
+cms:
+    templating:
+        paths:
+            - { name: backend/extension, path: '%cms.core_dir%/Cms/Extension/Infrastructure/Framework/Resources/views/backend' }

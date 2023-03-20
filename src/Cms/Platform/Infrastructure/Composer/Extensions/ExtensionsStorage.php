@@ -32,6 +32,7 @@ final class ExtensionsStorage
                 'source' => $source->value,
                 'name' => $manifest['name'],
                 'version' => $version,
+                'installed-at' => date('Y-m-d H:i:s'),
                 'path' => "/vendor/$package",
                 'vendor-package-name' => $package,
                 'entrypoint' => $this->resolveThemeEntrypoint($sourcePath),
@@ -42,6 +43,7 @@ final class ExtensionsStorage
                 'source' => $source->value,
                 'name' => $manifest['name'],
                 'version' => $version,
+                'installed-at' => date('Y-m-d H:i:s'),
                 'path' => "/extension/theme/$package",
                 'entrypoint' => $this->resolveThemeEntrypoint($sourcePath),
                 'manifest' => str_replace($this->rootDir, '', $sourcePath).'/manifest.json',
@@ -65,7 +67,9 @@ final class ExtensionsStorage
                 'source' => $source->value,
                 'name' => $manifest['name'],
                 'version' => $version,
-                'path' => "/vendor/$package$entrypoint",
+                'installed-at' => date('Y-m-d H:i:s'),
+                'path' => "/vendor/$package",
+                'entrypoint' => $entrypoint,
                 'vendor-package-name' => $package,
                 'manifest' => str_replace($this->rootDir, '', $sourcePath).'/manifest.json',
             ];
@@ -74,7 +78,9 @@ final class ExtensionsStorage
                 'source' => $source->value,
                 'name' => $manifest['name'],
                 'version' => $version,
-                'path' => "/extension/module/$package$entrypoint",
+                'installed-at' => date('Y-m-d H:i:s'),
+                'path' => "/extension/module/$package",
+                'entrypoint' => $entrypoint,
                 'manifest' => str_replace($this->rootDir, '', $sourcePath).'/manifest.json',
             ];
         }
@@ -105,7 +111,7 @@ final class ExtensionsStorage
         return $matches[1].'\\Theme';
     }
 
-    public function removeTheme(mixed $package)
+    public function removeTheme(mixed $package): void
     {
         $extensionsFilepath = realpath($this->rootDir.'/composer.extensions.json');
         $extensions = json_decode(file_get_contents($extensionsFilepath), true, JSON_THROW_ON_ERROR);
@@ -115,7 +121,7 @@ final class ExtensionsStorage
         file_put_contents($extensionsFilepath, json_encode($extensions, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT));
     }
 
-    public function removeModule(mixed $package)
+    public function removeModule(mixed $package): void
     {
         $extensionsFilepath = realpath($this->rootDir.'/composer.extensions.json');
         $extensions = json_decode(file_get_contents($extensionsFilepath), true, JSON_THROW_ON_ERROR);

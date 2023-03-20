@@ -9,6 +9,7 @@ use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
+use Tulia\Cms\Extension\Infrastructure\Framework\Module\AbstractModule;
 
 /**
  * @author Adam Banaszkiewicz
@@ -38,11 +39,19 @@ final class TuliaKernel extends Kernel
 
     public function registerBundles(): iterable
     {
-        $contents = require $this->getConfigDir() . '/bundles.php';
+        $this->resolveExtensions();
 
-        foreach ($contents as $class => $envs) {
+        $bundles = require $this->getConfigDir() . '/bundles.php';
+
+        foreach ($bundles as $class => $envs) {
             if ($envs[$this->environment] ?? $envs['all'] ?? false) {
                 yield new $class();
+            }
+        }
+
+        foreach ($this->extensions['modules'] as $module) {
+            if (isset($module['entrypoint'])) {
+                yield new $module['entrypoint']();
             }
         }
     }
@@ -81,6 +90,7 @@ final class TuliaKernel extends Kernel
             $base . '/Content/Type/Infrastructure/Framework/Resources/config',
             $base . '/ImportExport/Infrastructure/Framework/Resources/config',
             $base . '/Seo/Infrastructure/Framework/Resources/config',
+            $base . '/Extension/Infrastructure/Framework/Resources/config',
         ];
 
         if ($this->environment === 'dev') {
@@ -94,8 +104,6 @@ final class TuliaKernel extends Kernel
 
     protected function configureContainer(ContainerConfigurator $container): void
     {
-        $this->resolveExtensions();
-
         foreach ($this->getConfigDirs() as $root) {
             if (is_file($root . '/config.yaml')) {
                 $container->import($root . '/config.yaml');
@@ -119,6 +127,7 @@ final class TuliaKernel extends Kernel
         $container->parameters()->set('kernel.public_dir', $this->getPublicDir());
         $container->parameters()->set('kernel.cache_file', $cache->getPath());
         $container->parameters()->set('cms.extensions.themes', $this->extensions['themes']);
+        $container->parameters()->set('cms.extensions.modules', $this->extensions['modules']);
 
         $root = $this->getProjectDir();
         foreach ($this->extensions as $type => $packages) {
@@ -157,11 +166,42 @@ final class TuliaKernel extends Kernel
         $root = $this->getProjectDir();
         $result = [];
 
-        foreach ($this->extensions['themes'] ?? [] as $info) {
+        foreach ($this->extensions['themes'] ?? [] as $code => $info) {
+            if (!is_dir($root.$info['path'].'/Resources/config')) {
+                throw new \RuntimeException(sprintf(
+                    'The "%s" directory of theme "%s" does not exists.',
+                    $info['path'].'/Resources/config',
+                    $code,
+                ));
+            }
+
             $result[] = $root.$info['path'].'/Resources/config';
         }
-        foreach ($this->extensions['modules'] ?? [] as $info) {
-            $result[] = $root.$info['path'].'/Resources/config';
+
+        foreach ($this->extensions['modules'] ?? [] as $code => $info) {
+            /** @var null|AbstractModule $found */
+            $found = null;
+
+            foreach ($this->bundles as $name => $bundle) {
+                if ($bundle instanceof $info['entrypoint']) {
+                    $found = $bundle;
+                    break;
+                }
+            }
+
+            if (!$found) {
+                continue;
+            }
+
+            if (!is_dir($found->getPath().'/config')) {
+                throw new \RuntimeException(sprintf(
+                    'The "%s" directory of module "%s" does not exists.',
+                    $found->getPath().'/config',
+                    $code,
+                ));
+            }
+
+            $result[] = $found->getPath().'/config';
         }
 
         return $result;

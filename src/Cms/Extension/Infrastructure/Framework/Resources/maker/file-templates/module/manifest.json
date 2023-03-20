@@ -1,0 +1,6 @@
+{
+    "name": "{{ module.name }}",
+    "type": "module",
+    "entrypoint": "{{ module.entrypoint.escaped }}",
+    "info": "{{ module.info }}"
+}

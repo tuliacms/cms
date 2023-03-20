@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Bundle\CmsBundle\DependencyInjection;
 
+use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
@@ -173,6 +174,8 @@ class TuliaCmsExtension extends Extension
         $container->registerForAutoconfiguration(\Tulia\Cms\Options\Domain\WriteModel\Service\OptionsProviderInterface::class)
             ->setLazy(true)
             ->addTag('options.provider');
+
+        $container->addResource(new FileResource($container->getParameter('kernel.project_dir').'/composer.extensions.json'));
     }
 
     protected function validateOptionsValues(array $definitions): array

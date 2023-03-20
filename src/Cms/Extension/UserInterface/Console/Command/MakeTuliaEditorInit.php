@@ -2,19 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Theme\UserInterface\Console\Command;
+namespace Tulia\Cms\Extension\UserInterface\Console\Command;
 
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;
-use Tulia\Cms\Theme\UserInterface\Console\Command\Traits\MakerFilesManagementTrait;
-use Tulia\Cms\Theme\UserInterface\Console\Command\Traits\ThemeQuestionableTrait;
+use Tulia\Cms\Extension\UserInterface\Console\Command\Traits\MakerFilesManagementTrait;
+use Tulia\Cms\Extension\UserInterface\Console\Command\Traits\ThemeQuestionableTrait;
 use Tulia\Component\Theme\ManagerInterface;
 
 /**

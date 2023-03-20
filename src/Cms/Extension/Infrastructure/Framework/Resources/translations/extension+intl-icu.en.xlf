@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="pl" datatype="plaintext" original="extension+intl-icu.en.xlf">
+        <body>
+            <trans-unit id="tuliacms.extension.1">
+                <source>modules</source>
+                <target>Modules</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.extension.2">
+                <source>version</source>
+                <target>Version</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.extension.3">
+                <source>installedAt</source>
+                <target>Installed</target>
+                <note>Label placed before a Moment.js time ago</note>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
