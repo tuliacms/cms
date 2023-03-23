@@ -3,12 +3,12 @@
  * @author	Adam Banaszkiewicz <adam@codevia.com>
  * @license MIT only with Tulia CMS package. Usage outside the Tulia CMS package is prohibited.
  */
-const Canvas = require('./Canvas.js').default;
+const Admin = require('./Admin.js').default;
 const Editor = require('./Editor.js').default;
 const _ = require('lodash');
 
 export default {
-    Canvas,
+    Admin,
     Editor,
     block: function (block) {
         const requiredProps = [
@@ -18,11 +18,12 @@ export default {
             'manager',
             'editor',
             'render',
-            'defaults',
+            'store',
         ];
 
         for (let prop of requiredProps) {
             if (block.hasOwnProperty(prop) === false) {
+                return;
                 console.error(`Missing property "${prop}" in block. Cannot be registered.`);
                 return;
             }

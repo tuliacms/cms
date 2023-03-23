@@ -11,6 +11,20 @@ export default {
     editor: Editor,
     render: Render,
     manager: Manager,
+    state: {
+        data: {
+            images: [{
+                id: '1',
+                file: { id: null, filename: null }
+            }],
+        },
+        config: {
+            marginBottom: '4',
+            size: 'thumbnail',
+            columns: '3',
+            onclickGallery: '1',
+        },
+    },
     defaults: {
         marginBottom: '4',
         size: 'thumbnail',

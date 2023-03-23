@@ -101,7 +101,7 @@
             structure = JSON.parse(structure);
         }
 
-        new TuliaEditor.Editor('#{{ params.id }}', {
+        new TuliaEditor.Admin('#{{ params.id }}', {
             sink: {
                 structure: structureSelector,
                 content: contentSelector

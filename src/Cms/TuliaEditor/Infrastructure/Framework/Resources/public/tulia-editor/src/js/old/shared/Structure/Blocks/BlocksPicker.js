@@ -30,7 +30,13 @@ export default class BlocksPicker {
     }
 
     select (code) {
-        this.structureManipulator.newBlock(code, this.config.columnId, this.blocksRegistry.get(code).defaults);
+        const block = this.blocksRegistry.get(code);
+
+        this.structureManipulator.newBlock(
+            code,
+            this.config.columnId,
+            block.store,
+        );
         this.close();
     }
 }

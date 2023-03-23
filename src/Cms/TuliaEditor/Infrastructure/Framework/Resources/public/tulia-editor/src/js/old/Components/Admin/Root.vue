@@ -311,6 +311,10 @@ provide('blocks.registry', blocksRegistry);
 provide('blocks.picker', new BlocksPicker(blockPickerData, blocksRegistry, structureManipulator, modals));
 
 
+const DataStateFactory = require('shared/Structure/Element/State/Data/DataStateFactory.js').default;
+provide('state.data.factory', new DataStateFactory(blocksRegistry));
+
+
 /**********
  * Columns
  **********/

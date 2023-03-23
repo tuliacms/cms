@@ -44,7 +44,7 @@
 </style>
 
 <script>
-const ClassObserver = require('shared/Utils/ClassObserver.js').default;
+//const ClassObserver = require('shared/Utils/ClassObserver.js').default;
 
 export default {
     props: {

@@ -174,7 +174,7 @@ export default class StructureManipulator {
         });
     }
 
-    newBlock (type, parent, defaults) {
+    newBlock (type, parent, store) {
         let createBlock = (parent) => {
             let block = this.fixer.fixBlock({
                 code: type,
