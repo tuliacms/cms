@@ -8,6 +8,8 @@ const ObjectCloner = require("shared/Utils/ObjectCloner.js").default;
 const Location = require('shared/Utils/Location.js').default;*/
 
 import Container from "core/Admin/DependencyInjection/Container";
+import Messenger from "core/Shared/Bus/WindowsMessaging/Messenger";
+import ObjectCloner from "core/Shared/Utils/ObjectCloner";
 
 let instances = 0;
 
@@ -35,17 +37,27 @@ export default class Admin {
         this.instanceId = ++instances;
         this.options = $.extend({}, TuliaEditor.config.defaults, TuliaEditor.config.dynamic, this.options);
         this.options.translations = TuliaEditor.translations;
-        this.options.directives = TuliaEditor.directives;
-        this.options.controls = TuliaEditor.controls;
-        this.options.extensions = TuliaEditor.extensions;
-        this.options.blocks = TuliaEditor.blocks;
+
+        const messenger = new Messenger(this.instanceId, 'admin', 'editor');
 
         this.container = new Container(this.options);
+        this.container.setParameter('instanceId', this.instanceId);
+        this.container.setParameter('options.translations', TuliaEditor.translations);
+        this.container.setParameter('options.directives', TuliaEditor.directives);
+        this.container.setParameter('options.controls', TuliaEditor.controls);
+        this.container.setParameter('options.extensions', TuliaEditor.extensions);
+        this.container.setParameter('options.blocks', TuliaEditor.blocks);
         this.container.set('admin', this);
-        this.container.set('instanceId', this.instanceId);
         this.container.set('root', this.root);
-        this.container.set('options', this.options);
+        this.container.set('messenger', messenger);
         this.container.build();
+
+        messenger.receive('init.editor', () => {
+            messenger.send('init.options', {
+                options: this.options,
+                structure: this.container.get('structure').export,
+            });
+        });
 
         this.container.get('view').render();
 

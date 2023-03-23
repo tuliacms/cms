@@ -7,6 +7,7 @@ export default class AbstractContainer {
         this.options = options;
         this.definitions = {};
         this.services = {};
+        this.parameters = { options: options };
     }
 
     get(id) {
@@ -15,6 +16,14 @@ export default class AbstractContainer {
 
     set(id, obj) {
         this.services[id] = obj;
+    }
+
+    setParameter(name, data) {
+        this.parameters[name] = data;
+    }
+
+    getParameter(name) {
+        return this.parameters[name];
     }
 
     build() {
@@ -56,7 +65,7 @@ export default class AbstractContainer {
         return new Translator(
             this.options.locale,
             this.options.fallback_locales,
-            this.options.translations
+            this.getParameter('options.translations'),
         );
     }
 

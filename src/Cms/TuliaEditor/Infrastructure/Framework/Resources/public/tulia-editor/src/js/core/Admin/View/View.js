@@ -13,7 +13,7 @@ export default class View {
         this.root.append('<div class="tued-main-window">' +
             '<div class="tued-header">' +
                 '<div class="tued-preview-headline">' +
-                '<span class="tued-logo">Tulia Editor</span> - ' + this.translator.trans('contentPreview') +
+                    '<span class="tued-logo">Tulia Editor</span> - ' + this.translator.trans('contentPreview') +
                 '</div>' +
             '</div>' +
             '<div class="tued-preview-wrapper tued-preview-loading-EE">' +

@@ -1,11 +1,6 @@
 <template>
     <div class="tued-sidebar-structure">
-        <!--
-        @start="handleStart"
-        @change="handleChange"
-        @end="sendDelta"
-        -->
-        <draggable
+        <vuedraggable
             group="sections"
             item-key="id"
             :list="structure.sections"
@@ -13,6 +8,7 @@
             :component-data="{ name: 'fade', as: 'transition-group', 'data-draggable-delta-transformer-parent': '' }"
             v-bind="structureDragOptions"
             handle=".tued-structure-element-section > .tued-label > .tued-structure-draggable-handler"
+            @change="handleChange"
         >
             <template #item="{element}">
                 <div class="tued-structure-element tued-structure-element-section">
@@ -26,7 +22,7 @@
                     <div
                         :class="{ 'tued-label': true, 'tued-element-selected': false, 'tued-element-hovered': false }"
                     >
-                        <div class="tued-structure-draggable-handler" @mousedown.stop="selection.select(section, element.id, 'sidebar')">
+                        <div class="tued-structure-draggable-handler" mousedown.stop="selection.select(section, element.id, 'sidebar')">
                             <i class="fas fa-arrows-alt"></i>
                         </div>
                         <span>{{ translator.trans('section') }}</span>
@@ -34,14 +30,12 @@
 <!--                    <Rows
                         :parent="element"
                         :rows="element.rows"
-                        @draggable-start="handleStart"
                         @draggable-change="handleChange"
-                        @draggable-end="sendDelta"
                         @selected="emits('selected')"
                     ></Rows>-->
                 </div>
             </template>
-        </draggable>
+        </vuedraggable>
         <div class="tued-structure-new-element" @click="sections.newOne()">
             New section
         </div>
@@ -52,10 +46,8 @@
 </template>
 
 <script setup>
-const draggable = require('vuedraggable');
-/*const Rows = require('components/Admin/Sidebar/Rows.vue').default;*/
-/*const DraggableDeltaTranslator = require('shared/Structure/DraggableDeltaTranslator.js').default;*/
-const { inject, defineProps, onMounted, defineEmits, computed } = require('vue');
+import vuedraggable from "vuedraggable/src/vuedraggable";
+import { inject, defineProps, onMounted, defineEmits, computed } from "vue";
 
 const emits = defineEmits(['selected']);
 const structureDragOptions = inject('structureDragOptions');
@@ -67,32 +59,18 @@ const messenger = inject('messenger');
 const selection = inject('selection');
 const structureManipulator = inject('structureManipulator');
 const blocksPicker = inject('blocks.picker');
-const contextmenu = inject('contextmenu');
-let draggableDeltaTranslator = null;*/
+const contextmenu = inject('contextmenu');*/
 
 const structure = inject('structure');
+const messenger = inject('messenger');
 
-/*const handleStart = (event) => {
-    draggableDeltaTranslator = new DraggableDeltaTranslator(event);
-
-    selection.resetHovered();
-    selection.disableHovering();
-};
-const handleChange = (change) => {
-    draggableDeltaTranslator.handle(change);
-};
-const sendDelta = (event) => {
-    selection.enableHovering();
-
-    let delta = draggableDeltaTranslator.stop(event);
-
-    if (!delta) {
-        return;
-    }
-
-    messenger.notify('structure.move-element', delta);
+const handleChange = () => {
+    messenger.send('structure.changed', {
+        structure: structure.export,
+    });
 };
 
+/*
 onMounted(() => {
     messenger.operation('structure.create.block', (data, success, fail) => {
         if (data && data.columnId) {

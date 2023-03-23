@@ -10,17 +10,23 @@ export default class Container extends AbstractContainer {
         super.build();
 
         this.register('view', this._buildView);
-        this.register('store.structure.factory', () => new StructureStoreFactory(this.get('options')));
-        this.register('usecase.sections', () => new Sections(this.get('structure')));
-        this.register('canvas', () => new Canvas(this.get('options')));
+        this.register('usecase.sections', () => new Sections(this.get('structure'), this.get('messenger')));
+        this.register('canvas', () => new Canvas(this.getParameter('options')));
+        this.register('structure', () => {
+            return (new StructureStoreFactory(this.getParameter('options'))).factory();
+        });
 
         // Subscribers
         this.register(
             'subscriber.buildVueOnHtmlReady',
             () => new BuildVueOnHtmlReady(
                 this.get('vueFactory'),
-                this.get('options'),
-                this.get('instanceId'),
+                this.getParameter('options'),
+                this.getParameter('instanceId'),
+                this.getParameter('options.directives'),
+                this.getParameter('options.controls'),
+                this.getParameter('options.extensions'),
+                this.getParameter('options.blocks'),
                 this,
             ),
             { tags: [{ name: 'event_listener', on: 'admin.view.ready', call: 'build' }] }
@@ -32,7 +38,7 @@ export default class Container extends AbstractContainer {
     _buildView() {
         return new View(
             this.get('root'),
-            this.get('instanceId'),
+            this.getParameter('instanceId'),
             this.get('translator'),
             this.get('admin'),
             this.get('eventBus'),

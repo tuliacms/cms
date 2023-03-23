@@ -46,6 +46,8 @@ export default class VueFactory {
     static loadBlocks (vueApp, blocks) {
         for (let i in blocks) {
             vueApp.component('block-' + blocks[i].code + '-manager', blocks[i].manager);
+            vueApp.component('block-' + blocks[i].code + '-editor', blocks[i].editor);
+            vueApp.component('block-' + blocks[i].code + '-render', blocks[i].render);
         }
     }
 }

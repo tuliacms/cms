@@ -1,4 +1,4 @@
-import Admin from "admin/Admin.vue";
+import Editor from "editor/Editor.vue";
 
 export default class BuildVueOnHtmlReady {
     constructor(vueFactory, options, instanceId, directives, controls, extensions, blocks, container) {
@@ -14,7 +14,7 @@ export default class BuildVueOnHtmlReady {
 
     build() {
         const vue = this.vueFactory.factory(
-            Admin,
+            Editor,
             { container: this.container },
             this.directives,
             this.controls,
@@ -22,6 +22,6 @@ export default class BuildVueOnHtmlReady {
             this.blocks,
         );
 
-        vue.mount(`#tued-editor-window-inner-${this.instanceId}`);
+        vue.mount(`#tulia-editor`);
     }
 }

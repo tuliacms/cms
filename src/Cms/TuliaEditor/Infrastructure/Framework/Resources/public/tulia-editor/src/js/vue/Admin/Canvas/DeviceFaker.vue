@@ -1,18 +1,17 @@
 <template>
-    <div class="tued-canvas-device-faker" :style="{ width: canvas.currentBreakpoint.size + 'px' }">
-        <iframe :src="editorView" @load="loaded"></iframe>
+    <div class="tued-canvas-device-faker" :style="{ width: canvas.currentBreakpoint.width + 'px' }">
+        <iframe :src="editorView" ref="iframe"></iframe>
     </div>
 </template>
 
 <script setup>
-import { inject, defineProps } from "vue";
+import { inject, defineProps, onMounted, ref } from "vue";
 const props = defineProps(['editorView']);
 const canvas = inject('canvas');
-const eventBus = inject('eventBus');
+const messenger = inject('messenger');
+const iframe = ref(null);
 
-const loaded = () => {
-    console.log('iframe');
-    /*this.messenger.addWindow(this.$refs['canvas-faker-iframe'].contentWindow);
-    this.messenger.notify('editor.ready');*/
-};
+onMounted(() => {
+    messenger.setDestinationWindow(iframe.value.contentWindow);
+});
 </script>

@@ -1,9 +1,11 @@
+import { useStructureStore } from "core/Admin/Data/Store/Structure";
+
 export default class StructureStoreFactory {
     constructor(options) {
         this.options = options;
     }
 
-    factory(useStructureStore) {
+    factory() {
         const store = useStructureStore();
 
         //this.fill(store, this.options.structure.source);

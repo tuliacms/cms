@@ -9,7 +9,7 @@
     <div id="tulia-editor"></div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            new TuliaEditor.Editor();
+            new TuliaEditor.Editor(TuliaEditor);
         }, false);
     </script>
 {% endblock %}

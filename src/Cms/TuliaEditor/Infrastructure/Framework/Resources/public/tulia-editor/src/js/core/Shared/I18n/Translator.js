@@ -7,7 +7,7 @@ export default class Translator {
     translations;
 
     constructor (locale, fallbackLocales, translations) {
-        this.translations = translations;
+        this.translations = translations ?? {};
         this.locale = locale;
         this.fallbackLocales = fallbackLocales;
     }

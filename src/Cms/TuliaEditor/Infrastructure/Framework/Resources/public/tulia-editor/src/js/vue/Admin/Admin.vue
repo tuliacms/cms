@@ -40,13 +40,8 @@
 import Sidebar from "admin/Sidebar/Sidebar.vue";
 import Canvas from "admin/Canvas/Canvas.vue";
 import { provide, defineProps } from "vue";
-import { useStructureStore } from "core/Admin/Data/Store/Structure";
 
 const props = defineProps(['container']);
-
-const structure = props.container.get('store.structure.factory').factory(useStructureStore);
-props.container.set('structure', structure);
-provide('structure', structure);
 
 provide('structureDragOptions', {
     structureDragOptions: {
@@ -64,17 +59,19 @@ provide('structureDragOptions', {
  */
 provide('container', props.container);
 provide('translator', props.container.get('translator'));
-provide('options', props.container.get('options'));
+provide('options', props.container.getParameter('options'));
 provide('eventBus', props.container.get('eventBus'));
 provide('admin', props.container.get('admin'));
 provide('canvas', props.container.get('canvas'));
 provide('usecase.sections', props.container.get('usecase.sections'));
+provide('messenger', props.container.get('messenger'));
+provide('structure', props.container.get('structure'));
 
-const options = props.container.get('options');
-const instanceId = props.container.get('instanceId');
+const options = props.container.getParameter('options');
+const instanceId = props.container.getParameter('instanceId');
 </script>
 <script>
 export default {
-    name: 'Tulia Editor'
+    name: 'Tulia Editor - Admin',
 }
 </script>

@@ -37,7 +37,7 @@ let config = {
                 test: /\.css$/i,
                 use: [MiniCssExtractPlugin.loader, "css-loader"],
             },
-        ]
+        ],
     },
     watchOptions: {
         aggregateTimeout: 200,

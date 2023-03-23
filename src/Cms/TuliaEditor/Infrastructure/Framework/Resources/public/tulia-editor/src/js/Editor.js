@@ -1,92 +1,32 @@
 import './../css/tulia-editor.editor.scss';
-
-const Vue = require('vue');
-import { createPinia } from 'pinia';
-/*const Messenger = require('shared/Messaging/Messenger.js').default;
-const Location = require('shared/Utils/Location.js').default;
-const Translator = require('shared/I18n/Translator.js').default;
-const EditorRoot = require("components/Editor/Root.vue").default;
-const ObjectCloner = require("shared/Utils/ObjectCloner.js").default;*/
+import Location from "core/Shared/Utils/Location";
+import Container from "core/Editor/DependencyInjection/Container";
+import Messenger from "core/Shared/Bus/WindowsMessaging/Messenger";
 
 export default class Editor {
     instanceId = null;
-    vue = null;
 
-    constructor () {
+    constructor (TuliaEditor) {
         this.instanceId = Location.getQueryVariable('tuliaEditorInstance');
 
-        this.start();
-    }
+        const messenger = new Messenger(this.instanceId, 'editor', 'admin');
+        messenger.setDestinationWindow(window.top);
+        messenger.receive('init.options', (data) => {
+            this.container = new Container(data.options);
+            this.container.set('editor', this);
+            this.container.set('messenger', messenger);
+            this.container.setParameter('options.translations', data.options.translations);
+            this.container.setParameter('options.directives', TuliaEditor.directives);
+            this.container.setParameter('options.controls', TuliaEditor.controls);
+            this.container.setParameter('options.extensions', TuliaEditor.extensions);
+            this.container.setParameter('options.blocks', TuliaEditor.blocks);
+            this.container.setParameter('instanceId', this.instanceId);
+            this.container.build();
 
-    start () {
-        let self = this;
-        let messenger = new Messenger(this.instanceId, 'editor', [window, window.parent]);
-
-        messenger.on('editor.ready', () => {
-            messenger.execute('editor.init.fetch').then((options) => {
-                self.vue = Vue.createApp(EditorRoot, {
-                    container: {
-                        translator: new Translator(
-                            options.locale,
-                            options.fallback_locales,
-                            options.translations
-                        ),
-                        messenger: messenger,
-                    },
-                    instanceId: self.instanceId,
-                    options: options,
-                    availableBlocks: TuliaEditor.blocks,
-                    structure: ObjectCloner.deepClone(options.structure.source)
-                });
-
-                const pinia = createPinia();
-                self.vue.use(pinia);
-
-                self.loadDirectives(self.vue);
-                self.loadControls(self.vue);
-                self.loadExtensions(self.vue);
-                self.loadBlocks(self.vue);
-
-                // DEV
-                //self.vue.config.devtools = true;
-                //self.vue.config.performance = true;
-                // PROD
-                self.vue.config.devtools = false;
-                self.vue.config.debug = false;
-                self.vue.config.silent = true;
-
-                self.vue.mount('#tulia-editor');
-            });
+            this.container.get('view').render();
+            this.container.get('structure').update(data.structure);
         });
-    }
 
-    loadDirectives (vueApp) {
-        for (let i in TuliaEditor.directives) {
-            vueApp.directive(i, TuliaEditor.directives[i]);
-        }
-    }
-
-    loadControls (vueApp) {
-        for (let i in TuliaEditor.controls) {
-            vueApp.component(i, TuliaEditor.controls[i]);
-        }
-    }
-
-    loadExtensions (vueApp) {
-        for (let i in TuliaEditor.extensions) {
-            if (TuliaEditor.extensions[i].Admin) {
-                vueApp.component(i + 'Editor', TuliaEditor.extensions[i].Admin);
-            }
-            if (TuliaEditor.extensions[i].Render) {
-                vueApp.component(i + 'Render', TuliaEditor.extensions[i].Render);
-            }
-        }
-    }
-
-    loadBlocks (vueApp) {
-        for (let i in TuliaEditor.blocks) {
-            vueApp.component('block-' + TuliaEditor.blocks[i].code + '-editor', TuliaEditor.blocks[i].editor);
-            vueApp.component('block-' + TuliaEditor.blocks[i].code + '-render', TuliaEditor.blocks[i].render);
-        }
+        messenger.send('init.editor');
     }
 }
