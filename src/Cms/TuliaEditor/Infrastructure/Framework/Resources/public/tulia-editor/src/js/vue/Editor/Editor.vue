@@ -17,6 +17,10 @@ const structure = props.container.get('structure');
 provide('structure', structure);
 provide('translator', props.container.get('translator'));
 provide('messenger', props.container.get('messenger'));
+provide('selection', props.container.get('selection'));
+provide('eventBus', props.container.get('eventBus'));
+provide('selection.selectedElementBoundaries', props.container.get('selection.selectedElementBoundaries'));
+provide('usecase.selection', props.container.get('usecase.selection'));
 </script>
 <script>
 export default {

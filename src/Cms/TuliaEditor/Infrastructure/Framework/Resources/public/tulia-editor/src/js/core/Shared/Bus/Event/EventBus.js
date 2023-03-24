@@ -14,7 +14,13 @@ export default class EventBus {
     dispatch(event, data) {
         if (this.listeners[event]) {
             for (let i in this.listeners[event]) {
-                this.listeners[event][i].call(null, data);
+                this.listeners[event][i].call(null, data, event);
+            }
+        }
+
+        if (this.listeners['*']) {
+            for (let i in this.listeners['*']) {
+                this.listeners['*'][i].call(null, data, event);
             }
         }
     }

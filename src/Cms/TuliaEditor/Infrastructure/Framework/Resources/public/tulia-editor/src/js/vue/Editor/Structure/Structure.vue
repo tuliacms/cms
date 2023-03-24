@@ -1,5 +1,5 @@
 <template>
-    <div class="tued-structure">
+    <div class="tued-structure" ref="structureContainer">
         <!--
             @selection-enter="(type, id) => selectionEnter(type, id)"
             @selection-leave="(type, id) => selectionLeave(type, id)"
@@ -15,18 +15,18 @@
             {{ translator.trans('newBlock') }}
         </div>-->
 
-<!--        <div
+        <div
             class="tued-element-boundaries tued-element-selected-boundaries"
             :style="{
-                left: selectable.style.left + 'px',
-                top: selectable.style.top + 'px',
-                width: selectable.style.width + 'px',
-                height: selectable.style.height + 'px',
+                left: selection.selected.boundaries.left + 'px',
+                top: selection.selected.boundaries.top + 'px',
+                width: selection.selected.boundaries.width + 'px',
+                height: selection.selected.boundaries.height + 'px',
             }"
         >
-            <div class="tued-node-name">{{ selectable.style.tagName }}</div>
+            <div class="tued-node-name">{{ selection.selected.tagName }}</div>
         </div>
-        <div
+        <!--<div
             class="tued-element-boundaries tued-element-hovered-boundaries"
             :style="{
                 left: hoverable.style.left + 'px',
@@ -63,14 +63,24 @@
 
 <script setup>
 import Section from "editor/Structure/Section.vue";
-import { inject } from "vue";
+import { inject, ref } from "vue";
 
 const structure = inject('structure');
-const messenger = inject('messenger');
+const selection = inject('selection');
+const structureContainer = ref(null);
 
-messenger.receive('structure.changed', (data) => {
-    structure.update(data.structure);
+inject('selection.selectedElementBoundaries').registerHtmlNodeFinder((id, type) => {
+    return structureContainer.value.querySelector(`#tued-structure-${type}-${id}`);
 });
+
+/*let elm = this.$refs['element-actions'];
+
+    this.actions.style.top = style.top - elm.offsetHeight;
+    this.actions.style.left = style.left;
+    this.actions.style.width = style.width;*/
+
+
+
 
 
 /*const Section = require('components/Editor/Structure/Section.vue').default;

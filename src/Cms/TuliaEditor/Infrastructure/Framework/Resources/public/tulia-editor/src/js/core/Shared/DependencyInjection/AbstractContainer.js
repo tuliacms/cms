@@ -40,6 +40,10 @@ export default class AbstractContainer {
     }
 
     create(id) {
+        if (!this.definitions[id]) {
+            throw new Error(`Service "${id}" does not exists.`);
+        }
+
         const service = this.definitions[id].factory.apply(this);
 
         if (!service) {
@@ -50,15 +54,22 @@ export default class AbstractContainer {
     }
 
     finish() {
-        for (let i in this.definitions) {
-            if (this.definitions[i].options.tags) {
-                for (let t in this.definitions[i].options.tags) {
-                    if (this.definitions[i].options.tags[t].name === 'event_listener') {
-                        this.processEventBusTaggableService(i, this.definitions[i].options.tags[t]);
+        this.get('eventBus').listen('*', (data, event) => {
+            for (let id in this.definitions) {
+                if (this.definitions[id].options.tags) {
+                    for (let t in this.definitions[id].options.tags) {
+                        if (
+                            this.definitions[id].options.tags[t].name === 'event_listener'
+                            && this.definitions[id].options.tags[t].on === event
+                        ) {
+                            const service = this.get(id);
+
+                            service[this.definitions[id].options.tags[t].call].call(service, data, event);
+                        }
                     }
                 }
             }
-        }
+        });
     }
 
     _buildTranslator() {
@@ -67,13 +78,5 @@ export default class AbstractContainer {
             this.options.fallback_locales,
             this.getParameter('options.translations'),
         );
-    }
-
-    processEventBusTaggableService(id, tag) {
-        const service = this.get(id);
-
-        this.get('eventBus').listen(tag.on, function (data) {
-            service[tag.call].call(service, data);
-        });
     }
 }

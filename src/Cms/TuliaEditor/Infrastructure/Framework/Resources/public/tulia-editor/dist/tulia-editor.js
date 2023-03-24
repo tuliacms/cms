@@ -22009,8 +22009,10 @@ const props = __props
 (0,vue__WEBPACK_IMPORTED_MODULE_2__.provide)('admin', props.container.get('admin'));
 (0,vue__WEBPACK_IMPORTED_MODULE_2__.provide)('canvas', props.container.get('canvas'));
 (0,vue__WEBPACK_IMPORTED_MODULE_2__.provide)('usecase.sections', props.container.get('usecase.sections'));
+(0,vue__WEBPACK_IMPORTED_MODULE_2__.provide)('usecase.selection', props.container.get('usecase.selection'));
 (0,vue__WEBPACK_IMPORTED_MODULE_2__.provide)('messenger', props.container.get('messenger'));
 (0,vue__WEBPACK_IMPORTED_MODULE_2__.provide)('structure', props.container.get('structure'));
+(0,vue__WEBPACK_IMPORTED_MODULE_2__.provide)('selection', props.container.get('selection'));
 
 const options = props.container.getParameter('options');
 const instanceId = props.container.getParameter('instanceId');
@@ -22080,11 +22082,11 @@ __webpack_require__.r(__webpack_exports__);
 const props = __props
 
 
-const options = (0,vue__WEBPACK_IMPORTED_MODULE_2__.inject)('options');
 const canvas = (0,vue__WEBPACK_IMPORTED_MODULE_2__.inject)('canvas');
+const selection = (0,vue__WEBPACK_IMPORTED_MODULE_2__.inject)('usecase.selection');
 const coturnPosition = (0,vue__WEBPACK_IMPORTED_MODULE_2__.computed)(() => canvas.currentBreakpoint.width / 2);
 
-const __returned__ = { props, options, canvas, coturnPosition, Sizer: admin_Canvas_Sizer_vue__WEBPACK_IMPORTED_MODULE_0__["default"], DeviceFaker: admin_Canvas_DeviceFaker_vue__WEBPACK_IMPORTED_MODULE_1__["default"], computed: vue__WEBPACK_IMPORTED_MODULE_2__.computed, inject: vue__WEBPACK_IMPORTED_MODULE_2__.inject }
+const __returned__ = { props, canvas, selection, coturnPosition, Sizer: admin_Canvas_Sizer_vue__WEBPACK_IMPORTED_MODULE_0__["default"], DeviceFaker: admin_Canvas_DeviceFaker_vue__WEBPACK_IMPORTED_MODULE_1__["default"], computed: vue__WEBPACK_IMPORTED_MODULE_2__.computed, inject: vue__WEBPACK_IMPORTED_MODULE_2__.inject }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -22367,7 +22369,8 @@ __webpack_require__.r(__webpack_exports__);
 
 const structureDragOptions = (0,vue__WEBPACK_IMPORTED_MODULE_1__.inject)('structureDragOptions');
 const translator = (0,vue__WEBPACK_IMPORTED_MODULE_1__.inject)('translator');
-const sections = (0,vue__WEBPACK_IMPORTED_MODULE_1__.inject)('usecase.sections');
+const sectionsUseCase = (0,vue__WEBPACK_IMPORTED_MODULE_1__.inject)('usecase.sections');
+const selectionUseCase = (0,vue__WEBPACK_IMPORTED_MODULE_1__.inject)('usecase.selection');
 /*const props = defineProps(['structure']);
 const blockPicker = inject('blocks.picker');
 const messenger = inject('messenger');
@@ -22377,13 +22380,8 @@ const blocksPicker = inject('blocks.picker');
 const contextmenu = inject('contextmenu');*/
 
 const structure = (0,vue__WEBPACK_IMPORTED_MODULE_1__.inject)('structure');
-const messenger = (0,vue__WEBPACK_IMPORTED_MODULE_1__.inject)('messenger');
-
-const handleChange = () => {
-    messenger.send('structure.changed', {
-        structure: structure.export,
-    });
-};
+const selection = (0,vue__WEBPACK_IMPORTED_MODULE_1__.inject)('selection');
+const sections = (0,vue__WEBPACK_IMPORTED_MODULE_1__.inject)('usecase.sections');
 
 /*
 onMounted(() => {
@@ -22422,7 +22420,7 @@ onMounted(() => {
     });
 });*/
 
-const __returned__ = { emits, structureDragOptions, translator, sections, structure, messenger, handleChange, vuedraggable: vuedraggable_src_vuedraggable__WEBPACK_IMPORTED_MODULE_0__["default"], inject: vue__WEBPACK_IMPORTED_MODULE_1__.inject, onMounted: vue__WEBPACK_IMPORTED_MODULE_1__.onMounted, computed: vue__WEBPACK_IMPORTED_MODULE_1__.computed }
+const __returned__ = { emits, structureDragOptions, translator, sectionsUseCase, selectionUseCase, structure, selection, sections, vuedraggable: vuedraggable_src_vuedraggable__WEBPACK_IMPORTED_MODULE_0__["default"], inject: vue__WEBPACK_IMPORTED_MODULE_1__.inject }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -22495,6 +22493,10 @@ const structure = props.container.get('structure');
 (0,vue__WEBPACK_IMPORTED_MODULE_1__.provide)('structure', structure);
 (0,vue__WEBPACK_IMPORTED_MODULE_1__.provide)('translator', props.container.get('translator'));
 (0,vue__WEBPACK_IMPORTED_MODULE_1__.provide)('messenger', props.container.get('messenger'));
+(0,vue__WEBPACK_IMPORTED_MODULE_1__.provide)('selection', props.container.get('selection'));
+(0,vue__WEBPACK_IMPORTED_MODULE_1__.provide)('eventBus', props.container.get('eventBus'));
+(0,vue__WEBPACK_IMPORTED_MODULE_1__.provide)('selection.selectedElementBoundaries', props.container.get('selection.selectedElementBoundaries'));
+(0,vue__WEBPACK_IMPORTED_MODULE_1__.provide)('usecase.selection', props.container.get('usecase.selection'));
 
 const __returned__ = { props, renderPreview, structure, Structure: editor_Structure_Structure_vue__WEBPACK_IMPORTED_MODULE_0__["default"], ref: vue__WEBPACK_IMPORTED_MODULE_1__.ref, provide: vue__WEBPACK_IMPORTED_MODULE_1__.provide }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
@@ -22558,6 +22560,7 @@ const props = __props
 
 
 const translator = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('translator');
+const selection = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('usecase.selection');
 
 /*const Row = require('./Row.vue').default;
 const { defineProps, inject, computed } = require('vue');
@@ -22575,7 +22578,7 @@ const containerClassname = computed(() => {
     }
 });*/
 
-const __returned__ = { props, translator, inject: vue__WEBPACK_IMPORTED_MODULE_0__.inject }
+const __returned__ = { props, translator, selection, inject: vue__WEBPACK_IMPORTED_MODULE_0__.inject }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -22635,11 +22638,21 @@ __webpack_require__.r(__webpack_exports__);
   expose();
 
 const structure = (0,vue__WEBPACK_IMPORTED_MODULE_1__.inject)('structure');
-const messenger = (0,vue__WEBPACK_IMPORTED_MODULE_1__.inject)('messenger');
+const selection = (0,vue__WEBPACK_IMPORTED_MODULE_1__.inject)('selection');
+const structureContainer = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)(null);
 
-messenger.receive('structure.changed', (data) => {
-    structure.update(data.structure);
+(0,vue__WEBPACK_IMPORTED_MODULE_1__.inject)('selection.selectedElementBoundaries').registerHtmlNodeFinder((id, type) => {
+    return structureContainer.value.querySelector(`#tued-structure-${type}-${id}`);
 });
+
+/*let elm = this.$refs['element-actions'];
+
+    this.actions.style.top = style.top - elm.offsetHeight;
+    this.actions.style.left = style.left;
+    this.actions.style.width = style.width;*/
+
+
+
 
 
 /*const Section = require('components/Editor/Structure/Section.vue').default;
@@ -22802,7 +22815,7 @@ export default {
     }
 };*/
 
-const __returned__ = { structure, messenger, Section: editor_Structure_Section_vue__WEBPACK_IMPORTED_MODULE_0__["default"], inject: vue__WEBPACK_IMPORTED_MODULE_1__.inject }
+const __returned__ = { structure, selection, structureContainer, Section: editor_Structure_Section_vue__WEBPACK_IMPORTED_MODULE_0__["default"], inject: vue__WEBPACK_IMPORTED_MODULE_1__.inject, ref: vue__WEBPACK_IMPORTED_MODULE_1__.ref }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -26042,12 +26055,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [
       (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Sizer"]),
       (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-        onMousedown: _cache[0] || (_cache[0] = $event => (_ctx.messenger.notify('editor.click.outside')))
+        onMousedown: _cache[0] || (_cache[0] = $event => ($setup.selection.deselect()))
       }, [
-        (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["DeviceFaker"], {
-          editorView: $props.editorView,
-          canvasOptions: $props.canvasOptions
-        }, null, 8 /* PROPS */, ["editorView", "canvasOptions"]),
+        (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["DeviceFaker"], { editorView: $props.editorView }, null, 8 /* PROPS */, ["editorView"]),
         (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
           class: "body-coturn body-coturn-left",
           style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)({ transform: `translateX(-${$setup.coturnPosition}px)` })
@@ -26252,9 +26262,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const _hoisted_1 = { class: "tued-sidebar-structure" }
 const _hoisted_2 = { class: "tued-structure-element tued-structure-element-section" }
-const _hoisted_3 = {
-  class: /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({ 'tued-label': true, 'tued-element-selected': false, 'tued-element-hovered': false })
-}
+const _hoisted_3 = ["onClick"]
 const _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   class: "tued-structure-draggable-handler",
   "mousedown.stop": "selection.select(section, element.id, 'sidebar')"
@@ -26272,23 +26280,26 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "component-data": { name: 'fade', as: 'transition-group', 'data-draggable-delta-transformer-parent': '' }
     }, $setup.structureDragOptions, {
       handle: ".tued-structure-element-section > .tued-label > .tued-structure-draggable-handler",
-      onChange: $setup.handleChange
+      onChange: _cache[0] || (_cache[0] = $event => ($setup.sections.update()))
     }), {
       item: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(({element}) => [
         (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [
-          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("\n                    @mouseenter=\"selection.hover('section', element.id, 'sidebar')\"\n                    @mouseleave=\"selection.resetHovered()\"\n                    @click.stop=\"selection.select('section', element.id, 'sidebar')\"\n                    @dblclick.stop=\"emits('selected')\"\n                    :tued-contextmenu=\"contextmenu.register('section', element.id)\"\n                    "),
-          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("\n                    @mouseenter=\"selection.hover('section', element.id, 'sidebar')\"\n                    @mouseleave=\"selection.resetHovered()\"\n                    @dblclick.stop=\"emits('selected')\"\n                    :tued-contextmenu=\"contextmenu.register('section', element.id)\"\n                    "),
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+            onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($setup.selectionUseCase.select(element.id, 'section')), ["stop"]),
+            class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({ 'tued-label': true, 'tued-element-selected': $setup.selection.selected.id === element.id, 'tued-element-hovered': false })
+          }, [
             _hoisted_4,
             (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translator.trans('section')), 1 /* TEXT */)
-          ]),
-          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                    <Rows\n                        :parent=\"element\"\n                        :rows=\"element.rows\"\n                        @draggable-change=\"handleChange\"\n                        @selected=\"emits('selected')\"\n                    ></Rows>")
+          ], 10 /* CLASS, PROPS */, _hoisted_3),
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                    <Rows\n                        :parent=\"element\"\n                        :rows=\"element.rows\"\n                        @draggable-change=\"sections.update()\"\n                        @selected=\"emits('selected')\"\n                    ></Rows>")
         ])
       ]),
       _: 1 /* STABLE */
     }, 16 /* FULL_PROPS */, ["list"]),
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
       class: "tued-structure-new-element",
-      onClick: _cache[0] || (_cache[0] = $event => ($setup.sections.newOne()))
+      onClick: _cache[1] || (_cache[1] = $event => ($setup.sectionsUseCase.newOne()))
     }, " New section "),
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("        <div class=\"tued-structure-new-element\" @click=\"blockPicker.new()\">\n            {{ translator.trans('newBlock') }}\n        </div>")
   ]))
@@ -26342,18 +26353,19 @@ const _hoisted_2 = { class: "tued-structure-empty-element" }
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("\n        @mouseenter=\"$emit('selection-enter', 'section', section.id)\"\n        @mouseleave=\"$emit('selection-leave', 'section', section.id)\"\n        @mousedown.stop=\"selection.select('section', section.id, 'editor')\"\n        :tued-contextmenu=\"contextmenu.register('section', section.id)\"\n    "),
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("\n        @mouseenter=\"$emit('selection-enter', 'section', section.id)\"\n        @mouseleave=\"$emit('selection-leave', 'section', section.id)\"\n        :tued-contextmenu=\"contextmenu.register('section', section.id)\"\n    "),
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("section", {
       class: "tued-structure-section tued-structure-element-selectable",
       id: $props.section.id,
-      "data-tagname": "Section"
+      "data-tagname": "Section",
+      onMousedown: _cache[0] || (_cache[0] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($setup.selection.select($props.section.id, 'section')), ["stop"]))
     }, [
       (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("        <div :class=\"containerClassname\">\n            <Row\n                v-for=\"row in props.section.rows\"\n                :id=\"'tued-structure-row-' + row.id\"\n                :key=\"row.id\"\n                :row=\"row\"\n                :parent=\"section\"\n                @selection-enter=\"(type, id) => $emit('selection-enter', type, id)\"\n                @selection-leave=\"(type, id) => $emit('selection-leave', type, id)\"\n            ></Row>\n        </div>"),
       (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [
-        (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translator.trans('emptySection')), 1 /* TEXT */)
+        (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translator.trans('emptySection')) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.section.id), 1 /* TEXT */)
       ]),
       (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("        <div\n            class=\"tued-structure-empty-element\"\n            v-if=\"props.section.rows.length === 0\"\n        >\n            <span>{{ translator.trans('emptySection') }}</span>\n        </div>")
-    ], 8 /* PROPS */, _hoisted_1)
+    ], 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_1)
   ], 2112 /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */))
 }
 
@@ -26374,7 +26386,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 
 
-const _hoisted_1 = { class: "tued-structure" }
+const _hoisted_1 = {
+  class: "tued-structure",
+  ref: "structureContainer"
+}
+const _hoisted_2 = { class: "tued-node-name" }
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [
@@ -26387,8 +26403,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, null, 8 /* PROPS */, ["id", "section"]))
     }), 128 /* KEYED_FRAGMENT */)),
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("        <div class=\"tued-structure-new-element\" @click=\"newBlock()\">\n            {{ translator.trans('newBlock') }}\n        </div>"),
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("        <div\n            class=\"tued-element-boundaries tued-element-selected-boundaries\"\n            :style=\"{\n                left: selectable.style.left + 'px',\n                top: selectable.style.top + 'px',\n                width: selectable.style.width + 'px',\n                height: selectable.style.height + 'px',\n            }\"\n        >\n            <div class=\"tued-node-name\">{{ selectable.style.tagName }}</div>\n        </div>\n        <div\n            class=\"tued-element-boundaries tued-element-hovered-boundaries\"\n            :style=\"{\n                left: hoverable.style.left + 'px',\n                top: hoverable.style.top + 'px',\n                width: hoverable.style.width + 'px',\n                height: hoverable.style.height + 'px',\n            }\"\n        >\n        </div>\n        <div\n            class=\"tued-element-actions\"\n            ref=\"element-actions\"\n            :style=\"{\n                width: actions.style.width + 'px',\n                left: actions.style.left + 'px',\n                top: actions.style.top + 'px',\n            }\"\n        >\n            <div\n                class=\"tued-element-action\"\n                :title=\"translator.trans('selectParentElement')\"\n                @click=\"selectParentSelectable()\"\n                v-if=\"actions.activeness.selectParent\"\n            ><i class=\"fas fa-long-arrow-alt-up\"></i></div>\n            <div\n                class=\"tued-element-action\"\n                :title=\"translator.trans('delete')\"\n                @click=\"deleteSelectedElement()\"\n                v-if=\"actions.activeness.delete\"\n            ><i class=\"fas fa-trash\"></i></div>\n        </div>")
-  ]))
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+      class: "tued-element-boundaries tued-element-selected-boundaries",
+      style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)({
+                left: $setup.selection.selected.boundaries.left + 'px',
+                top: $setup.selection.selected.boundaries.top + 'px',
+                width: $setup.selection.selected.boundaries.width + 'px',
+                height: $setup.selection.selected.boundaries.height + 'px',
+            })
+    }, [
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.selection.selected.tagName), 1 /* TEXT */)
+    ], 4 /* STYLE */),
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("<div\n            class=\"tued-element-boundaries tued-element-hovered-boundaries\"\n            :style=\"{\n                left: hoverable.style.left + 'px',\n                top: hoverable.style.top + 'px',\n                width: hoverable.style.width + 'px',\n                height: hoverable.style.height + 'px',\n            }\"\n        >\n        </div>\n        <div\n            class=\"tued-element-actions\"\n            ref=\"element-actions\"\n            :style=\"{\n                width: actions.style.width + 'px',\n                left: actions.style.left + 'px',\n                top: actions.style.top + 'px',\n            }\"\n        >\n            <div\n                class=\"tued-element-action\"\n                :title=\"translator.trans('selectParentElement')\"\n                @click=\"selectParentSelectable()\"\n                v-if=\"actions.activeness.selectParent\"\n            ><i class=\"fas fa-long-arrow-alt-up\"></i></div>\n            <div\n                class=\"tued-element-action\"\n                :title=\"translator.trans('delete')\"\n                @click=\"deleteSelectedElement()\"\n                v-if=\"actions.activeness.delete\"\n            ><i class=\"fas fa-trash\"></i></div>\n        </div>")
+  ], 512 /* NEED_PATCH */))
 }
 
 /***/ }),
@@ -27732,6 +27759,8 @@ class Admin {
         //if (this.options.start_point === 'editor') {
         //    this.openEditor();
         //}
+
+        this.container.get('eventBus').dispatch('admin.ready');
     }
 
     openEditor () {
@@ -27905,6 +27934,7 @@ class Editor {
 
             this.container.get('view').render();
             this.container.get('structure').update(data.structure);
+            this.container.get('eventBus').dispatch('editor.ready');
         });
 
         messenger.send('init.editor');
@@ -28247,6 +28277,60 @@ const useCanvasStore = (0,pinia__WEBPACK_IMPORTED_MODULE_1__.defineStore)('canva
 
 /***/ }),
 
+/***/ "./src/js/core/Admin/Data/Store/Selection.js":
+/*!***************************************************!*\
+  !*** ./src/js/core/Admin/Data/Store/Selection.js ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "useSelectionStore": () => (/* binding */ useSelectionStore)
+/* harmony export */ });
+/* harmony import */ var pinia__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! pinia */ "./node_modules/pinia/dist/pinia.mjs");
+/* harmony import */ var core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core/Shared/Utils/ObjectCloner */ "./src/js/core/Shared/Utils/ObjectCloner.js");
+
+
+
+const useSelectionStore = (0,pinia__WEBPACK_IMPORTED_MODULE_1__.defineStore)('selection', {
+    state: () => {
+        return {
+            disableSelection: false,
+            selected: {
+                id: null,
+                type: null,
+            },
+            disableHovering: false,
+            hovered: {
+                id: null,
+                type: null,
+            },
+        };
+    },
+    actions: {
+        select(id, type) {
+            this.selected.type = type;
+            this.selected.id = id;
+        },
+        deselect() {
+            this.selected.type = null;
+            this.selected.id = null;
+        },
+    },
+    getters: {
+        export() {
+            return {
+                hovered: core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_0__["default"].deepClone(this.hovered),
+                selected: core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_0__["default"].deepClone(this.selected),
+            };
+        },
+    },
+});
+
+
+/***/ }),
+
 /***/ "./src/js/core/Admin/Data/Store/Structure.js":
 /*!***************************************************!*\
   !*** ./src/js/core/Admin/Data/Store/Structure.js ***!
@@ -28357,7 +28441,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_Admin_View_Subscriber_BuildVueOnHtmlReady__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core/Admin/View/Subscriber/BuildVueOnHtmlReady */ "./src/js/core/Admin/View/Subscriber/BuildVueOnHtmlReady.js");
 /* harmony import */ var core_Admin_Data_Store_StructureStoreFactory__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core/Admin/Data/Store/StructureStoreFactory */ "./src/js/core/Admin/Data/Store/StructureStoreFactory.js");
 /* harmony import */ var core_Admin_UseCase_Sections__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core/Admin/UseCase/Sections */ "./src/js/core/Admin/UseCase/Sections.js");
-/* harmony import */ var core_Admin_View_Canvas__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core/Admin/View/Canvas */ "./src/js/core/Admin/View/Canvas.js");
+/* harmony import */ var core_Admin_UseCase_Selection__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core/Admin/UseCase/Selection */ "./src/js/core/Admin/UseCase/Selection.js");
+/* harmony import */ var core_Admin_Data_Store_Selection__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core/Admin/Data/Store/Selection */ "./src/js/core/Admin/Data/Store/Selection.js");
+/* harmony import */ var core_Admin_View_Canvas__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core/Admin/View/Canvas */ "./src/js/core/Admin/View/Canvas.js");
+/* harmony import */ var core_Admin_Subscriber_Editor_SelectionSubscriber__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core/Admin/Subscriber/Editor/SelectionSubscriber */ "./src/js/core/Admin/Subscriber/Editor/SelectionSubscriber.js");
+
+
+
 
 
 
@@ -28371,14 +28461,16 @@ class Container extends core_Shared_DependencyInjection_AbstractContainer__WEBPA
 
         this.register('view', this._buildView);
         this.register('usecase.sections', () => new core_Admin_UseCase_Sections__WEBPACK_IMPORTED_MODULE_4__["default"](this.get('structure'), this.get('messenger')));
-        this.register('canvas', () => new core_Admin_View_Canvas__WEBPACK_IMPORTED_MODULE_5__["default"](this.getParameter('options')));
+        this.register('usecase.selection', () => new core_Admin_UseCase_Selection__WEBPACK_IMPORTED_MODULE_5__["default"](this.get('selection'), this.get('messenger')));
+        this.register('canvas', () => new core_Admin_View_Canvas__WEBPACK_IMPORTED_MODULE_7__["default"](this.getParameter('options')));
         this.register('structure', () => {
             return (new core_Admin_Data_Store_StructureStoreFactory__WEBPACK_IMPORTED_MODULE_3__["default"](this.getParameter('options'))).factory();
         });
+        this.register('selection', () => (0,core_Admin_Data_Store_Selection__WEBPACK_IMPORTED_MODULE_6__.useSelectionStore)());
 
         // Subscribers
         this.register(
-            'subscriber.buildVueOnHtmlReady',
+            'subscriber.BuildVueOnHtmlReady',
             () => new core_Admin_View_Subscriber_BuildVueOnHtmlReady__WEBPACK_IMPORTED_MODULE_2__["default"](
                 this.get('vueFactory'),
                 this.getParameter('options'),
@@ -28390,6 +28482,14 @@ class Container extends core_Shared_DependencyInjection_AbstractContainer__WEBPA
                 this,
             ),
             { tags: [{ name: 'event_listener', on: 'admin.view.ready', call: 'build' }] }
+        );
+        this.register(
+            'subscriber.EditorSelectionSubscriber',
+            () => new core_Admin_Subscriber_Editor_SelectionSubscriber__WEBPACK_IMPORTED_MODULE_8__["default"](
+                this.get('messenger'),
+                this.get('usecase.selection'),
+            ),
+            { tags: [{ name: 'event_listener', on: 'admin.view.ready', call: 'registerReceivers' }] }
         );
 
         super.finish();
@@ -28403,6 +28503,37 @@ class Container extends core_Shared_DependencyInjection_AbstractContainer__WEBPA
             this.get('admin'),
             this.get('eventBus'),
         );
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/core/Admin/Subscriber/Editor/SelectionSubscriber.js":
+/*!********************************************************************!*\
+  !*** ./src/js/core/Admin/Subscriber/Editor/SelectionSubscriber.js ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ SelectionSubscriber)
+/* harmony export */ });
+class SelectionSubscriber {
+    constructor(messenger, selection) {
+        this.messenger = messenger;
+        this.selection = selection;
+    }
+
+    registerReceivers() {
+        const self = this;
+
+        this.messenger.receive('editor.selection.select', (data) => self.select(data.id, data.type));
+    }
+
+    select(id, type) {
+        this.selection.select(id, type);
     }
 }
 
@@ -28436,8 +28567,45 @@ class Sections {
     }
 
     update() {
-        this.messenger.send('structure.changed', {
+        this.messenger.send('admin.structure.changed', {
             structure: this.structure.export,
+        });
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/core/Admin/UseCase/Selection.js":
+/*!************************************************!*\
+  !*** ./src/js/core/Admin/UseCase/Selection.js ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Selection)
+/* harmony export */ });
+class Selection {
+    constructor(selection, messenger) {
+        this.selection = selection;
+        this.messenger = messenger;
+    }
+
+    select(id, type) {
+        this.selection.select(id, type);
+        this.update();
+    }
+
+    deselect() {
+        this.selection.deselect();
+        this.update();
+    }
+
+    update() {
+        this.messenger.send('admin.selection.changed', {
+            selection: this.selection.export,
         });
     }
 }
@@ -28608,6 +28776,67 @@ class View {
 
 /***/ }),
 
+/***/ "./src/js/core/Editor/Data/Store/Selection.js":
+/*!****************************************************!*\
+  !*** ./src/js/core/Editor/Data/Store/Selection.js ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "useSelectionStore": () => (/* binding */ useSelectionStore)
+/* harmony export */ });
+/* harmony import */ var pinia__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pinia */ "./node_modules/pinia/dist/pinia.mjs");
+
+
+const useSelectionStore = (0,pinia__WEBPACK_IMPORTED_MODULE_0__.defineStore)('selection', {
+    state: () => {
+        return {
+            selected: {
+                id: null,
+                type: null,
+                tagName: 'div',
+                boundaries: {
+                    left: -100,
+                    top: -100,
+                    width: 0,
+                    height: 0,
+                    scrollTop: null,
+                },
+            },
+            hovered: {
+                id: null,
+                type: null,
+                boundaries: {
+                    left: -100,
+                    top: -100,
+                    width: 0,
+                    height: 0,
+                    scrollTop: null,
+                },
+            },
+        };
+    },
+    actions: {
+        update(selection) {
+            this.selected.type = selection?.selected?.type;
+            this.selected.id = selection?.selected?.id;
+            this.hovered.type = selection?.hovered?.type;
+            this.hovered.id = selection?.hovered?.id;
+        },
+        export() {
+            return {
+                hovered: { id: this.hovered.id, type: this.hovered.type },
+                selected: { id: this.selected.id, type: this.selected.type },
+            };
+        },
+    },
+});
+
+
+/***/ }),
+
 /***/ "./src/js/core/Editor/Data/Store/Structure.js":
 /*!****************************************************!*\
   !*** ./src/js/core/Editor/Data/Store/Structure.js ***!
@@ -28659,6 +28888,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_Editor_View_View__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core/Editor/View/View */ "./src/js/core/Editor/View/View.js");
 /* harmony import */ var core_Editor_View_Subscriber_BuildVueOnHtmlReady__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core/Editor/View/Subscriber/BuildVueOnHtmlReady */ "./src/js/core/Editor/View/Subscriber/BuildVueOnHtmlReady.js");
 /* harmony import */ var core_Editor_Data_Store_Structure__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core/Editor/Data/Store/Structure */ "./src/js/core/Editor/Data/Store/Structure.js");
+/* harmony import */ var core_Editor_Data_Store_Selection__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core/Editor/Data/Store/Selection */ "./src/js/core/Editor/Data/Store/Selection.js");
+/* harmony import */ var core_Editor_Subscriber_Admin_SelectionSubscriber__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core/Editor/Subscriber/Admin/SelectionSubscriber */ "./src/js/core/Editor/Subscriber/Admin/SelectionSubscriber.js");
+/* harmony import */ var core_Editor_Subscriber_Admin_StructureSubscriber__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core/Editor/Subscriber/Admin/StructureSubscriber */ "./src/js/core/Editor/Subscriber/Admin/StructureSubscriber.js");
+/* harmony import */ var core_Editor_Subscriber_Editor_SelectionSubscriber__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core/Editor/Subscriber/Editor/SelectionSubscriber */ "./src/js/core/Editor/Subscriber/Editor/SelectionSubscriber.js");
+/* harmony import */ var core_Editor_Selection_Boundaries_SelectedElementBoundaries__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core/Editor/Selection/Boundaries/SelectedElementBoundaries */ "./src/js/core/Editor/Selection/Boundaries/SelectedElementBoundaries.js");
+/* harmony import */ var core_Editor_UseCase_Selection__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core/Editor/UseCase/Selection */ "./src/js/core/Editor/UseCase/Selection.js");
+
+
+
+
+
+
 
 
 
@@ -28670,6 +28911,9 @@ class Container extends core_Shared_DependencyInjection_AbstractContainer__WEBPA
 
         this.register('view', () => new core_Editor_View_View__WEBPACK_IMPORTED_MODULE_1__["default"](this.get('eventBus')));
         this.register('structure', () => (0,core_Editor_Data_Store_Structure__WEBPACK_IMPORTED_MODULE_3__.useStructureStore)());
+        this.register('selection', () => (0,core_Editor_Data_Store_Selection__WEBPACK_IMPORTED_MODULE_4__.useSelectionStore)());
+        this.register('selection.selectedElementBoundaries', () => new core_Editor_Selection_Boundaries_SelectedElementBoundaries__WEBPACK_IMPORTED_MODULE_8__["default"](this.get('selection')));
+        this.register('usecase.selection', () => new core_Editor_UseCase_Selection__WEBPACK_IMPORTED_MODULE_9__["default"](this.get('messenger')));
 
         // Subscribers
         this.register(
@@ -28686,8 +28930,305 @@ class Container extends core_Shared_DependencyInjection_AbstractContainer__WEBPA
             ),
             { tags: [{ name: 'event_listener', on: 'editor.view.ready', call: 'build' }] }
         );
+        this.register(
+            'subscriber.selectionSubscriber',
+            () => new core_Editor_Subscriber_Admin_SelectionSubscriber__WEBPACK_IMPORTED_MODULE_5__["default"](
+                this.get('selection'),
+                this.get('messenger'),
+                this.get('eventBus'),
+            ),
+            { tags: [{ name: 'event_listener', on: 'editor.ready', call: 'registerReceivers' }] }
+        );
+        this.register(
+            'subscriber.StructureSubscriber',
+            () => new core_Editor_Subscriber_Admin_StructureSubscriber__WEBPACK_IMPORTED_MODULE_6__["default"](
+                this.get('structure'),
+                this.get('messenger'),
+                this.get('eventBus'),
+            ),
+            { tags: [{ name: 'event_listener', on: 'editor.ready', call: 'registerReceivers' }] }
+        );
+        this.register(
+            'subscriber.EditorSelectionSubscriber',
+            () => new core_Editor_Subscriber_Editor_SelectionSubscriber__WEBPACK_IMPORTED_MODULE_7__["default"](
+                this.get('selection.selectedElementBoundaries'),
+            ),
+            { tags: [
+                { name: 'event_listener', on: 'selection.selected', call: 'select' },
+                { name: 'event_listener', on: 'selection.deselected', call: 'deselect' },
+                { name: 'event_listener', on: 'structure.changed', call: 'update' },
+            ] }
+        );
 
         super.finish();
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/core/Editor/Selection/Boundaries/ElementOffset.js":
+/*!******************************************************************!*\
+  !*** ./src/js/core/Editor/Selection/Boundaries/ElementOffset.js ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ElementOffset)
+/* harmony export */ });
+class ElementOffset {
+    static get(el) {
+        const rect = el.getBoundingClientRect(),
+            scrollLeft = document.documentElement.scrollLeft,
+            scrollTop = document.documentElement.scrollTop;
+
+        return {
+            top: rect.top + scrollTop,
+            left: rect.left + scrollLeft
+        };
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/core/Editor/Selection/Boundaries/SelectedElementBoundaries.js":
+/*!******************************************************************************!*\
+  !*** ./src/js/core/Editor/Selection/Boundaries/SelectedElementBoundaries.js ***!
+  \******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ SelectedElementBoundaries)
+/* harmony export */ });
+/* harmony import */ var core_Editor_Selection_Boundaries_ElementOffset__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core/Editor/Selection/Boundaries/ElementOffset */ "./src/js/core/Editor/Selection/Boundaries/ElementOffset.js");
+
+
+class SelectedElementBoundaries {
+    selectedElement;
+    positionUpdateAnimationFrameHandle;
+    hidden = false;
+    htmlNodeFinder;
+
+    constructor(selection) {
+        this.selection = selection;
+    }
+
+    registerHtmlNodeFinder(htmlNodeFinder) {
+        this.htmlNodeFinder = htmlNodeFinder;
+    }
+
+    highlightSelected(id, type) {
+        this.selectedElement = this.htmlNodeFinder(id, type);
+        this.updatePosition();
+    }
+
+    clearSelectionHighlight() {
+        this.selectedElement = null;
+        this.resetPosition();
+    }
+
+    hide() {
+        this.hidden = true;
+        this.resetPosition();
+    }
+
+    show() {
+        this.hidden = false;
+        this.updatePosition();
+    }
+
+    update() {
+        this.updatePosition();
+    }
+
+    keepUpdatePositionFor(microseconds) {
+        let self = this;
+
+        function doTheUdate() {
+            self.updatePosition();
+            self.positionUpdateAnimationFrameHandle = requestAnimationFrame(doTheUdate);
+        }
+
+        requestAnimationFrame(doTheUdate);
+
+        setTimeout(() => {
+            cancelAnimationFrame(self.positionUpdateAnimationFrameHandle);
+        }, microseconds);
+    }
+
+    updatePosition() {
+        if (!this.selectedElement || this.hidden) {
+            return;
+        }
+
+        let doc = this.selectedElement.ownerDocument;
+
+        let offset = core_Editor_Selection_Boundaries_ElementOffset__WEBPACK_IMPORTED_MODULE_0__["default"].get(this.selectedElement);
+
+        this.selection.selected.boundaries.top = offset.top;
+        this.selection.selected.boundaries.left = offset.left;
+        this.selection.selected.boundaries.width = this.selectedElement.offsetWidth;
+        this.selection.selected.boundaries.height = this.selectedElement.offsetHeight;
+        this.selection.selected.tagName = this.selectedElement.dataset.tagname ?? this.selectedElement.tagName;
+        // @todo Remove dependency to jQuery
+        this.selection.selected.scrollTop = $(doc.defaultView || doc.parentWindow).scrollTop();
+    }
+
+    resetPosition() {
+        this.selection.selected.boundaries.top = -100;
+        this.selection.selected.boundaries.left = -100;
+        this.selection.selected.boundaries.width = 0;
+        this.selection.selected.boundaries.height = 0;
+        this.selection.selected.tagName = null;
+        // @todo Remove dependency to jQuery
+        this.selection.selected.scrollTop = 0;
+    }
+};
+
+
+/***/ }),
+
+/***/ "./src/js/core/Editor/Subscriber/Admin/SelectionSubscriber.js":
+/*!********************************************************************!*\
+  !*** ./src/js/core/Editor/Subscriber/Admin/SelectionSubscriber.js ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ SelectionSubscriber)
+/* harmony export */ });
+class SelectionSubscriber {
+    constructor(selection, messenger, eventBus) {
+        this.selection = selection;
+        this.messenger = messenger;
+        this.eventBus = eventBus;
+    }
+
+    registerReceivers() {
+        const self = this;
+
+        this.messenger.receive('admin.selection.changed', (data) => self.processChanged(data.selection));
+    }
+
+    processChanged(selection) {
+        const before = this.selection.export();
+        this.selection.update(selection);
+        const after = this.selection.export();
+
+        if (before.selected.id !== after.selected.id) {
+            if (after.selected.id) {
+                this.eventBus.dispatch('selection.selected', { id: after.selected.id, type: after.selected.type });
+            } else {
+                this.eventBus.dispatch('selection.deselected');
+            }
+        }
+        if (before.hovered.id !== after.hovered.id) {
+            if (after.hovered.id) {
+                this.eventBus.dispatch('selection.hovered', { id: after.hovered.id, type: after.hovered.type });
+            } else {
+                this.eventBus.dispatch('selection.dehovered');
+            }
+        }
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/core/Editor/Subscriber/Admin/StructureSubscriber.js":
+/*!********************************************************************!*\
+  !*** ./src/js/core/Editor/Subscriber/Admin/StructureSubscriber.js ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ StructureSubscriber)
+/* harmony export */ });
+class StructureSubscriber {
+    constructor(structure, messenger, eventBus) {
+        this.structure = structure;
+        this.messenger = messenger;
+        this.eventBus = eventBus;
+    }
+
+    registerReceivers() {
+        const self = this;
+
+        this.messenger.receive('admin.structure.changed', (data) => self.processChanged(data.structure));
+    }
+
+    processChanged(newStructure) {
+        this.structure.update(newStructure);
+        this.eventBus.dispatch('structure.changed');
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/core/Editor/Subscriber/Editor/SelectionSubscriber.js":
+/*!*********************************************************************!*\
+  !*** ./src/js/core/Editor/Subscriber/Editor/SelectionSubscriber.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ SelectionSubscriber)
+/* harmony export */ });
+class SelectionSubscriber {
+    constructor(elementBoundaries) {
+        this.elementBoundaries = elementBoundaries;
+    }
+
+    select(newSelected) {
+        this.elementBoundaries.highlightSelected(newSelected.id, newSelected.type);
+    }
+
+    deselect() {
+        this.elementBoundaries.clearSelectionHighlight();
+    }
+
+    update() {
+        setTimeout(() => this.elementBoundaries.updatePosition(), 50);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/core/Editor/UseCase/Selection.js":
+/*!*************************************************!*\
+  !*** ./src/js/core/Editor/UseCase/Selection.js ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Selection)
+/* harmony export */ });
+class Selection {
+    constructor(messenger) {
+        this.messenger = messenger;
+    }
+
+    select(id, type) {
+        this.messenger.send('editor.selection.select', { id, type });
+    }
+
+    deselect() {
+
     }
 }
 
@@ -28788,7 +29329,13 @@ class EventBus {
     dispatch(event, data) {
         if (this.listeners[event]) {
             for (let i in this.listeners[event]) {
-                this.listeners[event][i].call(null, data);
+                this.listeners[event][i].call(null, data, event);
+            }
+        }
+
+        if (this.listeners['*']) {
+            for (let i in this.listeners['*']) {
+                this.listeners['*'][i].call(null, data, event);
             }
         }
     }
@@ -28928,6 +29475,10 @@ class AbstractContainer {
     }
 
     create(id) {
+        if (!this.definitions[id]) {
+            throw new Error(`Service "${id}" does not exists.`);
+        }
+
         const service = this.definitions[id].factory.apply(this);
 
         if (!service) {
@@ -28938,15 +29489,22 @@ class AbstractContainer {
     }
 
     finish() {
-        for (let i in this.definitions) {
-            if (this.definitions[i].options.tags) {
-                for (let t in this.definitions[i].options.tags) {
-                    if (this.definitions[i].options.tags[t].name === 'event_listener') {
-                        this.processEventBusTaggableService(i, this.definitions[i].options.tags[t]);
+        this.get('eventBus').listen('*', (data, event) => {
+            for (let id in this.definitions) {
+                if (this.definitions[id].options.tags) {
+                    for (let t in this.definitions[id].options.tags) {
+                        if (
+                            this.definitions[id].options.tags[t].name === 'event_listener'
+                            && this.definitions[id].options.tags[t].on === event
+                        ) {
+                            const service = this.get(id);
+
+                            service[this.definitions[id].options.tags[t].call].call(service, data, event);
+                        }
                     }
                 }
             }
-        }
+        });
     }
 
     _buildTranslator() {
@@ -28955,14 +29513,6 @@ class AbstractContainer {
             this.options.fallback_locales,
             this.getParameter('options.translations'),
         );
-    }
-
-    processEventBusTaggableService(id, tag) {
-        const service = this.get(id);
-
-        this.get('eventBus').listen(tag.on, function (data) {
-            service[tag.call].call(service, data);
-        });
     }
 }
 

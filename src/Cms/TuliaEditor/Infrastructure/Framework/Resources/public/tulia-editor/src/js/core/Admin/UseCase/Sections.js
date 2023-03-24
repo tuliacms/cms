@@ -14,7 +14,7 @@ export default class Sections {
     }
 
     update() {
-        this.messenger.send('structure.changed', {
+        this.messenger.send('admin.structure.changed', {
             structure: this.structure.export,
         });
     }

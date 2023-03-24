@@ -2,13 +2,13 @@
     <!--
         @mouseenter="$emit('selection-enter', 'section', section.id)"
         @mouseleave="$emit('selection-leave', 'section', section.id)"
-        @mousedown.stop="selection.select('section', section.id, 'editor')"
         :tued-contextmenu="contextmenu.register('section', section.id)"
     -->
     <section
         class="tued-structure-section tued-structure-element-selectable"
         :id="section.id"
         data-tagname="Section"
+        @mousedown.stop="selection.select(section.id, 'section')"
     >
 <!--        <div :class="containerClassname">
             <Row
@@ -22,7 +22,7 @@
             ></Row>
         </div>-->
         <div class="tued-structure-empty-element">
-            <span>{{ translator.trans('emptySection') }}</span>
+            <span>{{ translator.trans('emptySection') }} {{ section.id }}</span>
         </div>
 <!--        <div
             class="tued-structure-empty-element"
@@ -38,6 +38,7 @@ import { defineProps, inject } from "vue";
 
 const props = defineProps(['section']);
 const translator = inject('translator');
+const selection = inject('usecase.selection');
 
 /*const Row = require('./Row.vue').default;
 const { defineProps, inject, computed } = require('vue');

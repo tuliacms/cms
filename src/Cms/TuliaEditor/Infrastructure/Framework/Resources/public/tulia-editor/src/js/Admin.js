@@ -68,6 +68,8 @@ export default class Admin {
         //if (this.options.start_point === 'editor') {
         //    this.openEditor();
         //}
+
+        this.container.get('eventBus').dispatch('admin.ready');
     }
 
     openEditor () {

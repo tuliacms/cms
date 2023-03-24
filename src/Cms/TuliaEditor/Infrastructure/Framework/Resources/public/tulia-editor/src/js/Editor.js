@@ -25,6 +25,7 @@ export default class Editor {
 
             this.container.get('view').render();
             this.container.get('structure').update(data.structure);
+            this.container.get('eventBus').dispatch('editor.ready');
         });
 
         messenger.send('init.editor');

@@ -3,7 +3,10 @@ import View from "core/Admin/View/View";
 import BuildVueOnHtmlReady from "core/Admin/View/Subscriber/BuildVueOnHtmlReady";
 import StructureStoreFactory from "core/Admin/Data/Store/StructureStoreFactory";
 import Sections from "core/Admin/UseCase/Sections";
+import Selection from "core/Admin/UseCase/Selection";
+import { useSelectionStore } from "core/Admin/Data/Store/Selection";
 import Canvas from "core/Admin/View/Canvas";
+import EditorSelectionSubscriber from "core/Admin/Subscriber/Editor/SelectionSubscriber";
 
 export default class Container extends AbstractContainer {
     build() {
@@ -11,14 +14,16 @@ export default class Container extends AbstractContainer {
 
         this.register('view', this._buildView);
         this.register('usecase.sections', () => new Sections(this.get('structure'), this.get('messenger')));
+        this.register('usecase.selection', () => new Selection(this.get('selection'), this.get('messenger')));
         this.register('canvas', () => new Canvas(this.getParameter('options')));
         this.register('structure', () => {
             return (new StructureStoreFactory(this.getParameter('options'))).factory();
         });
+        this.register('selection', () => useSelectionStore());
 
         // Subscribers
         this.register(
-            'subscriber.buildVueOnHtmlReady',
+            'subscriber.BuildVueOnHtmlReady',
             () => new BuildVueOnHtmlReady(
                 this.get('vueFactory'),
                 this.getParameter('options'),
@@ -30,6 +35,14 @@ export default class Container extends AbstractContainer {
                 this,
             ),
             { tags: [{ name: 'event_listener', on: 'admin.view.ready', call: 'build' }] }
+        );
+        this.register(
+            'subscriber.EditorSelectionSubscriber',
+            () => new EditorSelectionSubscriber(
+                this.get('messenger'),
+                this.get('usecase.selection'),
+            ),
+            { tags: [{ name: 'event_listener', on: 'admin.view.ready', call: 'registerReceivers' }] }
         );
 
         super.finish();
