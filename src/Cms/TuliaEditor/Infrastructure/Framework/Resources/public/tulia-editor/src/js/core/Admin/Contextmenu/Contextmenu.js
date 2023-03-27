@@ -1,31 +1,58 @@
-const ContextmenuEventTransformer = require("shared/Contextmenu/EventTransformer.js").default;
+import EventTransformer from "core/Shared/ContextMenu/EventTransformer";
 
-export default class {
-    source;
-    messenger;
+export default class Contextmenu {
     itemsCollection = {};
 
-    constructor (source, messenger) {
-        this.source = source;
-        this.messenger = messenger;
+    constructor(store) {
+        this.store = store;
     }
 
-    open (event) {
+    setEditorOffsetProvider(provider) {
+        this.editorOffsetProvider = provider;
+    }
+
+    open(event) {
         if (this.isTextSelected()) {
+            return;
+        }
+
+        const result = EventTransformer.transformPointerEvent(event);
+        const collection = this.collectItems(result.targets);
+
+        if (!collection.total) {
             return;
         }
 
         event.preventDefault();
 
-        this.messenger.execute('contextmenu', ContextmenuEventTransformer.transformPointerEvent(event))
+        this.store.open(collection, result.position);
     }
 
-    isTextSelected () {
-        let selection = window.getSelection();
+    openFromEditor(targets, position) {
+        const collection = this.collectItems(targets);
+
+        if (!collection.total) {
+            return;
+        }
+
+        const offset = this.editorOffsetProvider();
+
+        position.x = position.x + offset.left;
+        position.y = position.y + offset.top;
+
+        this.store.open(collection, position);
+    }
+
+    hide() {
+        this.store.hide();
+    }
+
+    isTextSelected() {
+        const selection = window.getSelection();
         return selection && selection.type === 'Range';
     };
 
-    register (type, elementId, data) {
+    register(type, elementId, data) {
         return JSON.stringify({
             type: type,
             elementId: elementId,
@@ -33,11 +60,7 @@ export default class {
         });
     }
 
-    items (id, type, callback) {
-        if (this.source === 'editor') {
-            throw new Error('Cannot register Contextmenu items in Editor. Please use a Manager section to do this.');
-        }
-
+    items(id, type, callback) {
         if (false === this.itemsCollection.hasOwnProperty(type)) {
             this.itemsCollection[type] = {};
         }
@@ -45,7 +68,7 @@ export default class {
         this.itemsCollection[type][id] = callback;
     }
 
-    collectItems (targets) {
+    collectItems(targets) {
         let items = [];
 
         for (let t in targets) {
@@ -98,7 +121,7 @@ export default class {
         return groups;
     }
 
-    prepareCallbacks (items, elementId) {
+    prepareCallbacks(items, elementId) {
         for (let i in items) {
             if (false === items[i].hasOwnProperty('onClick')) {
                 items[i].onClick = () => {};

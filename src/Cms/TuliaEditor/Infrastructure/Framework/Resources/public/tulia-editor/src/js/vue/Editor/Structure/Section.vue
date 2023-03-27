@@ -1,7 +1,4 @@
 <template>
-    <!--
-        :tued-contextmenu="contextmenu.register('section', section.id)"
-    -->
     <section
         class="tued-structure-section tued-structure-element-selectable"
         :id="section.id"
@@ -9,6 +6,7 @@
         @mousedown.stop="selection.select(section.id, 'section')"
         @mouseenter="$emit('selection-enter', section.id, 'section')"
         @mouseleave="$emit('selection-leave', section.id, 'section')"
+        :tued-contextmenu="contextmenu.register('section', section.id)"
     >
 <!--        <div :class="containerClassname">
             <Row
@@ -39,6 +37,7 @@ import { defineProps, inject } from "vue";
 const props = defineProps(['section']);
 const translator = inject('translator');
 const selection = inject('usecase.selection');
+const contextmenu = inject('contextmenu');
 
 /*const Row = require('./Row.vue').default;
 const { defineProps, inject, computed } = require('vue');

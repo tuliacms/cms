@@ -1,7 +1,9 @@
 <template>
     <div class="tued-editor-window-inner">
         <div class="tued-container">
-            <Sidebar></Sidebar>
+            <Sidebar
+                @contextmenu="(event) => contextmenu.open(event)"
+            ></Sidebar>
             <Canvas
                 :editorView="options.editor.view + '?tuliaEditorInstance=' + instanceId"
                 ref="canvas"
@@ -19,10 +21,10 @@
         </div>
         <!--<div v-for="(ext, key) in mountedExtensions" :key="key">
             <component :is="ext.code + 'Manager'" :instance="ext.instance"></component>
-        </div>
+        </div>-->
         <Teleport to="body">
-            <div class="dropdown-menu show tued-contextmenu" v-if="contextmenu.opened" :style="{ top: contextmenu.position.y + 'px', left: contextmenu.position.x + 'px' }">
-                <div v-for="group in contextmenu.items.collection" class="tued-dropdown-menu-group">
+            <div class="dropdown-menu show tued-contextmenu" v-if="contextmenuStore.opened" :style="{ top: contextmenuStore.position.y + 'px', left: contextmenuStore.position.x + 'px' }">
+                <div v-for="group in contextmenuStore.items" class="tued-dropdown-menu-group">
                     <div v-if="group.label"><h6 class="dropdown-header">{{ group.label }}</h6></div>
                     <div v-for="item in group.items">
                         <a :class="contextmenuItemClass(item)" href="#" @click="item.callback()">
@@ -32,14 +34,14 @@
                     </div>
                 </div>
             </div>
-        </Teleport>-->
+        </Teleport>
     </div>
 </template>
 
 <script setup>
 import Sidebar from "admin/Sidebar/Sidebar.vue";
 import Canvas from "admin/Canvas/Canvas.vue";
-import { provide, defineProps } from "vue";
+import { provide, defineProps, onMounted, ref } from "vue";
 
 const props = defineProps(['container']);
 
@@ -50,6 +52,49 @@ provide('structureDragOptions', {
         ghostClass: 'tued-structure-draggable-ghost'
     }
 });
+
+const contextmenuItemIcon = item => {
+    return 'dropdown-icon ' + item.icon;
+};
+const contextmenuItemClass = item => {
+    let classname = 'dropdown-item';
+
+    if (item.icon) {
+        classname += ' dropdown-item-with-icon';
+    }
+
+    return classname + ' ' + item.classname;
+};
+
+const options = props.container.getParameter('options');
+const instanceId = props.container.getParameter('instanceId');
+
+
+/**************
+ * Contextmenu
+ *************/
+const contextmenu = props.container.get('usecase.contextmenu');
+const contextmenuStore = props.container.get('contextmenu.store');
+
+const canvas = ref(null);
+
+contextmenu.setEditorOffsetProvider(() => {
+    const iframe = canvas.value.$el.querySelector('.tued-canvas-device-faker iframe');
+
+    return {
+        left: iframe.getBoundingClientRect().left,
+        top: iframe.getBoundingClientRect().top,
+    };
+});
+
+onMounted(() => {
+    document.body.addEventListener('click', (e) => contextmenu.hide());
+});
+
+
+
+
+
 
 
 
@@ -65,12 +110,11 @@ provide('admin', props.container.get('admin'));
 provide('canvas', props.container.get('canvas'));
 provide('usecase.sections', props.container.get('usecase.sections'));
 provide('usecase.selection', props.container.get('usecase.selection'));
+provide('usecase.draggable', props.container.get('usecase.draggable'));
+provide('usecase.contextmenu', props.container.get('usecase.contextmenu'));
 provide('messenger', props.container.get('messenger'));
 provide('structure.store', props.container.get('structure.store'));
 provide('selection.store', props.container.get('selection.store'));
-
-const options = props.container.getParameter('options');
-const instanceId = props.container.getParameter('instanceId');
 </script>
 <script>
 export default {

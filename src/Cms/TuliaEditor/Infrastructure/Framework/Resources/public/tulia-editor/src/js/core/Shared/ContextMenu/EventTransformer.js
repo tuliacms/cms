@@ -1,5 +1,5 @@
 export default class EventTransformer {
-    static transformPointerEvent (event, source) {
+    static transformPointerEvent (event) {
         if (event.target.tagName === 'HTML') {
             return null;
         }
@@ -20,7 +20,6 @@ export default class EventTransformer {
                 x: event.x,
                 y: event.y,
             },
-            source: source,
             targets: targets,
         };
     }

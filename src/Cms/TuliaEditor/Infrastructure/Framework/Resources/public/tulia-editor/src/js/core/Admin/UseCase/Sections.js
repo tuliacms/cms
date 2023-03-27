@@ -7,9 +7,17 @@ export default class Sections {
     }
 
     newOne() {
-        this.structure.appendSection({
-            id: v4(),
-        });
+        this.structure.appendSection({ id: v4() });
+        this.update();
+    }
+
+    newOneAfter(id) {
+        this.structure.appendSectionAfter({ id: v4() }, id);
+        this.update();
+    }
+
+    remove(id) {
+        this.structure.removeSection(id);
         this.update();
     }
 

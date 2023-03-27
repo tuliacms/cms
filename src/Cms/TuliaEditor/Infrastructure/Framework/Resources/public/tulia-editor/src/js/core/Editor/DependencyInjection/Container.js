@@ -10,6 +10,8 @@ import SelectedElementBoundaries from "core/Editor/Selection/Boundaries/Selected
 import HoveredElementBoundaries from "core/Editor/Selection/Boundaries/HoveredElementBoundaries";
 import Selection from "core/Editor/UseCase/Selection";
 import HoverResolver from "core/Editor/Selection/Boundaries/HoverResolver";
+import ContextmenuUsecase from "core/Editor/UseCase/Contextmenu";
+import Contextmenu from "core/Editor/Contextmenu/Contextmenu";
 
 export default class Container extends AbstractContainer {
     build() {
@@ -22,6 +24,8 @@ export default class Container extends AbstractContainer {
         this.register('selection.hoveredElementBoundaries', () => new HoveredElementBoundaries(this.get('selection.store')));
         this.register('selection.hoveredElementResolver', () => new HoverResolver(this.get('usecase.selection')));
         this.register('usecase.selection', () => new Selection(this.get('messenger')));
+        this.register('usecase.contextmenu', () => new ContextmenuUsecase(this.get('messenger')));
+        this.register('contextmenu', () => new Contextmenu());
 
         // Subscribers
         this.register(
