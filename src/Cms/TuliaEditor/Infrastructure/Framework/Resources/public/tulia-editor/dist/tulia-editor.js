@@ -22374,6 +22374,17 @@ const selectionUseCase = (0,vue__WEBPACK_IMPORTED_MODULE_1__.inject)('usecase.se
 const structureStore = (0,vue__WEBPACK_IMPORTED_MODULE_1__.inject)('structure.store');
 const selectionStore = (0,vue__WEBPACK_IMPORTED_MODULE_1__.inject)('selection.store');
 
+const startDraggable = () => {
+    selectionUseCase.disableSelection();
+    selectionUseCase.disableHovering();
+};
+const endDraggable = (event) => {
+    selectionUseCase.enableSelection();
+    selectionUseCase.enableHovering();
+    selectionUseCase.select(event.item.dataset.elementId, event.item.dataset.elementType);
+    selectionUseCase.hover(event.item.dataset.elementId, event.item.dataset.elementType);
+};
+
 /*const props = defineProps(['structure']);
 const blockPicker = inject('blocks.picker');
 const messenger = inject('messenger');
@@ -22420,7 +22431,7 @@ onMounted(() => {
     });
 });*/
 
-const __returned__ = { emits, structureDragOptions, translator, sectionsUseCase, selectionUseCase, structureStore, selectionStore, vuedraggable: vuedraggable_src_vuedraggable__WEBPACK_IMPORTED_MODULE_0__["default"], inject: vue__WEBPACK_IMPORTED_MODULE_1__.inject }
+const __returned__ = { emits, structureDragOptions, translator, sectionsUseCase, selectionUseCase, structureStore, selectionStore, startDraggable, endDraggable, vuedraggable: vuedraggable_src_vuedraggable__WEBPACK_IMPORTED_MODULE_0__["default"], inject: vue__WEBPACK_IMPORTED_MODULE_1__.inject }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -26271,7 +26282,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const _hoisted_1 = { class: "tued-sidebar-structure" }
-const _hoisted_2 = { class: "tued-structure-element tued-structure-element-section" }
+const _hoisted_2 = ["data-element-id"]
 const _hoisted_3 = ["onMouseenter", "onClick"]
 const _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   class: "tued-structure-draggable-handler",
@@ -26290,11 +26301,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "component-data": { name: 'fade', as: 'transition-group', 'data-draggable-delta-transformer-parent': '' }
     }, $setup.structureDragOptions, {
       handle: ".tued-structure-element-section > .tued-label > .tued-structure-draggable-handler",
-      onChange: _cache[1] || (_cache[1] = $event => ($setup.selectionStore.update())),
-      onStart: _cache[2] || (_cache[2] = () => {})
+      onChange: _cache[1] || (_cache[1] = $event => ($setup.sectionsUseCase.update())),
+      onStart: $setup.startDraggable,
+      onEnd: $setup.endDraggable
     }), {
       item: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(({element}) => [
-        (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [
+        (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+          class: "tued-structure-element tued-structure-element-section",
+          "data-element-type": "section",
+          "data-element-id": element.id
+        }, [
           (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("\n                    @dblclick.stop=\"emits('selected')\"\n                    :tued-contextmenu=\"contextmenu.register('section', element.id)\"\n                    "),
           (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
             onMouseenter: $event => ($setup.selectionUseCase.hover(element.id, 'section')),
@@ -26303,16 +26319,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({ 'tued-label': true, 'tued-element-selected': $setup.selectionStore.selected.id === element.id, 'tued-element-hovered': $setup.selectionStore.hovered.id === element.id })
           }, [
             _hoisted_4,
-            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translator.trans('section')), 1 /* TEXT */)
+            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translator.trans('section')) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(element.id), 1 /* TEXT */)
           ], 42 /* CLASS, PROPS, HYDRATE_EVENTS */, _hoisted_3),
           (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                    <Rows\n                        :parent=\"element\"\n                        :rows=\"element.rows\"\n                        @draggable-change=\"sections.update()\"\n                        @selected=\"emits('selected')\"\n                    ></Rows>")
-        ])
+        ], 8 /* PROPS */, _hoisted_2)
       ]),
       _: 1 /* STABLE */
     }, 16 /* FULL_PROPS */, ["list"]),
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.selectionStore) + " ", 1 /* TEXT */),
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
       class: "tued-structure-new-element",
-      onClick: _cache[3] || (_cache[3] = $event => ($setup.sectionsUseCase.newOne()))
+      onClick: _cache[2] || (_cache[2] = $event => ($setup.sectionsUseCase.newOne()))
     }, " New section "),
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("        <div class=\"tued-structure-new-element\" @click=\"blockPicker.new()\">\n            {{ translator.trans('newBlock') }}\n        </div>")
   ]))
@@ -28321,12 +28338,12 @@ __webpack_require__.r(__webpack_exports__);
 const useSelectionStore = (0,pinia__WEBPACK_IMPORTED_MODULE_1__.defineStore)('selection', {
     state: () => {
         return {
-            disableSelection: false,
+            selectionDisabled: false,
             selected: {
                 id: null,
                 type: null,
             },
-            disableHovering: false,
+            hoveringDisabled: false,
             hovered: {
                 id: null,
                 type: null,
@@ -28335,6 +28352,10 @@ const useSelectionStore = (0,pinia__WEBPACK_IMPORTED_MODULE_1__.defineStore)('se
     },
     actions: {
         select(id, type) {
+            if (this.selectionDisabled) {
+                return;
+            }
+
             this.selected.type = type;
             this.selected.id = id;
         },
@@ -28343,12 +28364,32 @@ const useSelectionStore = (0,pinia__WEBPACK_IMPORTED_MODULE_1__.defineStore)('se
             this.selected.id = null;
         },
         hover(id, type) {
+            if (this.hoveringDisabled) {
+                return;
+            }
+
             this.hovered.type = type;
             this.hovered.id = id;
         },
         dehover() {
             this.hovered.type = null;
             this.hovered.id = null;
+        },
+        disableHovering() {
+            this.hoveringDisabled = true;
+            this.hovered.type = null;
+            this.hovered.id = null;
+        },
+        enableHovering() {
+            this.hoveringDisabled = false;
+        },
+        disableSelection() {
+            this.selectionDisabled = true;
+            this.selected.type = null;
+            this.selected.id = null;
+        },
+        enableSelection() {
+            this.selectionDisabled = false;
         },
     },
     getters: {
@@ -28658,6 +28699,26 @@ class Selection {
 
     dehover() {
         this.selection.dehover();
+        this.update();
+    }
+
+    disableSelection() {
+        this.selection.disableSelection();
+        this.update();
+    }
+
+    enableSelection() {
+        this.selection.enableSelection();
+        this.update();
+    }
+
+    disableHovering() {
+        this.selection.disableHovering();
+        this.update();
+    }
+
+    enableHovering() {
+        this.selection.enableHovering();
         this.update();
     }
 

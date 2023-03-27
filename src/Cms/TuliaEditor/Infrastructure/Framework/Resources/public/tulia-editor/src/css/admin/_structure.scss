@@ -10,6 +10,13 @@
             padding-left: 0;
         }
 
+        &.sortable-ghost {
+            border-color: #000;
+            background-color: rgba(#000, .3);
+            color: #fff;
+            border-radius: 4px;
+        }
+
         .tued-label {
             position: relative;
             margin: 0 0 6px 0;
@@ -105,13 +112,6 @@
                 display: inline-block;
             }
         }
-    }
-
-    .tued-structure-draggable-ghost {
-        border-color: #000;
-        background-color: rgba(#000, .3);
-        color: #fff;
-        border-radius: 4px;
     }
 
     .tued-structure-new-element {

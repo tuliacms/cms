@@ -8,11 +8,16 @@
             :component-data="{ name: 'fade', as: 'transition-group', 'data-draggable-delta-transformer-parent': '' }"
             v-bind="structureDragOptions"
             handle=".tued-structure-element-section > .tued-label > .tued-structure-draggable-handler"
-            @change="selectionStore.update()"
-            @start=""
+            @change="sectionsUseCase.update()"
+            @start="startDraggable"
+            @end="endDraggable"
         >
             <template #item="{element}">
-                <div class="tued-structure-element tued-structure-element-section">
+                <div
+                    class="tued-structure-element tued-structure-element-section"
+                    data-element-type="section"
+                    :data-element-id="element.id"
+                >
                     <!--
                     @dblclick.stop="emits('selected')"
                     :tued-contextmenu="contextmenu.register('section', element.id)"
@@ -26,7 +31,7 @@
                         <div class="tued-structure-draggable-handler" mousedown.stop="selection.select(section, element.id, 'sidebar')">
                             <i class="fas fa-arrows-alt"></i>
                         </div>
-                        <span>{{ translator.trans('section') }}</span>
+                        <span>{{ translator.trans('section') }} {{ element.id }}</span>
                     </div>
 <!--                    <Rows
                         :parent="element"
@@ -37,6 +42,7 @@
                 </div>
             </template>
         </vuedraggable>
+        {{ selectionStore }}
         <div class="tued-structure-new-element" @click="sectionsUseCase.newOne()">
             New section
         </div>
@@ -57,6 +63,17 @@ const sectionsUseCase = inject('usecase.sections');
 const selectionUseCase = inject('usecase.selection');
 const structureStore = inject('structure.store');
 const selectionStore = inject('selection.store');
+
+const startDraggable = () => {
+    selectionUseCase.disableSelection();
+    selectionUseCase.disableHovering();
+};
+const endDraggable = (event) => {
+    selectionUseCase.enableSelection();
+    selectionUseCase.enableHovering();
+    selectionUseCase.select(event.item.dataset.elementId, event.item.dataset.elementType);
+    selectionUseCase.hover(event.item.dataset.elementId, event.item.dataset.elementType);
+};
 
 /*const props = defineProps(['structure']);
 const blockPicker = inject('blocks.picker');

@@ -203,6 +203,11 @@
     padding-left: 20px; }
   .tued-sidebar-structure .tued-structure-element.tued-structure-element-section {
     padding-left: 0; }
+  .tued-sidebar-structure .tued-structure-element.sortable-ghost {
+    border-color: #000;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: #fff;
+    border-radius: 4px; }
   .tued-sidebar-structure .tued-structure-element .tued-label {
     position: relative;
     margin: 0 0 6px 0;
@@ -271,11 +276,6 @@
       font-size: 13px;
       margin-right: 0;
       display: inline-block; }
-  .tued-sidebar-structure .tued-structure-draggable-ghost {
-    border-color: #000;
-    background-color: rgba(0, 0, 0, 0.3);
-    color: #fff;
-    border-radius: 4px; }
   .tued-sidebar-structure .tued-structure-new-element {
     border: 2px dashed #dedede;
     border-radius: 5px;

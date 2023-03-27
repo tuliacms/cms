@@ -24,6 +24,26 @@ export default class Selection {
         this.update();
     }
 
+    disableSelection() {
+        this.selection.disableSelection();
+        this.update();
+    }
+
+    enableSelection() {
+        this.selection.enableSelection();
+        this.update();
+    }
+
+    disableHovering() {
+        this.selection.disableHovering();
+        this.update();
+    }
+
+    enableHovering() {
+        this.selection.enableHovering();
+        this.update();
+    }
+
     update() {
         this.messenger.send('admin.selection.changed', {
             selection: this.selection.export,
