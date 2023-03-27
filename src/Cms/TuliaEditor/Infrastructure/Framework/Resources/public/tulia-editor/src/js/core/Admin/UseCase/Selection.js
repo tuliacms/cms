@@ -14,6 +14,16 @@ export default class Selection {
         this.update();
     }
 
+    hover(id, type) {
+        this.selection.hover(id, type);
+        this.update();
+    }
+
+    dehover() {
+        this.selection.dehover();
+        this.update();
+    }
+
     update() {
         this.messenger.send('admin.selection.changed', {
             selection: this.selection.export,

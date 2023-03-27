@@ -25,6 +25,14 @@ export const useSelectionStore = defineStore('selection', {
             this.selected.type = null;
             this.selected.id = null;
         },
+        hover(id, type) {
+            this.hovered.type = type;
+            this.hovered.id = id;
+        },
+        dehover() {
+            this.hovered.type = null;
+            this.hovered.id = null;
+        },
     },
     getters: {
         export() {

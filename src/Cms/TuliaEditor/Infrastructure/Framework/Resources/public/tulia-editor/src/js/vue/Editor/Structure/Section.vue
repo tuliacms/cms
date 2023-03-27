@@ -1,7 +1,5 @@
 <template>
     <!--
-        @mouseenter="$emit('selection-enter', 'section', section.id)"
-        @mouseleave="$emit('selection-leave', 'section', section.id)"
         :tued-contextmenu="contextmenu.register('section', section.id)"
     -->
     <section
@@ -9,6 +7,8 @@
         :id="section.id"
         data-tagname="Section"
         @mousedown.stop="selection.select(section.id, 'section')"
+        @mouseenter="$emit('selection-enter', section.id, 'section')"
+        @mouseleave="$emit('selection-leave', section.id, 'section')"
     >
 <!--        <div :class="containerClassname">
             <Row

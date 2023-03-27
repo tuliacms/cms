@@ -66,8 +66,8 @@ provide('canvas', props.container.get('canvas'));
 provide('usecase.sections', props.container.get('usecase.sections'));
 provide('usecase.selection', props.container.get('usecase.selection'));
 provide('messenger', props.container.get('messenger'));
-provide('structure', props.container.get('structure'));
-provide('selection', props.container.get('selection'));
+provide('structure.store', props.container.get('structure.store'));
+provide('selection.store', props.container.get('selection.store'));
 
 const options = props.container.getParameter('options');
 const instanceId = props.container.getParameter('instanceId');

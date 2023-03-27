@@ -48,7 +48,7 @@ const draggable = require('vuedraggable');
 const props = defineProps(['parent', 'blocks']);
 const emits = defineEmits(['selected']);
 
-const selection = inject('selection');
+const selection = inject('selection.store');
 const structureDragOptions = inject('structureDragOptions');
 const translator = inject('translator');
 const messenger = inject('messenger');

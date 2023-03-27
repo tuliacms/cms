@@ -1,14 +1,12 @@
 <template>
     <div class="tued-structure" ref="structureContainer">
-        <!--
-            @selection-enter="(type, id) => selectionEnter(type, id)"
-            @selection-leave="(type, id) => selectionLeave(type, id)"
-        -->
         <Section
             v-for="section in structure.sections"
             :id="'tued-structure-section-' + section.id"
             :key="section.id"
             :section="section"
+            @selection-enter="(id, type) => selectionEnter(id, type)"
+            @selection-leave="(id, type) => selectionLeave(id, type)"
         ></Section>
 
 <!--        <div class="tued-structure-new-element" @click="newBlock()">
@@ -26,17 +24,17 @@
         >
             <div class="tued-node-name">{{ selection.selected.tagName }}</div>
         </div>
-        <!--<div
+        <div
             class="tued-element-boundaries tued-element-hovered-boundaries"
             :style="{
-                left: hoverable.style.left + 'px',
-                top: hoverable.style.top + 'px',
-                width: hoverable.style.width + 'px',
-                height: hoverable.style.height + 'px',
+                left: selection.hovered.boundaries.left + 'px',
+                top: selection.hovered.boundaries.top + 'px',
+                width: selection.hovered.boundaries.width + 'px',
+                height: selection.hovered.boundaries.height + 'px',
             }"
         >
         </div>
-        <div
+        <!--<div
             class="tued-element-actions"
             ref="element-actions"
             :style="{
@@ -65,13 +63,21 @@
 import Section from "editor/Structure/Section.vue";
 import { inject, ref } from "vue";
 
-const structure = inject('structure');
-const selection = inject('selection');
+const structure = inject('structure.store');
+const selection = inject('selection.store');
 const structureContainer = ref(null);
 
-inject('selection.selectedElementBoundaries').registerHtmlNodeFinder((id, type) => {
+const findNode = function (id, type) {
     return structureContainer.value.querySelector(`#tued-structure-${type}-${id}`);
-});
+};
+
+inject('selection.selectedElementBoundaries').registerHtmlNodeFinder((id, type) => findNode(id, type));
+inject('selection.hoveredElementBoundaries').registerHtmlNodeFinder((id, type) => findNode(id, type));
+
+const hoverResolver = inject('selection.hoveredElementResolver');
+
+const selectionEnter = (id, type) => hoverResolver.enter(id, type);
+const selectionLeave = () => hoverResolver.leave();
 
 /*let elm = this.$refs['element-actions'];
 

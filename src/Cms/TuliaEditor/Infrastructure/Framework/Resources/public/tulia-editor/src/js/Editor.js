@@ -24,7 +24,7 @@ export default class Editor {
             this.container.build();
 
             this.container.get('view').render();
-            this.container.get('structure').update(data.structure);
+            this.container.get('structure.store').update(data.structure);
             this.container.get('eventBus').dispatch('editor.ready');
         });
 

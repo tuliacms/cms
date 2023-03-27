@@ -13,13 +13,13 @@ export default class Container extends AbstractContainer {
         super.build();
 
         this.register('view', this._buildView);
-        this.register('usecase.sections', () => new Sections(this.get('structure'), this.get('messenger')));
-        this.register('usecase.selection', () => new Selection(this.get('selection'), this.get('messenger')));
+        this.register('usecase.sections', () => new Sections(this.get('structure.store'), this.get('messenger')));
+        this.register('usecase.selection', () => new Selection(this.get('selection.store'), this.get('messenger')));
         this.register('canvas', () => new Canvas(this.getParameter('options')));
-        this.register('structure', () => {
+        this.register('structure.store', () => {
             return (new StructureStoreFactory(this.getParameter('options'))).factory();
         });
-        this.register('selection', () => useSelectionStore());
+        this.register('selection.store', () => useSelectionStore());
 
         // Subscribers
         this.register(

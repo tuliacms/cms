@@ -7,16 +7,20 @@ import AdminSelectionSubscriber from "core/Editor/Subscriber/Admin/SelectionSubs
 import AdminStructureSubscriber from "core/Editor/Subscriber/Admin/StructureSubscriber";
 import EditorSelectionSubscriber from "core/Editor/Subscriber/Editor/SelectionSubscriber";
 import SelectedElementBoundaries from "core/Editor/Selection/Boundaries/SelectedElementBoundaries";
+import HoveredElementBoundaries from "core/Editor/Selection/Boundaries/HoveredElementBoundaries";
 import Selection from "core/Editor/UseCase/Selection";
+import HoverResolver from "core/Editor/Selection/Boundaries/HoverResolver";
 
 export default class Container extends AbstractContainer {
     build() {
         super.build();
 
         this.register('view', () => new View(this.get('eventBus')));
-        this.register('structure', () => useStructureStore());
-        this.register('selection', () => useSelectionStore());
-        this.register('selection.selectedElementBoundaries', () => new SelectedElementBoundaries(this.get('selection')));
+        this.register('structure.store', () => useStructureStore());
+        this.register('selection.store', () => useSelectionStore());
+        this.register('selection.selectedElementBoundaries', () => new SelectedElementBoundaries(this.get('selection.store')));
+        this.register('selection.hoveredElementBoundaries', () => new HoveredElementBoundaries(this.get('selection.store')));
+        this.register('selection.hoveredElementResolver', () => new HoverResolver(this.get('usecase.selection')));
         this.register('usecase.selection', () => new Selection(this.get('messenger')));
 
         // Subscribers
@@ -37,7 +41,7 @@ export default class Container extends AbstractContainer {
         this.register(
             'subscriber.selectionSubscriber',
             () => new AdminSelectionSubscriber(
-                this.get('selection'),
+                this.get('selection.store'),
                 this.get('messenger'),
                 this.get('eventBus'),
             ),
@@ -46,7 +50,7 @@ export default class Container extends AbstractContainer {
         this.register(
             'subscriber.StructureSubscriber',
             () => new AdminStructureSubscriber(
-                this.get('structure'),
+                this.get('structure.store'),
                 this.get('messenger'),
                 this.get('eventBus'),
             ),
@@ -56,10 +60,13 @@ export default class Container extends AbstractContainer {
             'subscriber.EditorSelectionSubscriber',
             () => new EditorSelectionSubscriber(
                 this.get('selection.selectedElementBoundaries'),
+                this.get('selection.hoveredElementBoundaries'),
             ),
             { tags: [
                 { name: 'event_listener', on: 'selection.selected', call: 'select' },
                 { name: 'event_listener', on: 'selection.deselected', call: 'deselect' },
+                { name: 'event_listener', on: 'selection.hovered', call: 'hover' },
+                { name: 'event_listener', on: 'selection.dehovered', call: 'dehover' },
                 { name: 'event_listener', on: 'structure.changed', call: 'update' },
             ] }
         );

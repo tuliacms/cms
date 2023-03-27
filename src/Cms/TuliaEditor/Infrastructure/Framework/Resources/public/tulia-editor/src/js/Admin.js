@@ -55,7 +55,7 @@ export default class Admin {
         messenger.receive('init.editor', () => {
             messenger.send('init.options', {
                 options: this.options,
-                structure: this.container.get('structure').export,
+                structure: this.container.get('structure.store').export,
             });
         });
 

@@ -3,24 +3,25 @@
         <vuedraggable
             group="sections"
             item-key="id"
-            :list="structure.sections"
+            :list="structureStore.sections"
             tag="div"
             :component-data="{ name: 'fade', as: 'transition-group', 'data-draggable-delta-transformer-parent': '' }"
             v-bind="structureDragOptions"
             handle=".tued-structure-element-section > .tued-label > .tued-structure-draggable-handler"
-            @change="sections.update()"
+            @change="selectionStore.update()"
+            @start=""
         >
             <template #item="{element}">
                 <div class="tued-structure-element tued-structure-element-section">
                     <!--
-                    @mouseenter="selection.hover('section', element.id, 'sidebar')"
-                    @mouseleave="selection.resetHovered()"
                     @dblclick.stop="emits('selected')"
                     :tued-contextmenu="contextmenu.register('section', element.id)"
                     -->
                     <div
+                        @mouseenter="selectionUseCase.hover(element.id, 'section')"
+                        @mouseleave="selectionUseCase.dehover()"
                         @click.stop="selectionUseCase.select(element.id, 'section')"
-                        :class="{ 'tued-label': true, 'tued-element-selected': selection.selected.id === element.id, 'tued-element-hovered': false }"
+                        :class="{ 'tued-label': true, 'tued-element-selected': selectionStore.selected.id === element.id, 'tued-element-hovered': selectionStore.hovered.id === element.id }"
                     >
                         <div class="tued-structure-draggable-handler" mousedown.stop="selection.select(section, element.id, 'sidebar')">
                             <i class="fas fa-arrows-alt"></i>
@@ -54,6 +55,9 @@ const structureDragOptions = inject('structureDragOptions');
 const translator = inject('translator');
 const sectionsUseCase = inject('usecase.sections');
 const selectionUseCase = inject('usecase.selection');
+const structureStore = inject('structure.store');
+const selectionStore = inject('selection.store');
+
 /*const props = defineProps(['structure']);
 const blockPicker = inject('blocks.picker');
 const messenger = inject('messenger');
@@ -62,9 +66,6 @@ const structureManipulator = inject('structureManipulator');
 const blocksPicker = inject('blocks.picker');
 const contextmenu = inject('contextmenu');*/
 
-const structure = inject('structure');
-const selection = inject('selection');
-const sections = inject('usecase.sections');
 
 /*
 onMounted(() => {

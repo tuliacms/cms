@@ -125,7 +125,7 @@ let previousStructure = ObjectCloner.deepClone(props.structure);
 const selection = new Selection(structure, props.container.messenger);
 const structureManipulator = new StructureManipulator(structure, props.container.messenger);
 
-provide('selection', selection);
+provide('selection.store', selection);
 provide('structureManipulator', structureManipulator);
 
 onMounted(() => {
