@@ -53,6 +53,18 @@ provide('structureDragOptions', {
     }
 });
 
+const options = props.container.getParameter('options');
+const instanceId = props.container.getParameter('instanceId');
+
+
+/**************
+ * Contextmenu
+ *************/
+const contextmenu = props.container.get('usecase.contextmenu');
+const contextmenuStore = props.container.get('contextmenu.store');
+
+const canvas = ref(null);
+
 const contextmenuItemIcon = item => {
     return 'dropdown-icon ' + item.icon;
 };
@@ -65,18 +77,6 @@ const contextmenuItemClass = item => {
 
     return classname + ' ' + item.classname;
 };
-
-const options = props.container.getParameter('options');
-const instanceId = props.container.getParameter('instanceId');
-
-
-/**************
- * Contextmenu
- *************/
-const contextmenu = props.container.get('usecase.contextmenu');
-const contextmenuStore = props.container.get('contextmenu.store');
-
-const canvas = ref(null);
 
 contextmenu.setEditorOffsetProvider(() => {
     const iframe = canvas.value.$el.querySelector('.tued-canvas-device-faker iframe');
@@ -109,6 +109,7 @@ provide('eventBus', props.container.get('eventBus'));
 provide('admin', props.container.get('admin'));
 provide('canvas', props.container.get('canvas'));
 provide('usecase.sections', props.container.get('usecase.sections'));
+provide('usecase.rows', props.container.get('usecase.rows'));
 provide('usecase.selection', props.container.get('usecase.selection'));
 provide('usecase.draggable', props.container.get('usecase.draggable'));
 provide('usecase.contextmenu', props.container.get('usecase.contextmenu'));

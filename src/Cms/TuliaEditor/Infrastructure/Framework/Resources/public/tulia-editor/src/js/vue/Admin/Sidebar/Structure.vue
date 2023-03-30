@@ -8,7 +8,7 @@
             :component-data="{ name: 'fade', as: 'transition-group', 'data-draggable-delta-transformer-parent': '' }"
             v-bind="structureDragOptions"
             handle=".tued-structure-element-section > .tued-label > .tued-structure-draggable-handler"
-            @change="sectionsUseCase.update()"
+            @change="changeDraggable"
             @start="startDraggable"
             @end="endDraggable"
         >
@@ -34,18 +34,19 @@
                         </div>
                         <span>{{ translator.trans('section') }} {{ element.id }}</span>
                     </div>
-<!--                    <Rows
-                        :parent="element"
-                        :rows="element.rows"
+                    <!--
                         @draggable-change="sections.update()"
+                    -->
+                    <Rows
+                        :parent="element.id"
+                        @draggable-start="startDraggable"
+                        @draggable-change="changeDraggable"
+                        @draggable-end="endDraggable"
                         @selected="emits('selected')"
-                    ></Rows>-->
+                    ></Rows>
                 </div>
             </template>
         </vuedraggable>
-        <div class="tued-structure-new-element" @click="sectionsUseCase.newOne()">
-            New section
-        </div>
 <!--        <div class="tued-structure-new-element" @click="blockPicker.new()">
             {{ translator.trans('newBlock') }}
         </div>-->
@@ -54,49 +55,33 @@
 
 <script setup>
 import vuedraggable from "vuedraggable/src/vuedraggable";
+import Rows from "admin/Sidebar/Rows.vue";
 import { inject, defineEmits, onMounted } from "vue";
 
 const emits = defineEmits(['selected']);
 const structureDragOptions = inject('structureDragOptions');
 const translator = inject('translator');
 const sectionsUseCase = inject('usecase.sections');
+const rowsUseCase = inject('usecase.rows');
 const selectionUseCase = inject('usecase.selection');
 const draggableUseCase = inject('usecase.draggable');
 const structureStore = inject('structure.store');
 const selectionStore = inject('selection.store');
 const contextmenu = inject('usecase.contextmenu');
 
-const startDraggable = (event) => draggableUseCase.start(event.item.dataset.elementId, event.item.dataset.elementType);
-const endDraggable = (event) => draggableUseCase.end(event.item.dataset.elementId, event.item.dataset.elementType);
-
-/*const props = defineProps(['structure']);
-const blockPicker = inject('blocks.picker');
-const messenger = inject('messenger');
-const selection = inject('selection');
-const structureManipulator = inject('structureManipulator');
-const blocksPicker = inject('blocks.picker');*/
-
-
+const startDraggable = event => draggableUseCase.start(event);
+const changeDraggable = event => draggableUseCase.change(event);
+const endDraggable = event => draggableUseCase.end(event);
 
 onMounted(() => {
-    /*messenger.operation('structure.create.block', (data, success, fail) => {
-        if (data && data.columnId) {
-            blocksPicker.newAt(data.columnId);
-        } else {
-            blocksPicker.new();
-        }
-
-        success();
-    });*/
-
     contextmenu.items('sections', 'section', () => {
         return [
-           /* {
+            {
                 group: 'section',
-                onClick: (id) => structureManipulator.newRow(id),
+                onClick: (id) => rowsUseCase.newOne(id),
                 label: translator.trans('addRow'),
                 icon: 'fas fa-plus',
-            },*/
+            },
             {
                 group: 'section',
                 onClick: (id) => sectionsUseCase.newOneAfter(id),

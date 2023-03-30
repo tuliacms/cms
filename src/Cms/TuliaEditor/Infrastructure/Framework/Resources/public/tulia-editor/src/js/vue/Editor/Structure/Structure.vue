@@ -1,13 +1,9 @@
 <template>
     <div class="tued-structure" ref="structureContainer">
-        <Section
-            v-for="section in structure.sections"
-            :id="'tued-structure-section-' + section.id"
-            :key="section.id"
-            :section="section"
+        <Sections
             @selection-enter="(id, type) => selectionEnter(id, type)"
             @selection-leave="(id, type) => selectionLeave(id, type)"
-        ></Section>
+        ></Sections>
 
 <!--        <div class="tued-structure-new-element" @click="newBlock()">
             {{ translator.trans('newBlock') }}
@@ -60,10 +56,9 @@
 </template>
 
 <script setup>
-import Section from "editor/Structure/Section.vue";
+import Sections from "editor/Structure/Sections.vue";
 import { inject, ref } from "vue";
 
-const structure = inject('structure.store');
 const selection = inject('selection.store');
 const structureContainer = ref(null);
 

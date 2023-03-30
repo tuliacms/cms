@@ -12,6 +12,7 @@ import Contextmenu from "core/Admin/UseCase/Contextmenu";
 import ContextmenuAdminSubscriber from "core/Admin/Subscriber/Admin/ContextmenuSubscriber";
 import ContextmenuEditorSubscriber from "core/Admin/Subscriber/Editor/ContextmenuSubscriber";
 import Draggable from "core/Admin/UseCase/Draggable";
+import Rows from "core/Admin/UseCase/Rows";
 
 export default class Container extends AbstractContainer {
     build() {
@@ -19,8 +20,9 @@ export default class Container extends AbstractContainer {
 
         this.register('view', this._buildView);
         this.register('usecase.sections', () => new Sections(this.get('structure.store'), this.get('messenger')));
+        this.register('usecase.rows', () => new Rows(this.get('structure.store'), this.get('messenger')));
         this.register('usecase.selection', () => new Selection(this.get('selection.store'), this.get('messenger')));
-        this.register('usecase.draggable', () => new Draggable(this.get('usecase.selection'), this.get('eventBus')));
+        this.register('usecase.draggable', () => new Draggable(this.get('usecase.selection'), this.get('structure.store'), this.get('eventBus'), this.get('messenger')));
         this.register('usecase.contextmenu', () => new Contextmenu(this.get('contextmenu.store'), this.get('usecase.selection')));
         this.register('canvas', () => new Canvas(this.getParameter('options')));
         this.register('structure.store', () => {

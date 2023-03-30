@@ -59,10 +59,10 @@ export const useSelectionStore = defineStore('selection', {
         },
     },
     getters: {
-        export() {
+        export(state) {
             return {
-                hovered: ObjectCloner.deepClone(this.hovered),
-                selected: ObjectCloner.deepClone(this.selected),
+                hovered: ObjectCloner.deepClone(state.hovered),
+                selected: ObjectCloner.deepClone(state.selected),
             };
         },
     },

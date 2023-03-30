@@ -1,20 +1,29 @@
 import { defineStore } from 'pinia';
 
+const find = function (collection, id) {
+    for (let i in collection) {
+        if (collection[i].id === id) {
+            return collection[i];
+        }
+    }
+};
+
 export const useStructureStore = defineStore('structure', {
     state: () => {
         return {
             sections: [],
-            rows: [],
-            columns: [],
-            blocks: [],
         };
     },
     actions: {
         update(structure) {
             this.sections = structure.sections;
-            this.rows = structure.rows;
-            this.columns = structure.columns;
-            this.blocks = structure.blocks;
+        },
+    },
+    getters: {
+        rowsOf(state) {
+            return (sectionId) => {
+                return find(state.sections, sectionId).rows;
+            };
         },
     },
 });

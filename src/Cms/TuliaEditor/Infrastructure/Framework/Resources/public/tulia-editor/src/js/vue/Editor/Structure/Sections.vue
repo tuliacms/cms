@@ -1,43 +1,43 @@
 <template>
     <section
+        v-for="section in structure.sections"
+        :id="'tued-structure-section-' + section.id"
+        :key="section.id"
         class="tued-structure-section tued-structure-element-selectable"
-        :id="section.id"
         data-tagname="Section"
         @mousedown.stop="selection.select(section.id, 'section')"
-        @mouseenter="$emit('selection-enter', section.id, 'section')"
-        @mouseleave="$emit('selection-leave', section.id, 'section')"
+        @mouseenter="emit('selection-enter', section.id, 'section')"
+        @mouseleave="emit('selection-leave', section.id, 'section')"
         :tued-contextmenu="contextmenu.register('section', section.id)"
     >
-<!--        <div :class="containerClassname">
-            <Row
-                v-for="row in props.section.rows"
-                :id="'tued-structure-row-' + row.id"
-                :key="row.id"
-                :row="row"
-                :parent="section"
-                @selection-enter="(type, id) => $emit('selection-enter', type, id)"
-                @selection-leave="(type, id) => $emit('selection-leave', type, id)"
-            ></Row>
-        </div>-->
-        <div class="tued-structure-empty-element">
-            <span>{{ translator.trans('emptySection') }} {{ section.id }}</span>
+        <div :class="containerClassname">
+            <Rows
+                :parent="section.id"
+                @selection-enter="(id, type) => $emit('selection-enter', id, type)"
+                @selection-leave="(id, type) => $emit('selection-leave', id, type)"
+            ></Rows>
         </div>
-<!--        <div
+        <div
             class="tued-structure-empty-element"
-            v-if="props.section.rows.length === 0"
+            v-if="structure.rowsOf(section.id).length === 0"
         >
             <span>{{ translator.trans('emptySection') }}</span>
-        </div>-->
+        </div>
     </section>
 </template>
 
 <script setup>
-import { defineProps, inject } from "vue";
+import { defineProps, defineEmits, inject } from "vue";
+import Rows from "editor/Structure/Rows.vue";
 
 const props = defineProps(['section']);
+const emit = defineEmits(['selection-enter', 'selection-leave']);
 const translator = inject('translator');
 const selection = inject('usecase.selection');
 const contextmenu = inject('contextmenu');
+const structure = inject('structure.store');
+
+const containerClassname = 'container-xxl';
 
 /*const Row = require('./Row.vue').default;
 const { defineProps, inject, computed } = require('vue');
