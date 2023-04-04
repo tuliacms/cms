@@ -1,9 +1,33 @@
 import { defineStore } from 'pinia';
 
-const find = function (collection, id) {
-    for (let i in collection) {
-        if (collection[i].id === id) {
-            return collection[i];
+const find = function (sections, id) {
+    for (let sk in sections) {
+        if (sections[sk].id === id) {
+            return sections[sk];
+        }
+
+        let rows = sections[sk].rows;
+
+        for (let rk in rows) {
+            if (rows[rk].id === id) {
+                return rows[rk];
+            }
+
+            let columns = rows[rk].columns;
+
+            for (let ck in columns) {
+                if (columns[ck].id === id) {
+                    return columns[ck];
+                }
+
+                let blocks = columns[ck].blocks;
+
+                for (let bk in blocks) {
+                    if (blocks[bk].id === id) {
+                        return blocks[bk];
+                    }
+                }
+            }
         }
     }
 };
@@ -23,6 +47,11 @@ export const useStructureStore = defineStore('structure', {
         rowsOf(state) {
             return (sectionId) => {
                 return find(state.sections, sectionId).rows;
+            };
+        },
+        columnsOf(state) {
+            return (rowId) => {
+                return find(state.sections, rowId).columns;
             };
         },
     },

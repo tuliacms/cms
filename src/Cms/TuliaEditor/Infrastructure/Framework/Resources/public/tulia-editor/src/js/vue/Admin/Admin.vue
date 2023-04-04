@@ -110,6 +110,7 @@ provide('admin', props.container.get('admin'));
 provide('canvas', props.container.get('canvas'));
 provide('usecase.sections', props.container.get('usecase.sections'));
 provide('usecase.rows', props.container.get('usecase.rows'));
+provide('usecase.columns', props.container.get('usecase.columns'));
 provide('usecase.selection', props.container.get('usecase.selection'));
 provide('usecase.draggable', props.container.get('usecase.draggable'));
 provide('usecase.contextmenu', props.container.get('usecase.contextmenu'));

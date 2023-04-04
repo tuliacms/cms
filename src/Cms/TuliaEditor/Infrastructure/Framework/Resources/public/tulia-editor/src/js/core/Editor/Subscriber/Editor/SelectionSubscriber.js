@@ -5,7 +5,10 @@ export default class SelectionSubscriber {
     }
 
     select(newSelected) {
-        this.selectedElementBoundaries.highlightSelected(newSelected.id, newSelected.type);
+        setTimeout(
+            () => this.selectedElementBoundaries.highlightSelected(newSelected.id, newSelected.type),
+            40
+        );
     }
 
     deselect() {
@@ -20,7 +23,10 @@ export default class SelectionSubscriber {
         this.hoveredElementBoundaries.clear();
     }
 
-    update() {
-        setTimeout(() => this.selectedElementBoundaries.updatePosition(), 50);
+    registerUpdater() {
+        this.interval = setInterval(
+            () => this.selectedElementBoundaries.update(),
+            120
+        );
     }
 }

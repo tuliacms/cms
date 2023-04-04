@@ -67,11 +67,11 @@ export default class Container extends AbstractContainer {
                 this.get('selection.hoveredElementBoundaries'),
             ),
             { tags: [
+                { name: 'event_listener', on: 'editor.ready', call: 'registerUpdater' },
                 { name: 'event_listener', on: 'selection.selected', call: 'select' },
                 { name: 'event_listener', on: 'selection.deselected', call: 'deselect' },
                 { name: 'event_listener', on: 'selection.hovered', call: 'hover' },
                 { name: 'event_listener', on: 'selection.dehovered', call: 'dehover' },
-                { name: 'event_listener', on: 'structure.changed', call: 'update' },
             ] }
         );
 

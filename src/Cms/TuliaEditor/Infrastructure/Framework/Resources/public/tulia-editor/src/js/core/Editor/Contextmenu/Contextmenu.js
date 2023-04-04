@@ -1,5 +1,5 @@
 export default class Contextmenu {
-    register(type, elementId, data) {
+    register(elementId, type, data) {
         return JSON.stringify({
             type: type,
             elementId: elementId,

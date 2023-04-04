@@ -1,18 +1,23 @@
-const { v4 } = require('uuid');
+import { v4 } from "uuid";
 
 export default class Sections {
-    constructor(structure, messenger) {
+    constructor(structure, messenger, selectionUseCase) {
         this.structure = structure;
         this.messenger = messenger;
+        this.selectionUseCase = selectionUseCase;
     }
 
     newOne() {
-        this.structure.appendSection({ id: v4() });
+        const id = v4();
+        this.structure.appendSection({ id });
+        this.selectionUseCase.select(id, 'section');
         this.update();
     }
 
-    newOneAfter(id) {
-        this.structure.appendSectionAfter({ id: v4() }, id);
+    newOneAfter(afterId) {
+        const id = v4();
+        this.structure.appendSectionAfter({ id }, afterId);
+        this.selectionUseCase.select(id, 'section');
         this.update();
     }
 

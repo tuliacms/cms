@@ -63,7 +63,20 @@ const selection = inject('selection.store');
 const structureContainer = ref(null);
 
 const findNode = function (id, type) {
-    return structureContainer.value.querySelector(`#tued-structure-${type}-${id}`);
+    let node = structureContainer.value.querySelector(`#tued-structure-${type}-${id}`);
+    let interval;
+
+    if (!node) {
+        interval = setInterval(function() {
+            node = structureContainer.value.querySelector(`#tued-structure-${type}-${id}`);
+
+            if (node) {
+                clearInterval(interval);
+            }
+        }, 10);
+    }
+
+    return node;
 };
 
 inject('selection.selectedElementBoundaries').registerHtmlNodeFinder((id, type) => findNode(id, type));

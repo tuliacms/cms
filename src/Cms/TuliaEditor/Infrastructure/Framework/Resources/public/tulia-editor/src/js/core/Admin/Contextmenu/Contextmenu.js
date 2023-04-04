@@ -52,7 +52,7 @@ export default class Contextmenu {
         return selection && selection.type === 'Range';
     };
 
-    register(type, elementId, data) {
+    register(elementId, type, data) {
         return JSON.stringify({
             type: type,
             elementId: elementId,

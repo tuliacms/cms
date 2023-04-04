@@ -2,9 +2,33 @@ import { defineStore } from 'pinia';
 import ObjectCloner from "core/Shared/Utils/ObjectCloner";
 
 const find = function (sections, id) {
-    for (let i in sections) {
-        if (sections[i].id === id) {
-            return sections[i];
+    for (let sk in sections) {
+        if (sections[sk].id === id) {
+            return sections[sk];
+        }
+
+        let rows = sections[sk].rows;
+
+        for (let rk in rows) {
+            if (rows[rk].id === id) {
+                return rows[rk];
+            }
+
+            let columns = rows[rk].columns;
+
+            for (let ck in columns) {
+                if (columns[ck].id === id) {
+                    return columns[ck];
+                }
+
+                let blocks = columns[ck].blocks;
+
+                for (let bk in blocks) {
+                    if (blocks[bk].id === id) {
+                        return blocks[bk];
+                    }
+                }
+            }
         }
     }
 };
@@ -22,7 +46,7 @@ const findParent = function (sections, childId) {
 
             let parentRow = rows[rk];
 
-            /*let columns = rows[rk].columns;
+            let columns = rows[rk].columns;
 
             for (let ck in columns) {
                 if (columns[ck].id === childId) {
@@ -31,16 +55,26 @@ const findParent = function (sections, childId) {
 
                 let parentColumn = columns[ck];
 
-                let blocks = columns[ck].blocks;
+                /*let blocks = columns[ck].blocks;
 
                 for (let bk in blocks) {
                     if (blocks[bk].id === childId) {
                         return parentColumn;
                     }
-                }
-            }*/
+                }*/
+            }
         }
     }
+};
+
+const findElementsPosition = function (collection, id) {
+    for (let i in collection) {
+        if (collection[i].id === id) {
+            return parseInt(i);
+        }
+    }
+
+    return undefined;
 };
 
 const removeFromCollection = function (collection, id) {
@@ -56,6 +90,16 @@ const removeFromCollection = function (collection, id) {
     if (index !== null) {
         collection.splice(index, 1);
     }
+};
+
+const produceColumn = function (id, rowId) {
+    return {
+        id: id,
+        parent: rowId,
+        // Type is used for draggable modifications, because this is universal mechanism
+        type: 'column',
+        blocks: [],
+    };
 };
 
 export const useStructureStore = defineStore('structure', {
@@ -98,7 +142,12 @@ export const useStructureStore = defineStore('structure', {
                 }
             }
 
-            this.sections.splice(index + 1, 0, { id: section.id });
+            this.sections.splice(index + 1, 0, {
+                id: section.id,
+                // Type is used for draggable modifications, because this is universal mechanism
+                type: 'section',
+                rows: [],
+            });
         },
         removeSection(id) {
             removeFromCollection(this.sections, id);
@@ -109,11 +158,40 @@ export const useStructureStore = defineStore('structure', {
                 parent: sectionId,
                 // Type is used for draggable modifications, because this is universal mechanism
                 type: 'row',
+                columns: [],
             });
         },
         removeRow(id) {
             removeFromCollection(findParent(this.sections, id).rows, id);
-        }
+        },
+        appendColumn(column, rowId) {
+            find(this.sections, rowId).columns.push(produceColumn(column.id, rowId));
+        },
+        appendColumnBefore(column, before) {
+            const row = findParent(this.sections, before);
+            const pos = findElementsPosition(row.columns, before);
+
+            if (pos === undefined) {
+                row.columns.push(produceColumn(column.id, row.id));
+                return;
+            }
+
+            row.columns.splice(pos, 0, produceColumn(column.id, row.id));
+        },
+        appendColumnAfter(column, after) {
+            const row = findParent(this.sections, after);
+            const pos = findElementsPosition(row.columns, after);
+
+            if (pos === undefined) {
+                row.columns.push(produceColumn(column.id, row.id));
+                return;
+            }
+
+            row.columns.splice(pos + 1, 0, produceColumn(column.id, row.id));
+        },
+        removeColumn(id) {
+            removeFromCollection(findParent(this.sections, id).columns, id);
+        },
     },
     getters: {
         export(state) {
@@ -121,9 +199,19 @@ export const useStructureStore = defineStore('structure', {
                 sections: state.sections,
             });
         },
+        find(state) {
+            return (id) => {
+                return find(state.sections, id);
+            };
+        },
         rowsOf(state) {
             return (sectionId) => {
                 return find(state.sections, sectionId).rows;
+            };
+        },
+        columnsOf(state) {
+            return (rowId) => {
+                return find(state.sections, rowId).columns;
             };
         },
     },

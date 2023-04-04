@@ -26,10 +26,10 @@
                         @mouseleave="selectionUseCase.dehover()"
                         @click.stop="selectionUseCase.select(element.id, 'section')"
                         @contextmenu="selectionUseCase.select(element.id, 'section')"
-                        :tued-contextmenu="contextmenu.register('section', element.id)"
+                        :tued-contextmenu="contextmenu.register(element.id, 'section')"
                         :class="{ 'tued-label': true, 'tued-element-selected': selectionStore.selected.id === element.id, 'tued-element-hovered': selectionStore.hovered.id === element.id }"
                     >
-                        <div class="tued-structure-draggable-handler" mousedown.stop="selection.select(section, element.id, 'sidebar')">
+                        <div class="tued-structure-draggable-handler" @mousedown.stop="selectionUseCase.select(element.id, 'section')">
                             <i class="fas fa-arrows-alt"></i>
                         </div>
                         <span>{{ translator.trans('section') }} {{ element.id }}</span>
@@ -42,7 +42,7 @@
                         @draggable-start="startDraggable"
                         @draggable-change="changeDraggable"
                         @draggable-end="endDraggable"
-                        @selected="emits('selected')"
+                        @selected="emit('selected')"
                     ></Rows>
                 </div>
             </template>
@@ -58,7 +58,7 @@ import vuedraggable from "vuedraggable/src/vuedraggable";
 import Rows from "admin/Sidebar/Rows.vue";
 import { inject, defineEmits, onMounted } from "vue";
 
-const emits = defineEmits(['selected']);
+const emit = defineEmits(['selected']);
 const structureDragOptions = inject('structureDragOptions');
 const translator = inject('translator');
 const sectionsUseCase = inject('usecase.sections');

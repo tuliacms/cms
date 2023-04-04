@@ -8,7 +8,7 @@
         @mousedown.stop="selection.select(section.id, 'section')"
         @mouseenter="emit('selection-enter', section.id, 'section')"
         @mouseleave="emit('selection-leave', section.id, 'section')"
-        :tued-contextmenu="contextmenu.register('section', section.id)"
+        :tued-contextmenu="contextmenu.register(section.id, 'section')"
     >
         <div :class="containerClassname">
             <Rows

@@ -1,13 +1,16 @@
 import { v4 } from "uuid";
 
 export default class Rows {
-    constructor(structure, messenger) {
+    constructor(structure, messenger, selectionUseCase) {
         this.structure = structure;
         this.messenger = messenger;
+        this.selectionUseCase = selectionUseCase;
     }
 
     newOne(sectionId) {
-        this.structure.appendRow({ id: v4() }, sectionId);
+        const id = v4();
+        this.structure.appendRow({ id }, sectionId);
+        this.selectionUseCase.select(id, 'row');
         this.update();
     }
 

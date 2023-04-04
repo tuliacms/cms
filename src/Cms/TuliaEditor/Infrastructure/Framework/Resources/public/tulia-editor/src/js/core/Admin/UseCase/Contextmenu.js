@@ -22,8 +22,8 @@ export default class Contextmenu {
         this.contextmenu.setEditorOffsetProvider(provider);
     }
 
-    register(type, elementId, data) {
-        return this.contextmenu.register(type, elementId, data);
+    register(elementId, type, data) {
+        return this.contextmenu.register(elementId, type, data);
     }
 
     items(id, type, callback) {

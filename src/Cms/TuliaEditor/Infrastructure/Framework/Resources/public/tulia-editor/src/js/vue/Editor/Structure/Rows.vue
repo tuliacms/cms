@@ -10,15 +10,11 @@
         data-tagname="Row"
         :tued-contextmenu="contextmenu.register(row.id, 'row')"
     >
-<!--        <Column
-            v-for="column in props.row.columns"
-            :id="'tued-structure-column-' + column.id"
-            :key="column.id"
-            :column="column"
-            :parent="row"
+        <Columns
+            :parent="row.id"
             @selection-enter="(type, id) => $emit('selection-enter', type, id)"
             @selection-leave="(type, id) => $emit('selection-leave', type, id)"
-        ></Column>-->
+        ></Columns>
         <div
             class="tued-structure-empty-element"
         >
@@ -35,6 +31,7 @@
 
 <script setup>
 import { inject, defineProps, defineEmits } from "vue";
+import Columns from "editor/Structure/Columns.vue";
 
 const props = defineProps(['parent']);
 const emit = defineEmits(['selection-enter', 'selection-leave']);
