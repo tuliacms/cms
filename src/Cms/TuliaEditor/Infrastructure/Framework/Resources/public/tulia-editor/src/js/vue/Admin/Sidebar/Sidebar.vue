@@ -26,7 +26,7 @@
                 <Structure @selected="sidebar.tab = 'selected'"></Structure>
             </div>
             <div :class="{ 'd-block': sidebar.tab === 'selected', 'd-none': sidebar.tab !== 'selected' }" @click.stop="" @mouseup.stop="" @mousedown.stop="">
-<!--                <Selected :structure="structure"></Selected>-->
+                <Selected></Selected>
             </div>
             <div v-if="options.debug" :class="{ 'd-block': sidebar.tab === 'debug', 'd-none': sidebar.tab !== 'debug' }" @click.stop="" @mouseup.stop="" @mousedown.stop="">
 <!--                <Debug @disableSwitchTabs="sidebar.disabled = true" @enableSwitchTabs="sidebar.disabled = false"></Debug>-->
@@ -36,10 +36,10 @@
 </template>
 
 <script setup>
-const Structure = require('admin/Sidebar/Structure.vue').default;
-/*const Selected = require('components/Admin/Sidebar/Selected/Selected.vue').default;
-const Debug = require('components/Admin/Debug/Debug.vue').default;*/
-const { defineProps, ref, inject, provide, onMounted, reactive } = require('vue');
+import Structure from "admin/Sidebar/Structure.vue";
+import Selected from "admin/Sidebar/Selected/Selected.vue";
+/*const Debug = require('components/Admin/Debug/Debug.vue').default;*/
+import { defineProps, ref, inject, provide, onMounted, reactive } from "vue";
 
 /*const props = defineProps(['structure']);
 const messenger = inject('messenger');*/

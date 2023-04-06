@@ -34,7 +34,7 @@ const props = defineProps({
     help: { require: false },
     usesGroups: { require: false, default: false },
 });
-const messenger = inject('messenger');
+//const messenger = inject('messenger');
 const translator = inject('translator');
 
 const choices = reactive({list: {}});
@@ -96,10 +96,10 @@ onMounted(() => {
     rebuildChoicesWithoutGroups();
 
     document.body.addEventListener('click', deletectIfCanCloseOptions);
-    messenger.on('structure.selection.selected', closeOptions);
+    //messenger.on('structure.selection.selected', closeOptions);
 });
 onUnmounted(() => {
     document.body.removeEventListener('click', deletectIfCanCloseOptions);
-    messenger.off('structure.selection.selected', closeOptions);
+    //messenger.off('structure.selection.selected', closeOptions);
 });
 </script>

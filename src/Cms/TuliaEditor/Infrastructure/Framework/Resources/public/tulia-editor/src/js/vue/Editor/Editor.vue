@@ -24,6 +24,10 @@ provide('selection.hoveredElementBoundaries', props.container.get('selection.hov
 provide('selection.hoveredElementResolver', props.container.get('selection.hoveredElementResolver'));
 provide('usecase.selection', props.container.get('usecase.selection'));
 provide('contextmenu', props.container.get('contextmenu'));
+provide('instance.blocks', props.container.get('instantiator').instantiator('block'));
+provide('instance.columns', props.container.get('instantiator').instantiator('column'));
+provide('instance.rows', props.container.get('instantiator').instantiator('row'));
+provide('instance.sections', props.container.get('instantiator').instantiator('section'));
 
 const contextmenu = props.container.get('usecase.contextmenu');
 

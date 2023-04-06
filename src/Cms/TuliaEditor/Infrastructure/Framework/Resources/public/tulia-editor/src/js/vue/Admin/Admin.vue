@@ -117,6 +117,10 @@ provide('usecase.contextmenu', props.container.get('usecase.contextmenu'));
 provide('messenger', props.container.get('messenger'));
 provide('structure.store', props.container.get('structure.store'));
 provide('selection.store', props.container.get('selection.store'));
+provide('instance.blocks', props.container.get('instantiator').instantiator('block'));
+provide('instance.columns', props.container.get('instantiator').instantiator('column'));
+provide('instance.rows', props.container.get('instantiator').instantiator('row'));
+provide('instance.sections', props.container.get('instantiator').instantiator('section'));
 </script>
 <script>
 export default {

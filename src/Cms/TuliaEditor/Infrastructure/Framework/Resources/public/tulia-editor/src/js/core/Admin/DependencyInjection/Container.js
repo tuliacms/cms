@@ -14,6 +14,10 @@ import ContextmenuEditorSubscriber from "core/Admin/Subscriber/Editor/Contextmen
 import Draggable from "core/Admin/UseCase/Draggable";
 import Rows from "core/Admin/UseCase/Rows";
 import Columns from "core/Admin/UseCase/Columns";
+import ConfigStoreFactory from "core/Admin/Data/Store/ConfigStoreFactory";
+import ElementConfigStoreRegistry from "core/Admin/Data/ElementConfigStoreRegistry";
+import Instantiator from "core/Shared/Structure/Element/Instantiator";
+import ConfigSynchronizer from "core/Admin/Structure/Element/ConfigSynchronizer";
 
 export default class Container extends AbstractContainer {
     build() {
@@ -32,6 +36,10 @@ export default class Container extends AbstractContainer {
         });
         this.register('selection.store', () => useSelectionStore());
         this.register('contextmenu.store', () => useContextmenuStore());
+        this.register('element.config.storeFactory', () => new ConfigStoreFactory());
+        this.register('element.config.registry', () => new ElementConfigStoreRegistry(this.get('element.config.storeFactory'), this.get('element.config.synchronizer')));
+        this.register('element.config.synchronizer', () => new ConfigSynchronizer(this.get('messenger')));
+        this.register('instantiator', () => new Instantiator(this.get('element.config.registry')));
 
         // Subscribers
         this.register(

@@ -17,15 +17,10 @@
         ></Columns>
         <div
             class="tued-structure-empty-element"
+            v-if="structure.columnsOf(row.id).length === 0"
         >
             <span>{{ translator.trans('emptyRow') }}</span>
         </div>
-<!--        <div
-            class="tued-structure-empty-element"
-            v-if="props.row.columns.length === 0"
-        >
-            <span>{{ translator.trans('emptyRow') }}</span>
-        </div>-->
     </div>
 </template>
 
