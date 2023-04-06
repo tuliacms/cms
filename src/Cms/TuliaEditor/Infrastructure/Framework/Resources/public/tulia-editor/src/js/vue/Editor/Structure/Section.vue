@@ -9,11 +9,14 @@
         :tued-contextmenu="contextmenu.register(section.id, 'section')"
     >
         <div :class="containerClassname">
-            <Rows
+            <Row
+                v-for="row in structure.rowsOf(section.id)"
+                :key="row.id"
+                :row="row"
                 :parent="section.id"
                 @selection-enter="(id, type) => $emit('selection-enter', id, type)"
                 @selection-leave="(id, type) => $emit('selection-leave', id, type)"
-            ></Rows>
+            ></Row>
         </div>
         <div
             class="tued-structure-empty-element"
@@ -26,7 +29,7 @@
 
 <script setup>
 import { defineProps, defineEmits, inject, computed } from "vue";
-import Rows from "editor/Structure/Rows.vue";
+import Row from "editor/Structure/Row.vue";
 
 const props = defineProps(['section']);
 const emit = defineEmits(['selection-enter', 'selection-leave']);

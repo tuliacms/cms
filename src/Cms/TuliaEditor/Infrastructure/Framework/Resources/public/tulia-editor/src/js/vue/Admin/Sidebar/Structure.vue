@@ -18,10 +18,8 @@
                     data-element-type="section"
                     :data-element-id="element.id"
                 >
-                    <!--
-                    @dblclick.stop="emits('selected')"
-                    -->
                     <div
+                        @dblclick.stop="emit('selected')"
                         @mouseenter="selectionUseCase.hover(element.id, 'section')"
                         @mouseleave="selectionUseCase.dehover()"
                         @click.stop="selectionUseCase.select(element.id, 'section')"

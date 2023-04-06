@@ -1,8 +1,6 @@
 <template>
     <div
-        v-for="column in structure.columnsOf(parent)"
         :id="'tued-structure-column-' + column.id"
-        :key="column.id"
         :class="columnClass"
         @mouseenter="emit('selection-enter', column.id, 'column')"
         @mouseleave="emit('selection-leave', column.id, 'column')"
@@ -36,12 +34,13 @@
 <script setup>
 import { inject, defineProps, defineEmits } from "vue";
 
-const props = defineProps(['parent']);
+const props = defineProps(['parent', 'column']);
 const emit = defineEmits(['selection-enter', 'selection-leave']);
 const structure = inject('structure.store');
 const contextmenu = inject('contextmenu');
 const translator = inject('translator');
 const selection = inject('usecase.selection');
+const column = inject('instance.columns').editor(props);
 const columnClass = 'col';
 /*const { defineProps, inject, computed } = require('vue');
 const Block = require('./Block.vue').default;

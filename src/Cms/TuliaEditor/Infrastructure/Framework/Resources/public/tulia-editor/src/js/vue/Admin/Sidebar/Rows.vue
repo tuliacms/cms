@@ -14,10 +14,8 @@
         >
             <template #item="{element}">
                 <div class="tued-structure-element tued-structure-element-row">
-                    <!--
-                    @dblclick.stop="$emit('selected')"
-                    -->
                     <div
+                        @dblclick.stop="emit('selected')"
                         @mouseenter="selectionUseCase.hover(element.id, 'row')"
                         @mouseleave="selectionUseCase.dehover()"
                         @click.stop="selectionUseCase.select(element.id, 'row')"

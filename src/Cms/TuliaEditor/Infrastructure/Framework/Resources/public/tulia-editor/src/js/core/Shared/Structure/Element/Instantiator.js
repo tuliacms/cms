@@ -26,16 +26,16 @@ export default class Instantiator {
     }
 
     instance (type, segment, props) {
-        const element = this.getElementByType(props, type);
-        const instanceKey = `${type}-${segment}-${element.id}`;
+        const elementId = Instantiator.getElementIdByType(props, type);
+        const instanceKey = `${type}-${segment}-${elementId}`;
 
         if (this.instances[instanceKey]) {
             return this.instances[instanceKey];
         }
 
         const args = [
-            element.id,
-            element.type,
+            elementId,
+            type,
             this.elementStoreRegistry,
         ];
 
@@ -52,12 +52,16 @@ export default class Instantiator {
         return this.instances[instanceKey] = instance;
     }
 
-    getElementByType (props, type) {
+    static getElementIdByType (props, type) {
+        if (typeof props === 'string' || props instanceof String) {
+            return props;
+        }
+
         switch (type) {
-            case 'block': return props.block;
-            case 'column': return props.column;
-            case 'row': return props.row;
-            case 'section': return props.section;
+            case 'block': return props.block.id;
+            case 'column': return props.column.id;
+            case 'row': return props.row.id;
+            case 'section': return props.section.id;
         }
     }
 }

@@ -15,6 +15,7 @@
             <template #item="{element}">
                 <div class="tued-structure-element tued-structure-element-column">
                     <div
+                        @dblclick.stop="emit('selected')"
                         @mouseenter="selectionUseCase.hover(element.id, 'column')"
                         @mouseleave="selectionUseCase.dehover()"
                         @click.stop="selectionUseCase.select(element.id, 'column')"
@@ -48,7 +49,7 @@
                         @draggable-start="(event) => emit('draggable-start', event)"
                         @draggable-change="(event) => emit('draggable-change', event)"
                         @draggable-end="(event) => emit('draggable-end', event)"
-                        @selected="emits('selected')"
+                        @selected="emit('selected')"
                     ></Blocks>-->
                 </div>
             </template>

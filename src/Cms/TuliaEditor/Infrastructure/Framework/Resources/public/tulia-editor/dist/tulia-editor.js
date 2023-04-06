@@ -23244,10 +23244,10 @@ return __returned__
 
 /***/ }),
 
-/***/ "./src/js/vue/Editor/Structure/Columns.vue":
-/*!*************************************************!*\
-  !*** ./src/js/vue/Editor/Structure/Columns.vue ***!
-  \*************************************************/
+/***/ "./src/js/vue/Editor/Structure/Column.vue":
+/*!************************************************!*\
+  !*** ./src/js/vue/Editor/Structure/Column.vue ***!
+  \************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -23255,15 +23255,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _Columns_vue_vue_type_template_id_26861ea5__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Columns.vue?vue&type=template&id=26861ea5 */ "./src/js/vue/Editor/Structure/Columns.vue?vue&type=template&id=26861ea5");
-/* harmony import */ var _Columns_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Columns.vue?vue&type=script&setup=true&lang=js */ "./src/js/vue/Editor/Structure/Columns.vue?vue&type=script&setup=true&lang=js");
+/* harmony import */ var _Column_vue_vue_type_template_id_7cfeca3e__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Column.vue?vue&type=template&id=7cfeca3e */ "./src/js/vue/Editor/Structure/Column.vue?vue&type=template&id=7cfeca3e");
+/* harmony import */ var _Column_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Column.vue?vue&type=script&setup=true&lang=js */ "./src/js/vue/Editor/Structure/Column.vue?vue&type=script&setup=true&lang=js");
 /* harmony import */ var _home_adam_projects_tuliacms_development_tuliacms_core_src_Cms_TuliaEditor_Infrastructure_Framework_Resources_public_tulia_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_home_adam_projects_tuliacms_development_tuliacms_core_src_Cms_TuliaEditor_Infrastructure_Framework_Resources_public_tulia_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Columns_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Columns_vue_vue_type_template_id_26861ea5__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"src/js/vue/Editor/Structure/Columns.vue"]])
+const __exports__ = /*#__PURE__*/(0,_home_adam_projects_tuliacms_development_tuliacms_core_src_Cms_TuliaEditor_Infrastructure_Framework_Resources_public_tulia_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Column_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Column_vue_vue_type_template_id_7cfeca3e__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"src/js/vue/Editor/Structure/Column.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -23272,10 +23272,10 @@ if (false) {}
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Editor/Structure/Columns.vue?vue&type=script&setup=true&lang=js":
-/*!********************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Editor/Structure/Columns.vue?vue&type=script&setup=true&lang=js ***!
-  \********************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Editor/Structure/Column.vue?vue&type=script&setup=true&lang=js":
+/*!*******************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Editor/Structure/Column.vue?vue&type=script&setup=true&lang=js ***!
+  \*******************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -23289,7 +23289,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['parent'],
+  props: ['parent', 'column'],
   emits: ['selection-enter', 'selection-leave'],
   setup(__props, { expose, emit }) {
   expose();
@@ -23302,6 +23302,7 @@ const structure = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('structure.store')
 const contextmenu = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('contextmenu');
 const translator = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('translator');
 const selection = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('usecase.selection');
+const column = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('instance.columns').editor(props);
 const columnClass = 'col';
 /*const { defineProps, inject, computed } = require('vue');
 const Block = require('./Block.vue').default;
@@ -23314,7 +23315,7 @@ const contextmenu = inject('contextmenu');
 
 const columnClass = computed(() => (new SizesClassnameGenerator(props.column, ['tued-structure-column', 'tued-structure-element-selectable'])).generate());*/
 
-const __returned__ = { props, emit, structure, contextmenu, translator, selection, columnClass, inject: vue__WEBPACK_IMPORTED_MODULE_0__.inject }
+const __returned__ = { props, emit, structure, contextmenu, translator, selection, column, columnClass, inject: vue__WEBPACK_IMPORTED_MODULE_0__.inject }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -23323,10 +23324,10 @@ return __returned__
 
 /***/ }),
 
-/***/ "./src/js/vue/Editor/Structure/Rows.vue":
-/*!**********************************************!*\
-  !*** ./src/js/vue/Editor/Structure/Rows.vue ***!
-  \**********************************************/
+/***/ "./src/js/vue/Editor/Structure/Row.vue":
+/*!*********************************************!*\
+  !*** ./src/js/vue/Editor/Structure/Row.vue ***!
+  \*********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -23334,15 +23335,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _Rows_vue_vue_type_template_id_c817d97e__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Rows.vue?vue&type=template&id=c817d97e */ "./src/js/vue/Editor/Structure/Rows.vue?vue&type=template&id=c817d97e");
-/* harmony import */ var _Rows_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Rows.vue?vue&type=script&setup=true&lang=js */ "./src/js/vue/Editor/Structure/Rows.vue?vue&type=script&setup=true&lang=js");
+/* harmony import */ var _Row_vue_vue_type_template_id_25f1d222__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Row.vue?vue&type=template&id=25f1d222 */ "./src/js/vue/Editor/Structure/Row.vue?vue&type=template&id=25f1d222");
+/* harmony import */ var _Row_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Row.vue?vue&type=script&setup=true&lang=js */ "./src/js/vue/Editor/Structure/Row.vue?vue&type=script&setup=true&lang=js");
 /* harmony import */ var _home_adam_projects_tuliacms_development_tuliacms_core_src_Cms_TuliaEditor_Infrastructure_Framework_Resources_public_tulia_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_home_adam_projects_tuliacms_development_tuliacms_core_src_Cms_TuliaEditor_Infrastructure_Framework_Resources_public_tulia_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Rows_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Rows_vue_vue_type_template_id_c817d97e__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"src/js/vue/Editor/Structure/Rows.vue"]])
+const __exports__ = /*#__PURE__*/(0,_home_adam_projects_tuliacms_development_tuliacms_core_src_Cms_TuliaEditor_Infrastructure_Framework_Resources_public_tulia_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Row_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Row_vue_vue_type_template_id_25f1d222__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"src/js/vue/Editor/Structure/Row.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -23351,10 +23352,10 @@ if (false) {}
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Editor/Structure/Rows.vue?vue&type=script&setup=true&lang=js":
-/*!*****************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Editor/Structure/Rows.vue?vue&type=script&setup=true&lang=js ***!
-  \*****************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Editor/Structure/Row.vue?vue&type=script&setup=true&lang=js":
+/*!****************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Editor/Structure/Row.vue?vue&type=script&setup=true&lang=js ***!
+  \****************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -23364,13 +23365,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "vue");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var editor_Structure_Columns_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! editor/Structure/Columns.vue */ "./src/js/vue/Editor/Structure/Columns.vue");
+/* harmony import */ var editor_Structure_Column_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! editor/Structure/Column.vue */ "./src/js/vue/Editor/Structure/Column.vue");
 
 
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['parent'],
+  props: ['row', 'parent'],
   emits: ['selection-enter', 'selection-leave'],
   setup(__props, { expose, emit }) {
   expose();
@@ -23383,26 +23384,20 @@ const structure = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('structure.store')
 const contextmenu = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('contextmenu');
 const translator = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('translator');
 const selection = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('usecase.selection');
-const rowClassname = 'tued-structure-row tued-structure-element-selectable row';
+const row = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('instance.rows').editor(props);
+const section = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('instance.sections').editor(props.parent);
 
-/*const { defineProps, inject, computed } = require('vue');
-const props = defineProps(['row', 'parent']);
-const row = inject('rows.instance').editor(props);
-const section = row.getParent();
-const selection = inject('selection');
-const translator = inject('translator');
-
-const rowClassname = computed(() => {
+const rowClassname = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
     let classname = 'tued-structure-row tued-structure-element-selectable row';
 
-    if (section.data.containerWidth === 'full-width-no-padding') {
+    if (section.config.containerWidth === 'full-width-no-padding') {
         classname += ' g-0';
     }
 
     return classname;
-});*/
+});
 
-const __returned__ = { props, emit, structure, contextmenu, translator, selection, rowClassname, inject: vue__WEBPACK_IMPORTED_MODULE_0__.inject, Columns: editor_Structure_Columns_vue__WEBPACK_IMPORTED_MODULE_1__["default"] }
+const __returned__ = { props, emit, structure, contextmenu, translator, selection, row, section, rowClassname, inject: vue__WEBPACK_IMPORTED_MODULE_0__.inject, computed: vue__WEBPACK_IMPORTED_MODULE_0__.computed, Column: editor_Structure_Column_vue__WEBPACK_IMPORTED_MODULE_1__["default"] }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -23452,7 +23447,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "vue");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var editor_Structure_Rows_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! editor/Structure/Rows.vue */ "./src/js/vue/Editor/Structure/Rows.vue");
+/* harmony import */ var editor_Structure_Row_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! editor/Structure/Row.vue */ "./src/js/vue/Editor/Structure/Row.vue");
 
 
 
@@ -23481,7 +23476,7 @@ const containerClassname = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
     }
 });
 
-const __returned__ = { props, emit, translator, selection, contextmenu, structure, section, containerClassname, inject: vue__WEBPACK_IMPORTED_MODULE_0__.inject, computed: vue__WEBPACK_IMPORTED_MODULE_0__.computed, Rows: editor_Structure_Rows_vue__WEBPACK_IMPORTED_MODULE_1__["default"] }
+const __returned__ = { props, emit, translator, selection, contextmenu, structure, section, containerClassname, inject: vue__WEBPACK_IMPORTED_MODULE_0__.inject, computed: vue__WEBPACK_IMPORTED_MODULE_0__.computed, Row: editor_Structure_Row_vue__WEBPACK_IMPORTED_MODULE_1__["default"] }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -25034,34 +25029,34 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/js/vue/Editor/Structure/Columns.vue?vue&type=script&setup=true&lang=js":
-/*!************************************************************************************!*\
-  !*** ./src/js/vue/Editor/Structure/Columns.vue?vue&type=script&setup=true&lang=js ***!
-  \************************************************************************************/
+/***/ "./src/js/vue/Editor/Structure/Column.vue?vue&type=script&setup=true&lang=js":
+/*!***********************************************************************************!*\
+  !*** ./src/js/vue/Editor/Structure/Column.vue?vue&type=script&setup=true&lang=js ***!
+  \***********************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Columns_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Column_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Columns_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./Columns.vue?vue&type=script&setup=true&lang=js */ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Editor/Structure/Columns.vue?vue&type=script&setup=true&lang=js");
+/* harmony import */ var _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Column_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./Column.vue?vue&type=script&setup=true&lang=js */ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Editor/Structure/Column.vue?vue&type=script&setup=true&lang=js");
  
 
 /***/ }),
 
-/***/ "./src/js/vue/Editor/Structure/Rows.vue?vue&type=script&setup=true&lang=js":
-/*!*********************************************************************************!*\
-  !*** ./src/js/vue/Editor/Structure/Rows.vue?vue&type=script&setup=true&lang=js ***!
-  \*********************************************************************************/
+/***/ "./src/js/vue/Editor/Structure/Row.vue?vue&type=script&setup=true&lang=js":
+/*!********************************************************************************!*\
+  !*** ./src/js/vue/Editor/Structure/Row.vue?vue&type=script&setup=true&lang=js ***!
+  \********************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Rows_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Row_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Rows_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./Rows.vue?vue&type=script&setup=true&lang=js */ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Editor/Structure/Rows.vue?vue&type=script&setup=true&lang=js");
+/* harmony import */ var _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Row_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./Row.vue?vue&type=script&setup=true&lang=js */ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Editor/Structure/Row.vue?vue&type=script&setup=true&lang=js");
  
 
 /***/ }),
@@ -25818,34 +25813,34 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/js/vue/Editor/Structure/Columns.vue?vue&type=template&id=26861ea5":
-/*!*******************************************************************************!*\
-  !*** ./src/js/vue/Editor/Structure/Columns.vue?vue&type=template&id=26861ea5 ***!
-  \*******************************************************************************/
+/***/ "./src/js/vue/Editor/Structure/Column.vue?vue&type=template&id=7cfeca3e":
+/*!******************************************************************************!*\
+  !*** ./src/js/vue/Editor/Structure/Column.vue?vue&type=template&id=7cfeca3e ***!
+  \******************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Columns_vue_vue_type_template_id_26861ea5__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Column_vue_vue_type_template_id_7cfeca3e__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Columns_vue_vue_type_template_id_26861ea5__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./Columns.vue?vue&type=template&id=26861ea5 */ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Editor/Structure/Columns.vue?vue&type=template&id=26861ea5");
+/* harmony import */ var _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Column_vue_vue_type_template_id_7cfeca3e__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./Column.vue?vue&type=template&id=7cfeca3e */ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Editor/Structure/Column.vue?vue&type=template&id=7cfeca3e");
 
 
 /***/ }),
 
-/***/ "./src/js/vue/Editor/Structure/Rows.vue?vue&type=template&id=c817d97e":
-/*!****************************************************************************!*\
-  !*** ./src/js/vue/Editor/Structure/Rows.vue?vue&type=template&id=c817d97e ***!
-  \****************************************************************************/
+/***/ "./src/js/vue/Editor/Structure/Row.vue?vue&type=template&id=25f1d222":
+/*!***************************************************************************!*\
+  !*** ./src/js/vue/Editor/Structure/Row.vue?vue&type=template&id=25f1d222 ***!
+  \***************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Rows_vue_vue_type_template_id_c817d97e__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Row_vue_vue_type_template_id_25f1d222__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Rows_vue_vue_type_template_id_c817d97e__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./Rows.vue?vue&type=template&id=c817d97e */ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Editor/Structure/Rows.vue?vue&type=template&id=c817d97e");
+/* harmony import */ var _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Row_vue_vue_type_template_id_25f1d222__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./Row.vue?vue&type=template&id=25f1d222 */ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Editor/Structure/Row.vue?vue&type=template&id=25f1d222");
 
 
 /***/ }),
@@ -27365,15 +27360,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "component-data": { class: 'tued-structure-draggable-group', name: 'fade', as: 'transition-group', 'data-draggable-delta-transformer-parent': `row.${$props.parent}` }
     }, $setup.structureDragOptions, {
       handle: ".tued-structure-element-column > .tued-label > .tued-structure-draggable-handler",
-      onStart: _cache[1] || (_cache[1] = (event) => $setup.emit('draggable-start', event)),
-      onChange: _cache[2] || (_cache[2] = (event) => $setup.emit('draggable-change', event)),
-      onEnd: _cache[3] || (_cache[3] = (event) => $setup.emit('draggable-end', event))
+      onStart: _cache[2] || (_cache[2] = (event) => $setup.emit('draggable-start', event)),
+      onChange: _cache[3] || (_cache[3] = (event) => $setup.emit('draggable-change', event)),
+      onEnd: _cache[4] || (_cache[4] = (event) => $setup.emit('draggable-end', event))
     }), {
       item: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(({element}) => [
         (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [
           (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+            onDblclick: _cache[0] || (_cache[0] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($setup.emit('selected')), ["stop"])),
             onMouseenter: $event => ($setup.selectionUseCase.hover(element.id, 'column')),
-            onMouseleave: _cache[0] || (_cache[0] = $event => ($setup.selectionUseCase.dehover())),
+            onMouseleave: _cache[1] || (_cache[1] = $event => ($setup.selectionUseCase.dehover())),
             onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($setup.selectionUseCase.select(element.id, 'column')), ["stop"]),
             onContextmenu: $event => ($setup.selectionUseCase.select(element.id, 'column')),
             "tued-contextmenu": $setup.contextmenu.register(element.id, 'column'),
@@ -27386,7 +27382,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translator.trans('column')) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(element.id), 1 /* TEXT */),
             (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                        <div class=\"tied-structure-element-options\">\n                            <div class=\"tued-structure-column-sizer\">\n                                <span>{{ breakpointSize }}</span>\n                                <input\n                                    type=\"text\"\n                                    data-vueref=\"'column-' + element.id\"\n                                    :value=\"element.sizes[canvas.getBreakpointName()].size\"\n                                    @focus=\"$event.target.select()\"\n                                    @keyup=\"changeSize(element, $event)\"\n                                    @keydown=\"changeSizeWithArrows(element, $event)\"\n                                    @change=\"changeSize(element, $event)\"\n                                    placeholder=\"inherit\"\n                                />\n                            </div>\n                        </div>")
           ], 42 /* CLASS, PROPS, HYDRATE_EVENTS */, _hoisted_2),
-          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                    <Blocks\n                        :parent=\"element\"\n                        :blocks=\"element.blocks\"\n                        @draggable-start=\"(event) => emit('draggable-start', event)\"\n                        @draggable-change=\"(event) => emit('draggable-change', event)\"\n                        @draggable-end=\"(event) => emit('draggable-end', event)\"\n                        @selected=\"emits('selected')\"\n                    ></Blocks>")
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                    <Blocks\n                        :parent=\"element\"\n                        :blocks=\"element.blocks\"\n                        @draggable-start=\"(event) => emit('draggable-start', event)\"\n                        @draggable-change=\"(event) => emit('draggable-change', event)\"\n                        @draggable-end=\"(event) => emit('draggable-end', event)\"\n                        @selected=\"emit('selected')\"\n                    ></Blocks>")
         ])
       ]),
       _: 1 /* STABLE */
@@ -27429,16 +27425,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "component-data": { class: 'tued-structure-draggable-group', name: 'fade', as: 'transition-group', 'data-draggable-delta-transformer-parent': `section.${$props.parent}` }
     }, $setup.structureDragOptions, {
       handle: ".tued-structure-element-row > .tued-label > .tued-structure-draggable-handler",
-      onStart: _cache[5] || (_cache[5] = (event) => $setup.emit('draggable-start', event)),
-      onChange: _cache[6] || (_cache[6] = (event) => $setup.emit('draggable-change', event)),
-      onEnd: _cache[7] || (_cache[7] = (event) => $setup.emit('draggable-end', event))
+      onStart: _cache[6] || (_cache[6] = (event) => $setup.emit('draggable-start', event)),
+      onChange: _cache[7] || (_cache[7] = (event) => $setup.emit('draggable-change', event)),
+      onEnd: _cache[8] || (_cache[8] = (event) => $setup.emit('draggable-end', event))
     }), {
       item: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(({element}) => [
         (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [
-          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("\n                    @dblclick.stop=\"$emit('selected')\"\n                    "),
           (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+            onDblclick: _cache[0] || (_cache[0] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($setup.emit('selected')), ["stop"])),
             onMouseenter: $event => ($setup.selectionUseCase.hover(element.id, 'row')),
-            onMouseleave: _cache[0] || (_cache[0] = $event => ($setup.selectionUseCase.dehover())),
+            onMouseleave: _cache[1] || (_cache[1] = $event => ($setup.selectionUseCase.dehover())),
             onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($setup.selectionUseCase.select(element.id, 'row')), ["stop"]),
             onContextmenu: $event => ($setup.selectionUseCase.select(element.id, 'row')),
             "tued-contextmenu": $setup.contextmenu.register(element.id, 'row'),
@@ -27452,10 +27448,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           ], 42 /* CLASS, PROPS, HYDRATE_EVENTS */, _hoisted_2),
           (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Columns"], {
             parent: element.id,
-            onDraggableStart: _cache[1] || (_cache[1] = (event) => $setup.emit('draggable-start', event)),
-            onDraggableChange: _cache[2] || (_cache[2] = (event) => $setup.emit('draggable-change', event)),
-            onDraggableEnd: _cache[3] || (_cache[3] = (event) => $setup.emit('draggable-end', event)),
-            onSelected: _cache[4] || (_cache[4] = $event => ($setup.emit('selected')))
+            onDraggableStart: _cache[2] || (_cache[2] = (event) => $setup.emit('draggable-start', event)),
+            onDraggableChange: _cache[3] || (_cache[3] = (event) => $setup.emit('draggable-change', event)),
+            onDraggableEnd: _cache[4] || (_cache[4] = (event) => $setup.emit('draggable-end', event)),
+            onSelected: _cache[5] || (_cache[5] = $event => ($setup.emit('selected')))
           }, null, 8 /* PROPS */, ["parent"])
         ])
       ]),
@@ -27748,10 +27744,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           "data-element-type": "section",
           "data-element-id": element.id
         }, [
-          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("\n                    @dblclick.stop=\"emits('selected')\"\n                    "),
           (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+            onDblclick: _cache[0] || (_cache[0] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($setup.emit('selected')), ["stop"])),
             onMouseenter: $event => ($setup.selectionUseCase.hover(element.id, 'section')),
-            onMouseleave: _cache[0] || (_cache[0] = $event => ($setup.selectionUseCase.dehover())),
+            onMouseleave: _cache[1] || (_cache[1] = $event => ($setup.selectionUseCase.dehover())),
             onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($setup.selectionUseCase.select(element.id, 'section')), ["stop"]),
             onContextmenu: $event => ($setup.selectionUseCase.select(element.id, 'section')),
             "tued-contextmenu": $setup.contextmenu.register(element.id, 'section'),
@@ -27769,7 +27765,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             onDraggableStart: $setup.startDraggable,
             onDraggableChange: $setup.changeDraggable,
             onDraggableEnd: $setup.endDraggable,
-            onSelected: _cache[1] || (_cache[1] = $event => ($setup.emit('selected')))
+            onSelected: _cache[2] || (_cache[2] = $event => ($setup.emit('selected')))
           }, null, 8 /* PROPS */, ["parent"])
         ], 8 /* PROPS */, _hoisted_2)
       ]),
@@ -27807,10 +27803,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Editor/Structure/Columns.vue?vue&type=template&id=26861ea5":
-/*!*************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Editor/Structure/Columns.vue?vue&type=template&id=26861ea5 ***!
-  \*************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Editor/Structure/Column.vue?vue&type=template&id=7cfeca3e":
+/*!************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Editor/Structure/Column.vue?vue&type=template&id=7cfeca3e ***!
+  \************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -27822,35 +27818,32 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 
 
-const _hoisted_1 = ["id", "onMouseenter", "onMouseleave", "onMousedown", "tued-contextmenu"]
+const _hoisted_1 = ["id", "tued-contextmenu"]
 const _hoisted_2 = { class: "tued-structure-empty-element" }
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.structure.columnsOf($props.parent), (column) => {
-    return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
-      id: 'tued-structure-column-' + column.id,
-      key: column.id,
-      class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($setup.columnClass),
-      onMouseenter: $event => ($setup.emit('selection-enter', column.id, 'column')),
-      onMouseleave: $event => ($setup.emit('selection-leave', column.id, 'column')),
-      onMousedown: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($setup.selection.select(column.id, 'column')), ["stop"]),
-      "data-tagname": "Column",
-      "tued-contextmenu": $setup.contextmenu.register(column.id, 'column')
-    }, [
-      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("        <Block\n            v-for=\"block in props.column.blocks\"\n            :id=\"'tued-structure-block-' + block.id\"\n            :key=\"block.id\"\n            :block=\"block\"\n            :parent=\"props.column\"\n            @selection-enter=\"(type, id) => $emit('selection-enter', type, id)\"\n            @selection-leave=\"(type, id) => $emit('selection-leave', type, id)\"\n        ></Block>\n        <div\n            class=\"tued-structure-empty-element\"\n            v-if=\"props.column.blocks.length === 0\"\n        >\n            <span>{{ translator.trans('emptyColumn') }}</span>\n        </div>"),
-      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [
-        (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translator.trans('emptyColumn')), 1 /* TEXT */)
-      ])
-    ], 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_1))
-  }), 128 /* KEYED_FRAGMENT */))
+  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+    id: 'tued-structure-column-' + $setup.column.id,
+    class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($setup.columnClass),
+    onMouseenter: _cache[0] || (_cache[0] = $event => ($setup.emit('selection-enter', $setup.column.id, 'column'))),
+    onMouseleave: _cache[1] || (_cache[1] = $event => ($setup.emit('selection-leave', $setup.column.id, 'column'))),
+    onMousedown: _cache[2] || (_cache[2] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($setup.selection.select($setup.column.id, 'column')), ["stop"])),
+    "data-tagname": "Column",
+    "tued-contextmenu": $setup.contextmenu.register($setup.column.id, 'column')
+  }, [
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("        <Block\n            v-for=\"block in props.column.blocks\"\n            :id=\"'tued-structure-block-' + block.id\"\n            :key=\"block.id\"\n            :block=\"block\"\n            :parent=\"props.column\"\n            @selection-enter=\"(type, id) => $emit('selection-enter', type, id)\"\n            @selection-leave=\"(type, id) => $emit('selection-leave', type, id)\"\n        ></Block>\n        <div\n            class=\"tued-structure-empty-element\"\n            v-if=\"props.column.blocks.length === 0\"\n        >\n            <span>{{ translator.trans('emptyColumn') }}</span>\n        </div>"),
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translator.trans('emptyColumn')), 1 /* TEXT */)
+    ])
+  ], 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_1))
 }
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Editor/Structure/Rows.vue?vue&type=template&id=c817d97e":
-/*!**********************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Editor/Structure/Rows.vue?vue&type=template&id=c817d97e ***!
-  \**********************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Editor/Structure/Row.vue?vue&type=template&id=25f1d222":
+/*!*********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Editor/Structure/Row.vue?vue&type=template&id=25f1d222 ***!
+  \*********************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -27862,36 +27855,37 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 
 
-const _hoisted_1 = ["id", "onMouseenter", "onMouseleave", "onMousedown", "tued-contextmenu"]
+const _hoisted_1 = ["id", "tued-contextmenu"]
 const _hoisted_2 = {
   key: 0,
   class: "tued-structure-empty-element"
 }
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.structure.rowsOf($props.parent), (row) => {
-    return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
-      id: 'tued-structure-row-' + row.id,
-      key: row.id,
-      class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($setup.rowClassname),
-      onMouseenter: $event => ($setup.emit('selection-enter', row.id, 'row')),
-      onMouseleave: $event => ($setup.emit('selection-leave', row.id, 'row')),
-      onMousedown: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($setup.selection.select(row.id, 'row')), ["stop"]),
-      "data-tagname": "Row",
-      "tued-contextmenu": $setup.contextmenu.register(row.id, 'row')
-    }, [
-      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Columns"], {
-        parent: row.id,
+  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+    id: 'tued-structure-row-' + $setup.row.id,
+    class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($setup.rowClassname),
+    onMouseenter: _cache[2] || (_cache[2] = $event => ($setup.emit('selection-enter', $setup.row.id, 'row'))),
+    onMouseleave: _cache[3] || (_cache[3] = $event => ($setup.emit('selection-leave', $setup.row.id, 'row'))),
+    onMousedown: _cache[4] || (_cache[4] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($setup.selection.select($setup.row.id, 'row')), ["stop"])),
+    "data-tagname": "Row",
+    "tued-contextmenu": $setup.contextmenu.register($setup.row.id, 'row')
+  }, [
+    ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.structure.columnsOf($setup.row.id), (column) => {
+      return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)($setup["Column"], {
+        key: column.id,
+        column: column,
+        parent: $setup.row.id,
         onSelectionEnter: _cache[0] || (_cache[0] = (type, id) => _ctx.$emit('selection-enter', type, id)),
         onSelectionLeave: _cache[1] || (_cache[1] = (type, id) => _ctx.$emit('selection-leave', type, id))
-      }, null, 8 /* PROPS */, ["parent"]),
-      ($setup.structure.columnsOf(row.id).length === 0)
-        ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_2, [
-            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translator.trans('emptyRow')), 1 /* TEXT */)
-          ]))
-        : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)
-    ], 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_1))
-  }), 128 /* KEYED_FRAGMENT */))
+      }, null, 8 /* PROPS */, ["column", "parent"]))
+    }), 128 /* KEYED_FRAGMENT */)),
+    ($setup.structure.columnsOf($setup.row.id).length === 0)
+      ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_2, [
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translator.trans('emptyRow')), 1 /* TEXT */)
+        ]))
+      : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)
+  ], 42 /* CLASS, PROPS, HYDRATE_EVENTS */, _hoisted_1))
 }
 
 /***/ }),
@@ -27930,11 +27924,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
       class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($setup.containerClassname)
     }, [
-      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Rows"], {
-        parent: $setup.section.id,
-        onSelectionEnter: _cache[0] || (_cache[0] = (id, type) => _ctx.$emit('selection-enter', id, type)),
-        onSelectionLeave: _cache[1] || (_cache[1] = (id, type) => _ctx.$emit('selection-leave', id, type))
-      }, null, 8 /* PROPS */, ["parent"])
+      ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.structure.rowsOf($setup.section.id), (row) => {
+        return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)($setup["Row"], {
+          key: row.id,
+          row: row,
+          parent: $setup.section.id,
+          onSelectionEnter: _cache[0] || (_cache[0] = (id, type) => _ctx.$emit('selection-enter', id, type)),
+          onSelectionLeave: _cache[1] || (_cache[1] = (id, type) => _ctx.$emit('selection-leave', id, type))
+        }, null, 8 /* PROPS */, ["row", "parent"]))
+      }), 128 /* KEYED_FRAGMENT */))
     ], 2 /* CLASS */),
     ($setup.structure.rowsOf($setup.section.id).length === 0)
       ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_2, [
@@ -32733,16 +32731,16 @@ class Instantiator {
     }
 
     instance (type, segment, props) {
-        const element = this.getElementByType(props, type);
-        const instanceKey = `${type}-${segment}-${element.id}`;
+        const elementId = Instantiator.getElementIdByType(props, type);
+        const instanceKey = `${type}-${segment}-${elementId}`;
 
         if (this.instances[instanceKey]) {
             return this.instances[instanceKey];
         }
 
         const args = [
-            element.id,
-            element.type,
+            elementId,
+            type,
             this.elementStoreRegistry,
         ];
 
@@ -32759,12 +32757,16 @@ class Instantiator {
         return this.instances[instanceKey] = instance;
     }
 
-    getElementByType (props, type) {
+    static getElementIdByType (props, type) {
+        if (typeof props === 'string' || props instanceof String) {
+            return props;
+        }
+
         switch (type) {
-            case 'block': return props.block;
-            case 'column': return props.column;
-            case 'row': return props.row;
-            case 'section': return props.section;
+            case 'block': return props.block.id;
+            case 'column': return props.column.id;
+            case 'row': return props.row.id;
+            case 'section': return props.section.id;
         }
     }
 }
