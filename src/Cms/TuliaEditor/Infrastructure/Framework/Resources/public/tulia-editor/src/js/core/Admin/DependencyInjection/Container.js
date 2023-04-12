@@ -18,6 +18,7 @@ import ConfigStoreFactory from "core/Admin/Data/Store/ConfigStoreFactory";
 import ElementConfigStoreRegistry from "core/Admin/Data/ElementConfigStoreRegistry";
 import Instantiator from "core/Shared/Structure/Element/Instantiator";
 import ConfigSynchronizer from "core/Admin/Structure/Element/ConfigSynchronizer";
+import ColumnSize from "core/Admin/Structure/Element/ColumnSize";
 
 export default class Container extends AbstractContainer {
     build() {
@@ -30,7 +31,7 @@ export default class Container extends AbstractContainer {
         this.register('usecase.selection', () => new Selection(this.get('selection.store'), this.get('messenger')));
         this.register('usecase.draggable', () => new Draggable(this.get('usecase.selection'), this.get('structure.store'), this.get('eventBus'), this.get('messenger')));
         this.register('usecase.contextmenu', () => new Contextmenu(this.get('contextmenu.store'), this.get('usecase.selection')));
-        this.register('canvas', () => new Canvas(this.getParameter('options')));
+        this.register('canvas', () => new Canvas(this.getParameter('options'), this.get('eventBus')));
         this.register('structure.store', () => {
             return (new StructureStoreFactory(this.getParameter('options'))).factory();
         });
@@ -40,6 +41,7 @@ export default class Container extends AbstractContainer {
         this.register('element.config.registry', () => new ElementConfigStoreRegistry(this.get('element.config.storeFactory'), this.get('element.config.synchronizer')));
         this.register('element.config.synchronizer', () => new ConfigSynchronizer(this.get('messenger')));
         this.register('instantiator', () => new Instantiator(this.get('element.config.registry')));
+        this.register('columnSize', () => new ColumnSize());
 
         // Subscribers
         this.register(

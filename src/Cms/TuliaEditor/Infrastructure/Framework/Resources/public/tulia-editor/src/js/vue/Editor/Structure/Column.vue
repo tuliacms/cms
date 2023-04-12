@@ -32,7 +32,8 @@
 </template>
 
 <script setup>
-import { inject, defineProps, defineEmits } from "vue";
+import ColumnClassnameGenerator from "core/Editor/View/ColumnClassnameGenerator";
+import { inject, defineProps, defineEmits, computed } from "vue";
 
 const props = defineProps(['parent', 'column']);
 const emit = defineEmits(['selection-enter', 'selection-leave']);
@@ -41,15 +42,6 @@ const contextmenu = inject('contextmenu');
 const translator = inject('translator');
 const selection = inject('usecase.selection');
 const column = inject('instance.columns').editor(props);
-const columnClass = 'col';
-/*const { defineProps, inject, computed } = require('vue');
-const Block = require('./Block.vue').default;
-const SizesClassnameGenerator = require('shared/Structure/Columns/SizesClassnameGenerator.js').default;
 
-const props = defineProps(['column', 'parent']);
-const selection = inject('selection');
-const translator = inject('translator');
-const contextmenu = inject('contextmenu');
-
-const columnClass = computed(() => (new SizesClassnameGenerator(props.column, ['tued-structure-column', 'tued-structure-element-selectable'])).generate());*/
+const columnClass = computed(() => (new ColumnClassnameGenerator(column, ['tued-structure-column', 'tued-structure-element-selectable'])).generate());
 </script>

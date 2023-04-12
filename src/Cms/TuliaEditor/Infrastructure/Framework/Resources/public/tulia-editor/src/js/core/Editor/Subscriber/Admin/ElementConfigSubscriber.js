@@ -11,6 +11,8 @@ export default class ElementConfigSubscriber {
     }
 
     processChanged(id, type, config) {
-        this.elementConfigRegistry.get(id, type).replace(config);
+        const configStore = this.elementConfigRegistry.get(id, type);
+
+        configStore.replace(config);
     }
 }

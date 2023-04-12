@@ -22,8 +22,9 @@ export default class ElementConfigStoreRegistry {
 
         switch (type) {
             case 'section':
-                store = this.factory.forSection(id, {a:1})();
-                break;
+                store = this.factory.forSection(id, {a:1})(); break;
+            case 'column':
+                store = this.factory.forColumn(id, {a:1})(); break;
             default:
                 return;
         }

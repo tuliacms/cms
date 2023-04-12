@@ -121,6 +121,7 @@ provide('instance.blocks', props.container.get('instantiator').instantiator('blo
 provide('instance.columns', props.container.get('instantiator').instantiator('column'));
 provide('instance.rows', props.container.get('instantiator').instantiator('row'));
 provide('instance.sections', props.container.get('instantiator').instantiator('section'));
+provide('columnSize', props.container.get('columnSize'));
 </script>
 <script>
 export default {

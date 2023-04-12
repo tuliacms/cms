@@ -13,7 +13,11 @@
             @end="(event) => emit('draggable-end', event)"
         >
             <template #item="{element}">
-                <div class="tued-structure-element tued-structure-element-row">
+                <div
+                    class="tued-structure-element tued-structure-element-row"
+                    data-element-type="row"
+                    :data-element-id="element.id"
+                >
                     <div
                         @dblclick.stop="emit('selected')"
                         @mouseenter="selectionUseCase.hover(element.id, 'row')"
@@ -26,7 +30,7 @@
                         <div class="tued-structure-draggable-handler" @mousedown.stop="selectionUseCase.select(element.id, 'row')">
                             <i class="fas fa-arrows-alt"></i>
                         </div>
-                        <span>{{ translator.trans('row') }} {{ element.id }}</span>
+                        <span>{{ translator.trans('row') }}</span>
                     </div>
                     <Columns
                         :parent="element.id"
@@ -44,7 +48,7 @@
 <script setup>
 import vuedraggable from "vuedraggable/src/vuedraggable";
 import Columns from "admin/Sidebar/Columns.vue";
-import {inject, defineEmits, defineProps, onMounted} from "vue";
+import { inject, defineEmits, defineProps, onMounted } from "vue";
 
 const props = defineProps(['parent']);
 const emit = defineEmits(['draggable-start', 'draggable-change', 'draggable-end', 'selected']);
@@ -80,40 +84,3 @@ onMounted(() => {
     });
 });
 </script>
-
-<!--<script>
-const draggable = require('vuedraggable');
-const Columns = require('components/Admin/Sidebar/Columns.vue').default;
-
-export default {
-    props: ['parent', 'rows'],
-    inject: ['selection', 'structureDragOptions', 'structureManipulator', 'translator', 'contextmenu'],
-    components: {
-        draggable,
-        Columns
-    },
-    mounted() {
-        this.contextmenu.items('rows', 'row', (id) => {
-            const row = this.structureManipulator.find(id);
-            const items = [];
-
-            items.push({
-                group: 'row',
-                onClick: (id) => this.structureManipulator.newColumn(id),
-                label: this.translator.trans('addColumn'),
-                icon: 'fas fa-plus',
-            });
-
-            items.push({
-                group: 'row',
-                onClick: (id) => this.structureManipulator.removeElement(id),
-                label: this.translator.trans('delete'),
-                icon: 'fas fa-trash',
-                classname: 'dropdown-item-danger',
-            });
-
-            return items;
-        });
-    }
-};
-</script>-->
