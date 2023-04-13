@@ -8,23 +8,17 @@
         data-tagname="Column"
         :tued-contextmenu="contextmenu.register(column.id, 'column')"
     >
-<!--        <Block
-            v-for="block in props.column.blocks"
-            :id="'tued-structure-block-' + block.id"
-            :key="block.id"
-            :block="block"
-            :parent="props.column"
-            @selection-enter="(type, id) => $emit('selection-enter', type, id)"
-            @selection-leave="(type, id) => $emit('selection-leave', type, id)"
+        <Block
+             v-for="block in structure.blocksOf(column.id)"
+             :key="block.id"
+             :block="block"
+             :parent="column.id"
+             @selection-enter="(id, type) => emit('selection-enter', id, type)"
+             @selection-leave="(id, type) => emit('selection-leave', id, type)"
         ></Block>
         <div
             class="tued-structure-empty-element"
             v-if="props.column.blocks.length === 0"
-        >
-            <span>{{ translator.trans('emptyColumn') }}</span>
-        </div>-->
-        <div
-            class="tued-structure-empty-element"
         >
             <span>{{ translator.trans('emptyColumn') }}</span>
         </div>
@@ -33,7 +27,9 @@
 
 <script setup>
 import ColumnClassnameGenerator from "core/Editor/View/ColumnClassnameGenerator";
+import Block from "editor/Structure/Block.vue";
 import { inject, defineProps, defineEmits, computed } from "vue";
+import Row from "editor/Structure/Row.vue";
 
 const props = defineProps(['parent', 'column']);
 const emit = defineEmits(['selection-enter', 'selection-leave']);

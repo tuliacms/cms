@@ -14,8 +14,8 @@
                 :key="row.id"
                 :row="row"
                 :parent="section.id"
-                @selection-enter="(id, type) => $emit('selection-enter', id, type)"
-                @selection-leave="(id, type) => $emit('selection-leave', id, type)"
+                @selection-enter="(id, type) => emit('selection-enter', id, type)"
+                @selection-leave="(id, type) => emit('selection-leave', id, type)"
             ></Row>
         </div>
         <div

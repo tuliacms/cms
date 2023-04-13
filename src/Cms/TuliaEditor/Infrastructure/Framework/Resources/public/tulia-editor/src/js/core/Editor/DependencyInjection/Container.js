@@ -29,7 +29,7 @@ export default class Container extends AbstractContainer {
         this.register('usecase.selection', () => new Selection(this.get('messenger')));
         this.register('usecase.contextmenu', () => new ContextmenuUsecase(this.get('messenger')));
         this.register('contextmenu', () => new Contextmenu());
-        this.register('element.config.storeFactory', () => new ConfigStoreFactory());
+        this.register('element.config.storeFactory', () => new ConfigStoreFactory(this.get('blocks.registry'), this.get('structure.store')));
         this.register('element.config.registry', () => new ElementConfigStoreRegistry(this.get('element.config.storeFactory')));
 
 

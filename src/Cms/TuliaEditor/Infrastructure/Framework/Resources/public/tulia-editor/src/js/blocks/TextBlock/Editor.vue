@@ -1,11 +1,14 @@
 <template>
-    <div><WysiwygEditor v-model="block.data.text"></WysiwygEditor></div>
+    <div>
+        Config: {{ block.config.someConfig }}
+        <!--<WysiwygEditor v-model="block.data.text"></WysiwygEditor>-->
+    </div>
 </template>
 
 <script setup>
-const { defineProps, inject } = require('vue');
+import { defineProps, inject } from "vue";
 const props = defineProps(['block']);
-const block = inject('blocks.instance').editor(props);
+const block = inject('instance.blocks').editor(props);
 
-const WysiwygEditor = block.extension('WysiwygEditor');
+/*const WysiwygEditor = block.extension('WysiwygEditor');*/
 </script>

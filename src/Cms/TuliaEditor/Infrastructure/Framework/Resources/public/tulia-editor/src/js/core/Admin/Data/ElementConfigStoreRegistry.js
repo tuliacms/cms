@@ -25,6 +25,8 @@ export default class ElementConfigStoreRegistry {
                 store = this.factory.forSection(id, {a:1})(); break;
             case 'column':
                 store = this.factory.forColumn(id, {a:1})(); break;
+            case 'block':
+                store = this.factory.forBlock(id, {a:1})(); break;
             default:
                 return;
         }

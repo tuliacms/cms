@@ -28,9 +28,9 @@
                         'tued-structure-selected-options': true,
                         'tued-structure-selected-active': selectionStore.selected.id === column.id && selectionStore.selected.type === 'column'
                     }">
-                        <Column></Column>
+                        <Column :column="column"></Column>
                     </div>
-<!--                    <div
+                    <div
                         v-for="(block, key) in column.blocks"
                         :key="'block-' + key"
                     >
@@ -39,14 +39,14 @@
                             'tued-structure-selected-active': selectionStore.selected.id === block.id && selectionStore.selected.type === 'block'
                         }">
                             <Block :block="block"></Block>
-                            <div :class="{ 'd-block': existingBlocks[block.code], 'd-none': !existingBlocks[block.code] }">
+                            <div :class="{ 'd-block': registry.hasComponent(block.code, 'manager'), 'd-none': !registry.hasComponent(block.code, 'manager') }">
                                 <component
-                                    :is="'block-' + block.code + '-manager'"
+                                    :is="registry.getComponentName(block.code, 'manager')"
                                     :block="block"
                                 ></component>
                             </div>
                         </div>
-                    </div>-->
+                    </div>
                 </div>
             </div>
         </div>
@@ -59,11 +59,13 @@
 <script setup>
 import Section from "admin/Sidebar/Selected/Section.vue";
 import Column from "admin/Sidebar/Selected/Column.vue";
+import Block from "admin/Sidebar/Selected/Block.vue";
 import { inject } from "vue";
 
 const selectionStore = inject('selection.store');
 const structureStore = inject('structure.store');
 const translator = inject('translator');
+const registry = inject('blocks.registry');
 
 /*const Section = require('components/Admin/Sidebar/Selected/Section.vue').default;
 const Column = require('components/Admin/Sidebar/Selected/Column.vue').default;

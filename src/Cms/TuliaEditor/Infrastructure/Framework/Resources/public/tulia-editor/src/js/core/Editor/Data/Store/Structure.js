@@ -44,6 +44,11 @@ export const useStructureStore = defineStore('structure', {
         },
     },
     getters: {
+        find(state) {
+            return (id) => {
+                return find(state.sections, id);
+            };
+        },
         rowsOf(state) {
             return (sectionId) => {
                 return find(state.sections, sectionId).rows;
@@ -52,6 +57,11 @@ export const useStructureStore = defineStore('structure', {
         columnsOf(state) {
             return (rowId) => {
                 return find(state.sections, rowId).columns;
+            };
+        },
+        blocksOf(state) {
+            return (columnId) => {
+                return find(state.sections, columnId).blocks;
             };
         },
     },

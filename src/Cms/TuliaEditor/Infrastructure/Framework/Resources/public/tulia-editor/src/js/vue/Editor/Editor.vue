@@ -28,6 +28,7 @@ provide('instance.blocks', props.container.get('instantiator.block'));
 provide('instance.columns', props.container.get('instantiator.column'));
 provide('instance.rows', props.container.get('instantiator.row'));
 provide('instance.sections', props.container.get('instantiator.section'));
+provide('blocks.registry', props.container.get('blocks.registry'));
 
 const contextmenu = props.container.get('usecase.contextmenu');
 

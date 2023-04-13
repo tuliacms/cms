@@ -5,5 +5,5 @@
 <script setup>
 const { defineProps, inject } = require('vue');
 const props = defineProps(['block']);
-const block = inject('blocks.instance').render(props);
+const block = inject('instance.blocks').render(props);
 </script>

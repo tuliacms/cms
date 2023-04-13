@@ -9,12 +9,12 @@
         :tued-contextmenu="contextmenu.register(row.id, 'row')"
     >
         <Column
-             v-for="column in structure.columnsOf(row.id)"
-             :key="column.id"
+            v-for="column in structure.columnsOf(row.id)"
+            :key="column.id"
             :column="column"
             :parent="row.id"
-            @selection-enter="(type, id) => $emit('selection-enter', type, id)"
-            @selection-leave="(type, id) => $emit('selection-leave', type, id)"
+            @selection-enter="(id, type) => emit('selection-enter', id, type)"
+            @selection-leave="(id, type) => emit('selection-leave', id, type)"
         ></Column>
         <div
             class="tued-structure-empty-element"

@@ -6,6 +6,7 @@ import Render from "core/Shared/Structure/Element/Instantiator/Block/Render";
 export default class BlockInstantiator extends AbstractInstantiator {
     constructor(elementConfigStoreRegistry, blockRegistry, structureStore) {
         super('block', elementConfigStoreRegistry);
+
         this.blockRegistry = blockRegistry;
         this.structureStore = structureStore;
     }

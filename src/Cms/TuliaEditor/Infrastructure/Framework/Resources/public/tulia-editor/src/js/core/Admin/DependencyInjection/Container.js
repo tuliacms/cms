@@ -36,7 +36,7 @@ export default class Container extends AbstractContainer {
         });
         this.register('selection.store', () => useSelectionStore());
         this.register('contextmenu.store', () => useContextmenuStore());
-        this.register('element.config.storeFactory', () => new ConfigStoreFactory());
+        this.register('element.config.storeFactory', () => new ConfigStoreFactory(this.get('blocks.registry'), this.get('structure.store')));
         this.register('element.config.registry', () => new ElementConfigStoreRegistry(this.get('element.config.storeFactory'), this.get('element.config.synchronizer')));
         this.register('element.config.synchronizer', () => new ConfigSynchronizer(this.get('messenger')));
         this.register('columnSize', () => new ColumnSize());
