@@ -14,7 +14,9 @@ import ContextmenuUsecase from "core/Editor/UseCase/Contextmenu";
 import Contextmenu from "core/Editor/Contextmenu/Contextmenu";
 import ElementConfigSubscriber from "core/Editor/Subscriber/Admin/ElementConfigSubscriber";
 import ConfigStoreFactory from "core/Editor/Data/Store/ConfigStoreFactory";
-import ElementConfigStoreRegistry from "core/Editor/Data/ElementConfigStoreRegistry";
+import DataStoreFactory from "core/Editor/Data/Store/DataStoreFactory";
+import EditorElementDataStoreRegistry from "core/Editor/Data/EditorElementDataStoreRegistry";
+import DataSynchronizer from "core/Editor/Structure/Element/DataSynchronizer";
 
 export default class Container extends AbstractContainer {
     build() {
@@ -30,8 +32,9 @@ export default class Container extends AbstractContainer {
         this.register('usecase.contextmenu', () => new ContextmenuUsecase(this.get('messenger')));
         this.register('contextmenu', () => new Contextmenu());
         this.register('element.config.storeFactory', () => new ConfigStoreFactory(this.get('blocks.registry'), this.get('structure.store')));
-        this.register('element.config.registry', () => new ElementConfigStoreRegistry(this.get('element.config.storeFactory')));
-
+        this.register('element.data.storeFactory', () => new DataStoreFactory(this.get('blocks.registry'), this.get('structure.store')));
+        this.register('element.data.registry', () => new EditorElementDataStoreRegistry(this.get('element.data.storeFactory'), this.get('element.data.synchronizer')));
+        this.register('element.data.synchronizer', () => new DataSynchronizer(this.get('messenger')));
 
         // Subscribers
         this.register(

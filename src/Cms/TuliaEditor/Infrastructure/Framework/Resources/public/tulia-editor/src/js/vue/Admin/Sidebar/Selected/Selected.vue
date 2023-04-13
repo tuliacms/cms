@@ -66,38 +66,4 @@ const selectionStore = inject('selection.store');
 const structureStore = inject('structure.store');
 const translator = inject('translator');
 const registry = inject('blocks.registry');
-
-/*const Section = require('components/Admin/Sidebar/Selected/Section.vue').default;
-const Column = require('components/Admin/Sidebar/Selected/Column.vue').default;
-const Block = require('components/Admin/Sidebar/Selected/Block.vue').default;
-const { defineProps, reactive, inject, computed, onMounted } = require('vue');
-
-const messenger = inject('messenger');
-const translator = inject('translator');
-const props = defineProps(['structure']);
-const structure = reactive(props.structure);
-
-const selected = reactive({
-    id: null,
-    type: null
-});
-
-messenger.on('structure.selection.selected', (type, id) => {
-    selectionStore.selected.id = id;
-    selectionStore.selected.type = type;
-});
-messenger.on('structure.selection.deselected', () => {
-    selectionStore.selected.id = null;
-    selectionStore.selected.type = null;
-});
-
-const existingBlocks = {};
-
-onMounted(() => {
-    for (let i in TuliaEditor.blocks) {
-        if (TuliaEditor.blocks[i].hasOwnProperty('manager')) {
-            existingBlocks[TuliaEditor.blocks[i].code] = TuliaEditor.blocks[i].code;
-        }
-    }
-});*/
 </script>

@@ -23300,40 +23300,6 @@ const structureStore = (0,vue__WEBPACK_IMPORTED_MODULE_3__.inject)('structure.st
 const translator = (0,vue__WEBPACK_IMPORTED_MODULE_3__.inject)('translator');
 const registry = (0,vue__WEBPACK_IMPORTED_MODULE_3__.inject)('blocks.registry');
 
-/*const Section = require('components/Admin/Sidebar/Selected/Section.vue').default;
-const Column = require('components/Admin/Sidebar/Selected/Column.vue').default;
-const Block = require('components/Admin/Sidebar/Selected/Block.vue').default;
-const { defineProps, reactive, inject, computed, onMounted } = require('vue');
-
-const messenger = inject('messenger');
-const translator = inject('translator');
-const props = defineProps(['structure']);
-const structure = reactive(props.structure);
-
-const selected = reactive({
-    id: null,
-    type: null
-});
-
-messenger.on('structure.selection.selected', (type, id) => {
-    selectionStore.selected.id = id;
-    selectionStore.selected.type = type;
-});
-messenger.on('structure.selection.deselected', () => {
-    selectionStore.selected.id = null;
-    selectionStore.selected.type = null;
-});
-
-const existingBlocks = {};
-
-onMounted(() => {
-    for (let i in TuliaEditor.blocks) {
-        if (TuliaEditor.blocks[i].hasOwnProperty('manager')) {
-            existingBlocks[TuliaEditor.blocks[i].code] = TuliaEditor.blocks[i].code;
-        }
-    }
-});*/
-
 const __returned__ = { selectionStore, structureStore, translator, registry, Section: admin_Sidebar_Selected_Section_vue__WEBPACK_IMPORTED_MODULE_0__["default"], Column: admin_Sidebar_Selected_Column_vue__WEBPACK_IMPORTED_MODULE_1__["default"], Block: admin_Sidebar_Selected_Block_vue__WEBPACK_IMPORTED_MODULE_2__["default"], inject: vue__WEBPACK_IMPORTED_MODULE_3__.inject }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
@@ -23696,7 +23662,7 @@ const registry = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('blocks.registry');
 
 const block = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('instance.blocks').editor(props);
 
-const __returned__ = { props, emit, structure, contextmenu, translator, selection, registry, block, inject: vue__WEBPACK_IMPORTED_MODULE_0__.inject, computed: vue__WEBPACK_IMPORTED_MODULE_0__.computed }
+const __returned__ = { props, emit, structure, contextmenu, translator, selection, registry, block, inject: vue__WEBPACK_IMPORTED_MODULE_0__.inject }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -26999,9 +26965,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 
 
+const _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */)
+const _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */)
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Config: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.block.config.someConfig), 1 /* TEXT */),
+    _hoisted_1,
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Data: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.block.data.text), 1 /* TEXT */),
+    _hoisted_2,
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+      type: "text",
+      "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => (($setup.block.data.text) = $event))
+    }, null, 512 /* NEED_PATCH */), [
+      [vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.block.data.text]
+    ]),
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("<WysiwygEditor v-model=\"block.data.text\"></WysiwygEditor>")
   ]))
 }
@@ -27023,15 +27001,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 
 
+const _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */)
+const _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */)
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Config: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.block.config.someConfig) + " ", 1 /* TEXT */),
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Config: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.block.config.someConfig), 1 /* TEXT */),
+    _hoisted_1,
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
       type: "text",
       "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => (($setup.block.config.someConfig) = $event))
     }, null, 512 /* NEED_PATCH */), [
       [vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.block.config.someConfig]
-    ])
+    ]),
+    _hoisted_2,
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Data: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.block.data.text), 1 /* TEXT */)
   ], 64 /* STABLE_FRAGMENT */))
 }
 
@@ -28683,20 +28667,17 @@ __webpack_require__.r(__webpack_exports__);
 const _hoisted_1 = ["id", "tued-contextmenu"]
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("\n        :class=\"blockClass\"\n    "),
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-      class: "tued-structure-element-selectable",
-      id: 'tued-structure-block-' + $setup.block.id,
-      onMouseenter: _cache[0] || (_cache[0] = $event => ($setup.emit('selection-enter', $setup.block.id, 'block'))),
-      onMouseleave: _cache[1] || (_cache[1] = $event => ($setup.emit('selection-leave', $setup.block.id, 'block'))),
-      onMousedown: _cache[2] || (_cache[2] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($setup.selection.select($setup.block.id, 'block')), ["stop"])),
-      "data-tagname": "Block",
-      "tued-contextmenu": $setup.contextmenu.register($setup.block.id, 'block')
-    }, [
-      ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)((0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveDynamicComponent)($setup.registry.getComponentName($setup.block.details.code, 'editor')), { block: $setup.block }, null, 8 /* PROPS */, ["block"]))
-    ], 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_1)
-  ], 2112 /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */))
+  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+    class: "tued-structure-element-selectable",
+    id: 'tued-structure-block-' + $setup.block.id,
+    onMouseenter: _cache[0] || (_cache[0] = $event => ($setup.emit('selection-enter', $setup.block.id, 'block'))),
+    onMouseleave: _cache[1] || (_cache[1] = $event => ($setup.emit('selection-leave', $setup.block.id, 'block'))),
+    onMousedown: _cache[2] || (_cache[2] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($setup.selection.select($setup.block.id, 'block')), ["stop"])),
+    "data-tagname": "Block",
+    "tued-contextmenu": $setup.contextmenu.register($setup.block.id, 'block')
+  }, [
+    ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)((0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveDynamicComponent)($setup.registry.getComponentName($setup.block.details.code, 'editor')), { block: $setup.block }, null, 8 /* PROPS */, ["block"]))
+  ], 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_1))
 }
 
 /***/ }),
@@ -30885,49 +30866,28 @@ class Contextmenu {
 
 /***/ }),
 
-/***/ "./src/js/core/Admin/Data/ElementConfigStoreRegistry.js":
-/*!**************************************************************!*\
-  !*** ./src/js/core/Admin/Data/ElementConfigStoreRegistry.js ***!
-  \**************************************************************/
+/***/ "./src/js/core/Admin/Data/AdminElementConfigStoreRegistry.js":
+/*!*******************************************************************!*\
+  !*** ./src/js/core/Admin/Data/AdminElementConfigStoreRegistry.js ***!
+  \*******************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ ElementConfigStoreRegistry)
+/* harmony export */   "default": () => (/* binding */ AdminElementConfigStoreRegistry)
 /* harmony export */ });
-class ElementConfigStoreRegistry {
+/* harmony import */ var core_Shared_Structure_Element_Config_ElementConfigStoreRegistry__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core/Shared/Structure/Element/Config/ElementConfigStoreRegistry */ "./src/js/core/Shared/Structure/Element/Config/ElementConfigStoreRegistry.js");
+
+
+class AdminElementConfigStoreRegistry extends core_Shared_Structure_Element_Config_ElementConfigStoreRegistry__WEBPACK_IMPORTED_MODULE_0__["default"] {
     constructor(factory, configSynchronizer) {
-        this.factory = factory;
+        super(factory);
         this.configSynchronizer = configSynchronizer;
-        this.stores = {};
-    }
-
-    get(id, type) {
-        if (!this.stores[type]) {
-            this.stores[type] = {};
-        }
-
-        if (!this.stores[type][id]) {
-            this.stores[type][id] = this.create(id, type);
-        }
-
-        return this.stores[type][id];
     }
 
     create(id, type) {
-        let store = null;
-
-        switch (type) {
-            case 'section':
-                store = this.factory.forSection(id, {a:1})(); break;
-            case 'column':
-                store = this.factory.forColumn(id, {a:1})(); break;
-            case 'block':
-                store = this.factory.forBlock(id, {a:1})(); break;
-            default:
-                return;
-        }
+        const store = super.create(id, type);
 
         this.configSynchronizer.sync(id, type, store);
 
@@ -31099,6 +31059,53 @@ const useContextmenuStore = (0,pinia__WEBPACK_IMPORTED_MODULE_0__.defineStore)('
         }
     },
 });
+
+
+/***/ }),
+
+/***/ "./src/js/core/Admin/Data/Store/DataStoreFactory.js":
+/*!**********************************************************!*\
+  !*** ./src/js/core/Admin/Data/Store/DataStoreFactory.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ DataStoreFactory)
+/* harmony export */ });
+/* harmony import */ var pinia__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! pinia */ "./node_modules/pinia/dist/pinia.mjs");
+/* harmony import */ var core_Shared_Structure_Element_Config_Defaults_BlockDefaults__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core/Shared/Structure/Element/Config/Defaults/BlockDefaults */ "./src/js/core/Shared/Structure/Element/Config/Defaults/BlockDefaults.js");
+
+
+
+class DataStoreFactory {
+    constructor(blocksRegistry, structureStore) {
+        this.blocksRegistry = blocksRegistry;
+        this.structureStore = structureStore;
+        this.blockDefaults = new core_Shared_Structure_Element_Config_Defaults_BlockDefaults__WEBPACK_IMPORTED_MODULE_0__["default"]();
+    }
+
+    forBlock(id, currents) {
+        const block = this.structureStore.find(id);
+        const definition = this.blocksRegistry.get(block.code);
+
+        const actions = definition.store.data.actions || {};
+        const getters = definition.store.data.getters || {};
+
+        actions.replace = function(config) {
+            for (let i in config) {
+                this[i] = config[i];
+            }
+        };
+
+        return (0,pinia__WEBPACK_IMPORTED_MODULE_1__.defineStore)(`data:block:${id}`, {
+            state: () => this.blockDefaults.getBlockState(id, definition.store.data.state(), currents),
+            getters: getters,
+            actions: actions,
+        });
+    }
+}
 
 
 /***/ }),
@@ -31539,9 +31546,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_Admin_UseCase_Rows__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! core/Admin/UseCase/Rows */ "./src/js/core/Admin/UseCase/Rows.js");
 /* harmony import */ var core_Admin_UseCase_Columns__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! core/Admin/UseCase/Columns */ "./src/js/core/Admin/UseCase/Columns.js");
 /* harmony import */ var core_Admin_Data_Store_ConfigStoreFactory__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! core/Admin/Data/Store/ConfigStoreFactory */ "./src/js/core/Admin/Data/Store/ConfigStoreFactory.js");
-/* harmony import */ var core_Admin_Data_ElementConfigStoreRegistry__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! core/Admin/Data/ElementConfigStoreRegistry */ "./src/js/core/Admin/Data/ElementConfigStoreRegistry.js");
+/* harmony import */ var core_Admin_Data_AdminElementConfigStoreRegistry__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! core/Admin/Data/AdminElementConfigStoreRegistry */ "./src/js/core/Admin/Data/AdminElementConfigStoreRegistry.js");
 /* harmony import */ var core_Admin_Structure_Element_ConfigSynchronizer__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! core/Admin/Structure/Element/ConfigSynchronizer */ "./src/js/core/Admin/Structure/Element/ConfigSynchronizer.js");
 /* harmony import */ var core_Admin_Structure_Element_ColumnSize__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! core/Admin/Structure/Element/ColumnSize */ "./src/js/core/Admin/Structure/Element/ColumnSize.js");
+/* harmony import */ var core_Admin_Data_Store_DataStoreFactory__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! core/Admin/Data/Store/DataStoreFactory */ "./src/js/core/Admin/Data/Store/DataStoreFactory.js");
+/* harmony import */ var core_Admin_Subscriber_Editor_ElementDataSubscriber__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! core/Admin/Subscriber/Editor/ElementDataSubscriber */ "./src/js/core/Admin/Subscriber/Editor/ElementDataSubscriber.js");
+
+
 
 
 
@@ -31581,8 +31592,9 @@ class Container extends core_Shared_DependencyInjection_AbstractContainer__WEBPA
         this.register('selection.store', () => (0,core_Admin_Data_Store_Selection__WEBPACK_IMPORTED_MODULE_6__.useSelectionStore)());
         this.register('contextmenu.store', () => (0,core_Admin_Data_Store_Contextmenu__WEBPACK_IMPORTED_MODULE_7__.useContextmenuStore)());
         this.register('element.config.storeFactory', () => new core_Admin_Data_Store_ConfigStoreFactory__WEBPACK_IMPORTED_MODULE_16__["default"](this.get('blocks.registry'), this.get('structure.store')));
-        this.register('element.config.registry', () => new core_Admin_Data_ElementConfigStoreRegistry__WEBPACK_IMPORTED_MODULE_17__["default"](this.get('element.config.storeFactory'), this.get('element.config.synchronizer')));
+        this.register('element.config.registry', () => new core_Admin_Data_AdminElementConfigStoreRegistry__WEBPACK_IMPORTED_MODULE_17__["default"](this.get('element.config.storeFactory'), this.get('element.config.synchronizer')));
         this.register('element.config.synchronizer', () => new core_Admin_Structure_Element_ConfigSynchronizer__WEBPACK_IMPORTED_MODULE_18__["default"](this.get('messenger')));
+        this.register('element.data.storeFactory', () => new core_Admin_Data_Store_DataStoreFactory__WEBPACK_IMPORTED_MODULE_20__["default"](this.get('blocks.registry'), this.get('structure.store')));
         this.register('columnSize', () => new core_Admin_Structure_Element_ColumnSize__WEBPACK_IMPORTED_MODULE_19__["default"]());
 
         // Subscribers
@@ -31620,6 +31632,14 @@ class Container extends core_Shared_DependencyInjection_AbstractContainer__WEBPA
             () => new core_Admin_Subscriber_Editor_ContextmenuSubscriber__WEBPACK_IMPORTED_MODULE_12__["default"](
                 this.get('messenger'),
                 this.get('usecase.contextmenu'),
+            ),
+            { tags: [{ name: 'event_listener', on: 'admin.view.ready', call: 'registerReceivers' }] }
+        );
+        this.register(
+            'subscriber.ElementDataSubscriber',
+            () => new core_Admin_Subscriber_Editor_ElementDataSubscriber__WEBPACK_IMPORTED_MODULE_21__["default"](
+                this.get('messenger'),
+                this.get('element.data.registry')
             ),
             { tags: [{ name: 'event_listener', on: 'admin.view.ready', call: 'registerReceivers' }] }
         );
@@ -31788,6 +31808,39 @@ class SelectionSubscriber {
 
     hide() {
         this.contextmenu.hide();
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/core/Admin/Subscriber/Editor/ElementDataSubscriber.js":
+/*!**********************************************************************!*\
+  !*** ./src/js/core/Admin/Subscriber/Editor/ElementDataSubscriber.js ***!
+  \**********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ElementDataSubscriber)
+/* harmony export */ });
+class ElementDataSubscriber {
+    constructor(messenger, elementDataRegistry) {
+        this.messenger = messenger;
+        this.elementDataRegistry = elementDataRegistry;
+    }
+
+    registerReceivers() {
+        const self = this;
+
+        this.messenger.receive('element.data.sync', (data) => self.processChanged(data.id, data.type, data.data));
+    }
+
+    processChanged(id, type, data) {
+        const dataStore = this.elementDataRegistry.get(id, type);
+
+        dataStore.replace(data);
     }
 }
 
@@ -32399,48 +32452,30 @@ class Contextmenu {
 
 /***/ }),
 
-/***/ "./src/js/core/Editor/Data/ElementConfigStoreRegistry.js":
-/*!***************************************************************!*\
-  !*** ./src/js/core/Editor/Data/ElementConfigStoreRegistry.js ***!
-  \***************************************************************/
+/***/ "./src/js/core/Editor/Data/EditorElementDataStoreRegistry.js":
+/*!*******************************************************************!*\
+  !*** ./src/js/core/Editor/Data/EditorElementDataStoreRegistry.js ***!
+  \*******************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ ElementConfigStoreRegistry)
+/* harmony export */   "default": () => (/* binding */ EditorElementDataStoreRegistry)
 /* harmony export */ });
-class ElementConfigStoreRegistry {
-    constructor(factory) {
-        this.factory = factory;
-        this.stores = {};
-    }
+/* harmony import */ var core_Shared_Structure_Element_Data_ElementDataStoreRegistry__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core/Shared/Structure/Element/Data/ElementDataStoreRegistry */ "./src/js/core/Shared/Structure/Element/Data/ElementDataStoreRegistry.js");
 
-    get(id, type) {
-        if (!this.stores[type]) {
-            this.stores[type] = {};
-        }
 
-        if (!this.stores[type][id]) {
-            this.stores[type][id] = this.create(id, type);
-        }
-
-        return this.stores[type][id];
+class EditorElementDataStoreRegistry extends core_Shared_Structure_Element_Data_ElementDataStoreRegistry__WEBPACK_IMPORTED_MODULE_0__["default"] {
+    constructor(factory, configSynchronizer) {
+        super(factory);
+        this.configSynchronizer = configSynchronizer;
     }
 
     create(id, type) {
-        let store = null;
+        const store = super.create(id, type);
 
-        switch (type) {
-            case 'section':
-                store = this.factory.forSection(id, {a:1})(); break;
-            case 'column':
-                store = this.factory.forColumn(id, {a:1})(); break;
-            case 'block':
-                store = this.factory.forBlock(id, {a:1})(); break;
-            default:
-                return;
-        }
+        this.configSynchronizer.sync(id, type, store);
 
         return store;
     }
@@ -32517,6 +32552,49 @@ class ConfigStoreFactory {
 
         return (0,pinia__WEBPACK_IMPORTED_MODULE_3__.defineStore)(`config:block:${id}`, {
             state: () => this.blockDefaults.getBlockState(id, definition.store.config.state(), currents),
+            getters: getters,
+            actions: actions,
+        });
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/core/Editor/Data/Store/DataStoreFactory.js":
+/*!***********************************************************!*\
+  !*** ./src/js/core/Editor/Data/Store/DataStoreFactory.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ DataStoreFactory)
+/* harmony export */ });
+/* harmony import */ var pinia__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! pinia */ "./node_modules/pinia/dist/pinia.mjs");
+/* harmony import */ var core_Shared_Structure_Element_Config_Defaults_BlockDefaults__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core/Shared/Structure/Element/Config/Defaults/BlockDefaults */ "./src/js/core/Shared/Structure/Element/Config/Defaults/BlockDefaults.js");
+
+
+
+class DataStoreFactory {
+    constructor(blocksRegistry, structureStore) {
+        this.blocksRegistry = blocksRegistry;
+        this.structureStore = structureStore;
+        this.blockDefaults = new core_Shared_Structure_Element_Config_Defaults_BlockDefaults__WEBPACK_IMPORTED_MODULE_0__["default"]();
+    }
+
+    forBlock(id, currents) {
+        const block = this.structureStore.find(id);
+        const definition = this.blocksRegistry.get(block.code);
+
+        const actions = definition.store.data.actions || {};
+        const getters = definition.store.data.getters || {};
+
+        getters.export = (state) => this.blockDefaults.exportBlockState(id, state);
+
+        return (0,pinia__WEBPACK_IMPORTED_MODULE_1__.defineStore)(`data:block:${id}`, {
+            state: () => this.blockDefaults.getBlockState(id, definition.store.data.state(), currents),
             getters: getters,
             actions: actions,
         });
@@ -32698,7 +32776,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_Editor_Contextmenu_Contextmenu__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! core/Editor/Contextmenu/Contextmenu */ "./src/js/core/Editor/Contextmenu/Contextmenu.js");
 /* harmony import */ var core_Editor_Subscriber_Admin_ElementConfigSubscriber__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! core/Editor/Subscriber/Admin/ElementConfigSubscriber */ "./src/js/core/Editor/Subscriber/Admin/ElementConfigSubscriber.js");
 /* harmony import */ var core_Editor_Data_Store_ConfigStoreFactory__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! core/Editor/Data/Store/ConfigStoreFactory */ "./src/js/core/Editor/Data/Store/ConfigStoreFactory.js");
-/* harmony import */ var core_Editor_Data_ElementConfigStoreRegistry__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! core/Editor/Data/ElementConfigStoreRegistry */ "./src/js/core/Editor/Data/ElementConfigStoreRegistry.js");
+/* harmony import */ var core_Editor_Data_Store_DataStoreFactory__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! core/Editor/Data/Store/DataStoreFactory */ "./src/js/core/Editor/Data/Store/DataStoreFactory.js");
+/* harmony import */ var core_Editor_Data_EditorElementDataStoreRegistry__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! core/Editor/Data/EditorElementDataStoreRegistry */ "./src/js/core/Editor/Data/EditorElementDataStoreRegistry.js");
+/* harmony import */ var core_Editor_Structure_Element_DataSynchronizer__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! core/Editor/Structure/Element/DataSynchronizer */ "./src/js/core/Editor/Structure/Element/DataSynchronizer.js");
+
+
 
 
 
@@ -32731,8 +32813,9 @@ class Container extends core_Shared_DependencyInjection_AbstractContainer__WEBPA
         this.register('usecase.contextmenu', () => new core_Editor_UseCase_Contextmenu__WEBPACK_IMPORTED_MODULE_12__["default"](this.get('messenger')));
         this.register('contextmenu', () => new core_Editor_Contextmenu_Contextmenu__WEBPACK_IMPORTED_MODULE_13__["default"]());
         this.register('element.config.storeFactory', () => new core_Editor_Data_Store_ConfigStoreFactory__WEBPACK_IMPORTED_MODULE_15__["default"](this.get('blocks.registry'), this.get('structure.store')));
-        this.register('element.config.registry', () => new core_Editor_Data_ElementConfigStoreRegistry__WEBPACK_IMPORTED_MODULE_16__["default"](this.get('element.config.storeFactory')));
-
+        this.register('element.data.storeFactory', () => new core_Editor_Data_Store_DataStoreFactory__WEBPACK_IMPORTED_MODULE_16__["default"](this.get('blocks.registry'), this.get('structure.store')));
+        this.register('element.data.registry', () => new core_Editor_Data_EditorElementDataStoreRegistry__WEBPACK_IMPORTED_MODULE_17__["default"](this.get('element.data.storeFactory'), this.get('element.data.synchronizer')));
+        this.register('element.data.synchronizer', () => new core_Editor_Structure_Element_DataSynchronizer__WEBPACK_IMPORTED_MODULE_18__["default"](this.get('messenger')));
 
         // Subscribers
         this.register(
@@ -33027,6 +33110,43 @@ class SelectedElementBoundaries {
         this.selection.selected.scrollTop = 0;
     }
 };
+
+
+/***/ }),
+
+/***/ "./src/js/core/Editor/Structure/Element/DataSynchronizer.js":
+/*!******************************************************************!*\
+  !*** ./src/js/core/Editor/Structure/Element/DataSynchronizer.js ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ DataSynchronizer)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "vue");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+
+
+/**
+ * Exports data from Editor to Admin
+ */
+class DataSynchronizer {
+    constructor(messenger) {
+        this.messenger = messenger;
+    }
+
+    sync(id, type, store) {
+        (0,vue__WEBPACK_IMPORTED_MODULE_0__.watch)(store, async (newValue) => {
+            this.messenger.send('element.data.sync', {
+                id: id,
+                type: type,
+                data: newValue.export,
+            });
+        }, { deep: true });
+    }
+}
 
 
 /***/ }),
@@ -33558,6 +33678,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_Shared_Structure_Element_Instantiator_Row_RowInstantiator__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core/Shared/Structure/Element/Instantiator/Row/RowInstantiator */ "./src/js/core/Shared/Structure/Element/Instantiator/Row/RowInstantiator.js");
 /* harmony import */ var core_Shared_Structure_Element_Instantiator_Section_SectionInstantiator__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core/Shared/Structure/Element/Instantiator/Section/SectionInstantiator */ "./src/js/core/Shared/Structure/Element/Instantiator/Section/SectionInstantiator.js");
 /* harmony import */ var core_Shared_Structure_Block_BlockRegistry__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core/Shared/Structure/Block/BlockRegistry */ "./src/js/core/Shared/Structure/Block/BlockRegistry.js");
+/* harmony import */ var core_Shared_Structure_Element_Config_ElementConfigStoreRegistry__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core/Shared/Structure/Element/Config/ElementConfigStoreRegistry */ "./src/js/core/Shared/Structure/Element/Config/ElementConfigStoreRegistry.js");
+/* harmony import */ var core_Shared_Structure_Element_Data_ElementDataStoreRegistry__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core/Shared/Structure/Element/Data/ElementDataStoreRegistry */ "./src/js/core/Shared/Structure/Element/Data/ElementDataStoreRegistry.js");
+
+
 
 
 
@@ -33595,11 +33719,13 @@ class AbstractContainer {
         this.register('eventBus', () => new core_Shared_Bus_Event_EventBus__WEBPACK_IMPORTED_MODULE_2__["default"]());
         this.register('translator', this._buildTranslator);
         this.register('vueFactory', () => new core_Shared_Vue_VueFactory__WEBPACK_IMPORTED_MODULE_1__["default"]());
-        this.register('instantiator.block', () => new core_Shared_Structure_Element_Instantiator_Block_BlockInstantiator__WEBPACK_IMPORTED_MODULE_3__["default"](this.get('element.config.registry'), this.get('blocks.registry'), this.get('structure.store')));
-        this.register('instantiator.column', () => new core_Shared_Structure_Element_Instantiator_Column_ColumnInstantiator__WEBPACK_IMPORTED_MODULE_4__["default"](this.get('element.config.registry')));
-        this.register('instantiator.row', () => new core_Shared_Structure_Element_Instantiator_Row_RowInstantiator__WEBPACK_IMPORTED_MODULE_5__["default"](this.get('element.config.registry')));
-        this.register('instantiator.section', () => new core_Shared_Structure_Element_Instantiator_Section_SectionInstantiator__WEBPACK_IMPORTED_MODULE_6__["default"](this.get('element.config.registry')));
+        this.register('instantiator.block', () => new core_Shared_Structure_Element_Instantiator_Block_BlockInstantiator__WEBPACK_IMPORTED_MODULE_3__["default"](this.get('element.config.registry'), this.get('element.data.registry'), this.get('blocks.registry'), this.get('structure.store')));
+        this.register('instantiator.column', () => new core_Shared_Structure_Element_Instantiator_Column_ColumnInstantiator__WEBPACK_IMPORTED_MODULE_4__["default"](this.get('element.config.registry'), this.get('element.data.registry')));
+        this.register('instantiator.row', () => new core_Shared_Structure_Element_Instantiator_Row_RowInstantiator__WEBPACK_IMPORTED_MODULE_5__["default"](this.get('element.config.registry'), this.get('element.data.registry')));
+        this.register('instantiator.section', () => new core_Shared_Structure_Element_Instantiator_Section_SectionInstantiator__WEBPACK_IMPORTED_MODULE_6__["default"](this.get('element.config.registry'), this.get('element.data.registry')));
         this.register('blocks.registry', () => new core_Shared_Structure_Block_BlockRegistry__WEBPACK_IMPORTED_MODULE_7__["default"](this.getParameter('options.blocks')));
+        this.register('element.config.registry', () => new core_Shared_Structure_Element_Config_ElementConfigStoreRegistry__WEBPACK_IMPORTED_MODULE_8__["default"](this.get('element.config.storeFactory')));
+        this.register('element.data.registry', () => new core_Shared_Structure_Element_Data_ElementDataStoreRegistry__WEBPACK_IMPORTED_MODULE_9__["default"](this.get('element.data.storeFactory')));
     }
 
     register(id, factory, options) {
@@ -33924,6 +34050,102 @@ const exportSectionState = function (state) {
 
 /***/ }),
 
+/***/ "./src/js/core/Shared/Structure/Element/Config/ElementConfigStoreRegistry.js":
+/*!***********************************************************************************!*\
+  !*** ./src/js/core/Shared/Structure/Element/Config/ElementConfigStoreRegistry.js ***!
+  \***********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ElementConfigStoreRegistry)
+/* harmony export */ });
+class ElementConfigStoreRegistry {
+    constructor(factory) {
+        this.factory = factory;
+        this.stores = {};
+    }
+
+    get(id, type) {
+        if (!this.stores[type]) {
+            this.stores[type] = {};
+        }
+
+        if (!this.stores[type][id]) {
+            this.stores[type][id] = this.create(id, type);
+        }
+
+        return this.stores[type][id];
+    }
+
+    create(id, type) {
+        let store = null;
+
+        switch (type) {
+            case 'section':
+                store = this.factory.forSection(id, {a:1})(); break;
+            case 'column':
+                store = this.factory.forColumn(id, {a:1})(); break;
+            case 'block':
+                store = this.factory.forBlock(id, {a:1})(); break;
+            default:
+                return;
+        }
+
+        return store;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/core/Shared/Structure/Element/Data/ElementDataStoreRegistry.js":
+/*!*******************************************************************************!*\
+  !*** ./src/js/core/Shared/Structure/Element/Data/ElementDataStoreRegistry.js ***!
+  \*******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ElementDataStoreRegistry)
+/* harmony export */ });
+class ElementDataStoreRegistry {
+    constructor(factory) {
+        this.factory = factory;
+        this.stores = {};
+    }
+
+    get(id, type) {
+        if (!this.stores[type]) {
+            this.stores[type] = {};
+        }
+
+        if (!this.stores[type][id]) {
+            this.stores[type][id] = this.create(id, type);
+        }
+
+        return this.stores[type][id];
+    }
+
+    create(id, type) {
+        let store = null;
+
+        switch (type) {
+            case 'block':
+                store = this.factory.forBlock(id, {a:1})(); break;
+            default:
+                return;
+        }
+
+        return store;
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/js/core/Shared/Structure/Element/Instantiator/AbstractEditor.js":
 /*!*****************************************************************************!*\
   !*** ./src/js/core/Shared/Structure/Element/Instantiator/AbstractEditor.js ***!
@@ -33961,9 +34183,10 @@ __webpack_require__.r(__webpack_exports__);
 class AbstractInstantiator {
     instances = {};
 
-    constructor(type, elementConfigStoreRegistry) {
+    constructor(type, elementConfigStoreRegistry, elementDataStoreFactory) {
         this.type = type;
         this.elementConfigStoreRegistry = elementConfigStoreRegistry;
+        this.elementDataStoreFactory = elementDataStoreFactory;
     }
 
     createInstance(elementId, args, segment) {
@@ -33994,6 +34217,7 @@ class AbstractInstantiator {
             elementId,
             this.type,
             this.elementConfigStoreRegistry,
+            this.elementDataStoreFactory,
         ];
 
         return this.instances[instanceKey] = this.createInstance(elementId, args, segment);
@@ -34074,14 +34298,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ AbstractSegment)
 /* harmony export */ });
 class AbstractSegment {
-    constructor(id, type, elementConfigStoreRegistry) {
+    constructor(id, type, elementConfigStoreRegistry, elementDataStoreFactory) {
         this.id = id;
         this.type = type;
         this.elementConfigStoreRegistry = elementConfigStoreRegistry;
+        this.elementDataStoreFactory = elementDataStoreFactory;
     }
 
     get config() {
         return this.elementConfigStoreRegistry.get(this.id, this.type);
+    }
+
+    get data() {
+        return this.elementDataStoreFactory.get(this.id, this.type);
     }
 }
 
@@ -34109,8 +34338,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class BlockInstantiator extends core_Shared_Structure_Element_Instantiator_AbstractInstantiator__WEBPACK_IMPORTED_MODULE_0__["default"] {
-    constructor(elementConfigStoreRegistry, blockRegistry, structureStore) {
-        super('block', elementConfigStoreRegistry);
+    constructor(elementConfigStoreRegistry, elementDataStoreFactory, blockRegistry, structureStore) {
+        super('block', elementConfigStoreRegistry, elementDataStoreFactory);
 
         this.blockRegistry = blockRegistry;
         this.structureStore = structureStore;

@@ -1,9 +1,10 @@
 export default class AbstractInstantiator {
     instances = {};
 
-    constructor(type, elementConfigStoreRegistry) {
+    constructor(type, elementConfigStoreRegistry, elementDataStoreFactory) {
         this.type = type;
         this.elementConfigStoreRegistry = elementConfigStoreRegistry;
+        this.elementDataStoreFactory = elementDataStoreFactory;
     }
 
     createInstance(elementId, args, segment) {
@@ -34,6 +35,7 @@ export default class AbstractInstantiator {
             elementId,
             this.type,
             this.elementConfigStoreRegistry,
+            this.elementDataStoreFactory,
         ];
 
         return this.instances[instanceKey] = this.createInstance(elementId, args, segment);

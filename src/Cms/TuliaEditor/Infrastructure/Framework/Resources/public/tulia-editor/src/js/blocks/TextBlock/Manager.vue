@@ -1,6 +1,7 @@
 <template>
-    Config: {{ block.config.someConfig }}
-    <input type="text" v-model="block.config.someConfig">
+    Config: {{ block.config.someConfig }}<br />
+    <input type="text" v-model="block.config.someConfig"><br />
+    Data: {{ block.data.text }}
 </template>
 
 <script setup>

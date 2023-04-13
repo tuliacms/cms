@@ -6,6 +6,8 @@ import ColumnInstantiator from "core/Shared/Structure/Element/Instantiator/Colum
 import RowInstantiator from "core/Shared/Structure/Element/Instantiator/Row/RowInstantiator";
 import SectionInstantiator from "core/Shared/Structure/Element/Instantiator/Section/SectionInstantiator";
 import BlockRegistry from "core/Shared/Structure/Block/BlockRegistry";
+import ElementConfigStoreRegistry from "core/Shared/Structure/Element/Config/ElementConfigStoreRegistry";
+import ElementDataStoreRegistry from "core/Shared/Structure/Element/Data/ElementDataStoreRegistry";
 
 export default class AbstractContainer {
     constructor(options) {
@@ -35,11 +37,13 @@ export default class AbstractContainer {
         this.register('eventBus', () => new EventBus());
         this.register('translator', this._buildTranslator);
         this.register('vueFactory', () => new VueFactory());
-        this.register('instantiator.block', () => new BlockInstantiator(this.get('element.config.registry'), this.get('blocks.registry'), this.get('structure.store')));
-        this.register('instantiator.column', () => new ColumnInstantiator(this.get('element.config.registry')));
-        this.register('instantiator.row', () => new RowInstantiator(this.get('element.config.registry')));
-        this.register('instantiator.section', () => new SectionInstantiator(this.get('element.config.registry')));
+        this.register('instantiator.block', () => new BlockInstantiator(this.get('element.config.registry'), this.get('element.data.registry'), this.get('blocks.registry'), this.get('structure.store')));
+        this.register('instantiator.column', () => new ColumnInstantiator(this.get('element.config.registry'), this.get('element.data.registry')));
+        this.register('instantiator.row', () => new RowInstantiator(this.get('element.config.registry'), this.get('element.data.registry')));
+        this.register('instantiator.section', () => new SectionInstantiator(this.get('element.config.registry'), this.get('element.data.registry')));
         this.register('blocks.registry', () => new BlockRegistry(this.getParameter('options.blocks')));
+        this.register('element.config.registry', () => new ElementConfigStoreRegistry(this.get('element.config.storeFactory')));
+        this.register('element.data.registry', () => new ElementDataStoreRegistry(this.get('element.data.storeFactory')));
     }
 
     register(id, factory, options) {

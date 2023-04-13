@@ -1,7 +1,4 @@
 <template>
-    <!--
-        :class="blockClass"
-    -->
     <div
         class="tued-structure-element-selectable"
         :id="'tued-structure-block-' + block.id"
@@ -19,7 +16,7 @@
 </template>
 
 <script setup>
-import { inject, defineProps, defineEmits, computed } from "vue";
+import { inject, defineProps, defineEmits } from "vue";
 
 const props = defineProps(['parent', 'block']);
 const emit = defineEmits(['selection-enter', 'selection-leave']);

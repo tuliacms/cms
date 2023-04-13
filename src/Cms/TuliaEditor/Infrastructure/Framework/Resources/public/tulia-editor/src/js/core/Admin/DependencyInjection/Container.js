@@ -15,9 +15,11 @@ import Draggable from "core/Admin/UseCase/Draggable";
 import Rows from "core/Admin/UseCase/Rows";
 import Columns from "core/Admin/UseCase/Columns";
 import ConfigStoreFactory from "core/Admin/Data/Store/ConfigStoreFactory";
-import ElementConfigStoreRegistry from "core/Admin/Data/ElementConfigStoreRegistry";
+import AdminElementConfigStoreRegistry from "core/Admin/Data/AdminElementConfigStoreRegistry";
 import ConfigSynchronizer from "core/Admin/Structure/Element/ConfigSynchronizer";
 import ColumnSize from "core/Admin/Structure/Element/ColumnSize";
+import DataStoreFactory from "core/Admin/Data/Store/DataStoreFactory";
+import ElementDataSubscriber from "core/Admin/Subscriber/Editor/ElementDataSubscriber";
 
 export default class Container extends AbstractContainer {
     build() {
@@ -37,8 +39,9 @@ export default class Container extends AbstractContainer {
         this.register('selection.store', () => useSelectionStore());
         this.register('contextmenu.store', () => useContextmenuStore());
         this.register('element.config.storeFactory', () => new ConfigStoreFactory(this.get('blocks.registry'), this.get('structure.store')));
-        this.register('element.config.registry', () => new ElementConfigStoreRegistry(this.get('element.config.storeFactory'), this.get('element.config.synchronizer')));
+        this.register('element.config.registry', () => new AdminElementConfigStoreRegistry(this.get('element.config.storeFactory'), this.get('element.config.synchronizer')));
         this.register('element.config.synchronizer', () => new ConfigSynchronizer(this.get('messenger')));
+        this.register('element.data.storeFactory', () => new DataStoreFactory(this.get('blocks.registry'), this.get('structure.store')));
         this.register('columnSize', () => new ColumnSize());
 
         // Subscribers
@@ -76,6 +79,14 @@ export default class Container extends AbstractContainer {
             () => new ContextmenuEditorSubscriber(
                 this.get('messenger'),
                 this.get('usecase.contextmenu'),
+            ),
+            { tags: [{ name: 'event_listener', on: 'admin.view.ready', call: 'registerReceivers' }] }
+        );
+        this.register(
+            'subscriber.ElementDataSubscriber',
+            () => new ElementDataSubscriber(
+                this.get('messenger'),
+                this.get('element.data.registry')
             ),
             { tags: [{ name: 'event_listener', on: 'admin.view.ready', call: 'registerReceivers' }] }
         );

@@ -1,7 +1,6 @@
-export default class ElementConfigStoreRegistry {
-    constructor(factory, configSynchronizer) {
+export default class ElementDataStoreRegistry {
+    constructor(factory) {
         this.factory = factory;
-        this.configSynchronizer = configSynchronizer;
         this.stores = {};
     }
 
@@ -21,17 +20,11 @@ export default class ElementConfigStoreRegistry {
         let store = null;
 
         switch (type) {
-            case 'section':
-                store = this.factory.forSection(id, {a:1})(); break;
-            case 'column':
-                store = this.factory.forColumn(id, {a:1})(); break;
             case 'block':
                 store = this.factory.forBlock(id, {a:1})(); break;
             default:
                 return;
         }
-
-        this.configSynchronizer.sync(id, type, store);
 
         return store;
     }
