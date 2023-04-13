@@ -28,6 +28,9 @@ export default class StructureStoreFactory {
                 {id: "92dd5110-3815-4eb4-a32c-14215fac4c2b", parent: "7ac6f37f-cc0c-4c9d-9c2b-bed9ef4e1dd0"},
                 {id: "a2180b3a-a2b7-4f32-ad88-8c1fad3c0edd", parent: "7ac6f37f-cc0c-4c9d-9c2b-bed9ef4e1dd0"},
             ],
+            blocks: [
+                {id: "f410f23b-dc66-4b7d-9070-7d7be79ed6d9", parent: "6fa6ab47-8624-4175-bf9b-5105be8c859a", code: "core-textblock"},
+            ],
         });
 
         return store;
@@ -42,6 +45,9 @@ export default class StructureStoreFactory {
         }
         for (let s in structure.columns) {
             store.appendColumn(structure.columns[s], structure.columns[s].parent);
+        }
+        for (let s in structure.blocks) {
+            store.appendBlock(structure.blocks[s], structure.blocks[s].parent);
         }
     }
 }

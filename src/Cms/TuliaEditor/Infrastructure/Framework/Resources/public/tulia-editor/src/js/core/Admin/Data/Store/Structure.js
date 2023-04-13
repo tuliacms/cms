@@ -102,6 +102,16 @@ const produceColumn = function (id, rowId) {
     };
 };
 
+const produceBlock = function (id, code, columnId) {
+    return {
+        id: id,
+        parent: columnId,
+        // Type is used for draggable modifications, because this is universal mechanism
+        type: 'block',
+        code: code,
+    };
+};
+
 export const useStructureStore = defineStore('structure', {
     state: () => {
         return {
@@ -192,6 +202,9 @@ export const useStructureStore = defineStore('structure', {
         removeColumn(id) {
             removeFromCollection(findParent(this.sections, id).columns, id);
         },
+        appendBlock(block, columnId) {
+            find(this.sections, columnId).blocks.push(produceBlock(block.id, block.code, columnId));
+        },
     },
     getters: {
         export(state) {
@@ -212,6 +225,11 @@ export const useStructureStore = defineStore('structure', {
         columnsOf(state) {
             return (rowId) => {
                 return find(state.sections, rowId).columns;
+            };
+        },
+        blocksOf(state) {
+            return (columnId) => {
+                return find(state.sections, columnId).blocks;
             };
         },
     },

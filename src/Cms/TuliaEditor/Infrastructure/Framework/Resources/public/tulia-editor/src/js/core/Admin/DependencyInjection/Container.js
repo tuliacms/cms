@@ -16,7 +16,6 @@ import Rows from "core/Admin/UseCase/Rows";
 import Columns from "core/Admin/UseCase/Columns";
 import ConfigStoreFactory from "core/Admin/Data/Store/ConfigStoreFactory";
 import ElementConfigStoreRegistry from "core/Admin/Data/ElementConfigStoreRegistry";
-import Instantiator from "core/Shared/Structure/Element/Instantiator";
 import ConfigSynchronizer from "core/Admin/Structure/Element/ConfigSynchronizer";
 import ColumnSize from "core/Admin/Structure/Element/ColumnSize";
 
@@ -40,7 +39,6 @@ export default class Container extends AbstractContainer {
         this.register('element.config.storeFactory', () => new ConfigStoreFactory());
         this.register('element.config.registry', () => new ElementConfigStoreRegistry(this.get('element.config.storeFactory'), this.get('element.config.synchronizer')));
         this.register('element.config.synchronizer', () => new ConfigSynchronizer(this.get('messenger')));
-        this.register('instantiator', () => new Instantiator(this.get('element.config.registry')));
         this.register('columnSize', () => new ColumnSize());
 
         // Subscribers

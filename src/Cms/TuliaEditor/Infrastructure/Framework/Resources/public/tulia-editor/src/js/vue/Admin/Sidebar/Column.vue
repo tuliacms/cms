@@ -29,18 +29,18 @@
                 </div>
             </div>
         </div>
-        <!--    <Blocks
-                :parent="element"
-                :blocks="element.blocks"
-                @draggable-start="(event) => emit('draggable-start', event)"
-                @draggable-change="(event) => emit('draggable-change', event)"
-                @draggable-end="(event) => emit('draggable-end', event)"
-                @selected="emit('selected')"
-            ></Blocks>-->
+        <Blocks
+            :parent="column.id"
+            @draggable-start="(event) => emit('draggable-start', event)"
+            @draggable-change="(event) => emit('draggable-change', event)"
+            @draggable-end="(event) => emit('draggable-end', event)"
+            @selected="emit('selected')"
+        ></Blocks>
     </div>
 </template>
 
 <script setup>
+import Blocks from "admin/Sidebar/Blocks.vue";
 import { inject, defineEmits, defineProps, computed, onMounted, ref } from "vue";
 
 const props = defineProps(['parent', 'column']);

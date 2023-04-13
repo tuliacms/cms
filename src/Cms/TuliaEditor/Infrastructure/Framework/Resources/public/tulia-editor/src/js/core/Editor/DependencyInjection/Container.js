@@ -15,7 +15,6 @@ import Contextmenu from "core/Editor/Contextmenu/Contextmenu";
 import ElementConfigSubscriber from "core/Editor/Subscriber/Admin/ElementConfigSubscriber";
 import ConfigStoreFactory from "core/Editor/Data/Store/ConfigStoreFactory";
 import ElementConfigStoreRegistry from "core/Editor/Data/ElementConfigStoreRegistry";
-import Instantiator from "core/Shared/Structure/Element/Instantiator";
 
 export default class Container extends AbstractContainer {
     build() {
@@ -32,7 +31,7 @@ export default class Container extends AbstractContainer {
         this.register('contextmenu', () => new Contextmenu());
         this.register('element.config.storeFactory', () => new ConfigStoreFactory());
         this.register('element.config.registry', () => new ElementConfigStoreRegistry(this.get('element.config.storeFactory')));
-        this.register('instantiator', () => new Instantiator(this.get('element.config.registry')));
+
 
         // Subscribers
         this.register(

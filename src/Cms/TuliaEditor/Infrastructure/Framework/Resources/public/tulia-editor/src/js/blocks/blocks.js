@@ -6,10 +6,10 @@ const GalleryBlock = require('./GalleryBlock/GalleryBlock.js').default;
 
 let blocks = {};
 
-//blocks[TextBlock.code] = TextBlock;
+blocks[TextBlock.code] = TextBlock;
 //blocks[ImageBlock.code] = ImageBlock;
 //blocks[VideoBlock.code] = VideoBlock;
 //blocks[MapBlock.code] = MapBlock;
-blocks[GalleryBlock.code] = GalleryBlock;
+//blocks[GalleryBlock.code] = GalleryBlock;
 
 export default blocks;
