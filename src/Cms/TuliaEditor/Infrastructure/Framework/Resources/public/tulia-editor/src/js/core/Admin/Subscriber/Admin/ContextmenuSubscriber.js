@@ -3,6 +3,12 @@ export default class ContextmenuSubscriber {
         this.contextmenu = contextmenu;
     }
 
+    static getSubscribedEvents() {
+        return {
+            'draggable.start': 'hide',
+        };
+    }
+
     hide() {
         this.contextmenu.hide();
     }

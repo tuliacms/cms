@@ -20,87 +20,39 @@ import ConfigSynchronizer from "core/Admin/Structure/Element/ConfigSynchronizer"
 import ColumnSize from "core/Admin/Structure/Element/ColumnSize";
 import DataStoreFactory from "core/Admin/Data/Store/DataStoreFactory";
 import ElementDataSubscriber from "core/Admin/Subscriber/Editor/ElementDataSubscriber";
+import EditorWindow from "core/Admin/UseCase/EditorWindow";
+import SelectionSubscriber from "core/Admin/Subscriber/Admin/SelectionSubscriber";
 
 export default class Container extends AbstractContainer {
     build() {
         super.build();
 
-        this.register('view', this._buildView);
-        this.register('usecase.sections', () => new Sections(this.get('structure.store'), this.get('messenger'), this.get('usecase.selection')));
-        this.register('usecase.rows', () => new Rows(this.get('structure.store'), this.get('messenger'), this.get('usecase.selection')));
-        this.register('usecase.columns', () => new Columns(this.get('structure.store'), this.get('messenger'), this.get('usecase.selection')));
-        this.register('usecase.selection', () => new Selection(this.get('selection.store'), this.get('messenger')));
-        this.register('usecase.draggable', () => new Draggable(this.get('usecase.selection'), this.get('structure.store'), this.get('eventBus'), this.get('messenger')));
-        this.register('usecase.contextmenu', () => new Contextmenu(this.get('contextmenu.store'), this.get('usecase.selection')));
-        this.register('canvas', () => new Canvas(this.getParameter('options'), this.get('eventBus')));
-        this.register('structure.store', () => {
-            return (new StructureStoreFactory(this.getParameter('options'))).factory();
-        });
-        this.register('selection.store', () => useSelectionStore());
-        this.register('contextmenu.store', () => useContextmenuStore());
-        this.register('element.config.storeFactory', () => new ConfigStoreFactory(this.get('blocks.registry'), this.get('structure.store')));
-        this.register('element.config.registry', () => new AdminElementConfigStoreRegistry(this.get('element.config.storeFactory'), this.get('element.config.synchronizer')));
-        this.register('element.config.synchronizer', () => new ConfigSynchronizer(this.get('messenger')));
-        this.register('element.data.storeFactory', () => new DataStoreFactory(this.get('blocks.registry'), this.get('structure.store')));
-        this.register('columnSize', () => new ColumnSize());
+        this.registerFactory('view', () => new View(this.get('root'), this.getParameter('instanceId'), this.get('translator'), this.get('eventBus')));
+        this.registerFactory('usecase.sections', () => new Sections(this.get('structure.store'), this.get('messenger'), this.get('usecase.selection')));
+        this.registerFactory('usecase.rows', () => new Rows(this.get('structure.store'), this.get('messenger'), this.get('usecase.selection')));
+        this.registerFactory('usecase.columns', () => new Columns(this.get('structure.store'), this.get('messenger'), this.get('usecase.selection')));
+        this.registerFactory('usecase.selection', () => new Selection(this.get('selection.store'), this.get('messenger')));
+        this.registerFactory('usecase.draggable', () => new Draggable(this.get('usecase.selection'), this.get('structure.store'), this.get('eventBus'), this.get('messenger')));
+        this.registerFactory('usecase.contextmenu', () => new Contextmenu(this.get('contextmenu.store'), this.get('usecase.selection')));
+        this.register('usecase.editorWindow', EditorWindow, ['@eventBus', '@view'], { tags: [{ name: 'event_subscriber' }] });
+        this.registerFactory('canvas', () => new Canvas(this.getParameter('options'), this.get('eventBus')));
+        this.registerFactory('structure.store', () => (new StructureStoreFactory(this.getParameter('options'))).factory());
+        this.registerFactory('selection.store', () => useSelectionStore());
+        this.registerFactory('contextmenu.store', () => useContextmenuStore());
+        this.registerFactory('element.config.storeFactory', () => new ConfigStoreFactory(this.get('blocks.registry'), this.get('structure.store')));
+        this.registerFactory('element.config.registry', () => new AdminElementConfigStoreRegistry(this.get('element.config.storeFactory'), this.get('element.config.synchronizer')));
+        this.registerFactory('element.config.synchronizer', () => new ConfigSynchronizer(this.get('messenger')));
+        this.registerFactory('element.data.storeFactory', () => new DataStoreFactory(this.get('blocks.registry'), this.get('structure.store')));
+        this.registerFactory('columnSize', () => new ColumnSize());
 
         // Subscribers
-        this.register(
-            'subscriber.BuildVueOnHtmlReady',
-            () => new BuildVueOnHtmlReady(
-                this.get('vueFactory'),
-                this.getParameter('options'),
-                this.getParameter('instanceId'),
-                this.getParameter('options.directives'),
-                this.getParameter('options.controls'),
-                this.getParameter('options.extensions'),
-                this.getParameter('options.blocks'),
-                this,
-            ),
-            { tags: [{ name: 'event_listener', on: 'admin.view.ready', call: 'build' }] }
-        );
-        this.register(
-            'subscriber.EditorSelectionSubscriber',
-            () => new EditorSelectionSubscriber(
-                this.get('messenger'),
-                this.get('usecase.selection'),
-            ),
-            { tags: [{ name: 'event_listener', on: 'admin.view.ready', call: 'registerReceivers' }] }
-        );
-        this.register(
-            'subscriber.ContextmenuAdminSubscriber',
-            () => new ContextmenuAdminSubscriber(
-                this.get('usecase.contextmenu'),
-            ),
-            { tags: [{ name: 'event_listener', on: 'draggable.start', call: 'hide' }] }
-        );
-        this.register(
-            'subscriber.ContextmenuEditorSubscriber',
-            () => new ContextmenuEditorSubscriber(
-                this.get('messenger'),
-                this.get('usecase.contextmenu'),
-            ),
-            { tags: [{ name: 'event_listener', on: 'admin.view.ready', call: 'registerReceivers' }] }
-        );
-        this.register(
-            'subscriber.ElementDataSubscriber',
-            () => new ElementDataSubscriber(
-                this.get('messenger'),
-                this.get('element.data.registry')
-            ),
-            { tags: [{ name: 'event_listener', on: 'admin.view.ready', call: 'registerReceivers' }] }
-        );
+        this.register('subscriber.BuildVueOnHtmlReady', BuildVueOnHtmlReady, ['@vueFactory', '%options', '%instanceId', '%options.directives', '%options.controls', '%options.extensions', '%options.blocks', this], { tags: [{ name: 'event_subscriber' }] });
+        this.register('subscriber.EditorSelectionSubscriber', EditorSelectionSubscriber, ['@messenger', '@usecase.selection'], { tags: [{ name: 'event_subscriber' }] });
+        this.register('subscriber.SelectionSubscriber', SelectionSubscriber, ['@usecase.selection'], { tags: [{ name: 'event_subscriber' }] });
+        this.register('subscriber.ContextmenuAdminSubscriber', ContextmenuAdminSubscriber, ['@usecase.contextmenu'], { tags: [{ name: 'event_subscriber' }] });
+        this.register('subscriber.ContextmenuEditorSubscriber', ContextmenuEditorSubscriber, ['@messenger', '@usecase.contextmenu'], { tags: [{ name: 'event_subscriber' }] });
+        this.register('subscriber.ElementDataSubscriber', ElementDataSubscriber, ['@messenger', '@element.data.registry'], { tags: [{ name: 'event_subscriber' }] });
 
         super.finish();
-    }
-
-    _buildView() {
-        return new View(
-            this.get('root'),
-            this.getParameter('instanceId'),
-            this.get('translator'),
-            this.get('admin'),
-            this.get('eventBus'),
-        );
     }
 }

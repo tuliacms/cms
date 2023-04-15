@@ -4,6 +4,12 @@ export default class ElementConfigSubscriber {
         this.elementConfigRegistry = elementConfigRegistry;
     }
 
+    static getSubscribedEvents() {
+        return {
+            'editor.ready': 'registerReceivers',
+        };
+    }
+
     registerReceivers() {
         const self = this;
 

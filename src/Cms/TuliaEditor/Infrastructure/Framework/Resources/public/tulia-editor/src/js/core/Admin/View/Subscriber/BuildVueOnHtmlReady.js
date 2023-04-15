@@ -12,6 +12,12 @@ export default class BuildVueOnHtmlReady {
         this.container = container;
     }
 
+    static getSubscribedEvents() {
+        return {
+            'admin.ready': 'build',
+        };
+    }
+
     build() {
         const vue = this.vueFactory.factory(
             Admin,

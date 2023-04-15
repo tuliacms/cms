@@ -149,7 +149,7 @@ export default class AbstractSegment {
             return extension.Manager;
         }
         if (this.segment === 'editor') {
-            return extension.Admin;
+            return extension.Window;
         }
     }
 

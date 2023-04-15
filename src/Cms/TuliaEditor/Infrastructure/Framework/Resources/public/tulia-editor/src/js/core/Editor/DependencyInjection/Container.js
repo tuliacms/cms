@@ -22,75 +22,26 @@ export default class Container extends AbstractContainer {
     build() {
         super.build();
 
-        this.register('view', () => new View(this.get('eventBus')));
-        this.register('structure.store', () => useStructureStore());
-        this.register('selection.store', () => useSelectionStore());
-        this.register('selection.selectedElementBoundaries', () => new SelectedElementBoundaries(this.get('selection.store')));
-        this.register('selection.hoveredElementBoundaries', () => new HoveredElementBoundaries(this.get('selection.store')));
-        this.register('selection.hoveredElementResolver', () => new HoverResolver(this.get('usecase.selection')));
-        this.register('usecase.selection', () => new Selection(this.get('messenger')));
-        this.register('usecase.contextmenu', () => new ContextmenuUsecase(this.get('messenger')));
-        this.register('contextmenu', () => new Contextmenu());
-        this.register('element.config.storeFactory', () => new ConfigStoreFactory(this.get('blocks.registry'), this.get('structure.store')));
-        this.register('element.data.storeFactory', () => new DataStoreFactory(this.get('blocks.registry'), this.get('structure.store')));
-        this.register('element.data.registry', () => new EditorElementDataStoreRegistry(this.get('element.data.storeFactory'), this.get('element.data.synchronizer')));
-        this.register('element.data.synchronizer', () => new DataSynchronizer(this.get('messenger')));
+        this.registerFactory('view', () => new View(this.get('eventBus')));
+        this.registerFactory('structure.store', () => useStructureStore());
+        this.registerFactory('selection.store', () => useSelectionStore());
+        this.registerFactory('selection.selectedElementBoundaries', () => new SelectedElementBoundaries(this.get('selection.store')));
+        this.registerFactory('selection.hoveredElementBoundaries', () => new HoveredElementBoundaries(this.get('selection.store')));
+        this.registerFactory('selection.hoveredElementResolver', () => new HoverResolver(this.get('usecase.selection')));
+        this.registerFactory('usecase.selection', () => new Selection(this.get('messenger')));
+        this.registerFactory('usecase.contextmenu', () => new ContextmenuUsecase(this.get('messenger')));
+        this.registerFactory('contextmenu', () => new Contextmenu());
+        this.registerFactory('element.config.storeFactory', () => new ConfigStoreFactory(this.get('blocks.registry'), this.get('structure.store')));
+        this.registerFactory('element.data.storeFactory', () => new DataStoreFactory(this.get('blocks.registry'), this.get('structure.store')));
+        this.registerFactory('element.data.registry', () => new EditorElementDataStoreRegistry(this.get('element.data.storeFactory'), this.get('element.data.synchronizer')));
+        this.registerFactory('element.data.synchronizer', () => new DataSynchronizer(this.get('messenger')));
 
         // Subscribers
-        this.register(
-            'subscriber.buildVueOnHtmlReady',
-            () => new BuildVueOnHtmlReady(
-                this.get('vueFactory'),
-                this.getParameter('options'),
-                this.getParameter('instanceId'),
-                this.getParameter('options.directives'),
-                this.getParameter('options.controls'),
-                this.getParameter('options.extensions'),
-                this.getParameter('options.blocks'),
-                this,
-            ),
-            { tags: [{ name: 'event_listener', on: 'editor.view.ready', call: 'build' }] }
-        );
-        this.register(
-            'subscriber.selectionSubscriber',
-            () => new AdminSelectionSubscriber(
-                this.get('selection.store'),
-                this.get('messenger'),
-                this.get('eventBus'),
-            ),
-            { tags: [{ name: 'event_listener', on: 'editor.ready', call: 'registerReceivers' }] }
-        );
-        this.register(
-            'subscriber.StructureSubscriber',
-            () => new AdminStructureSubscriber(
-                this.get('structure.store'),
-                this.get('messenger'),
-                this.get('eventBus'),
-            ),
-            { tags: [{ name: 'event_listener', on: 'editor.ready', call: 'registerReceivers' }] }
-        );
-        this.register(
-            'subscriber.ElementConfigSubscriber',
-            () => new ElementConfigSubscriber(
-                this.get('messenger'),
-                this.get('element.config.registry')
-            ),
-            { tags: [{ name: 'event_listener', on: 'editor.ready', call: 'registerReceivers' }] }
-        );
-        this.register(
-            'subscriber.EditorSelectionSubscriber',
-            () => new EditorSelectionSubscriber(
-                this.get('selection.selectedElementBoundaries'),
-                this.get('selection.hoveredElementBoundaries'),
-            ),
-            { tags: [
-                { name: 'event_listener', on: 'editor.ready', call: 'registerUpdater' },
-                { name: 'event_listener', on: 'selection.selected', call: 'select' },
-                { name: 'event_listener', on: 'selection.deselected', call: 'deselect' },
-                { name: 'event_listener', on: 'selection.hovered', call: 'hover' },
-                { name: 'event_listener', on: 'selection.dehovered', call: 'dehover' },
-            ] }
-        );
+        this.register('subscriber.BuildVueOnHtmlReady', BuildVueOnHtmlReady, ['@vueFactory', '%options', '%instanceId', '%options.directives', '%options.controls', '%options.extensions', '%options.blocks', this], { tags: [{ name: 'event_subscriber' }] });
+        this.register('subscriber.AdminSelectionSubscriber', AdminSelectionSubscriber, ['@selection.store', '@messenger', '@eventBus'], { tags: [{ name: 'event_subscriber' }] });
+        this.register('subscriber.AdminStructureSubscriber', AdminStructureSubscriber, ['@structure.store', '@messenger', '@eventBus'], { tags: [{ name: 'event_subscriber' }] });
+        this.register('subscriber.ElementConfigSubscriber', ElementConfigSubscriber, ['@messenger', '@element.config.registry'], { tags: [{ name: 'event_subscriber' }] });
+        this.register('subscriber.EditorSelectionSubscriber', EditorSelectionSubscriber, ['@selection.selectedElementBoundaries', '@selection.hoveredElementBoundaries'], { tags: [{ name: 'event_subscriber' }] });
 
         super.finish();
     }

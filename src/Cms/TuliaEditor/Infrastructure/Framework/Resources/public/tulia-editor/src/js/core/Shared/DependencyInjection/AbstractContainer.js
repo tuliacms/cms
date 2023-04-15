@@ -34,21 +34,29 @@ export default class AbstractContainer {
     }
 
     build() {
-        this.register('eventBus', () => new EventBus());
-        this.register('translator', this._buildTranslator);
-        this.register('vueFactory', () => new VueFactory());
-        this.register('instantiator.block', () => new BlockInstantiator(this.get('element.config.registry'), this.get('element.data.registry'), this.get('blocks.registry'), this.get('structure.store')));
-        this.register('instantiator.column', () => new ColumnInstantiator(this.get('element.config.registry'), this.get('element.data.registry')));
-        this.register('instantiator.row', () => new RowInstantiator(this.get('element.config.registry'), this.get('element.data.registry')));
-        this.register('instantiator.section', () => new SectionInstantiator(this.get('element.config.registry'), this.get('element.data.registry')));
-        this.register('blocks.registry', () => new BlockRegistry(this.getParameter('options.blocks')));
-        this.register('element.config.registry', () => new ElementConfigStoreRegistry(this.get('element.config.storeFactory')));
-        this.register('element.data.registry', () => new ElementDataStoreRegistry(this.get('element.data.storeFactory')));
+        this.register('eventBus', EventBus);
+        this.registerFactory('translator', () => new Translator(this.options.locale, this.options.fallback_locales, this.getParameter('options.translations')));
+        this.register('vueFactory', VueFactory);
+        this.registerFactory('instantiator.block', () => new BlockInstantiator(this.get('element.config.registry'), this.get('element.data.registry'), this.get('blocks.registry'), this.get('structure.store')));
+        this.registerFactory('instantiator.column', () => new ColumnInstantiator(this.get('element.config.registry'), this.get('element.data.registry')));
+        this.registerFactory('instantiator.row', () => new RowInstantiator(this.get('element.config.registry'), this.get('element.data.registry')));
+        this.registerFactory('instantiator.section', () => new SectionInstantiator(this.get('element.config.registry'), this.get('element.data.registry')));
+        this.registerFactory('blocks.registry', () => new BlockRegistry(this.getParameter('options.blocks')));
+        this.registerFactory('element.config.registry', () => new ElementConfigStoreRegistry(this.get('element.config.storeFactory')));
+        this.registerFactory('element.data.registry', () => new ElementDataStoreRegistry(this.get('element.data.storeFactory')));
     }
 
-    register(id, factory, options) {
+    registerFactory(id, factory, options) {
         this.definitions[id] = {
             factory,
+            options: options ?? {},
+        };
+    }
+
+    register(id, classref, args, options) {
+        this.definitions[id] = {
+            classref,
+            args,
             options: options ?? {},
         };
     }
@@ -58,7 +66,16 @@ export default class AbstractContainer {
             throw new Error(`Service "${id}" does not exists.`);
         }
 
-        const service = this.definitions[id].factory.apply(this);
+        const definition = this.definitions[id];
+        let service = null;
+
+        if (definition.factory) {
+            service = definition.factory.apply(this);
+        } else if (definition.classref) {
+            service = new definition.classref(...this.buildArgs(definition.args));
+        } else {
+            throw new Error(`Definition for "${id}" service must contains a factory or classref.`);
+        }
 
         if (!service) {
             throw new Error(`Factory for "${id}" service does not return a valid service object.`);
@@ -67,30 +84,57 @@ export default class AbstractContainer {
         return this.services[id] = service;
     }
 
-    finish() {
-        this.get('eventBus').listen('*', (data, event) => {
-            for (let id in this.definitions) {
-                if (this.definitions[id].options.tags) {
-                    for (let t in this.definitions[id].options.tags) {
-                        if (
-                            this.definitions[id].options.tags[t].name === 'event_listener'
-                            && this.definitions[id].options.tags[t].on === event
-                        ) {
-                            const service = this.get(id);
+    buildArgs(args) {
+        let result = [];
 
-                            service[this.definitions[id].options.tags[t].call].call(service, data, event);
+        for (let i in args) {
+            if (typeof args[i] === 'string') {
+                const type = args[i].substring(0, 1);
+                const value = args[i].substring(1, args[i].length);
+
+                if (type === '@') {
+                    result.push(this.get(value));
+                } else if (type === '%') {
+                    result.push(this.getParameter(value));
+                } else {
+                    result.push(args[i]);
+                }
+
+                continue;
+            }
+
+            result.push(args[i]);
+        }
+
+        return result;
+    }
+
+    finish() {
+        const eventBus = this.get('eventBus');
+
+        for (let id in this.definitions) {
+            const def = this.definitions[id];
+
+            if (def.options.tags) {
+                for (let t in def.options.tags) {
+                    const tag = def.options.tags[t];
+
+                    if (tag.name === 'event_subscriber') {
+                        if (!def.classref) {
+                            throw new Error(`Definition of ${id} does not have classref, so cannot be registered as event_subscriber.`);
+                        }
+
+                        const events = def.classref.getSubscribedEvents();
+
+                        for (let e in events) {
+                            eventBus.listen(e, (data, event) => {
+                                const service = this.get(id);
+                                service[events[e]].call(service, data, event);
+                            });
                         }
                     }
                 }
             }
-        });
-    }
-
-    _buildTranslator() {
-        return new Translator(
-            this.options.locale,
-            this.options.fallback_locales,
-            this.getParameter('options.translations'),
-        );
+        }
     }
 }

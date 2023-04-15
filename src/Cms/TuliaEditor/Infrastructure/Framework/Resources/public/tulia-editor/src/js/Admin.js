@@ -59,25 +59,24 @@ export default class Admin {
             });
         });
 
-        this.container.get('view').render();
-
         TuliaEditor.instances[this.instanceId] = this;
+
+        this.container.get('view').render();
+        this.container.get('eventBus').dispatch('admin.ready');
 
         //this.renderPreview();
 
         //if (this.options.start_point === 'editor') {
         //    this.openEditor();
         //}
-
-        this.container.get('eventBus').dispatch('admin.ready');
     }
 
     openEditor () {
-        this.container.get('view').open();
+        this.container.get('usecase.editorWindow').open();
     }
 
     closeEditor () {
-        this.container.get('view').close();
+        this.container.get('usecase.editorWindow').cancel();
     }
 
     /*updateContent (structure, content, style) {

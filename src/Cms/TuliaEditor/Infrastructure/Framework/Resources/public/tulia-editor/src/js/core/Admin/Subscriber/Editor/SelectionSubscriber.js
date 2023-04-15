@@ -4,6 +4,12 @@ export default class SelectionSubscriber {
         this.selection = selection;
     }
 
+    static getSubscribedEvents() {
+        return {
+            'admin.ready': 'registerReceivers',
+        };
+    }
+
     registerReceivers() {
         const self = this;
 

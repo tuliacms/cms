@@ -5,6 +5,12 @@ export default class StructureSubscriber {
         this.eventBus = eventBus;
     }
 
+    static getSubscribedEvents() {
+        return {
+            'editor.ready': 'registerReceivers',
+        };
+    }
+
     registerReceivers() {
         const self = this;
 

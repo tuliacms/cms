@@ -4,6 +4,16 @@ export default class SelectionSubscriber {
         this.hoveredElementBoundaries = hoveredElementBoundaries;
     }
 
+    static getSubscribedEvents() {
+        return {
+            'editor.ready': 'registerUpdater',
+            'selection.selected': 'select',
+            'selection.deselected': 'deselect',
+            'selection.hovered': 'hover',
+            'selection.dehovered': 'dehover',
+        };
+    }
+
     select(newSelected) {
         setTimeout(
             () => this.selectedElementBoundaries.highlightSelected(newSelected.id, newSelected.type),

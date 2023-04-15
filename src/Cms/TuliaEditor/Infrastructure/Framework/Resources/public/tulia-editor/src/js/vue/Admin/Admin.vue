@@ -3,11 +3,10 @@
         <div class="tued-container">
             <Sidebar
                 @contextmenu="(event) => contextmenu.open(event)"
+                @save="saveEditor"
+                @cancel="cancelEditor"
             ></Sidebar>
-            <Canvas
-                :editorView="options.editor.view + '?tuliaEditorInstance=' + instanceId"
-                ref="canvas"
-            ></Canvas>
+            <Canvas ref="canvas"></Canvas>
             <!--<SidebarComponent
                 :structure="structure"
                 @cancel="cancelEditor"
@@ -41,9 +40,9 @@
 <script setup>
 import Sidebar from "admin/Sidebar/Sidebar.vue";
 import Canvas from "admin/Canvas/Canvas.vue";
-import { provide, defineProps, onMounted, ref } from "vue";
+import {provide, defineProps, onMounted, ref, toRaw} from "vue";
 
-const props = defineProps(['container']);
+const props = defineProps(['container', 'editor']);
 
 provide('structureDragOptions', {
     structureDragOptions: {
@@ -52,10 +51,6 @@ provide('structureDragOptions', {
         ghostClass: 'tued-structure-draggable-ghost'
     }
 });
-
-const options = props.container.getParameter('options');
-const instanceId = props.container.getParameter('instanceId');
-
 
 /**************
  * Contextmenu
@@ -92,6 +87,17 @@ onMounted(() => {
 });
 
 
+/**
+ * Save and Cancel
+ */
+const cancelEditor = () => {
+    //restorePreviousStructure();
+    //props.container.messenger.notify('structure.synchronize.from.admin', ObjectCloner.deepClone(toRaw(structure)));
+    props.container.get('usecase.editorWindow').cancel();
+};
+const saveEditor = () => {
+    props.container.get('usecase.editorWindow').save();
+};
 
 
 
@@ -99,12 +105,13 @@ onMounted(() => {
 
 
 /**
- * Every service from container must be provided at the end, because we produce thos services
- * here, and if any of then has dependency to any services created in this file, then this will fail.
+ * Every service from container must be provided at the end, because we produce those services
+ * here, and if any of them has dependency to any services created in this file, then this will fail.
  */
 provide('container', props.container);
-provide('translator', props.container.get('translator'));
+provide('instanceId', props.container.getParameter('instanceId'));
 provide('options', props.container.getParameter('options'));
+provide('translator', props.container.get('translator'));
 provide('eventBus', props.container.get('eventBus'));
 provide('admin', props.container.get('admin'));
 provide('canvas', props.container.get('canvas'));

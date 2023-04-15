@@ -12,6 +12,12 @@ export default class BuildVueOnHtmlReady {
         this.container = container;
     }
 
+    static getSubscribedEvents() {
+        return {
+            'editor.view.ready': 'build',
+        };
+    }
+
     build() {
         const vue = this.vueFactory.factory(
             Editor,

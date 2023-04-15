@@ -1,12 +1,10 @@
 export default class View {
-    editor;
-
-    constructor(root, instanceId, translator, admin, eventBus) {
+    constructor(root, instanceId, translator, eventBus) {
         this.translator = translator;
         this.instanceId = instanceId;
         this.root = root;
-        this.admin = admin;
         this.eventBus = eventBus;
+        this.editor = null;
     }
 
     render() {
@@ -24,27 +22,27 @@ export default class View {
         '</div>');
 
         this.renderModalsContainer();
+        this.renderEditorWindow();
 
         this.root.find('.tued-preview-wrapper').click(() => {
-            this.admin.openEditor();
+            this.open();
         });
+
+        this.eventBus.dispatch('admin.view.ready');
     };
 
     open () {
         $('body').addClass('tued-editor-opened');
+        this.editor.addClass('tued-editor-opened');
 
-        if (this.editor) {
-            this.editor.addClass('tued-editor-opened');
-        } else {
-            this.renderEditorWindow();
-        }
+        this.eventBus.dispatch('editor.opened');
     }
 
     close () {
-        if (this.editor) {
-            this.editor.removeClass('tued-editor-opened');
-            $('body').removeClass('tued-editor-opened');
-        }
+        this.editor.removeClass('tued-editor-opened');
+        $('body').removeClass('tued-editor-opened');
+
+        this.eventBus.dispatch('editor.closed');
     }
 
     renderModalsContainer() {
@@ -56,11 +54,9 @@ export default class View {
     }
 
     renderEditorWindow () {
-        this.editor = $(`<div class="tued-editor-window tued-editor-opened" data-tulia-editor-instance="${this.instanceId}">
+        this.editor = $(`<div class="tued-editor-window" data-tulia-editor-instance="${this.instanceId}">
             <div id="tued-editor-window-inner-${this.instanceId}"></div>
         </div>`);
         this.editor.appendTo('body');
-
-        this.eventBus.dispatch('admin.view.ready');
     };
 }

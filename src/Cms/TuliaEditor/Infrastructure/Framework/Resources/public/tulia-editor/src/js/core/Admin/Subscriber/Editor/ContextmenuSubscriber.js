@@ -4,6 +4,12 @@ export default class SelectionSubscriber {
         this.contextmenu = contextmenu;
     }
 
+    static getSubscribedEvents() {
+        return {
+            'admin.ready': 'registerReceivers',
+        };
+    }
+
     registerReceivers() {
         const self = this;
 

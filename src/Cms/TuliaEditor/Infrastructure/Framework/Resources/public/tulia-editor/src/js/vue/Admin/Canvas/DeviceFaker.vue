@@ -5,11 +5,14 @@
 </template>
 
 <script setup>
-import { inject, defineProps, onMounted, ref } from "vue";
-const props = defineProps(['editorView']);
+import { inject, onMounted, ref } from "vue";
 const canvas = inject('canvas');
 const messenger = inject('messenger');
+const options = inject('options');
+const instanceId = inject('instanceId');
 const iframe = ref(null);
+
+const editorView = options.editor.view + '?tuliaEditorInstance=' + instanceId;
 
 onMounted(() => {
     messenger.setDestinationWindow(iframe.value.contentWindow);

@@ -4,6 +4,12 @@ export default class ElementDataSubscriber {
         this.elementDataRegistry = elementDataRegistry;
     }
 
+    static getSubscribedEvents() {
+        return {
+            'admin.ready': 'registerReceivers',
+        };
+    }
+
     registerReceivers() {
         const self = this;
 
