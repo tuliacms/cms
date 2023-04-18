@@ -13,8 +13,8 @@ export default class DataStoreFactory {
         const block = this.structureStore.find(id);
         const definition = this.blocksRegistry.get(block.code);
 
-        const actions = definition.store.data.actions || {};
-        const getters = definition.store.data.getters || {};
+        const actions = definition.store?.data?.actions || {};
+        const getters = definition.store?.data?.getters || {};
 
         actions.replace = function(config) {
             config = ObjectCloner.deepClone(config);
@@ -26,7 +26,7 @@ export default class DataStoreFactory {
         getters.export = (state) => this.blockDefaults.exportBlockState(id, state);
 
         return defineStore(`data:block:${id}`, {
-            state: () => this.blockDefaults.getBlockState(id, definition.store.data.state(), currents),
+            state: () => this.blockDefaults.getBlockState(id, definition.store?.data?.state() ?? {}, currents),
             getters: getters,
             actions: actions,
         });

@@ -20590,69 +20590,6 @@ return __returned__
 
 /***/ }),
 
-/***/ "./src/js/blocks/TextBlock/Manager.vue":
-/*!*********************************************!*\
-  !*** ./src/js/blocks/TextBlock/Manager.vue ***!
-  \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _Manager_vue_vue_type_template_id_064e52b2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Manager.vue?vue&type=template&id=064e52b2 */ "./src/js/blocks/TextBlock/Manager.vue?vue&type=template&id=064e52b2");
-/* harmony import */ var _Manager_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Manager.vue?vue&type=script&setup=true&lang=js */ "./src/js/blocks/TextBlock/Manager.vue?vue&type=script&setup=true&lang=js");
-/* harmony import */ var _home_adam_projects_tuliacms_development_tuliacms_core_src_Cms_TuliaEditor_Infrastructure_Framework_Resources_public_tulia_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
-
-
-
-
-;
-const __exports__ = /*#__PURE__*/(0,_home_adam_projects_tuliacms_development_tuliacms_core_src_Cms_TuliaEditor_Infrastructure_Framework_Resources_public_tulia_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Manager_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Manager_vue_vue_type_template_id_064e52b2__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"src/js/blocks/TextBlock/Manager.vue"]])
-/* hot reload */
-if (false) {}
-
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__exports__);
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/blocks/TextBlock/Manager.vue?vue&type=script&setup=true&lang=js":
-/*!****************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/blocks/TextBlock/Manager.vue?vue&type=script&setup=true&lang=js ***!
-  \****************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "vue");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
-
-
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['block'],
-  setup(__props, { expose }) {
-  expose();
-
-const props = __props
-
-
-const block = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('instance.blocks').manager(props);
-
-const __returned__ = { props, block, inject: vue__WEBPACK_IMPORTED_MODULE_0__.inject }
-Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
-return __returned__
-}
-
-});
-
-/***/ }),
-
 /***/ "./src/js/blocks/TextBlock/Render.vue":
 /*!********************************************!*\
   !*** ./src/js/blocks/TextBlock/Render.vue ***!
@@ -20760,7 +20697,7 @@ const props = __props
 
 const { defineProps, inject, computed } = __webpack_require__(/*! vue */ "vue");
 
-const block = inject('blocks.instance').editor(props);
+const block = inject('instance.blocks').editor(props);
 const VideoUrl = (__webpack_require__(/*! ./VideoUrl.js */ "./src/js/blocks/VideoBlock/VideoUrl.js")["default"]);
 
 const classname = computed(() => {
@@ -20824,10 +20761,10 @@ const props = __props
 
 const { defineProps, inject, onMounted } = __webpack_require__(/*! vue */ "vue");
 
-const block = inject('blocks.instance').manager(props);
+const block = inject('instance.blocks').manager(props);
 const translator = inject('translator');
-const Select = block.control('Select');
-const Text = block.control('Input.Text');
+//const Select = block.control('Select');
+//const Text = block.control('Input.Text');
 
 const choices = {
     '1x1': '1x1',
@@ -20836,7 +20773,7 @@ const choices = {
     '21x9': '21x9',
 };
 
-const __returned__ = { defineProps, inject, onMounted, props, block, translator, Select, Text, choices }
+const __returned__ = { defineProps, inject, onMounted, props, block, translator, choices }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -20893,7 +20830,7 @@ const props = __props
 
 const { defineProps, inject, computed } = __webpack_require__(/*! vue */ "vue");
 
-const block = inject('blocks.instance').render(props);
+const block = inject('instance.blocks').render(props);
 const VideoUrl = (__webpack_require__(/*! ./VideoUrl.js */ "./src/js/blocks/VideoBlock/VideoUrl.js")["default"]);
 
 const classname = computed(() => {
@@ -25022,22 +24959,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/js/blocks/TextBlock/Manager.vue?vue&type=script&setup=true&lang=js":
-/*!********************************************************************************!*\
-  !*** ./src/js/blocks/TextBlock/Manager.vue?vue&type=script&setup=true&lang=js ***!
-  \********************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Manager_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
-/* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Manager_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./Manager.vue?vue&type=script&setup=true&lang=js */ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/blocks/TextBlock/Manager.vue?vue&type=script&setup=true&lang=js");
- 
-
-/***/ }),
-
 /***/ "./src/js/blocks/TextBlock/Render.vue?vue&type=script&setup=true&lang=js":
 /*!*******************************************************************************!*\
   !*** ./src/js/blocks/TextBlock/Render.vue?vue&type=script&setup=true&lang=js ***!
@@ -25898,22 +25819,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Editor_vue_vue_type_template_id_45cbd610__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Editor_vue_vue_type_template_id_45cbd610__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!../../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./Editor.vue?vue&type=template&id=45cbd610 */ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/blocks/TextBlock/Editor.vue?vue&type=template&id=45cbd610");
-
-
-/***/ }),
-
-/***/ "./src/js/blocks/TextBlock/Manager.vue?vue&type=template&id=064e52b2":
-/*!***************************************************************************!*\
-  !*** ./src/js/blocks/TextBlock/Manager.vue?vue&type=template&id=064e52b2 ***!
-  \***************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Manager_vue_vue_type_template_id_064e52b2__WEBPACK_IMPORTED_MODULE_0__.render)
-/* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Manager_vue_vue_type_template_id_064e52b2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!../../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./Manager.vue?vue&type=template&id=064e52b2 */ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/blocks/TextBlock/Manager.vue?vue&type=template&id=064e52b2");
 
 
 /***/ }),
@@ -26982,58 +26887,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 
 
-const _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */)
-const _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */)
-
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Config: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.block.config.someConfig), 1 /* TEXT */),
-    _hoisted_1,
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Data: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.block.data.text), 1 /* TEXT */),
-    _hoisted_2,
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
-      type: "text",
-      "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => (($setup.block.data.text) = $event))
-    }, null, 512 /* NEED_PATCH */), [
-      [vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.block.data.text]
-    ]),
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("<WysiwygEditor v-model=\"block.data.text\"></WysiwygEditor>")
   ]))
-}
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/blocks/TextBlock/Manager.vue?vue&type=template&id=064e52b2":
-/*!*********************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/blocks/TextBlock/Manager.vue?vue&type=template&id=064e52b2 ***!
-  \*********************************************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render)
-/* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "vue");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
-
-
-const _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */)
-const _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */)
-
-function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Config: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.block.config.someConfig), 1 /* TEXT */),
-    _hoisted_1,
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
-      type: "text",
-      "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => (($setup.block.config.someConfig) = $event))
-    }, null, 512 /* NEED_PATCH */), [
-      [vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.block.config.someConfig]
-    ]),
-    _hoisted_2,
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Data: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.block.data.text), 1 /* TEXT */)
-  ], 64 /* STABLE_FRAGMENT */))
 }
 
 /***/ }),
@@ -27078,7 +26936,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 
 
-const _hoisted_1 = ["src"]
+const _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" sdfgsdfgsdfg ")
+const _hoisted_2 = ["src"]
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return ($setup.block.data.url)
@@ -27086,9 +26945,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         key: 0,
         class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($setup.classname)
       }, [
+        _hoisted_1,
         (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
           src: $setup.VideoUrl.videoThumbnail($setup.block.data.url)
-        }, null, 8 /* PROPS */, _hoisted_1)
+        }, null, 8 /* PROPS */, _hoisted_2)
       ], 2 /* CLASS */))
     : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)
 }
@@ -27111,19 +26971,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Text"], {
-      modelValue: $setup.block.data.url,
-      "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => (($setup.block.data.url) = $event)),
-      label: $setup.translator.trans('youtubeVideoUrl')
-    }, null, 8 /* PROPS */, ["modelValue", "label"]),
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Select"], {
-      modelValue: $setup.block.data.ratio,
-      "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => (($setup.block.data.ratio) = $event)),
-      label: $setup.translator.trans('aspectRatio'),
-      choices: $setup.choices
-    }, null, 8 /* PROPS */, ["modelValue", "label"])
-  ], 64 /* STABLE_FRAGMENT */))
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("    <Text v-model=\"block.data.url\" :label=\"translator.trans('youtubeVideoUrl')\" />\n    <Select v-model=\"block.data.ratio\" :label=\"translator.trans('aspectRatio')\" :choices=\"choices\" />")
 }
 
 /***/ }),
@@ -30612,7 +30460,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 const Editor = (__webpack_require__(/*! ./Editor.vue */ "./src/js/blocks/TextBlock/Editor.vue")["default"]);
 const Render = (__webpack_require__(/*! ./Render.vue */ "./src/js/blocks/TextBlock/Render.vue")["default"]);
-const Manager = (__webpack_require__(/*! ./Manager.vue */ "./src/js/blocks/TextBlock/Manager.vue")["default"]);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
     theme: '*',
@@ -30622,19 +30469,11 @@ const Manager = (__webpack_require__(/*! ./Manager.vue */ "./src/js/blocks/TextB
     icon: 'data:image/png;base64,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',
     editor: Editor,
     render: Render,
-    manager: Manager,
     store: {
         data: {
             state: () => {
                 return {
-                    text: 'My sample text.',
-                };
-            },
-        },
-        config: {
-            state: () => {
-                return {
-                    someConfig: '4',
+                    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
                 };
             },
         },
@@ -30668,10 +30507,16 @@ const Manager = (__webpack_require__(/*! ./Manager.vue */ "./src/js/blocks/Video
     manager: Manager,
     editor: Editor,
     render: Render,
-    defaults: {
-        url: 'https://www.youtube.com/watch?v=h_D3VFfhvs4',
-        ratio: '16x9',
-    }
+    store: {
+        config: {
+            state: () => {
+                return {
+                    url: 'https://www.youtube.com/watch?v=h_D3VFfhvs4',
+                    ratio: '16x9',
+                };
+            },
+        },
+    },
 });
 
 
@@ -31028,8 +30873,8 @@ class ConfigStoreFactory {
         const block = this.structureStore.find(id);
         const definition = this.blocksRegistry.get(block.code);
 
-        const actions = definition.store.config.actions || {};
-        const getters = definition.store.config.getters || {};
+        const actions = definition.store?.config?.actions || {};
+        const getters = definition.store?.config?.getters || {};
 
         actions.replace = function(config) {
             config = core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_3__["default"].deepClone(config);
@@ -31041,7 +30886,7 @@ class ConfigStoreFactory {
         getters.export = (state) => this.blockDefaults.exportBlockState(id, state);
 
         return (0,pinia__WEBPACK_IMPORTED_MODULE_4__.defineStore)(`config:block:${id}`, {
-            state: () => this.blockDefaults.getBlockState(id, definition.store.config.state(), currents),
+            state: () => this.blockDefaults.getBlockState(id, definition.store?.config?.state() ?? {}, currents),
             getters: getters,
             actions: actions,
         });
@@ -31125,8 +30970,8 @@ class DataStoreFactory {
         const block = this.structureStore.find(id);
         const definition = this.blocksRegistry.get(block.code);
 
-        const actions = definition.store.data.actions || {};
-        const getters = definition.store.data.getters || {};
+        const actions = definition.store?.data?.actions || {};
+        const getters = definition.store?.data?.getters || {};
 
         actions.replace = function(config) {
             config = core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_1__["default"].deepClone(config);
@@ -31138,7 +30983,7 @@ class DataStoreFactory {
         getters.export = (state) => this.blockDefaults.exportBlockState(id, state);
 
         return (0,pinia__WEBPACK_IMPORTED_MODULE_2__.defineStore)(`data:block:${id}`, {
-            state: () => this.blockDefaults.getBlockState(id, definition.store.data.state(), currents),
+            state: () => this.blockDefaults.getBlockState(id, definition.store?.data?.state() ?? {}, currents),
             getters: getters,
             actions: actions,
         });
@@ -31803,9 +31648,6 @@ class Structure {
                                             store: {
                                                 data: {
                                                     text: 'My sample text. In store.'
-                                                },
-                                                config: {
-                                                    someConfig: '4, in store.',
                                                 }
                                             }
                                         }
@@ -31813,7 +31655,19 @@ class Structure {
                                 },
                                 {
                                     id: "92dd5110-3815-4eb4-a32c-14215fac4c2b",
-                                    blocks: [],
+                                    blocks: [
+                                        /*{
+                                            id: "20687444-337b-4ccf-8be6-3ac2288e1dd2",
+                                            code: "core-videoblock",
+                                            store: {
+                                                data: {},
+                                                config: {
+                                                    url: 'https://www.youtube.com/watch?v=bzBT9mEXOV8&list=RDbzBT9mEXOV8&start_radio=1&ab_channel=OU7SIDE',
+                                                    ratio: '16x9',
+                                                }
+                                            }
+                                        }*/
+                                    ],
                                 },
                                 {
                                     id: "a2180b3a-a2b7-4f32-ad88-8c1fad3c0edd",
@@ -31946,8 +31800,8 @@ class SourceToUnifiedFormat {
             parent: column.id,
             code: block.code,
         });
-        this.setConfig(unified, block.id, 'block', block.store.config);
-        this.setData(unified, block.id, 'block', block.store.data);
+        this.setConfig(unified, block.id, 'block', block.store?.config ?? {});
+        this.setData(unified, block.id, 'block', block.store?.data ?? {});
     }
 
     static setConfig(unified, id, type, config) {
@@ -33097,8 +32951,8 @@ class ConfigStoreFactory {
         const block = this.structureStore.find(id);
         const definition = this.blocksRegistry.get(block.code);
 
-        const actions = definition.store.config.actions || {};
-        const getters = definition.store.config.getters || {};
+        const actions = definition.store?.config?.actions || {};
+        const getters = definition.store?.config?.getters || {};
 
         actions.replace = function(config) {
             config = core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_3__["default"].deepClone(config);
@@ -33110,7 +32964,7 @@ class ConfigStoreFactory {
         getters.export = (state) => this.blockDefaults.exportBlockState(id, state);
 
         return (0,pinia__WEBPACK_IMPORTED_MODULE_4__.defineStore)(`config:block:${id}`, {
-            state: () => this.blockDefaults.getBlockState(id, definition.store.config.state(), currents),
+            state: () => this.blockDefaults.getBlockState(id, definition.store?.config?.state() ?? {}, currents),
             getters: getters,
             actions: actions,
         });
@@ -33149,8 +33003,8 @@ class DataStoreFactory {
         const block = this.structureStore.find(id);
         const definition = this.blocksRegistry.get(block.code);
 
-        const actions = definition.store.data.actions || {};
-        const getters = definition.store.data.getters || {};
+        const actions = definition.store?.data?.actions || {};
+        const getters = definition.store?.data?.getters || {};
 
         actions.replace = function(config) {
             config = core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_1__["default"].deepClone(config);
@@ -33162,7 +33016,7 @@ class DataStoreFactory {
         getters.export = (state) => this.blockDefaults.exportBlockState(id, state);
 
         return (0,pinia__WEBPACK_IMPORTED_MODULE_2__.defineStore)(`data:block:${id}`, {
-            state: () => this.blockDefaults.getBlockState(id, definition.store.data.state(), currents),
+            state: () => this.blockDefaults.getBlockState(id, definition.store?.data?.state() ?? {}, currents),
             getters: getters,
             actions: actions,
         });

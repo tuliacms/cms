@@ -7,7 +7,7 @@
 <script setup>
 const { defineProps, inject, computed } = require('vue');
 const props = defineProps(['block']);
-const block = inject('blocks.instance').render(props);
+const block = inject('instance.blocks').render(props);
 const VideoUrl = require('./VideoUrl.js').default;
 
 const classname = computed(() => {

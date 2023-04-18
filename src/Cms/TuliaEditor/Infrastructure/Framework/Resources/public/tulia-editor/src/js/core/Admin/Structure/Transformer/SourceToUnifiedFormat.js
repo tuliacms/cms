@@ -75,8 +75,8 @@ export default class SourceToUnifiedFormat {
             parent: column.id,
             code: block.code,
         });
-        this.setConfig(unified, block.id, 'block', block.store.config);
-        this.setData(unified, block.id, 'block', block.store.data);
+        this.setConfig(unified, block.id, 'block', block.store?.config ?? {});
+        this.setData(unified, block.id, 'block', block.store?.data ?? {});
     }
 
     static setConfig(unified, id, type, config) {

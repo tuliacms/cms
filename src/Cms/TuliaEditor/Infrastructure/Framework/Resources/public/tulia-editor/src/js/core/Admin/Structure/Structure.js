@@ -87,9 +87,6 @@ export default class Structure {
                                             store: {
                                                 data: {
                                                     text: 'My sample text. In store.'
-                                                },
-                                                config: {
-                                                    someConfig: '4, in store.',
                                                 }
                                             }
                                         }
@@ -97,7 +94,19 @@ export default class Structure {
                                 },
                                 {
                                     id: "92dd5110-3815-4eb4-a32c-14215fac4c2b",
-                                    blocks: [],
+                                    blocks: [
+                                        /*{
+                                            id: "20687444-337b-4ccf-8be6-3ac2288e1dd2",
+                                            code: "core-videoblock",
+                                            store: {
+                                                data: {},
+                                                config: {
+                                                    url: 'https://www.youtube.com/watch?v=bzBT9mEXOV8&list=RDbzBT9mEXOV8&start_radio=1&ab_channel=OU7SIDE',
+                                                    ratio: '16x9',
+                                                }
+                                            }
+                                        }*/
+                                    ],
                                 },
                                 {
                                     id: "a2180b3a-a2b7-4f32-ad88-8c1fad3c0edd",

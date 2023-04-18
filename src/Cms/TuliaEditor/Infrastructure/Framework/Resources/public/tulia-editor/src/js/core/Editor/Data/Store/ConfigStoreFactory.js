@@ -41,8 +41,8 @@ export default class ConfigStoreFactory {
         const block = this.structureStore.find(id);
         const definition = this.blocksRegistry.get(block.code);
 
-        const actions = definition.store.config.actions || {};
-        const getters = definition.store.config.getters || {};
+        const actions = definition.store?.config?.actions || {};
+        const getters = definition.store?.config?.getters || {};
 
         actions.replace = function(config) {
             config = ObjectCloner.deepClone(config);
@@ -54,7 +54,7 @@ export default class ConfigStoreFactory {
         getters.export = (state) => this.blockDefaults.exportBlockState(id, state);
 
         return defineStore(`config:block:${id}`, {
-            state: () => this.blockDefaults.getBlockState(id, definition.store.config.state(), currents),
+            state: () => this.blockDefaults.getBlockState(id, definition.store?.config?.state() ?? {}, currents),
             getters: getters,
             actions: actions,
         });

@@ -1,8 +1,6 @@
 <template>
     <div>
-        Config: {{ block.config.someConfig }}<br />
-        Data: {{ block.data.text }}<br />
-        <input type="text" v-model="block.data.text" />
+        Data: {{ block.data.text }}
         <!--<WysiwygEditor v-model="block.data.text"></WysiwygEditor>-->
     </div>
 </template>
