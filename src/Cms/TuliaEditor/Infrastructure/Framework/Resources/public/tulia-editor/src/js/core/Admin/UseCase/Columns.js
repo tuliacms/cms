@@ -1,41 +1,35 @@
 import { v4 } from "uuid";
 
 export default class Columns {
-    constructor(structure, messenger, selectionUseCase) {
-        this.structure = structure;
-        this.messenger = messenger;
+    constructor(structureStore, selectionUseCase, structure) {
+        this.structureStore = structureStore;
         this.selectionUseCase = selectionUseCase;
+        this.structure = structure;
     }
 
     newOne(rowId) {
         const id = v4();
-        this.structure.appendColumn({ id }, rowId);
+        this.structureStore.appendColumn({ id }, rowId);
         this.selectionUseCase.select(id, 'column');
-        this.update();
+        this.structure.update();
     }
 
     newBefore(before) {
         const id = v4();
-        this.structure.appendColumnBefore({ id }, before);
+        this.structureStore.appendColumnBefore({ id }, before);
         this.selectionUseCase.select(id, 'column');
-        this.update();
+        this.structure.update();
     }
 
     newAfter(after) {
         const id = v4();
-        this.structure.appendColumnAfter({ id }, after);
+        this.structureStore.appendColumnAfter({ id }, after);
         this.selectionUseCase.select(id, 'column');
-        this.update();
+        this.structure.update();
     }
 
     remove(id) {
-        this.structure.removeColumn(id);
-        this.update();
-    }
-
-    update() {
-        this.messenger.send('admin.structure.changed', {
-            structure: this.structure.export,
-        });
+        this.structureStore.removeColumn(id);
+        this.structure.update();
     }
 }

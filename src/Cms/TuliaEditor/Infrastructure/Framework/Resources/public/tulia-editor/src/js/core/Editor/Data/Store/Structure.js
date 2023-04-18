@@ -40,7 +40,7 @@ export const useStructureStore = defineStore('structure', {
     },
     actions: {
         update(structure) {
-            this.sections = structure.sections;
+            this.sections = structure?.sections ?? [];
         },
     },
     getters: {

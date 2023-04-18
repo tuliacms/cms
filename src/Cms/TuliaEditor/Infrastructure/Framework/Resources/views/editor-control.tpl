@@ -93,22 +93,10 @@
         let structureSelector = '.tulia-editor-structure-field[data-tulia-editor-group-id="{{ params.group_id }}"]';
         let contentSelector = '.tulia-editor-content-field[data-tulia-editor-group-id="{{ params.group_id }}"]';
 
-        let structure = $(structureSelector).val();
-
-        if (!structure) {
-            structure = {};
-        } else {
-            structure = JSON.parse(structure);
-        }
-
         new TuliaEditor.Admin('#{{ params.id }}', {
             sink: {
                 structure: structureSelector,
                 content: contentSelector
-            },
-            structure: {
-                source: structure,
-                preview: $(contentSelector).val(),
             },
             editor: {
                 view: '{{ path('backend.tulia_editor.editor_view') }}',

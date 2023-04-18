@@ -47,6 +47,7 @@ const emit = defineEmits(['cancel', 'save']);
 const options = inject('options');
 const translator = inject('translator');
 const admin = inject('admin');
+const eventBus = inject('eventBus');
 
 provide('structureDragOptions', {
     structureDragOptions: {
@@ -66,6 +67,12 @@ const openTab = (tab) => {
         sidebar.tab = tab;
     }
 };
+
+onMounted(() => {
+    eventBus.listen('editor.opened', () => {
+        openTab('structure');
+    });
+});
 
 /*onMounted(() => {
     messenger.on('structure.selection.selected', (type, id, trigger) => {

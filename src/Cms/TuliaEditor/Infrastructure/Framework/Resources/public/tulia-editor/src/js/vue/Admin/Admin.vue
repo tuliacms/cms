@@ -83,7 +83,7 @@ contextmenu.setEditorOffsetProvider(() => {
 });
 
 onMounted(() => {
-    document.body.addEventListener('click', (e) => contextmenu.hide());
+    document.body.addEventListener('click', () => contextmenu.hide());
 });
 
 

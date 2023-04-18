@@ -17,6 +17,7 @@ import ConfigStoreFactory from "core/Editor/Data/Store/ConfigStoreFactory";
 import DataStoreFactory from "core/Editor/Data/Store/DataStoreFactory";
 import EditorElementDataStoreRegistry from "core/Editor/Data/EditorElementDataStoreRegistry";
 import DataSynchronizer from "core/Editor/Structure/Element/DataSynchronizer";
+import ElementDataSubscriber from "core/Editor/Subscriber/Admin/ElementDataSubscriber";
 
 export default class Container extends AbstractContainer {
     build() {
@@ -41,6 +42,7 @@ export default class Container extends AbstractContainer {
         this.register('subscriber.AdminSelectionSubscriber', AdminSelectionSubscriber, ['@selection.store', '@messenger', '@eventBus'], { tags: [{ name: 'event_subscriber' }] });
         this.register('subscriber.AdminStructureSubscriber', AdminStructureSubscriber, ['@structure.store', '@messenger', '@eventBus'], { tags: [{ name: 'event_subscriber' }] });
         this.register('subscriber.ElementConfigSubscriber', ElementConfigSubscriber, ['@messenger', '@element.config.registry'], { tags: [{ name: 'event_subscriber' }] });
+        this.register('subscriber.ElementDataSubscriber', ElementDataSubscriber, ['@messenger', '@element.data.registry'], { tags: [{ name: 'event_subscriber' }] });
         this.register('subscriber.EditorSelectionSubscriber', EditorSelectionSubscriber, ['@selection.selectedElementBoundaries', '@selection.hoveredElementBoundaries'], { tags: [{ name: 'event_subscriber' }] });
 
         super.finish();

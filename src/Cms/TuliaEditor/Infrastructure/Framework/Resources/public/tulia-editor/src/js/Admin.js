@@ -24,6 +24,10 @@ export default class Admin {
     vue = null;
     container = {};
     previewHeightWatcherInterval = null;
+    sink = {
+        structure: null,
+        content: null,
+    };
 
     constructor (selector, options) {
         this.selector = selector;
@@ -37,6 +41,13 @@ export default class Admin {
         this.instanceId = ++instances;
         this.options = $.extend({}, TuliaEditor.config.defaults, TuliaEditor.config.dynamic, this.options);
         this.options.translations = TuliaEditor.translations;
+
+        this.sink.structure = document.querySelector(this.options.sink.structure);
+        this.sink.content = document.querySelector(this.options.sink.content);
+
+        this.options.structure = this.sink.structure.value
+            ? JSON.parse(this.sink.structure.value)
+            : {};
 
         const messenger = new Messenger(this.instanceId, 'admin', 'editor');
 
@@ -52,17 +63,16 @@ export default class Admin {
         this.container.set('messenger', messenger);
         this.container.build();
 
-        messenger.receive('init.editor', () => {
-            messenger.send('init.options', {
-                options: this.options,
-                structure: this.container.get('structure.store').export,
-            });
-        });
-
         TuliaEditor.instances[this.instanceId] = this;
 
         this.container.get('view').render();
         this.container.get('eventBus').dispatch('admin.ready');
+        this.container.get('eventBus').listen('editor.saved', (source) => {
+            console.log(source);
+
+            this.sink.structure.value = JSON.stringify(source);
+            this.sink.content.value = JSON.stringify(source);
+        });
 
         //this.renderPreview();
 

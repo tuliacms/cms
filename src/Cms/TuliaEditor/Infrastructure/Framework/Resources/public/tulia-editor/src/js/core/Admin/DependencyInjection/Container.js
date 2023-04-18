@@ -1,11 +1,11 @@
 import AbstractContainer from "core/Shared/DependencyInjection/AbstractContainer";
 import View from "core/Admin/View/View";
 import BuildVueOnHtmlReady from "core/Admin/View/Subscriber/BuildVueOnHtmlReady";
-import StructureStoreFactory from "core/Admin/Data/Store/StructureStoreFactory";
 import Sections from "core/Admin/UseCase/Sections";
 import Selection from "core/Admin/UseCase/Selection";
 import { useSelectionStore } from "core/Admin/Data/Store/Selection";
 import { useContextmenuStore } from "core/Admin/Data/Store/Contextmenu";
+import { useStructureStore } from "core/Admin/Data/Store/Structure";
 import Canvas from "core/Admin/View/Canvas";
 import EditorSelectionSubscriber from "core/Admin/Subscriber/Editor/SelectionSubscriber";
 import Contextmenu from "core/Admin/UseCase/Contextmenu";
@@ -22,21 +22,23 @@ import DataStoreFactory from "core/Admin/Data/Store/DataStoreFactory";
 import ElementDataSubscriber from "core/Admin/Subscriber/Editor/ElementDataSubscriber";
 import EditorWindow from "core/Admin/UseCase/EditorWindow";
 import SelectionSubscriber from "core/Admin/Subscriber/Admin/SelectionSubscriber";
+import Structure from "core/Admin/Structure/Structure";
+import EditorWindowSubscriber from "core/Admin/Subscriber/Admin/EditorWindowSubscriber";
 
 export default class Container extends AbstractContainer {
     build() {
         super.build();
 
         this.registerFactory('view', () => new View(this.get('root'), this.getParameter('instanceId'), this.get('translator'), this.get('eventBus')));
-        this.registerFactory('usecase.sections', () => new Sections(this.get('structure.store'), this.get('messenger'), this.get('usecase.selection')));
-        this.registerFactory('usecase.rows', () => new Rows(this.get('structure.store'), this.get('messenger'), this.get('usecase.selection')));
-        this.registerFactory('usecase.columns', () => new Columns(this.get('structure.store'), this.get('messenger'), this.get('usecase.selection')));
+        this.registerFactory('usecase.sections', () => new Sections(this.get('structure.store'), this.get('usecase.selection'), this.get('structure')));
+        this.registerFactory('usecase.rows', () => new Rows(this.get('structure.store'), this.get('usecase.selection'), this.get('structure')));
+        this.registerFactory('usecase.columns', () => new Columns(this.get('structure.store'), this.get('usecase.selection'), this.get('structure')));
         this.registerFactory('usecase.selection', () => new Selection(this.get('selection.store'), this.get('messenger')));
         this.registerFactory('usecase.draggable', () => new Draggable(this.get('usecase.selection'), this.get('structure.store'), this.get('eventBus'), this.get('messenger')));
         this.registerFactory('usecase.contextmenu', () => new Contextmenu(this.get('contextmenu.store'), this.get('usecase.selection')));
-        this.register('usecase.editorWindow', EditorWindow, ['@eventBus', '@view'], { tags: [{ name: 'event_subscriber' }] });
+        this.register('usecase.editorWindow', EditorWindow, ['@eventBus', '@view', '@structure']);
         this.registerFactory('canvas', () => new Canvas(this.getParameter('options'), this.get('eventBus')));
-        this.registerFactory('structure.store', () => (new StructureStoreFactory(this.getParameter('options'))).factory());
+        this.registerFactory('structure.store', () => useStructureStore());
         this.registerFactory('selection.store', () => useSelectionStore());
         this.registerFactory('contextmenu.store', () => useContextmenuStore());
         this.registerFactory('element.config.storeFactory', () => new ConfigStoreFactory(this.get('blocks.registry'), this.get('structure.store')));
@@ -44,6 +46,7 @@ export default class Container extends AbstractContainer {
         this.registerFactory('element.config.synchronizer', () => new ConfigSynchronizer(this.get('messenger')));
         this.registerFactory('element.data.storeFactory', () => new DataStoreFactory(this.get('blocks.registry'), this.get('structure.store')));
         this.registerFactory('columnSize', () => new ColumnSize());
+        this.register('structure', Structure, ['@structure.store', '@element.config.registry', '@element.data.registry', '@messenger', '%options']);
 
         // Subscribers
         this.register('subscriber.BuildVueOnHtmlReady', BuildVueOnHtmlReady, ['@vueFactory', '%options', '%instanceId', '%options.directives', '%options.controls', '%options.extensions', '%options.blocks', this], { tags: [{ name: 'event_subscriber' }] });
@@ -52,6 +55,7 @@ export default class Container extends AbstractContainer {
         this.register('subscriber.ContextmenuAdminSubscriber', ContextmenuAdminSubscriber, ['@usecase.contextmenu'], { tags: [{ name: 'event_subscriber' }] });
         this.register('subscriber.ContextmenuEditorSubscriber', ContextmenuEditorSubscriber, ['@messenger', '@usecase.contextmenu'], { tags: [{ name: 'event_subscriber' }] });
         this.register('subscriber.ElementDataSubscriber', ElementDataSubscriber, ['@messenger', '@element.data.registry'], { tags: [{ name: 'event_subscriber' }] });
+        this.register('subscriber.EditorWindowSubscriber', EditorWindowSubscriber, ['@usecase.editorWindow'], { tags: [{ name: 'event_subscriber' }] });
 
         super.finish();
     }

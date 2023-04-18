@@ -25,7 +25,7 @@ export default class View {
         this.renderEditorWindow();
 
         this.root.find('.tued-preview-wrapper').click(() => {
-            this.open();
+            this.eventBus.dispatch('preview.clicked');
         });
 
         this.eventBus.dispatch('admin.view.ready');

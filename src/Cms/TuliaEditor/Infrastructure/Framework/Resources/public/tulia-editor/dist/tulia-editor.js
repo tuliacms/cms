@@ -22275,7 +22275,7 @@ contextmenu.setEditorOffsetProvider(() => {
 });
 
 (0,vue__WEBPACK_IMPORTED_MODULE_2__.onMounted)(() => {
-    document.body.addEventListener('click', (e) => contextmenu.hide());
+    document.body.addEventListener('click', () => contextmenu.hide());
 });
 
 
@@ -23377,6 +23377,7 @@ const messenger = inject('messenger');*/
 const options = (0,vue__WEBPACK_IMPORTED_MODULE_2__.inject)('options');
 const translator = (0,vue__WEBPACK_IMPORTED_MODULE_2__.inject)('translator');
 const admin = (0,vue__WEBPACK_IMPORTED_MODULE_2__.inject)('admin');
+const eventBus = (0,vue__WEBPACK_IMPORTED_MODULE_2__.inject)('eventBus');
 
 (0,vue__WEBPACK_IMPORTED_MODULE_2__.provide)('structureDragOptions', {
     structureDragOptions: {
@@ -23397,6 +23398,12 @@ const openTab = (tab) => {
     }
 };
 
+(0,vue__WEBPACK_IMPORTED_MODULE_2__.onMounted)(() => {
+    eventBus.listen('editor.opened', () => {
+        openTab('structure');
+    });
+});
+
 /*onMounted(() => {
     messenger.on('structure.selection.selected', (type, id, trigger) => {
         if (trigger !== 'sidebar' && type === 'block') {
@@ -23405,7 +23412,7 @@ const openTab = (tab) => {
     });
 });*/
 
-const __returned__ = { emit, options, translator, admin, sidebar, openTab, Structure: admin_Sidebar_Structure_vue__WEBPACK_IMPORTED_MODULE_0__["default"], Selected: admin_Sidebar_Selected_Selected_vue__WEBPACK_IMPORTED_MODULE_1__["default"], ref: vue__WEBPACK_IMPORTED_MODULE_2__.ref, inject: vue__WEBPACK_IMPORTED_MODULE_2__.inject, provide: vue__WEBPACK_IMPORTED_MODULE_2__.provide, onMounted: vue__WEBPACK_IMPORTED_MODULE_2__.onMounted, reactive: vue__WEBPACK_IMPORTED_MODULE_2__.reactive }
+const __returned__ = { emit, options, translator, admin, eventBus, sidebar, openTab, Structure: admin_Sidebar_Structure_vue__WEBPACK_IMPORTED_MODULE_0__["default"], Selected: admin_Sidebar_Selected_Selected_vue__WEBPACK_IMPORTED_MODULE_1__["default"], ref: vue__WEBPACK_IMPORTED_MODULE_2__.ref, inject: vue__WEBPACK_IMPORTED_MODULE_2__.inject, provide: vue__WEBPACK_IMPORTED_MODULE_2__.provide, onMounted: vue__WEBPACK_IMPORTED_MODULE_2__.onMounted, reactive: vue__WEBPACK_IMPORTED_MODULE_2__.reactive }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -30196,6 +30203,10 @@ class Admin {
     vue = null;
     container = {};
     previewHeightWatcherInterval = null;
+    sink = {
+        structure: null,
+        content: null,
+    };
 
     constructor (selector, options) {
         this.selector = selector;
@@ -30209,6 +30220,13 @@ class Admin {
         this.instanceId = ++instances;
         this.options = $.extend({}, TuliaEditor.config.defaults, TuliaEditor.config.dynamic, this.options);
         this.options.translations = TuliaEditor.translations;
+
+        this.sink.structure = document.querySelector(this.options.sink.structure);
+        this.sink.content = document.querySelector(this.options.sink.content);
+
+        this.options.structure = this.sink.structure.value
+            ? JSON.parse(this.sink.structure.value)
+            : {};
 
         const messenger = new core_Shared_Bus_WindowsMessaging_Messenger__WEBPACK_IMPORTED_MODULE_2__["default"](this.instanceId, 'admin', 'editor');
 
@@ -30224,17 +30242,16 @@ class Admin {
         this.container.set('messenger', messenger);
         this.container.build();
 
-        messenger.receive('init.editor', () => {
-            messenger.send('init.options', {
-                options: this.options,
-                structure: this.container.get('structure.store').export,
-            });
-        });
-
         TuliaEditor.instances[this.instanceId] = this;
 
         this.container.get('view').render();
         this.container.get('eventBus').dispatch('admin.ready');
+        this.container.get('eventBus').listen('editor.saved', (source) => {
+            console.log(source);
+
+            this.sink.structure.value = JSON.stringify(source);
+            this.sink.content.value = JSON.stringify(source);
+        });
 
         //this.renderPreview();
 
@@ -30415,6 +30432,7 @@ class Editor {
             this.container.get('view').render();
             this.container.get('structure.store').update(data.structure);
             this.container.get('eventBus').dispatch('editor.ready');
+            messenger.send('editor.ready');
         });
 
         messenger.send('init.editor');
@@ -30966,10 +30984,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ ConfigStoreFactory)
 /* harmony export */ });
-/* harmony import */ var pinia__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! pinia */ "./node_modules/pinia/dist/pinia.mjs");
+/* harmony import */ var pinia__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! pinia */ "./node_modules/pinia/dist/pinia.mjs");
 /* harmony import */ var core_Shared_Structure_Element_Config_Defaults_SectionDefaults__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core/Shared/Structure/Element/Config/Defaults/SectionDefaults */ "./src/js/core/Shared/Structure/Element/Config/Defaults/SectionDefaults.js");
 /* harmony import */ var core_Shared_Structure_Element_Config_Defaults_ColumnDefaults__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core/Shared/Structure/Element/Config/Defaults/ColumnDefaults */ "./src/js/core/Shared/Structure/Element/Config/Defaults/ColumnDefaults.js");
 /* harmony import */ var core_Shared_Structure_Element_Config_Defaults_BlockDefaults__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core/Shared/Structure/Element/Config/Defaults/BlockDefaults */ "./src/js/core/Shared/Structure/Element/Config/Defaults/BlockDefaults.js");
+/* harmony import */ var core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core/Shared/Utils/ObjectCloner */ "./src/js/core/Shared/Utils/ObjectCloner.js");
+
 
 
 
@@ -30983,7 +31003,7 @@ class ConfigStoreFactory {
     }
 
     forSection(id, currents) {
-        return (0,pinia__WEBPACK_IMPORTED_MODULE_3__.defineStore)(`config:section:${id}`, {
+        return (0,pinia__WEBPACK_IMPORTED_MODULE_4__.defineStore)(`config:section:${id}`, {
             state: () => (0,core_Shared_Structure_Element_Config_Defaults_SectionDefaults__WEBPACK_IMPORTED_MODULE_0__.getSectionState)(currents),
             getters: {
                 export(state) {
@@ -30994,7 +31014,7 @@ class ConfigStoreFactory {
     }
 
     forColumn(id, currents) {
-        return (0,pinia__WEBPACK_IMPORTED_MODULE_3__.defineStore)(`config:column:${id}`, {
+        return (0,pinia__WEBPACK_IMPORTED_MODULE_4__.defineStore)(`config:column:${id}`, {
             state: () => (0,core_Shared_Structure_Element_Config_Defaults_ColumnDefaults__WEBPACK_IMPORTED_MODULE_1__.getColumnState)(currents),
             getters: {
                 export(state) {
@@ -31011,9 +31031,16 @@ class ConfigStoreFactory {
         const actions = definition.store.config.actions || {};
         const getters = definition.store.config.getters || {};
 
+        actions.replace = function(config) {
+            config = core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_3__["default"].deepClone(config);
+
+            for (let i in config) {
+                this[i] = config[i];
+            }
+        };
         getters.export = (state) => this.blockDefaults.exportBlockState(id, state);
 
-        return (0,pinia__WEBPACK_IMPORTED_MODULE_3__.defineStore)(`config:block:${id}`, {
+        return (0,pinia__WEBPACK_IMPORTED_MODULE_4__.defineStore)(`config:block:${id}`, {
             state: () => this.blockDefaults.getBlockState(id, definition.store.config.state(), currents),
             getters: getters,
             actions: actions,
@@ -31080,8 +31107,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ DataStoreFactory)
 /* harmony export */ });
-/* harmony import */ var pinia__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! pinia */ "./node_modules/pinia/dist/pinia.mjs");
+/* harmony import */ var pinia__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! pinia */ "./node_modules/pinia/dist/pinia.mjs");
 /* harmony import */ var core_Shared_Structure_Element_Config_Defaults_BlockDefaults__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core/Shared/Structure/Element/Config/Defaults/BlockDefaults */ "./src/js/core/Shared/Structure/Element/Config/Defaults/BlockDefaults.js");
+/* harmony import */ var core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core/Shared/Utils/ObjectCloner */ "./src/js/core/Shared/Utils/ObjectCloner.js");
+
 
 
 
@@ -31100,12 +31129,15 @@ class DataStoreFactory {
         const getters = definition.store.data.getters || {};
 
         actions.replace = function(config) {
+            config = core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_1__["default"].deepClone(config);
+
             for (let i in config) {
                 this[i] = config[i];
             }
         };
+        getters.export = (state) => this.blockDefaults.exportBlockState(id, state);
 
-        return (0,pinia__WEBPACK_IMPORTED_MODULE_1__.defineStore)(`data:block:${id}`, {
+        return (0,pinia__WEBPACK_IMPORTED_MODULE_2__.defineStore)(`data:block:${id}`, {
             state: () => this.blockDefaults.getBlockState(id, definition.store.data.state(), currents),
             getters: getters,
             actions: actions,
@@ -31272,13 +31304,13 @@ const findParent = function (sections, childId) {
 
                 let parentColumn = columns[ck];
 
-                /*let blocks = columns[ck].blocks;
+                let blocks = columns[ck].blocks;
 
                 for (let bk in blocks) {
                     if (blocks[bk].id === childId) {
                         return parentColumn;
                     }
-                }*/
+                }
             }
         }
     }
@@ -31336,6 +31368,22 @@ const useStructureStore = (0,pinia__WEBPACK_IMPORTED_MODULE_1__.defineStore)('st
         };
     },
     actions: {
+        replace(sections, rows, columns, blocks) {
+            this.sections = [];
+
+            for (let s in sections) {
+                this.appendSection(sections[s]);
+            }
+            for (let s in rows) {
+                this.appendRow(rows[s], rows[s].parent);
+            }
+            for (let s in columns) {
+                this.appendColumn(columns[s], columns[s].parent);
+            }
+            for (let s in blocks) {
+                this.appendBlock(blocks[s], blocks[s].parent);
+            }
+        },
         moveUsingDelta(delta) {
             switch(delta.element.type) {
                 case 'section':
@@ -31455,75 +31503,6 @@ const useStructureStore = (0,pinia__WEBPACK_IMPORTED_MODULE_1__.defineStore)('st
 
 /***/ }),
 
-/***/ "./src/js/core/Admin/Data/Store/StructureStoreFactory.js":
-/*!***************************************************************!*\
-  !*** ./src/js/core/Admin/Data/Store/StructureStoreFactory.js ***!
-  \***************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ StructureStoreFactory)
-/* harmony export */ });
-/* harmony import */ var core_Admin_Data_Store_Structure__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core/Admin/Data/Store/Structure */ "./src/js/core/Admin/Data/Store/Structure.js");
-
-
-class StructureStoreFactory {
-    constructor(options) {
-        this.options = options;
-    }
-
-    factory() {
-        const store = (0,core_Admin_Data_Store_Structure__WEBPACK_IMPORTED_MODULE_0__.useStructureStore)();
-
-        //this.fill(store, this.options.structure.source);
-
-        this.fill(store, {
-            sections: [
-                {id: "3aaab68f-73a8-4871-bf3e-6e8698eed744"},
-                {id: "70d5581b-d415-4e00-a509-650eefc50b52"},
-                {id: "08023e72-0934-402d-8dcd-2f1128bdb1dc"},
-                {id: "79322024-843c-48f9-8bb0-e6a21f1f5d89"},
-                {id: "427d2344-79d5-4b1d-a098-916514619d2f"},
-            ],
-            rows: [
-                {id: "7ac6f37f-cc0c-4c9d-9c2b-bed9ef4e1dd0", parent: "3aaab68f-73a8-4871-bf3e-6e8698eed744"},
-                {id: "392f96b7-ebcd-451c-a0c6-9a55233f2aad", parent: "70d5581b-d415-4e00-a509-650eefc50b52"},
-                {id: "fcc99a1f-5b98-49cc-b69b-9c686e4c133d", parent: "08023e72-0934-402d-8dcd-2f1128bdb1dc"},
-            ],
-            columns: [
-                {id: "6fa6ab47-8624-4175-bf9b-5105be8c859a", parent: "7ac6f37f-cc0c-4c9d-9c2b-bed9ef4e1dd0"},
-                {id: "92dd5110-3815-4eb4-a32c-14215fac4c2b", parent: "7ac6f37f-cc0c-4c9d-9c2b-bed9ef4e1dd0"},
-                {id: "a2180b3a-a2b7-4f32-ad88-8c1fad3c0edd", parent: "7ac6f37f-cc0c-4c9d-9c2b-bed9ef4e1dd0"},
-            ],
-            blocks: [
-                {id: "f410f23b-dc66-4b7d-9070-7d7be79ed6d9", parent: "6fa6ab47-8624-4175-bf9b-5105be8c859a", code: "core-textblock"},
-            ],
-        });
-
-        return store;
-    }
-
-    fill(store, structure) {
-        for (let s in structure.sections) {
-            store.appendSection(structure.sections[s]);
-        }
-        for (let s in structure.rows) {
-            store.appendRow(structure.rows[s], structure.rows[s].parent);
-        }
-        for (let s in structure.columns) {
-            store.appendColumn(structure.columns[s], structure.columns[s].parent);
-        }
-        for (let s in structure.blocks) {
-            store.appendBlock(structure.blocks[s], structure.blocks[s].parent);
-        }
-    }
-}
-
-
-/***/ }),
-
 /***/ "./src/js/core/Admin/DependencyInjection/Container.js":
 /*!************************************************************!*\
   !*** ./src/js/core/Admin/DependencyInjection/Container.js ***!
@@ -31538,11 +31517,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_Shared_DependencyInjection_AbstractContainer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core/Shared/DependencyInjection/AbstractContainer */ "./src/js/core/Shared/DependencyInjection/AbstractContainer.js");
 /* harmony import */ var core_Admin_View_View__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core/Admin/View/View */ "./src/js/core/Admin/View/View.js");
 /* harmony import */ var core_Admin_View_Subscriber_BuildVueOnHtmlReady__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core/Admin/View/Subscriber/BuildVueOnHtmlReady */ "./src/js/core/Admin/View/Subscriber/BuildVueOnHtmlReady.js");
-/* harmony import */ var core_Admin_Data_Store_StructureStoreFactory__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core/Admin/Data/Store/StructureStoreFactory */ "./src/js/core/Admin/Data/Store/StructureStoreFactory.js");
-/* harmony import */ var core_Admin_UseCase_Sections__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core/Admin/UseCase/Sections */ "./src/js/core/Admin/UseCase/Sections.js");
-/* harmony import */ var core_Admin_UseCase_Selection__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core/Admin/UseCase/Selection */ "./src/js/core/Admin/UseCase/Selection.js");
-/* harmony import */ var core_Admin_Data_Store_Selection__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core/Admin/Data/Store/Selection */ "./src/js/core/Admin/Data/Store/Selection.js");
-/* harmony import */ var core_Admin_Data_Store_Contextmenu__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core/Admin/Data/Store/Contextmenu */ "./src/js/core/Admin/Data/Store/Contextmenu.js");
+/* harmony import */ var core_Admin_UseCase_Sections__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core/Admin/UseCase/Sections */ "./src/js/core/Admin/UseCase/Sections.js");
+/* harmony import */ var core_Admin_UseCase_Selection__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core/Admin/UseCase/Selection */ "./src/js/core/Admin/UseCase/Selection.js");
+/* harmony import */ var core_Admin_Data_Store_Selection__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core/Admin/Data/Store/Selection */ "./src/js/core/Admin/Data/Store/Selection.js");
+/* harmony import */ var core_Admin_Data_Store_Contextmenu__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core/Admin/Data/Store/Contextmenu */ "./src/js/core/Admin/Data/Store/Contextmenu.js");
+/* harmony import */ var core_Admin_Data_Store_Structure__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core/Admin/Data/Store/Structure */ "./src/js/core/Admin/Data/Store/Structure.js");
 /* harmony import */ var core_Admin_View_Canvas__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core/Admin/View/Canvas */ "./src/js/core/Admin/View/Canvas.js");
 /* harmony import */ var core_Admin_Subscriber_Editor_SelectionSubscriber__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core/Admin/Subscriber/Editor/SelectionSubscriber */ "./src/js/core/Admin/Subscriber/Editor/SelectionSubscriber.js");
 /* harmony import */ var core_Admin_UseCase_Contextmenu__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core/Admin/UseCase/Contextmenu */ "./src/js/core/Admin/UseCase/Contextmenu.js");
@@ -31559,6 +31538,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_Admin_Subscriber_Editor_ElementDataSubscriber__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! core/Admin/Subscriber/Editor/ElementDataSubscriber */ "./src/js/core/Admin/Subscriber/Editor/ElementDataSubscriber.js");
 /* harmony import */ var core_Admin_UseCase_EditorWindow__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! core/Admin/UseCase/EditorWindow */ "./src/js/core/Admin/UseCase/EditorWindow.js");
 /* harmony import */ var core_Admin_Subscriber_Admin_SelectionSubscriber__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! core/Admin/Subscriber/Admin/SelectionSubscriber */ "./src/js/core/Admin/Subscriber/Admin/SelectionSubscriber.js");
+/* harmony import */ var core_Admin_Structure_Structure__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! core/Admin/Structure/Structure */ "./src/js/core/Admin/Structure/Structure.js");
+/* harmony import */ var core_Admin_Subscriber_Admin_EditorWindowSubscriber__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! core/Admin/Subscriber/Admin/EditorWindowSubscriber */ "./src/js/core/Admin/Subscriber/Admin/EditorWindowSubscriber.js");
+
+
 
 
 
@@ -31589,22 +31572,23 @@ class Container extends core_Shared_DependencyInjection_AbstractContainer__WEBPA
         super.build();
 
         this.registerFactory('view', () => new core_Admin_View_View__WEBPACK_IMPORTED_MODULE_1__["default"](this.get('root'), this.getParameter('instanceId'), this.get('translator'), this.get('eventBus')));
-        this.registerFactory('usecase.sections', () => new core_Admin_UseCase_Sections__WEBPACK_IMPORTED_MODULE_4__["default"](this.get('structure.store'), this.get('messenger'), this.get('usecase.selection')));
-        this.registerFactory('usecase.rows', () => new core_Admin_UseCase_Rows__WEBPACK_IMPORTED_MODULE_14__["default"](this.get('structure.store'), this.get('messenger'), this.get('usecase.selection')));
-        this.registerFactory('usecase.columns', () => new core_Admin_UseCase_Columns__WEBPACK_IMPORTED_MODULE_15__["default"](this.get('structure.store'), this.get('messenger'), this.get('usecase.selection')));
-        this.registerFactory('usecase.selection', () => new core_Admin_UseCase_Selection__WEBPACK_IMPORTED_MODULE_5__["default"](this.get('selection.store'), this.get('messenger')));
+        this.registerFactory('usecase.sections', () => new core_Admin_UseCase_Sections__WEBPACK_IMPORTED_MODULE_3__["default"](this.get('structure.store'), this.get('usecase.selection'), this.get('structure')));
+        this.registerFactory('usecase.rows', () => new core_Admin_UseCase_Rows__WEBPACK_IMPORTED_MODULE_14__["default"](this.get('structure.store'), this.get('usecase.selection'), this.get('structure')));
+        this.registerFactory('usecase.columns', () => new core_Admin_UseCase_Columns__WEBPACK_IMPORTED_MODULE_15__["default"](this.get('structure.store'), this.get('usecase.selection'), this.get('structure')));
+        this.registerFactory('usecase.selection', () => new core_Admin_UseCase_Selection__WEBPACK_IMPORTED_MODULE_4__["default"](this.get('selection.store'), this.get('messenger')));
         this.registerFactory('usecase.draggable', () => new core_Admin_UseCase_Draggable__WEBPACK_IMPORTED_MODULE_13__["default"](this.get('usecase.selection'), this.get('structure.store'), this.get('eventBus'), this.get('messenger')));
         this.registerFactory('usecase.contextmenu', () => new core_Admin_UseCase_Contextmenu__WEBPACK_IMPORTED_MODULE_10__["default"](this.get('contextmenu.store'), this.get('usecase.selection')));
-        this.register('usecase.editorWindow', core_Admin_UseCase_EditorWindow__WEBPACK_IMPORTED_MODULE_22__["default"], ['@eventBus', '@view'], { tags: [{ name: 'event_subscriber' }] });
+        this.register('usecase.editorWindow', core_Admin_UseCase_EditorWindow__WEBPACK_IMPORTED_MODULE_22__["default"], ['@eventBus', '@view', '@structure']);
         this.registerFactory('canvas', () => new core_Admin_View_Canvas__WEBPACK_IMPORTED_MODULE_8__["default"](this.getParameter('options'), this.get('eventBus')));
-        this.registerFactory('structure.store', () => (new core_Admin_Data_Store_StructureStoreFactory__WEBPACK_IMPORTED_MODULE_3__["default"](this.getParameter('options'))).factory());
-        this.registerFactory('selection.store', () => (0,core_Admin_Data_Store_Selection__WEBPACK_IMPORTED_MODULE_6__.useSelectionStore)());
-        this.registerFactory('contextmenu.store', () => (0,core_Admin_Data_Store_Contextmenu__WEBPACK_IMPORTED_MODULE_7__.useContextmenuStore)());
+        this.registerFactory('structure.store', () => (0,core_Admin_Data_Store_Structure__WEBPACK_IMPORTED_MODULE_7__.useStructureStore)());
+        this.registerFactory('selection.store', () => (0,core_Admin_Data_Store_Selection__WEBPACK_IMPORTED_MODULE_5__.useSelectionStore)());
+        this.registerFactory('contextmenu.store', () => (0,core_Admin_Data_Store_Contextmenu__WEBPACK_IMPORTED_MODULE_6__.useContextmenuStore)());
         this.registerFactory('element.config.storeFactory', () => new core_Admin_Data_Store_ConfigStoreFactory__WEBPACK_IMPORTED_MODULE_16__["default"](this.get('blocks.registry'), this.get('structure.store')));
         this.registerFactory('element.config.registry', () => new core_Admin_Data_AdminElementConfigStoreRegistry__WEBPACK_IMPORTED_MODULE_17__["default"](this.get('element.config.storeFactory'), this.get('element.config.synchronizer')));
         this.registerFactory('element.config.synchronizer', () => new core_Admin_Structure_Element_ConfigSynchronizer__WEBPACK_IMPORTED_MODULE_18__["default"](this.get('messenger')));
         this.registerFactory('element.data.storeFactory', () => new core_Admin_Data_Store_DataStoreFactory__WEBPACK_IMPORTED_MODULE_20__["default"](this.get('blocks.registry'), this.get('structure.store')));
         this.registerFactory('columnSize', () => new core_Admin_Structure_Element_ColumnSize__WEBPACK_IMPORTED_MODULE_19__["default"]());
+        this.register('structure', core_Admin_Structure_Structure__WEBPACK_IMPORTED_MODULE_24__["default"], ['@structure.store', '@element.config.registry', '@element.data.registry', '@messenger', '%options']);
 
         // Subscribers
         this.register('subscriber.BuildVueOnHtmlReady', core_Admin_View_Subscriber_BuildVueOnHtmlReady__WEBPACK_IMPORTED_MODULE_2__["default"], ['@vueFactory', '%options', '%instanceId', '%options.directives', '%options.controls', '%options.extensions', '%options.blocks', this], { tags: [{ name: 'event_subscriber' }] });
@@ -31613,6 +31597,7 @@ class Container extends core_Shared_DependencyInjection_AbstractContainer__WEBPA
         this.register('subscriber.ContextmenuAdminSubscriber', core_Admin_Subscriber_Admin_ContextmenuSubscriber__WEBPACK_IMPORTED_MODULE_11__["default"], ['@usecase.contextmenu'], { tags: [{ name: 'event_subscriber' }] });
         this.register('subscriber.ContextmenuEditorSubscriber', core_Admin_Subscriber_Editor_ContextmenuSubscriber__WEBPACK_IMPORTED_MODULE_12__["default"], ['@messenger', '@usecase.contextmenu'], { tags: [{ name: 'event_subscriber' }] });
         this.register('subscriber.ElementDataSubscriber', core_Admin_Subscriber_Editor_ElementDataSubscriber__WEBPACK_IMPORTED_MODULE_21__["default"], ['@messenger', '@element.data.registry'], { tags: [{ name: 'event_subscriber' }] });
+        this.register('subscriber.EditorWindowSubscriber', core_Admin_Subscriber_Admin_EditorWindowSubscriber__WEBPACK_IMPORTED_MODULE_25__["default"], ['@usecase.editorWindow'], { tags: [{ name: 'event_subscriber' }] });
 
         super.finish();
     }
@@ -31714,6 +31699,504 @@ class ConfigSynchronizer {
 
 /***/ }),
 
+/***/ "./src/js/core/Admin/Structure/Structure.js":
+/*!**************************************************!*\
+  !*** ./src/js/core/Admin/Structure/Structure.js ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Structure)
+/* harmony export */ });
+/* harmony import */ var core_Admin_Structure_Transformer_SourceToUnifiedFormat__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core/Admin/Structure/Transformer/SourceToUnifiedFormat */ "./src/js/core/Admin/Structure/Transformer/SourceToUnifiedFormat.js");
+/* harmony import */ var core_Admin_Structure_Transformer_StoreToUnifiedFormat__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core/Admin/Structure/Transformer/StoreToUnifiedFormat */ "./src/js/core/Admin/Structure/Transformer/StoreToUnifiedFormat.js");
+/* harmony import */ var core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core/Shared/Utils/ObjectCloner */ "./src/js/core/Shared/Utils/ObjectCloner.js");
+/* harmony import */ var core_Admin_Structure_Transformer_UnifiedToSource__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core/Admin/Structure/Transformer/UnifiedToSource */ "./src/js/core/Admin/Structure/Transformer/UnifiedToSource.js");
+
+
+
+
+
+class Structure {
+    _current = null;
+    _previous = null;
+
+    constructor(structureStore, configRegistry, dataRegistry, messenger, options) {
+        this.structureStore = structureStore;
+        this.configRegistry = configRegistry;
+        this.dataRegistry = dataRegistry;
+        this.messenger = messenger;
+        this.options = options;
+
+        const structure = this.options.structure.structure ?? this.getStructure();
+
+        this._current = core_Admin_Structure_Transformer_SourceToUnifiedFormat__WEBPACK_IMPORTED_MODULE_0__["default"].transform(structure);
+        this._previous = core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_2__["default"].deepClone(this._current);
+
+        messenger.receive('init.editor', () => {
+            messenger.send('init.options', {
+                options: this.options,
+                structure: structure,
+            });
+        });
+    }
+
+    revert() {
+        this.replaceWith(this._previous);
+        this._current = core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_2__["default"].deepClone(this._previous);
+        this.update();
+    }
+
+    current() {
+        this.replaceWith(this._current);
+        this.update();
+    }
+
+    currentAsNew() {
+        this._current = core_Admin_Structure_Transformer_StoreToUnifiedFormat__WEBPACK_IMPORTED_MODULE_1__["default"].transform(this.structureStore, this.configRegistry, this.dataRegistry);
+        this._previous = core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_2__["default"].deepClone(this._current);
+        this.update();
+
+        return core_Admin_Structure_Transformer_UnifiedToSource__WEBPACK_IMPORTED_MODULE_3__["default"].transform(this._current);
+    }
+
+    update() {
+        this.messenger.send('admin.structure.changed', {
+            structure: this.structureStore.export,
+        });
+    }
+
+    replaceWith(unified) {
+        this.structureStore.replace(
+            unified.structure.sections,
+            unified.structure.rows,
+            unified.structure.columns,
+            unified.structure.blocks,
+        );
+
+        for (let b in unified.data.blocks) {
+            this.messenger.send('element.data.replace', { id: b, type: 'block', data: unified.data.blocks[b] });
+        }
+
+        for (let b in unified.config.blocks) {
+            this.configRegistry.get(b, 'block').replace(unified.config.blocks[b]);
+        }
+    }
+
+    getStructure() {
+        return {
+            sections: [
+                {
+                    id: "3aaab68f-73a8-4871-bf3e-6e8698eed744",
+                    rows: [
+                        {
+                            id: "7ac6f37f-cc0c-4c9d-9c2b-bed9ef4e1dd0",
+                            columns: [
+                                {
+                                    id: "6fa6ab47-8624-4175-bf9b-5105be8c859a",
+                                    blocks: [
+                                        {
+                                            id: "f410f23b-dc66-4b7d-9070-7d7be79ed6d9",
+                                            code: "core-textblock",
+                                            store: {
+                                                data: {
+                                                    text: 'My sample text. In store.'
+                                                },
+                                                config: {
+                                                    someConfig: '4, in store.',
+                                                }
+                                            }
+                                        }
+                                    ],
+                                },
+                                {
+                                    id: "92dd5110-3815-4eb4-a32c-14215fac4c2b",
+                                    blocks: [],
+                                },
+                                {
+                                    id: "a2180b3a-a2b7-4f32-ad88-8c1fad3c0edd",
+                                    blocks: [],
+                                },
+                            ],
+                        },
+                    ],
+                },
+                {
+                    id: "70d5581b-d415-4e00-a509-650eefc50b52",
+                    rows: [
+                        {
+                            id: "392f96b7-ebcd-451c-a0c6-9a55233f2aad",
+                            columns: [],
+                        },
+                    ],
+                },
+                {
+                    id: "08023e72-0934-402d-8dcd-2f1128bdb1dc",
+                    rows: [
+                        {
+                            id: "fcc99a1f-5b98-49cc-b69b-9c686e4c133d",
+                            columns: [],
+                        },
+                    ],
+                },
+                {
+                    id: "79322024-843c-48f9-8bb0-e6a21f1f5d89",
+                    rows: [],
+                },
+                {
+                    id: "427d2344-79d5-4b1d-a098-916514619d2f",
+                    rows: [],
+                },
+            ]
+        };
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/core/Admin/Structure/Transformer/SourceToUnifiedFormat.js":
+/*!**************************************************************************!*\
+  !*** ./src/js/core/Admin/Structure/Transformer/SourceToUnifiedFormat.js ***!
+  \**************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ SourceToUnifiedFormat)
+/* harmony export */ });
+/* harmony import */ var core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core/Shared/Utils/ObjectCloner */ "./src/js/core/Shared/Utils/ObjectCloner.js");
+
+
+class SourceToUnifiedFormat {
+    static transform(source) {
+        const unified = {
+            structure: {
+                sections: [],
+                rows: [],
+                columns: [],
+                blocks: [],
+            },
+            data: {
+                sections: {},
+                rows: {},
+                columns: {},
+                blocks: {},
+            },
+            config: {
+                sections: {},
+                rows: {},
+                columns: {},
+                blocks: {},
+            },
+        };
+
+        this.transformStructure(source, unified);
+
+        return unified;
+    }
+
+    static transformStructure(source, unified) {
+        for (let s in source?.sections ?? []) {
+            const section = source.sections[s];
+            this.transformSection(section, unified);
+
+            for (let r in section?.rows ?? []) {
+                const row = section.rows[r];
+                this.transformRow(row, section, unified);
+
+                for (let c in row?.columns ?? []) {
+                    const column = row.columns[c];
+                    this.transformColumn(column, row, unified);
+
+                    for (let b in column?.blocks ?? []) {
+                        this.transformBlock(column.blocks[b], column, unified);
+                    }
+                }
+            }
+        }
+    }
+
+    static transformSection(section, unified) {
+        unified.structure.sections.push({
+            id: section.id,
+        });
+    }
+
+    static transformRow(row, section, unified) {
+        unified.structure.rows.push({
+            id: row.id,
+            parent: section.id,
+        });
+    }
+
+    static transformColumn(column, row, unified) {
+        unified.structure.columns.push({
+            id: column.id,
+            parent: row.id,
+        });
+    }
+
+    static transformBlock(block, column, unified) {
+        unified.structure.blocks.push({
+            id: block.id,
+            parent: column.id,
+            code: block.code,
+        });
+        this.setConfig(unified, block.id, 'block', block.store.config);
+        this.setData(unified, block.id, 'block', block.store.data);
+    }
+
+    static setConfig(unified, id, type, config) {
+        const key = `${type}s`;
+
+        if (!unified.config[key]) {
+            unified.config[key] = {};
+        }
+
+        unified.config[key][id] = core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_0__["default"].deepClone(config);
+    }
+
+    static setData(unified, id, type, data) {
+        const key = `${type}s`;
+
+        if (!unified.data[key]) {
+            unified.data[key] = {};
+        }
+
+        unified.data[key][id] = core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_0__["default"].deepClone(data);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/core/Admin/Structure/Transformer/StoreToUnifiedFormat.js":
+/*!*************************************************************************!*\
+  !*** ./src/js/core/Admin/Structure/Transformer/StoreToUnifiedFormat.js ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ StoreToUnifiedFormat)
+/* harmony export */ });
+/* harmony import */ var core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core/Shared/Utils/ObjectCloner */ "./src/js/core/Shared/Utils/ObjectCloner.js");
+
+
+class StoreToUnifiedFormat {
+    static transform(structureStore, configStoreRegistry, dataStoreRegistry) {
+        const unified = {
+            structure: {
+                sections: [],
+                rows: [],
+                columns: [],
+                blocks: [],
+            },
+            data: {
+                sections: {},
+                rows: {},
+                columns: {},
+                blocks: {},
+            },
+            config: {
+                sections: {},
+                rows: {},
+                columns: {},
+                blocks: {},
+            },
+        };
+
+        this.transformStructure(unified, structureStore.export, configStoreRegistry, dataStoreRegistry);
+
+        return unified;
+    }
+
+    static transformStructure(unified, structure, configStoreRegistry, dataStoreRegistry) {
+        for (let s in structure.sections) {
+            const section = structure.sections[s];
+            this.transformSection(section, unified, configStoreRegistry, dataStoreRegistry);
+
+            for (let r in section.rows) {
+                const row = section.rows[r];
+                this.transformRow(row, section, unified, configStoreRegistry, dataStoreRegistry);
+
+                for (let c in row.columns) {
+                    const column = row.columns[c];
+                    this.transformColumn(column, row, unified, configStoreRegistry, dataStoreRegistry);
+
+                    for (let b in column.blocks) {
+                        this.transformBlock(column.blocks[b], column, unified, configStoreRegistry, dataStoreRegistry);
+                    }
+                }
+            }
+        }
+    }
+
+    static transformSection(section, unified, configStoreRegistry, dataStoreRegistry) {
+        unified.structure.sections.push({
+            id: section.id,
+        });
+    }
+
+    static transformRow(row, section, unified, configStoreRegistry, dataStoreRegistry) {
+        unified.structure.rows.push({
+            id: row.id,
+            parent: section.id,
+        });
+    }
+
+    static transformColumn(column, row, unified, configStoreRegistry, dataStoreRegistry) {
+        unified.structure.columns.push({
+            id: column.id,
+            parent: row.id,
+        });
+    }
+
+    static transformBlock(block, column, unified, configStoreRegistry, dataStoreRegistry) {
+        unified.structure.blocks.push({
+            id: block.id,
+            parent: column.id,
+            code: block.code,
+        });
+
+        this.setConfig(unified, block.id, 'block', configStoreRegistry);
+        this.setData(unified, block.id, 'block', dataStoreRegistry);
+    }
+
+    static setConfig(unified, id, type, configStoreRegistry) {
+        const key = `${type}s`;
+
+        if (!unified.config[key]) {
+            unified.config[key] = {};
+        }
+
+        unified.config[key][id] = core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_0__["default"].deepClone(configStoreRegistry.get(id, type).export);
+    }
+
+    static setData(unified, id, type, dataStoreRegistry) {
+        const key = `${type}s`;
+
+        if (!unified.data[key]) {
+            unified.data[key] = {};
+        }
+
+        unified.data[key][id] = core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_0__["default"].deepClone(dataStoreRegistry.get(id, type).export);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/core/Admin/Structure/Transformer/UnifiedToSource.js":
+/*!********************************************************************!*\
+  !*** ./src/js/core/Admin/Structure/Transformer/UnifiedToSource.js ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ UnifiedToSource)
+/* harmony export */ });
+/* harmony import */ var core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core/Shared/Utils/ObjectCloner */ "./src/js/core/Shared/Utils/ObjectCloner.js");
+
+
+class UnifiedToSource {
+    static transform(unified) {
+        return {
+            sections: this.transformSections(unified.structure.sections, unified),
+        };
+    }
+
+    static transformSections(sections, unified) {
+        let result = [];
+
+        for (let s in sections) {
+            result.push({
+                id: sections[s].id,
+                store: {
+                    data: core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_0__["default"].deepClone(unified.data['sections'][sections[s].id] ?? {}),
+                    config: core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_0__["default"].deepClone(unified.config['sections'][sections[s].id] ?? {}),
+                },
+                rows: this.transformRows(sections[s].id, unified.structure.rows, unified),
+            });
+        }
+
+        return result;
+    }
+
+    static transformRows(sectionId, rows, unified) {
+        let result = [];
+
+        for (let r in rows) {
+            if (rows[r].parent !== sectionId) {
+                continue;
+            }
+
+            result.push({
+                id: rows[r].id,
+                store: {
+                    data: core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_0__["default"].deepClone(unified.data['rows'][rows[r].id] ?? {}),
+                    config: core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_0__["default"].deepClone(unified.config['rows'][rows[r].id] ?? {}),
+                },
+                columns: this.transformColumns(rows[r].id, unified.structure.columns, unified),
+            });
+        }
+
+        return result;
+    }
+
+    static transformColumns(rowId, columns, unified) {
+        let result = [];
+
+        for (let c in columns) {
+            if (columns[c].parent !== rowId) {
+                continue;
+            }
+
+            result.push({
+                id: columns[c].id,
+                store: {
+                    data: core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_0__["default"].deepClone(unified.data['columns'][columns[c].id] ?? {}),
+                    config: core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_0__["default"].deepClone(unified.config['columns'][columns[c].id] ?? {}),
+                },
+                blocks: this.transformBlocks(columns[c].id, unified.structure.blocks, unified),
+            });
+        }
+
+        return result;
+    }
+
+    static transformBlocks(columnId, blocks, unified) {
+        let result = [];
+
+        for (let b in blocks) {
+            if (blocks[b].parent !== columnId) {
+                continue;
+            }
+
+            result.push({
+                id: blocks[b].id,
+                code: blocks[b].code,
+                store: {
+                    data: core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_0__["default"].deepClone(unified.data['blocks'][blocks[b].id] ?? {}),
+                    config: core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_0__["default"].deepClone(unified.config['blocks'][blocks[b].id] ?? {}),
+                },
+            });
+        }
+
+        return result;
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/js/core/Admin/Subscriber/Admin/ContextmenuSubscriber.js":
 /*!*********************************************************************!*\
   !*** ./src/js/core/Admin/Subscriber/Admin/ContextmenuSubscriber.js ***!
@@ -31738,6 +32221,36 @@ class ContextmenuSubscriber {
 
     hide() {
         this.contextmenu.hide();
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/core/Admin/Subscriber/Admin/EditorWindowSubscriber.js":
+/*!**********************************************************************!*\
+  !*** ./src/js/core/Admin/Subscriber/Admin/EditorWindowSubscriber.js ***!
+  \**********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ EditorWindowSubscriber)
+/* harmony export */ });
+class EditorWindowSubscriber {
+    constructor(editorWindow) {
+        this.editorWindow = editorWindow;
+    }
+
+    static getSubscribedEvents() {
+        return {
+            'preview.clicked': 'openEditor',
+        };
+    }
+
+    openEditor() {
+        this.editorWindow.open();
     }
 }
 
@@ -31925,42 +32438,36 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class Columns {
-    constructor(structure, messenger, selectionUseCase) {
-        this.structure = structure;
-        this.messenger = messenger;
+    constructor(structureStore, selectionUseCase, structure) {
+        this.structureStore = structureStore;
         this.selectionUseCase = selectionUseCase;
+        this.structure = structure;
     }
 
     newOne(rowId) {
         const id = (0,uuid__WEBPACK_IMPORTED_MODULE_0__["default"])();
-        this.structure.appendColumn({ id }, rowId);
+        this.structureStore.appendColumn({ id }, rowId);
         this.selectionUseCase.select(id, 'column');
-        this.update();
+        this.structure.update();
     }
 
     newBefore(before) {
         const id = (0,uuid__WEBPACK_IMPORTED_MODULE_0__["default"])();
-        this.structure.appendColumnBefore({ id }, before);
+        this.structureStore.appendColumnBefore({ id }, before);
         this.selectionUseCase.select(id, 'column');
-        this.update();
+        this.structure.update();
     }
 
     newAfter(after) {
         const id = (0,uuid__WEBPACK_IMPORTED_MODULE_0__["default"])();
-        this.structure.appendColumnAfter({ id }, after);
+        this.structureStore.appendColumnAfter({ id }, after);
         this.selectionUseCase.select(id, 'column');
-        this.update();
+        this.structure.update();
     }
 
     remove(id) {
-        this.structure.removeColumn(id);
-        this.update();
-    }
-
-    update() {
-        this.messenger.send('admin.structure.changed', {
-            structure: this.structure.export,
-        });
+        this.structureStore.removeColumn(id);
+        this.structure.update();
     }
 }
 
@@ -32132,30 +32639,28 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ EditorWindow)
 /* harmony export */ });
 class EditorWindow {
-    constructor(eventBus, view) {
+    constructor(eventBus, view, structure) {
         this.eventBus = eventBus;
         this.view = view;
-    }
-
-    static getSubscribedEvents() {
-        return {
-            //'preview.clicked': 'open',
-        };
-    }
-
-    cancel() {
-        this.view.close();
-        this.eventBus.dispatch('editor.canceled');
+        this.structure = structure;
     }
 
     open() {
         this.view.open();
+        this.structure.current();
         this.eventBus.dispatch('editor.opened');
+    }
+
+    cancel() {
+        this.view.close();
+        this.structure.revert();
+        this.eventBus.dispatch('editor.canceled');
     }
 
     save() {
         this.view.close();
-        this.eventBus.dispatch('editor.saved');
+        const structure = this.structure.currentAsNew();
+        this.eventBus.dispatch('editor.saved', { structure });
     }
 }
 
@@ -32177,28 +32682,22 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class Rows {
-    constructor(structure, messenger, selectionUseCase) {
-        this.structure = structure;
-        this.messenger = messenger;
+    constructor(structureStore, selectionUseCase, structure) {
+        this.structureStore = structureStore;
         this.selectionUseCase = selectionUseCase;
+        this.structure = structure;
     }
 
     newOne(sectionId) {
         const id = (0,uuid__WEBPACK_IMPORTED_MODULE_0__["default"])();
-        this.structure.appendRow({ id }, sectionId);
+        this.structureStore.appendRow({ id }, sectionId);
         this.selectionUseCase.select(id, 'row');
-        this.update();
+        this.structure.update();
     }
 
     remove(id) {
-        this.structure.removeRow(id);
-        this.update();
-    }
-
-    update() {
-        this.messenger.send('admin.structure.changed', {
-            structure: this.structure.export,
-        });
+        this.structureStore.removeRow(id);
+        this.structure.update();
     }
 }
 
@@ -32220,35 +32719,29 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class Sections {
-    constructor(structure, messenger, selectionUseCase) {
-        this.structure = structure;
-        this.messenger = messenger;
+    constructor(structureStore, selectionUseCase, structure) {
+        this.structureStore = structureStore;
         this.selectionUseCase = selectionUseCase;
+        this.structure = structure;
     }
 
     newOne() {
         const id = (0,uuid__WEBPACK_IMPORTED_MODULE_0__["default"])();
-        this.structure.appendSection({ id });
+        this.structureStore.appendSection({ id });
         this.selectionUseCase.select(id, 'section');
-        this.update();
+        this.structure.update();
     }
 
     newOneAfter(afterId) {
         const id = (0,uuid__WEBPACK_IMPORTED_MODULE_0__["default"])();
-        this.structure.appendSectionAfter({ id }, afterId);
+        this.structureStore.appendSectionAfter({ id }, afterId);
         this.selectionUseCase.select(id, 'section');
-        this.update();
+        this.structure.update();
     }
 
     remove(id) {
-        this.structure.removeSection(id);
-        this.update();
-    }
-
-    update() {
-        this.messenger.send('admin.structure.changed', {
-            structure: this.structure.export,
-        });
+        this.structureStore.removeSection(id);
+        this.structure.update();
     }
 }
 
@@ -32450,7 +32943,7 @@ class View {
         this.renderEditorWindow();
 
         this.root.find('.tued-preview-wrapper').click(() => {
-            this.open();
+            this.eventBus.dispatch('preview.clicked');
         });
 
         this.eventBus.dispatch('admin.view.ready');
@@ -32556,10 +33049,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ ConfigStoreFactory)
 /* harmony export */ });
-/* harmony import */ var pinia__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! pinia */ "./node_modules/pinia/dist/pinia.mjs");
+/* harmony import */ var pinia__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! pinia */ "./node_modules/pinia/dist/pinia.mjs");
 /* harmony import */ var core_Shared_Structure_Element_Config_Defaults_SectionDefaults__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core/Shared/Structure/Element/Config/Defaults/SectionDefaults */ "./src/js/core/Shared/Structure/Element/Config/Defaults/SectionDefaults.js");
 /* harmony import */ var core_Shared_Structure_Element_Config_Defaults_ColumnDefaults__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core/Shared/Structure/Element/Config/Defaults/ColumnDefaults */ "./src/js/core/Shared/Structure/Element/Config/Defaults/ColumnDefaults.js");
 /* harmony import */ var core_Shared_Structure_Element_Config_Defaults_BlockDefaults__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core/Shared/Structure/Element/Config/Defaults/BlockDefaults */ "./src/js/core/Shared/Structure/Element/Config/Defaults/BlockDefaults.js");
+/* harmony import */ var core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core/Shared/Utils/ObjectCloner */ "./src/js/core/Shared/Utils/ObjectCloner.js");
+
 
 
 
@@ -32573,7 +33068,7 @@ class ConfigStoreFactory {
     }
 
     forSection(id, currents) {
-        return (0,pinia__WEBPACK_IMPORTED_MODULE_3__.defineStore)(`config:section:${id}`, {
+        return (0,pinia__WEBPACK_IMPORTED_MODULE_4__.defineStore)(`config:section:${id}`, {
             state: () => (0,core_Shared_Structure_Element_Config_Defaults_SectionDefaults__WEBPACK_IMPORTED_MODULE_0__.getSectionState)(currents),
             actions: {
                 replace(config) {
@@ -32586,7 +33081,7 @@ class ConfigStoreFactory {
     }
 
     forColumn(id, currents) {
-        return (0,pinia__WEBPACK_IMPORTED_MODULE_3__.defineStore)(`config:column:${id}`, {
+        return (0,pinia__WEBPACK_IMPORTED_MODULE_4__.defineStore)(`config:column:${id}`, {
             state: () => (0,core_Shared_Structure_Element_Config_Defaults_ColumnDefaults__WEBPACK_IMPORTED_MODULE_1__.getColumnState)(currents),
             actions: {
                 replace(config) {
@@ -32606,12 +33101,15 @@ class ConfigStoreFactory {
         const getters = definition.store.config.getters || {};
 
         actions.replace = function(config) {
+            config = core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_3__["default"].deepClone(config);
+
             for (let i in config) {
                 this[i] = config[i];
             }
         };
+        getters.export = (state) => this.blockDefaults.exportBlockState(id, state);
 
-        return (0,pinia__WEBPACK_IMPORTED_MODULE_3__.defineStore)(`config:block:${id}`, {
+        return (0,pinia__WEBPACK_IMPORTED_MODULE_4__.defineStore)(`config:block:${id}`, {
             state: () => this.blockDefaults.getBlockState(id, definition.store.config.state(), currents),
             getters: getters,
             actions: actions,
@@ -32633,8 +33131,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ DataStoreFactory)
 /* harmony export */ });
-/* harmony import */ var pinia__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! pinia */ "./node_modules/pinia/dist/pinia.mjs");
+/* harmony import */ var pinia__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! pinia */ "./node_modules/pinia/dist/pinia.mjs");
 /* harmony import */ var core_Shared_Structure_Element_Config_Defaults_BlockDefaults__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core/Shared/Structure/Element/Config/Defaults/BlockDefaults */ "./src/js/core/Shared/Structure/Element/Config/Defaults/BlockDefaults.js");
+/* harmony import */ var core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core/Shared/Utils/ObjectCloner */ "./src/js/core/Shared/Utils/ObjectCloner.js");
+
 
 
 
@@ -32652,9 +33152,16 @@ class DataStoreFactory {
         const actions = definition.store.data.actions || {};
         const getters = definition.store.data.getters || {};
 
+        actions.replace = function(config) {
+            config = core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_1__["default"].deepClone(config);
+
+            for (let i in config) {
+                this[i] = config[i];
+            }
+        };
         getters.export = (state) => this.blockDefaults.exportBlockState(id, state);
 
-        return (0,pinia__WEBPACK_IMPORTED_MODULE_1__.defineStore)(`data:block:${id}`, {
+        return (0,pinia__WEBPACK_IMPORTED_MODULE_2__.defineStore)(`data:block:${id}`, {
             state: () => this.blockDefaults.getBlockState(id, definition.store.data.state(), currents),
             getters: getters,
             actions: actions,
@@ -32780,7 +33287,7 @@ const useStructureStore = (0,pinia__WEBPACK_IMPORTED_MODULE_0__.defineStore)('st
     },
     actions: {
         update(structure) {
-            this.sections = structure.sections;
+            this.sections = structure?.sections ?? [];
         },
     },
     getters: {
@@ -32840,6 +33347,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_Editor_Data_Store_DataStoreFactory__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! core/Editor/Data/Store/DataStoreFactory */ "./src/js/core/Editor/Data/Store/DataStoreFactory.js");
 /* harmony import */ var core_Editor_Data_EditorElementDataStoreRegistry__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! core/Editor/Data/EditorElementDataStoreRegistry */ "./src/js/core/Editor/Data/EditorElementDataStoreRegistry.js");
 /* harmony import */ var core_Editor_Structure_Element_DataSynchronizer__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! core/Editor/Structure/Element/DataSynchronizer */ "./src/js/core/Editor/Structure/Element/DataSynchronizer.js");
+/* harmony import */ var core_Editor_Subscriber_Admin_ElementDataSubscriber__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! core/Editor/Subscriber/Admin/ElementDataSubscriber */ "./src/js/core/Editor/Subscriber/Admin/ElementDataSubscriber.js");
+
 
 
 
@@ -32883,6 +33392,7 @@ class Container extends core_Shared_DependencyInjection_AbstractContainer__WEBPA
         this.register('subscriber.AdminSelectionSubscriber', core_Editor_Subscriber_Admin_SelectionSubscriber__WEBPACK_IMPORTED_MODULE_5__["default"], ['@selection.store', '@messenger', '@eventBus'], { tags: [{ name: 'event_subscriber' }] });
         this.register('subscriber.AdminStructureSubscriber', core_Editor_Subscriber_Admin_StructureSubscriber__WEBPACK_IMPORTED_MODULE_6__["default"], ['@structure.store', '@messenger', '@eventBus'], { tags: [{ name: 'event_subscriber' }] });
         this.register('subscriber.ElementConfigSubscriber', core_Editor_Subscriber_Admin_ElementConfigSubscriber__WEBPACK_IMPORTED_MODULE_14__["default"], ['@messenger', '@element.config.registry'], { tags: [{ name: 'event_subscriber' }] });
+        this.register('subscriber.ElementDataSubscriber', core_Editor_Subscriber_Admin_ElementDataSubscriber__WEBPACK_IMPORTED_MODULE_19__["default"], ['@messenger', '@element.data.registry'], { tags: [{ name: 'event_subscriber' }] });
         this.register('subscriber.EditorSelectionSubscriber', core_Editor_Subscriber_Editor_SelectionSubscriber__WEBPACK_IMPORTED_MODULE_7__["default"], ['@selection.selectedElementBoundaries', '@selection.hoveredElementBoundaries'], { tags: [{ name: 'event_subscriber' }] });
 
         super.finish();
@@ -33196,6 +33706,45 @@ class ElementConfigSubscriber {
         const configStore = this.elementConfigRegistry.get(id, type);
 
         configStore.replace(config);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/core/Editor/Subscriber/Admin/ElementDataSubscriber.js":
+/*!**********************************************************************!*\
+  !*** ./src/js/core/Editor/Subscriber/Admin/ElementDataSubscriber.js ***!
+  \**********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ElementDataSubscriber)
+/* harmony export */ });
+class ElementDataSubscriber {
+    constructor(messenger, elementDataRegistry) {
+        this.messenger = messenger;
+        this.elementDataRegistry = elementDataRegistry;
+    }
+
+    static getSubscribedEvents() {
+        return {
+            'editor.ready': 'registerReceivers',
+        };
+    }
+
+    registerReceivers() {
+        const self = this;
+
+        this.messenger.receive('element.data.replace', (data) => self.processChanged(data.id, data.type, data.data));
+    }
+
+    processChanged(id, type, data) {
+        const dataStore = this.elementDataRegistry.get(id, type);
+
+        dataStore.replace(data);
     }
 }
 

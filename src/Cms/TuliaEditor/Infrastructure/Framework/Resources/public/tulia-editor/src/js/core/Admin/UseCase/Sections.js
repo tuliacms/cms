@@ -1,34 +1,28 @@
 import { v4 } from "uuid";
 
 export default class Sections {
-    constructor(structure, messenger, selectionUseCase) {
-        this.structure = structure;
-        this.messenger = messenger;
+    constructor(structureStore, selectionUseCase, structure) {
+        this.structureStore = structureStore;
         this.selectionUseCase = selectionUseCase;
+        this.structure = structure;
     }
 
     newOne() {
         const id = v4();
-        this.structure.appendSection({ id });
+        this.structureStore.appendSection({ id });
         this.selectionUseCase.select(id, 'section');
-        this.update();
+        this.structure.update();
     }
 
     newOneAfter(afterId) {
         const id = v4();
-        this.structure.appendSectionAfter({ id }, afterId);
+        this.structureStore.appendSectionAfter({ id }, afterId);
         this.selectionUseCase.select(id, 'section');
-        this.update();
+        this.structure.update();
     }
 
     remove(id) {
-        this.structure.removeSection(id);
-        this.update();
-    }
-
-    update() {
-        this.messenger.send('admin.structure.changed', {
-            structure: this.structure.export,
-        });
+        this.structureStore.removeSection(id);
+        this.structure.update();
     }
 }

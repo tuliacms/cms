@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { getSectionState, exportSectionState } from "core/Shared/Structure/Element/Config/Defaults/SectionDefaults";
 import { getColumnState, exportColumnState } from "core/Shared/Structure/Element/Config/Defaults/ColumnDefaults";
 import BlockDefaults from "core/Shared/Structure/Element/Config/Defaults/BlockDefaults";
+import ObjectCloner from "core/Shared/Utils/ObjectCloner";
 
 export default class ConfigStoreFactory {
     constructor(blocksRegistry, structureStore) {
@@ -39,6 +40,13 @@ export default class ConfigStoreFactory {
         const actions = definition.store.config.actions || {};
         const getters = definition.store.config.getters || {};
 
+        actions.replace = function(config) {
+            config = ObjectCloner.deepClone(config);
+
+            for (let i in config) {
+                this[i] = config[i];
+            }
+        };
         getters.export = (state) => this.blockDefaults.exportBlockState(id, state);
 
         return defineStore(`config:block:${id}`, {

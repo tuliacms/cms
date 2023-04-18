@@ -1,27 +1,25 @@
 export default class EditorWindow {
-    constructor(eventBus, view) {
+    constructor(eventBus, view, structure) {
         this.eventBus = eventBus;
         this.view = view;
-    }
-
-    static getSubscribedEvents() {
-        return {
-            //'preview.clicked': 'open',
-        };
-    }
-
-    cancel() {
-        this.view.close();
-        this.eventBus.dispatch('editor.canceled');
+        this.structure = structure;
     }
 
     open() {
         this.view.open();
+        this.structure.current();
         this.eventBus.dispatch('editor.opened');
+    }
+
+    cancel() {
+        this.view.close();
+        this.structure.revert();
+        this.eventBus.dispatch('editor.canceled');
     }
 
     save() {
         this.view.close();
-        this.eventBus.dispatch('editor.saved');
+        const structure = this.structure.currentAsNew();
+        this.eventBus.dispatch('editor.saved', { structure });
     }
 }

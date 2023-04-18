@@ -55,13 +55,13 @@ const findParent = function (sections, childId) {
 
                 let parentColumn = columns[ck];
 
-                /*let blocks = columns[ck].blocks;
+                let blocks = columns[ck].blocks;
 
                 for (let bk in blocks) {
                     if (blocks[bk].id === childId) {
                         return parentColumn;
                     }
-                }*/
+                }
             }
         }
     }
@@ -119,6 +119,22 @@ export const useStructureStore = defineStore('structure', {
         };
     },
     actions: {
+        replace(sections, rows, columns, blocks) {
+            this.sections = [];
+
+            for (let s in sections) {
+                this.appendSection(sections[s]);
+            }
+            for (let s in rows) {
+                this.appendRow(rows[s], rows[s].parent);
+            }
+            for (let s in columns) {
+                this.appendColumn(columns[s], columns[s].parent);
+            }
+            for (let s in blocks) {
+                this.appendBlock(blocks[s], blocks[s].parent);
+            }
+        },
         moveUsingDelta(delta) {
             switch(delta.element.type) {
                 case 'section':
