@@ -1,8 +1,9 @@
 export default class AbstractInstantiator {
     instances = {};
 
-    constructor(type, elementConfigStoreRegistry, elementDataStoreFactory) {
+    constructor(type, messenger, elementConfigStoreRegistry, elementDataStoreFactory) {
         this.type = type;
+        this.messenger = messenger;
         this.elementConfigStoreRegistry = elementConfigStoreRegistry;
         this.elementDataStoreFactory = elementDataStoreFactory;
     }
@@ -34,6 +35,7 @@ export default class AbstractInstantiator {
         const args = [
             elementId,
             this.type,
+            this.messenger,
             this.elementConfigStoreRegistry,
             this.elementDataStoreFactory,
         ];

@@ -8,3 +8,6 @@ const props = defineProps(['block']);
 const block = inject('blocks.instance').render(props);
 const Image = block.extension('Image');
 </script>
+<script>
+export default { name: 'Block.Image.Render' }
+</script>

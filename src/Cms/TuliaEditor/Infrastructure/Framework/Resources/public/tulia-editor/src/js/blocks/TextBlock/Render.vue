@@ -7,3 +7,6 @@ const { defineProps, inject } = require('vue');
 const props = defineProps(['block']);
 const block = inject('instance.blocks').render(props);
 </script>
+<script>
+export default { name: 'Block.Text.Render' }
+</script>

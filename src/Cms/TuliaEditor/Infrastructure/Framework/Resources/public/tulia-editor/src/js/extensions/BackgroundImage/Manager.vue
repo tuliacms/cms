@@ -48,9 +48,6 @@ extension.operation('remove-image', (data, success, fail) => {
     success();
 });
 </script>
-
 <script>
-export default {
-    name: 'BackgroundImageManager'
-}
+export default {name: 'Extension.BackgroundImage.Manager'}
 </script>

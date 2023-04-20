@@ -23,3 +23,6 @@ const filemanager = inject('filemanager');
 
 const columnsClassname = computed(ColumnClassnameGenerator.computer(block));
 </script>
+<script>
+export default { name: 'Block.Gallery.Render' }
+</script>

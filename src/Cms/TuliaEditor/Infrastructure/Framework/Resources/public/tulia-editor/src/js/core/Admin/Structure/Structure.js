@@ -73,6 +73,46 @@ export default class Structure {
         return {
             sections: [
                 {
+                    id: "f348288f-b7b9-4622-af30-cf9cec2654c8",
+                    rows: [
+                        {
+                            id: "5373a20b-0f3b-4bba-9411-e6073db15857",
+                            columns: [
+                                {
+                                    id: "5f4f01c4-e49e-429b-ae82-a1cda361fe47",
+                                    blocks: [
+                                        {
+                                            id: "59d9a354-070e-4e80-82ec-6dc71f4aa573",
+                                            code: "core-mapblock",
+                                            store: {
+                                                data: {}
+                                            }
+                                        }
+                                    ],
+                                },
+                                {
+                                    id: "4ce4e48a-8dc1-49d3-841f-b639570a8aa0",
+                                    blocks: [
+                                        {
+                                            id: "0e0bd94a-6e8f-43f9-9ba0-05d7fbf48113",
+                                            code: "core-galleryblock",
+                                            store: {
+                                                data: {}
+                                            }
+                                        }
+                                    ],
+                                },
+                                {
+                                    id: "8846e2c3-d0b0-4c8a-a5e0-5a358ade7868",
+                                    blocks: [
+
+                                    ],
+                                },
+                            ],
+                        },
+                    ],
+                },
+                {
                     id: "3aaab68f-73a8-4871-bf3e-6e8698eed744",
                     rows: [
                         {
@@ -95,7 +135,7 @@ export default class Structure {
                                 {
                                     id: "92dd5110-3815-4eb4-a32c-14215fac4c2b",
                                     blocks: [
-                                        /*{
+                                        {
                                             id: "20687444-337b-4ccf-8be6-3ac2288e1dd2",
                                             code: "core-videoblock",
                                             store: {
@@ -105,12 +145,24 @@ export default class Structure {
                                                     ratio: '16x9',
                                                 }
                                             }
-                                        }*/
+                                        }
                                     ],
                                 },
                                 {
                                     id: "a2180b3a-a2b7-4f32-ad88-8c1fad3c0edd",
-                                    blocks: [],
+                                    blocks: [
+                                        {
+                                            id: "8a946960-9e95-4b51-ab40-aac6cac7f538",
+                                            code: "core-imageblock",
+                                            store: {
+                                                data: {},
+                                                config: {
+                                                    url: 'https://www.youtube.com/watch?v=bzBT9mEXOV8&list=RDbzBT9mEXOV8&start_radio=1&ab_channel=OU7SIDE',
+                                                    ratio: '16x9',
+                                                }
+                                            }
+                                        }
+                                    ],
                                 },
                             ],
                         },

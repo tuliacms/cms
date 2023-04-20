@@ -18,9 +18,9 @@
                 :blockPickerData="blockPickerData"
             ></BlockPickerComponent>-->
         </div>
-        <!--<div v-for="(ext, key) in mountedExtensions" :key="key">
-            <component :is="ext.code + 'Manager'" :instance="ext.instance"></component>
-        </div>-->
+        <div v-for="(ext, key) in mountedExtensions" :key="key">
+            <component :is="ext.code + 'Manager'" :instanceId="ext.instanceId"></component>
+        </div>
         <Teleport to="body">
             <div class="dropdown-menu show tued-contextmenu" v-if="contextmenuStore.opened" :style="{ top: contextmenuStore.position.y + 'px', left: contextmenuStore.position.x + 'px' }">
                 <div v-for="group in contextmenuStore.items" class="tued-dropdown-menu-group">
@@ -40,7 +40,7 @@
 <script setup>
 import Sidebar from "admin/Sidebar/Sidebar.vue";
 import Canvas from "admin/Canvas/Canvas.vue";
-import {provide, defineProps, onMounted, ref, toRaw} from "vue";
+import { provide, defineProps, onMounted, ref, reactive } from "vue";
 
 const props = defineProps(['container', 'editor']);
 
@@ -100,6 +100,33 @@ const saveEditor = () => {
 };
 
 
+/*************
+ * Extensions
+ ************/
+const messenger = props.container.get('messenger');
+const mountedExtensions = reactive([]);
+
+messenger.receive('extension.mount', (data) => {
+    mountedExtensions.push({
+        instanceId: data.instanceId,
+        code: data.code,
+    });
+});
+
+messenger.receive('extension.unmount', (data) => {
+    let index = null;
+
+    for (let i in mountedExtensions) {
+        if (mountedExtensions[i].instanceId === data.instanceId) {
+            index = i;
+            break;
+        }
+    }
+
+    mountedExtensions.splice(index, 1);
+});
+
+
 
 
 
@@ -121,15 +148,19 @@ provide('usecase.columns', props.container.get('usecase.columns'));
 provide('usecase.selection', props.container.get('usecase.selection'));
 provide('usecase.draggable', props.container.get('usecase.draggable'));
 provide('usecase.contextmenu', props.container.get('usecase.contextmenu'));
-provide('messenger', props.container.get('messenger'));
+provide('messenger', messenger);
 provide('structure.store', props.container.get('structure.store'));
 provide('selection.store', props.container.get('selection.store'));
 provide('instance.blocks', props.container.get('instantiator.block'));
 provide('instance.columns', props.container.get('instantiator.column'));
 provide('instance.rows', props.container.get('instantiator.row'));
 provide('instance.sections', props.container.get('instantiator.section'));
+provide('instance.extensions', props.container.get('instantiator.extension'));
 provide('columnSize', props.container.get('columnSize'));
 provide('blocks.registry', props.container.get('blocks.registry'));
+provide('extensions.registry', props.container.get('extensions.registry'));
+provide('controls.registry', props.container.get('controls.registry'));
+provide('assets', props.container.get('assets'));
 </script>
 <script>
 export default {

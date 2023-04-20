@@ -149,9 +149,6 @@ const icons = 's|0;s|1;s|2;s|3;s|4;b|42-group;s|5;b|500px;s|6;s|7;s|8;s|9;s|a;b|
         };
     });
 </script>
-
 <script>
-export default {
-    name: 'FontIconManager'
-}
+export default {name: 'Extension.FontIcon.Manager'}
 </script>

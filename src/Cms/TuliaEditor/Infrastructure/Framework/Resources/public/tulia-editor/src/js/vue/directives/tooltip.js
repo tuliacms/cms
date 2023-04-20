@@ -40,10 +40,8 @@ export default {
          * Getting provides from instance is a hack in vuejs. Little tricky
          * and not safe, but painless solution to update popper position.
          */
-        binding.instance._.provides.messenger.on(
-            'canvas.view.updated',
-            async () => await popper.update()
-        );
+        binding.instance._.provides.eventBus.listen('element.config.sync', async () => await popper.update());
+        binding.instance._.provides.eventBus.listen('element.data.changed', async () => await popper.update());
     },
     beforeUnmount(el, binding, vnode, prevVnode) {
         for (let i in tooltips) {

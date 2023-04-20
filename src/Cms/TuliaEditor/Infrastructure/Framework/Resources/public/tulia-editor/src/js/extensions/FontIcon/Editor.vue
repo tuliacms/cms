@@ -30,9 +30,6 @@ extension.operation('icon-chosen', (data, success, fail) => {
 
 onUnmounted(() => extension.unmount());
 </script>
-
 <script>
-export default {
-    name: 'FontIconEditor'
-}
+export default {name: 'Extension.Fonticon.Editor'}
 </script>

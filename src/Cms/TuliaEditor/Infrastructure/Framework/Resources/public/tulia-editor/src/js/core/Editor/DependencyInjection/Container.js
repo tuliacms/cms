@@ -35,13 +35,13 @@ export default class Container extends AbstractContainer {
         this.registerFactory('element.config.storeFactory', () => new ConfigStoreFactory(this.get('blocks.registry'), this.get('structure.store')));
         this.registerFactory('element.data.storeFactory', () => new DataStoreFactory(this.get('blocks.registry'), this.get('structure.store')));
         this.registerFactory('element.data.registry', () => new EditorElementDataStoreRegistry(this.get('element.data.storeFactory'), this.get('element.data.synchronizer')));
-        this.registerFactory('element.data.synchronizer', () => new DataSynchronizer(this.get('messenger')));
+        this.registerFactory('element.data.synchronizer', () => new DataSynchronizer(this.get('messenger'), this.get('eventBus')));
 
         // Subscribers
         this.register('subscriber.BuildVueOnHtmlReady', BuildVueOnHtmlReady, ['@vueFactory', '%options', '%instanceId', '%options.directives', '%options.controls', '%options.extensions', '%options.blocks', this], { tags: [{ name: 'event_subscriber' }] });
         this.register('subscriber.AdminSelectionSubscriber', AdminSelectionSubscriber, ['@selection.store', '@messenger', '@eventBus'], { tags: [{ name: 'event_subscriber' }] });
         this.register('subscriber.AdminStructureSubscriber', AdminStructureSubscriber, ['@structure.store', '@messenger', '@eventBus'], { tags: [{ name: 'event_subscriber' }] });
-        this.register('subscriber.ElementConfigSubscriber', ElementConfigSubscriber, ['@messenger', '@element.config.registry'], { tags: [{ name: 'event_subscriber' }] });
+        this.register('subscriber.ElementConfigSubscriber', ElementConfigSubscriber, ['@messenger', '@element.config.registry', '@eventBus'], { tags: [{ name: 'event_subscriber' }] });
         this.register('subscriber.ElementDataSubscriber', ElementDataSubscriber, ['@messenger', '@element.data.registry'], { tags: [{ name: 'event_subscriber' }] });
         this.register('subscriber.EditorSelectionSubscriber', EditorSelectionSubscriber, ['@selection.selectedElementBoundaries', '@selection.hoveredElementBoundaries'], { tags: [{ name: 'event_subscriber' }] });
 

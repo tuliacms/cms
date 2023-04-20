@@ -3,14 +3,14 @@ export default class ColumnClassnameGenerator {
         return () => {
             let classname = '';
 
-            switch (block.data.columns) {
+            switch (block.config.columns) {
                 case '2': classname += ' col-6'; break;
                 case '3': classname += ' col-6 col-md-4'; break;
                 case '4': classname += ' col-6 col-md-4 col-lg-3'; break;
                 case '6': classname += ' col-6 col-md-4 col-lg-3 col-xl-2'; break;
             }
 
-            classname += ' mb-' + block.data.marginBottom;
+            classname += ' mb-' + block.config.marginBottom;
 
             return classname;
         };

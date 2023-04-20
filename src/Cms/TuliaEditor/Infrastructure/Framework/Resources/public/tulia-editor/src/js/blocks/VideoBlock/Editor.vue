@@ -1,17 +1,19 @@
 <template>
-    <div :class="classname" v-if="block.data.url">
-        sdfgsdfgsdfg
-        <img :src="VideoUrl.videoThumbnail(block.data.url)" />
+    <div :class="classname" v-if="block.config.url">
+        <img :src="VideoUrl.videoThumbnail(block.config.url)" />
     </div>
 </template>
 
 <script setup>
-const { defineProps, inject, computed } = require('vue');
+import { defineProps, inject, computed } from "vue";
 const props = defineProps(['block']);
 const block = inject('instance.blocks').editor(props);
 const VideoUrl = require('./VideoUrl.js').default;
 
 const classname = computed(() => {
-    return `ratio ratio-${block.data.ratio} mb-4`;
+    return `ratio ratio-${block.config.ratio} mb-4`;
 });
+</script>
+<script>
+export default { name: 'Block.Video.Editor' }
 </script>

@@ -8,6 +8,9 @@ import SectionInstantiator from "core/Shared/Structure/Element/Instantiator/Sect
 import BlockRegistry from "core/Shared/Structure/Block/BlockRegistry";
 import ElementConfigStoreRegistry from "core/Shared/Structure/Element/Config/ElementConfigStoreRegistry";
 import ElementDataStoreRegistry from "core/Shared/Structure/Element/Data/ElementDataStoreRegistry";
+import ExtensionRegistryFactory from "core/Shared/Extension/ExtensionRegistryFactory";
+import ControlRegistry from "core/Shared/Control/ControlRegistry";
+import ExtensionInstantiator from "core/Shared/Extension/Instance/ExtensionInstantiator";
 
 export default class AbstractContainer {
     constructor(options) {
@@ -37,13 +40,16 @@ export default class AbstractContainer {
         this.register('eventBus', EventBus);
         this.registerFactory('translator', () => new Translator(this.options.locale, this.options.fallback_locales, this.getParameter('options.translations')));
         this.register('vueFactory', VueFactory);
-        this.registerFactory('instantiator.block', () => new BlockInstantiator(this.get('element.config.registry'), this.get('element.data.registry'), this.get('blocks.registry'), this.get('structure.store')));
-        this.registerFactory('instantiator.column', () => new ColumnInstantiator(this.get('element.config.registry'), this.get('element.data.registry')));
-        this.registerFactory('instantiator.row', () => new RowInstantiator(this.get('element.config.registry'), this.get('element.data.registry')));
-        this.registerFactory('instantiator.section', () => new SectionInstantiator(this.get('element.config.registry'), this.get('element.data.registry')));
+        this.registerFactory('instantiator.block', () => new BlockInstantiator(this.get('messenger'), this.get('element.config.registry'), this.get('element.data.registry'), this.get('blocks.registry'), this.get('structure.store')));
+        this.registerFactory('instantiator.column', () => new ColumnInstantiator(this.get('messenger'), this.get('element.config.registry'), this.get('element.data.registry')));
+        this.registerFactory('instantiator.row', () => new RowInstantiator(this.get('messenger'), this.get('element.config.registry'), this.get('element.data.registry')));
+        this.registerFactory('instantiator.section', () => new SectionInstantiator(this.get('messenger'), this.get('element.config.registry'), this.get('element.data.registry')));
+        this.registerFactory('instantiator.extension', () => new ExtensionInstantiator(this.get('messenger')));
         this.registerFactory('blocks.registry', () => new BlockRegistry(this.getParameter('options.blocks')));
         this.registerFactory('element.config.registry', () => new ElementConfigStoreRegistry(this.get('element.config.storeFactory')));
         this.registerFactory('element.data.registry', () => new ElementDataStoreRegistry(this.get('element.data.storeFactory')));
+        this.registerFactory('controls.registry', () => new ControlRegistry(this.getParameter('options.controls')));
+        this.registerFactory('extensions.registry', () => ExtensionRegistryFactory.create(this, this.getParameter('options.extensions')));
     }
 
     registerFactory(id, factory, options) {

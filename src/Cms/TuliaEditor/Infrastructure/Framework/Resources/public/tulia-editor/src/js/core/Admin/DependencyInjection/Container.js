@@ -24,6 +24,7 @@ import EditorWindow from "core/Admin/UseCase/EditorWindow";
 import SelectionSubscriber from "core/Admin/Subscriber/Admin/SelectionSubscriber";
 import Structure from "core/Admin/Structure/Structure";
 import EditorWindowSubscriber from "core/Admin/Subscriber/Admin/EditorWindowSubscriber";
+import Assets from "core/Admin/Assets";
 
 export default class Container extends AbstractContainer {
     build() {
@@ -33,10 +34,10 @@ export default class Container extends AbstractContainer {
         this.registerFactory('usecase.sections', () => new Sections(this.get('structure.store'), this.get('usecase.selection'), this.get('structure')));
         this.registerFactory('usecase.rows', () => new Rows(this.get('structure.store'), this.get('usecase.selection'), this.get('structure')));
         this.registerFactory('usecase.columns', () => new Columns(this.get('structure.store'), this.get('usecase.selection'), this.get('structure')));
-        this.registerFactory('usecase.selection', () => new Selection(this.get('selection.store'), this.get('messenger')));
+        this.registerFactory('usecase.selection', () => new Selection(this.get('selection.store'), this.get('messenger'), this.get('eventBus')));
         this.registerFactory('usecase.draggable', () => new Draggable(this.get('usecase.selection'), this.get('structure.store'), this.get('eventBus'), this.get('messenger')));
         this.registerFactory('usecase.contextmenu', () => new Contextmenu(this.get('contextmenu.store'), this.get('usecase.selection')));
-        this.register('usecase.editorWindow', EditorWindow, ['@eventBus', '@view', '@structure']);
+        this.register('usecase.editorWindow', EditorWindow, ['@eventBus', '@view', '@structure', '@assets']);
         this.registerFactory('canvas', () => new Canvas(this.getParameter('options'), this.get('eventBus')));
         this.registerFactory('structure.store', () => useStructureStore());
         this.registerFactory('selection.store', () => useSelectionStore());
@@ -47,6 +48,7 @@ export default class Container extends AbstractContainer {
         this.registerFactory('element.data.storeFactory', () => new DataStoreFactory(this.get('blocks.registry'), this.get('structure.store')));
         this.registerFactory('columnSize', () => new ColumnSize());
         this.register('structure', Structure, ['@structure.store', '@element.config.registry', '@element.data.registry', '@messenger', '%options']);
+        this.register('assets', Assets);
 
         // Subscribers
         this.register('subscriber.BuildVueOnHtmlReady', BuildVueOnHtmlReady, ['@vueFactory', '%options', '%instanceId', '%options.directives', '%options.controls', '%options.extensions', '%options.blocks', this], { tags: [{ name: 'event_subscriber' }] });

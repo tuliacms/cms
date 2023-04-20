@@ -1,9 +1,8 @@
 <template></template>
-
 <script setup>
 const { computed, defineProps, inject } = require('vue');
-const props = defineProps(['instance']);
-const extension = inject('extension.instance').manager('Image', props.instance);
+const props = defineProps(['instanceId']);
+const extension = inject('instance.extensions').manager('Image', props.instanceId);
 const TuliaFilemanager = require('TuliaFilemanager');
 const options = inject('options');
 
@@ -27,7 +26,7 @@ const getFilemanager = () => {
                 return;
             }
 
-            extension.execute('image-chosen', {
+            extension.send('image-chosen', {
                 id: files[0].id,
                 filename: files[0].name,
             });
@@ -35,22 +34,17 @@ const getFilemanager = () => {
     });
 };
 
-extension.operation('chose-image', (data, success, fail) => {
+extension.receive('chose-image', () => {
     getFilemanager().open();
-    success();
 });
-extension.operation('remove-image', (data, success, fail) => {
+extension.receive('remove-image', () => {
     getFilemanager().clearSelection();
-    extension.execute('image-chosen', {
+    extension.send('image-chosen', {
         id: null,
         filename: null,
     });
-    success();
 });
 </script>
-
 <script>
-export default {
-    name: 'ImageManager'
-}
+export default {name: 'Extension.Image.Manager'}
 </script>

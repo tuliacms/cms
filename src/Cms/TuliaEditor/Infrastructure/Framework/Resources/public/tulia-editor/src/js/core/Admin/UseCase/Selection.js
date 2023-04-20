@@ -1,11 +1,17 @@
 export default class Selection {
-    constructor(selection, messenger) {
+    constructor(selection, messenger, eventBus) {
         this.selection = selection;
         this.messenger = messenger;
+        this.eventBus = eventBus;
     }
 
-    select(id, type) {
+    select(id, type, showInSidebar) {
         this.selection.select(id, type);
+
+        if (showInSidebar) {
+            this.eventBus.dispatch('show-sidebar');
+        }
+
         this.update();
     }
 

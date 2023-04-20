@@ -4,8 +4,8 @@ import Manager from "core/Shared/Structure/Element/Instantiator/Column/Manager";
 import Render from "core/Shared/Structure/Element/Instantiator/Column/Render";
 
 export default class ColumnInstantiator extends AbstractInstantiator {
-    constructor(elementConfigStoreRegistry) {
-        super('column', elementConfigStoreRegistry);
+    constructor(messenger, elementConfigStoreRegistry) {
+        super('column', messenger, elementConfigStoreRegistry);
     }
 
     createInstance(elementId, args, segment) {

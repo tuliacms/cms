@@ -4,8 +4,8 @@ import Manager from "core/Shared/Structure/Element/Instantiator/Row/Manager";
 import Render from "core/Shared/Structure/Element/Instantiator/Row/Render";
 
 export default class RowInstantiator extends AbstractInstantiator {
-    constructor(elementConfigStoreRegistry) {
-        super('row', elementConfigStoreRegistry);
+    constructor(messenger, elementConfigStoreRegistry) {
+        super('row', messenger, elementConfigStoreRegistry);
     }
 
     createInstance(elementId, args, segment) {

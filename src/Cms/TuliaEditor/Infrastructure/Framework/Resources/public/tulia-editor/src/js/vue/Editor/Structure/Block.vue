@@ -4,7 +4,7 @@
         :id="'tued-structure-block-' + block.id"
         @mouseenter="emit('selection-enter', block.id, 'block')"
         @mouseleave="emit('selection-leave', block.id, 'block')"
-        @mousedown.stop="selection.select(block.id, 'block')"
+        @mousedown.stop="selection.select(block.id, 'block', true)"
         data-tagname="Block"
         :tued-contextmenu="contextmenu.register(block.id, 'block')"
     >

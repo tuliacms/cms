@@ -13,14 +13,14 @@ export default class SelectionSubscriber {
     registerReceivers() {
         const self = this;
 
-        this.messenger.receive('editor.selection.select', (data) => self.select(data.id, data.type));
+        this.messenger.receive('editor.selection.select', (data) => self.select(data.id, data.type, data.showInSidebar));
         this.messenger.receive('editor.selection.deselect', () => self.deselect());
         this.messenger.receive('editor.selection.hover', (data) => self.hover(data.id, data.type));
         this.messenger.receive('editor.selection.dehover', () => self.dehover());
     }
 
-    select(id, type) {
-        this.selection.select(id, type);
+    select(id, type, showInSidebar) {
+        this.selection.select(id, type, showInSidebar);
     }
 
     deselect() {

@@ -50,7 +50,5 @@ onMounted(() => {
 </script>
 
 <script>
-export default {
-    name: 'DynamicBlockRender'
-}
+export default {name: 'Extension.DynamicBlock.Editor'}
 </script>

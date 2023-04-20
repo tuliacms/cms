@@ -67,11 +67,15 @@ export default class Admin {
 
         this.container.get('view').render();
         this.container.get('eventBus').dispatch('admin.ready');
-        this.container.get('eventBus').listen('editor.saved', (source) => {
-            console.log(source);
+        this.container.get('eventBus').listen('editor.saved', ({ source, content, assets }) => {
+            console.log(source, content, assets);
+
+            if (assets.length) {
+                content += `[assets names="${assets.join(',')}"]`;
+            }
 
             this.sink.structure.value = JSON.stringify(source);
-            this.sink.content.value = JSON.stringify(source);
+            this.sink.content.value = content;
         });
 
         //this.renderPreview();

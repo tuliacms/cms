@@ -23,8 +23,8 @@ export default class BlockDefaults {
     exportBlockState(id, state) {
         let exportedState = {};
 
-        for (let i in this.stateProperties) {
-            exportedState[this.stateProperties[i]] = state[this.stateProperties[i]];
+        for (let i in this.stateProperties[id]) {
+            exportedState[this.stateProperties[id][i]] = state[this.stateProperties[id][i]];
         }
 
         return ObjectCloner.deepClone(exportedState);

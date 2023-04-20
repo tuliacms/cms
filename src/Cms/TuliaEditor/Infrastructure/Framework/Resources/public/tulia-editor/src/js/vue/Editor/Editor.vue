@@ -14,6 +14,7 @@ const renderPreview = ref(props.container.getParameter('options').show_preview_i
 
 const structure = props.container.get('structure.store');
 
+provide('options', props.container.getParameter('options'));
 provide('translator', props.container.get('translator'));
 provide('messenger', props.container.get('messenger'));
 provide('eventBus', props.container.get('eventBus'));
@@ -28,7 +29,10 @@ provide('instance.blocks', props.container.get('instantiator.block'));
 provide('instance.columns', props.container.get('instantiator.column'));
 provide('instance.rows', props.container.get('instantiator.row'));
 provide('instance.sections', props.container.get('instantiator.section'));
+provide('instance.extensions', props.container.get('instantiator.extension'));
 provide('blocks.registry', props.container.get('blocks.registry'));
+provide('extensions.registry', props.container.get('extensions.registry'));
+provide('controls.registry', props.container.get('controls.registry'));
 
 const contextmenu = props.container.get('usecase.contextmenu');
 

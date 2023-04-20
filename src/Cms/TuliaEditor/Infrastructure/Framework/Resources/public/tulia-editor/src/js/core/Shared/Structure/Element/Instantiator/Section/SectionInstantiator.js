@@ -4,8 +4,8 @@ import Manager from "core/Shared/Structure/Element/Instantiator/Section/Manager"
 import Render from "core/Shared/Structure/Element/Instantiator/Section/Render";
 
 export default class SectionInstantiator extends AbstractInstantiator {
-    constructor(elementConfigStoreRegistry) {
-        super('section', elementConfigStoreRegistry);
+    constructor(messenger, elementConfigStoreRegistry) {
+        super('section', messenger, elementConfigStoreRegistry);
     }
 
     createInstance(elementId, args, segment) {

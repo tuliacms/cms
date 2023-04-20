@@ -40,9 +40,6 @@ onUnmounted(() => {
     extension.unmount();
 });
 </script>
-
 <script>
-export default {
-    name: 'BackgroundImageEditor'
-}
+export default {name: 'Extension.BackgroundImage.Editor'}
 </script>

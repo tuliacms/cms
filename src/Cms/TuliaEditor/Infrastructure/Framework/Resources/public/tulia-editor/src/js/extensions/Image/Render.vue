@@ -20,3 +20,6 @@ const props = defineProps({
     }
 });
 </script>
+<script>
+export default {name: 'Extension.Image.Render'}
+</script>

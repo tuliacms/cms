@@ -7,3 +7,6 @@ const { defineProps, inject, onMounted } = require('vue');
 const props = defineProps(['block']);
 const block = inject('blocks.instance').render(props);
 </script>
+<script>
+export default { name: 'Block.Map.Render' }
+</script>

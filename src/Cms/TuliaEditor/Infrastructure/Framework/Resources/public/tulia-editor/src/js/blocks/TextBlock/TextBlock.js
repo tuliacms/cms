@@ -1,5 +1,5 @@
-const Editor = require('./Editor.vue').default;
-const Render = require('./Render.vue').default;
+import Editor from './Editor.vue';
+import Render from './Render.vue';
 
 export default {
     theme: '*',

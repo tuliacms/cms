@@ -39,10 +39,8 @@
 import Structure from "admin/Sidebar/Structure.vue";
 import Selected from "admin/Sidebar/Selected/Selected.vue";
 /*const Debug = require('components/Admin/Debug/Debug.vue').default;*/
-import { defineProps, defineEmits, ref, inject, provide, onMounted, reactive } from "vue";
+import { defineEmits, inject, provide, onMounted, reactive } from "vue";
 
-/*const props = defineProps(['structure']);
-const messenger = inject('messenger');*/
 const emit = defineEmits(['cancel', 'save']);
 const options = inject('options');
 const translator = inject('translator');
@@ -72,13 +70,8 @@ onMounted(() => {
     eventBus.listen('editor.opened', () => {
         openTab('structure');
     });
-});
-
-/*onMounted(() => {
-    messenger.on('structure.selection.selected', (type, id, trigger) => {
-        if (trigger !== 'sidebar' && type === 'block') {
-            openTab('selected');
-        }
+    eventBus.listen('show-sidebar', () => {
+        openTab('selected');
     });
-});*/
+});
 </script>

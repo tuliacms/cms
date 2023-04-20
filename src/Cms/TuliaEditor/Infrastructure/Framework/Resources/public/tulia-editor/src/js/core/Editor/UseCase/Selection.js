@@ -3,8 +3,8 @@ export default class Selection {
         this.messenger = messenger;
     }
 
-    select(id, type) {
-        this.messenger.send('editor.selection.select', { id, type });
+    select(id, type, showInSidebar) {
+        this.messenger.send('editor.selection.select', { id, type, showInSidebar });
     }
 
     deselect() {

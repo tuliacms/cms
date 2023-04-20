@@ -14,3 +14,6 @@ const classname = computed(() => {
     return `ratio ratio-${block.data.ratio} mb-4`;
 });
 </script>
+<script>
+export default { name: 'Block.Video.Render' }
+</script>

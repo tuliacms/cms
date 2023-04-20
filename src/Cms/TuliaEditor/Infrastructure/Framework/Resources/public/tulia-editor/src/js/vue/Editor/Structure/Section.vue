@@ -3,7 +3,7 @@
         :id="'tued-structure-section-' + section.id"
         class="tued-structure-section tued-structure-element-selectable"
         data-tagname="Section"
-        @mousedown.stop="selection.select(section.id, 'section')"
+        @mousedown.stop="selection.select(section.id, 'section', true)"
         @mouseenter="emit('selection-enter', section.id, 'section')"
         @mouseleave="emit('selection-leave', section.id, 'section')"
         :tued-contextmenu="contextmenu.register(section.id, 'section')"

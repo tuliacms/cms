@@ -4,8 +4,8 @@ import Manager from "core/Shared/Structure/Element/Instantiator/Block/Manager";
 import Render from "core/Shared/Structure/Element/Instantiator/Block/Render";
 
 export default class BlockInstantiator extends AbstractInstantiator {
-    constructor(elementConfigStoreRegistry, elementDataStoreFactory, blockRegistry, structureStore) {
-        super('block', elementConfigStoreRegistry, elementDataStoreFactory);
+    constructor(messenger, elementConfigStoreRegistry, elementDataStoreFactory, blockRegistry, structureStore) {
+        super('block', messenger, elementConfigStoreRegistry, elementDataStoreFactory);
 
         this.blockRegistry = blockRegistry;
         this.structureStore = structureStore;

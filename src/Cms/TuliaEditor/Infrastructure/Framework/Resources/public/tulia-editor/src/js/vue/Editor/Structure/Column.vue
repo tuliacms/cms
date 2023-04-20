@@ -4,7 +4,7 @@
         :class="columnClass"
         @mouseenter="emit('selection-enter', column.id, 'column')"
         @mouseleave="emit('selection-leave', column.id, 'column')"
-        @mousedown.stop="selection.select(column.id, 'column')"
+        @mousedown.stop="selection.select(column.id, 'column', true)"
         data-tagname="Column"
         :tued-contextmenu="contextmenu.register(column.id, 'column')"
     >
