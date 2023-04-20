@@ -12,6 +12,8 @@ export default class Sections {
         this.structureStore.appendSection({ id });
         this.selectionUseCase.select(id, 'section');
         this.structure.update();
+
+        return id;
     }
 
     newOneAfter(afterId) {
@@ -19,6 +21,8 @@ export default class Sections {
         this.structureStore.appendSectionAfter({ id }, afterId);
         this.selectionUseCase.select(id, 'section');
         this.structure.update();
+
+        return id;
     }
 
     remove(id) {

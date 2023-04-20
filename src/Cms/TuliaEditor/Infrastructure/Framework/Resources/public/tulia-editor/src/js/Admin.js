@@ -154,7 +154,7 @@ export default class Admin {
         form.submit();
     }*/
 
-    createVueApp () {
+    /*createVueApp () {
         let breakpoints = ObjectCloner.deepClone(this.options.canvas.size.breakpoints);
         let defaultBreakpoint = {
             name: 'xl',
@@ -168,24 +168,9 @@ export default class Admin {
             }
         }
 
-        const data = {
-            editor: this,
-            container: this.container,
-            instanceId: this.instanceId,
-            options: ObjectCloner.deepClone(this.options),
-            availableBlocks: TuliaEditor.blocks,
-            structure: ObjectCloner.deepClone(this.options.structure.source),
-            canvas: {
-                size: {
-                    breakpoints: breakpoints,
-                    breakpoint: defaultBreakpoint
-                }
-            }
-        };
-
         this.vue = this.container.get('vueFactory').factory(
             AdminRoot,
-            data,
+            { editor: this, container: this.container },
             this.options.directives,
             this.options.controls,
             this.options.extensions,
@@ -196,7 +181,7 @@ export default class Admin {
         if (Location.getQueryVariable('showDebugbar') === 'true') {
             this.toggleDebugbar();
         }
-    };
+    };*/
 
     /*toggleRenderPreview () {
         this.container.messenger.execute('editor.canvas.preview.toggle');

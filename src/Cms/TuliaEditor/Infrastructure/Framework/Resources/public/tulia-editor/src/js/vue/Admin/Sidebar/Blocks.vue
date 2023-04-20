@@ -21,17 +21,16 @@
                 ></Block>
             </template>
         </vuedraggable>
-<!--        <div class="tued-structure-new-element" @click="blocksPicker.newAt(parent.id)">
+        <div class="tued-structure-new-element" @click="blocksPicker.newAt(props.parent)">
             {{ translator.trans('newBlock') }}
-        </div>-->
+        </div>
     </div>
 </template>
 
 <script setup>
 import vuedraggable from "vuedraggable/src/vuedraggable";
 import Block from "admin/Sidebar/Block.vue";
-import { inject, defineEmits, defineProps } from "vue";
-import Column from "admin/Sidebar/Column.vue";
+import { inject, defineEmits, defineProps, onMounted } from "vue";
 
 const props = defineProps(['parent']);
 const emit = defineEmits(['draggable-start', 'draggable-change', 'draggable-end', 'selected']);
@@ -39,22 +38,8 @@ const translator = inject('translator');
 const structureDragOptions = inject('structureDragOptions');
 const structureStore = inject('structure.store');
 const contextmenu = inject('usecase.contextmenu');
-
-/*const { inject, defineProps, defineEmits, onMounted } = require('vue');
-const draggable = require('vuedraggable');
-
-const props = defineProps(['parent', 'blocks']);
-const emits = defineEmits(['selected']);
-
-const selection = inject('selection.store');
-const structureDragOptions = inject('structureDragOptions');
-const translator = inject('translator');
-const messenger = inject('messenger');
-const blocksRegistry = inject('blocks.registry');
 const blocksPicker = inject('blocks.picker');
-const contextmenu = inject('contextmenu');
-const structureManipulator = inject('structureManipulator');
-const stateCalculator = inject('stateCalculator');
+const blocksUsecase = inject('usecase.blocks');
 
 onMounted(() => {
     contextmenu.items('blocks', 'column', () => {
@@ -70,12 +55,12 @@ onMounted(() => {
         return [
             {
                 group: 'block',
-                onClick: (id) => structureManipulator.removeElement(id),
+                onClick: (id) => blocksUsecase.remove(id),
                 label: translator.trans('delete'),
                 icon: 'fas fa-trash',
                 classname: 'dropdown-item-danger',
             },
         ];
     });
-});*/
+});
 </script>

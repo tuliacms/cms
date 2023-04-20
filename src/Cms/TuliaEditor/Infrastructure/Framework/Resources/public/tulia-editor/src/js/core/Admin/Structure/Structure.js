@@ -102,12 +102,6 @@ export default class Structure {
                                         }
                                     ],
                                 },
-                                {
-                                    id: "8846e2c3-d0b0-4c8a-a5e0-5a358ade7868",
-                                    blocks: [
-
-                                    ],
-                                },
                             ],
                         },
                     ],

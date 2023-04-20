@@ -12,6 +12,8 @@ export default class Rows {
         this.structureStore.appendRow({ id }, sectionId);
         this.selectionUseCase.select(id, 'row');
         this.structure.update();
+
+        return id;
     }
 
     remove(id) {

@@ -45,9 +45,9 @@
                 </div>
             </template>
         </vuedraggable>
-<!--        <div class="tued-structure-new-element" @click="blockPicker.new()">
+        <div class="tued-structure-new-element" @click="blockPicker.new()">
             {{ translator.trans('newBlock') }}
-        </div>-->
+        </div>
     </div>
 </template>
 
@@ -66,6 +66,7 @@ const draggableUseCase = inject('usecase.draggable');
 const structureStore = inject('structure.store');
 const selectionStore = inject('selection.store');
 const contextmenu = inject('usecase.contextmenu');
+const blockPicker = inject('blocks.picker');
 
 const startDraggable = event => draggableUseCase.start(event);
 const changeDraggable = event => draggableUseCase.change(event);

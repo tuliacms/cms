@@ -12,6 +12,8 @@ export default class Columns {
         this.structureStore.appendColumn({ id }, rowId);
         this.selectionUseCase.select(id, 'column');
         this.structure.update();
+
+        return id;
     }
 
     newBefore(before) {
@@ -19,6 +21,8 @@ export default class Columns {
         this.structureStore.appendColumnBefore({ id }, before);
         this.selectionUseCase.select(id, 'column');
         this.structure.update();
+
+        return id;
     }
 
     newAfter(after) {
@@ -26,6 +30,8 @@ export default class Columns {
         this.structureStore.appendColumnAfter({ id }, after);
         this.selectionUseCase.select(id, 'column');
         this.structure.update();
+
+        return id;
     }
 
     remove(id) {

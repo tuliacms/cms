@@ -25,6 +25,10 @@ import SelectionSubscriber from "core/Admin/Subscriber/Admin/SelectionSubscriber
 import Structure from "core/Admin/Structure/Structure";
 import EditorWindowSubscriber from "core/Admin/Subscriber/Admin/EditorWindowSubscriber";
 import Assets from "core/Admin/Assets";
+import BlocksPicker from "core/Admin/Structure/Blocks/BlocksPicker";
+import Modals from "core/Admin/View/Modals";
+import Blocks from "core/Admin/UseCase/Blocks";
+import CreateBlockSubscriber from "core/Admin/Subscriber/Editor/CreateBlockSubscriber";
 
 export default class Container extends AbstractContainer {
     build() {
@@ -34,6 +38,7 @@ export default class Container extends AbstractContainer {
         this.registerFactory('usecase.sections', () => new Sections(this.get('structure.store'), this.get('usecase.selection'), this.get('structure')));
         this.registerFactory('usecase.rows', () => new Rows(this.get('structure.store'), this.get('usecase.selection'), this.get('structure')));
         this.registerFactory('usecase.columns', () => new Columns(this.get('structure.store'), this.get('usecase.selection'), this.get('structure')));
+        this.registerFactory('usecase.blocks', () => new Blocks(this.get('blocks.registry'), this.get('structure.store'), this.get('usecase.selection'), this.get('structure'), this.get('usecase.columns'), this.get('usecase.rows'), this.get('usecase.sections')));
         this.registerFactory('usecase.selection', () => new Selection(this.get('selection.store'), this.get('messenger'), this.get('eventBus')));
         this.registerFactory('usecase.draggable', () => new Draggable(this.get('usecase.selection'), this.get('structure.store'), this.get('eventBus'), this.get('messenger')));
         this.registerFactory('usecase.contextmenu', () => new Contextmenu(this.get('contextmenu.store'), this.get('usecase.selection')));
@@ -49,6 +54,8 @@ export default class Container extends AbstractContainer {
         this.registerFactory('columnSize', () => new ColumnSize());
         this.register('structure', Structure, ['@structure.store', '@element.config.registry', '@element.data.registry', '@messenger', '%options']);
         this.register('assets', Assets);
+        this.register('blocks.picker', BlocksPicker, ['@usecase.blocks', '@modals']);
+        this.register('modals', Modals);
 
         // Subscribers
         this.register('subscriber.BuildVueOnHtmlReady', BuildVueOnHtmlReady, ['@vueFactory', '%options', '%instanceId', '%options.directives', '%options.controls', '%options.extensions', '%options.blocks', this], { tags: [{ name: 'event_subscriber' }] });
@@ -58,6 +65,7 @@ export default class Container extends AbstractContainer {
         this.register('subscriber.ContextmenuEditorSubscriber', ContextmenuEditorSubscriber, ['@messenger', '@usecase.contextmenu'], { tags: [{ name: 'event_subscriber' }] });
         this.register('subscriber.ElementDataSubscriber', ElementDataSubscriber, ['@messenger', '@element.data.registry'], { tags: [{ name: 'event_subscriber' }] });
         this.register('subscriber.EditorWindowSubscriber', EditorWindowSubscriber, ['@usecase.editorWindow'], { tags: [{ name: 'event_subscriber' }] });
+        this.register('subscriber.CreateBlockSubscriber', CreateBlockSubscriber, ['@messenger', '@blocks.picker'], { tags: [{ name: 'event_subscriber' }] });
 
         super.finish();
     }

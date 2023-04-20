@@ -221,6 +221,9 @@ export const useStructureStore = defineStore('structure', {
         appendBlock(block, columnId) {
             find(this.sections, columnId).blocks.push(produceBlock(block.id, block.code, columnId));
         },
+        removeBlock(id) {
+            removeFromCollection(findParent(this.sections, id).blocks, id);
+        },
     },
     getters: {
         export(state) {

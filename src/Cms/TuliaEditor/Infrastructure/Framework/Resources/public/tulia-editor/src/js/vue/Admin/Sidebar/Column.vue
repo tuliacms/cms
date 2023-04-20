@@ -44,7 +44,7 @@ import Blocks from "admin/Sidebar/Blocks.vue";
 import { inject, defineEmits, defineProps, computed, onMounted, ref } from "vue";
 
 const props = defineProps(['parent', 'column']);
-const emit = defineEmits(['selected']);
+const emit = defineEmits(['draggable-start', 'draggable-change', 'draggable-end', 'selected']);
 const selectionUseCase = inject('usecase.selection');
 const selectionStore = inject('selection.store');
 const contextmenu = inject('usecase.contextmenu');

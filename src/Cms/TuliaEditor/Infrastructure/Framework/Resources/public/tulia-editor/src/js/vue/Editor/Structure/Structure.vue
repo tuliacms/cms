@@ -8,9 +8,9 @@
             @selection-leave="(id, type) => selectionLeave(id, type)"
         ></Section>
 
-<!--        <div class="tued-structure-new-element" @click="newBlock()">
+        <div class="tued-structure-new-element" @click="newBlock()">
             {{ translator.trans('newBlock') }}
-        </div>-->
+        </div>
 
         <div
             class="tued-element-boundaries tued-element-selected-boundaries"
@@ -64,6 +64,8 @@ import { inject, ref } from "vue";
 
 const selection = inject('selection.store');
 const structure = inject('structure.store');
+const messenger = inject('messenger');
+const translator = inject('translator');
 const structureContainer = ref(null);
 
 const findNode = function (id, type) {
@@ -90,6 +92,8 @@ const hoverResolver = inject('selection.hoveredElementResolver');
 
 const selectionEnter = (id, type) => hoverResolver.enter(id, type);
 const selectionLeave = () => hoverResolver.leave();
+
+const newBlock = () => messenger.send('structure.create.block');
 
 /*let elm = this.$refs['element-actions'];
 

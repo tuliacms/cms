@@ -7,16 +7,7 @@
                 @cancel="cancelEditor"
             ></Sidebar>
             <Canvas ref="canvas"></Canvas>
-            <!--<SidebarComponent
-                :structure="structure"
-                @cancel="cancelEditor"
-                @save="saveEditor"
-                @contextmenu="(event) => cx.open(event, 'sidebar')"
-            ></SidebarComponent>
-            <BlockPickerComponent
-                :availableBlocks="availableBlocks"
-                :blockPickerData="blockPickerData"
-            ></BlockPickerComponent>-->
+            <BlockPickerModal></BlockPickerModal>
         </div>
         <div v-for="(ext, key) in mountedExtensions" :key="key">
             <component :is="ext.code + 'Manager'" :instanceId="ext.instanceId"></component>
@@ -40,6 +31,7 @@
 <script setup>
 import Sidebar from "admin/Sidebar/Sidebar.vue";
 import Canvas from "admin/Canvas/Canvas.vue";
+import BlockPickerModal from "admin/Block/BlockPickerModal.vue";
 import { provide, defineProps, onMounted, ref, reactive } from "vue";
 
 const props = defineProps(['container', 'editor']);
@@ -138,6 +130,7 @@ messenger.receive('extension.unmount', (data) => {
 provide('container', props.container);
 provide('instanceId', props.container.getParameter('instanceId'));
 provide('options', props.container.getParameter('options'));
+provide('options.blocks', props.container.getParameter('options.blocks'));
 provide('translator', props.container.get('translator'));
 provide('eventBus', props.container.get('eventBus'));
 provide('admin', props.container.get('admin'));
@@ -145,6 +138,7 @@ provide('canvas', props.container.get('canvas'));
 provide('usecase.sections', props.container.get('usecase.sections'));
 provide('usecase.rows', props.container.get('usecase.rows'));
 provide('usecase.columns', props.container.get('usecase.columns'));
+provide('usecase.blocks', props.container.get('usecase.blocks'));
 provide('usecase.selection', props.container.get('usecase.selection'));
 provide('usecase.draggable', props.container.get('usecase.draggable'));
 provide('usecase.contextmenu', props.container.get('usecase.contextmenu'));
@@ -161,6 +155,7 @@ provide('blocks.registry', props.container.get('blocks.registry'));
 provide('extensions.registry', props.container.get('extensions.registry'));
 provide('controls.registry', props.container.get('controls.registry'));
 provide('assets', props.container.get('assets'));
+provide('blocks.picker', props.container.get('blocks.picker'));
 </script>
 <script>
 export default {
