@@ -1,12 +1,13 @@
 <template>
     <div :class="{ 'tued-container': true, 'tued-show-preview': renderPreview }">
         <Structure></Structure>
-        <!--<RenderingCanvasComponent ref="renderedContent" :structure="structure"></RenderingCanvasComponent>-->
+        <Canvas ref="renderedContent"></Canvas>
     </div>
 </template>
 
 <script setup>
 import Structure from "editor/Structure/Structure.vue";
+import Canvas from "editor/Rendering/Canvas.vue";
 import { defineProps, ref, provide, onMounted } from "vue";
 
 const props = defineProps(['container']);

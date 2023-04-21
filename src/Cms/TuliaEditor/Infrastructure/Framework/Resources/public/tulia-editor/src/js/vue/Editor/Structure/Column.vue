@@ -26,10 +26,9 @@
 </template>
 
 <script setup>
-import ColumnClassnameGenerator from "core/Editor/View/ColumnClassnameGenerator";
+import ColumnClassnameGenerator from "core/Editor/Render/Column/ColumnClassnameGenerator";
 import Block from "editor/Structure/Block.vue";
 import { inject, defineProps, defineEmits, computed } from "vue";
-import Row from "editor/Structure/Row.vue";
 
 const props = defineProps(['parent', 'column']);
 const emit = defineEmits(['selection-enter', 'selection-leave']);
@@ -39,5 +38,5 @@ const translator = inject('translator');
 const selection = inject('usecase.selection');
 const column = inject('instance.columns').editor(props);
 
-const columnClass = computed(() => (new ColumnClassnameGenerator(column, ['tued-structure-column', 'tued-structure-element-selectable'])).generate());
+const columnClass = computed(() => ColumnClassnameGenerator.generate(column, ['tued-structure-column', 'tued-structure-element-selectable']));
 </script>

@@ -11,6 +11,7 @@ export default class SelectionSubscriber {
             'selection.deselected': 'deselect',
             'selection.hovered': 'hover',
             'selection.dehovered': 'dehover',
+            'structure.changed': 'deselect',
         };
     }
 

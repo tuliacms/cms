@@ -22,7 +22,7 @@ export default class ColumnSize {
             }
         }
 
-        column.sizes[breakpoint].size = size;
+        column.sizes[breakpoint] = size;
 
         this.structureManipulator.updateElement(column);
 
@@ -30,7 +30,7 @@ export default class ColumnSize {
     }
 
     increment (column, breakpoint) {
-        let size = column.sizes[breakpoint].size;
+        let size = column.sizes[breakpoint];
 
         if (!size) {
             size = 0;
@@ -40,7 +40,7 @@ export default class ColumnSize {
     }
 
     decrement (column, breakpoint) {
-        let size = column.sizes[breakpoint].size;
+        let size = column.sizes[breakpoint];
 
         if (!size) {
             size = 12;

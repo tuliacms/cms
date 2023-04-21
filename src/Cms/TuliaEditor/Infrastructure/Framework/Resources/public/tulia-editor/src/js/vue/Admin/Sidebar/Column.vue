@@ -15,11 +15,11 @@
             <span>{{ translator.trans('column') }}</span>
             <div class="tied-structure-element-options">
                 <div class="tued-structure-column-sizer">
-                    <span>{{ breakpointName }}</span>
+                    <span>{{ storage.breakpointName }}</span>
                     <input
                         type="text"
                         :ref="'column-' + column.id"
-                        :value="columnSizeValue"
+                        :value="storage.data.value"
                         @focus="$event.target.select()"
                         @keyup="event => changeSize(event)"
                         @keydown="event => changeSizeWithArrows(event)"
@@ -41,7 +41,7 @@
 
 <script setup>
 import Blocks from "admin/Sidebar/Blocks.vue";
-import { inject, defineEmits, defineProps, computed, onMounted, ref } from "vue";
+import { inject, defineEmits, defineProps } from "vue";
 
 const props = defineProps(['parent', 'column']);
 const emit = defineEmits(['draggable-start', 'draggable-change', 'draggable-end', 'selected']);
@@ -53,21 +53,17 @@ const column = inject('instance.columns').manager(props);
 const columnSize = inject('columnSize');
 const eventBus = inject('eventBus');
 
-const breakpointName = ref('xl');
-
-const columnSizeValue = computed(() => {
-    return column.config.sizes[breakpointName.value].size;
-});
+const storage = inject('breakpointsAwareDataStorageFactory').ref(column.config.sizes);
 
 const changeSizeWithArrows = (event) => {
     switch (event.key) {
         case '+':
         case 'ArrowUp':
-            columnSize.increment(column, breakpointName.value);
+            columnSize.increment(storage);
             break;
         case '-':
         case 'ArrowDown':
-            columnSize.decrement(column, breakpointName.value);
+            columnSize.decrement(storage);
             break;
     }
 };
@@ -96,12 +92,6 @@ const changeSize = (event) => {
             event.preventDefault();
     }
 
-    columnSize.changeTo(column, breakpointName.value, event.target.value);
+    columnSize.changeTo(storage, event.target.value);
 };
-
-onMounted(() => {
-    eventBus.listen('canvas.breakpoint.changed', (size) => {
-        breakpointName.value = size;
-    });
-});
 </script>

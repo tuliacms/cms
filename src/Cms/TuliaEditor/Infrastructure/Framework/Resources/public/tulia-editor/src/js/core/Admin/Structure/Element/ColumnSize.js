@@ -1,5 +1,5 @@
 export default class ColumnSize {
-    changeTo(column, breakpoint, size) {
+    changeTo(store, size) {
         size = parseInt(size);
 
         // Reset if value is empty or 'zero'
@@ -16,26 +16,26 @@ export default class ColumnSize {
             }
         }
 
-        column.config.sizes[breakpoint].size = size;
+        store.data.value = size;
     }
 
-    increment(column, breakpoint) {
-        let size = column.config.sizes[breakpoint].size;
+    increment(store) {
+        let size = store.data.value;
 
         if (!size) {
             size = 0;
         }
 
-        this.changeTo(column, breakpoint, size + 1);
+        this.changeTo(store, size + 1);
     }
 
-    decrement(column, breakpoint) {
-        let size = column.config.sizes[breakpoint].size;
+    decrement(store) {
+        let size = store.data.value;
 
         if (!size) {
             size = 12;
         }
 
-        this.changeTo(column, breakpoint, size - 1);
+        this.changeTo(store, size - 1);
     }
 }

@@ -32,7 +32,7 @@
                                 <input
                                     type="text"
                                     data-vueref="'column-' + element.id"
-                                    :value="element.sizes[canvas.getBreakpointName()].size"
+                                    :value="element.sizes[canvas.getBreakpointName()]"
                                     @focus="$event.target.select()"
                                     @keyup="changeSize(element, $event)"
                                     @keydown="changeSizeWithArrows(element, $event)"
@@ -80,11 +80,11 @@ const changeSizeWithArrows = (column, event) => {
     switch (event.key) {
         case '+':
         case 'ArrowUp':
-            column.sizes[canvas.getBreakpointName()].size = columnsSize.increment(column, canvas.getBreakpointName());
+            column.sizes[canvas.getBreakpointName()] = columnsSize.increment(column, canvas.getBreakpointName());
             break;
         case '-':
         case 'ArrowDown':
-            column.sizes[canvas.getBreakpointName()].size = columnsSize.decrement(column, canvas.getBreakpointName());
+            column.sizes[canvas.getBreakpointName()] = columnsSize.decrement(column, canvas.getBreakpointName());
             break;
         default:
             return;

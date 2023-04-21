@@ -6,7 +6,6 @@ export default class BlockDefaults {
     getBlockState(id, primalState, currents) {
         let state = {};
 
-        this.prepareDefaultState(primalState);
         this.stateProperties[id] = [];
 
         for (let i in primalState) {
@@ -29,16 +28,5 @@ export default class BlockDefaults {
         }
 
         return ObjectCloner.deepClone(exportedState);
-    }
-
-    prepareDefaultState(state) {
-        state.visibility = {
-            xxl: null,
-            xl: null,
-            lg: null,
-            md: null,
-            sm: null,
-            xs: null,
-        };
     }
 }

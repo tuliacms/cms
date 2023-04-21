@@ -20,7 +20,7 @@
             <div :class="{ 'tued-sidebar-selector': true, 'tued-sidebar-selector-has-debug': options.debug }" @click.stop="" @mouseup.stop="" @mousedown.stop="">
                 <div :class="{ 'tued-sidebar-type': true, 'tued-sidebar-type-active': sidebar.tab === 'selected' }" @click="openTab('selected')"><i class="far fa-dot-circle"></i><span>{{ translator.trans('selected') }}</span></div>
                 <div :class="{ 'tued-sidebar-type': true, 'tued-sidebar-type-active': sidebar.tab === 'structure' }" @click="openTab('structure')"><i class="fas fa-stream"></i><span>{{ translator.trans('structure') }}</span></div>
-                <div v-if="options.debug" :class="{ 'tued-sidebar-type': true, 'tued-sidebar-type-active': sidebar.tab === 'debug' }" @click="openTab('debug')"><i class="fas fa-code"></i><span>Debug</span></div>
+<!--                <div v-if="options.debug" :class="{ 'tued-sidebar-type': true, 'tued-sidebar-type-active': sidebar.tab === 'debug' }" @click="openTab('debug')"><i class="fas fa-code"></i><span>Debug</span></div>-->
             </div>
             <div :class="{ 'd-block': sidebar.tab === 'structure', 'd-none': sidebar.tab !== 'structure' }">
                 <Structure @selected="sidebar.tab = 'selected'"></Structure>
@@ -28,9 +28,9 @@
             <div :class="{ 'd-block': sidebar.tab === 'selected', 'd-none': sidebar.tab !== 'selected' }" @click.stop="" @mouseup.stop="" @mousedown.stop="">
                 <Selected></Selected>
             </div>
-            <div v-if="options.debug" :class="{ 'd-block': sidebar.tab === 'debug', 'd-none': sidebar.tab !== 'debug' }" @click.stop="" @mouseup.stop="" @mousedown.stop="">
-<!--                <Debug @disableSwitchTabs="sidebar.disabled = true" @enableSwitchTabs="sidebar.disabled = false"></Debug>-->
-            </div>
+            <!--<div v-if="options.debug" :class="{ 'd-block': sidebar.tab === 'debug', 'd-none': sidebar.tab !== 'debug' }" @click.stop="" @mouseup.stop="" @mousedown.stop="">
+                <Debug @disableSwitchTabs="sidebar.disabled = true" @enableSwitchTabs="sidebar.disabled = false"></Debug>
+            </div>-->
         </div>
     </div>
 </template>

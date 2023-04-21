@@ -12,14 +12,14 @@ export default class SizesClassnameGenerator {
         let anySizingAdded = false;
 
         for (let i in this.column.sizes) {
-            if (this.column.sizes[i].size) {
+            if (this.column.sizes[i]) {
                 let prefix = `${i}-`;
 
                 if (i === 'xs') {
                     prefix = '';
                 }
 
-                classList.push(`col-${prefix}${this.column.sizes[i].size}`);
+                classList.push(`col-${prefix}${this.column.sizes[i]}`);
                 anySizingAdded = true;
             }
         }

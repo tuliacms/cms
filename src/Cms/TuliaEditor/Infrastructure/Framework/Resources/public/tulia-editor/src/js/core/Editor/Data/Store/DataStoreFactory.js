@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import BlockDefaults from "core/Shared/Structure/Element/Config/Defaults/BlockDefaults";
+import BlockDefaults from "core/Shared/Structure/Element/Data/Defaults/BlockDefaults";
 import ObjectCloner from "core/Shared/Utils/ObjectCloner";
 
 export default class DataStoreFactory {

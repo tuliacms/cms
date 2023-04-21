@@ -156,6 +156,7 @@ provide('extensions.registry', props.container.get('extensions.registry'));
 provide('controls.registry', props.container.get('controls.registry'));
 provide('assets', props.container.get('assets'));
 provide('blocks.picker', props.container.get('blocks.picker'));
+provide('breakpointsAwareDataStorageFactory', props.container.get('breakpointsAwareDataStorageFactory'));
 </script>
 <script>
 export default {

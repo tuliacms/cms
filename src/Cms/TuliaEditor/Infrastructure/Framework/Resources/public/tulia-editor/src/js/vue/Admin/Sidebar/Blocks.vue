@@ -1,11 +1,11 @@
 <template>
-    <div>
+    <div class="tued-structure-draggable-group">
         <vuedraggable
             group="blocks"
             item-key="id"
             :list="structureStore.blocksOf(props.parent)"
             tag="div"
-            :component-data="{ class: 'tued-structure-draggable-group', name: 'fade', as: 'transition-group', 'data-draggable-delta-transformer-parent': `${parent.type}.${parent.id}` }"
+            :component-data="{ name: 'fade', as: 'transition-group', 'data-draggable-delta-transformer-parent': `${parent.type}.${parent.id}` }"
             v-bind="structureDragOptions"
             handle=".tued-structure-element-block > .tued-label > .tued-structure-draggable-handler"
             @start="(event) => emit('draggable-start', event)"

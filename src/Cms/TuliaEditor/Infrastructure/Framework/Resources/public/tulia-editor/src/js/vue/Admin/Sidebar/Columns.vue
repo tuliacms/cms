@@ -14,10 +14,13 @@
         >
             <template #item="{element}">
                 <Column
-                     data-element-type="column"
-                     :data-element-id="element.id"
+                    data-element-type="column"
+                    :data-element-id="element.id"
                     :column="element"
                     @selected="emit('selected')"
+                    @draggable-start="(event) => emit('draggable-start', event)"
+                    @draggable-change="(event) => emit('draggable-change', event)"
+                    @draggable-end="(event) => emit('draggable-end', event)"
                 ></Column>
             </template>
         </vuedraggable>
@@ -28,6 +31,7 @@
 import vuedraggable from "vuedraggable/src/vuedraggable";
 import Column from "admin/Sidebar/Column.vue";
 import { inject, defineEmits, defineProps, onMounted, computed } from "vue";
+import Blocks from "admin/Sidebar/Blocks.vue";
 
 const props = defineProps(['parent']);
 const emit = defineEmits(['draggable-start', 'draggable-change', 'draggable-end', 'selected']);

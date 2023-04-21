@@ -29,6 +29,7 @@ import BlocksPicker from "core/Admin/Structure/Blocks/BlocksPicker";
 import Modals from "core/Admin/View/Modals";
 import Blocks from "core/Admin/UseCase/Blocks";
 import CreateBlockSubscriber from "core/Admin/Subscriber/Editor/CreateBlockSubscriber";
+import BreakpointsAwareDataStorageFactory from "core/Admin/Structure/Element/BreakpointsAwareDataStorageFactory";
 
 export default class Container extends AbstractContainer {
     build() {
@@ -56,6 +57,7 @@ export default class Container extends AbstractContainer {
         this.register('assets', Assets);
         this.register('blocks.picker', BlocksPicker, ['@usecase.blocks', '@modals']);
         this.register('modals', Modals);
+        this.register('breakpointsAwareDataStorageFactory', BreakpointsAwareDataStorageFactory, ['%options', '@eventBus']);
 
         // Subscribers
         this.register('subscriber.BuildVueOnHtmlReady', BuildVueOnHtmlReady, ['@vueFactory', '%options', '%instanceId', '%options.directives', '%options.controls', '%options.extensions', '%options.blocks', this], { tags: [{ name: 'event_subscriber' }] });
