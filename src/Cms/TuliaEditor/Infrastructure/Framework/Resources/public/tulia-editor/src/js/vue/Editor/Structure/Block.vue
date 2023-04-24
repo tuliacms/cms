@@ -11,11 +11,13 @@
         <component
             :is="registry.getComponentName(block.details.code, 'editor')"
             :block="block"
+            :class="blockClass(block)"
         ></component>
     </div>
 </template>
 
 <script setup>
+import BlockClassnameGenerator from "core/Editor/Render/Block/BlockClassnameGenerator";
 import { inject, defineProps, defineEmits } from "vue";
 
 const props = defineProps(['parent', 'block']);
@@ -27,4 +29,5 @@ const selection = inject('usecase.selection');
 const registry = inject('blocks.registry');
 
 const block = inject('instance.blocks').editor(props);
+const blockClass = (block) => BlockClassnameGenerator.generate(block);
 </script>

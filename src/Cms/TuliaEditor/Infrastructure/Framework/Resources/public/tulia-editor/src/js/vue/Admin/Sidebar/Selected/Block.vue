@@ -1,10 +1,10 @@
 <template>
-<!--    <DesignOptions :block="props.block"></DesignOptions>-->
+    <DesignOptions :block="block"></DesignOptions>
     <Visibility :block="block"></Visibility>
 </template>
 <script setup>
-/*const DesignOptions = require('components/Admin/Sidebar/Selected/Parts/Block/DesignOptions.vue').default;*/
 import Visibility from "admin/Sidebar/Selected/Parts/Block/Visibility.vue";
+import DesignOptions from "admin/Sidebar/Selected/Parts/Block/DesignOptions.vue";
 import { defineProps, inject } from "vue";
 
 const props = defineProps(['block']);

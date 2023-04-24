@@ -14,7 +14,7 @@ export default class Structure {
         this.messenger = messenger;
         this.options = options;
 
-        const structure = this.options.structure.structure ?? this.getStructure();
+        const structure = this.options.structure ?? this.getStructure();
 
         this._current = SourceToUnifiedFormat.transform(structure);
         this._previous = ObjectCloner.deepClone(this._current);
@@ -90,7 +90,7 @@ export default class Structure {
                                         }
                                     ],
                                 },
-                                {
+                                /*{
                                     id: "4ce4e48a-8dc1-49d3-841f-b639570a8aa0",
                                     blocks: [
                                         {
@@ -101,12 +101,12 @@ export default class Structure {
                                             }
                                         }
                                     ],
-                                },
+                                },*/
                             ],
                         },
                     ],
                 },
-                {
+                /*{
                     id: "3aaab68f-73a8-4871-bf3e-6e8698eed744",
                     rows: [
                         {
@@ -187,8 +187,8 @@ export default class Structure {
                 {
                     id: "427d2344-79d5-4b1d-a098-916514619d2f",
                     rows: [],
-                },
-            ]
+                },*/
+            ],
         };
     }
 }

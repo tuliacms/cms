@@ -18,6 +18,8 @@ import DataStoreFactory from "core/Editor/Data/Store/DataStoreFactory";
 import EditorElementDataStoreRegistry from "core/Editor/Data/EditorElementDataStoreRegistry";
 import DataSynchronizer from "core/Editor/Structure/Element/DataSynchronizer";
 import ElementDataSubscriber from "core/Editor/Subscriber/Admin/ElementDataSubscriber";
+import ContentRendering from "core/Editor/UseCase/ContentRendering";
+import RenderedContentSubscriber from "core/Editor/Subscriber/Editor/RenderedContentSubscriber";
 
 export default class Container extends AbstractContainer {
     build() {
@@ -31,6 +33,7 @@ export default class Container extends AbstractContainer {
         this.registerFactory('selection.hoveredElementResolver', () => new HoverResolver(this.get('usecase.selection')));
         this.registerFactory('usecase.selection', () => new Selection(this.get('messenger')));
         this.registerFactory('usecase.contextmenu', () => new ContextmenuUsecase(this.get('messenger')));
+        this.registerFactory('usecase.contentRendering', () => new ContentRendering(this.get('messenger')));
         this.registerFactory('contextmenu', () => new Contextmenu());
         this.registerFactory('element.config.storeFactory', () => new ConfigStoreFactory(this.get('blocks.registry'), this.get('structure.store')));
         this.registerFactory('element.data.storeFactory', () => new DataStoreFactory(this.get('blocks.registry'), this.get('structure.store')));
@@ -42,8 +45,9 @@ export default class Container extends AbstractContainer {
         this.register('subscriber.AdminSelectionSubscriber', AdminSelectionSubscriber, ['@selection.store', '@messenger', '@eventBus'], { tags: [{ name: 'event_subscriber' }] });
         this.register('subscriber.AdminStructureSubscriber', AdminStructureSubscriber, ['@structure.store', '@messenger', '@eventBus'], { tags: [{ name: 'event_subscriber' }] });
         this.register('subscriber.ElementConfigSubscriber', ElementConfigSubscriber, ['@messenger', '@element.config.registry', '@eventBus'], { tags: [{ name: 'event_subscriber' }] });
-        this.register('subscriber.ElementDataSubscriber', ElementDataSubscriber, ['@messenger', '@element.data.registry'], { tags: [{ name: 'event_subscriber' }] });
+        this.register('subscriber.ElementDataSubscriber', ElementDataSubscriber, ['@messenger', '@element.data.registry', '@eventBus'], { tags: [{ name: 'event_subscriber' }] });
         this.register('subscriber.EditorSelectionSubscriber', EditorSelectionSubscriber, ['@selection.selectedElementBoundaries', '@selection.hoveredElementBoundaries'], { tags: [{ name: 'event_subscriber' }] });
+        this.register('subscriber.RenderedContentSubscriber', RenderedContentSubscriber, ['@usecase.contentRendering'], { tags: [{ name: 'event_subscriber' }] });
 
         super.finish();
     }

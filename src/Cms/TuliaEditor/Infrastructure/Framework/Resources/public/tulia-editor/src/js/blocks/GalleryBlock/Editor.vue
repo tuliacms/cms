@@ -16,7 +16,8 @@
 
 <script setup>
 import { defineProps, inject, computed } from "vue";
-const ColumnClassnameGenerator = require('./ColumnClassnameGenerator.js').default;
+import ColumnClassnameGenerator from "blocks/GalleryBlock/ColumnClassnameGenerator";
+
 const props = defineProps(['block']);
 const block = inject('instance.blocks').editor(props);
 const extensions = inject('extensions.registry');
@@ -24,7 +25,7 @@ const Image = extensions.editor('Image');
 const Collection = extensions.editor('Collection');
 const Actions = extensions.editor('Collection.Actions');
 
-const images = new Collection(block.data.images, {
+const images = new Collection(block, 'images', {
     file: { id: null, filename: null }
 });
 

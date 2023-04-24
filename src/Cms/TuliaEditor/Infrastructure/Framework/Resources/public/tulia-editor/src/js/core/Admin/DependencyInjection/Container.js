@@ -30,6 +30,9 @@ import Modals from "core/Admin/View/Modals";
 import Blocks from "core/Admin/UseCase/Blocks";
 import CreateBlockSubscriber from "core/Admin/Subscriber/Editor/CreateBlockSubscriber";
 import BreakpointsAwareDataStorageFactory from "core/Admin/Structure/Element/BreakpointsAwareDataStorageFactory";
+import BreakpointsStateCalculatorFactory from "core/Admin/Structure/Element/BreakpointsStateCalculatorFactory";
+import ContentRenderingSubscriber from "core/Admin/Subscriber/Editor/ContentRenderingSubscriber";
+import StructureRenderer from "core/Admin/Structure/StructureRenderer";
 
 export default class Container extends AbstractContainer {
     build() {
@@ -43,7 +46,7 @@ export default class Container extends AbstractContainer {
         this.registerFactory('usecase.selection', () => new Selection(this.get('selection.store'), this.get('messenger'), this.get('eventBus')));
         this.registerFactory('usecase.draggable', () => new Draggable(this.get('usecase.selection'), this.get('structure.store'), this.get('eventBus'), this.get('messenger')));
         this.registerFactory('usecase.contextmenu', () => new Contextmenu(this.get('contextmenu.store'), this.get('usecase.selection')));
-        this.register('usecase.editorWindow', EditorWindow, ['@eventBus', '@view', '@structure', '@assets']);
+        this.register('usecase.editorWindow', EditorWindow, ['@eventBus', '@view', '@structure', '@assets', '@structure.renderer']);
         this.registerFactory('canvas', () => new Canvas(this.getParameter('options'), this.get('eventBus')));
         this.registerFactory('structure.store', () => useStructureStore());
         this.registerFactory('selection.store', () => useSelectionStore());
@@ -54,10 +57,12 @@ export default class Container extends AbstractContainer {
         this.registerFactory('element.data.storeFactory', () => new DataStoreFactory(this.get('blocks.registry'), this.get('structure.store')));
         this.registerFactory('columnSize', () => new ColumnSize());
         this.register('structure', Structure, ['@structure.store', '@element.config.registry', '@element.data.registry', '@messenger', '%options']);
+        this.register('structure.renderer', StructureRenderer);
         this.register('assets', Assets);
         this.register('blocks.picker', BlocksPicker, ['@usecase.blocks', '@modals']);
         this.register('modals', Modals);
         this.register('breakpointsAwareDataStorageFactory', BreakpointsAwareDataStorageFactory, ['%options', '@eventBus']);
+        this.register('breakpointsStateCalculatorFactory', BreakpointsStateCalculatorFactory, ['%options', '@eventBus']);
 
         // Subscribers
         this.register('subscriber.BuildVueOnHtmlReady', BuildVueOnHtmlReady, ['@vueFactory', '%options', '%instanceId', '%options.directives', '%options.controls', '%options.extensions', '%options.blocks', this], { tags: [{ name: 'event_subscriber' }] });
@@ -68,6 +73,7 @@ export default class Container extends AbstractContainer {
         this.register('subscriber.ElementDataSubscriber', ElementDataSubscriber, ['@messenger', '@element.data.registry'], { tags: [{ name: 'event_subscriber' }] });
         this.register('subscriber.EditorWindowSubscriber', EditorWindowSubscriber, ['@usecase.editorWindow'], { tags: [{ name: 'event_subscriber' }] });
         this.register('subscriber.CreateBlockSubscriber', CreateBlockSubscriber, ['@messenger', '@blocks.picker'], { tags: [{ name: 'event_subscriber' }] });
+        this.register('subscriber.ContentRenderingSubscriber', ContentRenderingSubscriber, ['@messenger', '@structure.renderer'], { tags: [{ name: 'event_subscriber' }] });
 
         super.finish();
     }

@@ -1,9 +1,10 @@
 export default class EditorWindow {
-    constructor(eventBus, view, structure, assets) {
+    constructor(eventBus, view, structure, assets, structureRenderer) {
         this.eventBus = eventBus;
         this.view = view;
         this.structure = structure;
         this.assets = assets;
+        this.structureRenderer = structureRenderer;
     }
 
     open() {
@@ -22,7 +23,7 @@ export default class EditorWindow {
         this.view.close();
         this.eventBus.dispatch('editor.saved', {
             source: this.structure.currentAsNew(),
-            content: '',
+            content: this.structureRenderer.render(),
             assets: this.assets.collectNames(),
         });
     }

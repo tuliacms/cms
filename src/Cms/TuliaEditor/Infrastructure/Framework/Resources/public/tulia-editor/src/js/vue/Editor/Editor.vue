@@ -25,6 +25,7 @@ provide('selection.selectedElementBoundaries', props.container.get('selection.se
 provide('selection.hoveredElementBoundaries', props.container.get('selection.hoveredElementBoundaries'));
 provide('selection.hoveredElementResolver', props.container.get('selection.hoveredElementResolver'));
 provide('usecase.selection', props.container.get('usecase.selection'));
+provide('usecase.contentRendering', props.container.get('usecase.contentRendering'));
 provide('contextmenu', props.container.get('contextmenu'));
 provide('instance.blocks', props.container.get('instantiator.block'));
 provide('instance.columns', props.container.get('instantiator.column'));

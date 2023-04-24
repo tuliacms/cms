@@ -21,7 +21,7 @@ export default class ElementDataStoreRegistry {
 
         switch (type) {
             case 'block':
-                store = this.factory.forBlock(id, {a:1})(); break;
+                store = this.factory.forBlock(id, {})(); break;
             default:
                 return;
         }

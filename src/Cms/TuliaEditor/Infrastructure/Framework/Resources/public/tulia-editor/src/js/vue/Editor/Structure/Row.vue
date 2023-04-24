@@ -28,6 +28,7 @@
 <script setup>
 import { inject, defineProps, defineEmits, computed } from "vue";
 import Column from "editor/Structure/Column.vue";
+import RowClassnameGenerator from "core/Editor/Render/Row/RowClassnameGenerator";
 
 const props = defineProps(['row', 'parent']);
 const emit = defineEmits(['selection-enter', 'selection-leave']);
@@ -38,13 +39,5 @@ const selection = inject('usecase.selection');
 const row = inject('instance.rows').editor(props);
 const section = inject('instance.sections').editor(props.parent);
 
-const rowClassname = computed(() => {
-    let classname = 'tued-structure-row tued-structure-element-selectable row';
-
-    if (section.config.containerWidth === 'full-width-no-padding') {
-        classname += ' g-0';
-    }
-
-    return classname;
-});
+const rowClassname = computed(() => RowClassnameGenerator.generate(row, section, 'tued-structure-row tued-structure-element-selectable'));
 </script>

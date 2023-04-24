@@ -36,7 +36,10 @@ export default class SelectionSubscriber {
 
     registerUpdater() {
         this.interval = setInterval(
-            () => this.selectedElementBoundaries.update(),
+            () => {
+                this.selectedElementBoundaries.update();
+                this.hoveredElementBoundaries.update();
+            },
             120
         );
     }

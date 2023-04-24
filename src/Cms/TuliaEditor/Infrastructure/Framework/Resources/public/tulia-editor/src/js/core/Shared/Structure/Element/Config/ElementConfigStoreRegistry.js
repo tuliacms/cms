@@ -21,11 +21,11 @@ export default class ElementConfigStoreRegistry {
 
         switch (type) {
             case 'section':
-                store = this.factory.forSection(id, {a:1})(); break;
+                store = this.factory.forSection(id, {})(); break;
             case 'column':
-                store = this.factory.forColumn(id, {a:1})(); break;
+                store = this.factory.forColumn(id, {})(); break;
             case 'block':
-                store = this.factory.forBlock(id, {a:1})(); break;
+                store = this.factory.forBlock(id, {})(); break;
             default:
                 return;
         }

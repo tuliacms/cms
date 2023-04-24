@@ -10,7 +10,7 @@ export default class DataSynchronizer {
     }
 
     sync(id, type, store) {
-        watch(store, async (newValue) => {
+        watch(store, (newValue) => {
             const data = {
                 id: id,
                 type: type,

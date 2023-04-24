@@ -1,11 +1,14 @@
 export default class ContainerClassnameGenerator {
     static generate (section) {
-        let classname = 'tued-container';
+        let classname;
 
-        if (section.config.containerWidth === 'full-width') {
-            classname += ' container-fluid';
-        } else if (section.config.containerWidth === 'default') {
-            classname += ' container-xxl';
+        switch (section.config.containerWidth) {
+            case 'full-width':
+                classname = 'container-fluid'; break;
+            case 'full-width-no-padding':
+                classname = ''; break;
+            default:
+                classname = 'container-xxl'; break;
         }
 
         return classname;

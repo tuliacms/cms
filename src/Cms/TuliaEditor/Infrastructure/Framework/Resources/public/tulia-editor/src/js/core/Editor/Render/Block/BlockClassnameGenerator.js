@@ -2,25 +2,23 @@ export default class BlockClassnameGenerator {
     static generate (block) {
         let classlist = [];
 
-        /*if (block.data._internal?.sizing) {
-            for (let type in block.data._internal.sizing) {
-                const prefixType = type.substring(0, 1);
+        for (let type of ['padding', 'margin']) {
+            const prefixType = type.substring(0, 1);
 
-                for (let side in block.data._internal.sizing[type]) {
-                    const prefixSide = side.substring(0, 1);
+            for (let side of ['left', 'top', 'right', 'bottom']) {
+                const prefixSide = side.substring(0, 1);
 
-                    for (let breakpoint in block.data._internal.sizing[type][side]) {
-                        let prefix = `${prefixType}${prefixSide}-`;
+                for (let breakpoint in block.config[type][side]) {
+                    let prefix = `${prefixType}${prefixSide}-`;
 
-                        if (breakpoint !== 'xs') {
-                            prefix += `${breakpoint}-`
-                        }
-
-                        classlist.push(`${prefix}${block.data._internal.sizing[type][side][breakpoint]}`);
+                    if (breakpoint !== 'xs') {
+                        prefix += `${breakpoint}-`
                     }
+
+                    classlist.push(`${prefix}${block.config[type][side][breakpoint]}`);
                 }
             }
-        }*/
+        }
 
         for (let breakpoint in block.config.visibility) {
             let prefix = 'd-';

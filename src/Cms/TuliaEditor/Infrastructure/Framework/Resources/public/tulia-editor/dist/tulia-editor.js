@@ -19856,8 +19856,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "vue");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var blocks_GalleryBlock_ColumnClassnameGenerator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! blocks/GalleryBlock/ColumnClassnameGenerator */ "./src/js/blocks/GalleryBlock/ColumnClassnameGenerator.js");
 const __default__ = { name: 'Block.Gallery.Editor' }
 ;
+
+
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (/*#__PURE__*/Object.assign(__default__, {
   props: ['block'],
@@ -19866,7 +19869,6 @@ const __default__ = { name: 'Block.Gallery.Editor' }
 
 const props = __props
 
-const ColumnClassnameGenerator = (__webpack_require__(/*! ./ColumnClassnameGenerator.js */ "./src/js/blocks/GalleryBlock/ColumnClassnameGenerator.js")["default"]);
 
 const block = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('instance.blocks').editor(props);
 const extensions = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('extensions.registry');
@@ -19874,13 +19876,13 @@ const Image = extensions.editor('Image');
 const Collection = extensions.editor('Collection');
 const Actions = extensions.editor('Collection.Actions');
 
-const images = new Collection(block.data.images, {
+const images = new Collection(block, 'images', {
     file: { id: null, filename: null }
 });
 
-const columnsClassname = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(ColumnClassnameGenerator.computer(block));
+const columnsClassname = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(blocks_GalleryBlock_ColumnClassnameGenerator__WEBPACK_IMPORTED_MODULE_1__["default"].computer(block));
 
-const __returned__ = { ColumnClassnameGenerator, props, block, extensions, Image, Collection, Actions, images, columnsClassname, inject: vue__WEBPACK_IMPORTED_MODULE_0__.inject, computed: vue__WEBPACK_IMPORTED_MODULE_0__.computed }
+const __returned__ = { props, block, extensions, Image, Collection, Actions, images, columnsClassname, inject: vue__WEBPACK_IMPORTED_MODULE_0__.inject, computed: vue__WEBPACK_IMPORTED_MODULE_0__.computed, ColumnClassnameGenerator: blocks_GalleryBlock_ColumnClassnameGenerator__WEBPACK_IMPORTED_MODULE_1__["default"] }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -22357,6 +22359,7 @@ messenger.receive('extension.unmount', (data) => {
 (0,vue__WEBPACK_IMPORTED_MODULE_3__.provide)('assets', props.container.get('assets'));
 (0,vue__WEBPACK_IMPORTED_MODULE_3__.provide)('blocks.picker', props.container.get('blocks.picker'));
 (0,vue__WEBPACK_IMPORTED_MODULE_3__.provide)('breakpointsAwareDataStorageFactory', props.container.get('breakpointsAwareDataStorageFactory'));
+(0,vue__WEBPACK_IMPORTED_MODULE_3__.provide)('breakpointsStateCalculatorFactory', props.container.get('breakpointsStateCalculatorFactory'));
 
 const __returned__ = { props, contextmenu, contextmenuStore, canvas, contextmenuItemIcon, contextmenuItemClass, cancelEditor, saveEditor, messenger, mountedExtensions, Sidebar: admin_Sidebar_Sidebar_vue__WEBPACK_IMPORTED_MODULE_0__["default"], Canvas: admin_Canvas_Canvas_vue__WEBPACK_IMPORTED_MODULE_1__["default"], BlockPickerModal: admin_Block_BlockPickerModal_vue__WEBPACK_IMPORTED_MODULE_2__["default"], provide: vue__WEBPACK_IMPORTED_MODULE_3__.provide, onMounted: vue__WEBPACK_IMPORTED_MODULE_3__.onMounted, ref: vue__WEBPACK_IMPORTED_MODULE_3__.ref, reactive: vue__WEBPACK_IMPORTED_MODULE_3__.reactive }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
@@ -23184,8 +23187,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var admin_Sidebar_Selected_Parts_Block_Visibility_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! admin/Sidebar/Selected/Parts/Block/Visibility.vue */ "./src/js/vue/Admin/Sidebar/Selected/Parts/Block/Visibility.vue");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "vue");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var admin_Sidebar_Selected_Parts_Block_DesignOptions_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! admin/Sidebar/Selected/Parts/Block/DesignOptions.vue */ "./src/js/vue/Admin/Sidebar/Selected/Parts/Block/DesignOptions.vue");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "vue");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_2__);
+
 
 
 
@@ -23197,11 +23202,10 @@ __webpack_require__.r(__webpack_exports__);
 
 const props = __props
 
-/*const DesignOptions = require('components/Admin/Sidebar/Selected/Parts/Block/DesignOptions.vue').default;*/
 
-const block = (0,vue__WEBPACK_IMPORTED_MODULE_1__.inject)('instance.blocks').manager(props);
+const block = (0,vue__WEBPACK_IMPORTED_MODULE_2__.inject)('instance.blocks').manager(props);
 
-const __returned__ = { props, block, Visibility: admin_Sidebar_Selected_Parts_Block_Visibility_vue__WEBPACK_IMPORTED_MODULE_0__["default"], inject: vue__WEBPACK_IMPORTED_MODULE_1__.inject }
+const __returned__ = { props, block, Visibility: admin_Sidebar_Selected_Parts_Block_Visibility_vue__WEBPACK_IMPORTED_MODULE_0__["default"], DesignOptions: admin_Sidebar_Selected_Parts_Block_DesignOptions_vue__WEBPACK_IMPORTED_MODULE_1__["default"], inject: vue__WEBPACK_IMPORTED_MODULE_2__.inject }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -23277,6 +23281,101 @@ return __returned__
 
 /***/ }),
 
+/***/ "./src/js/vue/Admin/Sidebar/Selected/Parts/Block/DesignOptions.vue":
+/*!*************************************************************************!*\
+  !*** ./src/js/vue/Admin/Sidebar/Selected/Parts/Block/DesignOptions.vue ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _DesignOptions_vue_vue_type_template_id_66449558__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DesignOptions.vue?vue&type=template&id=66449558 */ "./src/js/vue/Admin/Sidebar/Selected/Parts/Block/DesignOptions.vue?vue&type=template&id=66449558");
+/* harmony import */ var _DesignOptions_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DesignOptions.vue?vue&type=script&setup=true&lang=js */ "./src/js/vue/Admin/Sidebar/Selected/Parts/Block/DesignOptions.vue?vue&type=script&setup=true&lang=js");
+/* harmony import */ var _home_adam_projects_tuliacms_development_tuliacms_core_src_Cms_TuliaEditor_Infrastructure_Framework_Resources_public_tulia_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+
+
+
+
+;
+const __exports__ = /*#__PURE__*/(0,_home_adam_projects_tuliacms_development_tuliacms_core_src_Cms_TuliaEditor_Infrastructure_Framework_Resources_public_tulia_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_DesignOptions_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_DesignOptions_vue_vue_type_template_id_66449558__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"src/js/vue/Admin/Sidebar/Selected/Parts/Block/DesignOptions.vue"]])
+/* hot reload */
+if (false) {}
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__exports__);
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Admin/Sidebar/Selected/Parts/Block/DesignOptions.vue?vue&type=script&setup=true&lang=js":
+/*!********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Admin/Sidebar/Selected/Parts/Block/DesignOptions.vue?vue&type=script&setup=true&lang=js ***!
+  \********************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "vue");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: ['block'],
+  setup(__props, { expose }) {
+  expose();
+
+const props = __props
+
+
+const options = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('options');
+const translator = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('translator');
+const controls = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('controls.registry');
+const Select = controls.manager('Select');
+const storageFactory = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('breakpointsAwareDataStorageFactory');
+
+const storage = {
+    margin: {
+        left: storageFactory.ref(props.block.config.margin.left),
+        top: storageFactory.ref(props.block.config.margin.top),
+        right: storageFactory.ref(props.block.config.margin.right),
+        bottom: storageFactory.ref(props.block.config.margin.bottom),
+    },
+    padding: {
+        left: storageFactory.ref(props.block.config.padding.left),
+        top: storageFactory.ref(props.block.config.padding.top),
+        right: storageFactory.ref(props.block.config.padding.right),
+        bottom: storageFactory.ref(props.block.config.padding.bottom),
+    },
+};
+
+const activeTab = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)('margin');
+const choices = (0,vue__WEBPACK_IMPORTED_MODULE_0__.reactive)({
+    '': translator.trans('inheritValue'),
+});
+
+const createChoices = () => {
+    for (let i = 0; i <= options.elements.style.spacers.max; i++) {
+        choices[i] = i;
+    }
+};
+
+(0,vue__WEBPACK_IMPORTED_MODULE_0__.onMounted)(() => createChoices());
+
+const __returned__ = { props, options, translator, controls, Select, storageFactory, storage, activeTab, choices, createChoices, inject: vue__WEBPACK_IMPORTED_MODULE_0__.inject, ref: vue__WEBPACK_IMPORTED_MODULE_0__.ref, reactive: vue__WEBPACK_IMPORTED_MODULE_0__.reactive, onMounted: vue__WEBPACK_IMPORTED_MODULE_0__.onMounted }
+Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
+return __returned__
+}
+
+});
+
+/***/ }),
+
 /***/ "./src/js/vue/Admin/Sidebar/Selected/Parts/Block/Visibility.vue":
 /*!**********************************************************************!*\
   !*** ./src/js/vue/Admin/Sidebar/Selected/Parts/Block/Visibility.vue ***!
@@ -23318,10 +23417,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "vue");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+const __default__ = {
+    name: 'Admin.Sidebar.Selected.Part.Block.Visibility',
+}
+;
 
 
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (/*#__PURE__*/Object.assign(__default__, {
   props: ['block'],
   setup(__props, { expose }) {
   expose();
@@ -23330,27 +23432,26 @@ const props = __props
 
 
 const translator = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('translator');
-//const stateCalculator = inject('stateCalculator');
 const controls = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('controls.registry');
 const Switch = controls.manager('Switch.YesNo');
 
 const storage = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('breakpointsAwareDataStorageFactory').ref(props.block.config.visibility);
+const stateCalculator = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('breakpointsStateCalculatorFactory').fromStorage(storage);
 
 const calculatedVisibilityLabel = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-    return storage.data.value;
-    /*if (stateCalculator.calculateState(block, '_internal.visibility') === '0') {
+    if (stateCalculator.calculateState() === '0') {
         return translator.trans('calculatedVisibilityInvisible');
     } else {
         return translator.trans('calculatedVisibilityVisible');
-    }*/
+    }
 });
 
-const __returned__ = { props, translator, controls, Switch, storage, calculatedVisibilityLabel, inject: vue__WEBPACK_IMPORTED_MODULE_0__.inject, computed: vue__WEBPACK_IMPORTED_MODULE_0__.computed }
+const __returned__ = { props, translator, controls, Switch, storage, stateCalculator, calculatedVisibilityLabel, inject: vue__WEBPACK_IMPORTED_MODULE_0__.inject, computed: vue__WEBPACK_IMPORTED_MODULE_0__.computed }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
 
-});
+}));
 
 /***/ }),
 
@@ -23770,6 +23871,7 @@ const structure = props.container.get('structure.store');
 (0,vue__WEBPACK_IMPORTED_MODULE_2__.provide)('selection.hoveredElementBoundaries', props.container.get('selection.hoveredElementBoundaries'));
 (0,vue__WEBPACK_IMPORTED_MODULE_2__.provide)('selection.hoveredElementResolver', props.container.get('selection.hoveredElementResolver'));
 (0,vue__WEBPACK_IMPORTED_MODULE_2__.provide)('usecase.selection', props.container.get('usecase.selection'));
+(0,vue__WEBPACK_IMPORTED_MODULE_2__.provide)('usecase.contentRendering', props.container.get('usecase.contentRendering'));
 (0,vue__WEBPACK_IMPORTED_MODULE_2__.provide)('contextmenu', props.container.get('contextmenu'));
 (0,vue__WEBPACK_IMPORTED_MODULE_2__.provide)('instance.blocks', props.container.get('instantiator.block'));
 (0,vue__WEBPACK_IMPORTED_MODULE_2__.provide)('instance.columns', props.container.get('instantiator.column'));
@@ -23856,9 +23958,13 @@ const messenger = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('messenger');
 const structureStore = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('structure.store');
 const sectionsInstance = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('instance.sections');
 const rowsInstance = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('instance.rows');
-const columnsInstance = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('instance.columns');
+const columnsInstance = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('instance.columns')
 const blocksInstance = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('instance.blocks');
 const registry = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('blocks.registry');
+
+const renderedContent = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(null);
+
+(0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('usecase.contentRendering').setNodeReference(renderedContent);
 
 const blockClass = (block) => core_Editor_Render_Block_BlockClassnameGenerator__WEBPACK_IMPORTED_MODULE_2__["default"].generate(block);
 const columnClass = (column) => core_Editor_Render_Column_ColumnClassnameGenerator__WEBPACK_IMPORTED_MODULE_1__["default"].generate(column, ['tued-column']);
@@ -23904,7 +24010,7 @@ const structure = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
     return structure;
 });
 
-const __returned__ = { messenger, structureStore, sectionsInstance, rowsInstance, columnsInstance, blocksInstance, registry, blockClass, columnClass, rowClass, containerClass, structure, computed: vue__WEBPACK_IMPORTED_MODULE_0__.computed, inject: vue__WEBPACK_IMPORTED_MODULE_0__.inject, ColumnClassnameGenerator: core_Editor_Render_Column_ColumnClassnameGenerator__WEBPACK_IMPORTED_MODULE_1__["default"], BlockClassnameGenerator: core_Editor_Render_Block_BlockClassnameGenerator__WEBPACK_IMPORTED_MODULE_2__["default"], RowClassnameGenerator: core_Editor_Render_Row_RowClassnameGenerator__WEBPACK_IMPORTED_MODULE_3__["default"], ContainerClassnameGenerator: core_Editor_Render_Section_ContainerClassnameGenerator__WEBPACK_IMPORTED_MODULE_4__["default"] }
+const __returned__ = { messenger, structureStore, sectionsInstance, rowsInstance, columnsInstance, blocksInstance, registry, renderedContent, blockClass, columnClass, rowClass, containerClass, structure, computed: vue__WEBPACK_IMPORTED_MODULE_0__.computed, inject: vue__WEBPACK_IMPORTED_MODULE_0__.inject, ref: vue__WEBPACK_IMPORTED_MODULE_0__.ref, ColumnClassnameGenerator: core_Editor_Render_Column_ColumnClassnameGenerator__WEBPACK_IMPORTED_MODULE_1__["default"], BlockClassnameGenerator: core_Editor_Render_Block_BlockClassnameGenerator__WEBPACK_IMPORTED_MODULE_2__["default"], RowClassnameGenerator: core_Editor_Render_Row_RowClassnameGenerator__WEBPACK_IMPORTED_MODULE_3__["default"], ContainerClassnameGenerator: core_Editor_Render_Section_ContainerClassnameGenerator__WEBPACK_IMPORTED_MODULE_4__["default"] }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -23952,8 +24058,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "vue");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_Editor_Render_Block_BlockClassnameGenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core/Editor/Render/Block/BlockClassnameGenerator */ "./src/js/core/Editor/Render/Block/BlockClassnameGenerator.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "vue");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_1__);
+
 
 
 
@@ -23967,15 +24075,16 @@ const props = __props
 
 
 
-const structure = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('structure.store');
-const contextmenu = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('contextmenu');
-const translator = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('translator');
-const selection = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('usecase.selection');
-const registry = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('blocks.registry');
+const structure = (0,vue__WEBPACK_IMPORTED_MODULE_1__.inject)('structure.store');
+const contextmenu = (0,vue__WEBPACK_IMPORTED_MODULE_1__.inject)('contextmenu');
+const translator = (0,vue__WEBPACK_IMPORTED_MODULE_1__.inject)('translator');
+const selection = (0,vue__WEBPACK_IMPORTED_MODULE_1__.inject)('usecase.selection');
+const registry = (0,vue__WEBPACK_IMPORTED_MODULE_1__.inject)('blocks.registry');
 
-const block = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('instance.blocks').editor(props);
+const block = (0,vue__WEBPACK_IMPORTED_MODULE_1__.inject)('instance.blocks').editor(props);
+const blockClass = (block) => core_Editor_Render_Block_BlockClassnameGenerator__WEBPACK_IMPORTED_MODULE_0__["default"].generate(block);
 
-const __returned__ = { props, emit, structure, contextmenu, translator, selection, registry, block, inject: vue__WEBPACK_IMPORTED_MODULE_0__.inject }
+const __returned__ = { props, emit, structure, contextmenu, translator, selection, registry, block, blockClass, BlockClassnameGenerator: core_Editor_Render_Block_BlockClassnameGenerator__WEBPACK_IMPORTED_MODULE_0__["default"], inject: vue__WEBPACK_IMPORTED_MODULE_1__.inject }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -24101,6 +24210,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "vue");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var editor_Structure_Column_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! editor/Structure/Column.vue */ "./src/js/vue/Editor/Structure/Column.vue");
+/* harmony import */ var core_Editor_Render_Row_RowClassnameGenerator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core/Editor/Render/Row/RowClassnameGenerator */ "./src/js/core/Editor/Render/Row/RowClassnameGenerator.js");
+
 
 
 
@@ -24122,17 +24233,9 @@ const selection = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('usecase.selection
 const row = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('instance.rows').editor(props);
 const section = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('instance.sections').editor(props.parent);
 
-const rowClassname = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-    let classname = 'tued-structure-row tued-structure-element-selectable row';
+const rowClassname = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => core_Editor_Render_Row_RowClassnameGenerator__WEBPACK_IMPORTED_MODULE_2__["default"].generate(row, section, 'tued-structure-row tued-structure-element-selectable'));
 
-    if (section.config.containerWidth === 'full-width-no-padding') {
-        classname += ' g-0';
-    }
-
-    return classname;
-});
-
-const __returned__ = { props, emit, structure, contextmenu, translator, selection, row, section, rowClassname, inject: vue__WEBPACK_IMPORTED_MODULE_0__.inject, computed: vue__WEBPACK_IMPORTED_MODULE_0__.computed, Column: editor_Structure_Column_vue__WEBPACK_IMPORTED_MODULE_1__["default"] }
+const __returned__ = { props, emit, structure, contextmenu, translator, selection, row, section, rowClassname, inject: vue__WEBPACK_IMPORTED_MODULE_0__.inject, computed: vue__WEBPACK_IMPORTED_MODULE_0__.computed, Column: editor_Structure_Column_vue__WEBPACK_IMPORTED_MODULE_1__["default"], RowClassnameGenerator: core_Editor_Render_Row_RowClassnameGenerator__WEBPACK_IMPORTED_MODULE_2__["default"] }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -24183,6 +24286,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "vue");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var editor_Structure_Row_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! editor/Structure/Row.vue */ "./src/js/vue/Editor/Structure/Row.vue");
+/* harmony import */ var core_Editor_Render_Section_ContainerClassnameGenerator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core/Editor/Render/Section/ContainerClassnameGenerator */ "./src/js/core/Editor/Render/Section/ContainerClassnameGenerator.js");
+
 
 
 
@@ -24203,15 +24308,9 @@ const contextmenu = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('contextmenu');
 const structure = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('structure.store');
 const section = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)('instance.sections').editor(props);
 
-const containerClassname = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-    switch (section.config.containerWidth) {
-        case 'full-width': return 'container-fluid';
-        case 'full-width-no-padding': return '';
-        default: return 'container-xxl';
-    }
-});
+const containerClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => core_Editor_Render_Section_ContainerClassnameGenerator__WEBPACK_IMPORTED_MODULE_2__["default"].generate(section));
 
-const __returned__ = { props, emit, translator, selection, contextmenu, structure, section, containerClassname, inject: vue__WEBPACK_IMPORTED_MODULE_0__.inject, computed: vue__WEBPACK_IMPORTED_MODULE_0__.computed, Row: editor_Structure_Row_vue__WEBPACK_IMPORTED_MODULE_1__["default"] }
+const __returned__ = { props, emit, translator, selection, contextmenu, structure, section, containerClass, inject: vue__WEBPACK_IMPORTED_MODULE_0__.inject, computed: vue__WEBPACK_IMPORTED_MODULE_0__.computed, Row: editor_Structure_Row_vue__WEBPACK_IMPORTED_MODULE_1__["default"], ContainerClassnameGenerator: core_Editor_Render_Section_ContainerClassnameGenerator__WEBPACK_IMPORTED_MODULE_2__["default"] }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -25613,6 +25712,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/js/vue/Admin/Sidebar/Selected/Parts/Block/DesignOptions.vue?vue&type=script&setup=true&lang=js":
+/*!************************************************************************************************************!*\
+  !*** ./src/js/vue/Admin/Sidebar/Selected/Parts/Block/DesignOptions.vue?vue&type=script&setup=true&lang=js ***!
+  \************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_DesignOptions_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_DesignOptions_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./DesignOptions.vue?vue&type=script&setup=true&lang=js */ "./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Admin/Sidebar/Selected/Parts/Block/DesignOptions.vue?vue&type=script&setup=true&lang=js");
+ 
+
+/***/ }),
+
 /***/ "./src/js/vue/Admin/Sidebar/Selected/Parts/Block/Visibility.vue?vue&type=script&setup=true&lang=js":
 /*!*********************************************************************************************************!*\
   !*** ./src/js/vue/Admin/Sidebar/Selected/Parts/Block/Visibility.vue?vue&type=script&setup=true&lang=js ***!
@@ -26537,6 +26652,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Column_vue_vue_type_template_id_7ce2863e__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_Column_vue_vue_type_template_id_7ce2863e__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!../../../../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./Column.vue?vue&type=template&id=7ce2863e */ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Admin/Sidebar/Selected/Column.vue?vue&type=template&id=7ce2863e");
+
+
+/***/ }),
+
+/***/ "./src/js/vue/Admin/Sidebar/Selected/Parts/Block/DesignOptions.vue?vue&type=template&id=66449558":
+/*!*******************************************************************************************************!*\
+  !*** ./src/js/vue/Admin/Sidebar/Selected/Parts/Block/DesignOptions.vue?vue&type=template&id=66449558 ***!
+  \*******************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_DesignOptions_vue_vue_type_template_id_66449558__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_1_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_4_use_0_DesignOptions_vue_vue_type_template_id_66449558__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!../../../../../../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./DesignOptions.vue?vue&type=template&id=66449558 */ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Admin/Sidebar/Selected/Parts/Block/DesignOptions.vue?vue&type=template&id=66449558");
 
 
 /***/ }),
@@ -28620,9 +28751,9 @@ __webpack_require__.r(__webpack_exports__);
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("    <DesignOptions :block=\"props.block\"></DesignOptions>"),
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["DesignOptions"], { block: $setup.block }, null, 8 /* PROPS */, ["block"]),
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Visibility"], { block: $setup.block }, null, 8 /* PROPS */, ["block"])
-  ], 2112 /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */))
+  ], 64 /* STABLE_FRAGMENT */))
 }
 
 /***/ }),
@@ -28649,6 +28780,128 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     _hoisted_1,
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("    <Alignment :column=\"props.column\"></Alignment>")
   ], 2112 /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */))
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Admin/Sidebar/Selected/Parts/Block/DesignOptions.vue?vue&type=template&id=66449558":
+/*!*************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[1]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/js/vue/Admin/Sidebar/Selected/Parts/Block/DesignOptions.vue?vue&type=template&id=66449558 ***!
+  \*************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "vue");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+
+
+const _hoisted_1 = { class: "nav nav-tabs nav-justified mb-0" }
+const _hoisted_2 = { class: "nav-item" }
+const _hoisted_3 = { class: "nav-item" }
+const _hoisted_4 = {
+  class: "tab-content px-2 py-3 mb-3",
+  style: {"border":"1px solid #dee2e6","border-top":"none"}
+}
+const _hoisted_5 = { class: "tued-sizing-whirl" }
+const _hoisted_6 = { class: "tued-sizing-whirl" }
+
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", _hoisted_1, [
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", _hoisted_2, [
+        (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+          class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({'nav-link': 1, 'active': $setup.activeTab === 'margin'}),
+          href: "#",
+          onClick: _cache[0] || (_cache[0] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($setup.activeTab = 'margin'), ["stop"]))
+        }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translator.trans('margin')), 3 /* TEXT, CLASS */)
+      ]),
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", _hoisted_3, [
+        (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+          class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({'nav-link': 1, 'active': $setup.activeTab === 'padding'}),
+          href: "#",
+          onClick: _cache[1] || (_cache[1] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($event => ($setup.activeTab = 'padding'), ["stop"]))
+        }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.translator.trans('padding')), 3 /* TEXT, CLASS */)
+      ])
+    ]),
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+        class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({'tab-pane fade': 1, 'show active': $setup.activeTab === 'margin'}),
+        role: "tabpanel",
+        tabindex: "0"
+      }, [
+        (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Select"], {
+            class: "tued-control-position--bottom",
+            modelValue: $setup.storage.margin.bottom.data.value,
+            "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => (($setup.storage.margin.bottom.data.value) = $event)),
+            label: $setup.translator.trans('bottom'),
+            choices: $setup.choices
+          }, null, 8 /* PROPS */, ["modelValue", "label", "choices"]),
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Select"], {
+            class: "tued-control-position--left",
+            modelValue: $setup.storage.margin.left.data.value,
+            "onUpdate:modelValue": _cache[3] || (_cache[3] = $event => (($setup.storage.margin.left.data.value) = $event)),
+            label: $setup.translator.trans('left'),
+            choices: $setup.choices
+          }, null, 8 /* PROPS */, ["modelValue", "label", "choices"]),
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Select"], {
+            class: "tued-control-position--right",
+            modelValue: $setup.storage.margin.right.data.value,
+            "onUpdate:modelValue": _cache[4] || (_cache[4] = $event => (($setup.storage.margin.right.data.value) = $event)),
+            label: $setup.translator.trans('right'),
+            choices: $setup.choices
+          }, null, 8 /* PROPS */, ["modelValue", "label", "choices"]),
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Select"], {
+            class: "tued-control-position--top",
+            modelValue: $setup.storage.margin.top.data.value,
+            "onUpdate:modelValue": _cache[5] || (_cache[5] = $event => (($setup.storage.margin.top.data.value) = $event)),
+            label: $setup.translator.trans('top'),
+            choices: $setup.choices
+          }, null, 8 /* PROPS */, ["modelValue", "label", "choices"])
+        ])
+      ], 2 /* CLASS */),
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+        class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({'tab-pane fade': 1, 'show active': $setup.activeTab === 'padding'}),
+        role: "tabpanel",
+        tabindex: "0"
+      }, [
+        (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Select"], {
+            class: "tued-control-position--bottom",
+            modelValue: $setup.storage.padding.bottom.data.value,
+            "onUpdate:modelValue": _cache[6] || (_cache[6] = $event => (($setup.storage.padding.bottom.data.value) = $event)),
+            label: $setup.translator.trans('bottom'),
+            choices: $setup.choices
+          }, null, 8 /* PROPS */, ["modelValue", "label", "choices"]),
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Select"], {
+            class: "tued-control-position--left",
+            modelValue: $setup.storage.padding.left.data.value,
+            "onUpdate:modelValue": _cache[7] || (_cache[7] = $event => (($setup.storage.padding.left.data.value) = $event)),
+            label: $setup.translator.trans('left'),
+            choices: $setup.choices
+          }, null, 8 /* PROPS */, ["modelValue", "label", "choices"]),
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Select"], {
+            class: "tued-control-position--right",
+            modelValue: $setup.storage.padding.right.data.value,
+            "onUpdate:modelValue": _cache[8] || (_cache[8] = $event => (($setup.storage.padding.right.data.value) = $event)),
+            label: $setup.translator.trans('right'),
+            choices: $setup.choices
+          }, null, 8 /* PROPS */, ["modelValue", "label", "choices"]),
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Select"], {
+            class: "tued-control-position--top",
+            modelValue: $setup.storage.padding.top.data.value,
+            "onUpdate:modelValue": _cache[9] || (_cache[9] = $event => (($setup.storage.padding.top.data.value) = $event)),
+            label: $setup.translator.trans('top'),
+            choices: $setup.choices
+          }, null, 8 /* PROPS */, ["modelValue", "label", "choices"])
+        ])
+      ], 2 /* CLASS */)
+    ])
+  ], 64 /* STABLE_FRAGMENT */))
 }
 
 /***/ }),
@@ -29010,7 +29263,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const _hoisted_1 = {
-  class: /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({ 'tued-rendering-canvas': true })
+  class: /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({ 'tued-rendering-canvas': true }),
+  ref: "renderedContent"
 }
 const _hoisted_2 = ["id"]
 const _hoisted_3 = ["id"]
@@ -29062,7 +29316,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ], 2 /* CLASS */)
       ], 8 /* PROPS */, _hoisted_2))
     }), 128 /* KEYED_FRAGMENT */))
-  ]))
+  ], 512 /* NEED_PATCH */))
 }
 
 /***/ }),
@@ -29094,7 +29348,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "data-tagname": "Block",
     "tued-contextmenu": $setup.contextmenu.register($setup.block.id, 'block')
   }, [
-    ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)((0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveDynamicComponent)($setup.registry.getComponentName($setup.block.details.code, 'editor')), { block: $setup.block }, null, 8 /* PROPS */, ["block"]))
+    ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)((0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveDynamicComponent)($setup.registry.getComponentName($setup.block.details.code, 'editor')), {
+      block: $setup.block,
+      class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($setup.blockClass($setup.block))
+    }, null, 8 /* PROPS */, ["block", "class"]))
   ], 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_1))
 }
 
@@ -29232,7 +29489,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "tued-contextmenu": $setup.contextmenu.register($setup.section.id, 'section')
   }, [
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-      class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($setup.containerClassname)
+      class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($setup.containerClass)
     }, [
       ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.structure.rowsOf($setup.section.id), (row) => {
         return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)($setup["Row"], {
@@ -32043,6 +32300,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_Admin_UseCase_Blocks__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! core/Admin/UseCase/Blocks */ "./src/js/core/Admin/UseCase/Blocks.js");
 /* harmony import */ var core_Admin_Subscriber_Editor_CreateBlockSubscriber__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! core/Admin/Subscriber/Editor/CreateBlockSubscriber */ "./src/js/core/Admin/Subscriber/Editor/CreateBlockSubscriber.js");
 /* harmony import */ var core_Admin_Structure_Element_BreakpointsAwareDataStorageFactory__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! core/Admin/Structure/Element/BreakpointsAwareDataStorageFactory */ "./src/js/core/Admin/Structure/Element/BreakpointsAwareDataStorageFactory.js");
+/* harmony import */ var core_Admin_Structure_Element_BreakpointsStateCalculatorFactory__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! core/Admin/Structure/Element/BreakpointsStateCalculatorFactory */ "./src/js/core/Admin/Structure/Element/BreakpointsStateCalculatorFactory.js");
+/* harmony import */ var core_Admin_Subscriber_Editor_ContentRenderingSubscriber__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! core/Admin/Subscriber/Editor/ContentRenderingSubscriber */ "./src/js/core/Admin/Subscriber/Editor/ContentRenderingSubscriber.js");
+/* harmony import */ var core_Admin_Structure_StructureRenderer__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! core/Admin/Structure/StructureRenderer */ "./src/js/core/Admin/Structure/StructureRenderer.js");
+
+
+
 
 
 
@@ -32088,7 +32351,7 @@ class Container extends core_Shared_DependencyInjection_AbstractContainer__WEBPA
         this.registerFactory('usecase.selection', () => new core_Admin_UseCase_Selection__WEBPACK_IMPORTED_MODULE_4__["default"](this.get('selection.store'), this.get('messenger'), this.get('eventBus')));
         this.registerFactory('usecase.draggable', () => new core_Admin_UseCase_Draggable__WEBPACK_IMPORTED_MODULE_13__["default"](this.get('usecase.selection'), this.get('structure.store'), this.get('eventBus'), this.get('messenger')));
         this.registerFactory('usecase.contextmenu', () => new core_Admin_UseCase_Contextmenu__WEBPACK_IMPORTED_MODULE_10__["default"](this.get('contextmenu.store'), this.get('usecase.selection')));
-        this.register('usecase.editorWindow', core_Admin_UseCase_EditorWindow__WEBPACK_IMPORTED_MODULE_22__["default"], ['@eventBus', '@view', '@structure', '@assets']);
+        this.register('usecase.editorWindow', core_Admin_UseCase_EditorWindow__WEBPACK_IMPORTED_MODULE_22__["default"], ['@eventBus', '@view', '@structure', '@assets', '@structure.renderer']);
         this.registerFactory('canvas', () => new core_Admin_View_Canvas__WEBPACK_IMPORTED_MODULE_8__["default"](this.getParameter('options'), this.get('eventBus')));
         this.registerFactory('structure.store', () => (0,core_Admin_Data_Store_Structure__WEBPACK_IMPORTED_MODULE_7__.useStructureStore)());
         this.registerFactory('selection.store', () => (0,core_Admin_Data_Store_Selection__WEBPACK_IMPORTED_MODULE_5__.useSelectionStore)());
@@ -32099,10 +32362,12 @@ class Container extends core_Shared_DependencyInjection_AbstractContainer__WEBPA
         this.registerFactory('element.data.storeFactory', () => new core_Admin_Data_Store_DataStoreFactory__WEBPACK_IMPORTED_MODULE_20__["default"](this.get('blocks.registry'), this.get('structure.store')));
         this.registerFactory('columnSize', () => new core_Admin_Structure_Element_ColumnSize__WEBPACK_IMPORTED_MODULE_19__["default"]());
         this.register('structure', core_Admin_Structure_Structure__WEBPACK_IMPORTED_MODULE_24__["default"], ['@structure.store', '@element.config.registry', '@element.data.registry', '@messenger', '%options']);
+        this.register('structure.renderer', core_Admin_Structure_StructureRenderer__WEBPACK_IMPORTED_MODULE_34__["default"]);
         this.register('assets', core_Admin_Assets__WEBPACK_IMPORTED_MODULE_26__["default"]);
         this.register('blocks.picker', core_Admin_Structure_Blocks_BlocksPicker__WEBPACK_IMPORTED_MODULE_27__["default"], ['@usecase.blocks', '@modals']);
         this.register('modals', core_Admin_View_Modals__WEBPACK_IMPORTED_MODULE_28__["default"]);
         this.register('breakpointsAwareDataStorageFactory', core_Admin_Structure_Element_BreakpointsAwareDataStorageFactory__WEBPACK_IMPORTED_MODULE_31__["default"], ['%options', '@eventBus']);
+        this.register('breakpointsStateCalculatorFactory', core_Admin_Structure_Element_BreakpointsStateCalculatorFactory__WEBPACK_IMPORTED_MODULE_32__["default"], ['%options', '@eventBus']);
 
         // Subscribers
         this.register('subscriber.BuildVueOnHtmlReady', core_Admin_View_Subscriber_BuildVueOnHtmlReady__WEBPACK_IMPORTED_MODULE_2__["default"], ['@vueFactory', '%options', '%instanceId', '%options.directives', '%options.controls', '%options.extensions', '%options.blocks', this], { tags: [{ name: 'event_subscriber' }] });
@@ -32113,6 +32378,7 @@ class Container extends core_Shared_DependencyInjection_AbstractContainer__WEBPA
         this.register('subscriber.ElementDataSubscriber', core_Admin_Subscriber_Editor_ElementDataSubscriber__WEBPACK_IMPORTED_MODULE_21__["default"], ['@messenger', '@element.data.registry'], { tags: [{ name: 'event_subscriber' }] });
         this.register('subscriber.EditorWindowSubscriber', core_Admin_Subscriber_Admin_EditorWindowSubscriber__WEBPACK_IMPORTED_MODULE_25__["default"], ['@usecase.editorWindow'], { tags: [{ name: 'event_subscriber' }] });
         this.register('subscriber.CreateBlockSubscriber', core_Admin_Subscriber_Editor_CreateBlockSubscriber__WEBPACK_IMPORTED_MODULE_30__["default"], ['@messenger', '@blocks.picker'], { tags: [{ name: 'event_subscriber' }] });
+        this.register('subscriber.ContentRenderingSubscriber', core_Admin_Subscriber_Editor_ContentRenderingSubscriber__WEBPACK_IMPORTED_MODULE_33__["default"], ['@messenger', '@structure.renderer'], { tags: [{ name: 'event_subscriber' }] });
 
         super.finish();
     }
@@ -32304,6 +32570,10 @@ class SingularBreakpointsAwareDataStorage {
         });
     }
 
+    get source () {
+        return this.reactiveData;
+    }
+
     get data () {
         return createProxy(this.reactiveData, this.breakpoint);
     }
@@ -32329,6 +32599,62 @@ class BreakpointsAwareDataStorageFactory {
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (BreakpointsAwareDataStorageFactory);
+
+
+/***/ }),
+
+/***/ "./src/js/core/Admin/Structure/Element/BreakpointsStateCalculatorFactory.js":
+/*!**********************************************************************************!*\
+  !*** ./src/js/core/Admin/Structure/Element/BreakpointsStateCalculatorFactory.js ***!
+  \**********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ BreakpointsStateCalculatorFactory)
+/* harmony export */ });
+class StateCalculator {
+    constructor(data, breakpoints, breakpointNameGetter) {
+        this.data = data;
+        this.breakpoints = breakpoints;
+        this.breakpointNameGetter = breakpointNameGetter;
+    }
+
+    calculateState() {
+        let calculatedValue = null;
+        let breakpoint = this.breakpointNameGetter();
+        let breakpointReached = false;
+
+        for (let i = 0; i < this.breakpoints.length; i++) {
+            if (this.breakpoints[i].name === breakpoint) {
+                breakpointReached = true;
+            }
+
+            if (breakpointReached && this.data[this.breakpoints[i].name]) {
+                calculatedValue = this.data[this.breakpoints[i].name];
+                break;
+            }
+        }
+
+        return calculatedValue;
+    }
+}
+
+class BreakpointsStateCalculatorFactory {
+    constructor (options, eventBus) {
+        this.breakpoints = options.canvas.size.breakpoints;
+        this.eventBus = eventBus;
+    }
+
+    fromStorage(breakpointsAwareDataStorage) {
+        return new StateCalculator(
+            breakpointsAwareDataStorage.source,
+            this.breakpoints,
+            () => breakpointsAwareDataStorage.breakpointName,
+        );
+    }
+}
 
 
 /***/ }),
@@ -32457,7 +32783,7 @@ class Structure {
         this.messenger = messenger;
         this.options = options;
 
-        const structure = this.options.structure.structure ?? this.getStructure();
+        const structure = this.options.structure ?? this.getStructure();
 
         this._current = core_Admin_Structure_Transformer_SourceToUnifiedFormat__WEBPACK_IMPORTED_MODULE_0__["default"].transform(structure);
         this._previous = core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_2__["default"].deepClone(this._current);
@@ -32533,7 +32859,7 @@ class Structure {
                                         }
                                     ],
                                 },
-                                {
+                                /*{
                                     id: "4ce4e48a-8dc1-49d3-841f-b639570a8aa0",
                                     blocks: [
                                         {
@@ -32544,12 +32870,12 @@ class Structure {
                                             }
                                         }
                                     ],
-                                },
+                                },*/
                             ],
                         },
                     ],
                 },
-                {
+                /*{
                     id: "3aaab68f-73a8-4871-bf3e-6e8698eed744",
                     rows: [
                         {
@@ -32630,9 +32956,33 @@ class Structure {
                 {
                     id: "427d2344-79d5-4b1d-a098-916514619d2f",
                     rows: [],
-                },
-            ]
+                },*/
+            ],
         };
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/core/Admin/Structure/StructureRenderer.js":
+/*!**********************************************************!*\
+  !*** ./src/js/core/Admin/Structure/StructureRenderer.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ StructureRenderer)
+/* harmony export */ });
+class StructureRenderer {
+    setContent(content) {
+        this.content = content;
+    }
+
+    render() {
+        return this.content;
     }
 }
 
@@ -33066,6 +33416,43 @@ class SelectionSubscriber {
     clear() {
         this.selection.dehover();
         this.selection.deselect();
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/core/Admin/Subscriber/Editor/ContentRenderingSubscriber.js":
+/*!***************************************************************************!*\
+  !*** ./src/js/core/Admin/Subscriber/Editor/ContentRenderingSubscriber.js ***!
+  \***************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ContentRenderingSubscriber)
+/* harmony export */ });
+class ContentRenderingSubscriber {
+    constructor(messenger, structureRenderer) {
+        this.messenger = messenger;
+        this.structureRenderer = structureRenderer;
+    }
+
+    static getSubscribedEvents() {
+        return {
+            'admin.ready': 'registerReceivers',
+        };
+    }
+
+    registerReceivers() {
+        const self = this;
+
+        this.messenger.receive('editor.content.rendered', (data) => self.storeContent(data));
+    }
+
+    storeContent(content) {
+        this.structureRenderer.setContent(content);
     }
 }
 
@@ -33525,11 +33912,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ EditorWindow)
 /* harmony export */ });
 class EditorWindow {
-    constructor(eventBus, view, structure, assets) {
+    constructor(eventBus, view, structure, assets, structureRenderer) {
         this.eventBus = eventBus;
         this.view = view;
         this.structure = structure;
         this.assets = assets;
+        this.structureRenderer = structureRenderer;
     }
 
     open() {
@@ -33548,7 +33936,7 @@ class EditorWindow {
         this.view.close();
         this.eventBus.dispatch('editor.saved', {
             source: this.structure.currentAsNew(),
-            content: '',
+            content: this.structureRenderer.render(),
             assets: this.assets.collectNames(),
         });
     }
@@ -34292,6 +34680,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_Editor_Data_EditorElementDataStoreRegistry__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! core/Editor/Data/EditorElementDataStoreRegistry */ "./src/js/core/Editor/Data/EditorElementDataStoreRegistry.js");
 /* harmony import */ var core_Editor_Structure_Element_DataSynchronizer__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! core/Editor/Structure/Element/DataSynchronizer */ "./src/js/core/Editor/Structure/Element/DataSynchronizer.js");
 /* harmony import */ var core_Editor_Subscriber_Admin_ElementDataSubscriber__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! core/Editor/Subscriber/Admin/ElementDataSubscriber */ "./src/js/core/Editor/Subscriber/Admin/ElementDataSubscriber.js");
+/* harmony import */ var core_Editor_UseCase_ContentRendering__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! core/Editor/UseCase/ContentRendering */ "./src/js/core/Editor/UseCase/ContentRendering.js");
+/* harmony import */ var core_Editor_Subscriber_Editor_RenderedContentSubscriber__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! core/Editor/Subscriber/Editor/RenderedContentSubscriber */ "./src/js/core/Editor/Subscriber/Editor/RenderedContentSubscriber.js");
+
+
 
 
 
@@ -34325,6 +34717,7 @@ class Container extends core_Shared_DependencyInjection_AbstractContainer__WEBPA
         this.registerFactory('selection.hoveredElementResolver', () => new core_Editor_Selection_Boundaries_HoverResolver__WEBPACK_IMPORTED_MODULE_11__["default"](this.get('usecase.selection')));
         this.registerFactory('usecase.selection', () => new core_Editor_UseCase_Selection__WEBPACK_IMPORTED_MODULE_10__["default"](this.get('messenger')));
         this.registerFactory('usecase.contextmenu', () => new core_Editor_UseCase_Contextmenu__WEBPACK_IMPORTED_MODULE_12__["default"](this.get('messenger')));
+        this.registerFactory('usecase.contentRendering', () => new core_Editor_UseCase_ContentRendering__WEBPACK_IMPORTED_MODULE_20__["default"](this.get('messenger')));
         this.registerFactory('contextmenu', () => new core_Editor_Contextmenu_Contextmenu__WEBPACK_IMPORTED_MODULE_13__["default"]());
         this.registerFactory('element.config.storeFactory', () => new core_Editor_Data_Store_ConfigStoreFactory__WEBPACK_IMPORTED_MODULE_15__["default"](this.get('blocks.registry'), this.get('structure.store')));
         this.registerFactory('element.data.storeFactory', () => new core_Editor_Data_Store_DataStoreFactory__WEBPACK_IMPORTED_MODULE_16__["default"](this.get('blocks.registry'), this.get('structure.store')));
@@ -34336,8 +34729,9 @@ class Container extends core_Shared_DependencyInjection_AbstractContainer__WEBPA
         this.register('subscriber.AdminSelectionSubscriber', core_Editor_Subscriber_Admin_SelectionSubscriber__WEBPACK_IMPORTED_MODULE_5__["default"], ['@selection.store', '@messenger', '@eventBus'], { tags: [{ name: 'event_subscriber' }] });
         this.register('subscriber.AdminStructureSubscriber', core_Editor_Subscriber_Admin_StructureSubscriber__WEBPACK_IMPORTED_MODULE_6__["default"], ['@structure.store', '@messenger', '@eventBus'], { tags: [{ name: 'event_subscriber' }] });
         this.register('subscriber.ElementConfigSubscriber', core_Editor_Subscriber_Admin_ElementConfigSubscriber__WEBPACK_IMPORTED_MODULE_14__["default"], ['@messenger', '@element.config.registry', '@eventBus'], { tags: [{ name: 'event_subscriber' }] });
-        this.register('subscriber.ElementDataSubscriber', core_Editor_Subscriber_Admin_ElementDataSubscriber__WEBPACK_IMPORTED_MODULE_19__["default"], ['@messenger', '@element.data.registry'], { tags: [{ name: 'event_subscriber' }] });
+        this.register('subscriber.ElementDataSubscriber', core_Editor_Subscriber_Admin_ElementDataSubscriber__WEBPACK_IMPORTED_MODULE_19__["default"], ['@messenger', '@element.data.registry', '@eventBus'], { tags: [{ name: 'event_subscriber' }] });
         this.register('subscriber.EditorSelectionSubscriber', core_Editor_Subscriber_Editor_SelectionSubscriber__WEBPACK_IMPORTED_MODULE_7__["default"], ['@selection.selectedElementBoundaries', '@selection.hoveredElementBoundaries'], { tags: [{ name: 'event_subscriber' }] });
+        this.register('subscriber.RenderedContentSubscriber', core_Editor_Subscriber_Editor_RenderedContentSubscriber__WEBPACK_IMPORTED_MODULE_21__["default"], ['@usecase.contentRendering'], { tags: [{ name: 'event_subscriber' }] });
 
         super.finish();
     }
@@ -34361,25 +34755,23 @@ class BlockClassnameGenerator {
     static generate (block) {
         let classlist = [];
 
-        /*if (block.data._internal?.sizing) {
-            for (let type in block.data._internal.sizing) {
-                const prefixType = type.substring(0, 1);
+        for (let type of ['padding', 'margin']) {
+            const prefixType = type.substring(0, 1);
 
-                for (let side in block.data._internal.sizing[type]) {
-                    const prefixSide = side.substring(0, 1);
+            for (let side of ['left', 'top', 'right', 'bottom']) {
+                const prefixSide = side.substring(0, 1);
 
-                    for (let breakpoint in block.data._internal.sizing[type][side]) {
-                        let prefix = `${prefixType}${prefixSide}-`;
+                for (let breakpoint in block.config[type][side]) {
+                    let prefix = `${prefixType}${prefixSide}-`;
 
-                        if (breakpoint !== 'xs') {
-                            prefix += `${breakpoint}-`
-                        }
-
-                        classlist.push(`${prefix}${block.data._internal.sizing[type][side][breakpoint]}`);
+                    if (breakpoint !== 'xs') {
+                        prefix += `${breakpoint}-`
                     }
+
+                    classlist.push(`${prefix}${block.config[type][side][breakpoint]}`);
                 }
             }
-        }*/
+        }
 
         for (let breakpoint in block.config.visibility) {
             let prefix = 'd-';
@@ -34456,8 +34848,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ RowClassnameGenerator)
 /* harmony export */ });
 class RowClassnameGenerator {
-    static generate (row, section) {
-        let classname = 'tued-row row';
+    static generate (row, section, defaultClassList) {
+        defaultClassList = defaultClassList ?? '';
+        let classname = defaultClassList + ' tued-row row';
 
         if (section.config.containerWidth === 'full-width-no-padding') {
             classname += ' g-0';
@@ -34483,12 +34876,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 class ContainerClassnameGenerator {
     static generate (section) {
-        let classname = 'tued-container';
+        let classname;
 
-        if (section.config.containerWidth === 'full-width') {
-            classname += ' container-fluid';
-        } else if (section.config.containerWidth === 'default') {
-            classname += ' container-xxl';
+        switch (section.config.containerWidth) {
+            case 'full-width':
+                classname = 'container-fluid'; break;
+            case 'full-width-no-padding':
+                classname = ''; break;
+            default:
+                classname = 'container-xxl'; break;
         }
 
         return classname;
@@ -34757,7 +35153,7 @@ class DataSynchronizer {
     }
 
     sync(id, type, store) {
-        (0,vue__WEBPACK_IMPORTED_MODULE_0__.watch)(store, async (newValue) => {
+        (0,vue__WEBPACK_IMPORTED_MODULE_0__.watch)(store, (newValue) => {
             const data = {
                 id: id,
                 type: type,
@@ -34826,9 +35222,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ ElementDataSubscriber)
 /* harmony export */ });
 class ElementDataSubscriber {
-    constructor(messenger, elementDataRegistry) {
+    constructor(messenger, elementDataRegistry, eventBus) {
         this.messenger = messenger;
         this.elementDataRegistry = elementDataRegistry;
+        this.eventBus = eventBus;
     }
 
     static getSubscribedEvents() {
@@ -34840,6 +35237,11 @@ class ElementDataSubscriber {
     registerReceivers() {
         const self = this;
 
+        /**
+         * This event comes only when "save" and "cancel" editor,
+         * to replace state of the Canvas as a whole. This MUST NOT be used to
+         * set "data" from Admin to Editor. Data is edited only by Editor!
+         */
         this.messenger.receive('element.data.replace', (data) => self.processChanged(data.id, data.type, data.data));
     }
 
@@ -34847,6 +35249,7 @@ class ElementDataSubscriber {
         const dataStore = this.elementDataRegistry.get(id, type);
 
         dataStore.replace(data);
+        this.eventBus.dispatch('element.data.replace', { id, type, data });
     }
 }
 
@@ -34947,6 +35350,39 @@ class StructureSubscriber {
 
 /***/ }),
 
+/***/ "./src/js/core/Editor/Subscriber/Editor/RenderedContentSubscriber.js":
+/*!***************************************************************************!*\
+  !*** ./src/js/core/Editor/Subscriber/Editor/RenderedContentSubscriber.js ***!
+  \***************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ RenderedContentSubscriber)
+/* harmony export */ });
+class RenderedContentSubscriber {
+    constructor(contentRendering) {
+        this.contentRendering = contentRendering;
+    }
+
+    static getSubscribedEvents() {
+        return {
+            'element.data.changed': 'renderContent',
+            'structure.changed': 'renderContent',
+            'element.config.sync': 'renderContent',
+            'element.data.replace': 'renderContent',
+        };
+    }
+
+    renderContent() {
+        this.contentRendering.render();
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/js/core/Editor/Subscriber/Editor/SelectionSubscriber.js":
 /*!*********************************************************************!*\
   !*** ./src/js/core/Editor/Subscriber/Editor/SelectionSubscriber.js ***!
@@ -34996,9 +35432,47 @@ class SelectionSubscriber {
 
     registerUpdater() {
         this.interval = setInterval(
-            () => this.selectedElementBoundaries.update(),
+            () => {
+                this.selectedElementBoundaries.update();
+                this.hoveredElementBoundaries.update();
+            },
             120
         );
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/core/Editor/UseCase/ContentRendering.js":
+/*!********************************************************!*\
+  !*** ./src/js/core/Editor/UseCase/ContentRendering.js ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ContentRendering)
+/* harmony export */ });
+class ContentRendering {
+    constructor(messenger) {
+        this.messenger = messenger;
+    }
+
+    setNodeReference(node) {
+        this.node = node;
+    }
+
+    render() {
+        /**
+         * I dont know why, but without timeout here, content does not contain last change.
+         * It looks like I get the changes from Store, but Vue needs some time to rerender
+         * the DOM.
+         */
+        setTimeout(() => {
+            this.messenger.send('editor.content.rendered', this.node.value.innerHTML);
+        }, 30);
     }
 }
 
@@ -35919,13 +36393,18 @@ class BlockDefaults {
     }
 
     prepareDefaultState(state) {
-        state.visibility = {
-            xxl: null,
-            xl: null,
-            lg: null,
-            md: null,
-            sm: null,
-            xs: null,
+        state.visibility = {xxl: null, xl: null, lg: null, md: null, sm: null, xs: null};
+        state.margin = {
+            left: {xxl: null, xl: null, lg: null, md: null, sm: null, xs: null},
+            top: {xxl: null, xl: null, lg: null, md: null, sm: null, xs: null},
+            right: {xxl: null, xl: null, lg: null, md: null, sm: null, xs: null},
+            bottom: {xxl: null, xl: null, lg: null, md: null, sm: null, xs: null},
+        };
+        state.padding = {
+            left: {xxl: null, xl: null, lg: null, md: null, sm: null, xs: null},
+            top: {xxl: null, xl: null, lg: null, md: null, sm: null, xs: null},
+            right: {xxl: null, xl: null, lg: null, md: null, sm: null, xs: null},
+            bottom: {xxl: null, xl: null, lg: null, md: null, sm: null, xs: null},
         };
     }
 }
@@ -36036,11 +36515,11 @@ class ElementConfigStoreRegistry {
 
         switch (type) {
             case 'section':
-                store = this.factory.forSection(id, {a:1})(); break;
+                store = this.factory.forSection(id, {})(); break;
             case 'column':
-                store = this.factory.forColumn(id, {a:1})(); break;
+                store = this.factory.forColumn(id, {})(); break;
             case 'block':
-                store = this.factory.forBlock(id, {a:1})(); break;
+                store = this.factory.forBlock(id, {})(); break;
             default:
                 return;
         }
@@ -36134,7 +36613,7 @@ class ElementDataStoreRegistry {
 
         switch (type) {
             case 'block':
-                store = this.factory.forBlock(id, {a:1})(); break;
+                store = this.factory.forBlock(id, {})(); break;
             default:
                 return;
         }
@@ -37037,24 +37516,26 @@ __webpack_require__.r(__webpack_exports__);
 const _ = __webpack_require__(/*! lodash */ "lodash");
 
 class Collection {
-    _collection;
+    block;
+    property;
     prototype;
 
-    constructor (collection, prototype) {
-        this._assertThatAllElementsContainsId(collection);
+    constructor (block, property, prototype) {
+        this._assertThatAllElementsContainsId(block.data[property]);
 
-        this._collection = collection;
+        this.block = block;
+        this.property = property;
         this.prototype = prototype;
     }
 
     get collection () {
-        return this._collection;
+        return this.block.data[this.property];
     }
 
     remove (element) {
-        for (let i in this._collection) {
-            if (this._collection[i].id === element.id) {
-                this._collection.splice(i, 1);
+        for (let i in this.block.data[this.property]) {
+            if (this.block.data[this.property][i].id === element.id) {
+                this.block.data[this.property].splice(i, 1);
             }
         }
     }
@@ -37063,9 +37544,9 @@ class Collection {
         let element = _.assign({}, this.prototype);
         element.id = this._generateId();
 
-        this._collection.push(element);
+        this.block.data[this.property].push(element);
 
-        return this._collection.length - 1;
+        return this.block.data[this.property].length - 1;
     }
 
     moveBackward (element) {
@@ -37095,7 +37576,7 @@ class Collection {
         }
 
         // Cannot move forward the last element of collection
-        if (index + 1 >= this._collection.length) {
+        if (index + 1 >= this.block.data[this.property].length) {
             return;
         }
 
@@ -37105,13 +37586,13 @@ class Collection {
     }
 
     moveToIndex (element, oldIndex, newIndex) {
-        this._collection.splice(oldIndex, 1);
-        this._collection.splice(newIndex, 0, element);
+        this.block.data[this.property].splice(oldIndex, 1);
+        this.block.data[this.property].splice(newIndex, 0, element);
     }
 
     _findIndex (element) {
-        for (let i in this._collection) {
-            if (this._collection[i].id === element.id) {
+        for (let i in this.block.data[this.property]) {
+            if (this.block.data[this.property][i].id === element.id) {
                 return parseInt(i);
             }
         }
@@ -39825,7 +40306,7 @@ const _ = __webpack_require__(/*! lodash */ "lodash");
                 // HTML input/textarea selector, where to store the structure.
                 structure: null,
                 // HTML input/textarea selector, where to store the rendered content.
-                content: null
+                content: null,
             },
             canvas: {
                 size: {
@@ -39837,16 +40318,16 @@ const _ = __webpack_require__(/*! lodash */ "lodash");
                         { name: 'md', width: 770 },
                         { name: 'sm', width: 580 },
                         { name: 'xs', width: 320 },
-                    ]
-                }
+                    ],
+                },
             },
             elements: {
                 style: {
                     spacers: {
                         // Maximum implemented spacers in Bootstrap
                         max: 5,
-                    }
-                }
+                    },
+                },
             },
             locale: 'en_en',
             fallback_locales: ['en'],
@@ -39860,7 +40341,7 @@ const _ = __webpack_require__(/*! lodash */ "lodash");
             sections: {},
             filemanager: {
                 image_resolve_path: null,
-                endpoint: null
+                endpoint: null,
             },
             // Themes supported by this instance of Editor
             themes: [],

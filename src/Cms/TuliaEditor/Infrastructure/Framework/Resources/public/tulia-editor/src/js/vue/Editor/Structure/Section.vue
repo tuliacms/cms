@@ -8,7 +8,7 @@
         @mouseleave="emit('selection-leave', section.id, 'section')"
         :tued-contextmenu="contextmenu.register(section.id, 'section')"
     >
-        <div :class="containerClassname">
+        <div :class="containerClass">
             <Row
                 v-for="row in structure.rowsOf(section.id)"
                 :key="row.id"
@@ -30,6 +30,7 @@
 <script setup>
 import { defineProps, defineEmits, inject, computed } from "vue";
 import Row from "editor/Structure/Row.vue";
+import ContainerClassnameGenerator from "core/Editor/Render/Section/ContainerClassnameGenerator";
 
 const props = defineProps(['section']);
 const emit = defineEmits(['selection-enter', 'selection-leave']);
@@ -39,11 +40,5 @@ const contextmenu = inject('contextmenu');
 const structure = inject('structure.store');
 const section = inject('instance.sections').editor(props);
 
-const containerClassname = computed(() => {
-    switch (section.config.containerWidth) {
-        case 'full-width': return 'container-fluid';
-        case 'full-width-no-padding': return '';
-        default: return 'container-xxl';
-    }
-});
+const containerClass = computed(() => ContainerClassnameGenerator.generate(section));
 </script>

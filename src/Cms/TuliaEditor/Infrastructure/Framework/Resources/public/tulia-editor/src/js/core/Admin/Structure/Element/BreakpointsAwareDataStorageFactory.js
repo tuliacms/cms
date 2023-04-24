@@ -121,6 +121,10 @@ class SingularBreakpointsAwareDataStorage {
         });
     }
 
+    get source () {
+        return this.reactiveData;
+    }
+
     get data () {
         return createProxy(this.reactiveData, this.breakpoint);
     }

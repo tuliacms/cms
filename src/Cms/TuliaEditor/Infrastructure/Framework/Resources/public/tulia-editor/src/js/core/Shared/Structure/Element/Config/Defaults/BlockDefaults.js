@@ -32,13 +32,18 @@ export default class BlockDefaults {
     }
 
     prepareDefaultState(state) {
-        state.visibility = {
-            xxl: null,
-            xl: null,
-            lg: null,
-            md: null,
-            sm: null,
-            xs: null,
+        state.visibility = {xxl: null, xl: null, lg: null, md: null, sm: null, xs: null};
+        state.margin = {
+            left: {xxl: null, xl: null, lg: null, md: null, sm: null, xs: null},
+            top: {xxl: null, xl: null, lg: null, md: null, sm: null, xs: null},
+            right: {xxl: null, xl: null, lg: null, md: null, sm: null, xs: null},
+            bottom: {xxl: null, xl: null, lg: null, md: null, sm: null, xs: null},
+        };
+        state.padding = {
+            left: {xxl: null, xl: null, lg: null, md: null, sm: null, xs: null},
+            top: {xxl: null, xl: null, lg: null, md: null, sm: null, xs: null},
+            right: {xxl: null, xl: null, lg: null, md: null, sm: null, xs: null},
+            bottom: {xxl: null, xl: null, lg: null, md: null, sm: null, xs: null},
         };
     }
 }

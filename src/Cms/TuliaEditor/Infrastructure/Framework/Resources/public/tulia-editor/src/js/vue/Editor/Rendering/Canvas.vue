@@ -1,5 +1,5 @@
 <template>
-    <div :class="{ 'tued-rendering-canvas': true }">
+    <div :class="{ 'tued-rendering-canvas': true }" ref="renderedContent">
         <section
             v-for="(section, key) in structure.sections"
             :key="'section-' + key"
@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-import { computed, inject } from "vue";
+import {computed, inject, ref} from "vue";
 import ColumnClassnameGenerator from "core/Editor/Render/Column/ColumnClassnameGenerator";
 import BlockClassnameGenerator from "core/Editor/Render/Block/BlockClassnameGenerator";
 import RowClassnameGenerator from "core/Editor/Render/Row/RowClassnameGenerator";
@@ -46,9 +46,13 @@ const messenger = inject('messenger');
 const structureStore = inject('structure.store');
 const sectionsInstance = inject('instance.sections');
 const rowsInstance = inject('instance.rows');
-const columnsInstance = inject('instance.columns');
+const columnsInstance = inject('instance.columns')
 const blocksInstance = inject('instance.blocks');
 const registry = inject('blocks.registry');
+
+const renderedContent = ref(null);
+
+inject('usecase.contentRendering').setNodeReference(renderedContent);
 
 const blockClass = (block) => BlockClassnameGenerator.generate(block);
 const columnClass = (column) => ColumnClassnameGenerator.generate(column, ['tued-column']);

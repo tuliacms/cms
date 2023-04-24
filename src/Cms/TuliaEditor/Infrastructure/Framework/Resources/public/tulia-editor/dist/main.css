@@ -1493,7 +1493,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     font-size: 11px; }
 
 .tued-rendering-canvas {
-  /*display: none;*/ }
+  display: none; }
 
 .tued-container.tued-show-preview .tued-rendering-canvas {
   display: block; }

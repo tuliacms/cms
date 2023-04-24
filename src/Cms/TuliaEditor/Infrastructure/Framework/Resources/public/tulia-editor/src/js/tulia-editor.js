@@ -86,7 +86,7 @@ export default {
                 // HTML input/textarea selector, where to store the structure.
                 structure: null,
                 // HTML input/textarea selector, where to store the rendered content.
-                content: null
+                content: null,
             },
             canvas: {
                 size: {
@@ -98,16 +98,16 @@ export default {
                         { name: 'md', width: 770 },
                         { name: 'sm', width: 580 },
                         { name: 'xs', width: 320 },
-                    ]
-                }
+                    ],
+                },
             },
             elements: {
                 style: {
                     spacers: {
                         // Maximum implemented spacers in Bootstrap
                         max: 5,
-                    }
-                }
+                    },
+                },
             },
             locale: 'en_en',
             fallback_locales: ['en'],
@@ -121,7 +121,7 @@ export default {
             sections: {},
             filemanager: {
                 image_resolve_path: null,
-                endpoint: null
+                endpoint: null,
             },
             // Themes supported by this instance of Editor
             themes: [],
