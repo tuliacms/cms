@@ -1,15 +1,7 @@
 import './../css/tulia-editor.admin.scss';
 
-/*const Fixer = require('shared/Structure/Fixer.js').default;
-const Translator = require('shared/I18n/Translator.js').default;
-const Messenger = require('shared/Messaging/Messenger.js').default;
-const AdminRoot = require("components/Admin/Root.vue").default;
-const ObjectCloner = require("shared/Utils/ObjectCloner.js").default;
-const Location = require('shared/Utils/Location.js').default;*/
-
 import Container from "core/Admin/DependencyInjection/Container";
 import Messenger from "core/Shared/Bus/WindowsMessaging/Messenger";
-import ObjectCloner from "core/Shared/Utils/ObjectCloner";
 
 let instances = 0;
 
@@ -18,12 +10,9 @@ export default class Admin {
     options = null;
     instanceId = null;
     root = null;
-    previewRoot = null;
-    previewHeight = null;
     editor = null;
     vue = null;
     container = {};
-    previewHeightWatcherInterval = null;
     sink = {
         structure: null,
         content: null,
@@ -65,14 +54,15 @@ export default class Admin {
 
         TuliaEditor.instances[this.instanceId] = this;
 
+        /**
+         * @todo Set this content here temporary. Needs to be moved in proper place.
+         */
+        this.container.get('structure.renderer').setContent(this.sink.content.value);
+
         this.container.get('view').render();
         this.container.get('eventBus').dispatch('admin.ready');
-        this.container.get('eventBus').listen('editor.saved', ({ source, content, assets }) => {
-            console.log(source, content, assets);
-
-            if (assets.length) {
-                content += `[assets names="${assets.join(',')}"]`;
-            }
+        this.container.get('eventBus').listen('editor.saved', ({ source, content }) => {
+            console.log(source, content);
 
             this.sink.structure.value = JSON.stringify(source);
             this.sink.content.value = content;
@@ -91,107 +81,5 @@ export default class Admin {
 
     closeEditor () {
         this.container.get('usecase.editorWindow').cancel();
-    }
-
-    /*updateContent (structure, content, style) {
-        document.querySelector(this.options.sink.structure).value = JSON.stringify(structure);
-
-        if (!content) {
-            this.updatePreview('');
-            document.querySelector(this.options.sink.content).value = '';
-        } else {
-            this.updatePreview(content + `<style>${style}</style>`);
-            document.querySelector(this.options.sink.content).value = content + `<style>${style}</style>`;
-        }
-    };*/
-
-    /*renderPreview () {
-        this.root.find('.tued-preview').on('load', () => {
-            this.previewRoot = this.root.find('iframe.tued-preview')[0].contentWindow.document.body;
-            this.previewRoot.querySelector('.tued-preview-wrapper').addEventListener('click', () => {
-                this.openEditor();
-            });
-
-            if (!this.previewLoaded) {
-                this.updatePreview(this.options.structure.preview);
-            } else {
-                this.root.find('.tued-preview-wrapper').removeClass('tued-preview-loading');
-            }
-
-            this.previewLoaded = true;
-            this.createPreviewHeightWatcher();
-            this.updatePreviewHeight();
-        });
-    }*/
-
-    /*createPreviewHeightWatcher () {
-        clearInterval(this.previewHeightWatcherInterval);
-        this.previewHeightWatcherInterval = setInterval(() => {
-            this.updatePreviewHeight();
-        }, 2000);
-    }*/
-
-    /*updatePreviewHeight () {
-        let newHeight = this.previewRoot.offsetHeight;
-
-        if (newHeight !== this.previewHeight) {
-            this.previewHeight = newHeight;
-            this.root.find('iframe.tued-preview').height(newHeight);
-        }
-    }*/
-
-    /*updatePreview (preview) {
-        const form = this.previewRoot.querySelector('#tulia-editor-preview-form');
-        const input = form.querySelector('input');
-
-        if (!preview) {
-            preview = '<div class="tued-empty-content">' + this.trans('startCreatingNewContent') + '</div>';
-        }
-
-        this.root.find('.tued-preview-wrapper').addClass('tued-preview-loading');
-
-        input.value = preview;
-        form.submit();
-    }*/
-
-    /*createVueApp () {
-        let breakpoints = ObjectCloner.deepClone(this.options.canvas.size.breakpoints);
-        let defaultBreakpoint = {
-            name: 'xl',
-            width: 1200,
-        };
-
-        for (let i in breakpoints) {
-            if (breakpoints[i].name === this.options.canvas.size.default) {
-                defaultBreakpoint.name = breakpoints[i].name;
-                defaultBreakpoint.width = breakpoints[i].width;
-            }
-        }
-
-        this.vue = this.container.get('vueFactory').factory(
-            AdminRoot,
-            { editor: this, container: this.container },
-            this.options.directives,
-            this.options.controls,
-            this.options.extensions,
-            this.options.blocks,
-        );
-        this.vue.mount(`#tued-editor-window-inner-${this.instanceId}`);
-
-        if (Location.getQueryVariable('showDebugbar') === 'true') {
-            this.toggleDebugbar();
-        }
-    };*/
-
-    /*toggleRenderPreview () {
-        this.container.messenger.execute('editor.canvas.preview.toggle');
-    };
-
-    toggleDebugbar () {
-        this.editor.toggleClass('tued-editor-debugar-opened');
-    }*/
-
-    trans(id) {
-        return this.container.get('translator').trans(id);
     }
 }

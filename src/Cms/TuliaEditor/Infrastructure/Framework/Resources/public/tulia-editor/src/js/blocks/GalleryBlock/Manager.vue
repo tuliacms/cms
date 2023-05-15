@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-const { defineProps, inject, onMounted, computed, reactive, watch } = require('vue');
+const { defineProps, inject, onMounted, onUnmounted, computed, reactive, watch } = require('vue');
 const props = defineProps(['block']);
 const block = inject('instance.blocks').manager(props);
 const controls = inject('controls.registry');
@@ -58,6 +58,10 @@ onMounted(() => {
     }
 
     assets.require(block.id, 'magnific_popup');
+});
+
+onUnmounted(() => {
+    assets.remove(block.id, 'magnific_popup');
 });
 </script>
 <script>

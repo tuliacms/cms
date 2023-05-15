@@ -19939,7 +19939,7 @@ const __default__ = { name: 'Block.Gallery.Manager' }
 
 const props = __props
 
-const { defineProps, inject, onMounted, computed, reactive, watch } = __webpack_require__(/*! vue */ "vue");
+const { defineProps, inject, onMounted, onUnmounted, computed, reactive, watch } = __webpack_require__(/*! vue */ "vue");
 
 const block = inject('instance.blocks').manager(props);
 const controls = inject('controls.registry');
@@ -19993,7 +19993,11 @@ onMounted(() => {
     assets.require(block.id, 'magnific_popup');
 });
 
-const __returned__ = { defineProps, inject, onMounted, computed, reactive, watch, props, block, controls, translator, options, assets, Select, Switch, sizesChoices, columnsChoices, marginChoices }
+onUnmounted(() => {
+    assets.remove(block.id, 'magnific_popup');
+});
+
+const __returned__ = { defineProps, inject, onMounted, onUnmounted, computed, reactive, watch, props, block, controls, translator, options, assets, Select, Switch, sizesChoices, columnsChoices, marginChoices }
 Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
 return __returned__
 }
@@ -30840,15 +30844,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _css_tulia_editor_admin_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../css/tulia-editor.admin.scss */ "./src/css/tulia-editor.admin.scss");
 /* harmony import */ var core_Admin_DependencyInjection_Container__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core/Admin/DependencyInjection/Container */ "./src/js/core/Admin/DependencyInjection/Container.js");
 /* harmony import */ var core_Shared_Bus_WindowsMessaging_Messenger__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core/Shared/Bus/WindowsMessaging/Messenger */ "./src/js/core/Shared/Bus/WindowsMessaging/Messenger.js");
-/* harmony import */ var core_Shared_Utils_ObjectCloner__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core/Shared/Utils/ObjectCloner */ "./src/js/core/Shared/Utils/ObjectCloner.js");
-
-
-/*const Fixer = require('shared/Structure/Fixer.js').default;
-const Translator = require('shared/I18n/Translator.js').default;
-const Messenger = require('shared/Messaging/Messenger.js').default;
-const AdminRoot = require("components/Admin/Root.vue").default;
-const ObjectCloner = require("shared/Utils/ObjectCloner.js").default;
-const Location = require('shared/Utils/Location.js').default;*/
 
 
 
@@ -30861,12 +30856,9 @@ class Admin {
     options = null;
     instanceId = null;
     root = null;
-    previewRoot = null;
-    previewHeight = null;
     editor = null;
     vue = null;
     container = {};
-    previewHeightWatcherInterval = null;
     sink = {
         structure: null,
         content: null,
@@ -30908,14 +30900,15 @@ class Admin {
 
         TuliaEditor.instances[this.instanceId] = this;
 
+        /**
+         * @todo Set this content here temporary. Needs to be moved in proper place.
+         */
+        this.container.get('structure.renderer').setContent(this.sink.content.value);
+
         this.container.get('view').render();
         this.container.get('eventBus').dispatch('admin.ready');
-        this.container.get('eventBus').listen('editor.saved', ({ source, content, assets }) => {
-            console.log(source, content, assets);
-
-            if (assets.length) {
-                content += `[assets names="${assets.join(',')}"]`;
-            }
+        this.container.get('eventBus').listen('editor.saved', ({ source, content }) => {
+            console.log(source, content);
 
             this.sink.structure.value = JSON.stringify(source);
             this.sink.content.value = content;
@@ -30934,108 +30927,6 @@ class Admin {
 
     closeEditor () {
         this.container.get('usecase.editorWindow').cancel();
-    }
-
-    /*updateContent (structure, content, style) {
-        document.querySelector(this.options.sink.structure).value = JSON.stringify(structure);
-
-        if (!content) {
-            this.updatePreview('');
-            document.querySelector(this.options.sink.content).value = '';
-        } else {
-            this.updatePreview(content + `<style>${style}</style>`);
-            document.querySelector(this.options.sink.content).value = content + `<style>${style}</style>`;
-        }
-    };*/
-
-    /*renderPreview () {
-        this.root.find('.tued-preview').on('load', () => {
-            this.previewRoot = this.root.find('iframe.tued-preview')[0].contentWindow.document.body;
-            this.previewRoot.querySelector('.tued-preview-wrapper').addEventListener('click', () => {
-                this.openEditor();
-            });
-
-            if (!this.previewLoaded) {
-                this.updatePreview(this.options.structure.preview);
-            } else {
-                this.root.find('.tued-preview-wrapper').removeClass('tued-preview-loading');
-            }
-
-            this.previewLoaded = true;
-            this.createPreviewHeightWatcher();
-            this.updatePreviewHeight();
-        });
-    }*/
-
-    /*createPreviewHeightWatcher () {
-        clearInterval(this.previewHeightWatcherInterval);
-        this.previewHeightWatcherInterval = setInterval(() => {
-            this.updatePreviewHeight();
-        }, 2000);
-    }*/
-
-    /*updatePreviewHeight () {
-        let newHeight = this.previewRoot.offsetHeight;
-
-        if (newHeight !== this.previewHeight) {
-            this.previewHeight = newHeight;
-            this.root.find('iframe.tued-preview').height(newHeight);
-        }
-    }*/
-
-    /*updatePreview (preview) {
-        const form = this.previewRoot.querySelector('#tulia-editor-preview-form');
-        const input = form.querySelector('input');
-
-        if (!preview) {
-            preview = '<div class="tued-empty-content">' + this.trans('startCreatingNewContent') + '</div>';
-        }
-
-        this.root.find('.tued-preview-wrapper').addClass('tued-preview-loading');
-
-        input.value = preview;
-        form.submit();
-    }*/
-
-    /*createVueApp () {
-        let breakpoints = ObjectCloner.deepClone(this.options.canvas.size.breakpoints);
-        let defaultBreakpoint = {
-            name: 'xl',
-            width: 1200,
-        };
-
-        for (let i in breakpoints) {
-            if (breakpoints[i].name === this.options.canvas.size.default) {
-                defaultBreakpoint.name = breakpoints[i].name;
-                defaultBreakpoint.width = breakpoints[i].width;
-            }
-        }
-
-        this.vue = this.container.get('vueFactory').factory(
-            AdminRoot,
-            { editor: this, container: this.container },
-            this.options.directives,
-            this.options.controls,
-            this.options.extensions,
-            this.options.blocks,
-        );
-        this.vue.mount(`#tued-editor-window-inner-${this.instanceId}`);
-
-        if (Location.getQueryVariable('showDebugbar') === 'true') {
-            this.toggleDebugbar();
-        }
-    };*/
-
-    /*toggleRenderPreview () {
-        this.container.messenger.execute('editor.canvas.preview.toggle');
-    };
-
-    toggleDebugbar () {
-        this.editor.toggleClass('tued-editor-debugar-opened');
-    }*/
-
-    trans(id) {
-        return this.container.get('translator').trans(id);
     }
 }
 
@@ -32303,6 +32194,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_Admin_Structure_Element_BreakpointsStateCalculatorFactory__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! core/Admin/Structure/Element/BreakpointsStateCalculatorFactory */ "./src/js/core/Admin/Structure/Element/BreakpointsStateCalculatorFactory.js");
 /* harmony import */ var core_Admin_Subscriber_Editor_ContentRenderingSubscriber__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! core/Admin/Subscriber/Editor/ContentRenderingSubscriber */ "./src/js/core/Admin/Subscriber/Editor/ContentRenderingSubscriber.js");
 /* harmony import */ var core_Admin_Structure_StructureRenderer__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! core/Admin/Structure/StructureRenderer */ "./src/js/core/Admin/Structure/StructureRenderer.js");
+/* harmony import */ var core_Admin_Subscriber_Admin_PreviewSubscriber__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! core/Admin/Subscriber/Admin/PreviewSubscriber */ "./src/js/core/Admin/Subscriber/Admin/PreviewSubscriber.js");
+/* harmony import */ var core_Admin_View_Preview__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! core/Admin/View/Preview */ "./src/js/core/Admin/View/Preview.js");
+
+
 
 
 
@@ -32344,6 +32239,7 @@ class Container extends core_Shared_DependencyInjection_AbstractContainer__WEBPA
         super.build();
 
         this.registerFactory('view', () => new core_Admin_View_View__WEBPACK_IMPORTED_MODULE_1__["default"](this.get('root'), this.getParameter('instanceId'), this.get('translator'), this.get('eventBus')));
+        this.register('view.preview', core_Admin_View_Preview__WEBPACK_IMPORTED_MODULE_36__["default"], ['@root', '@eventBus', '@translator', '%instanceId', '%options']);
         this.registerFactory('usecase.sections', () => new core_Admin_UseCase_Sections__WEBPACK_IMPORTED_MODULE_3__["default"](this.get('structure.store'), this.get('usecase.selection'), this.get('structure')));
         this.registerFactory('usecase.rows', () => new core_Admin_UseCase_Rows__WEBPACK_IMPORTED_MODULE_14__["default"](this.get('structure.store'), this.get('usecase.selection'), this.get('structure')));
         this.registerFactory('usecase.columns', () => new core_Admin_UseCase_Columns__WEBPACK_IMPORTED_MODULE_15__["default"](this.get('structure.store'), this.get('usecase.selection'), this.get('structure')));
@@ -32351,7 +32247,7 @@ class Container extends core_Shared_DependencyInjection_AbstractContainer__WEBPA
         this.registerFactory('usecase.selection', () => new core_Admin_UseCase_Selection__WEBPACK_IMPORTED_MODULE_4__["default"](this.get('selection.store'), this.get('messenger'), this.get('eventBus')));
         this.registerFactory('usecase.draggable', () => new core_Admin_UseCase_Draggable__WEBPACK_IMPORTED_MODULE_13__["default"](this.get('usecase.selection'), this.get('structure.store'), this.get('eventBus'), this.get('messenger')));
         this.registerFactory('usecase.contextmenu', () => new core_Admin_UseCase_Contextmenu__WEBPACK_IMPORTED_MODULE_10__["default"](this.get('contextmenu.store'), this.get('usecase.selection')));
-        this.register('usecase.editorWindow', core_Admin_UseCase_EditorWindow__WEBPACK_IMPORTED_MODULE_22__["default"], ['@eventBus', '@view', '@structure', '@assets', '@structure.renderer']);
+        this.register('usecase.editorWindow', core_Admin_UseCase_EditorWindow__WEBPACK_IMPORTED_MODULE_22__["default"], ['@eventBus', '@view', '@structure', '@structure.renderer']);
         this.registerFactory('canvas', () => new core_Admin_View_Canvas__WEBPACK_IMPORTED_MODULE_8__["default"](this.getParameter('options'), this.get('eventBus')));
         this.registerFactory('structure.store', () => (0,core_Admin_Data_Store_Structure__WEBPACK_IMPORTED_MODULE_7__.useStructureStore)());
         this.registerFactory('selection.store', () => (0,core_Admin_Data_Store_Selection__WEBPACK_IMPORTED_MODULE_5__.useSelectionStore)());
@@ -32362,7 +32258,7 @@ class Container extends core_Shared_DependencyInjection_AbstractContainer__WEBPA
         this.registerFactory('element.data.storeFactory', () => new core_Admin_Data_Store_DataStoreFactory__WEBPACK_IMPORTED_MODULE_20__["default"](this.get('blocks.registry'), this.get('structure.store')));
         this.registerFactory('columnSize', () => new core_Admin_Structure_Element_ColumnSize__WEBPACK_IMPORTED_MODULE_19__["default"]());
         this.register('structure', core_Admin_Structure_Structure__WEBPACK_IMPORTED_MODULE_24__["default"], ['@structure.store', '@element.config.registry', '@element.data.registry', '@messenger', '%options']);
-        this.register('structure.renderer', core_Admin_Structure_StructureRenderer__WEBPACK_IMPORTED_MODULE_34__["default"]);
+        this.register('structure.renderer', core_Admin_Structure_StructureRenderer__WEBPACK_IMPORTED_MODULE_34__["default"], ['@assets']);
         this.register('assets', core_Admin_Assets__WEBPACK_IMPORTED_MODULE_26__["default"]);
         this.register('blocks.picker', core_Admin_Structure_Blocks_BlocksPicker__WEBPACK_IMPORTED_MODULE_27__["default"], ['@usecase.blocks', '@modals']);
         this.register('modals', core_Admin_View_Modals__WEBPACK_IMPORTED_MODULE_28__["default"]);
@@ -32379,6 +32275,7 @@ class Container extends core_Shared_DependencyInjection_AbstractContainer__WEBPA
         this.register('subscriber.EditorWindowSubscriber', core_Admin_Subscriber_Admin_EditorWindowSubscriber__WEBPACK_IMPORTED_MODULE_25__["default"], ['@usecase.editorWindow'], { tags: [{ name: 'event_subscriber' }] });
         this.register('subscriber.CreateBlockSubscriber', core_Admin_Subscriber_Editor_CreateBlockSubscriber__WEBPACK_IMPORTED_MODULE_30__["default"], ['@messenger', '@blocks.picker'], { tags: [{ name: 'event_subscriber' }] });
         this.register('subscriber.ContentRenderingSubscriber', core_Admin_Subscriber_Editor_ContentRenderingSubscriber__WEBPACK_IMPORTED_MODULE_33__["default"], ['@messenger', '@structure.renderer'], { tags: [{ name: 'event_subscriber' }] });
+        this.register('subscriber.PreviewSubscriber', core_Admin_Subscriber_Admin_PreviewSubscriber__WEBPACK_IMPORTED_MODULE_35__["default"], ['@view.preview', '@structure.renderer'], { tags: [{ name: 'event_subscriber' }] });
 
         super.finish();
     }
@@ -32977,12 +32874,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ StructureRenderer)
 /* harmony export */ });
 class StructureRenderer {
+    constructor(assets) {
+        this.assets = assets;
+    }
+
     setContent(content) {
         this.content = content;
     }
 
     render() {
-        return this.content;
+        let content = this.content;
+        const assets = this.assets.collectNames();
+
+        if (assets.length) {
+            content += `[assets names="${assets.join(',')}"]`;
+        }
+
+        return content;
     }
 }
 
@@ -33383,6 +33291,47 @@ class EditorWindowSubscriber {
 
     openEditor() {
         this.editorWindow.open();
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/js/core/Admin/Subscriber/Admin/PreviewSubscriber.js":
+/*!*****************************************************************!*\
+  !*** ./src/js/core/Admin/Subscriber/Admin/PreviewSubscriber.js ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ PreviewSubscriber)
+/* harmony export */ });
+class PreviewSubscriber {
+    constructor(preview, structureRenderer) {
+        this.preview = preview;
+        this.structureRenderer = structureRenderer;
+    }
+
+    static getSubscribedEvents() {
+        return {
+            'admin.view.ready': 'renderPreview',
+            'editor.saved': 'refreshPreviewOnSave',
+            'preview.ready': 'refreshPreviewOnReady',
+        };
+    }
+
+    renderPreview() {
+        this.preview.render();
+    }
+
+    refreshPreviewOnSave({ source, content }) {
+        this.preview.refresh(content);
+    }
+
+    refreshPreviewOnReady() {
+        this.preview.refresh(this.structureRenderer.render());
     }
 }
 
@@ -33912,11 +33861,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ EditorWindow)
 /* harmony export */ });
 class EditorWindow {
-    constructor(eventBus, view, structure, assets, structureRenderer) {
+    constructor(eventBus, view, structure, structureRenderer) {
         this.eventBus = eventBus;
         this.view = view;
         this.structure = structure;
-        this.assets = assets;
         this.structureRenderer = structureRenderer;
     }
 
@@ -33937,7 +33885,6 @@ class EditorWindow {
         this.eventBus.dispatch('editor.saved', {
             source: this.structure.currentAsNew(),
             content: this.structureRenderer.render(),
-            assets: this.assets.collectNames(),
         });
     }
 }
@@ -34188,6 +34135,94 @@ class Modals {
 
 /***/ }),
 
+/***/ "./src/js/core/Admin/View/Preview.js":
+/*!*******************************************!*\
+  !*** ./src/js/core/Admin/View/Preview.js ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Preview)
+/* harmony export */ });
+class Preview {
+    firstLoaded = false;
+    previewHeightWatcherInterval;
+
+    constructor(root, eventBus, translator, instanceId, options) {
+        this.root = root;
+        this.eventBus = eventBus;
+        this.translator = translator;
+        this.instanceId = instanceId;
+        this.options = options;
+    }
+
+    render() {
+        this.root.find('.tued-main-window').append(
+            '<div class="tued-preview-wrapper tued-preview-loading">' +
+                '<div class="tued-preview-loader"><div class="tued-preview-notch"><i class="fas fa-circle-notch fa-spin"></i><span>Loading preview...</span></div></div>' +
+                '<iframe class="tued-preview" src="' + this.options.editor.preview + '?tuliaEditorInstance=' + this.instanceId + '"></iframe>' +
+            '</div>'
+        );
+
+        const self = this;
+
+        this.root.find('iframe.tued-preview').on('load', function() {
+            self.previewRoot = this.contentWindow.document.body;
+            self.previewRoot.querySelector('.tued-preview-wrapper').addEventListener('click', () => {
+                self.eventBus.dispatch('preview.clicked');
+            });
+
+            self.root.find('.tued-preview-wrapper').removeClass('tued-preview-loading');
+
+            if (!self.firstLoaded) {
+                self.eventBus.dispatch('preview.ready');
+                self.firstLoaded = true;
+            } else {
+                self.eventBus.dispatch('preview.loaded');
+            }
+
+            self._createPreviewHeightWatcher();
+            self.updatePreviewHeight();
+        });
+    }
+
+    refresh(preview) {
+        const form = this.previewRoot.querySelector('#tulia-editor-preview-form');
+        const input = form.querySelector('input');
+
+        if (!preview) {
+            preview = '<div class="tued-empty-content">' + this.translator.trans('startCreatingNewContent') + '</div>';
+        }
+
+        this.root.find('.tued-preview-wrapper').addClass('tued-preview-loading');
+
+        input.value = preview;
+        form.submit();
+    }
+
+    updatePreviewHeight () {
+        let newHeight = this.previewRoot.offsetHeight;
+
+        if (newHeight !== this.previewHeight) {
+            this.previewHeight = newHeight;
+            this.root.find('iframe.tued-preview').height(newHeight);
+        }
+    }
+
+    _createPreviewHeightWatcher () {
+        clearInterval(this.previewHeightWatcherInterval);
+
+        this.previewHeightWatcherInterval = setInterval(() => {
+            this.updatePreviewHeight();
+        }, 2000);
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/js/core/Admin/View/Subscriber/BuildVueOnHtmlReady.js":
 /*!******************************************************************!*\
   !*** ./src/js/core/Admin/View/Subscriber/BuildVueOnHtmlReady.js ***!
@@ -34264,19 +34299,10 @@ class View {
                     '<span class="tued-logo">Tulia Editor</span> - ' + this.translator.trans('contentPreview') +
                 '</div>' +
             '</div>' +
-            '<div class="tued-preview-wrapper tued-preview-loading-EE">' +
-                '<div class="tued-preview-loader"><div class="tued-preview-notch"><i class="fas fa-circle-notch fa-spin"></i><span>Loading preview...</span></div></div>' +
-                '<img class="tued-preview" src="https://placehold.co/1095x400" style="height:400px">' +
-                /*'<iframe class="tued-preview" src="' + this.options.editor.preview + '?tuliaEditorInstance=' + this.instanceId + '"></iframe>' +*/
-            '</div>' +
         '</div>');
 
         this.renderModalsContainer();
         this.renderEditorWindow();
-
-        this.root.find('.tued-preview-wrapper').click(() => {
-            this.eventBus.dispatch('preview.clicked');
-        });
 
         this.eventBus.dispatch('admin.view.ready');
     };
@@ -34766,6 +34792,10 @@ class BlockClassnameGenerator {
 
                     if (breakpoint !== 'xs') {
                         prefix += `${breakpoint}-`
+                    }
+
+                    if (!block.config[type][side][breakpoint]) {
+                        continue;
                     }
 
                     classlist.push(`${prefix}${block.config[type][side][breakpoint]}`);

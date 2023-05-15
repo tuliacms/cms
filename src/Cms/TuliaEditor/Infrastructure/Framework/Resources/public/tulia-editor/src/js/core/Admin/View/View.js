@@ -14,19 +14,10 @@ export default class View {
                     '<span class="tued-logo">Tulia Editor</span> - ' + this.translator.trans('contentPreview') +
                 '</div>' +
             '</div>' +
-            '<div class="tued-preview-wrapper tued-preview-loading-EE">' +
-                '<div class="tued-preview-loader"><div class="tued-preview-notch"><i class="fas fa-circle-notch fa-spin"></i><span>Loading preview...</span></div></div>' +
-                '<img class="tued-preview" src="https://placehold.co/1095x400" style="height:400px">' +
-                /*'<iframe class="tued-preview" src="' + this.options.editor.preview + '?tuliaEditorInstance=' + this.instanceId + '"></iframe>' +*/
-            '</div>' +
         '</div>');
 
         this.renderModalsContainer();
         this.renderEditorWindow();
-
-        this.root.find('.tued-preview-wrapper').click(() => {
-            this.eventBus.dispatch('preview.clicked');
-        });
 
         this.eventBus.dispatch('admin.view.ready');
     };

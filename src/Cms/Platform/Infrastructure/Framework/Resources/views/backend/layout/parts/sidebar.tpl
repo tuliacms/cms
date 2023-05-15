@@ -28,7 +28,7 @@
         </div>
     </div>
     <div class="sidebar-footer">
-        <a href="https://tuliacms.org/goto/slack" class="text-white" target="_blank" title="Tulia CMS on Slack"><i class="fab fa-slack"></i></a>
+        <a href="https://tuliacms.org/goto/discord" class="text-white" target="_blank" title="Tulia CMS on Discord"><i class="fab fa-discord"></i></a>
         <a href="https://tuliacms.org/goto/facebook" class="text-white" target="_blank" title="Tulia CMS on Facebook"><i class="fab fa-facebook"></i></a>
         <a href="https://tuliacms.org" class="text-white" target="_blank" title="Tulia CMS Website"><i class="fas fa-globe"></i></a>
         <a href="#" class="text-white found-bug-footer-button" target="_blank" title="{{ 'didYouFoundBug'|trans }}" data-bs-toggle="modal" data-bs-target="#tuliacms-found-bug-modal"><i class="fas fa-bug"></i> {{ 'didYouFoundBug'|trans }}</a>

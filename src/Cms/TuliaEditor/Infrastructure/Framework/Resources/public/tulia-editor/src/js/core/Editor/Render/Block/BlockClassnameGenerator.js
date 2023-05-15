@@ -15,6 +15,10 @@ export default class BlockClassnameGenerator {
                         prefix += `${breakpoint}-`
                     }
 
+                    if (!block.config[type][side][breakpoint]) {
+                        continue;
+                    }
+
                     classlist.push(`${prefix}${block.config[type][side][breakpoint]}`);
                 }
             }
