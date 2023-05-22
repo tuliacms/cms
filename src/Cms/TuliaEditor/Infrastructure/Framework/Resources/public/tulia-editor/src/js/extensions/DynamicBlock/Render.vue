@@ -1,23 +1,11 @@
 <template>
     <div class="tued-dynamic-block">[dynamic_block {{ attributes }}]</div>
 </template>
-
 <script setup>
-const { defineProps, defineEmits, inject, onMounted, isReactive, reactive, ref, computed, toRaw, watch } = require('vue');
+const { defineProps, defineEmits, inject, onMounted, reactive, ref, computed, watch } = require('vue');
 const props = defineProps(['type', 'data']);
 
 const attributes = ref(props.data);
-
-const getReactiveData = (source) => {
-    if (source.hasOwnProperty('reactiveData')) {
-        return source.reactiveData;
-    }
-    if (isReactive(source)) {
-        return source;
-    }
-
-    throw new Error('The "data" property must be Block data or reactive object to work properly.');
-};
 
 const serializeAttributes = (source, prefix) => {
     let result = '';
@@ -38,17 +26,14 @@ const serializeAttributes = (source, prefix) => {
 };
 
 const updateAttributes = (data) => {
-    attributes.value = `type="${props.type}"` + serializeAttributes(toRaw(data));
+    attributes.value = `type="${props.type}"` + serializeAttributes(data);
 };
 
 onMounted(() => {
-    const data = getReactiveData(props.data);
-
-    updateAttributes(data);
-    watch(data, (newData) => updateAttributes(newData));
+    updateAttributes(props.data.export);
+    watch(() => props.data, (newData) => updateAttributes(newData));
 });
 </script>
-
 <script>
 export default {name: 'Extension.DynamicBlock.Editor'}
 </script>

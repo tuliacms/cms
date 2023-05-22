@@ -9,7 +9,7 @@ export default class Render {
 
         this.block = block;
         this.image = image;
-        this.id = block.style({
+        this.id = 'asd'/*block.style({
             'background-image': () => {
                 const img = self.image();
 
@@ -21,7 +21,7 @@ export default class Render {
 
                 return `url('[image_url id="${img.id}" size="${img.size}"]')`;
             }
-        });
+        })*/;
     }
 
     link = () => {

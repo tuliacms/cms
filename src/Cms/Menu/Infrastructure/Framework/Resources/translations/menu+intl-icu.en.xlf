@@ -170,6 +170,10 @@
                 <source>menuSpace</source>
                 <target>Space to show</target>
             </trans-unit>
+            <trans-unit id="tuliacms.menu.43">
+                <source>pleaseProvideMenuSpace</source>
+                <target>Please provide a menu space to show.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

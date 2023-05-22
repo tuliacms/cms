@@ -4,9 +4,8 @@
 const { inject, defineProps } = require('vue');
 const Tulia = require('Tulia');
 const options = inject('options');
-const props = defineProps(['instance']);
-const extension = inject('extension.instance')
-    .manager('BackgroundImage', props.instance);
+const props = defineProps(['instanceId']);
+const extension = inject('instance.extensions').manager('BackgroundImage', props.instanceId);
 const filemanager = {
     instance: null
 };
@@ -27,7 +26,7 @@ const getFilemanager = () => {
                 return;
             }
 
-            extension.execute('image-chosen', {
+            extension.send('image-chosen', {
                 id: files[0].id,
                 filename: files[0].name,
             });
@@ -35,17 +34,15 @@ const getFilemanager = () => {
     });
 };
 
-extension.operation('chose-image', (data, success, fail) => {
+extension.receive('chose-image', data => {
     getFilemanager().open();
-    success();
 });
-extension.operation('remove-image', (data, success, fail) => {
+extension.receive('remove-image', data => {
     getFilemanager().clearSelection();
-    extension.execute('image-chosen', {
+    extension.send('image-chosen', {
         id: null,
         filename: null,
     });
-    success();
 });
 </script>
 <script>

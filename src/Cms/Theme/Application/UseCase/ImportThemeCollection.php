@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Theme\Application\UseCase;
 
+use Tulia\Cms\Platform\Infrastructure\Framework\Routing\Website\WebsiteRegistryInterface;
 use Tulia\Cms\Shared\Application\UseCase\AbstractTransactionalUseCase;
 use Tulia\Cms\Shared\Application\UseCase\RequestInterface;
 use Tulia\Cms\Shared\Application\UseCase\ResultInterface;
@@ -19,7 +20,8 @@ final class ImportThemeCollection extends AbstractTransactionalUseCase
     public function __construct(
         private readonly ThemeImportCollectionRegistry $registry,
         private readonly ImporterInterface $importer,
-        private readonly ManagerInterface $manager
+        private readonly ManagerInterface $manager,
+        private readonly WebsiteRegistryInterface $websiteRegistry,
     ) {
     }
 
@@ -44,7 +46,13 @@ final class ImportThemeCollection extends AbstractTransactionalUseCase
 
         $filepath = $theme->getDirectory().'/'.ltrim($collections[$request->collection]['filepath']);
 
-        $this->importer->importFromFile($filepath);
+        $this->importer->importFromFile(
+            $filepath,
+            parameters: [
+                'website' => $this->websiteRegistry->get($request->websiteId),
+                'author_id' => $request->authorId,
+            ]
+        );
 
         return null;
     }

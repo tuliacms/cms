@@ -1,9 +1,13 @@
 import AbstractInstance from "core/Shared/Extension/Instance/AbstractInstance";
 import _ from "lodash";
 
+const generateExtensionInstanceId = (code) => {
+    return `${code}-${_.uniqueId()}`;
+};
+
 export default class Editor extends AbstractInstance {
     constructor (code, messenger) {
-        super (code, `${code}-${_.uniqueId()}`, messenger);
+        super (code, generateExtensionInstanceId(), messenger);
 
         this.mount();
     }

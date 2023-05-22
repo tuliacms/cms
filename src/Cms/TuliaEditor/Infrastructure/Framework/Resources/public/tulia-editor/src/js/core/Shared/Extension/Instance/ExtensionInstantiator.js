@@ -8,8 +8,12 @@ export default class ExtensionInstantiator {
         this.messenger = messenger;
     }
 
-    manager (code, instance) {
-        return new Manager(code, instance, this.messenger);
+    manager (code, instanceId) {
+        if (!instanceId) {
+            throw new Error(`Please provide an instanceId for '${code}' extension.`);
+        }
+
+        return new Manager(code, instanceId, this.messenger);
     }
 
     editor (code) {

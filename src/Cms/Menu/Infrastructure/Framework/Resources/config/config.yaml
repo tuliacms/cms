@@ -30,6 +30,7 @@ cms:
                         type: string
                     spaces:
                         type: array
+                        required: true
                     items:
                         collection_of: MenuItem
             MenuItem:
