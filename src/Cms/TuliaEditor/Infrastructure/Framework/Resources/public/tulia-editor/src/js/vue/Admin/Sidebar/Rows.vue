@@ -30,6 +30,9 @@
                         <div class="tued-structure-draggable-handler" @mousedown.stop="selectionUseCase.select(element.id, 'row')">
                             <i class="fas fa-arrows-alt"></i>
                         </div>
+                        <div class="tued-structure-inspect" title="Inspect" @click="inspector.inspect(element.id, 'row')">
+                            <i class="fas fa-crosshairs"></i>
+                        </div>
                         <span>{{ translator.trans('row') }}</span>
                     </div>
                     <Columns
@@ -60,6 +63,7 @@ const columnsUseCase = inject('usecase.columns');
 const selectionStore = inject('selection.store');
 const structureStore = inject('structure.store');
 const contextmenu = inject('usecase.contextmenu');
+const inspector = inject('structure.inspector');
 
 onMounted(() => {
     contextmenu.items('rows', 'row', (id) => {

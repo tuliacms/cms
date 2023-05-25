@@ -13,7 +13,7 @@
                 <i class="fas fa-arrows-alt"></i>
             </div>
             <span>{{ translator.trans('column') }}</span>
-            <div class="tied-structure-element-options">
+            <div class="tued-structure-element-options">
                 <div class="tued-structure-column-sizer">
                     <span>{{ storage.breakpointName }}</span>
                     <input
@@ -27,6 +27,9 @@
                         placeholder="inherit"
                     />
                 </div>
+            </div>
+            <div class="tued-structure-inspect" title="Inspect" @click="inspector.inspect(column.id, 'column')">
+                <i class="fas fa-crosshairs"></i>
             </div>
         </div>
         <Blocks
@@ -52,6 +55,7 @@ const translator = inject('translator');
 const column = inject('structure').column(props.column);
 const columnSize = inject('columnSize');
 const eventBus = inject('eventBus');
+const inspector = inject('structure.inspector');
 
 const storage = inject('breakpointsAwareDataStorageFactory').ref(column.config.sizes);
 

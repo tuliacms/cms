@@ -9,7 +9,7 @@ export default class Selection {
         this.selection.select(id, type);
 
         if (showInSidebar) {
-            this.eventBus.dispatch('show-sidebar');
+            this.eventBus.dispatch('show-sidebar', { id, type });
         }
 
         this.update();

@@ -29,6 +29,7 @@ export default class SelectionSubscriber {
                 this.eventBus.dispatch('selection.deselected');
             }
         }
+
         if (before.hovered.id !== after.hovered.id) {
             if (after.hovered.id) {
                 this.eventBus.dispatch('selection.hovered', { id: after.hovered.id, type: after.hovered.type });

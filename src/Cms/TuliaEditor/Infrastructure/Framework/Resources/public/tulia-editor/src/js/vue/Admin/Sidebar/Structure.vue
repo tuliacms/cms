@@ -30,6 +30,9 @@
                         <div class="tued-structure-draggable-handler" @mousedown.stop="selectionUseCase.select(element.id, 'section')">
                             <i class="fas fa-arrows-alt"></i>
                         </div>
+                        <div class="tued-structure-inspect" title="Inspect" @click="inspector.inspect(element.id, 'section')">
+                            <i class="fas fa-crosshairs"></i>
+                        </div>
                         <span>{{ translator.trans('section') }}</span>
                     </div>
                     <!--
@@ -67,6 +70,7 @@ const structureStore = inject('structure.store');
 const selectionStore = inject('selection.store');
 const contextmenu = inject('usecase.contextmenu');
 const blockPicker = inject('blocks.picker');
+const inspector = inject('structure.inspector');
 
 const startDraggable = event => draggableUseCase.start(event);
 const changeDraggable = event => draggableUseCase.change(event);

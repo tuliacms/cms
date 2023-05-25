@@ -145,6 +145,7 @@ provide('usecase.contextmenu', props.container.get('usecase.contextmenu'));
 provide('messenger', messenger);
 provide('structure', props.container.get('structure'));
 provide('structure.store', props.container.get('structure.store'));
+provide('structure.inspector', props.container.get('structure.inspector'));
 provide('selection.store', props.container.get('selection.store'));
 provide('instance.extensions', props.container.get('instantiator.extension'));
 provide('columnSize', props.container.get('columnSize'));

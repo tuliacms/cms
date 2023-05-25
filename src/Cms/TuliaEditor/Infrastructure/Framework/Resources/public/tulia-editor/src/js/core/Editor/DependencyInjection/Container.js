@@ -20,6 +20,7 @@ import DataSynchronizer from "core/Editor/Structure/Element/DataSynchronizer";
 import ElementDataSubscriber from "core/Editor/Subscriber/Admin/ElementDataSubscriber";
 import ContentRendering from "core/Editor/UseCase/ContentRendering";
 import RenderedContentSubscriber from "core/Editor/Subscriber/Editor/RenderedContentSubscriber";
+import InspectorSubscriber from "core/Editor/Subscriber/Admin/InspectorSubscriber";
 
 export default class Container extends AbstractContainer {
     build() {
@@ -48,6 +49,7 @@ export default class Container extends AbstractContainer {
         this.register('subscriber.ElementDataSubscriber', ElementDataSubscriber, ['@messenger', '@element.data.registry', '@eventBus'], { tags: [{ name: 'event_subscriber' }] });
         this.register('subscriber.EditorSelectionSubscriber', EditorSelectionSubscriber, ['@selection.selectedElementBoundaries', '@selection.hoveredElementBoundaries'], { tags: [{ name: 'event_subscriber' }] });
         this.register('subscriber.RenderedContentSubscriber', RenderedContentSubscriber, ['@usecase.contentRendering'], { tags: [{ name: 'event_subscriber' }] });
+        this.register('subscriber.InspectorSubscriber', InspectorSubscriber, ['@messenger'], { tags: [{ name: 'event_subscriber' }] });
 
         super.finish();
     }

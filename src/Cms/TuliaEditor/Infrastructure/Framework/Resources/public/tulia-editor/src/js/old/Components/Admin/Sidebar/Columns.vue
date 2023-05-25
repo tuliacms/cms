@@ -26,7 +26,7 @@
                             <i class="fas fa-arrows-alt"></i>
                         </div>
                         <span>{{ translator.trans('column') }}</span>
-                        <div class="tied-structure-element-options">
+                        <div class="tued-structure-element-options">
                             <div class="tued-structure-column-sizer">
                                 <span>{{ breakpointSize }}</span>
                                 <input

@@ -9,6 +9,7 @@ export default class Blocks {
         columnsUseCase,
         rowsUseCase,
         sectionsUseCase,
+        inspector,
     ) {
         this.blocksRegistry = blocksRegistry;
         this.structureStore = structureStore;
@@ -17,6 +18,7 @@ export default class Blocks {
         this.columnsUseCase = columnsUseCase;
         this.rowsUseCase = rowsUseCase;
         this.sectionsUseCase = sectionsUseCase;
+        this.inspector = inspector;
     }
 
     newBlock(code, columnId) {
@@ -36,8 +38,9 @@ export default class Blocks {
         }
 
         this.structureStore.appendBlock({ id, code }, columnId);
-        this.selectionUseCase.select(id, 'block');
+        this.selectionUseCase.select(id, 'block', true);
         this.structureUseCase.update();
+        this.inspector.inspect(id, 'block');
 
         return id;
     }

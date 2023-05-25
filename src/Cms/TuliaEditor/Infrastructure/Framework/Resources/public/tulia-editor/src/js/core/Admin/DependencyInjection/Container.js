@@ -36,6 +36,7 @@ import StructureRenderer from "core/Admin/Structure/StructureRenderer";
 import PreviewSubscriber from "core/Admin/Subscriber/Admin/PreviewSubscriber";
 import Preview from "core/Admin/View/Preview";
 import SectionConfigurator from "core/Admin/Structure/Element/Config/SectionConfigurator";
+import Inspector from "core/Admin/UseCase/Inspector";
 
 export default class Container extends AbstractContainer {
     build() {
@@ -46,7 +47,7 @@ export default class Container extends AbstractContainer {
         this.registerFactory('usecase.sections', () => new Sections(this.get('structure.store'), this.get('usecase.selection'), this.get('structure.admin')));
         this.registerFactory('usecase.rows', () => new Rows(this.get('structure.store'), this.get('usecase.selection'), this.get('structure.admin')));
         this.registerFactory('usecase.columns', () => new Columns(this.get('structure.store'), this.get('usecase.selection'), this.get('structure.admin')));
-        this.registerFactory('usecase.blocks', () => new Blocks(this.get('blocks.registry'), this.get('structure.store'), this.get('usecase.selection'), this.get('structure.admin'), this.get('usecase.columns'), this.get('usecase.rows'), this.get('usecase.sections')));
+        this.registerFactory('usecase.blocks', () => new Blocks(this.get('blocks.registry'), this.get('structure.store'), this.get('usecase.selection'), this.get('structure.admin'), this.get('usecase.columns'), this.get('usecase.rows'), this.get('usecase.sections'), this.get('structure.inspector')));
         this.registerFactory('usecase.selection', () => new Selection(this.get('selection.store'), this.get('messenger'), this.get('eventBus')));
         this.registerFactory('usecase.draggable', () => new Draggable(this.get('usecase.selection'), this.get('structure.store'), this.get('eventBus'), this.get('messenger')));
         this.registerFactory('usecase.contextmenu', () => new Contextmenu(this.get('contextmenu.store'), this.get('usecase.selection')));
@@ -68,6 +69,7 @@ export default class Container extends AbstractContainer {
         this.register('breakpointsAwareDataStorageFactory', BreakpointsAwareDataStorageFactory, ['%options', '@eventBus']);
         this.register('breakpointsStateCalculatorFactory', BreakpointsStateCalculatorFactory, ['%options', '@eventBus']);
         this.register('configurator.section', SectionConfigurator);
+        this.register('structure.inspector', Inspector, ['@messenger']);
 
         // Subscribers
         this.register('subscriber.BuildVueOnHtmlReady', BuildVueOnHtmlReady, ['@vueFactory', '%options', '%instanceId', '%options.directives', '%options.controls', '%options.extensions', '%options.blocks', this], { tags: [{ name: 'event_subscriber' }] });
