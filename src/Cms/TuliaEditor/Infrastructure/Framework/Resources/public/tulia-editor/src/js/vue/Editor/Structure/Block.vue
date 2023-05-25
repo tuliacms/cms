@@ -28,6 +28,6 @@ const translator = inject('translator');
 const selection = inject('usecase.selection');
 const registry = inject('blocks.registry');
 
-const block = inject('instance.blocks').editor(props);
+const block = inject('structure').block(props.block);
 const blockClass = (block) => BlockClassnameGenerator.generate(block);
 </script>

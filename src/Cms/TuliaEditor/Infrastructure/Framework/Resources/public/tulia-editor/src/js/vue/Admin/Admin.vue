@@ -143,12 +143,9 @@ provide('usecase.selection', props.container.get('usecase.selection'));
 provide('usecase.draggable', props.container.get('usecase.draggable'));
 provide('usecase.contextmenu', props.container.get('usecase.contextmenu'));
 provide('messenger', messenger);
+provide('structure', props.container.get('structure'));
 provide('structure.store', props.container.get('structure.store'));
 provide('selection.store', props.container.get('selection.store'));
-provide('instance.blocks', props.container.get('instantiator.block'));
-provide('instance.columns', props.container.get('instantiator.column'));
-provide('instance.rows', props.container.get('instantiator.row'));
-provide('instance.sections', props.container.get('instantiator.section'));
 provide('instance.extensions', props.container.get('instantiator.extension'));
 provide('columnSize', props.container.get('columnSize'));
 provide('blocks.registry', props.container.get('blocks.registry'));
@@ -158,6 +155,7 @@ provide('assets', props.container.get('assets'));
 provide('blocks.picker', props.container.get('blocks.picker'));
 provide('breakpointsAwareDataStorageFactory', props.container.get('breakpointsAwareDataStorageFactory'));
 provide('breakpointsStateCalculatorFactory', props.container.get('breakpointsStateCalculatorFactory'));
+provide('configurator.section', props.container.get('configurator.section'));
 </script>
 <script>
 export default {

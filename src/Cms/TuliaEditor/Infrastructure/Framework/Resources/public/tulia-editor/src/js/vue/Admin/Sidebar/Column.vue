@@ -49,7 +49,7 @@ const selectionUseCase = inject('usecase.selection');
 const selectionStore = inject('selection.store');
 const contextmenu = inject('usecase.contextmenu');
 const translator = inject('translator');
-const column = inject('instance.columns').manager(props);
+const column = inject('structure').column(props.column);
 const columnSize = inject('columnSize');
 const eventBus = inject('eventBus');
 

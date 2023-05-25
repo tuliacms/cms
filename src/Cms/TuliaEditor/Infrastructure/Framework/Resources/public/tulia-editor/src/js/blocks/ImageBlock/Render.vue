@@ -5,7 +5,7 @@
 <script setup>
 const { defineProps, inject } = require('vue');
 const props = defineProps(['block']);
-const block = inject('instance.blocks').render(props);
+const block = inject('structure').block(props.block);
 const Image = inject('extensions.registry').render('Image');
 </script>
 <script>

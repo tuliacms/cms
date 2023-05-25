@@ -44,10 +44,7 @@ import ContainerClassnameGenerator from "core/Editor/Render/Section/ContainerCla
 
 const messenger = inject('messenger');
 const structureStore = inject('structure.store');
-const sectionsInstance = inject('instance.sections');
-const rowsInstance = inject('instance.rows');
-const columnsInstance = inject('instance.columns')
-const blocksInstance = inject('instance.blocks');
+const structureService = inject('structure');
 const registry = inject('blocks.registry');
 
 const renderedContent = ref(null);
@@ -65,25 +62,25 @@ const structure = computed(() => {
     };
 
     for (let s in structureStore.sections) {
-        const section = sectionsInstance.render(structureStore.sections[s].id);
+        const section = structureService.section(structureStore.sections[s].id);
         section.rows = [];
 
         const rows = structureStore.rowsOf(section.id);
 
         for (let r in rows) {
-            const row = rowsInstance.render(rows[r].id);
+            const row = structureService.row(rows[r].id);
             row.columns = [];
 
             const columns = structureStore.columnsOf(row.id);
 
             for (let c in columns) {
-                const column = columnsInstance.render(columns[c].id);
+                const column = structureService.column(columns[c].id);
                 column.blocks = [];
 
                 const blocks = structureStore.blocksOf(column.id);
 
                 for (let b in blocks) {
-                    column.blocks.push(blocksInstance.render(blocks[b].id));
+                    column.blocks.push(structureService.block(blocks[b].id));
                 }
 
                 row.columns.push(column);

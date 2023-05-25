@@ -10,5 +10,5 @@ const props = defineProps(['column']);*/
 import { defineProps, inject } from "vue";
 
 const props = defineProps(['column']);
-const column = inject('instance.columns').manager(props);
+const column = inject('structure').column(props.column);
 </script>

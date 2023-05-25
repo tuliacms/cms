@@ -6,7 +6,7 @@
 <script setup>
 import { defineProps, inject } from "vue";
 const props = defineProps(['block']);
-const block = inject('instance.blocks').manager(props);
+const block = inject('structure').block(props.block);
 const translator = inject('translator');
 const controls = inject('controls.registry');
 

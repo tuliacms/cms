@@ -36,7 +36,7 @@ const structure = inject('structure.store');
 const contextmenu = inject('contextmenu');
 const translator = inject('translator');
 const selection = inject('usecase.selection');
-const column = inject('instance.columns').editor(props);
+const column = inject('structure').column(props.column);
 
 const columnClass = computed(() => ColumnClassnameGenerator.generate(column, ['tued-structure-column', 'tued-structure-element-selectable']));
 </script>

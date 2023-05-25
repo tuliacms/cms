@@ -8,7 +8,7 @@
 <script setup>
 const { defineProps, inject, onMounted, onUnmounted, computed, reactive, watch } = require('vue');
 const props = defineProps(['block']);
-const block = inject('instance.blocks').manager(props);
+const block = inject('structure').block(props.block);
 const controls = inject('controls.registry');
 const translator = inject('translator');
 const options = inject('options');

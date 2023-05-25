@@ -35,6 +35,7 @@ import ContentRenderingSubscriber from "core/Admin/Subscriber/Editor/ContentRend
 import StructureRenderer from "core/Admin/Structure/StructureRenderer";
 import PreviewSubscriber from "core/Admin/Subscriber/Admin/PreviewSubscriber";
 import Preview from "core/Admin/View/Preview";
+import SectionConfigurator from "core/Admin/Structure/Element/Config/SectionConfigurator";
 
 export default class Container extends AbstractContainer {
     build() {
@@ -42,14 +43,14 @@ export default class Container extends AbstractContainer {
 
         this.registerFactory('view', () => new View(this.get('root'), this.getParameter('instanceId'), this.get('translator'), this.get('eventBus')));
         this.register('view.preview', Preview, ['@root', '@eventBus', '@translator', '%instanceId', '%options']);
-        this.registerFactory('usecase.sections', () => new Sections(this.get('structure.store'), this.get('usecase.selection'), this.get('structure')));
-        this.registerFactory('usecase.rows', () => new Rows(this.get('structure.store'), this.get('usecase.selection'), this.get('structure')));
-        this.registerFactory('usecase.columns', () => new Columns(this.get('structure.store'), this.get('usecase.selection'), this.get('structure')));
-        this.registerFactory('usecase.blocks', () => new Blocks(this.get('blocks.registry'), this.get('structure.store'), this.get('usecase.selection'), this.get('structure'), this.get('usecase.columns'), this.get('usecase.rows'), this.get('usecase.sections')));
+        this.registerFactory('usecase.sections', () => new Sections(this.get('structure.store'), this.get('usecase.selection'), this.get('structure.admin')));
+        this.registerFactory('usecase.rows', () => new Rows(this.get('structure.store'), this.get('usecase.selection'), this.get('structure.admin')));
+        this.registerFactory('usecase.columns', () => new Columns(this.get('structure.store'), this.get('usecase.selection'), this.get('structure.admin')));
+        this.registerFactory('usecase.blocks', () => new Blocks(this.get('blocks.registry'), this.get('structure.store'), this.get('usecase.selection'), this.get('structure.admin'), this.get('usecase.columns'), this.get('usecase.rows'), this.get('usecase.sections')));
         this.registerFactory('usecase.selection', () => new Selection(this.get('selection.store'), this.get('messenger'), this.get('eventBus')));
         this.registerFactory('usecase.draggable', () => new Draggable(this.get('usecase.selection'), this.get('structure.store'), this.get('eventBus'), this.get('messenger')));
         this.registerFactory('usecase.contextmenu', () => new Contextmenu(this.get('contextmenu.store'), this.get('usecase.selection')));
-        this.register('usecase.editorWindow', EditorWindow, ['@eventBus', '@view', '@structure', '@structure.renderer']);
+        this.register('usecase.editorWindow', EditorWindow, ['@eventBus', '@view', '@structure.admin', '@structure.renderer']);
         this.registerFactory('canvas', () => new Canvas(this.getParameter('options'), this.get('eventBus')));
         this.registerFactory('structure.store', () => useStructureStore());
         this.registerFactory('selection.store', () => useSelectionStore());
@@ -59,13 +60,14 @@ export default class Container extends AbstractContainer {
         this.registerFactory('element.config.synchronizer', () => new ConfigSynchronizer(this.get('messenger')));
         this.registerFactory('element.data.storeFactory', () => new DataStoreFactory(this.get('blocks.registry'), this.get('structure.store')));
         this.registerFactory('columnSize', () => new ColumnSize());
-        this.register('structure', Structure, ['@structure.store', '@element.config.registry', '@element.data.registry', '@messenger', '%options']);
+        this.register('structure.admin', Structure, ['@structure.store', '@element.config.registry', '@element.data.registry', '@messenger', '%options']);
         this.register('structure.renderer', StructureRenderer, ['@assets']);
         this.register('assets', Assets);
         this.register('blocks.picker', BlocksPicker, ['@usecase.blocks', '@modals']);
         this.register('modals', Modals);
         this.register('breakpointsAwareDataStorageFactory', BreakpointsAwareDataStorageFactory, ['%options', '@eventBus']);
         this.register('breakpointsStateCalculatorFactory', BreakpointsStateCalculatorFactory, ['%options', '@eventBus']);
+        this.register('configurator.section', SectionConfigurator);
 
         // Subscribers
         this.register('subscriber.BuildVueOnHtmlReady', BuildVueOnHtmlReady, ['@vueFactory', '%options', '%instanceId', '%options.directives', '%options.controls', '%options.extensions', '%options.blocks', this], { tags: [{ name: 'event_subscriber' }] });

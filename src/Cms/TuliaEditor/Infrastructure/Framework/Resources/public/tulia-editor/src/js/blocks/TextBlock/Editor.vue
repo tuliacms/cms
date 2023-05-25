@@ -7,7 +7,7 @@
 <script setup>
 import { defineProps, inject } from "vue";
 const props = defineProps(['block']);
-const block = inject('instance.blocks').editor(props);
+const block = inject('structure').block(props.block);
 const extensions = inject('extensions.registry');
 
 const WysiwygEditor = extensions.editor('WysiwygEditor');

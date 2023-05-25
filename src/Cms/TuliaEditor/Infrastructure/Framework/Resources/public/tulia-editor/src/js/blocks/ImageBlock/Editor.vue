@@ -12,7 +12,7 @@
 <script setup>
 import { defineProps, inject, watch, ref } from "vue";
 const props = defineProps(['block']);
-const block = inject('instance.blocks').editor(props);
+const block = inject('structure').block(props.block);
 const ImageEditor = inject('extensions.registry').editor('Image');
 const contextmenu = inject('contextmenu');
 </script>

@@ -11,7 +11,13 @@ export default {
     manager: Manager,
     editor: Editor,
     render: Render,
-    defaults: {
-        content: 'Lorem ipsum dolor sit amet...'
-    }
+    store: {
+        data: {
+            state: () => {
+                return {
+                    content: 'Lorem ipsum dolor sit amet...'
+                };
+            },
+        },
+    },
 };

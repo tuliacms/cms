@@ -38,7 +38,7 @@ const translator = inject('translator');
 const selection = inject('usecase.selection');
 const contextmenu = inject('contextmenu');
 const structure = inject('structure.store');
-const section = inject('instance.sections').editor(props);
+const section = inject('structure').section(props.section);
 
 const containerClass = computed(() => ContainerClassnameGenerator.generate(section));
 </script>

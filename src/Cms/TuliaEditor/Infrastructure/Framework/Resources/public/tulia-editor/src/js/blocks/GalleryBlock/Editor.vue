@@ -19,7 +19,7 @@ import { defineProps, inject, computed } from "vue";
 import ColumnClassnameGenerator from "blocks/GalleryBlock/ColumnClassnameGenerator";
 
 const props = defineProps(['block']);
-const block = inject('instance.blocks').editor(props);
+const block = inject('structure').block(props.block);
 const extensions = inject('extensions.registry');
 const Image = extensions.editor('Image');
 const Collection = extensions.editor('Collection');

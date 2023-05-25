@@ -5,7 +5,7 @@
 <script setup>
 const { defineProps, inject } = require('vue');
 const props = defineProps(['block']);
-const block = inject('instance.blocks').render(props);
+const block = inject('structure').block(props.block);
 </script>
 <script>
 export default { name: 'Block.Text.Render' }

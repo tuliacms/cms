@@ -18,7 +18,7 @@ import Select from "controls/Select.vue";
 import { inject, defineProps } from "vue";
 
 const props = defineProps(['section']);
-const section = inject('instance.sections').manager(props);
+const section = inject('structure').section(props.section);
 const translator = inject('translator');
 
 const containerWidthList = {

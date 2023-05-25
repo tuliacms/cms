@@ -8,5 +8,5 @@ import DesignOptions from "admin/Sidebar/Selected/Parts/Block/DesignOptions.vue"
 import { defineProps, inject } from "vue";
 
 const props = defineProps(['block']);
-const block = inject('instance.blocks').manager(props);
+const block = inject('structure').block(props.block);
 </script>

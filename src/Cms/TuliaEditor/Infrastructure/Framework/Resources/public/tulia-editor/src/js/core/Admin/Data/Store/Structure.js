@@ -236,6 +236,11 @@ export const useStructureStore = defineStore('structure', {
                 return find(state.sections, id);
             };
         },
+        findParent(state) {
+            return (childId) => {
+                return findParent(state.sections, childId);
+            };
+        },
         rowsOf(state) {
             return (sectionId) => {
                 return find(state.sections, sectionId).rows;

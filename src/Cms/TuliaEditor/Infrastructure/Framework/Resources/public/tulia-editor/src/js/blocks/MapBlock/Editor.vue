@@ -79,7 +79,7 @@ import { defineProps, inject, onMounted, computed, reactive, watch } from "vue";
 const L = require('leaflet');
 const _ = require('lodash');
 const props = defineProps(['block']);
-const block = inject('instance.blocks').editor(props);
+const block = inject('structure').block(props.block);
 const translator = inject('translator');
 
 const mapId = `tued-map-instance-${_.uniqueId()}`;

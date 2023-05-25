@@ -5,7 +5,7 @@
 <script setup>
 import { defineProps, inject, computed } from "vue";
 const props = defineProps(['block']);
-const block = inject('instance.blocks').manager(props);
+const block = inject('structure').block(props.block);
 const Select = inject('controls.registry').manager('Select');
 const translator = inject('translator');
 const options = inject('options');

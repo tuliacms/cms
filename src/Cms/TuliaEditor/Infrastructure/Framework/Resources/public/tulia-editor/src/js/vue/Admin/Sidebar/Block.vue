@@ -27,5 +27,5 @@ const structureDragOptions = inject('structureDragOptions');
 const selectionUseCase = inject('usecase.selection');
 const selectionStore = inject('selection.store');
 const contextmenu = inject('usecase.contextmenu');
-const block = inject('instance.blocks').manager(props);
+const block = inject('structure').block(props.block);
 </script>

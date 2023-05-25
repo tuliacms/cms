@@ -36,8 +36,8 @@ const structure = inject('structure.store');
 const contextmenu = inject('contextmenu');
 const translator = inject('translator');
 const selection = inject('usecase.selection');
-const row = inject('instance.rows').editor(props);
-const section = inject('instance.sections').editor(props.parent);
+const row = inject('structure').row(props.row);
+const section = inject('structure').section(props.parent);
 
 const rowClassname = computed(() => RowClassnameGenerator.generate(row, section, 'tued-structure-row tued-structure-element-selectable'));
 </script>

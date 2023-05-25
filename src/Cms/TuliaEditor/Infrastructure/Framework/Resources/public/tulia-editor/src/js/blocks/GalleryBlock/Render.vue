@@ -17,7 +17,7 @@
 import { defineProps, inject, computed } from "vue";
 const ColumnClassnameGenerator = require('./ColumnClassnameGenerator.js').default;
 const props = defineProps(['block']);
-const block = inject('instance.blocks').render(props);
+const block = inject('structure').block(props.block);
 const extensions = inject('extensions.registry');
 const Image = extensions.render('Image');
 const filemanager = extensions.render('Filemanager');
