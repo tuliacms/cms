@@ -31,15 +31,19 @@ export default class BlockDefaults {
         return ObjectCloner.deepClone(exportedState);
     }
 
+    /**
+     * Default config options has prefix for two reasons. First is to distinguish them from
+     * the component ones. Second - most important - to prevent overwriting by component.
+     */
     prepareDefaultState(state) {
-        state.visibility = {xxl: null, xl: null, lg: null, md: null, sm: null, xs: null};
-        state.margin = {
+        state.__visibility = {xxl: null, xl: null, lg: null, md: null, sm: null, xs: null};
+        state.__margin = {
             left: {xxl: null, xl: null, lg: null, md: null, sm: null, xs: null},
             top: {xxl: null, xl: null, lg: null, md: null, sm: null, xs: null},
             right: {xxl: null, xl: null, lg: null, md: null, sm: null, xs: null},
             bottom: {xxl: null, xl: null, lg: null, md: null, sm: null, xs: null},
         };
-        state.padding = {
+        state.__padding = {
             left: {xxl: null, xl: null, lg: null, md: null, sm: null, xs: null},
             top: {xxl: null, xl: null, lg: null, md: null, sm: null, xs: null},
             right: {xxl: null, xl: null, lg: null, md: null, sm: null, xs: null},

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Filemanager\Infrastructure\Cms\Shortcode;
 
+use Symfony\Component\Uid\Uuid;
 use Tulia\Cms\Filemanager\Domain\Generator\Html;
 use Tulia\Component\Shortcode\Compiler\ShortcodeCompilerInterface;
 use Tulia\Component\Shortcode\ShortcodeInterface;
@@ -20,6 +21,12 @@ class ImageShortcode implements ShortcodeCompilerInterface
         }
 
         if ($id = $shortcode->getParameter('id')) {
+            try {
+                Uuid::fromString($shortcode->getParameter('id'));
+            } catch (\InvalidArgumentException $e) {
+                throw new \InvalidArgumentException(sprintf('Invalid UUID of "image" shortcode given: "%s"', $shortcode->getParameter('id')), $e->getCode(), $e);
+            }
+
             return $this->compileId($shortcode, $id);
         }
 
@@ -28,7 +35,7 @@ class ImageShortcode implements ShortcodeCompilerInterface
 
     public function getAlias(): string
     {
-        return 'image';
+        return 'c';
     }
 
     private function compileSrc(ShortcodeInterface $shortcode, string $src): string

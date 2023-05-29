@@ -5,5 +5,8 @@ const Render = require('./Render.js').default;
 export default {
     Manager,
     Editor,
-    Render
+    Render: 'extension.backgroundImage.render',
+    services (container) {
+        container.register('extension.backgroundImage.render', Render, ['@extension.filemanager.render']);
+    }
 }

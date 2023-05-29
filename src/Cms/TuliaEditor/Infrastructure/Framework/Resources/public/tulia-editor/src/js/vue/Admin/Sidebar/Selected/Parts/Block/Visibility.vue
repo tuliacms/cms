@@ -9,7 +9,7 @@ const translator = inject('translator');
 const controls = inject('controls.registry');
 const Switch = controls.manager('Switch.YesNo');
 
-const storage = inject('breakpointsAwareDataStorageFactory').ref(props.block.config.visibility);
+const storage = inject('breakpointsAwareDataStorageFactory').ref(props.block.config.__visibility);
 const stateCalculator = inject('breakpointsStateCalculatorFactory').fromStorage(storage);
 
 const calculatedVisibilityLabel = computed(() => {

@@ -38,16 +38,16 @@ const storageFactory = inject('breakpointsAwareDataStorageFactory');
 
 const storage = {
     margin: {
-        left: storageFactory.ref(props.block.config.margin.left),
-        top: storageFactory.ref(props.block.config.margin.top),
-        right: storageFactory.ref(props.block.config.margin.right),
-        bottom: storageFactory.ref(props.block.config.margin.bottom),
+        left: storageFactory.ref(props.block.config.__margin.left),
+        top: storageFactory.ref(props.block.config.__margin.top),
+        right: storageFactory.ref(props.block.config.__margin.right),
+        bottom: storageFactory.ref(props.block.config.__margin.bottom),
     },
     padding: {
-        left: storageFactory.ref(props.block.config.padding.left),
-        top: storageFactory.ref(props.block.config.padding.top),
-        right: storageFactory.ref(props.block.config.padding.right),
-        bottom: storageFactory.ref(props.block.config.padding.bottom),
+        left: storageFactory.ref(props.block.config.__padding.left),
+        top: storageFactory.ref(props.block.config.__padding.top),
+        right: storageFactory.ref(props.block.config.__padding.right),
+        bottom: storageFactory.ref(props.block.config.__padding.bottom),
     },
 };
 
