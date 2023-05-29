@@ -37,7 +37,7 @@ let config = {
                 test: /\.css$/i,
                 use: [MiniCssExtractPlugin.loader, "css-loader"],
             },
-        ]
+        ],
     },
     watchOptions: {
         aggregateTimeout: 200,
@@ -55,12 +55,14 @@ let config = {
     resolve: {
         extensions: ['.js', '.scss'],
         alias: {
+            core: path.resolve(__dirname, 'src/js/core'),
+            admin: path.resolve(__dirname, 'src/js/vue/Admin'),
+            editor: path.resolve(__dirname, 'src/js/vue/Editor'),
             components: path.resolve(__dirname, 'src/js/Components'),
-            controls: path.resolve(__dirname, 'src/js/Controls'),
             blocks: path.resolve(__dirname, 'src/js/blocks'),
             extensions: path.resolve(__dirname, 'src/js/extensions'),
-            directives: path.resolve(__dirname, 'src/js/directives'),
-            shared: path.resolve(__dirname, 'src/js/shared'),
+            controls: path.resolve(__dirname, 'src/js/vue/controls'),
+            directives: path.resolve(__dirname, 'src/js/vue/directives'),
         }
     },
     devtool: 'source-map',

@@ -1,6 +1,6 @@
-const Editor = require('./Editor.vue').default;
-const Render = require('./Render.vue').default;
-const Manager = require('./Manager.vue').default;
+import Editor from './Editor.vue';
+import Render from './Render.vue';
+import Manager from './Manager.vue';
 
 export default {
     theme: '*',
@@ -11,12 +11,24 @@ export default {
     editor: Editor,
     render: Render,
     manager: Manager,
-    defaults: {
-        position: {
-            lat: 51.505,
-            lng: -0.09,
+    store: {
+        data: {
+            state: () => {
+                return {
+                    position: {
+                        lat: 51.505,
+                        lng: -0.09,
+                    },
+                };
+            },
         },
-        zoom: 10,
-        height: 200,
-    }
+        config: {
+            state: () => {
+                return {
+                    zoom: 10,
+                    height: 200,
+                };
+            },
+        },
+    },
 };

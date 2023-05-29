@@ -1,24 +1,26 @@
 const _ = require('lodash');
 
 export default class Collection {
-    _collection;
+    block;
+    property;
     prototype;
 
-    constructor (collection, prototype) {
-        this._assertThatAllElementsContainsId(collection);
+    constructor (block, property, prototype) {
+        this._assertThatAllElementsContainsId(block.data[property]);
 
-        this._collection = collection;
+        this.block = block;
+        this.property = property;
         this.prototype = prototype;
     }
 
     get collection () {
-        return this._collection;
+        return this.block.data[this.property];
     }
 
     remove (element) {
-        for (let i in this._collection) {
-            if (this._collection[i].id === element.id) {
-                this._collection.splice(i, 1);
+        for (let i in this.block.data[this.property]) {
+            if (this.block.data[this.property][i].id === element.id) {
+                this.block.data[this.property].splice(i, 1);
             }
         }
     }
@@ -27,9 +29,9 @@ export default class Collection {
         let element = _.assign({}, this.prototype);
         element.id = this._generateId();
 
-        this._collection.push(element);
+        this.block.data[this.property].push(element);
 
-        return this._collection.length - 1;
+        return this.block.data[this.property].length - 1;
     }
 
     moveBackward (element) {
@@ -59,7 +61,7 @@ export default class Collection {
         }
 
         // Cannot move forward the last element of collection
-        if (index + 1 >= this._collection.length) {
+        if (index + 1 >= this.block.data[this.property].length) {
             return;
         }
 
@@ -69,13 +71,13 @@ export default class Collection {
     }
 
     moveToIndex (element, oldIndex, newIndex) {
-        this._collection.splice(oldIndex, 1);
-        this._collection.splice(newIndex, 0, element);
+        this.block.data[this.property].splice(oldIndex, 1);
+        this.block.data[this.property].splice(newIndex, 0, element);
     }
 
     _findIndex (element) {
-        for (let i in this._collection) {
-            if (this._collection[i].id === element.id) {
+        for (let i in this.block.data[this.property]) {
+            if (this.block.data[this.property][i].id === element.id) {
                 return parseInt(i);
             }
         }

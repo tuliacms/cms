@@ -1,6 +1,6 @@
-const Editor = require('./Editor.vue').default;
-const Render = require('./Render.vue').default;
-const Manager = require('./Manager.vue').default;
+import Editor from './Editor.vue';
+import Render from './Render.vue';
+import Manager from './Manager.vue';
 
 export default {
     theme: '*',
@@ -11,8 +11,14 @@ export default {
     manager: Manager,
     editor: Editor,
     render: Render,
-    defaults: {
-        url: 'https://www.youtube.com/watch?v=h_D3VFfhvs4',
-        ratio: '16x9',
-    }
+    store: {
+        config: {
+            state: () => {
+                return {
+                    url: 'https://www.youtube.com/watch?v=h_D3VFfhvs4',
+                    ratio: '16x9',
+                };
+            },
+        },
+    },
 };

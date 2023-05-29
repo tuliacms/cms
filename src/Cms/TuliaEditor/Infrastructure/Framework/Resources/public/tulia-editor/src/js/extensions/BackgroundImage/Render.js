@@ -1,40 +1,38 @@
 export default class Render {
-    id;
-    block;
-    image;
+    constructor(filemanagerRender) {
+        this.filemanagerRender = filemanagerRender;
+    }
 
-    constructor (block, image) {
+    of(block, image) {
+        return new RenderOf(this.filemanagerRender, block, image);
+    }
+}
+
+
+class RenderOf {
+    constructor (filemanagerRender, block, image) {
+        this.filemanagerRender = filemanagerRender;
         this.validateImage(image);
-        let self = this;
 
         this.block = block;
         this.image = image;
-        this.id = block.style({
-            'background-image': () => {
-                const img = self.image();
-
-                if (!img.id) {
-                    return `url('#')`;
-                }
-
-                img.size = img.size ?? 'original';
-
-                return `url('[image_url id="${img.id}" size="${img.size}"]')`;
-            }
-        });
     }
 
-    link = () => {
+    get link() {
         const img = this.image();
 
         if (!img.id) {
             return `#`;
         }
 
-        return `[image_url id="${img.id}" size="${img.size}"]`;
-    };
+        return this.filemanagerRender.generatePreviewImagePath(img);
+    }
 
-    validateImage (image) {
+    get backgroundImage() {
+        return `url(${this.link})`;
+    }
+
+    validateImage(image) {
         if (typeof image !== 'function') {
             throw new Error('Image must be a getter function returning a image.');
         }

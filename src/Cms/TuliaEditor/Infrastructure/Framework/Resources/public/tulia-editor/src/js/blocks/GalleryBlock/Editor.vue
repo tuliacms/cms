@@ -2,7 +2,7 @@
     <div>
         <div class="row">
             <div v-for="(image, i) in images.collection" :class="columnsClassname" :key="image.id">
-                <Image v-model="images.collection[i].file" :size="block.data.size" @updated="$emit('updated')" :ref="setRef"></Image>
+                <Image v-model="images.collection[i].file" :size="block.config.size" :holder="block.id"></Image>
                 <Actions actions="moveBackward,moveForward,remove" :collection="images" :item="image"></Actions>
             </div>
         </div>
@@ -15,36 +15,22 @@
 </template>
 
 <script setup>
-const { defineProps, inject, computed, reactive, onMounted, watch, ref, toRaw } = require('vue');
-const ColumnClassnameGenerator = require('./ColumnClassnameGenerator.js').default;
+import { defineProps, inject, computed } from "vue";
+import ColumnClassnameGenerator from "blocks/GalleryBlock/ColumnClassnameGenerator";
+
 const props = defineProps(['block']);
-const block = inject('blocks.instance').editor(props);
-const view = inject('canvas.view');
-const Image = block.extension('Image');
-const Collection = block.extension('Collection');
-const Actions = block.extension('Collection.Actions');
+const block = inject('structure').block(props.block);
+const extensions = inject('extensions.registry');
+const Image = extensions.editor('Image');
+const Collection = extensions.editor('Collection');
+const Actions = extensions.editor('Collection.Actions');
 
-const imageExtList = ref([]);
-const setRef = function (v) {
-    if (!imageExtList.value.includes(v)) {
-        imageExtList.value.push(v);
-    }
-};
-
-const images = new Collection(block.data.images, {
+const images = new Collection(block, 'images', {
     file: { id: null, filename: null }
 });
 
 const columnsClassname = computed(ColumnClassnameGenerator.computer(block));
-
-watch(() => block.data.size, async (newValue) => {
-    for (let i in imageExtList.value) {
-        imageExtList.value[i].changeSize(newValue);
-    }
-});
 </script>
 <script>
-export default {
-    name: 'GalleryEditor'
-}
+export default { name: 'Block.Gallery.Editor' }
 </script>

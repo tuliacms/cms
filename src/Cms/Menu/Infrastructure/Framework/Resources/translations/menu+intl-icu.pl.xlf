@@ -170,6 +170,10 @@
                 <source>menuSpace</source>
                 <target>Miejsce wyświetlania</target>
             </trans-unit>
+            <trans-unit id="tuliacms.menu.43">
+                <source>pleaseProvideMenuSpace</source>
+                <target>Proszę wybrać miejsce wyświetlania menu.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -6,7 +6,7 @@
         <div class="tued-simplemap-editable-overlay">
             <button type="button" class="tued-btn" @click="finishEditing">{{ translator.trans('finishMapEditing') }}</button>
         </div>
-        <div :id="mapId" :style="{ height: settings.height + 'px' }"></div>
+        <div :id="mapId" :style="{ height: block.config.height + 'px' }"></div>
     </div>
 </template>
 
@@ -75,11 +75,11 @@
 </style>
 
 <script setup>
-const { defineProps, inject, onMounted, computed, reactive, watch } = require('vue');
+import { defineProps, inject, onMounted, computed, reactive, watch } from "vue";
 const L = require('leaflet');
 const _ = require('lodash');
 const props = defineProps(['block']);
-const block = inject('blocks.instance').editor(props);
+const block = inject('structure').block(props.block);
 const translator = inject('translator');
 
 const mapId = `tued-map-instance-${_.uniqueId()}`;
@@ -87,7 +87,6 @@ const mapId = `tued-map-instance-${_.uniqueId()}`;
 let position = [block.data.position.lat, block.data.position.lng];
 const settings = reactive({
     editable: false,
-    height: block.data.height,
 });
 
 const editMap = () => {
@@ -98,12 +97,12 @@ const finishEditing = () => {
 };
 let map, tiles, marker;
 
-/*watch(() => block.data.zoom, async (zoom) => {
+watch(() => block.config.zoom, async (zoom) => {
     map.setZoom(zoom);
-});*/
+});
 
 onMounted(() => {
-    map = L.map(mapId).setView(position, block.data.zoom);
+    map = L.map(mapId).setView(position, block.config.zoom);
     tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         minZoom: 4,
@@ -120,7 +119,7 @@ onMounted(() => {
     ).addTo(map);
 
     map.on('zoom', (e) => {
-        block.data.zoom = map.getZoom();
+        block.send('map.zoom.change', map.getZoom());
     });
 
     map.on('click', function mapClickListen(e) {
@@ -137,4 +136,7 @@ onMounted(() => {
         block.data.position.lng = latlng.lng;
     });
 });
+</script>
+<script>
+export default { name: 'Block.Map.Editor' }
 </script>

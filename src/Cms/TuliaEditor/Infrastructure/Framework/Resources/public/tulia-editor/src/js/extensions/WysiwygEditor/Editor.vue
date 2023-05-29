@@ -44,7 +44,7 @@
 </style>
 
 <script>
-const ClassObserver = require('shared/Utils/ClassObserver.js').default;
+//const ClassObserver = require('shared/Utils/ClassObserver.js').default;
 
 export default {
     props: {
@@ -54,7 +54,7 @@ export default {
         },
         class: {}
     },
-    name: 'Wysiwyg',
+    name: 'Extension.WysiwygEditor.Editor',
     inject: ['messenger', 'translator'],
     data () {
         return {
@@ -91,9 +91,9 @@ export default {
             }
         });*/
 
-        this.messenger.on('editor.click.outside', () => {
+        /*this.messenger.on('editor.click.outside', () => {
             quill.theme.tooltip.root.classList.add('ql-hidden');
-        });
+        });*/
     },
     watch: {
         modelValue (val) {
@@ -110,3 +110,4 @@ export default {
     }*/
 };
 </script>
+

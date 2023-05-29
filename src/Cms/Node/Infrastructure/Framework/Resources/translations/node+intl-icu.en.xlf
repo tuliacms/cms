@@ -169,7 +169,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.node.43">
                 <source>mainCategoryHelp</source>
-                <target>Canonical link to this node will be generaten for this category.</target>
+                <target>Canonical link to this node will be generated for this category.</target>
             </trans-unit>
             <trans-unit id="tuliacms.node.44">
                 <source>additionalCategories</source>

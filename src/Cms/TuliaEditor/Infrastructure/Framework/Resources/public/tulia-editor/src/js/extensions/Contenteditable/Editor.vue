@@ -105,9 +105,6 @@ onMounted(() => {
 });
 
 </script>
-
 <script>
-export default {
-    name: 'Contenteditable',
-};
+export default {name: 'Extension.Contenteditable.Editor'}
 </script>

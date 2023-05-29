@@ -1,9 +1,12 @@
 <template>
-    <div>[map height="{{ block.data.height }}" lat="{{ block.data.position.lat }}" lng="{{ block.data.position.lng }}" zoom="{{ block.data.zoom }}"]</div>
+    <div>[map height="{{ block.config.height }}" lat="{{ block.data.position.lat }}" lng="{{ block.data.position.lng }}" zoom="{{ block.config.zoom }}"]</div>
 </template>
 
 <script setup>
-const { defineProps, inject, onMounted } = require('vue');
+import { defineProps, inject } from "vue";
 const props = defineProps(['block']);
-const block = inject('blocks.instance').render(props);
+const block = inject('structure').block(props.block);
+</script>
+<script>
+export default { name: 'Block.Map.Render' }
 </script>

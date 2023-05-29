@@ -1,15 +1,14 @@
 <template>
-    <Select v-model="block.data.size" :label="translator.trans('imageSize')" :choices="choices"></Select>
+    <Select v-model="block.config.size" :label="translator.trans('imageSize')" :choices="choices"></Select>
 </template>
 
 <script setup>
-const { defineProps, inject, onMounted, computed } = require('vue');
+import { defineProps, inject, computed } from "vue";
 const props = defineProps(['block']);
-const block = inject('blocks.instance').manager(props);
+const block = inject('structure').block(props.block);
+const Select = inject('controls.registry').manager('Select');
 const translator = inject('translator');
 const options = inject('options');
-
-const Select = block.control('Select');
 
 const choices = computed(() => {
     let choices = {original: 'Original'};
@@ -28,4 +27,7 @@ const choices = computed(() => {
 
     return choices;
 });
+</script>
+<script>
+export default { name: 'Block.Image.Manager' }
 </script>

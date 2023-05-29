@@ -64,11 +64,8 @@ const added = (index) => {
 onUnmounted(() => extension.unmount());
 onMounted(() => validateCollection());
 </script>
-
 <script>
-export default {
-    name: 'CollectionCarousel'
-}
+export default {name: 'Extension.Collection.Carousel.Editor'}
 </script>
 
 <style scoped lang="scss">

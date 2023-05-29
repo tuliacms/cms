@@ -1,5 +1,5 @@
 <template>
-    <i :class="iconClassname" @click="extension.execute('chose-icon')"></i>
+    <i :class="iconClassname" @click="extension.send('chose-icon')"></i>
 </template>
 
 <style scoped lang="scss">
@@ -15,24 +15,20 @@
 
 <script setup>
 const { defineProps, defineEmits, inject, onUnmounted, computed } = require('vue');
-const props = defineProps(['modelValue', 'class']);
-const extension = inject('extension.instance').editor('FontIcon');
+const props = defineProps(['modelValue', 'class', 'instanceId']);
+const extension = inject('instance.extensions').editor('FontIcon', props.instanceId);
 const emit = defineEmits(['update:modelValue']);
 
 const iconClassname = computed(() => {
     return `tued-ext-fonticon-element ${props.class} ${props.modelValue}`;
 });
 
-extension.operation('icon-chosen', (data, success, fail) => {
+extension.receive('icon-chosen', (data) => {
     emit('update:modelValue', data.icon);
-    success();
 });
 
 onUnmounted(() => extension.unmount());
 </script>
-
 <script>
-export default {
-    name: 'FontIconEditor'
-}
+export default {name: 'Extension.Fonticon.Editor'}
 </script>

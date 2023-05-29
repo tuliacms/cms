@@ -71,9 +71,12 @@ class DbalQuery extends AbstractDbalQuery
 
         $this->setDefaults($criteria);
 
-        if ($criteria['limit']) {
+        /**
+         * @todo Until spaces are simple_array, we need to fetch all menus.
+         */
+        /*if ($criteria['limit']) {
             $this->queryBuilder->setMaxResults($criteria['limit']);
-        }
+        }*/
 
         $this->callPlugins($criteria);
 
@@ -88,32 +91,31 @@ class DbalQuery extends AbstractDbalQuery
             return $collection;
         }
 
-        $items = [];
-        $rootItemId = null;
+        try {
+            foreach ($result as $row) {
+                $items = [];
+                $rootItemId = null;
 
-        if ($criteria['fetch_items']) {
-            $criteria['id'] = $result[0]['id'];
-            $items = $this->fetchMenuItems($criteria);
+                if ($criteria['fetch_items']) {
+                    $items = $this->fetchMenuItems(array_merge($criteria, ['id' => $row['id']]));
 
-            foreach ($items as $key => $row) {
-                if ($row['is_root']) {
-                    $rootItemId = $row['id'];
+                    foreach ($items as $itemKey => $item) {
+                        if ($item['is_root']) {
+                            $rootItemId = $item['id'];
 
-                    if (!$criteria['fetch_root']) {
-                        unset($items[$key]);
-                        continue;
+                            if (!$criteria['fetch_root']) {
+                                unset($items[$itemKey]);
+                                continue;
+                            }
+                        }
+
+                        $items[$itemKey]['lazy_attributes'] = new LazyAttributesFinder($item['id'], $criteria['locale'], $this->attributesFinder);
                     }
                 }
 
-                $items[$key]['lazy_attributes'] = new LazyAttributesFinder($row['id'], $criteria['locale'], $this->attributesFinder);
-            }
-        }
-
-        try {
-            foreach ($result as $row) {
                 $row['items'] = $items;
                 $row['root_item_id'] = $rootItemId;
-                $row['spaces'] = explode(',', $row['spaces']);
+                $row['spaces'] = explode(',', $row['spaces'] ?? '');
 
                 // There are just few menus across website, so we can filter like that.
                 if ($criteria['space'] && !\in_array($criteria['space'], $row['spaces'], true)) {

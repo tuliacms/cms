@@ -1,8 +1,8 @@
-const TextBlock = require('./TextBlock/TextBlock.js').default;
-const ImageBlock = require('./ImageBlock/ImageBlock.js').default;
-const VideoBlock = require('./VideoBlock/VideoBlock.js').default;
-const MapBlock = require('./MapBlock/MapBlock.js').default;
-const GalleryBlock = require('./GalleryBlock/GalleryBlock.js').default;
+import TextBlock from "blocks/TextBlock/TextBlock";
+import ImageBlock from "blocks/ImageBlock/ImageBlock";
+import VideoBlock from "blocks/VideoBlock/VideoBlock";
+import MapBlock from "blocks/MapBlock/MapBlock";
+import GalleryBlock from "blocks/GalleryBlock/GalleryBlock";
 
 let blocks = {};
 

@@ -3,12 +3,12 @@
  * @author	Adam Banaszkiewicz <adam@codevia.com>
  * @license MIT only with Tulia CMS package. Usage outside the Tulia CMS package is prohibited.
  */
-const Canvas = require('./Canvas.js').default;
+const Admin = require('./Admin.js').default;
 const Editor = require('./Editor.js').default;
 const _ = require('lodash');
 
 export default {
-    Canvas,
+    Admin,
     Editor,
     block: function (block) {
         const requiredProps = [
@@ -18,11 +18,12 @@ export default {
             'manager',
             'editor',
             'render',
-            'defaults',
+            'store',
         ];
 
         for (let prop of requiredProps) {
             if (block.hasOwnProperty(prop) === false) {
+                return;
                 console.error(`Missing property "${prop}" in block. Cannot be registered.`);
                 return;
             }
@@ -85,7 +86,7 @@ export default {
                 // HTML input/textarea selector, where to store the structure.
                 structure: null,
                 // HTML input/textarea selector, where to store the rendered content.
-                content: null
+                content: null,
             },
             canvas: {
                 size: {
@@ -97,16 +98,16 @@ export default {
                         { name: 'md', width: 770 },
                         { name: 'sm', width: 580 },
                         { name: 'xs', width: 320 },
-                    ]
-                }
+                    ],
+                },
             },
             elements: {
                 style: {
                     spacers: {
                         // Maximum implemented spacers in Bootstrap
                         max: 5,
-                    }
-                }
+                    },
+                },
             },
             locale: 'en_en',
             fallback_locales: ['en'],
@@ -120,7 +121,7 @@ export default {
             sections: {},
             filemanager: {
                 image_resolve_path: null,
-                endpoint: null
+                endpoint: null,
             },
             // Themes supported by this instance of Editor
             themes: [],

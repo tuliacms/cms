@@ -56,10 +56,17 @@ class Menu extends AbstractController
         CreateMenu $createMenu,
         WebsiteInterface $website,
     ): RedirectResponse {
+        try {
+            $this->validateRequest($request);
+        } catch (\Exception $e) {
+            $this->addFlash('danger', $e->getMessage());
+            return $this->redirectToRoute('backend.menu');
+        }
+
         ($createMenu)(new CreateMenuRequest(
             $request->request->get('name'),
             $website->getId(),
-            $request->request->all('spaces')
+            $request->request->all('spaces'),
         ));
 
         $this->addFlash('success', $this->trans('menuCreated', [], 'menu'));
@@ -72,6 +79,13 @@ class Menu extends AbstractController
      */
     public function edit(Request $request, UpdateMenu $updateMenu): RedirectResponse
     {
+        try {
+            $this->validateRequest($request);
+        } catch (\Exception $e) {
+            $this->addFlash('danger', $e->getMessage());
+            return $this->redirectToRoute('backend.menu');
+        }
+
         try {
             ($updateMenu)(new UpdateMenuRequest(
                 $request->request->get('id'),
@@ -103,5 +117,16 @@ class Menu extends AbstractController
 
         $this->addFlash('success', $this->trans('selectedMenusWereDeleted', [], 'menu'));
         return $this->redirectToRoute('backend.menu');
+    }
+
+    private function validateRequest(Request $request): void
+    {
+        if (!trim($request->request->get('name'))) {
+            throw new \Exception($this->trans('pleaseProvideMenuName', [], 'menu'));
+        }
+
+        if (!$request->request->all('spaces')) {
+            throw new \Exception($this->trans('pleaseProvideMenuSpace', [], 'menu'));
+        }
     }
 }
