@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import { defineProps, inject, watch, ref } from "vue";
+import { defineProps, inject } from "vue";
 const props = defineProps(['block']);
 const block = inject('structure').block(props.block);
 const ImageEditor = inject('extensions.registry').editor('Image');
