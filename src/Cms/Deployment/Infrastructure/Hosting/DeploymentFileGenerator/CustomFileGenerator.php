@@ -18,7 +18,7 @@ final class CustomFileGenerator extends AbstractDeploymentFileGenerator
     public function generate(array $parameters): string
     {
         return $this->interpolate(
-            file_get_contents(\dirname(__DIR__, 2).'/Framework/Resources/deployment-templates/custom.php'),
+            file_get_contents(\dirname(__DIR__, 2).'/Framework/Resources/recipes/custom.php'),
             $parameters
         );
     }

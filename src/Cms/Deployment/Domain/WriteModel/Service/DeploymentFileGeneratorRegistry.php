@@ -12,18 +12,18 @@ class DeploymentFileGeneratorRegistry
 {
     /** @param DeploymentFileGeneratorInterface[] $generators */
     public function __construct(
-        private readonly iterable $generators,
+        private readonly \Traversable $generators,
     ) {
     }
 
-    public function all(): iterable
+    public function all(): \Traversable
     {
         return $this->generators;
     }
 
     public function get(string $name): DeploymentFileGeneratorInterface
     {
-        foreach ($this->generators as $generator) {
+        foreach (iterator_to_array($this->generators) as $generator) {
             if ($generator->supports() === $name) {
                 return $generator;
             }
@@ -37,6 +37,6 @@ class DeploymentFileGeneratorRegistry
      */
     public function names(): array
     {
-        return array_map(static fn ($v) => $v->supports(), $this->generators);
+        return array_map(static fn ($v) => $v->supports(), iterator_to_array($this->generators));
     }
 }

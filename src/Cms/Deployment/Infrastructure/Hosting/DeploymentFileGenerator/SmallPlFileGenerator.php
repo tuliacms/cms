@@ -19,7 +19,7 @@ final class SmallPlFileGenerator extends AbstractDeploymentFileGenerator
     public function generate(array $parameters): string
     {
         return $this->interpolate(
-            file_get_contents(\dirname(__DIR__, 2).'/Framework/Resources/deployment-templates/small.pl.php'),
+            file_get_contents(\dirname(__DIR__, 2).'/Framework/Resources/recipes/small.pl.php'),
             $parameters
         );
     }

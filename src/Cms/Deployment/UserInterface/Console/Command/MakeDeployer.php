@@ -36,6 +36,11 @@ final class MakeDeployer extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
+        if (!file_exists($this->projectDir.'/.env.prod')) {
+            $io->writeln('<fg=red>You need to create .env.prod file with production environment variables first.</>');
+            return Command::FAILURE;
+        }
+
         if (!file_exists($this->projectDir.'/vendor/deployer/deployer/src/Deployer.php')) {
             $io->writeln('<fg=red>You need to install Deployer first to configure deployments for this instance of Tulia CMS.</>');
             $io->writeln('To install Deployer execute those commands one by one:');
@@ -63,8 +68,7 @@ final class MakeDeployer extends Command
         file_put_contents($this->projectDir.'/deploy.php', $generator->generate($parameters));
 
         $io->writeln('<info>Deployer config file created. Next steps:</info>');
-        $io->writeln('   1. Fill the <fg=gray>repository</> setting in newly created <fg=gray>deployer.php</> file, with git repository path to this application.');
-        $io->writeln('   2. Execute <fg=gray>make deploy</> to deploy application to target server.');
+        $io->writeln('   1. Execute <fg=gray>make deploy</> to deploy application to target server.');
 
         return Command::SUCCESS;
     }
