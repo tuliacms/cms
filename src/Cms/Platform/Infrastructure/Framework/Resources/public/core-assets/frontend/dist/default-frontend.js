@@ -28,7 +28,7 @@ module.exports = $;
 /************************************************************************/
 /******/ 	// The module cache
 /******/ 	var __webpack_module_cache__ = {};
-/******/
+/******/ 	
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
 /******/ 		// Check if module is in cache
@@ -42,14 +42,14 @@ module.exports = $;
 /******/ 			// no module.loaded needed
 /******/ 			exports: {}
 /******/ 		};
-/******/
+/******/ 	
 /******/ 		// Execute the module function
 /******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
-/******/
+/******/ 	
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-/******/
+/******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/make namespace object */
 /******/ 	(() => {
@@ -61,18 +61,18 @@ module.exports = $;
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
 /******/ 	})();
-/******/
+/******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-/*!***********************!*\
-  !*** ./src/script.js ***!
-  \***********************/
+/*!*******************************!*\
+  !*** ./src/default-script.js ***!
+  \*******************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _default_stylesheet_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./default-stylesheet.scss */ "./src/default-stylesheet.scss");
-
 const $ = __webpack_require__(/*! $ */ "$");
+
 
 $(function() {
     if ($.magnificPopup) {

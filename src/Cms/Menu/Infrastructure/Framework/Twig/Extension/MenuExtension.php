@@ -26,7 +26,7 @@ class MenuExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('menu_space', function (string $space, string $layout) {
+            new TwigFunction('menu_space', function (string $space, string $layout = 'horizontal') {
                 return $this->builder->buildHtml(
                     Criteria::bySpace(
                         $space,

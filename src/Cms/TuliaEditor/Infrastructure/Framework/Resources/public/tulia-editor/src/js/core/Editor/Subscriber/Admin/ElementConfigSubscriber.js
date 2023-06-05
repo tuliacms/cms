@@ -14,10 +14,10 @@ export default class ElementConfigSubscriber {
     registerReceivers() {
         const self = this;
 
-        this.messenger.receive('element.config.sync', (data) => self.processChanged(data.id, data.type, data.config));
+        this.messenger.receive('element.config.sync', (data) => self.processConfigSync(data.id, data.type, data.config));
     }
 
-    processChanged(id, type, config) {
+    processConfigSync(id, type, config) {
         const configStore = this.elementConfigRegistry.get(id, type);
 
         configStore.replace(config);

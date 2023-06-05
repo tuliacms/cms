@@ -8,7 +8,6 @@ export default class Render {
     }
 }
 
-
 class RenderOf {
     constructor (filemanagerRender, block, image) {
         this.filemanagerRender = filemanagerRender;

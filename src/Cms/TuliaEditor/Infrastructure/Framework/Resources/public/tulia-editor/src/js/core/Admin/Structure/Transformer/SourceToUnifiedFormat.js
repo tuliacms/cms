@@ -53,6 +53,7 @@ export default class SourceToUnifiedFormat {
         unified.structure.sections.push({
             id: section.id,
         });
+        this.setConfig(unified, section.id, 'section', section.store?.config ?? {});
     }
 
     static transformRow(row, section, unified) {
@@ -60,6 +61,7 @@ export default class SourceToUnifiedFormat {
             id: row.id,
             parent: section.id,
         });
+        this.setConfig(unified, row.id, 'row', row.store?.config ?? {});
     }
 
     static transformColumn(column, row, unified) {
@@ -67,6 +69,7 @@ export default class SourceToUnifiedFormat {
             id: column.id,
             parent: row.id,
         });
+        this.setConfig(unified, column.id, 'column', column.store?.config ?? {});
     }
 
     static transformBlock(block, column, unified) {

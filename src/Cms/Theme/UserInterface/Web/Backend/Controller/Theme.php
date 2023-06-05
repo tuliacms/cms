@@ -89,6 +89,7 @@ class Theme extends AbstractController
             'js' => 'application/javascript',
             'jpg' => 'image/jpeg',
             'png' => 'image/png',
+            'svg' => 'image/svg+xml',
             default => 'text/plain'
         };
 

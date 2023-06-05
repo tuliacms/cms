@@ -53,6 +53,7 @@ export default class StoreToUnifiedFormat {
         unified.structure.sections.push({
             id: section.id,
         });
+        this.setConfig(unified, section.id, 'section', configStoreRegistry);
     }
 
     static transformRow(row, section, unified, configStoreRegistry, dataStoreRegistry) {
@@ -60,6 +61,7 @@ export default class StoreToUnifiedFormat {
             id: row.id,
             parent: section.id,
         });
+        this.setConfig(unified, row.id, 'row', configStoreRegistry);
     }
 
     static transformColumn(column, row, unified, configStoreRegistry, dataStoreRegistry) {
@@ -67,6 +69,7 @@ export default class StoreToUnifiedFormat {
             id: column.id,
             parent: row.id,
         });
+        this.setConfig(unified, column.id, 'column', configStoreRegistry);
     }
 
     static transformBlock(block, column, unified, configStoreRegistry, dataStoreRegistry) {
@@ -75,7 +78,6 @@ export default class StoreToUnifiedFormat {
             parent: column.id,
             code: block.code,
         });
-
         this.setConfig(unified, block.id, 'block', configStoreRegistry);
         this.setData(unified, block.id, 'block', dataStoreRegistry);
     }

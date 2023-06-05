@@ -19,10 +19,10 @@ export default class ElementDataSubscriber {
          * to replace state of the Canvas as a whole. This MUST NOT be used to
          * set "data" from Admin to Editor. Data is edited only by Editor!
          */
-        this.messenger.receive('element.data.replace', (data) => self.processChanged(data.id, data.type, data.data));
+        this.messenger.receive('element.data.replace', (data) => self.processDataReplace(data.id, data.type, data.data));
     }
 
-    processChanged(id, type, data) {
+    processDataReplace(id, type, data) {
         const dataStore = this.elementDataRegistry.get(id, type);
 
         dataStore.replace(data);

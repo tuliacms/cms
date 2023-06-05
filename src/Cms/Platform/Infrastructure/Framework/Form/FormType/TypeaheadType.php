@@ -139,7 +139,7 @@ class TypeaheadType extends AbstractType
 
                 $resolvedValue = $view->vars['value'];
 
-                if ($selected['id'] === $view->vars['value']) {
+                if ($selected && $selected['id'] === $view->vars['value']) {
                     $resolvedValue = $selected[$options['display_prop']];
                 }
 

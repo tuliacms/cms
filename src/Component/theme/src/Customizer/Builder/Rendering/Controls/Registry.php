@@ -23,14 +23,21 @@ class Registry implements RegistryInterface
     {
         $params['control_name'] = $id;
         $params['control_id']   = $this->createControlId($params['code']);
+        $names = [];
 
         foreach ($this->controls as $control) {
             if ($control::getName() === $type) {
                 return $control->build($params);
             }
+
+            $names[] = $control::getName();
         }
 
-        throw new \OutOfBoundsException(sprintf('Control type "%s" not registered.', $type));
+        throw new \OutOfBoundsException(sprintf(
+            'Control type "%s" not registered, choose one of the following: %s.',
+            $type,
+            implode(', ', $names)
+        ));
     }
 
     /**

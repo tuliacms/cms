@@ -19,9 +19,15 @@ export default class ElementConfigStoreRegistry {
     create(id, type) {
         let store = null;
 
+        /**
+         * @todo Implement default values here, and remove loops from
+         * TuliaEditor/Infrastructure/Framework/Resources/public/tulia-editor/src/js/core/Admin/Structure/Structure.js:72
+         */
         switch (type) {
             case 'section':
                 store = this.factory.forSection(id, {})(); break;
+            case 'row':
+                store = this.factory.forRow(id, {})(); break;
             case 'column':
                 store = this.factory.forColumn(id, {})(); break;
             case 'block':

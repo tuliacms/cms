@@ -35,7 +35,7 @@ class ImageShortcode implements ShortcodeCompilerInterface
 
     public function getAlias(): string
     {
-        return 'c';
+        return 'image';
     }
 
     private function compileSrc(ShortcodeInterface $shortcode, string $src): string

@@ -1,4 +1,5 @@
 const $ = require('$');
+import './default-stylesheet.scss';
 
 $(function() {
     if ($.magnificPopup) {

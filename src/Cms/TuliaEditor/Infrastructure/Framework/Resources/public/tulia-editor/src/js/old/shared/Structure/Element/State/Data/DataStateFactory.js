@@ -6,8 +6,6 @@ export default class {
     }
 
     forBlock(id, type, currentData) {
-        dump(id, type, currentData);
-        return '';
         return defineStore(`block.${id}`, () => {
             const data = {};
 

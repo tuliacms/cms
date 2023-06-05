@@ -10,7 +10,10 @@
     </head>
     <body class="{{ body_class(app.request) }}">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="{{ path('frontend.homepage') }}">{{ current_website().name }}</a>
+            <div class="container-xxl px-4">
+                <a class="navbar-brand" href="{{ path('frontend.homepage') }}">{{ current_website().name }}</a>
+                {{ menu_space('mainmenu') }}
+            </div>
         </nav>
         {{ breadcrumbs() }}
         <div class="container-xxl">

@@ -13,10 +13,10 @@ export default class ElementDataSubscriber {
     registerReceivers() {
         const self = this;
 
-        this.messenger.receive('element.data.sync', (data) => self.processChanged(data.id, data.type, data.data));
+        this.messenger.receive('element.data.sync', (data) => self.processDataSync(data.id, data.type, data.data));
     }
 
-    processChanged(id, type, data) {
+    processDataSync(id, type, data) {
         const dataStore = this.elementDataRegistry.get(id, type);
 
         dataStore.replace(data);

@@ -62,6 +62,7 @@ final class TuliaKernel extends Kernel
 
         $dirs = [
             $base . '/Platform/Infrastructure/Framework/Resources/config',
+            $base . '/Platform/Infrastructure/DefaultTheme/Resources/config',
             $this->getProjectDir() . '/config',
             $base . '/Activity/Framework/Resources/config',
             $base . '/BackendMenu/Framework/Resources/config',

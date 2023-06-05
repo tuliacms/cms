@@ -1,0 +1,10 @@
+cms:
+    theme:
+        configuration:
+            DefaultTheme:
+                translation_domain: 'tulia_default_theme'
+                css_framework: bootstrap-5
+                configuration:
+                    base:
+                        menu_spaces:
+                            - { name: mainmenu, label: Main menu }

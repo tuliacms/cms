@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
-import { getSectionState } from "core/Shared/Structure/Element/Config/Defaults/SectionDefaults";
+import {exportSectionState, getSectionState} from "core/Shared/Structure/Element/Config/Defaults/SectionDefaults";
+import { getRowState } from "core/Shared/Structure/Element/Config/Defaults/RowDefaults";
 import { getColumnState } from "core/Shared/Structure/Element/Config/Defaults/ColumnDefaults";
 import BlockDefaults from "core/Shared/Structure/Element/Config/Defaults/BlockDefaults";
 import ObjectCloner from "core/Shared/Utils/ObjectCloner";
@@ -14,6 +15,26 @@ export default class ConfigStoreFactory {
     forSection(id, currents) {
         return defineStore(`config:section:${id}`, {
             state: () => getSectionState(currents),
+            actions: {
+                replace(config) {
+                    config = ObjectCloner.deepClone(config);
+
+                    for (let i in config) {
+                        this[i] = config[i];
+                    }
+                },
+            },
+            getters: {
+                export(state) {
+                    return exportSectionState(state);
+                },
+            },
+        });
+    }
+
+    forRow(id, currents) {
+        return defineStore(`config:row:${id}`, {
+            state: () => getRowState(currents),
             actions: {
                 replace(config) {
                     for (let i in config) {

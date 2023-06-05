@@ -14,10 +14,10 @@ export default class StructureSubscriber {
     registerReceivers() {
         const self = this;
 
-        this.messenger.receive('admin.structure.changed', (data) => self.processChanged(data.structure));
+        this.messenger.receive('admin.structure.changed', (data) => self.processStructureChanged(data.structure));
     }
 
-    processChanged(newStructure) {
+    processStructureChanged(newStructure) {
         this.structure.update(newStructure);
         this.eventBus.dispatch('structure.changed');
     }

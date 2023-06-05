@@ -21,7 +21,7 @@ final class DbalWebsitesCounterQuery implements WebsitesCounterQueryInterface
         $count = 0;
 
         foreach ($this->storage->all() as $website) {
-            if ($website['id'] !== $except && $website['active']) {
+            if ($website['id'] !== $except && $website['enabled']) {
                 $count++;
             }
         }

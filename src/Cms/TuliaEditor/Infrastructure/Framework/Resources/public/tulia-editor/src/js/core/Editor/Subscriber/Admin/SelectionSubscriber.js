@@ -14,10 +14,10 @@ export default class SelectionSubscriber {
     registerReceivers() {
         const self = this;
 
-        this.messenger.receive('admin.selection.changed', (data) => self.processChanged(data.selection));
+        this.messenger.receive('admin.selection.changed', (data) => self.processSelectionChanged(data.selection));
     }
 
-    processChanged(selection) {
+    processSelectionChanged(selection) {
         const before = this.selection.export();
         this.selection.update(selection);
         const after = this.selection.export();

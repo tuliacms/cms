@@ -1,7 +1,7 @@
 $tulia-default-navbar-mobile-width: 300px !default;
 
 .tulia-navbar.navbar-nav {
-    --tulia-navbar-horizontal-submenu-bg: #000;
+    --tulia-navbar-horizontal-submenu-bg: rgb(248,249,250);
     --tulia-navbar-horizontal-submenu-padding-x: 20px;
     --tulia-navbar-horizontal-submenu-padding-y: 0;
     --tulia-navbar-horizontal-submenu-width: 200px;
@@ -18,6 +18,14 @@ $tulia-default-navbar-mobile-width: 300px !default;
             list-style: none;
             padding: var(--tulia-navbar-horizontal-submenu-padding-y) var(--tulia-navbar-horizontal-submenu-padding-x);
             margin: 0;
+        }
+    }
+
+    &.tulia-navbar__vertical {
+        display: block;
+
+        .nav-item {
+            display: block;
         }
     }
 
