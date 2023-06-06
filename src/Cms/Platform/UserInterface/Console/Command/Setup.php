@@ -76,7 +76,22 @@ EOF
             $sampleData === 'yes',
         ));
 
-        $output->writeln('<info>Tulia CMS installed. Go to http://localhost/ to start new adventure!</info>');
+        $io->writeln(<<<EOF
+<fg=#00ff00>
+███████╗██╗   ██╗ ██████╗ ██████╗███████╗███████╗███████╗
+██╔════╝██║   ██║██╔════╝██╔════╝██╔════╝██╔════╝██╔════╝
+███████╗██║   ██║██║     ██║     █████╗  ███████╗███████╗
+╚════██║██║   ██║██║     ██║     ██╔══╝  ╚════██║╚════██║
+███████║╚██████╔╝╚██████╗╚██████╗███████╗███████║███████║
+╚══════╝ ╚═════╝  ╚═════╝ ╚═════╝╚══════╝╚══════╝╚══════╝
+</>
+    <info>Tulia CMS installed. Let's start a new adventure!</info>
+
+EOF
+        );
+
+        $output->writeln('Frontend: http://localhost/');
+        $output->writeln(sprintf('Backend:  http://localhost/administrator/ (<comment>%s</comment>|<comment>%s</comment>)', $username, $password));
 
         return Command::SUCCESS;
     }

@@ -14,7 +14,7 @@ use Tulia\Cms\Shared\Application\UseCase\TransactionalSessionInterface;
 final class DoctrineTransactionalSession implements TransactionalSessionInterface
 {
     public function __construct(
-        private Connection $connection
+        private readonly Connection $connection,
     ) {
     }
 

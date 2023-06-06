@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Platform\Application\UseCase;
 
+use Doctrine\DBAL\Connection;
 use Tulia\Cms\Options\Application\Service\WebsitesOptionsRegistrator;
 use Tulia\Cms\Options\Domain\WriteModel\OptionsRepositoryInterface;
 use Tulia\Cms\Shared\Application\UseCase\AbstractTransactionalUseCase;
@@ -34,6 +35,8 @@ final class SetupSystem extends AbstractTransactionalUseCase
         private readonly ThemeActivator $themeActivator,
         private readonly ImporterInterface $importer,
         private readonly WebsiteRegistryInterface $websiteRegistry,
+        /** @todo Remove this from Application layer */
+        private readonly Connection $connection,
     ) {
     }
 
@@ -42,6 +45,8 @@ final class SetupSystem extends AbstractTransactionalUseCase
      */
     protected function execute(RequestInterface $request): ?ResultInterface
     {
+        $this->cleanUp();
+
         $websiteId = $this->createWebsite($request->websiteName, $request->websiteLocale, $request->websiteLocalDomain, $request->websiteProductionDomain);
         $this->updateOptions($websiteId, $request->websiteLocale, $request->username);
         $this->updateTheme($websiteId);
@@ -132,7 +137,17 @@ final class SetupSystem extends AbstractTransactionalUseCase
             parameters: [
                 'website' => $this->websiteRegistry->get($websiteId),
                 'author_id' => $authorId,
-            ]
+            ],
         );
+    }
+
+    private function cleanUp(): void
+    {
+        $this->connection->executeStatement('DELETE FROM #__website_locale');
+        $this->connection->executeStatement('DELETE FROM #__website');
+        $this->connection->executeStatement('DELETE FROM #__option_translation');
+        $this->connection->executeStatement('DELETE FROM #__option');
+        $this->connection->executeStatement('DELETE FROM #__user_attribute');
+        $this->connection->executeStatement('DELETE FROM #__user');
     }
 }

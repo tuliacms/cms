@@ -21,12 +21,12 @@ abstract class AbstractTransactionalUseCase implements TransactionalUseCaseInter
         });
     }
 
+    abstract protected function execute(RequestInterface $request): ?ResultInterface;
+
     public function setTransactionalSession(TransactionalSessionInterface $transactionalSession): void
     {
         $this->transactionalSession = $transactionalSession;
     }
-
-    abstract protected function execute(RequestInterface $request): ?ResultInterface;
 
     public function setEnvironment(string $environment): void
     {
