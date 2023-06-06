@@ -66,9 +66,11 @@ final class MakeDeployer extends Command
         }
 
         file_put_contents($this->projectDir.'/deploy.php', $generator->generate($parameters));
+        copy($this->projectDir.'/.env', $this->projectDir.'/.env.prod');
 
         $io->writeln('<info>Deployer config file created. Next steps:</info>');
-        $io->writeln('   1. Execute <fg=gray>make deploy</> to deploy application to target server.');
+        $io->writeln('   1. Update production credentials in <fg=gray>.env.prod</> file (or configure CI/CD to create this file with production credentials)');
+        $io->writeln('   2. Execute <fg=gray>make deploy</> to deploy application to target server.');
 
         return Command::SUCCESS;
     }
