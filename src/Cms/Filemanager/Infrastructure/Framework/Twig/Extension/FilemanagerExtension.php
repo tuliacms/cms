@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Filemanager\Infrastructure\Framework\Twig\Extension;
 
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Filemanager\Application\Service\ImageUrlResolver;
 use Tulia\Cms\Filemanager\Domain\Generator\Html;
@@ -22,6 +24,7 @@ use Twig\TwigFunction;
 class FilemanagerExtension extends AbstractExtension
 {
     public function __construct(
+        private readonly LoggerInterface $logger,
         private readonly FileFinderInterface $finder,
         private readonly ImageUrlResolver $urlResolver,
         private readonly ImageUrlGeneratorInterface $urlGenerator,
@@ -54,6 +57,11 @@ class FilemanagerExtension extends AbstractExtension
      */
     public function image(string $id, array $params = []): string
     {
+        if (!Uuid::isValid($id)) {
+            $this->logger->notice('Id of image is not a valid UUID.', ['id' => $id]);
+            return '<!-- invalid ID -->';
+        }
+
         $image = $this->finder->findOne([
             'id' => $id,
             'type' => FileTypeEnum::IMAGE,
@@ -82,14 +90,25 @@ class FilemanagerExtension extends AbstractExtension
      */
     public function imageUrl($id, array $params = []): string
     {
-        return $this->urlGenerator->generate(
-            $id instanceof File ? $id->getId() : $id,
-            $params
-        );
+        $id = $id instanceof File ? $id->getId() : $id;
+
+        if (!Uuid::isValid($id)) {
+            $this->logger->notice('Id of image is not a valid UUID.', ['id' => $id]);
+            return '#';
+        }
+
+        return $this->urlGenerator->generate($id, $params);
     }
 
     public function gallery(array $ids, array $params = []): string
     {
+        foreach ($ids as $id) {
+            if (!Uuid::isValid($id)) {
+                $this->logger->notice('Id of image is not a valid UUID.', ['id' => $id]);
+                return '<!-- invalid ID -->';
+            }
+        }
+
         $images = $this->finder->find([
             'id__in' => $ids,
             'type'   => FileTypeEnum::IMAGE,
@@ -116,6 +135,11 @@ class FilemanagerExtension extends AbstractExtension
 
     public function svg(string $id, array $params = []): string
     {
+        if (!Uuid::isValid($id)) {
+            $this->logger->notice('Id of image is not a valid UUID.', ['id' => $id]);
+            return '<!-- invalid ID -->';
+        }
+
         $svg = $this->finder->findOne([
             'id' => $id,
             'type' => FileTypeEnum::SVG,
@@ -143,6 +167,11 @@ class FilemanagerExtension extends AbstractExtension
         if ($id instanceof File) {
             $svg = $id;
         } else {
+            if (!Uuid::isValid($id)) {
+                $this->logger->notice('Id of image is not a valid UUID.', ['id' => $id]);
+                return '';
+            }
+
             $svg = $this->finder->findOne([
                 'id' => $id,
                 'type' => FileTypeEnum::SVG,
@@ -158,6 +187,11 @@ class FilemanagerExtension extends AbstractExtension
 
     public function isFileType(string $id, string $type): bool
     {
+        if (!Uuid::isValid($id)) {
+            $this->logger->notice('Id of image is not a valid UUID.', ['id' => $id]);
+            return false;
+        }
+
         return (bool) $this->finder->findOne([
             'id' => $id,
             'type' => $type,
